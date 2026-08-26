@@ -1,7 +1,7 @@
 # Psyerns ChefZ
 
 <p align="center">
-  <img src="Psyerns_ChefZ_Docs/Psyerns_ChefZ_Banner.png" alt="Psyerns ChefZ" width="800">
+  <img src="data/Psyerns_ChefZ_Banner.png" alt="Psyerns ChefZ" width="800">
 </p>
 
 <p align="center">
@@ -38,10 +38,13 @@
 
 **This repository is currently the design corpus, not a shipped mod.**
 
-What exists today: the complete planning set under `Psyerns_ChefZ_Docs/` and the static
-validator suite under `tools/chefz-validate/`. What does not exist yet is the mod itself:
-every addon folder under `Psyerns_ChefZ_Core/Addons/` is still empty. Implementation starts
-at Milestone 1.
+The design is finished and the static validator suite under `tools/chefz-validate/` is
+implemented. What does not exist yet is the mod itself: every addon folder under
+`Psyerns_ChefZ_Core/Addons/` is still empty. Implementation starts at Milestone 1.
+
+The planning corpus this README summarises — core architecture, content vision, the full V1
+ingredient &amp; production map, the Terje compatibility analysis and the open design questions —
+is kept internally and is not part of this repository.
 
 | | |
 |---|---|
@@ -65,7 +68,7 @@ independent compatibility mods that are only needed if you run Terje or COT.
 ```text
 Psyerns_ChefZ/                              ← repository root (this README)
 │
-├── Psyerns_ChefZ_Docs/                     ← planning, gate reports, backlogs
+├── data/                                   ← banner, screenshots
 │
 ├── Psyerns_ChefZ_Core/                     ← THE mod (one workshop item)
 │   ├── Addons/
@@ -471,7 +474,7 @@ correctness. That is exactly what the four gates are for.
 ## Build Workflow
 
 ChefZ is built by a defined agent crew with **one writing owner per file** and four human
-approval gates. Full spec: [`ChefZ_MultiAgent_Workflow.md`](Psyerns_ChefZ_Docs/ChefZ_MultiAgent_Workflow.md).
+approval gates.
 
 | Milestone | Form | Done when |
 |---|---|---|
@@ -504,7 +507,7 @@ deltas at once. Everywhere else the slices pipeline without locking.
 
 ### At Every Gate
 
-1. Read the gate report in `Psyerns_ChefZ_Docs/GATE_<n>_REPORT.md`
+1. Read the gate report — what was built, full validator output, open points, asset backlog status, and an in-game test checklist
 2. Build and sign the PBOs with DayZ Tools
 3. Deploy to the test server, work through the in-game checklist
 4. Report back: approved, or a defect list — the milestone reruns with a correction brief
@@ -644,21 +647,6 @@ time with errors that point at the consumer rather than the real cause.
 
 Check after every build that the PBO header's `prefix` property and the `files[]` paths inside
 `config.bin` share the same root.
-
----
-
-## Documentation
-
-| Document | Contents |
-|---|---|
-| [`ChefZ_Core_Architekturplan.md`](Psyerns_ChefZ_Docs/ChefZ_Core_Architekturplan.md) | Core systems — Recipe Engine, categories, processing, quality, nutrition, preservation, containers, events, config |
-| [`ChefZ_DME_Mod_Plan.md`](Psyerns_ChefZ_Docs/ChefZ_DME_Mod_Plan.md) | Content vision — plants, herbs, spices, meat, sausage, dairy, dishes, buffs, rarities, cookbook |
-| [`ChefZ_V1_Ingredient_Production_Map.md`](Psyerns_ChefZ_Docs/ChefZ_V1_Ingredient_Production_Map.md) | V1 scope — every production chain, station, class list, asset list, dependency map, build phases |
-| [`ChefZ_Terje_Compatibility_Analyse.md`](Psyerns_ChefZ_Docs/ChefZ_Terje_Compatibility_Analyse.md) | Terje integration — skill boundaries, Herbalist perk, XP matrix, anti-farming, medicine hooks |
-| [`ChefZ_Weitere_Planungsschritte.md`](Psyerns_ChefZ_Docs/ChefZ_Weitere_Planungsschritte.md) | Open design questions — food states, cook timing, hygiene, plates, trader economy, loot design |
-| [`ChefZ_MultiAgent_Workflow.md`](Psyerns_ChefZ_Docs/ChefZ_MultiAgent_Workflow.md) | How ChefZ is built — ownership matrix, delta protocol, agent crew, milestones, gates |
-
-> The planning documents are written in German; this README summarises them in English.
 
 ---
 
