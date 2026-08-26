@@ -1,0 +1,100 @@
+# Psyerns ChefZ — .gitignore
+#
+# Scope: apart from the local build-harness folder below, this file only
+# ignores content inside the two mod folders.
+#   /Psyerns_ChefZ/
+#   /Psyerns_ChefZ_Core/
+# Everything else (README, Psyerns_ChefZ_Docs, tools, the compatibility mods)
+# is deliberately left untouched by these rules.
+
+# Local build harness — tooling, not project source. Stays out of the repo.
+/.claude/
+/CLAUDE.md
+
+
+# ─────────────────────────────────────────────────────────────
+#  /Psyerns_ChefZ/
+# ─────────────────────────────────────────────────────────────
+
+# Packed / signed mod output
+/Psyerns_ChefZ/**/*.pbo
+/Psyerns_ChefZ/**/*.bisign
+/Psyerns_ChefZ/**/*.bikey
+/Psyerns_ChefZ/**/*.biprivatekey
+
+# Build artifacts (config.cpp is the source, config.bin is generated)
+/Psyerns_ChefZ/**/config.bin
+/Psyerns_ChefZ/**/build/
+/Psyerns_ChefZ/**/Build/
+/Psyerns_ChefZ/**/Output/
+/Psyerns_ChefZ/**/packed/
+/Psyerns_ChefZ/**/temp/
+/Psyerns_ChefZ/**/Temp/
+
+# Logs and crash dumps
+/Psyerns_ChefZ/**/*.log
+/Psyerns_ChefZ/**/*.rpt
+/Psyerns_ChefZ/**/*.mdmp
+/Psyerns_ChefZ/**/Logs/
+
+# Runtime server data
+/Psyerns_ChefZ/**/profiles/
+
+# Editor / tooling leftovers
+/Psyerns_ChefZ/**/*.bak
+/Psyerns_ChefZ/**/*.tmp
+/Psyerns_ChefZ/**/*~
+/Psyerns_ChefZ/**/*.bat
+/Psyerns_ChefZ/**/.vs/
+/Psyerns_ChefZ/**/.vscode/
+/Psyerns_ChefZ/**/*.suo
+/Psyerns_ChefZ/**/*.user
+
+# OS
+/Psyerns_ChefZ/**/Thumbs.db
+/Psyerns_ChefZ/**/Desktop.ini
+/Psyerns_ChefZ/**/.DS_Store
+
+
+# ─────────────────────────────────────────────────────────────
+#  /Psyerns_ChefZ_Core/
+# ─────────────────────────────────────────────────────────────
+
+# Packed / signed mod output
+/Psyerns_ChefZ_Core/**/*.pbo
+/Psyerns_ChefZ_Core/**/*.bisign
+/Psyerns_ChefZ_Core/**/*.bikey
+/Psyerns_ChefZ_Core/**/*.biprivatekey
+
+# Build artifacts (config.cpp is the source, config.bin is generated)
+/Psyerns_ChefZ_Core/**/config.bin
+/Psyerns_ChefZ_Core/**/build/
+/Psyerns_ChefZ_Core/**/Build/
+/Psyerns_ChefZ_Core/**/Output/
+/Psyerns_ChefZ_Core/**/packed/
+/Psyerns_ChefZ_Core/**/temp/
+/Psyerns_ChefZ_Core/**/Temp/
+
+# Logs and crash dumps
+/Psyerns_ChefZ_Core/**/*.log
+/Psyerns_ChefZ_Core/**/*.rpt
+/Psyerns_ChefZ_Core/**/*.mdmp
+/Psyerns_ChefZ_Core/**/Logs/
+
+# Runtime server data — $profile:ChefZ/ is generated on first server start
+/Psyerns_ChefZ_Core/**/profiles/
+
+# Editor / tooling leftovers
+/Psyerns_ChefZ_Core/**/*.bak
+/Psyerns_ChefZ_Core/**/*.tmp
+/Psyerns_ChefZ_Core/**/*~
+/Psyerns_ChefZ_Core/**/*.bat
+/Psyerns_ChefZ_Core/**/.vs/
+/Psyerns_ChefZ_Core/**/.vscode/
+/Psyerns_ChefZ_Core/**/*.suo
+/Psyerns_ChefZ_Core/**/*.user
+
+# OS
+/Psyerns_ChefZ_Core/**/Thumbs.db
+/Psyerns_ChefZ_Core/**/Desktop.ini
+/Psyerns_ChefZ_Core/**/.DS_Store

@@ -1,0 +1,10 @@
+# Vanilla-DayZ-Klassen - NOCH NICHT BEFUELLT
+#
+# Solange diese Datei leer ist, koennen classrefs.mjs und naming.mjs
+# Kollisionen mit Vanilla-Item-Klassen nicht pruefen und melden nur Warnungen.
+#
+# So befuellen (eine der beiden Wege):
+#  a) DayZ-Game-Data entpacken und dann:
+#     node tools/chefz-validate/build-refindex.mjs "<pfad zu den entpackten Daten>"
+#  b) Auf einem Testserver einen Klassendump erzeugen und die Namen hier
+#     einfuegen - eine Klasse je Zeile, Zeilen mit # sind Kommentare.
