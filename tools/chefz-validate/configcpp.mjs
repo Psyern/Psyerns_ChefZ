@@ -62,11 +62,25 @@ export default function run() {
   }
 
   // --- doppelte Klassendefinitionen ueber das gesamte Projekt ---
+  //
+  // Verglichen wird der VOLLE Pfad, nicht der nackte Name. In DayZ-Configs
+  // traegt jedes essbare Item seine eigenen Unterknoten - "Nutrition",
+  // "FoodStages", "Raw", "Baked", "Horticulture", "defs". Dass "Raw" 26-mal
+  // vorkommt, ist der Normalfall und kein Fehler; zwei Item-Klassen mit
+  // demselben Namen sind einer.
+  const byPath = new Map();
   for (const [name, defs] of projectClasses()) {
-    if (defs.length > 1) {
-      const where = defs.map(d => `${rel(d.file)}:${d.line}`).join(', ');
-      f.error(defs[0].file, defs[0].line, `Klasse "${name}" ist ${defs.length}-mal definiert (${where}) - die spaetere ueberschreibt die fruehere still`);
+    for (const d of defs) {
+      const path = [...d.scope, name].join('/');
+      if (!byPath.has(path)) byPath.set(path, []);
+      byPath.get(path).push({ ...d, name });
     }
+  }
+  for (const [path, defs] of byPath) {
+    if (defs.length <= 1) continue;
+    const where = defs.map(d => `${rel(d.file)}:${d.line}`).join(', ');
+    f.error(defs[0].file, defs[0].line,
+      `"${path}" ist ${defs.length}-mal definiert (${where}) - die spaetere ueberschreibt die fruehere still`);
   }
 
   // --- modded class: jede Stelle benennen, damit sie bewusst bleibt ---

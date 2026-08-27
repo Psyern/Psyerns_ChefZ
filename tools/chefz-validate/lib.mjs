@@ -140,6 +140,12 @@ export function parseConfigCpp(file) {
 
   const classes = [];
   const chain = [];
+  // Fuer JEDE offene "{" merken, ob sie einen Klassenrumpf geoeffnet hat.
+  // Ohne das zaehlt die schliessende Klammer eines Array-Literals
+  // (units[] = {...}) als Klassenende, und die gesamte Verschachtelung
+  // darunter verrutscht - "Food/FoodStages" statt
+  // "CfgVehicles/ChefZ_Wheat/Food/FoodStages".
+  const braces = [];
   let line = 1;
 
   const declRe = /class\s+([A-Za-z_]\w*)\s*(?::\s*([A-Za-z_]\w*)\s*)?/y;
@@ -147,7 +153,20 @@ export function parseConfigCpp(file) {
   for (let i = 0; i < src.length; i++) {
     const ch = src[i];
     if (ch === '\n') { line++; continue; }
-    if (ch === '}') { if (chain.length) chain.pop(); continue; }
+
+    // Zeichenketten ueberspringen - sie duerfen Klammern enthalten.
+    if (ch === '"') {
+      i++;
+      while (i < src.length && src[i] !== '"') { if (src[i] === '\n') line++; i++; }
+      continue;
+    }
+
+    if (ch === '{') { braces.push(false); continue; }   // Klammer ohne Klassenkopf
+    if (ch === '}') {
+      const wasClass = braces.pop();
+      if (wasClass && chain.length) chain.pop();
+      continue;
+    }
 
     if (ch === 'c' && /\bclass\b/.test(src.slice(i, i + 6)) && (i === 0 || /[^\w]/.test(src[i - 1]))) {
       declRe.lastIndex = i;
@@ -159,6 +178,7 @@ export function parseConfigCpp(file) {
         if (after && after[1] === '{') {
           classes.push({ name, parent, line, scope: chain.slice(), declaredBody: true });
           chain.push(name);
+          braces.push(true);          // diese "{" gehoert einem Klassenrumpf
           i = declRe.lastIndex + after[0].length - 1;
           continue;
         } else if (after && after[1] === ';') {
@@ -337,6 +357,11 @@ export function parseConfigTree(file) {
       const rest = src.slice(i + cls[0].length);
       const open = /^\s*\{/.exec(rest);
       const node = newNode(cls[1], cls[2] || null, line);
+      // Ohne "{" ist das eine Vorwaertsdeklaration ("class Edible_Base;") -
+      // DayZ-Standard, um eine FREMDE Basisklasse sichtbar zu machen. Sie
+      // definiert nichts. Wer Content zaehlt, muss sie auslassen, sonst gilt
+      // jede Vanilla-Basisklasse als Erfindung des Moduls.
+      node.hasBody = !!open;
       addChild(stack[stack.length - 1], node);
       const consumed = cls[0].length + (open ? open[0].length : 0);
       for (const c of src.slice(i, i + consumed)) if (c === '\n') line++;

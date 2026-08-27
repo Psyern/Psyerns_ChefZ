@@ -216,6 +216,9 @@ export default function run() {
   // Das ist die Regel, die mit dem Projekt mitwaechst: was ein Content-Modul
   // deklariert, darf im Core nicht vorkommen - ganz gleich, wie es heisst.
   const contentIds = new Map();          // token -> Herkunft
+  // Alle ausserhalb des Projekts bekannten Klassennamen (Vanilla, Terje, Expansion,
+  // CF, COT, Dabs). Was hier drin steht, hat kein Content-Modul erfunden.
+  const foreignRef = ref.names;
   for (const rec of allRecords()) {
     if (isCoreFile(rec.file)) continue;
     if (!rec.id) continue;
@@ -228,6 +231,13 @@ export default function run() {
       const isItems = /^Cfg(Vehicles|Weapons|Magazines)$/.test(node.name);
       if (!isCfgChefZ && !isItems) continue;
       for (const child of node.children) {
+        // Vorwaertsdeklaration ("class Edible_Base;") definiert nichts - sie macht
+        // eine FREMDE Basisklasse sichtbar. Als Content zu zaehlen, was ein Modul
+        // nur sichtbar macht, verbietet dem Core jede Vanilla-Basisklasse.
+        if (child.hasBody === false) continue;
+        // Dieselbe Ueberlegung fuer Namen, die es ausserhalb des Projekts gibt:
+        // ein Modul kann eine Fremdklasse erweitern, ohne sie zu erfinden.
+        if (foreignRef.has(child.name)) continue;
         contentIds.set(child.name, `${node.name}-Klasse "${child.name}" aus ${moduleOf(file)}`);
       }
     }

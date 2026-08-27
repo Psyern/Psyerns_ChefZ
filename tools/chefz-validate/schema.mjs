@@ -95,26 +95,39 @@ export default function run() {
     const data = res.data;
 
     if (p.includes('/config/recipes/')) {
-      const list = Array.isArray(data) ? data : (Array.isArray(data.Recipes) ? data.Recipes : null);
+      // Massgeblich ist die Dokumentform, die der Core tatsaechlich laedt
+      // (ChefZ_JsonDocs.c): { kind, schemaVersion, records: [...] }.
+      // Die beiden aelteren Formen bleiben lesbar, damit vorhandene Dateien
+      // nicht schlagartig ungueltig werden.
+      const list = Array.isArray(data) ? data
+        : (Array.isArray(data.records) ? data.records
+          : (Array.isArray(data.Recipes) ? data.Recipes : null));
       if (!list) {
-        f.error(file, 0, 'Rezeptdatei muss ein Array sein oder ein Objekt mit dem Feld "Recipes"');
+        f.error(file, 0, 'Rezeptdatei muss die Core-Dokumentform { kind, schemaVersion, records: [...] } haben (oder ein Array bzw. ein Objekt mit "Recipes" sein)');
         continue;
       }
+      if (data && !Array.isArray(data) && Array.isArray(data.records) && data.kind !== 'recipe') {
+        f.warn(file, lineOf(file, '"kind"'), `Rezeptdatei deklariert kind "${data.kind}" statt "recipe" - der Core sortiert sie damit als andere Datensatzart ein`);
+      }
+      // Bewusst NUR die Huelle. Die Feldstruktur eines Rezepts gehoert
+      // ChefZ_RecipeDef im Core und wird von den chefz*-Pruefern gegen den
+      // echten Code geprueft. Ein handgepflegter Nachbau davon hier wuerde
+      // bei jeder Core-Aenderung driften und Fehler melden, wo keine sind.
       const seen = new Map();
       list.forEach((r, i) => {
-        checkShape(f, file, r, 'recipe', `Rezept #${i + 1}`);
-        if (r && typeof r.RecipeID === 'string') {
-          if (seen.has(r.RecipeID)) {
-            f.error(file, lineOf(file, r.RecipeID), `RecipeID "${r.RecipeID}" doppelt in derselben Datei (auch #${seen.get(r.RecipeID) + 1})`);
-          }
-          seen.set(r.RecipeID, i);
+        if (r === null || typeof r !== 'object' || Array.isArray(r)) {
+          f.error(file, 0, `Rezept #${i + 1}: erwartet ein Objekt`);
+          return;
         }
-        if (r && Array.isArray(r.Ingredients)) {
-          r.Ingredients.forEach((ing, j) => {
-            if (ing && typeof ing === 'object' && !('Category' in ing) && ('Item' in ing)) return; // Item statt Category ist erlaubt
-            checkShape(f, file, ing, 'ingredient', `Rezept #${i + 1} Zutat #${j + 1}`);
-          });
+        const id = r.id ?? r.RecipeID;
+        if (typeof id !== 'string' || id.length === 0) {
+          f.error(file, 0, `Rezept #${i + 1}: hat keine Kennung ("id")`);
+          return;
         }
+        if (seen.has(id)) {
+          f.error(file, lineOf(file, id), `Rezept-Kennung "${id}" doppelt in derselben Datei (auch #${seen.get(id) + 1})`);
+        }
+        seen.set(id, i);
       });
     }
   }

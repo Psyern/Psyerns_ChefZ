@@ -10,7 +10,10 @@ const ALLOWED_UNPREFIXED = [
   /^Cot/i,                     // COT-Erweiterungen
 ];
 
-const PASCAL = /^ChefZ_[A-Z][A-Za-z0-9]*$/;
+// "_Base" als Endung ist DayZ-Konvention fuer nicht spawnbare Basisklassen
+// (Edible_Base, Inventory_Base, Container_Base). Sie zu verbieten hiesse, gegen
+// die Engine-Konvention zu benennen, in die sich ChefZ einreiht.
+const PASCAL = /^ChefZ_[A-Z][A-Za-z0-9]*(_Base)?$/;
 
 export default function run() {
   const f = new Findings('naming');
