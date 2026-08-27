@@ -16,6 +16,8 @@ const CHECKS = [
   // S19 (19 §3). chefzsym und chefzcore sind AUFLAGEN aus OF-11, keine Zugaben:
   // ohne sie ist der datengetriebene Entwurf schlechter als ein enum-basierter.
   'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
+  // Invariante I2 - die zentrale Designregel, mechanisch geprueft.
+  'chefzvanilla',
 ];
 
 const args = process.argv.slice(2);
