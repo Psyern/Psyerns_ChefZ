@@ -1,23 +1,23 @@
-"Language","original","English","German"
-"STR_CHEFZ_YEAST","Yeast","Yeast","Hefe"
-"STR_CHEFZ_YEAST_DESC","Baker's yeast. Makes dough rise.","Baker's yeast. Makes dough rise.","Backhefe. Laesst Teig aufgehen."
-"STR_CHEFZ_SIMPLEDOUGH","Simple Dough","Simple Dough","Einfacher Teig"
-"STR_CHEFZ_SIMPLEDOUGH_DESC","Flour and water, kneaded. Fries into flatbread.","Flour and water, kneaded. Fries into flatbread.","Mehl und Wasser, geknetet. Wird in der Pfanne zu Fladenbrot."
-"STR_CHEFZ_YEASTDOUGH","Yeast Dough","Yeast Dough","Hefeteig"
-"STR_CHEFZ_YEASTDOUGH_DESC","Risen dough. Bake it into bread.","Risen dough. Bake it into bread.","Gegangener Teig. Backe Brot daraus."
-"STR_CHEFZ_PASTADOUGH","Pasta Dough","Pasta Dough","Nudelteig"
-"STR_CHEFZ_PASTADOUGH_DESC","Rolled out dough. Cut it into pasta.","Rolled out dough. Cut it into pasta.","Ausgerollter Teig. Schneide Nudeln daraus."
-"STR_CHEFZ_RAWPASTA","Fresh Pasta","Fresh Pasta","Frische Nudeln"
-"STR_CHEFZ_RAWPASTA_DESC","Fresh pasta. Cooks fast, keeps badly.","Fresh pasta. Cooks fast, keeps badly.","Frische Nudeln. Kochen schnell, halten schlecht."
-"STR_CHEFZ_DRIEDPASTA","Dried Pasta","Dried Pasta","Trockennudeln"
-"STR_CHEFZ_DRIEDPASTA_DESC","Dried on a rack. Keeps for a long time.","Dried on a rack. Keeps for a long time.","Auf dem Trockenrahmen getrocknet. Haelt lange."
-"STR_CHEFZ_BREAD","Bread","Bread","Brot"
-"STR_CHEFZ_BREAD_DESC","A baked loaf.","A baked loaf.","Ein gebackener Laib."
-"STR_CHEFZ_FLATBREAD","Flatbread","Flatbread","Fladenbrot"
-"STR_CHEFZ_FLATBREAD_DESC","Unleavened bread from the pan.","Unleavened bread from the pan.","Ungesaeuertes Brot aus der Pfanne."
-"STR_CHEFZ_PROC_KNEAD","Knead Dough","Knead Dough","Teig kneten"
-"STR_CHEFZ_PROC_ROLL","Roll Out Dough","Roll Out Dough","Teig ausrollen"
-"STR_CHEFZ_CAT_DOUGH","Dough","Dough","Teig"
-"STR_CHEFZ_CAT_PASTA","Pasta","Pasta","Nudeln"
-"STR_CHEFZ_CAT_BREAD","Bread","Bread","Brot"
-"STR_CHEFZ_TAG_BAKED_GOOD","Baked Good","Baked Good","Backware"
+"Language","original","english","czech","german","russian","polish","hungarian","italian","spanish","french","chinese","japanese","portuguese","chinesesimp",
+"STR_CHEFZ_YEAST","Yeast","Yeast","Droždí","Hefe","Дрожжи","Drożdże","Élesztő","Lievito","Levadura","Levure","酵母","イースト","Fermento","酵母",
+"STR_CHEFZ_YEAST_DESC","Baker's yeast. Makes dough rise.","Baker's yeast. Makes dough rise.","Pekařské droždí. Nechá těsto vykynout.","Backhefe. Laesst Teig aufgehen.","Пекарские дрожжи. Заставляют тесто подниматься.","Drożdże piekarskie. Sprawiają, że ciasto rośnie.","Sütőélesztő. Megkeleszti a tésztát.","Lievito di birra. Fa lievitare l'impasto.","Levadura de panadero. Hace subir la masa.","Levure de boulanger. Fait lever la pâte.","麵包酵母。能讓麵團發酵膨脹。","パン用イースト。生地を発酵させて膨らませる。","Fermento de padeiro. Faz a massa crescer.","面包酵母。能让面团发酵膨胀。",
+"STR_CHEFZ_SIMPLEDOUGH","Simple Dough","Simple Dough","Jednoduché těsto","Einfacher Teig","Простое тесто","Proste ciasto","Egyszerű tészta","Impasto semplice","Masa simple","Pâte simple","簡易麵團","シンプルな生地","Massa simples","简易面团",
+"STR_CHEFZ_SIMPLEDOUGH_DESC","Flour and water, kneaded. Fries into flatbread.","Flour and water, kneaded. Fries into flatbread.","Mouka a voda, prohnětené. Na pánvi z něj bude placka.","Mehl und Wasser, geknetet. Wird in der Pfanne zu Fladenbrot.","Мука и вода, вымешанные. На сковороде получается лепёшка.","Mąka i woda, wyrobione. Na patelni wychodzi podpłomyk.","Liszt és víz, összegyúrva. Serpenyőben lepénykenyér lesz belőle.","Farina e acqua, impastate. In padella diventa una piadina.","Harina y agua, amasadas. En la sartén se convierte en pan plano.","Farine et eau, pétries. À la poêle, elle devient du pain plat.","麵粉和水揉成的麵團。下鍋可以煎成薄餅。","小麦粉と水を練ったもの。フライパンで焼くとフラットブレッドになる。","Farinha e água, amassadas. Na frigideira vira pão achatado.","面粉和水揉成的面团。下锅可以煎成薄饼。",
+"STR_CHEFZ_YEASTDOUGH","Yeast Dough","Yeast Dough","Kynuté těsto","Hefeteig","Дрожжевое тесто","Ciasto drożdżowe","Kelt tészta","Impasto lievitato","Masa de levadura","Pâte levée","發酵麵團","発酵生地","Massa levedada","发酵面团",
+"STR_CHEFZ_YEASTDOUGH_DESC","Risen dough. Bake it into bread.","Risen dough. Bake it into bread.","Vykynuté těsto. Upeč z něj chléb.","Gegangener Teig. Backe Brot daraus.","Поднявшееся тесто. Испеки из него хлеб.","Wyrośnięte ciasto. Upiecz z niego chleb.","Megkelt tészta. Süss belőle kenyeret.","Impasto lievitato. Cuocilo per farne del pane.","Masa fermentada. Hornéala para hacer pan.","Pâte levée. Faites-en cuire du pain.","已經發起的麵團。可以烤成麵包。","膨らんだ生地。焼けばパンになる。","Massa crescida. Asse para fazer pão.","已经发起的面团。可以烤成面包。",
+"STR_CHEFZ_PASTADOUGH","Pasta Dough","Pasta Dough","Těsto na těstoviny","Nudelteig","Тесто для пасты","Ciasto na makaron","Gyúrt tészta","Impasto per pasta","Masa para pasta","Pâte à nouilles","麵條麵團","パスタ生地","Massa para macarrão","面条面团",
+"STR_CHEFZ_PASTADOUGH_DESC","Rolled out dough. Cut it into pasta.","Rolled out dough. Cut it into pasta.","Vyválené těsto. Nakrájej z něj těstoviny.","Ausgerollter Teig. Schneide Nudeln daraus.","Раскатанное тесто. Нарежь из него пасту.","Rozwałkowane ciasto. Pokrój je na makaron.","Kinyújtott tészta. Vágj belőle metéltet.","Impasto steso. Taglialo per ottenere della pasta.","Masa estirada. Córtala para hacer pasta.","Pâte étalée. Découpez-la en nouilles.","擀平的麵團。可以切成麵條。","薄く伸ばした生地。切ればパスタになる。","Massa aberta. Corte-a para fazer macarrão.","擀平的面团。可以切成面条。",
+"STR_CHEFZ_RAWPASTA","Fresh Pasta","Fresh Pasta","Čerstvé těstoviny","Frische Nudeln","Свежая паста","Świeży makaron","Friss tészta","Pasta fresca","Pasta fresca","Pâtes fraîches","新鮮麵條","生パスタ","Macarrão fresco","新鲜面条",
+"STR_CHEFZ_RAWPASTA_DESC","Fresh pasta. Cooks fast, keeps badly.","Fresh pasta. Cooks fast, keeps badly.","Čerstvé těstoviny. Uvaří se rychle, dlouho nevydrží.","Frische Nudeln. Kochen schnell, halten schlecht.","Свежая паста. Варится быстро, хранится плохо.","Świeży makaron. Gotuje się szybko, ale szybko się psuje.","Friss tészta. Gyorsan megfő, de hamar megromlik.","Pasta fresca. Cuoce in fretta, si conserva male.","Pasta fresca. Se cuece rápido, se conserva mal.","Pâtes fraîches. Cuisent vite, se conservent mal.","新鮮麵條。煮得快，但不耐放。","生パスタ。すぐ茹で上がるが、日持ちしない。","Macarrão fresco. Cozinha rápido, conserva-se mal.","新鲜面条。煮得快，但不耐放。",
+"STR_CHEFZ_DRIEDPASTA","Dried Pasta","Dried Pasta","Sušené těstoviny","Trockennudeln","Сушёная паста","Makaron suszony","Szárított tészta","Pasta secca","Pasta seca","Pâtes sèches","乾麵條","乾燥パスタ","Macarrão seco","干面条",
+"STR_CHEFZ_DRIEDPASTA_DESC","Dried on a rack. Keeps for a long time.","Dried on a rack. Keeps for a long time.","Usušené na sušáku. Vydrží dlouho.","Auf dem Trockenrahmen getrocknet. Haelt lange.","Высушена на сушилке. Хранится долго.","Wysuszony na suszarce. Długo się przechowuje.","Szárítóállványon szárítva. Sokáig eltartható.","Essiccata su una rastrelliera. Si conserva a lungo.","Secada en un bastidor. Se conserva mucho tiempo.","Séchées sur un séchoir. Se conservent longtemps.","在晾架上風乾。可以長期保存。","乾燥ラックで干したもの。長期間保存できる。","Seco em um varal. Conserva-se por muito tempo.","在晾架上风干。可以长期保存。",
+"STR_CHEFZ_BREAD","Bread","Bread","Chléb","Brot","Хлеб","Chleb","Kenyér","Pane","Pan","Pain","麵包","パン","Pão","面包",
+"STR_CHEFZ_BREAD_DESC","A baked loaf.","A baked loaf.","Upečený bochník.","Ein gebackener Laib.","Испечённая буханка.","Upieczony bochenek.","Egy megsütött cipó.","Una pagnotta cotta al forno.","Una hogaza horneada.","Une miche cuite au four.","一條烤好的麵包。","焼き上がったパンのかたまり。","Um pão assado.","一条烤好的面包。",
+"STR_CHEFZ_FLATBREAD","Flatbread","Flatbread","Placka","Fladenbrot","Лепёшка","Podpłomyk","Lepénykenyér","Piadina","Pan plano","Pain plat","薄餅","フラットブレッド","Pão achatado","薄饼",
+"STR_CHEFZ_FLATBREAD_DESC","Unleavened bread from the pan.","Unleavened bread from the pan.","Nekynutý chléb z pánve.","Ungesaeuertes Brot aus der Pfanne.","Пресный хлеб со сковороды.","Przaśny chleb z patelni.","Kovásztalan kenyér a serpenyőből.","Pane azzimo cotto in padella.","Pan sin levadura hecho en la sartén.","Pain sans levain cuit à la poêle.","用平底鍋煎出的無酵餅。","フライパンで焼いた無発酵のパン。","Pão sem fermento feito na frigideira.","用平底锅煎出的无酵饼。",
+"STR_CHEFZ_PROC_KNEAD","Knead Dough","Knead Dough","Prohníst těsto","Teig kneten","Замесить тесто","Wyrobić ciasto","Tészta gyúrása","Impastare","Amasar","Pétrir la pâte","揉麵團","生地をこねる","Amassar","揉面团",
+"STR_CHEFZ_PROC_ROLL","Roll Out Dough","Roll Out Dough","Vyválet těsto","Teig ausrollen","Раскатать тесто","Rozwałkować ciasto","Tészta kinyújtása","Stendere l'impasto","Estirar la masa","Étaler la pâte","擀麵團","生地を伸ばす","Abrir a massa","擀面团",
+"STR_CHEFZ_CAT_DOUGH","Dough","Dough","Těsto","Teig","Тесто","Ciasto","Tészta","Impasto","Masa","Pâte","麵團","生地","Massa","面团",
+"STR_CHEFZ_CAT_PASTA","Pasta","Pasta","Těstoviny","Nudeln","Паста","Makaron","Tésztafélék","Pasta","Pasta","Pâtes","麵食","パスタ","Massas","面食",
+"STR_CHEFZ_CAT_BREAD","Bread","Bread","Chléb","Brot","Хлеб","Chleb","Kenyér","Pane","Pan","Pain","麵包","パン","Pão","面包",
+"STR_CHEFZ_TAG_BAKED_GOOD","Baked Good","Baked Good","Pečivo","Backware","Выпечка","Wypiek","Pékáru","Prodotto da forno","Producto de panadería","Produit de boulangerie","烘焙食品","ベーカリー製品","Produto de panificação","烘焙食品",

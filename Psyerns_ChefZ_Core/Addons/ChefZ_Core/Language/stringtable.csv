@@ -1,5 +1,5 @@
-"Language","original","English","German"
-"STR_CHEFZ_ACTION_PROCESS","Process","Process","Verarbeiten"
-"STR_CHEFZ_CRAFT_GENERIC","Process","Process","Verarbeiten"
-"STR_CHEFZ_ACTION_TAKE_PORTION","Take Portion","Take Portion","Portion entnehmen"
-"STR_CHEFZ_PORTIONS","Portions","Portions","Portionen"
+"Language","original","english","czech","german","russian","polish","hungarian","italian","spanish","french","chinese","japanese","portuguese","chinesesimp",
+"STR_CHEFZ_ACTION_PROCESS","Process","Process","Zpracovat","Verarbeiten","Обработать","Przetwórz","Feldolgozás","Lavora","Procesar","Transformer","加工","加工する","Processar","加工",
+"STR_CHEFZ_CRAFT_GENERIC","Process","Process","Zpracovat","Verarbeiten","Обработать","Przetwórz","Feldolgozás","Lavora","Procesar","Transformer","加工","加工する","Processar","加工",
+"STR_CHEFZ_ACTION_TAKE_PORTION","Take Portion","Take Portion","Odebrat porci","Portion entnehmen","Взять порцию","Weź porcję","Adag kivétele","Prendi una porzione","Tomar una porción","Prendre une portion","取一份","一人前を取る","Pegar uma porção","取一份",
+"STR_CHEFZ_PORTIONS","Portions","Portions","Porce","Portionen","Порции","Porcje","Adagok","Porzioni","Porciones","Portions","份數","人前","Porções","份数",
