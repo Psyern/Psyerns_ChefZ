@@ -1,0 +1,31 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "_comment": "Slice produce. Entwurf 05 §2, zweiter Deklarationsweg: FREMDE Klassen werden im Slice-JSON gebunden, nie in ihrer eigenen config.cpp (Workflow §10.5). Potato und Tomato existieren in Vanilla - ChefZ erweitert sie, statt eine zweite Kartoffel zu bauen (Production Map §13, §14). GreenBellPepper ist die Vanilla-Paprika und laeuft deshalb in dieselbe Schnittstufe wie ChefZ_Paprika (§15).",
+    "records": [
+        {
+            "id": "Potato",
+            "categories": ["VEGETABLE", "ROOT_VEGETABLE"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "Tomato",
+            "categories": ["VEGETABLE"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "GreenBellPepper",
+            "categories": ["VEGETABLE"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        }
+    ]
+}

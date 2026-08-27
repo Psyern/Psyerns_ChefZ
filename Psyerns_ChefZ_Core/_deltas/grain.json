@@ -1,0 +1,66 @@
+{
+    "slice": "grain",
+
+    "categories": [
+        { "id": "GRAIN",  "parent": null,    "displayName": "#STR_CHEFZ_CAT_GRAIN" },
+        { "id": "FLOUR",  "parent": "GRAIN", "displayName": "#STR_CHEFZ_CAT_FLOUR" },
+        { "id": "DOUGH",  "parent": null,    "displayName": "#STR_CHEFZ_CAT_DOUGH" },
+        { "id": "PASTA",  "parent": null,    "displayName": "#STR_CHEFZ_CAT_PASTA" },
+        { "id": "BREAD",  "parent": null,    "displayName": "#STR_CHEFZ_CAT_BREAD" }
+    ],
+
+    "tags": [
+        {
+            "id": "CHEFZ_GRAIN",
+            "displayName": "#STR_CHEFZ_TAG_GRAIN",
+            "appliesTo": [
+                "ChefZ_Wheat", "ChefZ_Flour",
+                "ChefZ_SimpleDough", "ChefZ_YeastDough", "ChefZ_PastaDough",
+                "ChefZ_RawPasta", "ChefZ_DriedPasta",
+                "ChefZ_Bread", "ChefZ_Flatbread"
+            ]
+        },
+        {
+            "id": "CHEFZ_BAKED_GOOD",
+            "displayName": "#STR_CHEFZ_TAG_BAKED_GOOD",
+            "appliesTo": ["ChefZ_Bread", "ChefZ_Flatbread"]
+        }
+    ],
+
+    "processes": [
+        { "id": "PROCESS_MILL",  "station": "ChefZ_GrainMill", "durationSec": 25 },
+        { "id": "PROCESS_KNEAD", "durationSec": 8 },
+        { "id": "PROCESS_ROLL",  "tool": "ChefZ_RollingPin", "durationSec": 10 }
+    ],
+
+    "nutrition": [
+        { "class": "ChefZ_Wheat",       "energy": 180, "water": 5,  "stomach": 20 },
+        { "class": "ChefZ_Flour",       "energy": 340, "water": 2,  "stomach": 25 },
+        { "class": "ChefZ_Yeast",       "energy": 90,  "water": 4,  "stomach": 5 },
+        { "class": "ChefZ_SimpleDough", "energy": 300, "water": 90, "stomach": 35 },
+        { "class": "ChefZ_YeastDough",  "energy": 310, "water": 90, "stomach": 35 },
+        { "class": "ChefZ_PastaDough",  "energy": 320, "water": 70, "stomach": 32 },
+        { "class": "ChefZ_RawPasta",    "energy": 260, "water": 60, "stomach": 30 },
+        { "class": "ChefZ_DriedPasta",  "energy": 380, "water": 5,  "stomach": 28 },
+        { "class": "ChefZ_Bread",       "energy": 500, "water": 20, "stomach": 45 },
+        { "class": "ChefZ_Flatbread",   "energy": 320, "water": 15, "stomach": 30 }
+    ],
+
+    "classes": [
+        "ChefZ_GrainFoodBase",
+        "ChefZ_WheatPlant",
+        "ChefZ_WheatSeeds",
+        "ChefZ_Wheat",
+        "ChefZ_GrainMill",
+        "ChefZ_RollingPin",
+        "ChefZ_Flour",
+        "ChefZ_Yeast",
+        "ChefZ_SimpleDough",
+        "ChefZ_YeastDough",
+        "ChefZ_PastaDough",
+        "ChefZ_RawPasta",
+        "ChefZ_DriedPasta",
+        "ChefZ_Bread",
+        "ChefZ_Flatbread"
+    ]
+}

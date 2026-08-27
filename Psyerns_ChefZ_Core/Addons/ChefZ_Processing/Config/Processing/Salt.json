@@ -1,0 +1,60 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_SaltwaterToRawSalt",
+            "process": "PROCESS_BOIL_BRINE",
+            "priority": 0,
+            "qualityRule": "MEAN",
+            "inputs": [
+                {
+                    "slotId": "brine",
+                    "match": {
+                        "isLiquidContainer": true,
+                        "liquidType": "SaltWater",
+                        "quantityPct": { "min": 0.8 }
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "amount",
+                    "consumeAmount": 0.6,
+                    "allowPartial": true
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_RawSalt",
+                    "quantityMode": "ratio",
+                    "ratio": 0.04,
+                    "inheritFreshness": false,
+                    "inheritTemperature": false
+                }
+            ]
+        },
+        {
+            "id": "TR_RawSaltToSalt",
+            "process": "PROCESS_DRY_SALT",
+            "priority": 0,
+            "qualityRule": "MEAN",
+            "inputs": [
+                {
+                    "slotId": "rawsalt",
+                    "match": { "cls": "ChefZ_RawSalt" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_Salt",
+                    "quantityMode": "ratio",
+                    "ratio": 0.67,
+                    "inheritFreshness": false,
+                    "inheritTemperature": false
+                }
+            ]
+        }
+    ]
+}

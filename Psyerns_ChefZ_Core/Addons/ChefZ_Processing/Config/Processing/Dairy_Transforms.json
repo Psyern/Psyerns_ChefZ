@@ -1,0 +1,75 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_MilkToCream",
+            "process": "PROCESS_SEPARATE_CREAM",
+            "stationsAllowed": ["ChefZ_ButterChurn"],
+            "inputs": [
+                {
+                    "slotId": "milk",
+                    "match": { "cls": "ChefZ_Milk" },
+                    "minCount": 2,
+                    "maxCount": 2,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_Cream",
+                    "inheritFreshness": true,
+                    "freshnessCarry": 0.95
+                }
+            ],
+            "qualityRule": "MEAN",
+            "priority": 10
+        },
+        {
+            "id": "TR_CreamToButter",
+            "process": "PROCESS_CHURN_BUTTER",
+            "stationsAllowed": ["ChefZ_ButterChurn"],
+            "inputs": [
+                {
+                    "slotId": "cream",
+                    "match": { "cls": "ChefZ_Cream" },
+                    "minCount": 2,
+                    "maxCount": 2,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_Butter",
+                    "inheritFreshness": true,
+                    "freshnessCarry": 1.0
+                }
+            ],
+            "qualityRule": "MEAN",
+            "priority": 10
+        },
+        {
+            "id": "TR_MilkToCheese",
+            "process": "PROCESS_PRESS_CHEESE",
+            "stationsAllowed": ["ChefZ_CheesePress"],
+            "inputs": [
+                {
+                    "slotId": "milk",
+                    "match": { "cls": "ChefZ_Milk" },
+                    "minCount": 3,
+                    "maxCount": 3,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_Cheese",
+                    "inheritFreshness": true,
+                    "freshnessCarry": 1.0
+                }
+            ],
+            "qualityRule": "MEAN",
+            "priority": 10
+        }
+    ]
+}

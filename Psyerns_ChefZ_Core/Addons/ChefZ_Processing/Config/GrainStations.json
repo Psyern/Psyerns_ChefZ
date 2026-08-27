@@ -1,0 +1,14 @@
+{
+    "kind": "station",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_GrainMill",
+            "stationCategories": ["MILL"],
+            "processes": ["PROCESS_MILL"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        }
+    ]
+}

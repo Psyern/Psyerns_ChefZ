@@ -1,0 +1,76 @@
+{
+    "kind": "recipe",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "REC_ChefZ_Bread",
+            "priority": 10,
+            "contexts": [
+                {
+                    "deviceClasses": ["Pot", "FryingPan", "OvenIndoor"],
+                    "methods": ["BAKING"]
+                }
+            ],
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked"],
+            "slots": [
+                {
+                    "slotId": "dough",
+                    "match": { "cls": "ChefZ_YeastDough" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": {
+                "extraItems": "forbid"
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_Bread",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "nutritionModifier": 1.0
+        },
+        {
+            "id": "REC_ChefZ_Flatbread",
+            "priority": 0,
+            "contexts": [
+                {
+                    "deviceClasses": ["FryingPan", "Pot"],
+                    "methods": ["BAKING"]
+                }
+            ],
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked"],
+            "slots": [
+                {
+                    "slotId": "dough",
+                    "match": { "cls": "ChefZ_SimpleDough" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": {
+                "extraItems": "forbid"
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_Flatbread",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "nutritionModifier": 1.0
+        }
+    ]
+}

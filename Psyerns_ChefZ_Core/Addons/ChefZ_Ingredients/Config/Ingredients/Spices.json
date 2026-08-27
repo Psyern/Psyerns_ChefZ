@@ -1,0 +1,105 @@
+{
+  "kind": "ingredient",
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "ChefZ_DriedParsley",
+      "categories": ["DRIED_HERB"],
+      "tags": ["CHEFZ_HERB"],
+      "defaultState": "DRIED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_DriedDill",
+      "categories": ["DRIED_HERB"],
+      "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],
+      "defaultState": "DRIED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_DriedThyme",
+      "categories": ["DRIED_HERB"],
+      "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],
+      "defaultState": "DRIED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_DriedRosemary",
+      "categories": ["DRIED_HERB"],
+      "tags": ["CHEFZ_HERB"],
+      "defaultState": "DRIED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_DriedWildGarlic",
+      "categories": ["DRIED_HERB"],
+      "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],
+      "defaultState": "DRIED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_DriedPaprika",
+      "categories": ["SPICE"],
+      "tags": ["CHEFZ_SPICE"],
+      "defaultState": "DRIED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_PaprikaPowder",
+      "categories": ["SPICE"],
+      "tags": ["CHEFZ_SPICE"],
+      "defaultState": "PREPARED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_DriedPeppercorns",
+      "categories": ["SPICE"],
+      "tags": ["CHEFZ_SPICE"],
+      "defaultState": "DRIED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_BlackPepper",
+      "categories": ["SPICE"],
+      "tags": ["CHEFZ_SPICE"],
+      "defaultState": "PREPARED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_HerbMix",
+      "categories": ["SPICE", "DRIED_HERB"],
+      "tags": ["CHEFZ_SPICE", "CHEFZ_HERB"],
+      "defaultState": "PREPARED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    },
+    {
+      "id": "ChefZ_HunterSeasoning",
+      "categories": ["SPICE"],
+      "tags": ["CHEFZ_SPICE"],
+      "defaultState": "PREPARED",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": false
+    }
+  ]
+}

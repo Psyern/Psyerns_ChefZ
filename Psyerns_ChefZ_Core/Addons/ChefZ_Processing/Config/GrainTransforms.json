@@ -1,0 +1,31 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_WheatToFlour",
+            "process": "PROCESS_MILL",
+            "stationsAllowed": ["ChefZ_GrainMill"],
+            "inputs": [
+                {
+                    "slotId": "grain",
+                    "match": { "cls": "ChefZ_Wheat" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_Flour",
+                    "quantityMode": "ratio",
+                    "ratio": 0.78,
+                    "inheritFreshness": true,
+                    "freshnessCarry": 1.0
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 0
+        }
+    ]
+}

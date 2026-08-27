@@ -1,0 +1,36 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_Milk",
+            "categories": ["DAIRY"],
+            "tags": ["CHEFZ_DAIRY"],
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Cream",
+            "categories": ["DAIRY"],
+            "tags": ["CHEFZ_DAIRY"],
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Butter",
+            "categories": ["DAIRY"],
+            "tags": ["CHEFZ_DAIRY"],
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Cheese",
+            "categories": ["DAIRY"],
+            "tags": ["CHEFZ_DAIRY"],
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Egg",
+            "categories": ["EGG"],
+            "tags": ["CHEFZ_EGG"],
+            "decays": true
+        }
+    ]
+}

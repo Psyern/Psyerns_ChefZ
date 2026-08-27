@@ -1,0 +1,136 @@
+{
+    "_comment": "Erzeugt vom chefz-registry-integrator aus Psyerns_ChefZ_Core/_deltas/*.json (Workflow §5). Nicht von Hand bearbeiten - Aenderungen gehen in das Delta des zustaendigen Slice. Reihenfolge: Slices alphabetisch, innerhalb eines Slice nach ID. Feldnamen wie in den Deltas (Delta-Schema aus Workflow §5); die Abbildung auf die ChefZ_*Def-Felder des Rang-2-Laders ({kind, schemaVersion, records[]}) ist offen und liegt beim Core/Architekt - siehe Integrationsbericht, Punkt REG-FORMAT.",
+    "schemaVersion": 1,
+    "slices": [
+        "dairy",
+        "grain",
+        "herbs",
+        "meat",
+        "produce",
+        "salt"
+    ],
+    "tags": [
+        {
+            "id": "CHEFZ_DAIRY",
+            "appliesTo": [
+                "ChefZ_Milk",
+                "ChefZ_Cream",
+                "ChefZ_Butter",
+                "ChefZ_Cheese"
+            ]
+        },
+        {
+            "id": "CHEFZ_EGG",
+            "appliesTo": [
+                "ChefZ_Egg"
+            ]
+        },
+        {
+            "id": "CHEFZ_BAKED_GOOD",
+            "displayName": "#STR_CHEFZ_TAG_BAKED_GOOD",
+            "appliesTo": [
+                "ChefZ_Bread",
+                "ChefZ_Flatbread"
+            ]
+        },
+        {
+            "id": "CHEFZ_GRAIN",
+            "displayName": "#STR_CHEFZ_TAG_GRAIN",
+            "appliesTo": [
+                "ChefZ_Wheat",
+                "ChefZ_Flour",
+                "ChefZ_SimpleDough",
+                "ChefZ_YeastDough",
+                "ChefZ_PastaDough",
+                "ChefZ_RawPasta",
+                "ChefZ_DriedPasta",
+                "ChefZ_Bread",
+                "ChefZ_Flatbread"
+            ]
+        },
+        {
+            "id": "CHEFZ_HERB",
+            "appliesTo": [
+                "ChefZ_Parsley",
+                "ChefZ_Dill",
+                "ChefZ_Thyme",
+                "ChefZ_Rosemary",
+                "ChefZ_WildGarlic",
+                "ChefZ_DriedParsley",
+                "ChefZ_DriedDill",
+                "ChefZ_DriedThyme",
+                "ChefZ_DriedRosemary",
+                "ChefZ_DriedWildGarlic",
+                "ChefZ_HerbMix"
+            ]
+        },
+        {
+            "id": "CHEFZ_SPICE",
+            "appliesTo": [
+                "ChefZ_PepperBerries",
+                "ChefZ_DriedPeppercorns",
+                "ChefZ_BlackPepper",
+                "ChefZ_DriedPaprika",
+                "ChefZ_PaprikaPowder",
+                "ChefZ_HerbMix",
+                "ChefZ_HunterSeasoning"
+            ]
+        },
+        {
+            "id": "CHEFZ_WILD_HERB",
+            "appliesTo": [
+                "ChefZ_Dill",
+                "ChefZ_Thyme",
+                "ChefZ_WildGarlic",
+                "ChefZ_DriedDill",
+                "ChefZ_DriedThyme",
+                "ChefZ_DriedWildGarlic"
+            ]
+        },
+        {
+            "id": "CHEFZ_HIGH_PROTEIN"
+        },
+        {
+            "id": "CHEFZ_HOT_MEAL"
+        },
+        {
+            "id": "CHEFZ_PREMIUM"
+        },
+        {
+            "id": "CHEFZ_RAW_MEAT"
+        },
+        {
+            "id": "CHEFZ_RAW_SAUSAGE"
+        },
+        {
+            "id": "CHEFZ_WILD_MEAT"
+        },
+        {
+            "id": "CHEFZ_CHOPPED",
+            "appliesTo": [
+                "ChefZ_SlicedPotato",
+                "ChefZ_ChoppedTomato",
+                "ChefZ_ChoppedPaprika",
+                "ChefZ_ChoppedOnion",
+                "ChefZ_ChoppedGarlic",
+                "ChefZ_ChoppedCarrot",
+                "ChefZ_ChoppedCabbage"
+            ]
+        },
+        {
+            "id": "CHEFZ_FRESH",
+            "appliesTo": [
+                "Potato",
+                "Tomato",
+                "GreenBellPepper",
+                "ChefZ_Onion",
+                "ChefZ_Garlic",
+                "ChefZ_Carrot",
+                "ChefZ_Cabbage"
+            ]
+        },
+        {
+            "id": "CHEFZ_SALT"
+        }
+    ]
+}

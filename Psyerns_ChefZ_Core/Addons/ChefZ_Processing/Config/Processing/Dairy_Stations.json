@@ -1,0 +1,22 @@
+{
+    "kind": "station",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_ButterChurn",
+            "stationCategories": ["CHURN"],
+            "processes": ["PROCESS_SEPARATE_CREAM", "PROCESS_CHURN_BUTTER"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        },
+        {
+            "id": "ChefZ_CheesePress",
+            "stationCategories": ["PRESS"],
+            "processes": ["PROCESS_PRESS_CHEESE"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        }
+    ]
+}

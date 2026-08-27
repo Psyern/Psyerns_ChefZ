@@ -1,0 +1,72 @@
+{
+    "slice": "produce",
+
+    "categories": [
+        { "id": "VEGETABLE", "parent": null, "displayName": "#STR_CHEFZ_CAT_VEGETABLE" },
+        { "id": "ROOT_VEGETABLE", "parent": "VEGETABLE", "displayName": "#STR_CHEFZ_CAT_ROOT_VEGETABLE" },
+        { "id": "LEAF_VEGETABLE", "parent": "VEGETABLE", "displayName": "#STR_CHEFZ_CAT_LEAF_VEGETABLE" }
+    ],
+
+    "tags": [
+        {
+            "id": "CHEFZ_FRESH",
+            "appliesTo": [
+                "Potato", "Tomato", "GreenBellPepper",
+                "ChefZ_Onion", "ChefZ_Garlic", "ChefZ_Carrot", "ChefZ_Cabbage"
+            ]
+        },
+        {
+            "id": "CHEFZ_CHOPPED",
+            "appliesTo": [
+                "ChefZ_SlicedPotato", "ChefZ_ChoppedTomato", "ChefZ_ChoppedPaprika",
+                "ChefZ_ChoppedOnion", "ChefZ_ChoppedGarlic", "ChefZ_ChoppedCarrot",
+                "ChefZ_ChoppedCabbage"
+            ]
+        }
+    ],
+
+    "processes": [
+        { "id": "PROCESS_CHOP_VEGETABLE", "tool": "CUTTING_TOOL", "durationSec": 5 },
+        { "id": "PROCESS_CUT_OUT_SEEDS", "tool": "CUTTING_TOOL", "durationSec": 6 }
+    ],
+
+    "nutrition": [
+        { "class": "ChefZ_Onion", "energy": 90, "water": 55, "stomach": 25 },
+        { "class": "ChefZ_Garlic", "energy": 40, "water": 15, "stomach": 8 },
+        { "class": "ChefZ_Carrot", "energy": 100, "water": 60, "stomach": 30 },
+        { "class": "ChefZ_Cabbage", "energy": 110, "water": 80, "stomach": 45 },
+        { "class": "ChefZ_SlicedPotato", "energy": 180, "water": 40, "stomach": 40 },
+        { "class": "ChefZ_ChoppedTomato", "energy": 45, "water": 70, "stomach": 20 },
+        { "class": "ChefZ_ChoppedPaprika", "energy": 60, "water": 45, "stomach": 20 },
+        { "class": "ChefZ_ChoppedOnion", "energy": 90, "water": 55, "stomach": 25 },
+        { "class": "ChefZ_ChoppedGarlic", "energy": 40, "water": 15, "stomach": 8 },
+        { "class": "ChefZ_ChoppedCarrot", "energy": 100, "water": 60, "stomach": 30 },
+        { "class": "ChefZ_ChoppedCabbage", "energy": 110, "water": 80, "stomach": 45 }
+    ],
+
+    "classes": [
+        "ChefZ_VegetableFood_Base",
+        "ChefZ_VegetablePlant_Base",
+        "ChefZ_VegetableSeeds_Base",
+        "ChefZ_OnionPlant",
+        "ChefZ_GarlicPlant",
+        "ChefZ_CarrotPlant",
+        "ChefZ_CabbagePlant",
+        "ChefZ_OnionSeeds",
+        "ChefZ_GarlicSeeds",
+        "ChefZ_CarrotSeeds",
+        "ChefZ_CabbageSeeds",
+        "ChefZ_Onion",
+        "ChefZ_Garlic",
+        "ChefZ_Carrot",
+        "ChefZ_Cabbage",
+        "ChefZ_ChoppedVegetableBase",
+        "ChefZ_SlicedPotato",
+        "ChefZ_ChoppedTomato",
+        "ChefZ_ChoppedPaprika",
+        "ChefZ_ChoppedOnion",
+        "ChefZ_ChoppedGarlic",
+        "ChefZ_ChoppedCarrot",
+        "ChefZ_ChoppedCabbage"
+    ]
+}

@@ -1,0 +1,296 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "_comment": "§29: Raw Meat + Knife -> ChefZ_DicedMeat. Der EINZIGE HANDCRAFT-Transform des Moduls - deshalb handcraftRecipeSlots = 1 im CfgChefZ-Knoten. Ein Eingang plus Werkzeuggruppe: genau die Form, die Vanillas RecipeBase traegt (01 V12). vanillaStage statt state, weil die Garstufe eines Vanilla-Steaks unabhaengig von jeder ChefZ-Registry entscheidbar ist.",
+            "id": "TR_DicedMeat",
+            "process": "PROCESS_CUT_MEAT",
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "category": "MEAT" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_DicedMeat",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "PREPARED",
+                    "inheritFreshness": true
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 0
+        },
+
+        {
+            "_comment": "§30/§57: Meat -> Minced Meat am Fleischwolf. Der gattungsneutrale Fall mit priority 0 - jede Sortenregel unten schlaegt ihn.",
+            "id": "TR_MeatToMinced",
+            "process": "PROCESS_GRIND_MEAT",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "category": "MEAT" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_MincedMeat",
+                    "quantity": 1,
+                    "quantityMode": "fromInput",
+                    "setState": "PREPARED",
+                    "inheritFreshness": true
+                }
+            ],
+            "byproducts": [
+                {
+                    "_comment": "§31: Tierfett faellt beim Wolfen an. Nicht bei jedem Durchgang - chance 0.35 - sonst waere Fett kein Fund, sondern eine Selbstverstaendlichkeit.",
+                    "cls": "ChefZ_AnimalFat",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "PREPARED",
+                    "chance": 0.35
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 0
+        },
+        {
+            "_comment": "§30: die Sorten. Das Ausgangsfleisch bleibt erkennbar - genau das verlangt §30 (\"Das Ausgangsfleisch sollte intern gespeichert bzw. klassifiziert werden\"). Umgesetzt als eigene Klasse und nicht als Variable am Item: eine Variable haette die Naehrwerte nicht mitgenommen, denn die haengen an Klasse x Garstufe (13 §2).",
+            "id": "TR_PorkToMinced",
+            "process": "PROCESS_GRIND_MEAT",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "cls": "PigSteakMeat" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_MincedPork", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+            ],
+            "byproducts": [
+                { "cls": "ChefZ_AnimalFat", "quantity": 1, "quantityMode": "fixed", "setState": "PREPARED", "chance": 0.5 }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 20
+        },
+        {
+            "id": "TR_VenisonToMinced",
+            "process": "PROCESS_GRIND_MEAT",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "cls": "DeerSteakMeat" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_MincedVenison", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 20
+        },
+        {
+            "id": "TR_BoarToMinced",
+            "process": "PROCESS_GRIND_MEAT",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "cls": "BoarSteakMeat" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_MincedBoar", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+            ],
+            "byproducts": [
+                { "cls": "ChefZ_AnimalFat", "quantity": 1, "quantityMode": "fixed", "setState": "PREPARED", "chance": 0.35 }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 20
+        },
+        {
+            "id": "TR_ChickenToMinced",
+            "process": "PROCESS_GRIND_MEAT",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "cls": "ChickenBreastMeat" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_MincedChicken", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 20
+        },
+        {
+            "id": "TR_BearToMinced",
+            "process": "PROCESS_GRIND_MEAT",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "cls": "BearSteakMeat" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_MincedBear", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+            ],
+            "byproducts": [
+                { "cls": "ChefZ_AnimalFat", "quantity": 1, "quantityMode": "fixed", "setState": "PREPARED", "chance": 0.6 }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 20
+        },
+
+        {
+            "_comment": "§33: Intestines + Knife/Processing -> ChefZ_SausageCasing. Das Wasser aus §33 fehlt bewusst: es haette einen dritten Eingang gekostet und damit eine Fluessigkeitsbindung, die V1 nicht braucht. Wer Hygiene will, bekommt sie in V2 als eigenen Zustand - nicht als stiller Zusatzslot.",
+            "id": "TR_SausageCasing",
+            "process": "PROCESS_CLEAN_CASING",
+            "stationsAllowed": ["ChefZ_CuttingBoard"],
+            "inputs": [
+                {
+                    "slotId": "guts",
+                    "match": { "cls": "Guts" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SausageCasing",
+                    "quantity": 2,
+                    "quantityMode": "fixed",
+                    "setState": "PREPARED",
+                    "inheritFreshness": true,
+                    "freshnessCarry": 0.9
+                }
+            ],
+            "priority": 0
+        },
+
+        {
+            "_comment": "§34: die Basiswurst. Hack + EIN Gewuerz + Huelle. priority 0 - jede Sortenregel unten ist genauer und gewinnt. Der Gewuerzslot matcht ueber die KATEGORIE und nicht ueber ChefZ_Salt: die Salz- und Kraeuterkette gehoert einem anderen Slice, und ein Klassenname aus einem fremden Slice waere eine Bindung, die bricht, sobald dort umbenannt wird.",
+            "id": "TR_RawSausage",
+            "process": "PROCESS_STUFF_SAUSAGE",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                { "slotId": "meat",   "match": { "category": "MINCED_MEAT" }, "minCount": 1, "consume": "whole" },
+                { "slotId": "spice",  "match": { "category": "SPICE" },       "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_RawSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 0
+        },
+        {
+            "_comment": "§35: Minced Pork + Salz + Schwarzer Pfeffer + Huelle. Zwei Gewuerzslots - der Matcher bindet jedem Slot ein ANDERES Item (07 §4), es braucht also wirklich zwei verschiedene Gewuerze.",
+            "id": "TR_RawPorkSausage",
+            "process": "PROCESS_STUFF_SAUSAGE",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                { "slotId": "meat",   "match": { "cls": "ChefZ_MincedPork" }, "minCount": 1, "consume": "whole" },
+                { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_RawPorkSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 20
+        },
+        {
+            "_comment": "§36: Minced Venison + Salz + Thymian + Pfeffer + Huelle. Der Kraeuterslot nimmt HERB, DRIED_HERB oder SPICE - welche Kategorie der Kraeuter-Slice dem Thymian am Ende gibt, entscheidet er, nicht dieser Datensatz.",
+            "id": "TR_RawVenisonSausage",
+            "process": "PROCESS_STUFF_SAUSAGE",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                { "slotId": "meat",   "match": { "cls": "ChefZ_MincedVenison" }, "minCount": 1, "consume": "whole" },
+                { "slotId": "spice",  "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "herb",   "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_RawVenisonSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 30
+        },
+        {
+            "_comment": "§37: Minced Boar + Salz + Pfeffer + Baerlauch + Huelle.",
+            "id": "TR_RawBoarSausage",
+            "process": "PROCESS_STUFF_SAUSAGE",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                { "slotId": "meat",   "match": { "cls": "ChefZ_MincedBoar" }, "minCount": 1, "consume": "whole" },
+                { "slotId": "spice",  "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "herb",   "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_RawBoarSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 30
+        },
+        {
+            "_comment": "§38: Wild Meat + Salz + Hunter Seasoning + Huelle. Als EINZIGE Sorte direkt aus rohem Wildfleisch statt aus Hack - so steht es in §38 und so steht es im Pruefstein 20 §2.2. minCount 2, weil zwei Stuecke Wild in eine Wurst gehen.",
+            "id": "TR_RawHunterSausage",
+            "process": "PROCESS_STUFF_SAUSAGE",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                { "slotId": "meat",   "match": { "allOf": [ { "category": "WILD_MEAT" }, { "vanillaStage": "Raw" } ] }, "minCount": 2, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1, "gradePoints": 1 },
+                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_RawHunterSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "qualityDelta": 1.0,
+            "priority": 25
+        },
+        {
+            "_comment": "§39: Minced Meat + Salz + Pfeffer + Paprikapulver + Huelle. Drei Gewuerzslots - das ist zugleich die Unterscheidung zur Basiswurst (ein Slot) und zur Schweinswurst (zwei).",
+            "id": "TR_RawSpicySausage",
+            "process": "PROCESS_STUFF_SAUSAGE",
+            "stationsAllowed": ["ChefZ_MeatGrinder"],
+            "inputs": [
+                { "slotId": "meat",   "match": { "category": "MINCED_MEAT" }, "minCount": 1, "consume": "whole" },
+                { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice3", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_RawSpicySausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 25
+        }
+    ]
+}

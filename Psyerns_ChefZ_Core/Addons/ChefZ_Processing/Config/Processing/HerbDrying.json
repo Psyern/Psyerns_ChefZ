@@ -1,0 +1,111 @@
+{
+  "kind": "transform",
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "TR_ParsleyToDried",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": ["ChefZ_DryingRack"],
+      "durationOverrideSec": 480,
+      "qualityRule": "MIN",
+      "inputs": [
+        { "slotId": "herb", "match": { "cls": "ChefZ_Parsley" }, "minCount": 1, "consume": "whole" }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_DriedParsley", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_DillToDried",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": ["ChefZ_DryingRack"],
+      "durationOverrideSec": 480,
+      "qualityRule": "MIN",
+      "inputs": [
+        { "slotId": "herb", "match": { "cls": "ChefZ_Dill" }, "minCount": 1, "consume": "whole" }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_DriedDill", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_ThymeToDried",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": ["ChefZ_DryingRack"],
+      "durationOverrideSec": 480,
+      "qualityRule": "MIN",
+      "inputs": [
+        { "slotId": "herb", "match": { "cls": "ChefZ_Thyme" }, "minCount": 1, "consume": "whole" }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_DriedThyme", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_RosemaryToDried",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": ["ChefZ_DryingRack"],
+      "durationOverrideSec": 600,
+      "qualityRule": "MIN",
+      "inputs": [
+        { "slotId": "herb", "match": { "cls": "ChefZ_Rosemary" }, "minCount": 1, "consume": "whole" }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_DriedRosemary", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_WildGarlicToDried",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": ["ChefZ_DryingRack"],
+      "durationOverrideSec": 480,
+      "qualityRule": "MIN",
+      "inputs": [
+        { "slotId": "herb", "match": { "cls": "ChefZ_WildGarlic" }, "minCount": 1, "consume": "whole" }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_DriedWildGarlic", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_PaprikaToDried",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": ["ChefZ_DryingRack"],
+      "durationOverrideSec": 900,
+      "qualityRule": "MIN",
+      "inputs": [
+        { "slotId": "pod", "match": { "cls": "ChefZ_Paprika" }, "minCount": 1, "consume": "whole" }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_DriedPaprika", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_PepperBerriesToDried",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": ["ChefZ_DryingRack"],
+      "durationOverrideSec": 900,
+      "qualityRule": "MIN",
+      "inputs": [
+        { "slotId": "berries", "match": { "cls": "ChefZ_PepperBerries" }, "minCount": 1, "consume": "whole" }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_DriedPeppercorns", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    }
+  ]
+}

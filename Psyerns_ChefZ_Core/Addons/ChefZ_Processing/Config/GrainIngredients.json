@@ -1,0 +1,13 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_Flour",
+            "categories": ["FLOUR"],
+            "tags": ["CHEFZ_GRAIN"],
+            "unitsPerWholeItem": 1000,
+            "decays": true
+        }
+    ]
+}

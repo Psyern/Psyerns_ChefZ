@@ -1,0 +1,29 @@
+{
+    "kind": "process",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "PROCESS_KNEAD",
+            "exec": "HANDCRAFT",
+            "displayName": "#STR_CHEFZ_PROC_KNEAD",
+            "baseDurationSec": 8.0,
+            "animationLength": 4.0,
+            "specialty": 0.02,
+            "requiresHeat": false,
+            "toolDamage": 0
+        },
+        {
+            "id": "PROCESS_ROLL",
+            "exec": "HANDCRAFT",
+            "displayName": "#STR_CHEFZ_PROC_ROLL",
+            "toolGroups": [
+                "ROLLING_PIN"
+            ],
+            "baseDurationSec": 10.0,
+            "animationLength": 4.0,
+            "specialty": 0.02,
+            "requiresHeat": false,
+            "toolDamage": 2
+        }
+    ]
+}

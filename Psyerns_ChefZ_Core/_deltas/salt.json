@@ -1,0 +1,23 @@
+{
+    "slice": "salt",
+
+    "categories": [
+        { "id": "SPICE", "parent": null, "displayName": "#STR_CHEFZ_CAT_SPICE" },
+        { "id": "SALT", "parent": "SPICE", "displayName": "#STR_CHEFZ_CAT_SALT" }
+    ],
+
+    "tags": [
+        { "id": "CHEFZ_SALT" }
+    ],
+
+    "processes": [
+        { "id": "PROCESS_BOIL_BRINE", "station": "ChefZ_SaltPan", "durationSec": 900 },
+        { "id": "PROCESS_DRY_SALT", "station": "ChefZ_SaltPan", "durationSec": 1200 }
+    ],
+
+    "classes": [
+        "ChefZ_RawSalt",
+        "ChefZ_Salt",
+        "ChefZ_SaltPan"
+    ]
+}

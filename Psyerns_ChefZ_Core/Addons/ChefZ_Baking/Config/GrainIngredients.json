@@ -1,0 +1,60 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_Yeast",
+            "unitsPerWholeItem": 100,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SimpleDough",
+            "categories": ["DOUGH"],
+            "tags": ["CHEFZ_GRAIN"],
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_YeastDough",
+            "categories": ["DOUGH"],
+            "tags": ["CHEFZ_GRAIN"],
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_PastaDough",
+            "categories": ["DOUGH"],
+            "tags": ["CHEFZ_GRAIN"],
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_RawPasta",
+            "categories": ["PASTA"],
+            "tags": ["CHEFZ_GRAIN"],
+            "unitsPerWholeItem": 500,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_DriedPasta",
+            "categories": ["PASTA"],
+            "tags": ["CHEFZ_GRAIN"],
+            "unitsPerWholeItem": 500,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Bread",
+            "categories": ["BREAD"],
+            "tags": ["CHEFZ_GRAIN", "CHEFZ_BAKED_GOOD"],
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Flatbread",
+            "categories": ["BREAD"],
+            "tags": ["CHEFZ_GRAIN", "CHEFZ_BAKED_GOOD"],
+            "unitsPerWholeItem": 1,
+            "decays": true
+        }
+    ]
+}

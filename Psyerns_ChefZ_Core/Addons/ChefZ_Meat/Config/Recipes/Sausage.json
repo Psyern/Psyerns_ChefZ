@@ -1,0 +1,110 @@
+{
+    "kind": "recipe",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "_comment": "§40: RAW SAUSAGE -> COOKED SAUSAGE. completion ON_STAGE heisst: VANILLA bestimmt, wann gar ist - der Klassentausch haengt an den FoodStageTransitions der config.cpp, nicht an einer eigenen Uhr (Pruefstein 20 §2.2, letzter Absatz). Passt keines dieser Rezepte, kocht Vanilla die Wurst wie jedes andere Nahrungsmittel weiter; ChefZ blockiert nichts (Workflow §10.2). policy.extraItems ist ignore und nicht forbid: in einer Pfanne liegt selten nur eine Wurst, und ein zweites Item darf das Braten nicht verhindern.",
+            "id": "RCP_CookSausage",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "slots": [
+                { "slotId": "sausage", "match": { "cls": "ChefZ_RawSausage" }, "minCount": 1, "consume": "whole" }
+            ],
+            "policy": { "extraItems": "ignore" },
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked", "Boiled"],
+            "outputs": [
+                {
+                    "cls": "ChefZ_CookedSausage",
+                    "quantity": 1,
+                    "quantityMode": "fromInput",
+                    "setState": "COOKED",
+                    "inheritFreshness": true,
+                    "inheritTemperature": true
+                }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "RCP_CookPorkSausage",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "slots": [
+                { "slotId": "sausage", "match": { "cls": "ChefZ_RawPorkSausage" }, "minCount": 1, "consume": "whole" }
+            ],
+            "policy": { "extraItems": "ignore" },
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked", "Boiled"],
+            "outputs": [
+                { "cls": "ChefZ_PorkSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "RCP_CookVenisonSausage",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "slots": [
+                { "slotId": "sausage", "match": { "cls": "ChefZ_RawVenisonSausage" }, "minCount": 1, "consume": "whole" }
+            ],
+            "policy": { "extraItems": "ignore" },
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked", "Boiled"],
+            "outputs": [
+                { "cls": "ChefZ_VenisonSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "RCP_CookBoarSausage",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "slots": [
+                { "slotId": "sausage", "match": { "cls": "ChefZ_RawBoarSausage" }, "minCount": 1, "consume": "whole" }
+            ],
+            "policy": { "extraItems": "ignore" },
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked", "Boiled"],
+            "outputs": [
+                { "cls": "ChefZ_BoarSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "RCP_CookHunterSausage",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "slots": [
+                { "slotId": "sausage", "match": { "cls": "ChefZ_RawHunterSausage" }, "minCount": 1, "consume": "whole" }
+            ],
+            "policy": { "extraItems": "ignore" },
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked", "Boiled"],
+            "outputs": [
+                { "cls": "ChefZ_HunterSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "RCP_CookSpicySausage",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "slots": [
+                { "slotId": "sausage", "match": { "cls": "ChefZ_RawSpicySausage" }, "minCount": 1, "consume": "whole" }
+            ],
+            "policy": { "extraItems": "ignore" },
+            "completion": "ON_STAGE",
+            "doneStages": ["Baked", "Boiled"],
+            "outputs": [
+                { "cls": "ChefZ_SpicySausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+            ],
+            "priority": 0
+        }
+    ]
+}

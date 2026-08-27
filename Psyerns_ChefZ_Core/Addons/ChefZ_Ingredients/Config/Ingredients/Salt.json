@@ -1,0 +1,25 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_RawSalt",
+            "quantityUnit": "GRAM",
+            "unitsPerWholeItem": 120,
+            "decays": false
+        },
+        {
+            "id": "ChefZ_Salt",
+            "categories": [
+                "SALT"
+            ],
+            "tags": [
+                "CHEFZ_SPICE",
+                "CHEFZ_SALT"
+            ],
+            "quantityUnit": "GRAM",
+            "unitsPerWholeItem": 200,
+            "decays": false
+        }
+    ]
+}

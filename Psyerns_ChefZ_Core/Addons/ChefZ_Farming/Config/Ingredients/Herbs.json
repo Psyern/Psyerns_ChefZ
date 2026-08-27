@@ -1,0 +1,69 @@
+{
+  "kind": "ingredient",
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "ChefZ_Parsley",
+      "categories": ["HERB"],
+      "tags": ["CHEFZ_HERB"],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Dill",
+      "categories": ["HERB"],
+      "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Thyme",
+      "categories": ["HERB"],
+      "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Rosemary",
+      "categories": ["HERB"],
+      "tags": ["CHEFZ_HERB"],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_WildGarlic",
+      "categories": ["HERB"],
+      "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Paprika",
+      "categories": ["VEGETABLE"],
+      "tags": [],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_PepperBerries",
+      "categories": ["SPICE"],
+      "tags": ["CHEFZ_SPICE"],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    }
+  ]
+}

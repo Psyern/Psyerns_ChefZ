@@ -1,0 +1,14 @@
+{
+    "kind": "process",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "PROCESS_MILL",
+            "exec": "STATION_ACTION",
+            "displayName": "#STR_CHEFZ_PROC_MILL",
+            "baseDurationSec": 25.0,
+            "requiresHeat": false,
+            "toolDamage": 0
+        }
+    ]
+}
