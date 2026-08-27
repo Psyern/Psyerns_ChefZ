@@ -7,6 +7,21 @@
 // PBO-Praefix: $PREFIX$ enthaelt "ChefZ_Core". Die Wurzel jedes Pfades in
 // files[] MUSS damit uebereinstimmen, sonst ueberspringt DayZ die
 // Skriptmodule still und ohne RPT-Eintrag (README "Packing - PBO Prefix").
+//
+// PFADWURZEL, verbindlich (B4, Entwurf 02 §4.1): die Wurzel eines
+// Laufzeitpfades ist das PBO-Praefix, und das PBO-Praefix ist der ORDNERNAME
+// des Addons. Also "ChefZ_Core/..." und - fuer ein Content-Modul -
+// "ChefZ_Meat/...". Es gibt keine zweite Form. Das gilt fuer files[] hier
+// genauso wie fuer jeden dataFiles[]-Eintrag in CfgChefZ; es ist derselbe
+// Adressraum.
+//
+// HANDWERKS-REZEPTPLAETZE: ein Content-Modul, das Transforms mit
+// exec = "HANDCRAFT" mitbringt, deklariert in SEINEM CfgChefZ-Knoten
+// zusaetzlich "handcraftRecipeSlots = <Anzahl>". Der Core selbst bringt keine
+// mit und deklariert deshalb keinen CfgChefZ-Knoten - er reserviert null
+// Plaetze und laesst Vanillas Rezeptliste um kein Bit veraendert. Warum die
+// Zahl ueberhaupt vorab feststehen muss, steht im Kopf von
+// Scripts/4_World/ChefZ/Processing/ChefZ_HandcraftBridge.c.
 
 class CfgPatches
 {
@@ -96,13 +111,21 @@ class CfgMods
             // Seit S15 zusaetzlich in Processing/: die Handcraft-Bruecke -
             // ChefZ_GenericCraftRecipe (GENAU EINE aus Daten parametrisierte
             // RecipeBase-Ableitung, Entwurf 11 E3), ChefZ_HandcraftBridge und
-            // die ZWEITE und LETZTE modded class des Core auf einer
-            // Vanilla-Spielklasse: modded class PluginRecipesManagerBase
-            // (Entwurf 00 §5, Zeile 2). Sie ruft super.RegisterRecipies() als
-            // erste Anweisung und fuegt danach ausschliesslich HINZU;
-            // UnregisterRecipe kommt im gesamten Core nicht vor. Vanillas
-            // Rezeptliste und die IDs ihrer Rezepte bleiben damit unter allen
-            // Umstaenden unveraendert.
+            // modded class PluginRecipesManagerBase (Entwurf 00 §5, Zeile 2).
+            // Sie ruft super.RegisterRecipies() als erste Anweisung und fuegt
+            // danach ausschliesslich HINZU; UnregisterRecipe kommt im gesamten
+            // Core nicht vor. Vanillas Rezeptliste und die IDs ihrer Rezepte
+            // bleiben damit unter allen Umstaenden unveraendert.
+            //
+            // Dazu ChefZ_ModdedWorldCraft: modded class ActionWorldCraft und
+            // ihre beiden Datenhalter. Vanillas Craftaktion uebertraegt die
+            // POSITION eines Rezepts, nicht seine Identitaet; diese Datei legt
+            // eine positionsunabhaengige Kennung daneben und laesst den Server
+            // eine Aktion VERWEIGERN, deren Position auf den beiden Seiten
+            // Verschiedenes bedeutet. Alle drei Overrides rufen super als
+            // erste Anweisung, ein fehlgeschlagenes Lesen gibt nie false
+            // zurueck, und ohne Widerspruch geschieht nichts. Die
+            // vollstaendige Begruendung steht im Kopf der Datei.
             //
             // Auch hier: KEIN Content. Der Core registriert kein einziges
             // Rezept aus eigenem Antrieb - jedes entsteht aus einem

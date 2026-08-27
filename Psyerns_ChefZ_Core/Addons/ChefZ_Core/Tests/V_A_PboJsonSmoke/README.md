@@ -92,7 +92,7 @@ grüner Test beantwortet die Frage nur halb.
 | Sonde | Pfadform | Was ein FAIL bedeutet |
 |---|---|---|
 | P1 | `ChefZ_Core/Config/ChefZ_ProbeData.json` | **Die Kernfrage.** FAIL ⇒ Rang 2 als `config.cpp`-Seed (`02 E7`), `ChefZ_ConfigCppSource` statt `ChefZ_AddonJsonSource`. |
-| P2 | `Psyerns/ChefZ_Core/Config/...` | Pfadform der Beispiele in `02 §4`. FAIL bei PASS von P1 ⇒ die Beispielpfade im Entwurf sind zu korrigieren: Wurzel ist `$PREFIX$`, und `$PREFIX$` ist laut README der Ordnername. |
+| P2 | `Psyerns/ChefZ_Core/Config/...` | **Gegenprobe, keine Messung mehr.** B4 ist entschieden (`02 §4.1`): Wurzel ist `$PREFIX$` = Ordnername. Erwartet ist **FAIL**. Ein PASS widerlegt die Entscheidung und muss gemeldet werden. |
 | P3 | `.../Config/Probe/...` | FAIL ⇒ verschachtelte Datenpfade tragen nicht; Manifestdateien müssen flach liegen. |
 | P4 | alles kleingeschrieben | PASS ⇒ Pfadvergleich ist case-insensitiv; FAIL ⇒ `chefzsym`/Manifest-Validator muss Schreibweisen exakt prüfen. |
 | P5 | führender `/` | Nur Robustheitsinfo für die Pfadnormalisierung im Config Manager. |

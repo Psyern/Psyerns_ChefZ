@@ -110,6 +110,28 @@ class ChefZ_ManifestReader
     static const int API_VERSION = 1;
 
     /**
+     * Optionales Manifestfeld: wie viele HANDWERKS-Rezeptplaetze dieser Slice
+     * in Vanillas Rezeptliste braucht (02 §4).
+     *
+     *     class CfgChefZ
+     *     {
+     *         class ChefZ_Beispiel
+     *         {
+     *             chefzApiVersion       = 1;
+     *             loadOrder             = 200;
+     *             handcraftRecipeSlots  = 12;   // <- so viele HANDCRAFT-Transforms
+     *             dataFiles[]           = { "..." };
+     *         };
+     *     };
+     *
+     * Die Zahl ist eine RESERVIERUNG, keine Obergrenze fuer Transforms
+     * ueberhaupt: sie zaehlt ausschliesslich Transforms, deren Prozess
+     * exec = "HANDCRAFT" hat. Warum das ueberhaupt deklariert werden muss,
+     * steht im Kopf von ChefZ_HandcraftBridge.
+     */
+    static const string SLOT_FIELD = "handcraftRecipeSlots";
+
+    /**
      * Enumeriert CfgChefZ. Muster woertlich aus
      * 3_Game/DayZ/Client/Mods/ModLoader.c:18-25 (ConfigGetChildrenCount +
      * ConfigGetChildName).
@@ -167,6 +189,65 @@ class ChefZ_ManifestReader
 
         Sort(slices);
         return slices;
+    }
+
+    /**
+     * Summe der von allen Slices angemeldeten HANDWERKS-REZEPTPLAETZE.
+     *
+     * ---------------------------------------------------------------------
+     * WARUM DAS HIER STEHT UND NICHT IM CONFIG MANAGER
+     * ---------------------------------------------------------------------
+     * Diese Zahl wird zu einem Zeitpunkt gebraucht, an dem es noch keinen
+     * geladenen Bestand gibt: Vanilla baut seine Rezeptliste im
+     * MissionBase-KONSTRUKTOR auf, ChefZ laedt erst in MissionServer.OnInit
+     * (siehe Kopf von ChefZ_HandcraftBridge, Abschnitt POSITIONSANKER).
+     *
+     * Sie darf deshalb NICHTS voraussetzen ausser der Engine-Config - und
+     * genau die steht dort bereits vollstaendig: Vanilla selbst laeuft im
+     * selben Konstruktor mit g_Game.ConfigGetChildrenCount() ueber
+     * CFG_VEHICLESPATH (PluginRecipesManager.GenerateRecipeCache).
+     *
+     * Kein Report, kein Sink, keine Allokation ausser zwei Zeichenketten je
+     * Slice. Fehlt CfgChefZ ganz oder nennt kein Slice das Feld, ist das
+     * Ergebnis 0 - und dann reserviert ChefZ keinen einzigen Platz und
+     * veraendert Vanillas Rezeptliste um kein Bit.
+     *
+     * Rang 3 geht hier ABSICHTLICH nicht ein. Ein $profile-Overlay kennt nur
+     * der Server; eine daraus abgeleitete Platzzahl waere auf den beiden
+     * Seiten verschieden, und die Zahl muss auf beiden Seiten gleich sein -
+     * sie ist der Anker (02 §6, 02 E2).
+     */
+    static int ReadHandcraftSlotTotal()
+    {
+        if (!g_Game)
+            return 0;
+
+        if (!g_Game.ConfigIsExisting(ROOT))
+            return 0;
+
+        int total = 0;
+        int count = g_Game.ConfigGetChildrenCount(ROOT);
+
+        for (int i = 0; i < count; i++)
+        {
+            string sliceName;
+            if (!g_Game.ConfigGetChildName(ROOT, i, sliceName))
+                continue;
+            if (sliceName == "")
+                continue;
+
+            string node = ROOT + " " + sliceName + " " + SLOT_FIELD;
+            if (!g_Game.ConfigIsExisting(node))
+                continue;
+
+            int n = g_Game.ConfigGetInt(node);
+            if (n <= 0)
+                continue;
+
+            total = total + n;
+        }
+
+        return total;
     }
 
     private static void CheckApiVersion(ChefZ_SliceManifest m, ChefZ_LoadReport report)

@@ -33,7 +33,16 @@ class ChefZ_Boot
     static void OnMissionStart()
     {
         if (s_ServerDone)
+        {
+            // Zweiter Missionsstart im selben Prozess. Die Daten stehen
+            // bereits und werden bewusst NICHT neu geladen (02 E5) - aber
+            // Vanilla hat mit der neuen Mission ein NEUES
+            // PluginRecipesManager gebaut, und dessen frisch verankerte
+            // Rezeptplaetze sind noch leer. Ohne diese Zeile bliebe das
+            // Handwerk ab dem zweiten Start stumm.
+            ChefZ_HandcraftBridge.FillReserved();
             return;
+        }
         s_ServerDone = true;
 
         RunSelfTest();
@@ -41,16 +50,20 @@ class ChefZ_Boot
         ChefZ_ConfigManager cfg = ChefZ_ConfigManager.Get();
         cfg.LoadAll(true);
 
-        // S15 (11 §5): die HANDCRAFT-Transforms in Vanillas Rezeptliste
-        // eintragen. NACH dem Laden und nicht in RegisterRecipies(), weil
-        // Vanilla seine Rezepte im MissionBase-KONSTRUKTOR registriert -
-        // also lange bevor es hier einen Bestand gibt. Die vollstaendige
-        // Begruendung steht im Kopf von ChefZ_HandcraftBridge, Abschnitt
-        // ZEITPUNKT.
+        // S15 (11 §5): die bereits VERANKERTEN Rezeptplaetze mit den
+        // HANDCRAFT-Transforms parametrieren.
         //
-        // Ausschliesslich ADDITIV. Faellt der Aufruf aus, fehlen die
-        // Handwerksrezepte - Vanilla-Crafting bleibt vollstaendig.
-        ChefZ_HandcraftBridge.InstallDeferred();
+        // Eingetragen wurden sie schon im MissionBase-KONSTRUKTOR, aus
+        // RegisterRecipies() heraus (ChefZ_HandcraftBridge.Reserve). Hier
+        // wird kein Rezept mehr registriert und keine Position mehr
+        // veraendert - nur beschrieben, was schon steht. Warum das so
+        // getrennt ist, steht im Kopf von ChefZ_HandcraftBridge, Abschnitt
+        // POSITIONSANKER.
+        //
+        // Ausschliesslich ADDITIV. Faellt der Aufruf aus, bleiben die
+        // Plaetze leer und damit folgenlos - Vanilla-Crafting bleibt
+        // vollstaendig.
+        ChefZ_HandcraftBridge.FillReserved();
 
         ReportState(cfg, "SERVER");
 
@@ -77,7 +90,13 @@ class ChefZ_Boot
     static void OnClientStart()
     {
         if (s_ClientDone)
+        {
+            // Zweiter Missionsstart im selben Prozess - beim Client der
+            // Normalfall, sobald jemand einen zweiten Server betritt.
+            // Begruendung siehe OnMissionStart.
+            ChefZ_HandcraftBridge.FillReserved();
             return;
+        }
         s_ClientDone = true;
 
         // Auf einem Listen-Server laufen BEIDE Einstiegspunkte im selben
@@ -90,13 +109,15 @@ class ChefZ_Boot
         ChefZ_ConfigManager cfg = ChefZ_ConfigManager.Get();
         cfg.LoadAll(false);
 
-        // S15: auch der Client traegt die Handwerksrezepte ein. Er muss es,
+        // S15: auch der Client parametriert seine Rezeptplaetze. Er muss es,
         // damit die Craftaktion ueberhaupt erscheint - ActionWorldCraft fragt
         // PluginRecipesManager.GetValidRecipes() clientseitig.
         //
         // Er ENTSCHEIDET dabei nichts (00 §5): was tatsaechlich geschieht,
-        // prueft der Server in CheckRecipe -> CanDo erneut und bindet neu.
-        ChefZ_HandcraftBridge.InstallDeferred();
+        // prueft der Server in CheckRecipe -> CanDo erneut und bindet neu -
+        // und seit dem Positionsanker prueft er zusaetzlich, dass beide
+        // Seiten ueberhaupt dasselbe Rezept meinen (ChefZ_CraftIntent).
+        ChefZ_HandcraftBridge.FillReserved();
 
         ReportState(cfg, "CLIENT");
     }
@@ -432,6 +453,7 @@ class ChefZ_Boot
             + "  transforms=" + ChefZ_ProcessingManager.Get().GetTransformCount().ToString()
             + "  werkzeuggruppen=" + ChefZ_ToolRegistry.Get().GetGroupCount().ToString()
             + "  handwerksrezepte=" + ChefZ_HandcraftBridge.GetRegisteredCount().ToString()
+            + "/" + ChefZ_HandcraftBridge.GetSlotCount().ToString()
             + "  portionsgerichte=" + ChefZ_PortionManager.Get().GetSpecCount().ToString()
             + "  behaelter=" + ChefZ_ContainerRegistry.Get().GetClassCount().ToString()
             + "  behaelterkategorien=" + ChefZ_ContainerRegistry.Get().GetCategoryCount().ToString()

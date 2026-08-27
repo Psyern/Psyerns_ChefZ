@@ -14,17 +14,28 @@
 //      Klassennamen; ein ChefZ-Selektor kennt Kategorien, Zustaende und
 //      Wertebereiche. Die Uebersetzung ist bewusst eine UEBER-Naeherung -
 //      siehe unten.
-//   2. Je HANDCRAFT-Transform ein ChefZ_GenericCraftRecipe bauen und
-//      REGISTRIEREN. Additiv, in fester Reihenfolge, nie loeschend.
-//   3. Den Zeitpunkt richtig treffen. Das ist der unangenehmste Teil und
-//      bekommt einen eigenen Abschnitt.
+//   2. Je HANDCRAFT-Transform ein ChefZ_GenericCraftRecipe parametrieren.
+//      Additiv, in fester Reihenfolge, nie loeschend.
+//   3. Den PLATZ richtig treffen. Das ist der unangenehmste Teil und bekommt
+//      einen eigenen Abschnitt.
 //
-// ---------------------------------------------------------------------------
-// ZEITPUNKT: Vanilla registriert, BEVOR ChefZ geladen hat
-// ---------------------------------------------------------------------------
-// 11 §5 zeichnet den BOOT-Fluss als "erst ProcessingManager.Build(), dann
-// PluginRecipesManagerBase.RegisterRecipies()". In der Engine ist es
-// umgekehrt, und das ist keine Auslegungsfrage:
+//==============================================================================
+// POSITIONSANKER - warum ChefZ frueh registriert und spaet parametriert
+//==============================================================================
+//
+// DAS PROBLEM, IN EINEM SATZ
+// --------------------------
+// Vanillas Craftaktion uebertraegt beim Start die REZEPT-ID
+// (ActionWorldCraft.WriteToContext -> ctx.Write(m_RecipeID)), und diese ID ist
+// die POSITION des Rezepts in m_RecipeList
+// (PluginRecipesManager.RegisterRecipe: m_RegRecipeIndex = m_RecipeList.Insert
+// (recipe); recipe.SetID(m_RegRecipeIndex)). Sie ist KEINE Identitaet. Zwei
+// Seiten, die dieselben Rezepte in unterschiedlicher REIHENFOLGE registrieren,
+// meinen unter derselben Zahl verschiedene Rezepte.
+//
+// DIE ZEITACHSE, DIE ES BRICHT
+// ----------------------------
+// Vanilla baut die Liste im MissionBase-KONSTRUKTOR auf:
 //
 //     MissionBase()                 <- Konstruktor
 //       PluginManagerInit()
@@ -32,35 +43,84 @@
 //           new PluginRecipesManager()
 //             CreateAllRecipes() -> RegisterRecipies()   <- HIER
 //             GenerateRecipeCache()
+//           plugin.OnInit()                              <- und HIER
 //     ...
-//     MissionServer.OnInit()
-//       ChefZ_CoreEntry.BootServer() -> ChefZ_ConfigManager.LoadAll()  <- ERST HIER
+//     MissionServer.OnInit()  /  MissionGameplay.OnInit()
+//       ChefZ_CoreEntry.Boot* -> ChefZ_ConfigManager.LoadAll()  <- ERST HIER
 //
-// Zum Zeitpunkt von RegisterRecipies() gibt es also weder Prozesse noch
-// Transforms. Ein Aufbau dort waere ein Aufbau aus Nichts.
+// Zwischen RegisterRecipies() und OnInit() liegt fuer JEDEN Mod ein
+// Registrierungsfenster, und mehrere ausgelieferte Mods benutzen es. Der
+// entscheidende Punkt: manche von ihnen registrieren SEITENABHAENGIG - auf dem
+// Server sofort in Plugin.OnInit(), auf dem Client erst per Netzwerkpaket beim
+// Verbinden, also LANGE nach MissionGameplay.OnInit().
 //
-// Geloest wird das mit ZWEI Einstiegspunkten in dieselbe Methode:
+// Registrierte ChefZ - wie bis S15 - erst in OnInit() nach, entstand daraus:
 //
-//   Install(mgr)         wird aus RegisterRecipies() gerufen. Ist der
-//                        ChefZ_ProcessingManager noch nicht bereit, tut sie
-//                        NICHTS und merkt sich das auch nicht als erledigt.
-//   InstallDeferred()    wird von ChefZ_Boot gerufen, unmittelbar nachdem der
-//                        Bestand steht. Sie holt den Aufbau nach und laesst
-//                        Vanilla anschliessend seinen Rezeptcache neu bauen -
-//                        ueber PluginRecipesManager.CallbackGenerateCache(),
-//                        also ueber eine oeffentliche Vanillamethode, die
-//                        genau dafuer da ist.
+//     Server:  [Vanilla][Kette aus RegisterRecipies][Fremdmod][ChefZ]
+//     Client:  [Vanilla][Kette aus RegisterRecipies][ChefZ][Fremdmod]
 //
-// Der Cache MUSS neu gebaut werden: PluginRecipesManager.GenerateRecipeCache()
-// bildet "Itemklasse -> Rezept-IDs" und laeuft im Konstruktor genau einmal.
-// Ohne Neuaufbau kennt der Cache die ChefZ-Rezepte nicht, und dann findet
-// GetValidRecipes() sie nie - registriert waeren sie trotzdem.
+// Beide Bloecke sind gegeneinander verschoben - und zwar in BEIDE Richtungen:
+// die ChefZ-Rezepte des Clients zeigen serverseitig auf Fremdrezepte, und die
+// Fremdrezepte des Clients zeigen serverseitig auf andere Fremdrezepte. Der
+// zweite Teil ist der schlimmere: ChefZ haette damit fremdes Crafting kaputt
+// gemacht, ohne dass der Spieler ein ChefZ-Rezept auch nur anfasst.
 //
-// Beim zweiten Missionsstart in demselben Prozess (falls es ihn je gibt)
-// greift der erste Weg: der ChefZ-Bestand steht dann bereits, Install() baut
-// sofort, und Vanillas eigener GenerateRecipeCache()-Aufruf im Konstruktor
-// sieht die Rezepte von selbst. Deshalb merkt sich diese Klasse, in WELCHE
-// Plugininstanz sie eingetragen hat, und nicht bloss DASS sie es getan hat.
+// Die frueher an dieser Stelle gemeldete KENNSUMME zeigt diesen Fall NICHT an.
+// Sie geht nur ueber den ChefZ-Bestand, und der ist auf beiden Seiten
+// identisch - der Versatz kommt von einem fremden Registrierer. Eine Loesung
+// aus einer erweiterten Kennsumme gibt es nicht: der Core kann Fremdrezepte
+// nicht abzaehlen, ohne sie zu kennen, und er darf sie nicht kennen.
+//
+// DIE LOESUNG: DEN PLATZ NEHMEN, WENN IHN ALLE NEHMEN
+// ---------------------------------------------------
+// ChefZ registriert seine Rezeptobjekte jetzt DORT, wo Vanilla registriert -
+// in RegisterRecipies(), im Konstruktor, auf beiden Seiten am selben Punkt der
+// modded-class-Kette. Zu diesem Zeitpunkt gibt es noch keine Daten; die
+// Objekte sind LEER und tun nichts (ChefZ_GenericCraftRecipe.CanDo prueft
+// m_ChefZ_Ready als allererstes und liefert false).
+//
+//     Reserve(mgr)     aus RegisterRecipies(). Traegt N leere Rezepte ein.
+//                      N kommt aus der Engine-Config (CfgChefZ
+//                      handcraftRecipeSlots, aufsummiert ueber alle Slices) -
+//                      also aus der EINZIGEN Quelle, die auf Client und Server
+//                      nachweislich dieselbe ist und die schon im Konstruktor
+//                      vollstaendig vorliegt.
+//     FillReserved()   aus ChefZ_Boot, unmittelbar nachdem der Bestand steht.
+//                      Sie PARAMETRIERT die bereits eingetragenen Objekte
+//                      (InitFromDef) und laesst Vanilla danach seinen
+//                      Rezeptcache neu bauen. Es wird dabei KEIN Rezept mehr
+//                      registriert und keine Position mehr veraendert.
+//
+// Damit gilt wieder, was ohne ChefZ galt: alles, was im Konstruktor
+// registriert wird, steht vorn und steht auf beiden Seiten gleich; alles, was
+// spaeter kommt, steht dahinter - egal von wem, egal wann. ChefZ verschiebt
+// niemanden mehr, und niemand verschiebt ChefZ.
+//
+// DER PREIS, offen benannt: die Platzzahl ist eine DEKLARATION. Ein Slice mit
+// HANDCRAFT-Transforms muss handcraftRecipeSlots nennen. Nennt er zu wenig,
+// werden die ueberzaehligen Transforms mit einer Fehlerzeile im Klartext
+// ABGEWIESEN - laut, deterministisch und auf beiden Seiten gleich. Das ist die
+// Richtung, in die dieser Fehler fallen muss: ein Rezept, das fehlt und im RPT
+// steht, kostet einen Konfigurationseintrag; ein Rezept, das das falsche Item
+// erzeugt, kostet Vertrauen.
+//
+// WAS DER ANKER NICHT LEISTET
+// ---------------------------
+// Er setzt voraus, dass beide Seiten dieselbe Platzzahl lesen und denselben
+// Transformbestand haben. Beides kann auseinanderlaufen:
+//   - der Server liest zusaetzlich Rang 3 ($profile-Overlays, 02 §6). Ein
+//     HANDCRAFT-Transform, den nur ein Overlay einfuehrt, belegt serverseitig
+//     einen Platz, den der Client anders belegt.
+//   - ein Client kann ein Addon geladen haben, das der Server nicht hat.
+// Fuer genau diesen Rest gibt es das zweite Netz: ChefZ_CraftIntent, gefuehrt
+// von ChefZ_ModdedWorldCraft. Der Client teilt neben der Position eine
+// positionsUNabhaengige Kennung mit; der Server haelt sie gegen das Rezept,
+// das bei IHM an dieser Position steht, und VERWEIGERT bei Widerspruch. Die
+// Aktion laeuft dann ins Leere - sie erzeugt nie das falsche Ergebnis.
+//
+// Zusaetzlich meldet diese Klasse beim Start weiterhin eine Kennsumme, jetzt
+// samt Ankerposition und Platzzahl. Stimmen die Zeilen im Client- und im
+// Server-RPT nicht ueberein, steht die Ursache dort.
 //
 // ---------------------------------------------------------------------------
 // Warum die Klassenliste eine UEBER-Naeherung ist
@@ -82,30 +142,6 @@
 // und niemand koennte sagen, warum.
 //
 // ---------------------------------------------------------------------------
-// ID-DRIFT zwischen Client und Server - offen benannt
-// ---------------------------------------------------------------------------
-// Vanillas Craftaktion uebertraegt die Rezept-ID, und die ist eine POSITION
-// in m_RecipeList (PluginRecipesManager.RegisterRecipe). Client und Server
-// muessen deshalb dieselben Rezepte in derselben Reihenfolge registrieren.
-//
-// Das ist gegeben, solange beide Seiten dieselben Transformdaten sehen. Genau
-// das ist NICHT garantiert: der Server liest zusaetzlich Rang 3
-// ($profile:ChefZ/-Overlays, 02 §6), der Client nur Rang 1 und 2. Ein
-// HANDCRAFT-Transform, den nur ein Overlay einfuehrt, verschiebt alle
-// nachfolgenden ChefZ-Rezept-IDs des Servers gegen die des Clients.
-//
-// Zwei Dinge daempfen das, und keines beseitigt es:
-//   - registriert wird in ID-Reihenfolge, nicht in Ladereihenfolge. Ein
-//     Overlay, das einen bestehenden Transform nur AENDERT, verschiebt nichts.
-//   - der Server prueft jedes Rezept beim Ausfuehren erneut (CheckRecipe ->
-//     CanDo -> Matcher). Eine verschobene ID landet fast immer auf einem
-//     Rezept, dessen Bindung fehlschlaegt: es geschieht dann NICHTS.
-//
-// Damit ein Betreiber es trotzdem SEHEN kann, meldet diese Klasse beim Start
-// eine Kennsumme ueber die registrierten Transform-IDs. Stimmen die Zeilen im
-// Client- und im Server-RPT nicht ueberein, ist die Ursache genau dieser Fall.
-//
-// ---------------------------------------------------------------------------
 // ABHAENGIG VON OF-10 - ebenfalls offen benannt
 // ---------------------------------------------------------------------------
 // Transforms liegen in JSON. Ob eine JSON-Datei aus einem PBO clientseitig
@@ -115,15 +151,16 @@
 // Fuer Stationen ist die Antwort nicht kritisch: dort entscheidet der Server,
 // und der Client zeigt im Zweifel eine Aktion, die abgelehnt wird. HIER ist
 // sie es sehr wohl. Vanillas Craftaktion entsteht CLIENTSEITIG aus
-// PluginRecipesManager.GetValidRecipes(); ohne Transformdaten registriert der
+// PluginRecipesManager.GetValidRecipes(); ohne Transformdaten parametriert der
 // Client kein Rezept, und dann erscheint die Aktion NIE - unabhaengig davon,
 // was der Server weiss.
 //
-// Es gibt dagegen kein Mittel im Code. Sollte die Messung ergeben, dass der
-// Client die JSON-Dateien nicht lesen kann, muessen HANDCRAFT-Transforms in
-// die Game-Config wandern (Rang 1, 02 §2) - eine Datenentscheidung, keine
-// Codeaenderung. Die Kennsumme oben zeigt den Fall unmittelbar an: sie waere
-// clientseitig 0.
+// Der Positionsanker macht diesen Ausfall wenigstens HARMLOS: die Plaetze
+// stehen auf beiden Seiten trotzdem an derselben Stelle, weil ihre Zahl aus
+// der Engine-Config kommt und nicht aus den JSON-Daten. Nichts verschiebt
+// sich; es fehlt nur die Aktion. Sollte die Messung negativ ausfallen, muessen
+// HANDCRAFT-Transforms in die Game-Config wandern (Rang 1, 02 §2) - eine
+// Datenentscheidung, keine Codeaenderung.
 //
 // KEIN CONTENT: kein Prozess, keine Zutat, kein Werkzeug wird hier benannt.
 //
@@ -132,68 +169,214 @@
 
 class ChefZ_HandcraftBridge
 {
-    //! In WELCHE Plugininstanz eingetragen wurde. Schwacher Zeiger: das
+    /**
+     * Obergrenze der Reservierung.
+     *
+     * Sie ist kein Balancingwert, sondern eine Bremse gegen einen Tippfehler:
+     * ein "handcraftRecipeSlots = 100000" in einer fremden config.cpp wuerde
+     * sonst Vanillas Rezeptliste (MAX_NUMBER_OF_RECIPES = 2048) sprengen und
+     * ueber Error() eine Meldung je Eintrag erzeugen. 256 ist grosszuegig
+     * jenseits jeder realistischen Zahl von Handwerksschritten und laesst
+     * Vanillas eigener Liste den ganzen Rest.
+     */
+    static const int MAX_SLOTS = 256;
+
+    //! In WELCHE Plugininstanz reserviert wurde. Schwacher Zeiger: das
     //! Plugin gehoert dem PluginManager, und ein starker Halter hier haette
     //! es ueber das Missionsende hinaus am Leben gehalten.
-    private static PluginRecipesManagerBase s_InstalledInto;
+    private static PluginRecipesManagerBase s_ReservedInto;
 
-    private static int s_Registered;
+    //! In WELCHE Plugininstanz bereits parametriert wurde. Getrennt gefuehrt,
+    //! weil zwischen Reservierung und Parametrierung ein Missionsstart liegt -
+    //! und weil ein ZWEITER Missionsstart im selben Prozess (Client, der einem
+    //! zweiten Server beitritt) ein NEUES Plugin baut, das erneut gefuellt
+    //! werden muss.
+    private static PluginRecipesManagerBase s_FilledInto;
+
+    //! Die reservierten Rezeptobjekte, in Registrierungsreihenfolge.
+    //! ABSICHTLICH ohne ref: Eigentuemer ist Vanillas m_RecipeList
+    //! (ref array<ref RecipeBase>). Ein zweiter starker Halter hier haette
+    //! Rezepte ueber das Missionsende hinaus am Leben gehalten.
+    private static ref array<ChefZ_GenericCraftRecipe> s_Slots;
+
+    private static int s_SlotCount;
+    private static int s_BaseIndex;
+    private static int s_Filled;
     private static int s_Rejected;
     private static int s_Fingerprint;
+    private static int s_IntentRefusals;
 
-    //! Die registrierten Transform-IDs, in Registrierungsreihenfolge. Nur
-    //! Diagnose - sie beantwortet die Frage "welches Rezept ist ChefZ-Rezept
-    //! Nummer drei", und die stellt sich genau dann, wenn etwas driftet.
+    //! Die parametrierten Transform-IDs, in Plaetzereihenfolge. Nur
+    //! Diagnose - sie beantwortet die Frage "welches Rezept sitzt auf
+    //! ChefZ-Platz drei", und die stellt sich genau dann, wenn etwas driftet.
     private static ref array<string> s_Order;
 
     //==========================================================================
-    // Einstiegspunkte
+    // 1) Reservierung - aus RegisterRecipies(), im Missionskonstruktor
     //==========================================================================
 
     /**
-     * Aufbau und Registrierung - aus RegisterRecipies() oder nachtraeglich.
+     * Traegt N leere ChefZ-Rezepte in Vanillas Liste ein und merkt sich ihre
+     * Positionen.
      *
-     * @return Zahl der neu registrierten Rezepte. 0 heisst entweder "es gibt
-     *         keine HANDCRAFT-Transforms" oder "die Daten stehen noch nicht".
-     *         Beides ist kein Fehler.
+     * Sie ist ADDITIV und sie ist FOLGENLOS: jedes eingetragene Objekt ist
+     * unparametriert, seine Zutatenlisten sind leer, es landet damit in
+     * keinem Cache-Eintrag und wird nie angeboten. Faellt der ganze Aufruf
+     * aus, ist Vanillas Rezeptliste ununterscheidbar von der eines Servers
+     * ohne ChefZ.
+     *
+     * Kein Rueckgabewert - es gibt an der Aufrufstelle nichts zu entscheiden.
      */
-    static int Install(PluginRecipesManagerBase mgr)
+    static void Reserve(PluginRecipesManagerBase mgr)
     {
         if (!mgr)
-            return 0;
+            return;
 
-        if (s_InstalledInto == mgr)
-            return 0;                       // diese Instanz hat bereits alles
+        if (s_ReservedInto == mgr)
+            return;                         // diese Instanz ist bereits verankert
+
+        ResetState();
+        s_ReservedInto = mgr;
+
+        int want = ChefZ_ManifestReader.ReadHandcraftSlotTotal();
+
+        if (want <= 0)
+        {
+            // Der Normalfall ohne Handwerks-Content - und der Normalfall des
+            // Core allein. Es wird KEIN Platz belegt.
+            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS,
+                "handcraft.noslots",
+                "Kein Slice meldet handcraftRecipeSlots an. ChefZ traegt kein Rezept "
+                + "in Vanillas Liste ein; Vanilla-Crafting ist unveraendert.");
+            return;
+        }
+
+        if (want > MAX_SLOTS)
+        {
+            ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
+                "CfgChefZ meldet zusammen " + want.ToString() + " handcraftRecipeSlots. "
+                + "Das ist mehr als die Obergrenze " + MAX_SLOTS.ToString()
+                + " und mit hoher Wahrscheinlichkeit ein Zahlendreher in einer "
+                + "config.cpp. Reserviert werden " + MAX_SLOTS.ToString() + " Plaetze; "
+                + "die ueberzaehligen HANDCRAFT-Transforms werden abgewiesen. "
+                + "Vanilla-Crafting ist davon unberuehrt.");
+            want = MAX_SLOTS;
+        }
+
+        for (int i = 0; i < want; i++)
+        {
+            ChefZ_GenericCraftRecipe slot = new ChefZ_GenericCraftRecipe();
+
+            if (!mgr.ChefZ_ReserveRecipeSlot(slot))
+                break;
+
+            if (s_SlotCount == 0)
+                s_BaseIndex = slot.GetID();
+
+            s_Slots.Insert(slot);
+            s_SlotCount++;
+        }
+
+        // An der Stufenpruefung vorbei: diese Zeile muss auf Client und Server
+        // vergleichbar sein, und wer sie vergleicht, hat keine Debugstufe an
+        // (18 §4).
+        ChefZ_Log.Banner("Handwerk Anker  plaetze=" + s_SlotCount.ToString()
+            + "  ab Rezept-ID " + s_BaseIndex.ToString()
+            + "  (Anker und Platzzahl muessen auf Client und Server gleich sein)");
+    }
+
+    private static void ResetState()
+    {
+        s_ReservedInto   = null;
+        s_FilledInto     = null;
+        s_Slots          = new array<ChefZ_GenericCraftRecipe>();
+        s_Order          = new array<string>();
+        s_SlotCount      = 0;
+        s_BaseIndex      = -1;
+        s_Filled         = 0;
+        s_Rejected       = 0;
+        s_Fingerprint    = 0;
+        s_IntentRefusals = 0;
+    }
+
+    //==========================================================================
+    // 2) Parametrierung - aus ChefZ_Boot, nachdem der Bestand steht
+    //==========================================================================
+
+    /**
+     * Fuellt die reservierten Plaetze und laesst Vanillas Rezeptcache neu
+     * bauen.
+     *
+     * Wird von ChefZ_Boot gerufen, auf BEIDEN Seiten. Der Client braucht die
+     * Rezepte fuer die Anzeige der Craftaktion (ActionWorldCraft fragt
+     * GetValidRecipes clientseitig); entschieden wird trotzdem nur auf dem
+     * Server (00 §5).
+     *
+     * Hier wird NICHTS mehr registriert. Positionen entstehen ausschliesslich
+     * in Reserve(); diese Methode beschreibt nur, was dort schon steht.
+     *
+     * Der Cacheneubau kostet einen vollstaendigen Durchlauf durch
+     * CfgVehicles, CfgWeapons und CfgMagazines - genau denselben, den Vanilla
+     * beim Start ohnehin einmal macht. Er faellt einmal je Missionsstart an
+     * und nur dann, wenn tatsaechlich ein Platz gefuellt wurde.
+     */
+    static void FillReserved()
+    {
+        PluginRecipesManager plugin;
+        if (!Class.CastTo(plugin, GetPlugin(PluginRecipesManager)))
+        {
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
+                "handcraft.noplugin",
+                "PluginRecipesManager ist nicht erreichbar. Handwerksrezepte werden "
+                + "nicht angeboten; Vanilla-Crafting ist davon unberuehrt.");
+            return;
+        }
+
+        // Ausdruecklich als Basistyp vergleichen: die beiden Merker sind
+        // PluginRecipesManagerBase, und ein Vergleich ueber eine
+        // Typgrenze hinweg soll hier nicht vom Compiler abhaengen.
+        PluginRecipesManagerBase asBase = plugin;
+
+        if (s_FilledInto == asBase)
+            return;                         // diese Instanz ist bereits gefuellt
+
+        if (s_ReservedInto != asBase)
+        {
+            // Reserve() hat diese Plugininstanz nie gesehen. Das heisst, dass
+            // RegisterRecipies() unseren Teil der Kette nicht erreicht hat -
+            // ein Fremdmod ruft super nicht. NACHTRAEGLICH zu registrieren
+            // waere hier genau der Fehler, den der Anker beseitigt: der Platz
+            // laege dann hinter allem, was inzwischen dazugekommen ist, und
+            // auf den beiden Seiten verschieden.
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
+                "handcraft.noanchor",
+                "Es sind keine Rezeptplaetze verankert - RegisterRecipies() hat den "
+                + "ChefZ-Teil der Kette nicht erreicht. Handwerksrezepte werden NICHT "
+                + "nachtraeglich eingetragen: ihre IDs waeren auf Client und Server "
+                + "verschieden. Vanilla-Crafting ist vollstaendig, ChefZ-Kochen und "
+                + "ChefZ-Stationen sind unberuehrt.");
+            return;
+        }
+
+        s_FilledInto  = asBase;
+        s_Filled      = 0;
+        s_Rejected    = 0;
+        s_Fingerprint = 0;
+        s_Order.Clear();
 
         ChefZ_ProcessingManager pm = ChefZ_ProcessingManager.Get();
         if (!pm.IsReady())
-        {
-            // Der Normalfall beim ersten Start - siehe Abschnitt ZEITPUNKT.
-            // Ausdruecklich NICHT als erledigt vermerken: InstallDeferred()
-            // holt es nach.
-            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS,
-                "handcraft.notready",
-                "RegisterRecipies() lief, bevor der ChefZ-Bestand stand. Die "
-                + "Handwerksrezepte werden nach dem Laden nachgetragen. Vanillas "
-                + "Rezepte sind davon unberuehrt.");
-            return 0;
-        }
-
-        s_InstalledInto = mgr;
-        s_Registered    = 0;
-        s_Rejected      = 0;
-        s_Fingerprint   = 0;
-        s_Order         = new array<string>();
+            return;
 
         array<ChefZ_CompiledProcess> processes = new array<ChefZ_CompiledProcess>();
         pm.GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT, processes);
 
         if (processes.Count() == 0)
-            return 0;                       // kein Handwerksprozess deklariert
+            return;                         // kein Handwerksprozess deklariert
 
         // Prozesse und Transforms zu Paaren ausrollen und in ID-Reihenfolge
-        // bringen. Die Reihenfolge ist KEINE Kosmetik - siehe Abschnitt
-        // ID-DRIFT.
+        // bringen. Die Reihenfolge ist KEINE Kosmetik: sie bestimmt, welcher
+        // Transform auf welchem verankerten Platz sitzt.
         array<ChefZ_CompiledProcess>   pairProc = new array<ChefZ_CompiledProcess>();
         array<ChefZ_CompiledTransform> pairTr   = new array<ChefZ_CompiledTransform>();
 
@@ -207,56 +390,70 @@ class ChefZ_HandcraftBridge
                 InsertByIdOrder(pairProc, pairTr, proc, list.Get(t));
         }
 
-        for (int i = 0; i < pairProc.Count(); i++)
-            RegisterOne(mgr, pairProc.Get(i), pairTr.Get(i));
+        if (pairTr.Count() == 0)
+            return;
 
-        Report();
-        return s_Registered;
-    }
-
-    /**
-     * Den Aufbau nachholen, nachdem der Bestand steht - und Vanillas
-     * Rezeptcache neu bauen lassen.
-     *
-     * Wird von ChefZ_Boot gerufen, auf BEIDEN Seiten. Der Client braucht die
-     * Rezepte fuer die Anzeige der Craftaktion (ActionWorldCraft fragt
-     * GetValidRecipes clientseitig); entschieden wird trotzdem nur auf dem
-     * Server (00 §5).
-     *
-     * Kostet einen vollstaendigen Durchlauf durch CfgVehicles, CfgWeapons und
-     * CfgMagazines - genau denselben, den Vanilla beim Start ohnehin einmal
-     * macht. Er faellt einmal je Missionsstart an und nur dann, wenn
-     * tatsaechlich etwas hinzugekommen ist.
-     */
-    static void InstallDeferred()
-    {
-        PluginRecipesManager plugin;
-        if (!Class.CastTo(plugin, GetPlugin(PluginRecipesManager)))
+        if (s_SlotCount == 0)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                "handcraft.noplugin",
-                "PluginRecipesManager ist nicht erreichbar. Handwerksrezepte werden "
-                + "nicht registriert; Vanilla-Crafting ist davon unberuehrt.");
+            ReportMissingSlots(pairTr.Count());
             return;
         }
 
-        if (Install(plugin) <= 0)
-            return;
+        for (int i = 0; i < pairTr.Count(); i++)
+        {
+            if (i >= s_SlotCount)
+            {
+                ReportSurplus(pairTr, i);
+                break;
+            }
 
-        // Oeffentliche Vanillamethode; sie ruft GenerateRecipeCache(). Ohne
-        // diesen Aufruf waeren die Rezepte registriert, aber ueber den Cache
-        // nicht auffindbar - siehe Abschnitt ZEITPUNKT.
-        plugin.CallbackGenerateCache();
+            FillOne(s_Slots.Get(i), pairProc.Get(i), pairTr.Get(i));
+        }
+
+        Report();
+
+        if (s_Filled > 0)
+        {
+            // Oeffentliche Vanillamethode; sie ruft GenerateRecipeCache().
+            // Ohne diesen Aufruf waeren die Rezepte parametriert, aber ueber
+            // den Cache nicht auffindbar - GenerateRecipeCache() laeuft im
+            // Konstruktor genau einmal, und dort waren die Plaetze leer.
+            plugin.CallbackGenerateCache();
+        }
     }
 
     //==========================================================================
-    // Ein einzelnes Rezept
+    // Ein einzelner Platz
     //==========================================================================
 
-    private static void RegisterOne(notnull PluginRecipesManagerBase mgr,
-                                    notnull ChefZ_CompiledProcess proc,
-                                    notnull ChefZ_CompiledTransform tr)
+    /**
+     * Der Platz i gehoert IMMER dem Paar i - auch dann, wenn die
+     * Parametrierung fehlschlaegt.
+     *
+     * Das ist Absicht und nicht Bequemlichkeit: eine Abweisung, die den Platz
+     * frei liesse, verschoebe jeden nachfolgenden Transform um eins. Beide
+     * Seiten weisen dieselben Daten identisch ab, aber sie duerfen sich nicht
+     * darauf verlassen muessen - eine Abweisung kostet ein Rezept, sie darf
+     * nie eine Verschiebung kosten.
+     */
+    private static void FillOne(ChefZ_GenericCraftRecipe slot,
+                                notnull ChefZ_CompiledProcess proc,
+                                notnull ChefZ_CompiledTransform tr)
     {
+        // Die ID geht IMMER in die Kennsumme, auch bei einer Abweisung. Die
+        // Kennsumme beantwortet "haben beide Seiten denselben Bestand in
+        // derselben Reihenfolge gesehen" - und das ist unabhaengig davon, ob
+        // ein Transform abbildbar war.
+        s_Order.Insert(tr.id);
+        s_Fingerprint = s_Fingerprint * 31 + tr.id.Hash();
+
+        if (!slot)
+        {
+            Reject(tr, "der verankerte Rezeptplatz fehlt - das ist ein interner Fehler "
+                + "und sollte nicht vorkommen");
+            return;
+        }
+
         /**
          * stationsAllowed hat bei HANDCRAFT keine Wirkung - es hat eine
          * SCHAEDLICHE Wirkung.
@@ -280,42 +477,32 @@ class ChefZ_HandcraftBridge
         array<ref array<string>> inputClasses = new array<ref array<string>>();
         for (int s = 0; s < tr.inputs.Count(); s++)
         {
-            ChefZ_CompiledSlot slot = tr.inputs.Get(s);
+            ChefZ_CompiledSlot cslot = tr.inputs.Get(s);
             array<string> classes = new array<string>();
-            if (slot)
-                CollectSelectorClasses(slot.selector, classes);
+            if (cslot)
+                CollectSelectorClasses(cslot.selector, classes);
             inputClasses.Insert(classes);
         }
 
         array<string> toolClasses = new array<string>();
         CollectToolClasses(proc, toolClasses);
 
-        //--- Bauen -------------------------------------------------------------
-        ChefZ_GenericCraftRecipe recipe = new ChefZ_GenericCraftRecipe();
-
+        //--- Parametrieren: der Platz bleibt derselbe -------------------------
         string err;
-        if (!recipe.InitFromDef(proc, tr, inputClasses, toolClasses, err))
+        if (!slot.InitFromDef(proc, tr, inputClasses, toolClasses, err))
         {
             Reject(tr, err);
             return;
         }
 
-        //--- Registrieren: ADDITIV, nie loeschend -----------------------------
-        mgr.ChefZ_RegisterGeneratedRecipe(recipe);
-
-        s_Registered++;
-        s_Order.Insert(tr.id);
-
-        // Ordinale Kennsumme ueber die IDs, in Registrierungsreihenfolge.
-        // Reihenfolge UND Bestand gehen ein - genau die beiden Dinge, die
-        // zwischen Client und Server uebereinstimmen muessen.
-        s_Fingerprint = s_Fingerprint * 31 + tr.id.Hash();
+        s_Filled++;
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
         {
             ChefZ_Log.Debug(ChefZ_LogChannel.PROCESS,
-                "Handwerksrezept #" + (s_Registered - 1).ToString() + ": "
-                + recipe.ChefZ_ToDebugString());
+                "Handwerksrezept auf Platz " + (s_Order.Count() - 1).ToString()
+                + " (Rezept-ID " + slot.GetID().ToString() + "): "
+                + slot.ChefZ_ToDebugString());
         }
     }
 
@@ -333,8 +520,129 @@ class ChefZ_HandcraftBridge
 
         ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
             "HANDCRAFT " + tr.id + " (" + tr.sourceRef + ") wird nicht als Craftrezept "
-            + "registriert: " + why + " Die uebrigen Transforms sind davon unberuehrt, "
+            + "angeboten: " + why + " Die uebrigen Transforms sind davon unberuehrt, "
             + "Vanilla-Crafting ebenfalls.");
+    }
+
+    //! Es gibt Transforms, aber keinen einzigen verankerten Platz.
+    private static void ReportMissingSlots(int needed)
+    {
+        s_Rejected = needed;
+
+        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
+            "Es sind " + needed.ToString() + " HANDCRAFT-Transforms geladen, aber KEIN "
+            + "Rezeptplatz reserviert. Kein Handwerksrezept wird angeboten. Ursache: "
+            + "kein Slice nennt in seiner config.cpp \"handcraftRecipeSlots\". Der Platz "
+            + "muss VOR dem Laden feststehen - Vanilla vergibt Rezept-IDs als Position "
+            + "in seiner Liste, und diese Positionen entstehen im Missionskonstruktor. "
+            + "Abhilfe: im CfgChefZ-Knoten des Slice \"handcraftRecipeSlots = "
+            + needed.ToString() + ";\" eintragen. Vanilla-Crafting, ChefZ-Kochen und "
+            + "ChefZ-Stationen sind unberuehrt.");
+    }
+
+    //! Es gibt mehr Transforms als verankerte Plaetze.
+    private static void ReportSurplus(notnull array<ChefZ_CompiledTransform> pairs,
+                                      int firstSurplus)
+    {
+        int surplus = pairs.Count() - firstSurplus;
+        s_Rejected  = s_Rejected + surplus;
+
+        string names = "";
+        for (int i = firstSurplus; i < pairs.Count(); i++)
+        {
+            if (names != "")
+                names = names + ", ";
+            names = names + pairs.Get(i).id;
+        }
+
+        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
+            "Es sind " + pairs.Count().ToString() + " HANDCRAFT-Transforms geladen, aber "
+            + "nur " + s_SlotCount.ToString() + " Rezeptplaetze reserviert. Die "
+            + surplus.ToString() + " ueberzaehligen werden NICHT angeboten: " + names
+            + ". Nachtraeglich einzutragen ist keine Loesung - ihre Rezept-IDs waeren "
+            + "auf Client und Server verschieden, und der Spieler bekaeme das falsche "
+            + "Ergebnis. Abhilfe: \"handcraftRecipeSlots\" im CfgChefZ-Knoten des Slice "
+            + "auf die tatsaechliche Zahl erhoehen. Die ersten " + s_SlotCount.ToString()
+            + " Transforms funktionieren normal, Vanilla-Crafting ebenfalls.");
+    }
+
+    //==========================================================================
+    // Identitaetspruefung (zweites Netz, siehe Dateikopf)
+    //==========================================================================
+
+    /**
+     * Welche ChefZ-Identitaet steht auf DIESER Seite an dieser Rezeptposition?
+     *
+     * Antwort ChefZ_CraftIntent.NOT_CHEFZ fuer jede Position, die kein
+     * fertiges ChefZ-Rezept traegt - Vanilla, Fremdmod, unbelegter Platz,
+     * Position ausserhalb der Liste. Genau das ist der Normalfall, und zwei
+     * solche Antworten sind gleich: ChefZ mischt sich in fremdes Crafting
+     * nicht ein.
+     *
+     * Rein lesend. Sie veraendert nichts an Vanillas Liste und legt nichts an.
+     */
+    static int IntentOfRecipeId(int recipeId)
+    {
+        if (recipeId < 0)
+            return ChefZ_CraftIntent.NOT_CHEFZ;
+
+        PluginRecipesManager plugin;
+        if (!Class.CastTo(plugin, GetPlugin(PluginRecipesManager)))
+            return ChefZ_CraftIntent.NOT_CHEFZ;
+
+        if (!plugin.m_RecipeList)
+            return ChefZ_CraftIntent.NOT_CHEFZ;
+
+        if (recipeId >= plugin.m_RecipeList.Count())
+            return ChefZ_CraftIntent.NOT_CHEFZ;
+
+        ChefZ_GenericCraftRecipe recipe;
+        if (!Class.CastTo(recipe, plugin.m_RecipeList.Get(recipeId)))
+            return ChefZ_CraftIntent.NOT_CHEFZ;
+
+        if (!recipe.ChefZ_IsReady())
+            return ChefZ_CraftIntent.NOT_CHEFZ;
+
+        return ChefZ_CraftIntent.Of(recipe.ChefZ_GetTransformId());
+    }
+
+    /**
+     * Darf der Server diese Craftaktion ausfuehren?
+     *
+     * Serverseitiger Torwaechter. Er wird von ChefZ_ModdedWorldCraft
+     * unmittelbar vor PerformRecipeServer gefragt.
+     *
+     * Er ist BEWUSST nur ein Nein-Geber: ohne Angabe der Gegenseite laesst er
+     * durch, und bei Uebereinstimmung laesst er durch. Der Client entscheidet
+     * damit nichts - er kann eine Aktion hoechstens verhindern, die ohnehin
+     * die falsche gewesen waere.
+     */
+    static bool AcceptCraftIntent(int recipeId, int clientIntent)
+    {
+        int serverIntent = IntentOfRecipeId(recipeId);
+
+        if (ChefZ_CraftIntent.Accepts(clientIntent, serverIntent))
+            return true;
+
+        s_IntentRefusals++;
+
+        // Once mit festem Schluessel: eine Zeile je Missionsstart genuegt zur
+        // Diagnose, und ein Spieler, der es wiederholt versucht, soll das RPT
+        // nicht fluten. Die Gesamtzahl steht in "chefz registries".
+        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS,
+            "handcraft.intentdrift",
+            "Eine Craftaktion wurde VERWEIGERT: der Client meinte "
+            + ChefZ_CraftIntent.Describe(clientIntent) + ", an Rezept-ID "
+            + recipeId.ToString() + " steht auf dem Server aber "
+            + ChefZ_CraftIntent.Describe(serverIntent) + ". Die Rezeptlisten von Client "
+            + "und Server sind gegeneinander verschoben. Haeufigste Ursachen: die "
+            + "Modliste des Clients ist nicht die des Servers, oder ein "
+            + "$profile-Overlay bringt HANDCRAFT-Transforms mit, die es im PBO nicht "
+            + "gibt (Rang 3 ist serverseitig, 02 §6). Vergleiche die Zeile "
+            + "\"Handwerk Anker\" in beiden RPT-Dateien. Es wurde NICHTS erzeugt und "
+            + "NICHTS verbraucht.");
+
+        return false;
     }
 
     //==========================================================================
@@ -354,10 +662,9 @@ class ChefZ_HandcraftBridge
      *      dient.
      *
      * Das Ergebnis ist aufsteigend sortiert und duplikatfrei. Sortiert, weil
-     * Vanillas Rezept-IDs positionell sind und zwei Seiten dieselbe Liste
-     * erzeugen muessen (siehe Dateikopf, ID-DRIFT); duplikatfrei, weil
-     * derselbe Klassenname zweimal in m_Ingredients Vanillas Cache zweimal
-     * denselben Eintrag kostet.
+     * Vanillas Rezeptcache auf beiden Seiten gleich aussehen soll;
+     * duplikatfrei, weil derselbe Klassenname zweimal in m_Ingredients
+     * Vanillas Cache zweimal denselben Eintrag kostet.
      */
     static void CollectSelectorClasses(ChefZ_CompiledSelector selector,
                                        notnull array<string> outClasses)
@@ -448,7 +755,7 @@ class ChefZ_HandcraftBridge
                  * Eine Verneinung darf nur dann ausschliessen, wenn das
                  * verneinte Blatt STATISCH ist. {"not":{"state":"RAW"}}
                  * schliesst keine Klasse aus - jedes Item dieser Klasse kann
-                 * roh sein oder nicht. {"not":{"category":"MEAT"}} schliesst
+                 * roh sein oder nicht. {"not":{"category":"X"}} schliesst
                  * sehr wohl aus.
                  */
                 if (sel.negated && IsStatic(sel.negated))
@@ -573,7 +880,7 @@ class ChefZ_HandcraftBridge
     }
 
     //==========================================================================
-    // Paare in ID-Reihenfolge (siehe Dateikopf, ID-DRIFT)
+    // Paare in ID-Reihenfolge (siehe Dateikopf, POSITIONSANKER)
     //==========================================================================
 
     /**
@@ -617,40 +924,53 @@ class ChefZ_HandcraftBridge
     /**
      * Eine Zeile ins RPT, an der Stufenpruefung vorbei.
      *
-     * Sie steht dort aus einem einzigen Grund: die Kennsumme ist auf Client
-     * und Server zu vergleichen, und ein Betreiber, der das tun muss, hat
-     * keine Debugstufe eingeschaltet (18 §4, dieselbe Begruendung wie bei
-     * ChefZ_Boot.ReportState).
+     * Sie steht dort aus einem einzigen Grund: Ankerposition, Platzzahl und
+     * Kennsumme sind auf Client und Server zu vergleichen, und ein Betreiber,
+     * der das tun muss, hat keine Debugstufe eingeschaltet (18 §4, dieselbe
+     * Begruendung wie bei ChefZ_Boot.ReportState).
      */
     private static void Report()
     {
-        if (s_Registered == 0 && s_Rejected == 0)
-            return;
-
-        ChefZ_Log.Banner("Handwerk  rezepte=" + s_Registered.ToString()
+        ChefZ_Log.Banner("Handwerk  rezepte=" + s_Filled.ToString()
             + "  abgewiesen=" + s_Rejected.ToString()
+            + "  plaetze=" + s_SlotCount.ToString()
+            + "  ab Rezept-ID " + s_BaseIndex.ToString()
             + "  kennsumme=" + s_Fingerprint.ToString()
-            + "  (Kennsumme muss auf Client und Server gleich sein)");
+            + "  (alle vier muessen auf Client und Server gleich sein)");
     }
 
-    static int  GetRegisteredCount() { return s_Registered; }
+    static int  GetRegisteredCount() { return s_Filled; }
     static int  GetRejectedCount()   { return s_Rejected; }
     static int  GetFingerprint()     { return s_Fingerprint; }
-    static bool IsInstalled()        { return s_InstalledInto != null; }
+    static int  GetSlotCount()       { return s_SlotCount; }
+    static int  GetBaseIndex()       { return s_BaseIndex; }
+    static int  GetIntentRefusals()  { return s_IntentRefusals; }
+    static bool IsAnchored()         { return s_ReservedInto != null; }
+    static bool IsInstalled()        { return s_FilledInto != null; }
 
     static void DumpHandcraft(out array<string> outLines)
     {
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Handwerk  rezepte=" + s_Registered.ToString()
+        outLines.Insert("ChefZ Handwerk  rezepte=" + s_Filled.ToString()
             + "  abgewiesen=" + s_Rejected.ToString()
-            + "  kennsumme=" + s_Fingerprint.ToString());
+            + "  plaetze=" + s_SlotCount.ToString()
+            + "  ab Rezept-ID " + s_BaseIndex.ToString()
+            + "  kennsumme=" + s_Fingerprint.ToString()
+            + "  verweigert=" + s_IntentRefusals.ToString());
 
         if (!s_Order)
             return;
 
         for (int i = 0; i < s_Order.Count(); i++)
-            outLines.Insert("  #" + i.ToString() + "  " + s_Order.Get(i));
+        {
+            string id = "?";
+            if (s_BaseIndex >= 0)
+                id = (s_BaseIndex + i).ToString();
+
+            outLines.Insert("  Platz " + i.ToString() + "  Rezept-ID " + id
+                + "  " + s_Order.Get(i));
+        }
     }
 }

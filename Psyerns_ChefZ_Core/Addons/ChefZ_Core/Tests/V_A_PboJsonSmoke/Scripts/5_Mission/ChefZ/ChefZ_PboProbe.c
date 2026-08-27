@@ -91,11 +91,17 @@ class ChefZ_PboProbe
         //     "Packing - PBO Prefix" vorschreibt.
         Probe("P1 prefix-root      ", "ChefZ_Core/Config/ChefZ_ProbeData.json", "CHEFZ_V_A_OK");
 
-        // P2  Form aus Entwurf 02 Paragraph 4 ("Psyerns/ChefZ_Meat/Config/...").
-        //     Sie setzt eine Praefixwurzel "Psyerns/" voraus. Stimmt sie nicht
-        //     mit $PREFIX$ ueberein, MUSS P2 fehlschlagen - dann ist die
-        //     Beispielpfadform im Entwurf zu korrigieren, nicht die Engine.
-        Probe("P2 doc-form Psyerns/", "Psyerns/ChefZ_Core/Config/ChefZ_ProbeData.json", "CHEFZ_V_A_OK");
+        // P2  GEGENPROBE zur entschiedenen Pfadwurzel (B4, 02 Paragraph 4.1).
+        //     Verbindlich gilt: die Wurzel ist das PBO-Praefix, und das ist der
+        //     Ordnername des Addons. P2 setzt stattdessen eine Wurzel voraus,
+        //     die es nach dieser Entscheidung nicht gibt.
+        //
+        //     Diese Sonde MISST die Frage also nicht mehr, sie FALSIFIZIERT die
+        //     Antwort: erwartet ist "Pfad unbekannt". Meldet P2 "gelesen", ist
+        //     die Entscheidung falsch und gehoert zurueckgenommen - dann traegt
+        //     die Engine beide Wurzeln, und der Entwurf muss EINE davon
+        //     ausdruecklich verbieten.
+        Probe("P2 gegenprobe wurzel", "Psyerns/ChefZ_Core/Config/ChefZ_ProbeData.json", "CHEFZ_V_A_OK");
 
         // P3  Unterverzeichnis - beantwortet, ob verschachtelte Datenpfade
         //     ("Config/Recipes/Sausage.json") tragen.

@@ -1,11 +1,11 @@
 //==============================================================================
-// modded class PluginRecipesManagerBase - der ZWEITE und LETZTE Eingriff des
-// Core in eine Vanilla-Spielklasse.
+// modded class PluginRecipesManagerBase - der ZWEITE Eingriff des Core in eine
+// Vanilla-Spielklasse.
 //
 // Entwurf: 11 §4 (die Methode, woertlich), 11 §5 (BOOT), 11 §7 ("Vanilla-
 // Crafting vollstaendig unberuehrt, weil super.RegisterRecipies() immer zuerst
-// laeuft"), 11 E3 (letzter Absatz), 00 §4 (Tabelle der Overrides), 00 §5
-// Zeile 2, 19 S15, G15.
+// laeuft"), 11 E2, 11 E3 (letzter Absatz), 00 §4 (Tabelle der Overrides),
+// 00 §5 Zeile 2, 19 S15, G15.
 //
 //==============================================================================
 // BEGRUENDUNG DIESES OVERRIDES
@@ -31,6 +31,20 @@
 // pflegen.
 //
 //==============================================================================
+// WARUM HIER RESERVIERT UND NICHT REGISTRIERT WIRD
+//==============================================================================
+// Vanilla vergibt Rezept-IDs als POSITION in seiner Liste, und die
+// Craftaktion uebertraegt genau diese Position ueber das Netz. Wer spaeter
+// registriert als die Gegenseite, verschiebt sich gegen sie.
+//
+// ChefZ nimmt seine Plaetze deshalb HIER - im Missionskonstruktor, an genau
+// dem Punkt, an dem Vanilla und jeder super-treue Fremdmod ihre Plaetze
+// nehmen. Die eingetragenen Rezepte sind zu diesem Zeitpunkt LEER; sie
+// bekommen ihre Daten erst nach dem Laden, ohne dass sich eine einzige
+// Position aendert. Die vollstaendige Begruendung samt Zeitachse steht im Kopf
+// von ChefZ_HandcraftBridge, Abschnitt POSITIONSANKER.
+//
+//==============================================================================
 // DIE DREI EIGENSCHAFTEN, DIE VANILLA-CRAFTING UNBERUEHRT LASSEN
 //==============================================================================
 // Sie sind nicht verhandelbar. Wer diese Datei anfasst, prueft sie einzeln.
@@ -46,9 +60,8 @@
 //      nicht vor, weder aufgerufen noch ueberschrieben. Kein Vanilla-Rezept
 //      wird ersetzt, umbenannt oder abgeschaltet.
 //
-//   3. Der ChefZ-Teil hat keinen Rueckkanal. ChefZ_HandcraftBridge.Install()
-//      gibt eine Zahl zurueck, die hier NICHT ausgewertet wird, und sie
-//      veraendert nichts an dem, was super getan hat.
+//   3. Der ChefZ-Teil hat keinen Rueckkanal. ChefZ_HandcraftBridge.Reserve()
+//      gibt nichts zurueck und veraendert nichts an dem, was super getan hat.
 //
 // Daraus folgt strukturell und nicht bloss beabsichtigt: faellt der gesamte
 // ChefZ-Teil aus - Config kaputt, keine Transforms, Ausnahme mitten im Aufbau
@@ -61,10 +74,15 @@
 // modded class kettet. Unser super-Aufruf ist die erste Anweisung - das
 // vertraeglichste moegliche Verhalten. Ein anderer Mod, der ebenfalls
 // RegisterRecipies() erweitert, registriert seine Rezepte vor oder nach
-// unseren, je nach Ladereihenfolge; beide Listen bleiben vollstaendig.
+// unseren, je nach Ladereihenfolge; beide Listen bleiben vollstaendig, und die
+// Reihenfolge innerhalb dieser Kette ist auf Client und Server dieselbe, weil
+// sie aus der Ladereihenfolge der Mods folgt und aus nichts sonst.
 //
 // Ruft ein anderer Mod in seiner Kette super NICHT, bricht er ohnehin Vanilla;
-// dann fehlen auch die ChefZ-Rezepte, und das ist das sichere Ergebnis.
+// dann fehlen auch die ChefZ-Plaetze. ChefZ traegt sie in diesem Fall NICHT
+// nachtraeglich ein - das waere genau der Versatz, den der Anker beseitigt.
+// ChefZ_HandcraftBridge.FillReserved() meldet den Fall im Klartext und laesst
+// das Handwerk aus; Kochen und Stationen laufen weiter.
 //
 // EIN Verhalten eines fremden Mods koennen wir nicht abfangen und benennen es
 // deshalb: ruft jemand UnregisterRecipe("ChefZ_GenericCraftRecipe"), trifft es
@@ -85,21 +103,19 @@ modded class PluginRecipesManagerBase
 
         // ---- 2) ChefZ - ausschliesslich additiv ----------------------------
         //
-        // Beim ERSTEN Missionsstart tut dieser Aufruf nichts: der
-        // ChefZ-Bestand steht zu diesem Zeitpunkt noch nicht, weil der
-        // PluginManager im MissionBase-KONSTRUKTOR laeuft und ChefZ erst in
-        // MissionServer.OnInit() laedt. ChefZ_Boot holt den Aufbau
-        // unmittelbar nach dem Laden nach; die vollstaendige Begruendung
-        // steht im Kopf von ChefZ_HandcraftBridge, Abschnitt ZEITPUNKT.
+        // Reserviert N leere Rezeptplaetze. N kommt aus der Engine-Config
+        // (CfgChefZ handcraftRecipeSlots) und ist damit auf Client und Server
+        // dieselbe Zahl. Ist N gleich 0 - der Normalfall ohne
+        // Handwerks-Content -, geschieht hier NICHTS.
         //
-        // Der Rueckgabewert wird bewusst verworfen. Es gibt hier nichts zu
-        // entscheiden - was ChefZ nicht registrieren konnte, steht im
-        // Ladebericht, und Vanillas Liste ist in jedem Fall vollstaendig.
-        ChefZ_HandcraftBridge.Install(this);
+        // Es gibt hier nichts zu entscheiden: was ChefZ nicht parametrieren
+        // kann, steht im Ladebericht, und Vanillas Liste ist in jedem Fall
+        // vollstaendig.
+        ChefZ_HandcraftBridge.Reserve(this);
     }
 
     /**
-     * Ein fertig parametrisiertes ChefZ-Rezept eintragen.
+     * Einen LEEREN ChefZ-Rezeptplatz eintragen.
      *
      * Diese Methode existiert aus genau einem Grund: RegisterRecipe() ist
      * protected und damit nur INNERHALB dieser Klassenhierarchie erreichbar.
@@ -110,28 +126,41 @@ modded class PluginRecipesManagerBase
      *   - sie nimmt AUSSCHLIESSLICH ein ChefZ_GenericCraftRecipe, nicht ein
      *     RecipeBase. Damit ist sie kein allgemeines Registrierungstor, das
      *     ein anderer Mod versehentlich benutzt.
-     *   - sie prueft, dass das Rezept fertig gebaut ist. Ein halb
-     *     parametrisiertes Rezept in Vanillas Liste waere ein Rezept ohne
-     *     Zutaten - und Vanillas Cache-Aufbau liefe darueber.
-     *   - sie gibt nichts zurueck und veraendert nichts anderes.
+     *   - sie nimmt ausschliesslich ein UNPARAMETRIERTES Rezept. Ein fertiges
+     *     Rezept hier einzutragen hiesse, es NACH dem Konstruktorfenster in
+     *     die Liste zu haengen - und genau das ist der Fehler, den der
+     *     Positionsanker beseitigt.
+     *   - sie veraendert nichts anderes.
+     *
+     * Ein leeres Rezept ist in Vanillas Liste FOLGENLOS: seine
+     * Zutatenlisten sind leer (RecipeBase legt sie im Konstruktor als leere
+     * Arrays an), es landet damit in keinem Cache-Eintrag, und
+     * ChefZ_GenericCraftRecipe.CanDo() prueft m_ChefZ_Ready als allererstes
+     * und liefert false.
      *
      * UnregisterRecipe() wird hier NICHT gespiegelt. Es gibt keinen Weg, ueber
      * ChefZ ein Rezept aus Vanillas Liste zu entfernen, und das ist Absicht.
+     *
+     * @return false, wenn nichts eingetragen wurde. Der Aufrufer bricht die
+     *         Reservierung dann ab - ein halb belegter Anker ist besser als
+     *         ein falsch gezaehlter.
      */
-    void ChefZ_RegisterGeneratedRecipe(ChefZ_GenericCraftRecipe recipe)
+    bool ChefZ_ReserveRecipeSlot(ChefZ_GenericCraftRecipe slot)
     {
-        if (!recipe)
-            return;
+        if (!slot)
+            return false;
 
-        if (!recipe.ChefZ_IsReady())
+        if (slot.ChefZ_IsReady())
         {
             ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-                "Ein unfertiges Handwerksrezept sollte registriert werden und wurde "
-                + "abgewiesen: " + recipe.ChefZ_GetInitError()
-                + ". Vanillas Rezeptliste bleibt unveraendert.");
-            return;
+                "Ein bereits parametriertes Handwerksrezept sollte als Platzhalter "
+                + "eingetragen werden und wurde abgewiesen. Rezeptplaetze entstehen "
+                + "ausschliesslich leer und im Missionskonstruktor. Vanillas "
+                + "Rezeptliste bleibt unveraendert.");
+            return false;
         }
 
-        RegisterRecipe(recipe);
+        RegisterRecipe(slot);
+        return true;
     }
 }

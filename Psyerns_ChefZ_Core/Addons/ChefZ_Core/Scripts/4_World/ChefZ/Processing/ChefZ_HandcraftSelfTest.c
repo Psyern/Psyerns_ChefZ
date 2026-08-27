@@ -83,6 +83,19 @@ class ChefZ_HandcraftSelfTest
         Check("Zustandswechsel",      TestPureStateChange());
         Check("Wiederholbarkeit",     TestRepeatable());
 
+        // Die Identitaetsarithmetik des zweiten Netzes gegen Rezept-ID-
+        // Versatz. Sie steht hier und nicht in einem eigenen Selbsttest,
+        // weil sie zu genau diesem Teilsystem gehoert - und sie MUSS geprueft
+        // werden: faellt sie um, faellt sie in die falsche Richtung.
+        //
+        // Ein Accepts(), das zu viel durchlaesst, ist bloss wieder der alte
+        // Zustand. Ein Accepts(), das zu wenig durchlaesst - etwa weil
+        // UNKNOWN nicht mehr der Vorgabewert eines nicht gesetzten int ist -,
+        // verweigert JEDE Craftaktion im Einzelspielerbetrieb, und zwar mit
+        // einer Fehlermeldung, die auf einen Versatz zeigt, den es gar nicht
+        // gibt.
+        Check("Kennung Craftaktion",  ChefZ_CraftIntent.SelfCheck());
+
         return s_Failed == 0;
     }
 

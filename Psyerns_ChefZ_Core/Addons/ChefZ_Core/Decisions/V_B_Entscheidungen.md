@@ -383,10 +383,13 @@ Sonst nichts. V-B ist laut `19 §2` ausdrücklich **kein Code**; `ChefZ_Log`,
 S1, S9 und S6 — nicht hier.
 
 **Bewusst nicht geschrieben:** ein `CfgChefZ`-Manifesteintrag für `Config/Core.json`.
-Welche Pfadform trägt (`ChefZ_Core/Config/…` gegen `Psyerns/ChefZ_Core/Config/…`,
-Trennzeichen, Groß-/Kleinschreibung) entscheidet die **Messung** aus V-A, deren
-Protokollblock in `Tests/V_A_PboJsonSmoke/README.md §5` noch leer ist. Einen Pfad zu
-raten, den der Loader später still verwirft, wäre die schlechteste aller Varianten.
+Die Pfad**wurzel** ist inzwischen entschieden (B4, `02 §4.1`): sie ist das PBO-Präfix
+und damit der Ordnername, also `ChefZ_Core/Config/…`. Offen bleibt nur, ob eine
+JSON-Datei aus einem Mod-PBO überhaupt lesbar ist und in welcher Schreibweise
+(Trennzeichen, Groß-/Kleinschreibung) — das entscheidet die **Messung** aus V-A,
+deren Protokollblock in `Tests/V_A_PboJsonSmoke/README.md §5` noch leer ist. Einen
+Pfad zu raten, den der Loader später still verwirft, wäre die schlechteste aller
+Varianten.
 Der Eintrag entsteht in S2, mit dem Messergebnis in der Hand. Fällt V-A negativ aus,
 wird derselbe Datensatz stattdessen zu einem `CfgChefZSeed`-Klassenbaum — die Werte
 in `Core.json` bleiben davon unberührt, nur ihre Quelle wechselt (`02 E7`, OF-10).
