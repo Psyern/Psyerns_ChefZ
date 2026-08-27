@@ -78,16 +78,21 @@ class ChefZ_Cheese extends ChefZ_Edible_Base
      * sie ersatzlos weg, und der Spieler haette ein Stueck Kaese in der Hand,
      * das er nicht essen kann.
      *
-     * Bewusst dieselben zwei Aktionen wie in BoxCerealCrunchin.c und keine
-     * dritte: der Wechsel der Basisklasse soll am Verhalten NICHTS aendern
-     * ausser der Kochbarkeit.
+     * NICHT ActionEatCereal, obwohl BoxCerealCrunchin genau die mitbrachte:
+     * ActionEatCereal.OnFinishProgressServer laesst mit einer Wahrscheinlichkeit
+     * eine OrienteeringCompass auf den Boden fallen - Vanillas Muesli-Osterei
+     * (ActionEatCereal.c). An einer Muesli-Schachtel ist das ein Gag, an einem
+     * Laib Kaese waere es ein Bug: Kaese essen liesse Kompasse regnen.
+     *
+     * ActionEatBig ist der wertgleiche Ersatz ohne diesen Nebeneffekt und die
+     * Variante, die Vanilla fuer grosse Portionen nimmt (Rice.c, Marmalade.c).
      */
     override void SetActions()
     {
         super.SetActions();
 
         AddAction(ActionForceFeed);
-        AddAction(ActionEatCereal);
+        AddAction(ActionEatBig);
     }
 }
 

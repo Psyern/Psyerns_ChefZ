@@ -34,4 +34,27 @@
 
 class ChefZ_SauceItemBase extends ChefZ_Edible_Base
 {
+    /**
+     * Die Essaktion der vier Bruehen und Saucen.
+     *
+     * Vanilla registriert sie auf jeder Nahrungsklasse einzeln; ohne sie wird
+     * das Glas im Spiel nicht zum Essen angeboten, ohne dass irgendwo etwas
+     * gemeldet wuerde.
+     *
+     * ActionEatBig, und das Vorbild steht schon in der config.cpp: die
+     * Configklasse erbt von Marmalade, und Marmalade.c registriert genau
+     * ActionForceFeed + ActionEatBig. Ein Glas Eingekochtes ist der Fall, fuer
+     * den Vanilla EAT_BIG vorgesehen hat - die Klassen tragen varQuantityMax
+     * 100, ein Loeffelmass waere hier eine Ewigkeit.
+     *
+     * Keine Gattungszusage: eine eingekochte Sauce ist weder Fleisch noch
+     * Obst, und Marmalade sagt ebenfalls nichts dazu.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeed);
+        AddAction(ActionEatBig);
+    }
 }

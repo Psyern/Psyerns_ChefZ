@@ -50,7 +50,50 @@ class ChefZ_CabbageSeeds extends SeedBase {}
 //--- von ihnen ist eine reine Rohzutat, und eine Erbin OHNE Uebergaenge gibt
 //--- es nicht - der Knoten steht auf der gemeinsamen Configbasis und laesst
 //--- sich in einer Configklasse nicht wieder entfernen.
-class ChefZ_VegetableFood_Base extends ChefZ_Edible_Base {}
+class ChefZ_VegetableFood_Base extends ChefZ_Edible_Base
+{
+    /**
+     * Zwiebel, Knoblauch, Karotte und Kohl sind fuer Vanilla "Fruit". Potato.c
+     * und Tomato.c sagen dasselbe ueber Kartoffel und Tomate; die Schublade
+     * heisst so, meint aber Obst UND Gemuese (Edible_Base.c:755, Kommentar
+     * "fruit, vegetables and mushrooms").
+     *
+     * Die Zusage ist hier PFLICHT und nicht Zierde: ActionEatFruit.
+     * ActionCondition prueft "food_item.IsFruit()" und liefert sonst false -
+     * die Aktion waere registriert und erschiene trotzdem nie. Genau die Sorte
+     * lautloser Fehler, um die es hier geht.
+     *
+     * Zweitwirkung, ebenfalls gewollt: Edible_Base.ProcessDecay nimmt damit
+     * den Obstzweig mit DECAY_FOOD_RAW_FRVG / BOILED_FRVG / BAKED_FRVG und dem
+     * Ausgang "trocknet statt zu verrotten" - statt des Zweigs fuer geoeffnete
+     * Konserven, in dem jedes ChefZ-Gemuese bisher lag.
+     */
+    override bool IsFruit()
+    {
+        return true;
+    }
+
+    /**
+     * Die Essaktion der vier Ernteklassen.
+     *
+     * ActionEatFruit ist Vanillas Variante fuer die ganze Knolle: Potato.c
+     * :26-31 registriert ActionForceFeed + ActionEatFruit, Tomato.c und
+     * Zucchini.c ebenso. Sie verbraucht EAT_NORMAL und setzt zusaetzlich
+     * CMD_ACTIONMOD_EAT / CMD_ACTIONFB_EAT ausdruecklich - dieselbe
+     * Essanimation, aber ueber die Fruchtkondition abgesichert.
+     *
+     * Anders als bei den frischen Kraeutern ist hier die FRUCHTvariante
+     * richtig: eine ganze Zwiebel ist ein Gegenstand in der Hand, kein
+     * Buendel.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeed);
+        AddAction(ActionEatFruit);
+    }
+}
 
 //--- Die Ernte. Sie traegt einen ChefZ-Zustand, weil sie Eingang der
 //--- Schnittstufe ist und der Transform Frische und Zustand fortschreibt.

@@ -79,4 +79,40 @@ class ChefZ_PortionedDish_Base extends ChefZ_PortionedFood_Base {}
 //! Die servierte Portion auf dem Teller oder in der Schuessel. Traegt beim
 //! vollstaendigen Verzehr den leeren Behaelter zurueck - das leistet
 //! ChefZ_Edible_Base.OnConsume anhand von m_ChefZ_ReturnContainer (16 §3.2).
-class ChefZ_ServedDish_Base extends ChefZ_Edible_Base {}
+class ChefZ_ServedDish_Base extends ChefZ_Edible_Base
+{
+    /**
+     * Die Essaktion aller 25 Teller- und Schuesselgerichte, an genau einer
+     * Stelle.
+     *
+     * Vanilla setzt sie NICHT auf Edible_Base, sondern auf jeder
+     * Nahrungsklasse einzeln (Rice.c:3-10). Ohne sie bietet das Spiel den
+     * fertigen Teller nicht zum Essen an - kein Fehlerbild, keine Logzeile,
+     * die Aktion fehlt einfach. Sie steht hier und nicht an 25 Klassen, weil
+     * die Engine zu einer Configklasse ohne eigene Skriptklasse die
+     * Config-Elternkette hinaufgeht und jedes Gericht ueber
+     * ChefZ_ServedDish_Base laeuft.
+     *
+     * ActionEatBig ist die Variante, die Vanilla fuer grosse Mahlzeiten
+     * nimmt: Rice.c, Marmalade.c, PowderedMilk.c und Guts.c registrieren sie,
+     * und sie verbraucht UAQuantityConsumed.EAT_BIG (25) statt EAT_NORMAL
+     * (15). Ein Teller Eintopf isst sich nicht wie eine Beere.
+     *
+     * KEINE Gattungszusage (IsMeat/IsFruit): ein zubereitetes Gericht ist
+     * keins von beidem, und Vanillas zubereitete Nahrung - Rice, Marmalade,
+     * die Konserven - sagt ebenfalls nichts dazu. Der Verfall laeuft damit
+     * ueber ChefZ_ItemDecay und die Preservation-Daten, nicht ueber Vanillas
+     * Fleisch- oder Obstuhr.
+     *
+     * ChefZ_PortionedDish_Base bekommt bewusst NICHTS davon: aus dem Bulk im
+     * Kochgefaess wird portioniert, nicht gegessen (15 §2). Dafuer haengt
+     * ChefZ_ActionTakePortion an ChefZ_PortionedFood_Base.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeed);
+        AddAction(ActionEatBig);
+    }
+}

@@ -68,7 +68,7 @@ function eatActionClasses(files) {
     const txt = readText(file);
     if (!txt || !txt.includes('AddAction')) continue;
     const src = stripComments(txt);
-    const classPositions = [...src.matchAll(/class\s+([A-Za-z_]\w*)/g)]
+    const classPositions = [...src.matchAll(/\bclass\s+([A-Za-z_]\w*)/g)]
       .map(m => ({ name: m[1], at: m.index }));
     // ActionForceFeed zaehlt bewusst NICHT: das ist Fuettern durch einen anderen
     // Spieler. Wer sein eigenes Essen essen will, braucht ein ActionEat*.

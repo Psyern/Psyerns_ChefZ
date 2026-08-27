@@ -39,7 +39,47 @@
 //! davon wird ausschliesslich roh verzehrt. Eine Erbin ohne Uebergaenge gibt es
 //! nicht - der Knoten steht auf der gemeinsamen Basis, keine Configklasse kann
 //! ihn wieder entfernen.
-class ChefZ_ChoppedVegetableBase extends ChefZ_Edible_Base {}
+class ChefZ_ChoppedVegetableBase extends ChefZ_Edible_Base
+{
+    /**
+     * Schnittgut aus Kartoffel, Tomate, Paprika, Zwiebel, Knoblauch, Karotte
+     * und Kohl - fuer Vanilla alles "Fruit". Das ist dieselbe Schublade, in
+     * der Potato.c und SlicedPumpkin.c liegen; sie meint Obst UND Gemuese
+     * (Edible_Base.c:755).
+     *
+     * PFLICHT und nicht Zierde: ActionEatFruit.ActionCondition prueft
+     * "food_item.IsFruit()" und liefert sonst false. Die Aktion waere
+     * registriert und erschiene trotzdem nie.
+     *
+     * Zweitwirkung: Edible_Base.ProcessDecay nimmt den Obstzweig mit den
+     * FRVG-Konstanten statt des Zweigs fuer geoeffnete Konserven.
+     */
+    override bool IsFruit()
+    {
+        return true;
+    }
+
+    /**
+     * Die Essaktion aller sieben Schnittgutklassen, an einer Stelle.
+     *
+     * Vanilla setzt sie NICHT auf Edible_Base, sondern auf jeder
+     * Nahrungsklasse einzeln; ohne sie wird das Item im Spiel nicht zum Essen
+     * angeboten. Die Engine findet diese Klasse fuer jede Erbin ueber die
+     * Config-Elternkette.
+     *
+     * Vorbild ist woertlich SlicedPumpkin.c:27-28 - Vanillas eigenes
+     * geschnittenes Gemuese, ActionForceFeed + ActionEatFruit. Die
+     * Configbasis dieses Moduls benutzt sogar dessen Modell
+     * (pumpkin_sliced.p3d) als Proxy.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeed);
+        AddAction(ActionEatFruit);
+    }
+}
 
 //! §13: Potato + Knife.
 class ChefZ_SlicedPotato extends ChefZ_ChoppedVegetableBase {}

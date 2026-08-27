@@ -33,4 +33,42 @@
 
 class ChefZ_PreservedFood_Base extends ChefZ_Edible_Base
 {
+    /**
+     * Alle acht Items dieses Moduls sind Fleisch oder Fisch: gesalzen,
+     * getrocknet oder geraeuchert. Konservieren aendert die Haltbarkeit, nicht
+     * die Gattung - deshalb dieselbe Zusage wie auf ChefZ_MeatItemBase.
+     *
+     * Sie ist hier zusaetzlich wertvoll, weil Vanillas Fleischzweig in
+     * Edible_Base.ProcessDecay als einziger die Stufe DRIED kennt
+     * (DECAY_FOOD_DRIED_MEAT). Ohne IsMeat() liefe Doerrfleisch im Zweig
+     * "opened cans", der die Stufe gar nicht betrachtet - und die Preservation
+     * des Moduls skalierte eine Uhr, die fuer Trockenware nie gestellt wird.
+     *
+     * Vanillas Beleg fuer "getrocknetes Fleisch ist Fleisch": die
+     * SteakMeat-Klassen tragen die Stufe DRIED in derselben Klasse, die
+     * IsMeat() zusagt.
+     */
+    override bool IsMeat()
+    {
+        return true;
+    }
+
+    /**
+     * Die Essaktion fuer alle acht Klassen des Moduls, auf der Familienbasis.
+     *
+     * Vanilla registriert sie auf jeder Nahrungsklasse einzeln (Lard.c:36-42);
+     * ohne sie wird das Item im Spiel schlicht nicht zum Essen angeboten. Die
+     * Engine findet diese Klasse fuer jede Erbin ueber die Config-Elternkette.
+     *
+     * ActionEatMeat, aus demselben Grund wie in ChefZ_Meat: Fleischvariante,
+     * EAT_NORMAL, und ApplyModifiers greift, falls je ein Zustand dieses
+     * Moduls roh ist. Vorbild: BearSteakMeat.c, Lard.c.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeed);
+        AddAction(ActionEatMeat);
+    }
 }

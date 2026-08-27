@@ -78,4 +78,108 @@
 //! das eine ChefZ-Skriptklasse braucht. CanBeCooked() folgt den Daten und
 //! liefert hier true; die Uebergaenge Raw -> Baked (BAKING) und
 //! Raw -> Boiled (BOILING) stehen in der config.cpp dieses Moduls.
-class ChefZ_PaprikaPowder extends ChefZ_Edible_Base {}
+class ChefZ_PaprikaPowder extends ChefZ_Edible_Base
+{
+    //! Siehe die Begruendung an ChefZ_SpiceBase.SetActions(). Das Pulver
+    //! bekommt dieselbe Aktion wie die uebrigen Gewuerze - seine Skriptkette
+    //! laeuft nur aus dem oben genannten Grund ueber ChefZ_Edible_Base statt
+    //! ueber ChefZ_SpiceBase und erbt sie deshalb nicht.
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeedSmall);
+        AddAction(ActionEatSmall);
+    }
+}
+
+//==============================================================================
+// Die beiden Gewuerzbasen - und warum sie doch eine Skriptklasse bekommen
+//==============================================================================
+// Der Kopf dieser Datei begruendet, warum die Gewuerze ausser dem
+// Paprikapulver KEINE Skriptklasse bekommen: sie haben keinen Food-Knoten,
+// waeren nie kochbar, und ein ChefZ-Zustandsblock waere Sync-Kost fuer nichts.
+// Diese Begruendung gilt unveraendert - fuer den ZUSTAND.
+//
+// Sie gilt nicht fuer die Essaktion. Vanilla registriert die Essaktion auf
+// jeder Nahrungsklasse einzeln und NICHT auf Edible_Base (Potato.c:26-31).
+// ChefZ_SpiceBase und ChefZ_DriedHerbBase tragen beide einen
+// "class Nutrition"-Block; sie sind damit Nahrung im Sinne von
+// PlayerStomach.InitData, werden aber ohne eine ActionEat*-Registrierung nie
+// zum Essen angeboten - kein Fehlerbild, keine Logzeile.
+//
+// Deshalb erben diese beiden Klassen von Edible_Base und NICHT von
+// ChefZ_Edible_Base. Das ist der ganze Unterschied und der Grund, warum die
+// Entscheidung des Dateikopfs bestehen bleibt:
+//
+//   Edible_Base       nur die Aktion. Kein m_ChefZ_State, kein OnStoreSave,
+//                     kein OnVariablesSynchronized, keine Registry-Abfrage je
+//                     Verfallstakt. Genau das, was der Kopf vermeiden wollte.
+//   ChefZ_Edible_Base haette zusaetzlich den vollen Zustandsblock gebracht.
+//
+// Elf Klassen haengen an diesen beiden Basen; die Engine findet sie fuer jede
+// ueber die Config-Elternkette.
+//
+// WARUM NICHT "gar nicht essbar": fuer Salz, Pfeffer und Gewuerzpulver waere
+// das die ehrlichere Antwort, und der saubere Weg dorthin ist, ihnen die
+// Naehrwerte zu nehmen statt ihnen eine Essaktion zu geben. Dieser Weg ist
+// diesem Slice verschlossen:
+//
+//   1. Die Naehrwerte stehen nicht nur in der config.cpp, sondern auch in der
+//      zentralen ChefZ_Registry/Config/Nutrition.json - und die darf dieser
+//      Slice nicht anfassen (Workflow §5).
+//   2. Jedes dieser Gewuerze ist ERGEBNIS eines Rezepts oder Transforms
+//      (ChefZ_BlackPepper, ChefZ_HerbMix, ChefZ_HunterSeasoning,
+//      ChefZ_PaprikaPowder, ChefZ_DriedThyme und die uebrige
+//      DriedHerb-Familie). Fuer Ergebnisklassen verlangt 01 V7 einen
+//      Nutrition- oder Food-Knoten; ohne ihn registriert PlayerStomach sie
+//      nie. Die Naehrwerte zu entfernen hiesse, diese Regel zu brechen.
+//
+// Die Zahlen sagen ohnehin, was gemeint ist: fullnessIndex 2, energy 8 bis 10.
+// Ein geloeffeltes Gewuerz saettigt nicht - es ist essbar und wertlos, und
+// genau das soll der Spieler merken duerfen.
+//==============================================================================
+
+//! Basis der Gewuerzpulver (§71): schwarzer Pfeffer, Pfefferkoerner,
+//! Kraeutermischung, Jaegergewuerz. Traegt NUR die Essaktion.
+class ChefZ_SpiceBase extends Edible_Base
+{
+    /**
+     * ActionEatSmall + ActionForceFeedSmall, das Vanilla-Paar fuer die kleinste
+     * Portion. Vorbild ist PackagedFood.c - Honey, Zagorky_ColorBase und
+     * Snack_ColorBase registrieren genau diese beiden und keine anderen.
+     *
+     * Die kleine Variante und nicht ActionEat oder ActionEatBig, weil
+     * UAQuantityConsumed.EAT_SMALL (10) gegen EAT_NORMAL (15) und EAT_BIG (25)
+     * die Bissgroesse ist: eine Tuete Pfeffer wird geloeffelt, nicht
+     * ausgetrunken. Dass die Klassen varQuantityMax = 1 tragen und damit
+     * ohnehin in einem Zug leer sind, macht die Wahl nicht beliebig - sie ist
+     * die Aussage darueber, was das Item ist, und sie bleibt richtig, wenn
+     * jemand die Menge spaeter hochsetzt.
+     *
+     * Bewusst KEIN ActionForceFeed (gross): Vanilla paart immer beide Haelften
+     * derselben Groesse. Gefuettert wird, was auch selbst gegessen werden
+     * kann, und in derselben Portion.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeedSmall);
+        AddAction(ActionEatSmall);
+    }
+}
+
+//! Basis der getrockneten Kraeuter (§16, §9): Petersilie, Dill, Thymian,
+//! Rosmarin, Baerlauch und getrocknete Paprikaschoten. Traegt NUR die
+//! Essaktion; Begruendung der Variante siehe ChefZ_SpiceBase.
+class ChefZ_DriedHerbBase extends Edible_Base
+{
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeedSmall);
+        AddAction(ActionEatSmall);
+    }
+}
