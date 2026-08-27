@@ -46,12 +46,14 @@
 //     ChefZ_ToolRegistry.
 //
 //     Der KOCHKONTEXT (ChefZ_CookContext.availableToolGroups) bleibt davon
-//     ausdruecklich unberuehrt: ein kochender Topf hat keinen Besitzer und
-//     keine Hand (08 §3), und wessen Messer in Reichweite liegt, waere fuer
-//     die Bindung eines Kesselrezepts eine spielerabhaengige Antwort auf eine
-//     Frage, die fuer jeden Spieler dieselbe sein muss. Ein Rezept mit
-//     requiredToolGroups bindet deshalb weiterhin nicht - die sichere
-//     Richtung.
+//     ausdruecklich unberuehrt: ein kochender Topf hat keine Hand (08 §3),
+//     und wessen Messer in Reichweite liegt, waere eine Antwort, die sich
+//     zwischen zwei Ticks aendert, ohne dass jemand etwas getan haette. Ein
+//     Rezept mit requiredToolGroups bindet deshalb weiterhin nicht - die
+//     sichere Richtung.
+//
+//     Der HANDELNDE SPIELER ist davon zu trennen und wird seit S19 sehr wohl
+//     gefuehrt - nur nicht hier. Siehe die Anmerkung an CollectContext().
 // Beide haengen an derselben Stelle, damit die Regel "genau eine Datei fasst
 // Entities an" gilt.
 //
@@ -102,9 +104,27 @@ class ChefZ_FactCollector
      * Abschlusspruefung eingetragen. Sie hier zu raten hiesse, sie zweimal zu
      * fuehren.
      *
-     * actorIdentityId bleibt 0. 08 §3 haelt ausdruecklich fest, dass die
-     * Bindung fuer jeden Spieler dieselbe sein muss - ein kochender Topf hat
-     * keinen Besitzer.
+     * actorIdentityId bleibt 0, und das ist SEIT S19 eine Arbeitsteilung und
+     * kein Verzicht mehr.
+     *
+     * 08 §3 hat recht: ein kochender Topf hat keinen Besitzer. Es gibt am
+     * GERAET nichts abzulesen, woraus sich ein handelnder Spieler ergaebe -
+     * Vanilla fuehrt dort keine Kennung, und ChefZ darf keine anlegen (00 §5
+     * fuehrt Pot, FryingPan, Cauldron und ItemBase in der geschlossenen Liste
+     * der NICHT gemoddeten Klassen).
+     *
+     * Wer gehandelt hat, ist deshalb keine Eigenschaft des Gefaesses, sondern
+     * eine BEOBACHTUNG ueber die Zeit: wer stand daneben, als der Bestand
+     * wuchs. Diese Beobachtung fuehrt die Kochsitzung, die Sitzung gehoert
+     * dem Adapter (10 §7), und der Adapter stempelt den Wert unmittelbar nach
+     * diesem Aufruf in denselben Kontext
+     * (ChefZ_CookingDeviceAdapter.BuildContextFrom). Die Regel begruendet
+     * ChefZ_CookActor.
+     *
+     * Diese Datei bleibt damit, was sie ist: sie liest EIN Gefaess EINMAL und
+     * weiss nichts ueber seine Vorgeschichte. Haette sie den Spieler zu
+     * ermitteln, muesste sie die Welt absuchen - und die Zusage "der Sammler
+     * liest ausschliesslich das uebergebene Item" waere dahin.
      */
     static bool CollectContext(notnull ItemBase device,
                                notnull ChefZ_DeviceDescriptor desc,

@@ -773,6 +773,16 @@ class ChefZ_Diagnostics
             return false;
         }
 
+        // Dieselbe Zuschreibung, die auch der Kochtick benutzen wuerde -
+        // sonst antwortete "chefz match" auf eine andere Frage als die, die
+        // der Server sich stellt. PeekSession legt keine Sitzung an: eine
+        // Auskunft darf den Zustand nicht veraendern, ueber den sie Auskunft
+        // gibt. Ohne laufende Sitzung bleibt es bei 0 - dann steht im Bericht
+        // "niemand", und das ist die ehrliche Antwort.
+        ChefZ_CookSession session = ChefZ_CookingDeviceAdapter.Get().PeekSession(device);
+        if (session)
+            localCtx.actorIdentityId = session.actorIdentityId;
+
         ChefZ_FactCollector.CollectFromCargo(device, localSnapshot, localEntities);
 
         desc     = found;

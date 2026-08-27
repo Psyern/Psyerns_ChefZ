@@ -24,6 +24,7 @@
             "maxSelectorDepth": 8,
             "maxCategories": 256,
             "sessionTtlSec": 300.0,
+            "cookActorRadius": 6.0,
 
             "globalSpoilageScale": 1.0,
             "minDecayScale": 0.01,

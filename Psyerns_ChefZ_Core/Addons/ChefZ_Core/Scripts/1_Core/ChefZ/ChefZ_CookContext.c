@@ -53,9 +53,31 @@ class ChefZ_CookContext
     //! Werkzeuggruppen, die in Reichweite sind. Nie null.
     ref array<ChefZ_Sym> availableToolGroups;
 
-    //! 0 = niemand beteiligt. Wird fuer Faehigkeiten gebraucht (17), nie fuer
-    //! die Bindung: dasselbe Gefaess muss fuer jeden Spieler dasselbe Rezept
-    //! ergeben.
+    /**
+     * Wer handelt gerade an diesem Gefaess? 0 = niemand beteiligt.
+     *
+     * Ein Kochgeraet fuehrt keinen Besitzer, und ChefZ darf ihm keinen geben
+     * (00 §5). Der Wert ist deshalb keine Eigenschaft des Gefaesses, sondern
+     * eine Beobachtung der Kochsitzung; wer sie anstellt und nach welcher
+     * Regel, steht im Kopf von ChefZ_CookActor. Diese Klasse NIMMT ihn
+     * entgegen und faellt keine Entscheidung darueber - 1_Core kennt keine
+     * Spieler.
+     *
+     * Gebraucht wird er fuer Faehigkeiten (17 §3.3) und fuer die Nutzlast der
+     * Kochereignisse (17 §3.1). Ueber ChefZ_CapabilityGate wirkt er damit
+     * auch auf die Bindung: ein Rezept mit requires[] und onFail "block"
+     * faellt fuer den einen Koch weg und fuer den anderen nicht. Das ist
+     * gewollt (08 §7 Schritt 2c) und vertraegt sich mit der Zusage aus 08 §7
+     * ("zweimal dieselbe Eingabe ergibt zweimal dasselbe Ergebnis"), weil der
+     * Spieler TEIL der Eingabe ist und sich nur aendert, wenn sich zugleich
+     * der Inhalt aendert - und ein Inhaltswechsel loest ohnehin eine
+     * vollstaendige Neubewertung aus.
+     *
+     * Bei 0 verhaelt sich der gesamte Pfad wie ohne Zuschreibung: das Tor
+     * sperrt nichts (17 §3.3), Faehigkeiten liefern ihren Default, und ein
+     * Fortschrittsempfaenger sieht "niemand beteiligt". Ein Kochvorgang ohne
+     * Spieler in der Naehe laeuft vollstaendig durch.
+     */
     int       actorIdentityId;
 
     //! Verstrichene Zeit der Kochsitzung, nur fuer completion TIMED (10 §6).
@@ -146,6 +168,11 @@ class ChefZ_CookContext
         }
         if (elapsedSec > 0.0)
             s = s + " seit=" + elapsedSec.ToString() + "s";
+
+        // Nur wenn es einen gibt: "koch=0" waere in jeder zweiten Zeile eines
+        // Traces zu lesen und saehe aus wie ein Fehler, wo keiner ist.
+        if (actorIdentityId != 0)
+            s = s + " koch=" + actorIdentityId.ToString();
 
         return s;
     }

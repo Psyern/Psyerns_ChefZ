@@ -259,7 +259,22 @@ class ChefZ_CookingDeviceAdapter
         ChefZ_DeviceDescriptor desc;
         int cargoCount;
         if (!PassesGate(device, desc, cargoCount))
+        {
+            // Ein BEKANNTES Kochgeraet, das die Stufe 0 nicht mehr besteht,
+            // ist ein Gefaess, in dem nicht einmal mehr ein Rezept anfangen
+            // koennte - leer oder unter der Mindestzutatenzahl. Ab hier sieht
+            // der Adapter nicht mehr hin, und eine Zuschreibung, die er nicht
+            // mehr ueberwacht, ist eine offene Flanke: sie ueberdauerte das
+            // Leeren des Topfes und hinge dem naechsten Koch an. Deshalb
+            // faellt sie hier - und nicht erst mit der Alterung.
+            //
+            // desc ist nur gesetzt, wenn die Geraeteaufloesung gelungen und
+            // das Geraet in CfgChefZDevices eingetragen ist (10 E7). Fuer
+            // alles andere geschieht hier so wenig wie bisher.
+            if (desc && desc.enabled)
+                ForgetClaim(device);
             return;
+        }
 
         m_CountObserved++;
 
@@ -290,6 +305,13 @@ class ChefZ_CookingDeviceAdapter
 
         ChefZ_CoreSettingsDef settings = ChefZ_ConfigManager.Get().GetSettings();
 
+        //--- Zuschreibung (siehe Kopf von ChefZ_CookActor) --------------------
+        // Sie steht HINTER der Ruecksprung-Wache oben und damit nicht im
+        // heissesten Pfad: ist die Signatur unveraendert und die Sitzung
+        // inert, ist auch der Bestand unveraendert und es gaebe nichts
+        // aufzuloesen.
+        UpdateActorClaim(device, session, settings);
+
         //--- Stufe B - Vollmatch (10 §5) --------------------------------------
         bool freshlyBuilt = false;
 
@@ -315,6 +337,82 @@ class ChefZ_CookingDeviceAdapter
     }
 
     //==========================================================================
+    // Zuschreibung (siehe Kopf von ChefZ_CookActor)
+    //==========================================================================
+
+    /**
+     * Die Zuschreibung eines Gefaesses fallen lassen, ohne eine Sitzung
+     * anzulegen.
+     *
+     * PeekSession und nicht GetSession: der Aufruf steht im gedrosselten Pfad
+     * und darf fuer ein Gefaess, das ChefZ noch nie gesehen hat, nicht
+     * ploetzlich Speicher belegen. Ohne Sitzung gibt es nichts zu vergessen.
+     */
+    private void ForgetClaim(notnull ItemBase device)
+    {
+        ChefZ_CookSession session = PeekSession(device);
+        if (!session)
+            return;
+        session.ForgetClaim();
+    }
+
+    /**
+     * Den Anspruchsinhaber dieses Gefaesses fortschreiben.
+     *
+     * Der ganze Mechanismus haengt an einem einzigen Befund: Vanillas
+     * Kochschleife legt nie etwas in ein Gefaess. Waechst der Bestand, war es
+     * ein Spieler - und nur dann wird gefragt, welcher.
+     *
+     * Drei Waechter davor, in dieser Reihenfolge, weil sie immer billiger
+     * werden, je haeufiger sie greifen:
+     *
+     *   1. kein Zuwachs                -> ein Vergleich, der Normalfall
+     *   2. Zuschreibung abgeschaltet   -> cookActorRadius <= 0
+     *   3. niemand hoert zu            -> vier Map-Zugriffe (17 E2)
+     *
+     * Erst danach laeuft die Umkreissuche, und die laeuft damit nur in dem
+     * Tick, in dem tatsaechlich jemand etwas eingelegt hat.
+     *
+     * Sie kann nichts kaputt machen: der Rueckgabewert wird ausschliesslich
+     * in die Sitzung geschrieben und von dort in ChefZ_CookContext. Bleibt er
+     * 0, verhaelt sich der Core exakt so wie vor dieser Aenderung.
+     */
+    private void UpdateActorClaim(notnull ItemBase device,
+                                  notnull ChefZ_CookSession session,
+                                  ChefZ_CoreSettingsDef settings)
+    {
+        if (!session.ObserveItemCount(m_Scratch.itemCount))
+            return;
+
+        if (!settings)
+            return;
+        if (settings.cookActorRadius <= 0.0)
+            return;
+
+        if (!ChefZ_CookActor.AnyoneCares())
+            return;
+
+        int before = session.actorIdentityId;
+        int after  = ChefZ_CookActor.Resolve(device, before, settings.cookActorRadius);
+        if (after == before)
+            return;
+
+        session.actorIdentityId = after;
+
+        // Der Wechsel gehoert ins Log, weil er die einzige Stelle des
+        // Kochpfads ist, an der eine SPIELERBEZOGENE Entscheidung faellt.
+        // Wer sich fragt, warum ein Gericht bei ihm keine Wirkung hatte, muss
+        // die Antwort hier finden koennen.
+        if (!ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
+            return;
+
+        ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
+            "Zuschreibung in Gefaess " + session.vesselId.ToString() + ": "
+            + before.ToString() + " -> " + after.ToString()
+            + "  (Bestand auf " + m_Scratch.itemCount.ToString() + " gewachsen)");
+    }
+
+    //==========================================================================
     // Stufe B (10 §5)
     //==========================================================================
 
@@ -330,7 +428,7 @@ class ChefZ_CookingDeviceAdapter
                               notnull ChefZ_DeviceDescriptor desc,
                               float updateTime, int method)
     {
-        if (!BuildContextFrom(device, desc, updateTime, method))
+        if (!BuildContextFrom(device, desc, session.actorIdentityId, updateTime, method))
         {
             FailSession(session, "Kontext konnte nicht erhoben werden");
             return false;
@@ -546,7 +644,7 @@ class ChefZ_CookingDeviceAdapter
         // weil eine davon Zutaten kostet, wenn sie versagt.
         if (!freshlyBuilt)
         {
-            if (!BuildContextFrom(device, desc, updateTime, method))
+            if (!BuildContextFrom(device, desc, session.actorIdentityId, updateTime, method))
             {
                 FailSession(session, "Kontext konnte nicht erhoben werden");
                 return;
@@ -934,6 +1032,20 @@ class ChefZ_CookingDeviceAdapter
         m_CountCompleted++;
         session.state = ChefZ_ESessionState.DONE;
 
+        // Der Applicator hat das Gericht IN DAS GEFAESS gelegt
+        // (ChefZ_Applicator.SpawnOutput). Der Bestand kann dadurch wachsen,
+        // ohne dass ein Spieler etwas getan hat - genau der Fall, den die
+        // Zuschreibung sonst als Einlegen lesen wuerde. Die Sperre gilt fuer
+        // den naechsten Tick dieses Gefaesses und fuer keinen weiteren.
+        //
+        // Der Anspruch SELBST bleibt bestehen: die Reste im Topf hat
+        // derselbe Spieler hineingelegt, und ein zweites Gericht daraus ist
+        // ein zweites Gericht aus seinen Zutaten - keine Wiederholung
+        // desselben Vorgangs. Doppelte Meldung ist dadurch ausgeschlossen,
+        // dass ein Abschluss die gebundenen Zutaten VERBRAUCHT: derselbe
+        // Kochvorgang kann kein zweites Mal fertig werden.
+        session.claimSelfInflicted = true;
+
         // S13 (17 §4, §7, E7): ChefZ_OnRecipeCompleted und danach
         // ProgressRegistry.Report("cook").
         //
@@ -1142,6 +1254,27 @@ class ChefZ_CookingDeviceAdapter
             m_InsertsSinceSweep = 0;
             AgeSessions(TickCount(0));
         }
+
+        return session;
+    }
+
+    /**
+     * Sitzung zum Gefaess, OHNE eine anzulegen. null, wenn es keine gibt.
+     *
+     * Fuer Auskunftspfade: die Diagnose soll nachsehen koennen, ohne eine
+     * Sitzung zu erzeugen und damit die Alterung anzustossen.
+     */
+    ChefZ_CookSession PeekSession(notnull ItemBase vessel)
+    {
+        int low, high;
+        if (!VesselId(vessel, low, high))
+            return null;
+
+        ChefZ_CookSession session;
+        if (!m_Sessions.Find(low, session))
+            return null;
+        if (session.vesselIdHigh != high)
+            return null;                    // dieselbe Haelfte, anderes Gefaess
 
         return session;
     }
@@ -1501,7 +1634,16 @@ class ChefZ_CookingDeviceAdapter
         if (!ResolveDevice(vessel, desc))
             return false;
 
-        if (!BuildContextFrom(vessel, desc, updateTime, method))
+        // PeekSession und nicht GetSession: diese Methode ist die Auskunft
+        // aus 10 §4 und wird von der Diagnose gerufen ("chefz match", 18 E6).
+        // Eine Auskunft darf keine Sitzung ANLEGEN - sonst veraendert das
+        // Nachsehen den Zustand, ueber den es Auskunft gibt.
+        int actorId = 0;
+        ChefZ_CookSession session = PeekSession(vessel);
+        if (session)
+            actorId = session.actorIdentityId;
+
+        if (!BuildContextFrom(vessel, desc, actorId, updateTime, method))
             return false;
 
         ctx         = m_Ctx;
@@ -1511,10 +1653,25 @@ class ChefZ_CookingDeviceAdapter
     }
 
     private bool BuildContextFrom(notnull ItemBase vessel, notnull ChefZ_DeviceDescriptor desc,
+                                  int actorIdentityId,
                                   float updateTime, int method)
     {
         if (!ChefZ_FactCollector.CollectContext(vessel, desc, method, m_Ctx))
             return false;
+
+        // Der Sammler kann die Identitaet nicht kennen und soll es auch nicht:
+        // er liest EIN Gefaess und weiss nichts ueber die Vorgeschichte. Wer
+        // an diesem Gefaess gehandelt hat, weiss allein die Sitzung - und die
+        // gehoert dem Adapter (10 §7). Deshalb wird hier gestempelt und nicht
+        // dort.
+        //
+        // Der Wert ist damit fuer den GANZEN Tick festgelegt, bevor die
+        // Auswertung beginnt: Bindung, Qualitaetsabwertung und Ereignis sehen
+        // dieselbe Zahl. Er aendert sich nur bei einem Bestandszuwachs, und
+        // ein Bestandszuwachs aendert die Signatur - die gebundene Auswertung
+        // laeuft danach ohnehin neu. Damit bleibt die Zusage aus 08 §7
+        // erhalten: dieselbe Eingabe ergibt dasselbe Ergebnis.
+        m_Ctx.actorIdentityId = actorIdentityId;
 
         // Ueber lokale Zwischenvariablen: CollectFromCargo nimmt beide Listen
         // als out-Parameter, und m_Snapshot / m_Entities sind FELDER (siehe

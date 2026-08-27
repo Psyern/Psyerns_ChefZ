@@ -62,6 +62,16 @@ class ChefZ_CookSession
      */
     static const int LONG_AGO = 1 << 20;
 
+    /**
+     * Startwert von claimItemCount: "noch nie gemessen".
+     *
+     * -1 und nicht 0, aus demselben Grund, aus dem
+     * ChefZ_VesselSignature.Reset() itemCount auf -1 setzt: 0 ist ein
+     * gueltiger Bestand (ein leeres Gefaess), und ein leeres Gefaess darf
+     * nicht wie ein bereits gemessenes aussehen.
+     */
+    static const int COUNT_UNMEASURED = -1;
+
     //! Niedrige 32 Bit der Netz-ID des Gefaesses. Zugleich der Map-Schluessel.
     int vesselId;
 
@@ -102,6 +112,50 @@ class ChefZ_CookSession
     //! Zeitmarke des letzten Kochticks in Millisekunden, siehe Kopf.
     int lastTouchedTick;
 
+    //==========================================================================
+    // Zuschreibung (siehe Kopf von ChefZ_CookActor)
+    //==========================================================================
+
+    /**
+     * Wem gehoert das, was hier gerade entsteht? 0 = niemand.
+     *
+     * Das ist der EINZIGE spielerbezogene Wert des Kochpfads. Er ist reine
+     * Laufzeit wie alles in dieser Klasse: nicht gespeichert, nicht
+     * synchronisiert, kein Feld an einem Vanilla-Kochgeraet (10 §7, 00 §5).
+     * Ein Serverneustart loescht ihn - und das ist richtig so, denn eine
+     * Zuschreibung, die einen Neustart ueberlebt, waere eine Behauptung ueber
+     * einen Vorgang, den niemand mehr beobachtet hat.
+     *
+     * Er ueberlebt ausdruecklich AdoptNewContent(): ein Gericht reift ueber
+     * viele Signaturwechsel hinweg, und wer es angesetzt hat, verliert es
+     * nicht dadurch, dass seine Zutaten gar werden.
+     */
+    int actorIdentityId;
+
+    /**
+     * Bestand beim letzten ausgewerteten Kochtick. COUNT_UNMEASURED, solange
+     * noch nie gemessen wurde.
+     *
+     * Der Vergleich gegen diesen Wert ist die ganze Erkennung: waechst der
+     * Bestand, hat ein Spieler etwas eingelegt (siehe Kopf von
+     * ChefZ_CookActor). Er ist bewusst NICHT Teil der Signatur - die Signatur
+     * beantwortet "hat sich etwas geaendert", dieses Feld beantwortet "ist
+     * etwas dazugekommen", und das sind zwei verschiedene Fragen.
+     */
+    int claimItemCount;
+
+    /**
+     * Der naechste Bestandszuwachs stammt von ChefZ selbst.
+     *
+     * ChefZ_Applicator.SpawnOutput legt das fertige Gericht in das Gefaess -
+     * damit waechst der Bestand ohne Zutun eines Spielers, und ohne diese
+     * Sperre entstuende genau in dem Tick nach einem Abschluss ein neuer
+     * Anspruch fuer jeden, der dann allein am Feuer steht. Die Sperre gilt
+     * fuer genau einen Tick; sie wird bei der naechsten Messung verbraucht,
+     * gleich ob der Bestand tatsaechlich gewachsen ist.
+     */
+    bool claimSelfInflicted;
+
     void ChefZ_CookSession()
     {
         signature = new ChefZ_VesselSignature();
@@ -128,6 +182,33 @@ class ChefZ_CookSession
         ticksSinceMatch    = LONG_AGO;
         failCount          = 0;
         signature.Reset();
+
+        ForgetClaim();
+    }
+
+    /**
+     * Die Zuschreibung vergessen - Anspruch, Bestandsmarke und Sperre.
+     *
+     * Zwei Aufrufer, und beide meinen dasselbe: "was hier war, ist vorbei".
+     *
+     *   1. ResetAll() - die Sitzung beginnt von vorn (Alterung,
+     *      Serverneustart, frisches Gefaess).
+     *   2. Der Adapter, sobald das Gefaess unter die Mindestzutatenzahl
+     *      faellt und damit aus seinem Blickfeld verschwindet.
+     *
+     * Der zweite Fall ist der wichtigere, und er ist eine Missbrauchssperre:
+     * ohne ihn bliebe die Bestandsmarke auf dem alten Stand stehen, waehrend
+     * der Adapter nicht hinsieht. Wer danach ein LEERES Gefaess mit eigenen
+     * Zutaten fuellt, ohne den alten Stand zu ueberschreiten, arbeitete auf
+     * den Anspruch seines Vorgaengers ein. Mit COUNT_UNMEASURED beginnt die
+     * Zaehlung neu, und die erste eingelegte Zutat eroeffnet einen neuen
+     * Anspruch - fuer den, der sie eingelegt hat.
+     */
+    void ForgetClaim()
+    {
+        actorIdentityId    = 0;
+        claimItemCount     = COUNT_UNMEASURED;
+        claimSelfInflicted = false;
     }
 
     /**
@@ -144,6 +225,12 @@ class ChefZ_CookSession
      * Items im Sekundentakt bewegt (10 E4). Wuerde es hier zurueckgesetzt,
      * fuehrte jede Bewegung sofort zu einem neuen Vollmatch - die Drosselung
      * waere abgeschaltet, ohne dass es jemand merkt.
+     *
+     * actorIdentityId, claimItemCount und claimSelfInflicted bleiben aus
+     * demselben Grund unangetastet: sie gehoeren nicht zum INHALT, sondern zur
+     * Frage, wer ihn dorthin gelegt hat. Ein Signaturwechsel ist meistens
+     * blosses Garen - der Anspruch darf davon nicht abhaengen, und der
+     * Bestandsvergleich muss ueber den Wechsel hinweg gueltig bleiben.
      */
     void AdoptNewContent(notnull ChefZ_VesselSignature fresh)
     {
@@ -156,6 +243,35 @@ class ChefZ_CookSession
     }
 
     //==========================================================================
+
+    /**
+     * Den Bestand dieses Ticks eintragen und melden, ob er GEWACHSEN ist.
+     *
+     * Nur bei true wird ein Anspruch neu aufgeloest. Alles andere - gleich
+     * geblieben, geschrumpft, von ChefZ selbst erzeugt - laesst den
+     * bestehenden Anspruch unberuehrt.
+     *
+     * Die Sperre claimSelfInflicted wird IMMER verbraucht, auch wenn der
+     * Bestand gar nicht gewachsen ist. Sonst bliebe sie liegen und
+     * verschluckte irgendwann einen echten Zuwachs - eine Sperre mit
+     * unbestimmter Lebensdauer ist keine Sperre, sondern ein Leck.
+     *
+     * @param currentItemCount Bestand aus der Signatur dieses Ticks.
+     * @return true = ein Spieler hat etwas eingelegt.
+     */
+    bool ObserveItemCount(int currentItemCount)
+    {
+        bool grew = currentItemCount > claimItemCount && currentItemCount > 0;
+        claimItemCount = currentItemCount;
+
+        if (claimSelfInflicted)
+        {
+            claimSelfInflicted = false;
+            return false;
+        }
+
+        return grew;
+    }
 
     bool IsInert()
     {
@@ -226,6 +342,8 @@ class ChefZ_CookSession
             s = s + "  zeit=" + elapsedSec.ToString() + "s";
         if (failCount > 0)
             s = s + "  fehler=" + failCount.ToString();
+        if (actorIdentityId != 0)
+            s = s + "  koch=" + actorIdentityId.ToString();
 
         return s + "  [" + signature.ToDebugString() + "]";
     }
@@ -281,6 +399,68 @@ class ChefZ_CookSession
         s.ResetAll();
         if (s.signature.IsMeasured())                   return false;
         if (s.ticksSinceMatch != LONG_AGO)              return false;
+
+        //--- Zuschreibung -----------------------------------------------------
+        ChefZ_CookSession t = new ChefZ_CookSession();
+        if (t.actorIdentityId != 0)                     return false;
+        if (t.claimItemCount != COUNT_UNMEASURED)       return false;
+        if (t.claimSelfInflicted)                       return false;
+
+        // Ein leeres Gefaess ist KEIN Zuwachs - sonst bekaeme, wer neben
+        // einem leeren Topf steht, einen Anspruch auf nichts.
+        if (t.ObserveItemCount(0))                      return false;
+        if (t.claimItemCount != 0)                      return false;
+
+        // Der erste echte Inhalt ist ein Zuwachs.
+        if (!t.ObserveItemCount(3))                     return false;
+
+        // Derselbe Bestand ist keiner - das ist der Normalfall ueber viele
+        // Ticks, waehrend das Essen gart.
+        if (t.ObserveItemCount(3))                      return false;
+
+        // Ein SCHRUMPFENDER Bestand ist keiner. Vanilla laesst Zutaten bei
+        // Quantity 0 verschwinden; das darf keinen Anspruch eroeffnen.
+        if (t.ObserveItemCount(2))                      return false;
+        if (t.claimItemCount != 2)                      return false;
+
+        // Danach zaehlt gegen den GESCHRUMPFTEN Bestand, nicht gegen den
+        // hoechsten je gesehenen.
+        if (!t.ObserveItemCount(3))                     return false;
+
+        // Die Sperre nach einem Abschluss schluckt genau einen Tick.
+        t.claimSelfInflicted = true;
+        if (t.ObserveItemCount(9))                      return false;   // geschluckt
+        if (t.claimSelfInflicted)                       return false;   // und verbraucht
+        if (t.claimItemCount != 9)                      return false;   // aber mitgezaehlt
+        if (!t.ObserveItemCount(10))                    return false;   // danach wieder scharf
+
+        // Die Sperre wird auch dann verbraucht, wenn nichts gewachsen ist -
+        // sonst bliebe sie liegen und traefe einen spaeteren echten Zuwachs.
+        t.claimSelfInflicted = true;
+        if (t.ObserveItemCount(4))                      return false;
+        if (t.claimSelfInflicted)                       return false;
+        if (!t.ObserveItemCount(5))                     return false;
+
+        // Der Anspruch ueberlebt einen Inhaltswechsel ...
+        t.actorIdentityId = 4711;
+        t.AdoptNewContent(sig);
+        if (t.actorIdentityId != 4711)                  return false;
+        if (t.claimItemCount != 5)                      return false;
+
+        // ... und faellt bei ForgetClaim. Danach ist der naechste Bestand,
+        // wie klein auch immer, wieder ein Zuwachs - genau das schliesst die
+        // Uebernahme eines fremden Anspruchs an einem geleerten Gefaess aus.
+        t.claimItemCount = 12;
+        t.ForgetClaim();
+        if (t.actorIdentityId != 0)                     return false;
+        if (t.claimItemCount != COUNT_UNMEASURED)       return false;
+        if (!t.ObserveItemCount(1))                     return false;
+
+        // ResetAll schliesst ForgetClaim ein.
+        t.actorIdentityId = 4711;
+        t.ResetAll();
+        if (t.actorIdentityId != 0)                     return false;
+        if (t.claimItemCount != COUNT_UNMEASURED)       return false;
 
         return true;
     }

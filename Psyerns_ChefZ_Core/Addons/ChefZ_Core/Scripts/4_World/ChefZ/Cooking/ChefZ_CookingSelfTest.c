@@ -18,9 +18,10 @@
 // der Trace auf einem echten Server mit echten Feuerstellen, waehrend ChefZ
 // garantiert nichts veraendern kann.
 //
-// Die drei Bausteine hier sind die, deren Fehler man auf dem Server NICHT
+// Die vier Bausteine hier sind die, deren Fehler man auf dem Server NICHT
 // saehe: eine Signatur, die eine Aenderung verschluckt, sieht aus wie ein
-// Gefaess, in dem nichts passiert.
+// Gefaess, in dem nichts passiert - und eine falsche Zuschreibung sieht aus
+// wie eine richtige.
 //
 // Layer: 4_World.
 //==============================================================================
@@ -40,6 +41,7 @@ class ChefZ_CookingSelfTest
         Check("Signatur",       ChefZ_VesselSignature.SelfCheck());
         Check("Kochsitzung",    ChefZ_CookSession.SelfCheck());
         Check("Methodentabelle", ChefZ_CookingHook.SelfCheck());
+        Check("Zuschreibung",   ChefZ_CookActor.SelfCheck());
 
         return s_Failed == 0;
     }

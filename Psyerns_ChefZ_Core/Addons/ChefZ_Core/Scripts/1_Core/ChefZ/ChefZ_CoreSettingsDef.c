@@ -29,6 +29,19 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
     //! mehrere Records enthalten; genommen wird dieser, sonst der erste.
     static const string PRIMARY_ID = "CORE";
 
+    /**
+     * Obergrenze fuer cookActorRadius, in Metern.
+     *
+     * Bewusst KEINE Einstellung, sondern eine Sicherung: sie beantwortet
+     * nicht die Frage "wie nah muss man stehen", sondern die Frage "ab wann
+     * ist die Antwort keine Beobachtung mehr". Ein Umkreis jenseits davon
+     * schriebe ein Gericht einem Spieler zu, der von der Feuerstelle nichts
+     * gesehen hat - und genau das ist der Missbrauch, den die Zuschreibung
+     * verhindern soll. 64 Meter sind grosszuegiger als jede Feuerstelle, an
+     * der man noch von Zusehen sprechen kann.
+     */
+    static const float COOK_ACTOR_RADIUS_MAX = 64.0;
+
     //--- Grundschalter (02 §5.4) ---------------------------------------------
     bool  enabled;                  // false => Core inert, reines Vanilla
     bool  strictMode;               // true  => jeder Fehler fuehrt zu SAFE_MODE
@@ -64,6 +77,27 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
      * kurze Testlaeufe) und ausdruecklich nichts fuer den Dauerbetrieb.
      */
     float sessionTtlSec;
+
+    /**
+     * Umkreis in Metern, in dem ein Kochgeraet einen handelnden Spieler
+     * findet. 0 schaltet die Zuschreibung vollstaendig ab.
+     *
+     * Warum es diese Zahl ueberhaupt gibt: ein Kochgeraet fuehrt in Vanilla
+     * keinen Besitzer, und ChefZ darf keinen anlegen - 00 §5 fuehrt Pot,
+     * FryingPan, Cauldron, ItemBase und Edible_Base ausdruecklich in der
+     * Liste der NICHT gemoddeten Klassen. Wem ein Gericht gehoert, ist
+     * deshalb keine gespeicherte Tatsache, sondern eine Beobachtung: wer
+     * stand am Geraet, als sein Bestand wuchs. Wie weit "am Geraet" reicht,
+     * ist eine Spielgefuehlsfrage und gehoert damit in die Konfiguration -
+     * dieselbe Ueberlegung wie bei containerSearchRadius (16 E5).
+     *
+     * 6 Meter als Vorgabe: weit genug, dass man neben der Feuerstelle stehen
+     * und sich bewegen darf, eng genug, dass ein Vorbeigehender nicht als
+     * Koch durchgeht. Die Obergrenze ist eine Sicherung und keine
+     * Einstellung - ein Umkreis von einem Kilometer waere kein grosszuegiger
+     * Server, sondern eine Zuschreibung an einen Zufall.
+     */
+    float cookActorRadius;
 
     //--- Haltbarkeit (14) ----------------------------------------------------
     float globalSpoilageScale;
@@ -322,6 +356,7 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         maxSelectorDepth        = ChefZ_Undefined.INT;
         maxCategories           = ChefZ_Undefined.INT;
         sessionTtlSec           = ChefZ_Undefined.FLOAT;
+        cookActorRadius         = ChefZ_Undefined.FLOAT;
 
         nutritionAuditMaxFindings = ChefZ_Undefined.INT;
         nutritionTolerancePct     = ChefZ_Undefined.FLOAT;
@@ -397,6 +432,7 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         maxSelectorDepth        = PatchInt(maxSelectorDepth, s.maxSelectorDepth, s, "maxSelectorDepth");
         maxCategories           = PatchInt(maxCategories, s.maxCategories, s, "maxCategories");
         sessionTtlSec           = PatchFloat(sessionTtlSec, s.sessionTtlSec, s, "sessionTtlSec");
+        cookActorRadius         = PatchFloat(cookActorRadius, s.cookActorRadius, s, "cookActorRadius");
 
         nutritionAuditMaxFindings = PatchInt(nutritionAuditMaxFindings, s.nutritionAuditMaxFindings, s, "nutritionAuditMaxFindings");
         nutritionTolerancePct     = PatchFloat(nutritionTolerancePct, s.nutritionTolerancePct, s, "nutritionTolerancePct");
@@ -497,6 +533,10 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         // am Topf keine Sitzung verliert, kurz genug, dass eine abgebrannte
         // Feuerstelle nicht bis zum Serverneustart Speicher belegt.
         sessionTtlSec           = ChefZ_Undefined.FloatOr(sessionTtlSec, 300.0);
+
+        // 6 Meter: siehe Feldkommentar. Eine Zahl, die ein Betreiber ohne
+        // Codekenntnis verstehen und aendern koennen soll.
+        cookActorRadius         = ChefZ_Undefined.FloatOr(cookActorRadius, 6.0);
 
         matcherCooldownSec      = ChefZ_Undefined.FloatOr(matcherCooldownSec, 1.0);
         globalSpoilageScale     = ChefZ_Undefined.FloatOr(globalSpoilageScale, 1.0);
@@ -634,6 +674,10 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
             matcherCooldownSec = ClampReportFloat(report, "matcherCooldownSec", matcherCooldownSec, 0.0);
         if (sessionTtlSec < 0.0)
             sessionTtlSec = ClampReportFloat(report, "sessionTtlSec", sessionTtlSec, 0.0);
+        if (cookActorRadius < 0.0)
+            cookActorRadius = ClampReportFloat(report, "cookActorRadius", cookActorRadius, 0.0);
+        if (cookActorRadius > COOK_ACTOR_RADIUS_MAX)
+            cookActorRadius = ClampReportFloat(report, "cookActorRadius", cookActorRadius, COOK_ACTOR_RADIUS_MAX);
         if (globalSpoilageScale < 0.0)
             globalSpoilageScale = ClampReportFloat(report, "globalSpoilageScale", globalSpoilageScale, 0.0);
         if (minDecayScale <= 0.0)
@@ -871,6 +915,7 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         if (!d.logServerOnly)                       return false;
         if (d.matcherNodeBudget != 4096)            return false;
         if (d.sessionTtlSec != 300.0)               return false;
+        if (d.cookActorRadius != 6.0)               return false;
         if (d.defaultFreshnessLifetimeSec != 21600.0) return false;
         if (d.capabilityMode != "asAuthored")       return false;
         if (d.defaultExtraItems != "forbid")        return false;
