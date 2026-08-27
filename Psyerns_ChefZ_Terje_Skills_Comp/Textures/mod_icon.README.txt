@@ -1,0 +1,44 @@
+FEHLENDES ASSET: mod_icon.edds
+==============================
+
+Dieses Verzeichnis soll laut Modulvorgabe eine Datei
+
+    Textures/mod_icon.edds
+
+enthalten. Sie liegt NICHT vor und kann aus diesem Arbeitsbereich heraus auch
+nicht erzeugt werden - im gesamten Projekt Psyerns_ChefZ existiert bislang
+keine einzige .edds-Datei, und aus der vorhandenen
+Psyerns_ChefZ_Docs/Psyerns_ChefZ_Banner.png laesst sich ohne die
+DayZ-Werkzeugkette (ImageToPAA / Workbench) keine .edds erzeugen.
+
+Was stattdessen getan wurde
+---------------------------
+config.cpp setzt in CfgMods:
+
+    picture     = "";
+    hidePicture = 1;
+    hideName    = 1;
+
+Ein Zeiger auf eine nicht vorhandene Textur waere schlechter als gar keiner:
+DayZ meldet ihn nicht, und im Modmenue erschiene ein leerer Rahmen. Mit
+hidePicture = 1 taucht das Modul im Startmenue ohnehin nicht als eigener
+Eintrag auf - dasselbe tun TerjeCore, TerjeCompatibilityCOT und ChefZ_Core.
+
+Der Perk selbst hat ein Symbol
+------------------------------
+Nicht betroffen ist das Icon des Perks "chefzherb" im Skillbaum. Es zeigt auf
+ein VORHANDENES Symbol aus TerjeSkills:
+
+    set:TerjePerkBlack_icon image:tp_mushpremonition
+    set:TerjePerk_icon      image:tp_mushpremonition
+
+Sobald ein eigenes Kraeutersymbol geliefert wird, sind das die zwei Zeilen in
+config.cpp, die sich aendern - zusammen mit einem eigenen imageset-Eintrag
+unter CfgMods/defs/imageSets.
+
+Wenn das Modulsymbol geliefert wird
+-----------------------------------
+1. mod_icon.edds hier ablegen,
+2. in config.cpp setzen:
+       picture = "Psyerns_ChefZ_Terje_Skills_Comp/Textures/mod_icon.edds";
+3. diese Datei loeschen.

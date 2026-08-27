@@ -1,0 +1,29 @@
+mod_icon.edds fehlt - offener Asset-Punkt.
+
+Der Auftrag verlangt an dieser Stelle eine Textures/mod_icon.edds. Es liegt im
+gesamten Projekt Psyerns_ChefZ keine einzige .edds-Datei vor, und aus dieser
+Sitzung heraus laesst sich keine erzeugen (kein Bildkonverter, und
+Psyerns_ChefZ_Docs/Psyerns_ChefZ_Banner.png ist eine PNG-Quelle, kein
+DXT-Format).
+
+Zwei Wege wurden bewusst NICHT gegangen:
+
+  1. Eine .edds aus TerjeCore/Textures oder TerjeMedicine/Textures kopieren.
+     Das ist fremdes Bildmaterial. Fremdcode ist in diesem Projekt Lesequelle,
+     kein Steinbruch.
+
+  2. Eine leere oder umbenannte Datei als mod_icon.edds ablegen. Eine kaputte
+     Textur ist schlechter als keine - DayZ meldet sie erst zur Laufzeit und
+     nur im RPT.
+
+Stattdessen deklariert config.cpp - genau wie ChefZ_Core selbst -
+
+    picture = "";
+    hidePicture = 1;
+    hideName = 1;
+
+Das Modul erscheint damit gar nicht erst im Mod-Menue und braucht kein Icon.
+Sobald ein ChefZ-Modicon existiert, hier ablegen und in CfgMods eintragen:
+
+    picture = "Psyerns_ChefZ_Terje_Medicine_Comp/Textures/mod_icon.edds";
+    hidePicture = 0;
