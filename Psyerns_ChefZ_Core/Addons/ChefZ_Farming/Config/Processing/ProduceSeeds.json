@@ -1,7 +1,6 @@
 {
     "kind": "transform",
     "schemaVersion": 1,
-    "_comment": "Slice produce. Samengewinnung nach dem Vorbild von Vanillas CutOutSeeds: Gemuese + Messer -> Samen. Vier Transforms ueber PROCESS_CUT_OUT_SEEDS (exec HANDCRAFT, Werkzeuggruppe CUTTING_TOOL). Kartoffel und Tomate fehlen hier ABSICHTLICH: Vanilla bringt CutOutTomatoSeeds und PotatoSeed bereits mit, ein zweiter Weg zum selben Samen waere Doppelung (Workflow §10.5).",
     "records": [
         {
             "id": "TR_SeedsFromOnion",

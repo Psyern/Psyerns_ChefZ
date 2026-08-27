@@ -13,7 +13,8 @@ const SECTIONS = {
   tags: 'id',
   processes: 'id',
   nutrition: 'class',
-  preservation: 'state',
+  preservation: 'id',
+  states: 'id',
 };
 
 function stable(v) { return JSON.stringify(v, Object.keys(v ?? {}).sort()); }
@@ -101,6 +102,23 @@ export default function run() {
     if (!defined.has(st) && !announced.has(st)) {
       f.error(rec.file, lineOf(rec.file, id), `Prozess "${id}" nennt Station "${st}", die weder definiert noch in einem Delta angekuendigt ist`);
     }
+  }
+
+  // --- 3b. Preservation-Records muessen auf einen deklarierten Zustand zeigen ---
+  //
+  // Ein Record mit scope "state", dessen Zustand niemand deklariert, ist statisch
+  // sauber und zur Laufzeit wirkungslos: ChefZ_PreservationManager.Build() findet
+  // die ID nicht und die Haltbarkeitsregel greift nie. Das ist als Warnung
+  // gefaehrlicher denn als Fehler - ein gruener Lauf laesst ein totes System
+  // erledigt aussehen. Deshalb Fehler.
+  for (const [id, rec] of merged.preservation) {
+    const scope = rec.entry.scope ?? 'state';
+    if (scope !== 'state') continue;
+    if (merged.states.has(id)) continue;
+    f.error(rec.file, lineOf(rec.file, id),
+      `Haltbarkeitsregel "${id}" gilt fuer den Zustand "${id}", den kein Delta deklariert `
+      + `(Abschnitt "states"). Die Regel ist zur Laufzeit wirkungslos - der Preservation `
+      + `Manager findet den Zustand nicht.`);
   }
 
   // --- 4. angekuendigte Klassen muessen irgendwann real werden ---

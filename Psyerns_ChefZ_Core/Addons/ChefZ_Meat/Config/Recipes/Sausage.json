@@ -3,7 +3,6 @@
     "schemaVersion": 1,
     "records": [
         {
-            "_comment": "§40: RAW SAUSAGE -> COOKED SAUSAGE. completion ON_STAGE heisst: VANILLA bestimmt, wann gar ist - der Klassentausch haengt an den FoodStageTransitions der config.cpp, nicht an einer eigenen Uhr (Pruefstein 20 §2.2, letzter Absatz). Passt keines dieser Rezepte, kocht Vanilla die Wurst wie jedes andere Nahrungsmittel weiter; ChefZ blockiert nichts (Workflow §10.2). policy.extraItems ist ignore und nicht forbid: in einer Pfanne liegt selten nur eine Wurst, und ein zweites Item darf das Braten nicht verhindern.",
             "id": "RCP_CookSausage",
             "contexts": [
                 { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }

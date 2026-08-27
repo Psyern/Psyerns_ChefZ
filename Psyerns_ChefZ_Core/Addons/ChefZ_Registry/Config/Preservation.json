@@ -1,5 +1,21 @@
 {
     "kind": "preservation",
     "schemaVersion": 1,
-    "records": []
+    "records": [
+        {
+            "id": "DRIED",
+            "scope": "state",
+            "spoilageMultiplier": 0.15
+        },
+        {
+            "id": "SMOKED",
+            "scope": "state",
+            "spoilageMultiplier": 0.25
+        },
+        {
+            "id": "SALTED",
+            "scope": "state",
+            "spoilageMultiplier": 0.5
+        }
+    ]
 }

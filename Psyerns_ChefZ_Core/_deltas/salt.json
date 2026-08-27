@@ -15,6 +15,10 @@
         { "id": "PROCESS_DRY_SALT", "station": "ChefZ_SaltPan", "durationSec": 1200 }
     ],
 
+    "preservation": [
+        { "id": "SALTED", "scope": "state", "spoilageMultiplier": 0.5 }
+    ],
+
     "classes": [
         "ChefZ_RawSalt",
         "ChefZ_Salt",

@@ -3,7 +3,6 @@
     "schemaVersion": 1,
     "records": [
         {
-            "_comment": "Production Map §28: ChefZ teilt VANILLA-Fleisch in Kategorien ein. Das ist der Uebergabepunkt aus §27 - was aus der Zerlegung faellt, ist ab hier eine ChefZ-Zutat. Kein Vanilla-Eintrag wird dafuer veraendert; die Zuordnung lebt ausschliesslich hier.",
             "id": "PigSteakMeat",
             "categories": ["MEAT", "DOMESTIC_MEAT"],
             "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
@@ -85,7 +84,6 @@
         },
 
         {
-            "_comment": "§27/§31/§32/§33: Fett, Knochen und Daerme kommen aus der Zerlegung und sind Vanilla-Klassen. ChefZ legt fuer sie KEINE eigene Klasse an - es waere eine zweite Sorte desselben Dings.",
             "id": "Lard",
             "categories": ["FAT"],
             "tags": [],
@@ -109,7 +107,6 @@
         },
 
         {
-            "_comment": "§29/§30: die eigenen Zwischenprodukte.",
             "id": "ChefZ_DicedMeat",
             "categories": ["MEAT", "MINCED_MEAT"],
             "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
@@ -192,7 +189,6 @@
         },
 
         {
-            "_comment": "§34-§39: die rohen Wuerste. SAUSAGE ist Unterkategorie von MEAT - ein Gericht, das MEAT verlangt, nimmt damit auch Wurst (07 §3, Kategorie trifft alle Unterkategorien).",
             "id": "ChefZ_RawSausage",
             "categories": ["MEAT", "SAUSAGE"],
             "tags": ["CHEFZ_RAW_SAUSAGE", "CHEFZ_HIGH_PROTEIN"],
@@ -248,7 +244,6 @@
         },
 
         {
-            "_comment": "§40: die gebratenen Wuerste. Sie tragen CHEFZ_HOT_MEAL, weil sie warm entstehen, und keinen RAW-Tag mehr.",
             "id": "ChefZ_CookedSausage",
             "categories": ["MEAT", "SAUSAGE"],
             "tags": ["CHEFZ_HOT_MEAL", "CHEFZ_HIGH_PROTEIN"],

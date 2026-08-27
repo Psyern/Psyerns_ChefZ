@@ -1,7 +1,6 @@
 {
     "kind": "transform",
     "schemaVersion": 1,
-    "_comment": "Slice produce. Acht Schnitt-Transforms, alle ueber PROCESS_CHOP_VEGETABLE (exec HANDCRAFT, Werkzeuggruppe CUTTING_TOOL). Ein Eingang plus Werkzeug ist genau die Form, die Vanillas RecipeBase traegt - MAX_NUMBER_OF_INGREDIENTS = 2, das Messer belegt den zweiten Platz (01 V12). Transforms stehen ausdruecklich NICHT in der config.cpp (11 §5, ChefZ_ConfigCppSource Kopf): sie tragen Selektoren und sind eine serverseitige Entscheidung.",
     "records": [
         {
             "id": "TR_ChopPotato",

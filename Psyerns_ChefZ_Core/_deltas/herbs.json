@@ -36,7 +36,9 @@
     { "class": "ChefZ_HerbMix", "energy": 10, "water": 0, "stomach": 2 },
     { "class": "ChefZ_HunterSeasoning", "energy": 12, "water": 0, "stomach": 2 }
   ],
-  "preservation": [],
+  "preservation": [
+    { "id": "DRIED", "scope": "state", "spoilageMultiplier": 0.15 }
+  ],
   "classes": [
     "ChefZ_HerbPlantBase",
     "ChefZ_ParsleyPlant",

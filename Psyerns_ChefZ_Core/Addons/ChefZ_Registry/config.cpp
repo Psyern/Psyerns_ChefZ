@@ -43,18 +43,24 @@ class CfgPatches
         requiredVersion = 0.1;
 
         // ChefZ_Core:        liest die Registries (ChefZ_JsonDocs, Rang 2).
-        // ChefZ_Farming:     Rang-1-Prozess PROCESS_CUT_OUT_SEEDS, den ein
-        //                    Registryrecord feldweise patcht.
-        // ChefZ_Ingredients: Rang-1-Prozess PROCESS_CHOP_VEGETABLE und die
-        //                    Werkzeuggruppe CUTTING_TOOL.
-        // ChefZ_Processing:  Rang-1-Prozesse, Station-Records und die
-        //                    Werkzeuggruppen, auf die toolGroups[] zeigt.
-        // ChefZ_Meat, ChefZ_Baking: die Klassen, die Nutrition-Records nennen.
+        // ChefZ_Farming:     ChefZ_Onion, ChefZ_Carrot, ChefZ_Cabbage,
+        //                    ChefZ_Garlic und die Frischkraeuter.
+        // ChefZ_Ingredients: ChefZ_SlicedPotato, die Chopped*-Klassen,
+        //                    ChefZ_Salt und ChefZ_RawSalt.
+        // ChefZ_Processing:  ChefZ_Flour, die Teige, die Pasta.
+        // ChefZ_Meat:        ChefZ_DicedMeat, die Minced*- und Sausage-Klassen.
+        // ChefZ_Baking:      ChefZ_Bread, ChefZ_Flatbread.
         //
-        // Alle fuenf sind ECHTE Abhaengigkeiten der DATEN, nicht Kosmetik: ein
-        // Patch auf einen Rang-1-Record braucht den Record, und ein
-        // toolGroups[]-Verweis braucht die Gruppe. Keines der genannten Module
+        // Alle fuenf sind ECHTE Abhaengigkeiten der DATEN, nicht Kosmetik:
+        // jeder Nutrition-Record nennt eine Klasse, und ein Record ohne seine
+        // Klasse ist ein Naehrwert fuer nichts. Keines der genannten Module
         // haengt umgekehrt von ChefZ_Registry ab - es gibt also keinen Zyklus.
+        //
+        // Bis S19 stand hier eine andere Begruendung: Rang-1-Prozesse, die ein
+        // Registryrecord feldweise patcht. Die ist mit K1 entfallen - die
+        // Registry fuehrt keine Prozesse mehr (siehe dataFiles[] unten). Die
+        // fuenf Eintraege bleiben trotzdem noetig, jetzt aus dem
+        // Nutrition-Grund.
         requiredAddons[] =
         {
             "DZ_Data",
@@ -86,6 +92,21 @@ class CfgPatches
 // handcraftRecipeSlots = 0: die Registry bringt keinen einzigen Transform mit,
 // also auch keinen mit exec = "HANDCRAFT", und reserviert nichts in Vanillas
 // Rezeptliste.
+//
+// KEINE PROZESSE (K1, entschieden nach S19).
+//
+// dataFiles[] nennt vier Registries, nicht fuenf. Processing.json ist weg, und
+// das ist kein vergessener Eintrag: Prozess-Records gehoeren den Slices, die
+// sie ohnehin autoritativ deklarieren. Die Registry haette sie im SELBEN Rang
+// ein zweites Mal eingebracht, und ChefZ_RecordSink weist einen doppelten
+// Record desselben Rangs ab, statt ihn zu patchen - PROCESS_MILL,
+// PROCESS_KNEAD und PROCESS_ROLL waren so gar nicht schreibbar. Nicht die
+// Registry und nicht die Slices waren das Problem, sondern die Mischung aus
+// beidem.
+//
+// Die Kollisionspruefung ueber Prozess-IDs bleibt Aufgabe des Integrators
+// (tools/chefz-validate/deltas.mjs, Abschnitt 1 und 3). Sie ergibt nur keine
+// Datei mehr - ihr Ergebnis ist ein Bericht, kein Datensatz.
 //------------------------------------------------------------------------------
 class CfgChefZ
 {
@@ -99,8 +120,7 @@ class CfgChefZ
             "ChefZ_Registry/Config/Categories.json",
             "ChefZ_Registry/Config/Tags.json",
             "ChefZ_Registry/Config/Nutrition.json",
-            "ChefZ_Registry/Config/Preservation.json",
-            "ChefZ_Registry/Config/Processing.json"
+            "ChefZ_Registry/Config/Preservation.json"
         };
     };
 };

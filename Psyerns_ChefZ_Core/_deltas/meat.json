@@ -57,6 +57,11 @@
         { "class": "ChefZ_SpicySausage", "energy": 495, "water": 17, "stomach": 140 }
     ],
 
+    "preservation": [
+        { "id": "SMOKED", "scope": "state", "spoilageMultiplier": 0.25 },
+        { "id": "DRIED", "scope": "state", "spoilageMultiplier": 0.15 }
+    ],
+
     "classes": [
         "ChefZ_MeatItemBase",
         "ChefZ_DicedMeat",

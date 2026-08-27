@@ -44,15 +44,33 @@ const SHAPES = {
     required: { class: T.str },
     optional: { energy: T.num, water: T.num, stomach: T.num, temperature: T.num, health: T.num, toxicity: T.num },
   },
+  // Feldnamen nach ChefZ_PreservationDef: die ID IST das Ziel, "scope" sagt, in
+  // welcher Dimension nachgeschlagen wird. Das aeltere Feld "state" bleibt lesbar,
+  // damit vorhandene Deltas nicht schlagartig ungueltig werden.
   preservation: {
-    required: { state: T.str },
-    optional: { spoilageMultiplier: T.num, nutritionLoss: T.num, waterLoss: T.num },
+    required: {},
+    optional: {
+      id: T.str, state: T.str, scope: T.str,
+      spoilageMultiplier: T.num, stopsDecay: T.bool, preventsRotten: T.bool,
+      onPlayerMultiplier: T.num, environmentTemperature: v => v === null || typeof v === 'object',
+      displayName: T.str,
+    },
+  },
+  // ChefZ_StateDef - die Lebensmittelzustaende, auf die Preservation und Rezepte
+  // zeigen. Ohne sie sind alle Zustandsnamen unaufgeloest.
+  state: {
+    required: { id: T.str },
+    optional: {
+      displayName: T.str, projectsToVanillaStage: T.str, implies: T.arrStr,
+      spoilageMultiplier: T.num, freshnessLifetimeSec: T.num,
+      edible: T.bool, terminal: T.bool, preserved: T.bool,
+    },
   },
 };
 
 const DELTA_SECTIONS = {
   categories: 'category', tags: 'tag', processes: 'process',
-  nutrition: 'nutrition', preservation: 'preservation',
+  nutrition: 'nutrition', preservation: 'preservation', states: 'state',
 };
 
 function checkShape(f, file, obj, shapeName, label) {
@@ -155,9 +173,17 @@ export default function run() {
         f.error(file, lineOf(file, `"${section}"`), `Delta: "${section}" muss ein Array sein`);
         continue;
       }
-      d[section].forEach((entry, i) => checkShape(f, file, entry, shapeName, `${section}[${i}]`));
+      d[section].forEach((entry, i) => {
+        checkShape(f, file, entry, shapeName, `${section}[${i}]`);
+        // Preservation traegt die Kennung als "id" (Core) oder "state" (altes
+        // Delta-Schema) - eines von beiden MUSS da sein.
+        if (shapeName === 'preservation' && entry && typeof entry === 'object'
+            && !T.str(entry.id) && !T.str(entry.state)) {
+          f.error(file, 0, `${section}[${i}]: braucht eine Kennung - "id" (Core-Form) oder "state" (alte Delta-Form)`);
+        }
+      });
     }
-    const known = new Set([...Object.keys(DELTA_SECTIONS), 'slice', 'classes']);
+    const known = new Set([...Object.keys(DELTA_SECTIONS), 'slice', 'classes', 'handcraftRecipeSlots']);
     for (const k of Object.keys(d)) {
       if (!known.has(k)) f.warn(file, lineOf(file, `"${k}"`), `Delta: unbekannter Abschnitt "${k}"`);
     }

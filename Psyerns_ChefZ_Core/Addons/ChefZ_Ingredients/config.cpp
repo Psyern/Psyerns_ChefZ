@@ -56,7 +56,9 @@ class CfgPatches
         // DZ_Gear_Food  - die Proxy-Modelle unter \dz\gear\food\
         // ChefZ_Core    - ChefZ_Edible_Base und die Auswertung der CfgChefZ*-Knoten
         // ChefZ_Farming - die Eingangsklassen der Schnitt-Transforms (ChefZ_Onion ...)
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "DZ_Gear_Consumables"};
+        // ChefZ_Processing: liefert CfgChefZTools/CUTTING_TOOL, das dieses
+        // Modul in PROCESS_CHOP_VEGETABLE benutzt.
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "ChefZ_Processing", "DZ_Gear_Consumables"};
     };
 };
 
@@ -793,36 +795,20 @@ class CfgChefZIngredients
 // die Form, die Vanillas RecipeBase traegt (01 V12,
 // MAX_NUMBER_OF_INGREDIENTS = 2: das Messer belegt den zweiten Platz).
 //
-// Die Werkzeuggruppe CUTTING_TOOL steht unten. Sie ist bewusst KEIN
-// produce-eigener Name: CfgChefZTools wird von der Engine ueber alle Addons
-// gemergt, zwei Module duerfen denselben Gruppenknoten mit derselben
-// Klassenliste tragen, und der Slice bleibt dadurch fuer sich allein
-// lauffaehig - auch wenn ChefZ_Processing gerade nicht geladen ist. Zwei
-// VERSCHIEDENE Gruppen mit denselben Messern waeren dagegen eine Doppelung,
-// die spaeter auseinanderlaeuft.
+// Die Werkzeuggruppe CUTTING_TOOL wird hier BENUTZT, aber nicht deklariert.
+// Sie steht EINMAL in ChefZ_Processing (CfgChefZTools/CUTTING_TOOL), zusammen
+// mit ROLLING_PIN - Werkzeuge sind geteiltes Vokabular (Gemuese schneiden,
+// Kraeuter schneiden, Fleisch schneiden verlangen dasselbe Messer) und gehoeren
+// fachlich in das Verarbeitungsmodul.
+//
+// Frueher stand hier ein zweiter, inhaltlich identischer Knoten mit der
+// Begruendung, der Slice bleibe dadurch ohne ChefZ_Processing lauffaehig. Das
+// traegt nicht: CfgChefZTools wird von der Engine ueber alle Addons gemergt,
+// und zwei Knoten gleichen Namens sind keine Redundanz, sondern eine stille
+// Ueberschreibung - der spaeter geladene gewinnt, ohne Meldung. Sobald eine der
+// beiden Listen sich aendert, laufen sie auseinander und niemand sieht es.
+// Deshalb: eine Deklaration, und ChefZ_Processing steht in requiredAddons.
 //==============================================================================
-class CfgChefZTools
-{
-    // Werkzeuge als DATEN (11 E8): id = die GRUPPE, classes[] = ihre
-    // Mitglieder. Das ist die richtige Schreibweise fuer FREMDE Klassen -
-    // ChefZ fasst keine Vanilla-config.cpp an, sondern nennt die Klassen in
-    // einer eigenen Gruppe (Workflow §10.5).
-    class CUTTING_TOOL
-    {
-        classes[] =
-        {
-            "KitchenKnife",
-            "SteakKnife",
-            "HuntingKnife",
-            "CombatKnife",
-            "KukriKnife",
-            "BoneKnife",
-            "StoneKnife",
-            "FangeKnife"
-        };
-        allowSubclasses = 1;
-    };
-};
 
 class CfgChefZProcesses
 {
