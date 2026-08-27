@@ -102,10 +102,13 @@ class CfgMods
 
 class CfgVehicles
 {
-    // ### SLICE dairy ### Proxy-Basen
-    class Pot;
-    class Cauldron;
-
+    // Die einzige Configbasis dieses Moduls. Es gibt hier bewusst KEINE
+    // Vorwaertsdeklaration von Pot oder Cauldron mehr: beide sind Vanillas
+    // Kochgefaesse und stehen zugleich in CfgChefZDevices
+    // (ChefZ_Cooking/config.cpp:2843ff.) als ChefZ-Kochgeraete. Eine Station,
+    // die von ihnen erbt, wird von ChefZ_CookingDeviceAdapter.BuildDescriptor
+    // ueber den Aufstieg entlang CfgVehicles als Kochgeraet erkannt. Siehe den
+    // Block "### SLICE dairy ###" weiter unten.
     class Inventory_Base;
     // ChefZ_GrainFoodBase kommt aus ChefZ_Farming und wird NICHT
     // vorwaertsdeklariert: eine leere Vorwaertsdeklaration wuerde den
@@ -248,15 +251,85 @@ class CfgVehicles
     // eine Vanilla-Klasse, Skriptbasis ChefZ_ProcessingStation_Base, Prozesse
     // im Stationsdatensatz. Kein Core-Code, keine eigene Action.
     //
-    // MODELL-PROXY ueber VERERBUNG statt model=: Pot und Cauldron bringen
-    // Modell, Icon, Schadensmodell UND einen Cargo-Bereich mit - und genau aus
-    // dem Cargo liest die Station ihre Eingaenge
-    // (ChefZ_FactCollector.CollectFromCargo). Ein geratener p3d-Pfad faellt
-    // erst beim Packen auf, eine geerbte Klasse nie.
+    // ---------------------------------------------------------------------
+    // WARUM Inventory_Base UND NICHT LAENGER Pot / Cauldron  (Blocker G4-E2)
+    // ---------------------------------------------------------------------
+    // Beide Stationen erbten bis Gate 4 von Vanillas Kochgefaessen. Das war
+    // falsch, und zwar aus drei voneinander unabhaengigen Gruenden:
     //
-    // Beide fassen Vanillas Kochkette an KEINER Stelle an (11 E6): sie sind
-    // fuer die Kochlogik kein Kochgeschirr, weil ihre SKRIPTklasse von
-    // ChefZ_ProcessingStation_Base erbt und nicht von der Vanilla-Klasse.
+    // 1. CONFIGSEITE. Pot und Cauldron stehen in CfgChefZDevices
+    //    (ChefZ_Cooking/config.cpp: Pot portionCapacity = 4, Cauldron = 12).
+    //    ChefZ_CookingDeviceAdapter.BuildDescriptor steigt die
+    //    CfgVehicles-Kette hoch, findet die Basis und setzt desc.enabled auf
+    //    true. Fuer ChefZ war das Butterfass damit ein Topf mit 4 Portionen
+    //    und die Kaesepresse ein Kessel mit 12 - und jedes Rezept mit
+    //    deviceClasses ["Pot"] bzw. ["Cauldron"] (BowlDishes.json, DishesB.json,
+    //    Dishes_A.json, Sauces.json, ChefZ_Baking/Config/GrainRecipes.json)
+    //    haette im Butterfass gematcht.
+    //
+    //    Die alte Begruendung an dieser Stelle - "fuer die Kochlogik kein
+    //    Kochgeschirr, weil die SKRIPTklasse von ChefZ_ProcessingStation_Base
+    //    erbt" - trug nur fuer Vanillas IsCookware() (Skriptseite). Die eigene
+    //    Geraeteaufloesung von ChefZ liest die CONFIG und hat die Skriptkette
+    //    nie gesehen.
+    //
+    // 2. VANILLASEITE. FireplaceBase.CookOnDirectSlot ruft
+    //    Cooking.CookWithEquipment fuer jedes Item in DirectCookingA/B/C, ohne
+    //    IsCookware() zu pruefen. Ueber das von Pot bzw. Cauldron geerbte
+    //    inventorySlot[] liessen sich beide Stationen in einen Direktkochplatz
+    //    haengen und auf eine Feuerstelle stellen.
+    //
+    // 3. HIERARCHIE. Config erbte Pot (mit liquidContainerType, varQuantity*,
+    //    inventorySlot[]), das Skript ChefZ_ProcessingStation_Base -> ItemBase.
+    //    Pot.SetActions() mit ActionDrinkCookingPot / ActionEmptyCookingPot lag
+    //    nie in der Kette: ein Behaelter, den man fuellen, aber nicht leeren
+    //    kann.
+    //
+    // Dieselbe Datei lehnt bei ChefZ_SaltPan die Ableitung von Pot/Cauldron
+    // schon laenger ausdruecklich ab. Beide Stationen folgen jetzt genau
+    // diesem Vorbild - Inventory_Base, Modell ueber model=, Eingangsseite ueber
+    // einen eigenen Cargo-Block.
+    //
+    // ---------------------------------------------------------------------
+    // BRAUCHT DIE MILCHKETTE EINE FLUESSIGKEITSFUEHRUNG? NEIN.
+    // ---------------------------------------------------------------------
+    // Nachgeprueft an Config/Processing/Dairy_Transforms.json: alle drei
+    // Transforms (TR_MilkToCream, TR_CreamToButter, TR_MilkToCheese) matchen
+    // ueber "cls" auf ITEM-Klassen - ChefZ_Milk und ChefZ_Cream. Keiner nennt
+    // isLiquidContainer oder liquidType. Sahne und Bruch sind in V1 Stueckware,
+    // keine Fluessigkeit; die Station traegt sie in ihrem Cargo, genau wie der
+    // Trockenrahmen seine Kraeuter.
+    //
+    // Die einzige Stelle im Modul, die tatsaechlich mit Fluessigkeit arbeitet,
+    // ist Config/Processing/Salt.json - und auch dort ist der Eingang ein
+    // GEFUELLTER BEHAELTER im Cargo, nie die Station selbst. Ein Kochgefaess
+    // als Basis war also an keiner Stelle noetig.
+    //
+    // ---------------------------------------------------------------------
+    // MODELL UND CARGO, die beiden Dinge, die Pot/Cauldron mitgebracht haben
+    // ---------------------------------------------------------------------
+    // Beides steht jetzt ausgeschrieben da:
+    //
+    // - model=: Vanilla-Proxy wooden_case.p3d aus DZ_Gear_Camping, derselbe
+    //   Pfad, den ChefZ_GrainMill und ChefZ_Smoker bereits benutzen. Er ist
+    //   damit im Modul nachweislich gueltig, und er zeigt vor allem KEINE
+    //   Kochgeschirr-Silhouette mehr - ein Butterfass, das wie ein Kochtopf
+    //   aussieht, laedt genau zu der Verwechslung ein, die dieser Blocker
+    //   beseitigt. Ziele bleiben hoelzernes Stossbutterfass und hoelzerne
+    //   Presse mit Spindel; der Asset-Bedarf ist im Slice-Bericht gemeldet und
+    //   waechst durch diesen Wechsel um zwei Stationen, die sich das Kistenmesh
+    //   mit Muehle und Raeucherschrank teilen.
+    //
+    // - class Cargo: die Eingangsseite. ChefZ_ProcessingStation_Base liest
+    //   seine Zutaten ueber ChefZ_FactCollector.CollectFromCargo aus genau
+    //   diesem Bereich; ohne ihn faende ein Job nie eine Zutat. Die Groessen
+    //   sind aus den Transforms gerechnet und in beiden Rasterlesarten
+    //   tragfaehig: ChefZ_Milk ist 2x3, ChefZ_Cream 2x2.
+    //     Butterfass  4x4 - TR_MilkToCream und TR_CreamToButter verlangen je
+    //                 2 Einheiten.
+    //     Presse      6x4 - TR_MilkToCheese verlangt 3 Milch gleichzeitig.
+    //   Ein Cargo, der groesser ist als itemSize, ist in diesem Modul kein
+    //   Sonderfall: ChefZ_HerbStationBase macht es genauso.
     //==========================================================================
 
     // §48/§49: Das Butterfass traegt ZWEI Prozesse - erst abrahmen, dann
@@ -265,32 +338,47 @@ class CfgVehicles
     // Processing fuer V1; zwei Stationen fuer eine dreigliedrige Kette waeren
     // eine Station zu viel. Das Fass kann beides, weil es beide Male dasselbe
     // tut: ruehren.
-    //
-    // PROXY: Pot. Ziel: hoelzernes Stossbutterfass.
-    class ChefZ_ButterChurn : Pot
+    class ChefZ_ButterChurn : Inventory_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BUTTERCHURN";
         descriptionShort = "#STR_CHEFZ_ITEM_BUTTERCHURN_DESC";
+        model = "\DZ\gear\camping\wooden_case.p3d";
         rotationFlags = 17;
         itemSize[] = {4, 4};
         weight = 4200;
+        absorbency = 0.0;
         canBeDigged = 0;
+        varQuantityDestroyOnMin = 0;
         lifetime = 172800;
+
+        class Cargo
+        {
+            itemsCargoSize[] = {4, 4};
+            openable = 0;
+        };
     };
 
     // §50: Die Kaesepresse.
-    // PROXY: Cauldron. Ziel: hoelzerne Presse mit Spindel.
-    class ChefZ_CheesePress : Cauldron
+    class ChefZ_CheesePress : Inventory_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHEESEPRESS";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESEPRESS_DESC";
+        model = "\DZ\gear\camping\wooden_case.p3d";
         rotationFlags = 17;
         itemSize[] = {5, 4};
         weight = 6800;
+        absorbency = 0.0;
         canBeDigged = 0;
+        varQuantityDestroyOnMin = 0;
         lifetime = 172800;
+
+        class Cargo
+        {
+            itemsCargoSize[] = {6, 4};
+            openable = 0;
+        };
     };
 
     //==========================================================================
