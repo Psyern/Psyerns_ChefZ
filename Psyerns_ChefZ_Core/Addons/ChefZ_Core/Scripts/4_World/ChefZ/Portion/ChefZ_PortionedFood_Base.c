@@ -660,23 +660,38 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
         AddAction(ChefZ_ActionTakePortion);
     }
 
-    /**
-     * 15 §3: "true: Bulk darf warmgehalten werden."
+    /*
+     * KEIN eigenes CanBeCooked() mehr - und das ist die Erfuellung von 15 §3,
+     * nicht ihre Ruecknahme.
      *
-     * Ein Kessel Eintopf im Feuer soll heiss bleiben. Vanillas
-     * ProcessItemToCook behandelt ihn dabei wie jedes andere Nahrungsmittel -
-     * Temperatur ja, Ueberhitzung ja -, und genau das ist gewollt (15 §2).
+     * 15 §3 sagt "true: Bulk darf warmgehalten werden", und genau das liefert
+     * ChefZ_Edible_Base.CanBeCooked() fuer jedes Bulk: ChefZ_PortionedDish_Base
+     * bringt Food > FoodStages UND Food > FoodStageTransitions mit (siehe den
+     * Block dazu in ChefZ_Cooking/config.cpp), also sind beide Bedingungen der
+     * Basis erfuellt und die Antwort ist dieselbe wie vorher.
      *
-     * Der Portionszaehler ist davon unberuehrt, weil er kein quantity ist
-     * (15 E2): Cooking.DecreaseCookedItemQuantity greift auf quantity zu, und
-     * dort steht die Verzehrmenge, nicht die Portionszahl.
+     * Das feste `return true;` ist verschwunden, weil es nach der
+     * Basisaenderung eine ZWEITE, widersprechende Regel gewesen waere - und
+     * zwar keine harmlose. Es hat auch dann true gesagt, wenn das Bulk gar
+     * keinen Food-Knoten hatte. Vanilla haette dieses Item dann als kochbar
+     * angenommen und in Cooking.UpdateCookingState ueber ein nicht
+     * vorhandenes FoodStage-Objekt gegriffen (Edible_Base.c:605). Ein
+     * Content-Autor, der den Food-Knoten seines Bulks vergisst, bekommt jetzt
+     * ein Gericht, das nicht warm wird - statt eines Serverfehlers je Kochtakt.
+     *
+     * Unveraendert gilt: der Portionszaehler ist von alldem unberuehrt, weil er
+     * kein quantity ist (15 E2). Cooking.DecreaseCookedItemQuantity greift auf
+     * quantity zu, und dort steht die Verzehrmenge, nicht die Portionszahl.
      */
-    override bool CanBeCooked()
-    {
-        return true;
-    }
 
-    //! 15 §3: false. Ein Kessel gehoert nicht auf einen Stock.
+    /**
+     * 15 §3: false. Ein Kessel gehoert nicht auf einen Stock.
+     *
+     * Ausdruecklich hingeschrieben, obwohl ChefZ_Edible_Base den Schalter gar
+     * nicht anfasst und der Vanilla-Default (Edible_Base.c:134) ohnehin false
+     * ist: 15 §3 fuehrt diese Zeile als Zusage, und eine Zusage, die nur aus
+     * einem geerbten Default besteht, liest niemand nach.
+     */
     override bool CanBeCookedOnStick()
     {
         return false;

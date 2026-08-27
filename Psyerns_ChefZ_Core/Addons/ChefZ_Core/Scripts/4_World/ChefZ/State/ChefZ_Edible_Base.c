@@ -56,6 +56,11 @@ class ChefZ_Edible_Base extends Edible_Base
     //! warum die Felder dort liegen und nicht hier.
     protected ref ChefZ_ItemStateComponent m_ChefZ_State;
 
+    //! Klassenname -> "deklariert Food > FoodStageTransitions?".
+    //! Siehe ChefZ_DeclaresCookTransitions(); die Antwort ist eine
+    //! KLASSENeigenschaft und aendert sich zur Laufzeit nie.
+    private static ref map<string, bool> s_ChefZ_CookTransitions;
+
     void ChefZ_Edible_Base()
     {
         // Zuerst der Block, dann die Registrierung: der Sync-Pfad
@@ -277,6 +282,159 @@ class ChefZ_Edible_Base extends Edible_Base
     //==========================================================================
     // Vanilla-Anbindung
     //==========================================================================
+
+    /**
+     * DER SCHALTER, OHNE DEN NICHTS KOCHT (01 V4, Cooking.c:47).
+     *
+     * Vanilla laesst Kochbarkeit NICHT von den Daten folgen. Edible_Base gibt
+     * `false` zurueck (Edible_Base.c:129, und schon ItemBase.c:2666), und JEDE
+     * kochbare Vanilla-Nahrung schaltet sie in ihrer EIGENEN Klasse wieder ein
+     * - Potato.c:3, Lard.c:3, CarpFilletMeat.c:3 und rund vierzig weitere, alle
+     * mit demselben dreizeiligen `return true;`.
+     *
+     * ChefZ_Edible_Base hatte diesen Schalter nicht. Die Folge war kein
+     * Fehlerbild, sondern eine STILLE Sperre: Cooking.ProcessItemToCook
+     * (Cooking.c:47) ging an jeder ChefZ-Zutat mit eigener Skriptklasse vorbei,
+     * die Vanilla-Garstufe blieb auf RAW stehen, und
+     * ChefZ_RecipeEvaluator.CheckStages verlangt von jeder gebundenen
+     * Pflichtzutat eine erlaubte Endstufe. Kein ON_STAGE-Rezept konnte fertig
+     * werden. Nichts davon war statisch sichtbar - die Zeile fehlte einfach.
+     *
+     * ---------------------------------------------------------------------
+     * Warum die Bedingung SO lautet und nicht `return true;`
+     * ---------------------------------------------------------------------
+     * Der Core hat keinen Content und darf deshalb keine Meinung darueber
+     * haben, was gekocht gehoert. Er kann aber nachsehen, was die Klasse
+     * MITBRINGT - und genau daraus folgt die Antwort:
+     *
+     *   1. GetFoodStage() != null. Das ist woertlich HasFoodStage()
+     *      (ItemBase.c:2654), denn Edible_Base legt m_FoodStage nur dann an
+     *      (Edible_Base.c:27). Ohne dieses Objekt ist `true` kein Feature,
+     *      sondern ein Absturz: Cooking.UpdateCookingState ruft ungeprueft
+     *      item_to_cook.GetNextFoodStageType(...) und das ist
+     *      GetFoodStage().GetNextFoodStageType(...) (Edible_Base.c:605).
+     *      Betrifft real ChefZ_ServedDish_Base - eine servierte Portion hat
+     *      bewusst keinen Food-Knoten.
+     *
+     *   2. Die Klasse deklariert Food > FoodStageTransitions. Ohne Uebergaenge
+     *      faellt FoodStage.GetNextFoodStageType auf FoodStageType.BURNED
+     *      zurueck (FoodStage.c:472) - das ist die Content-Falle aus 01 V4.
+     *      Wer keine Uebergaenge hat, wird hier gar nicht erst angefasst und
+     *      liegt im Topf wie jedes andere Cargo-Item.
+     *
+     * Damit ist die Falle aus 01 V4 fuer jeden Erben dieser Klasse nicht mehr
+     * erreichbar: kochbar zu sein SETZT die Uebergaenge VORAUS. Die
+     * Validatorregel (chefzstage) bleibt trotzdem noetig - sie greift fuer
+     * Content, das CanBeCooked() selbst ueberschreibt, und fuer Klassen, die
+     * eine kochbare VANILLA-Skriptklasse erben (ChefZ_Butter erbt Lard).
+     *
+     * ---------------------------------------------------------------------
+     * Was diese Bedingung fuer eine Zutat bedeutet, die nur roh gegessen wird
+     * ---------------------------------------------------------------------
+     * Sie bleibt unveraendert nicht kochbar. Petersilie, Salz und die uebrigen
+     * Gewuerze haben keinen Food-Knoten, also keine Stufen und keine
+     * Uebergaenge - Bedingung 1 und 2 sind beide falsch, und der Rueckgabewert
+     * ist derselbe wie vorher. Eine Klasse wird durch diese Aenderung NUR dann
+     * kochbar, wenn ihr Autor die Uebergaenge ausdruecklich hingeschrieben hat.
+     *
+     * ---------------------------------------------------------------------
+     * Warum hier KEIN CanBeCookedOnStick() steht
+     * ---------------------------------------------------------------------
+     * Der Schalter steht in Vanilla direkt daneben (Edible_Base.c:134) und
+     * bleibt hier bewusst unangetastet. Vier Gruende, in dieser Reihenfolge:
+     *
+     *   1. 01 §47 und 10 §85 sagen es ausdruecklich: "CookOnStick ist nicht
+     *      gehookt". ChefZ mischt sich in den Spiess nicht ein.
+     *   2. Vanilla koppelt die beiden Schalter NICHT. CaninaBerry.c und
+     *      SambucusBerry.c liefern CanBeCooked() == true und
+     *      CanBeCookedOnStick() == false. Eine abgeleitete Zusage waere also
+     *      nicht einmal in Vanilla richtig - und aus den Uebergaengen ist sie
+     *      nicht ableitbar, weil dort nichts ueber Spiesse steht.
+     *   3. Eine automatische Kopplung wuerde jeder Sauce, jedem Teig und jedem
+     *      Stueck Kaese das Spiessgaren erlauben. Das ist eine inhaltliche
+     *      Entscheidung, und Entscheidungen ueber Inhalt trifft der Core nicht.
+     *   4. Der Ausfall ist folgenlos: false ist der Vanilla-Default, die Aktion
+     *      wird schlicht nicht angeboten (ActionCookOnStick.c:36). Anders als
+     *      bei CanBeCooked() blockiert das kein Rezept. Heute ist der Zweig
+     *      ohnehin unerreichbar - ActionCookOnStick braucht ein Item, das AM
+     *      Stock haengt, und keine ChefZ-Configklasse deklariert einen
+     *      inventorySlot.
+     *
+     * Ein Content-Modul, das Fleisch am Spiess will, schreibt auf SEINER
+     * Klasse dieselben drei Zeilen, die Vanilla auf Lard schreibt - und
+     * bekommt vom Core den Test dafuer geschenkt:
+     *
+     *     override bool CanBeCookedOnStick()
+     *     {
+     *         return ChefZ_Edible_Base.ChefZ_DeclaresCookTransitions(GetType());
+     *     }
+     */
+    override bool CanBeCooked()
+    {
+        if (!GetFoodStage())
+            return false;
+
+        return ChefZ_DeclaresCookTransitions(GetType());
+    }
+
+    /**
+     * "Deklariert diese Configklasse Food > FoodStageTransitions?"
+     *
+     * Oeffentlich, weil Content denselben Test fuer eigene Schalter braucht
+     * (siehe CanBeCooked() oben) und weil zwei Fassungen derselben Frage
+     * garantiert auseinanderlaufen.
+     *
+     * GECACHT, und zwar aus demselben Grund, den Vanilla selbst nennt
+     * (ItemBase.c:2659: "so we don't have to parse configs all the time"):
+     * CanBeCooked() laeuft je Cargo-Item und Kochtakt. Das Ergebnis haengt
+     * ausschliesslich am Klassennamen und kann sich zur Laufzeit nicht aendern
+     * - der Cache ist deshalb kein Risiko, sondern nur eine gesparte
+     * Configsuche.
+     *
+     * Die Vererbung loest die Engine auf: eine Configklasse sieht den
+     * Food-Knoten ihrer Elternklasse. Genau darauf baut Vanilla bei
+     * HasFoodStage() (ItemBase.c:2654) und bei
+     * SetupFoodStageTransitionMapping (FoodStage.c:167) ebenfalls.
+     *
+     * Ausfallpfad: ohne g_Game (sehr frueher Aufruf) lautet die Antwort false
+     * UND wird nicht gemerkt - eine zufaellig falsche Antwort duerfte sonst
+     * fuer den Rest der Sitzung stehenbleiben.
+     */
+    static bool ChefZ_DeclaresCookTransitions(string type)
+    {
+        if (type == "")
+            return false;
+
+        if (!s_ChefZ_CookTransitions)
+            s_ChefZ_CookTransitions = new map<string, bool>();
+
+        bool known;
+        if (s_ChefZ_CookTransitions.Find(type, known))
+            return known;
+
+        if (!g_Game)
+            return false;
+
+        bool has = g_Game.ConfigIsExisting("CfgVehicles " + type + " Food FoodStageTransitions");
+        s_ChefZ_CookTransitions.Insert(type, has);
+
+        // Genau EINMAL je Klasse, beim ersten Nachsehen - danach antwortet der
+        // Cache und es wird nicht mehr geloggt. Das ist die Zeile, die den
+        // urspruenglichen Blocker im RPT sichtbar gemacht haette.
+        if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
+        {
+            if (has)
+                ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
+                    type + ": Food > FoodStageTransitions vorhanden - kochbar (01 V4).");
+            else
+                ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
+                    type + ": kein Food > FoodStageTransitions - NICHT kochbar. Die Klasse "
+                    + "bleibt im Kochgeraet auf ihrer Garstufe stehen; ein ON_STAGE-Rezept, "
+                    + "das sie als Pflichtzutat fuehrt, wird nie fertig (01 V4).");
+        }
+
+        return has;
+    }
 
     /**
      * 01 V9: CanDecay() ist auf Edible_Base false - eine neue ChefZ-Nahrung

@@ -17,7 +17,7 @@ const CHECKS = [
   // ohne sie ist der datengetriebene Entwurf schlechter als ein enum-basierter.
   'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
   // Invariante I2 - die zentrale Designregel, mechanisch geprueft.
-  'chefzvanilla',
+  'chefzvanilla', 'chefzcookable',
 ];
 
 const args = process.argv.slice(2);
