@@ -5,7 +5,7 @@
 import path from 'node:path';
 import {
   Findings, deltaFiles, readJson, projectClasses, lineOf, rel,
-  ADDONS_DIR, exists, CORE_REGISTRIES,
+  ADDONS_DIR, exists, CORE_REGISTRIES, REGISTRY_DIR, REGISTRY_ADDON,
 } from './lib.mjs';
 
 const SECTIONS = {
@@ -113,22 +113,25 @@ export default function run() {
   }
 
   // --- 5. Ist der Merge angekommen? ---
-  const coreCfg = path.join(ADDONS_DIR, 'ChefZ_Core', 'Config');
+  const coreCfg = REGISTRY_DIR;
   if (exists(coreCfg)) {
     for (const name of CORE_REGISTRIES) {
       const file = path.join(coreCfg, name);
       if (!exists(file)) {
-        f.warn(file, 0, `Zentrale Registry "${name}" fehlt, obwohl ${deltas.length} Delta(s) vorliegen - Integrator noch nicht gelaufen?`);
+        f.warn(file, 0, `Zentrale Registry "${name}" fehlt in ${REGISTRY_ADDON}, obwohl ${deltas.length} Delta(s) vorliegen - Integrator noch nicht gelaufen?`);
         continue;
       }
       const res = readJson(file);
       if (!res.ok) { f.error(file, 0, `Registry nicht lesbar: ${res.error}`); continue; }
       const section = name.replace('.json', '').toLowerCase();
-      const key = { categories: 'id', tags: 'id', processing: 'id', nutrition: 'class', preservation: 'state' }[section];
-      const expected = merged[section === 'processing' ? 'processes' : section];
-      if (!expected || !key) continue;
-      const list = Array.isArray(res.data) ? res.data : (res.data[section] ?? res.data.entries ?? []);
-      const have = new Set(Array.isArray(list) ? list.map(e => e?.[key]).filter(Boolean) : []);
+      const expected = merged[section];
+      if (!expected) continue;
+      // Die Registry hat die Dokumentform des Core: { kind, schemaVersion, records }.
+      // Dort ist die Kennung IMMER "id" - auch wo das Delta sie "class" oder
+      // "state" nennt. Genau diese Umbenennung ist die Arbeit des Integrators.
+      const list = Array.isArray(res.data) ? res.data
+        : (res.data.records ?? res.data[section] ?? res.data.entries ?? []);
+      const have = new Set(Array.isArray(list) ? list.map(e => e?.id ?? e?.class ?? e?.state).filter(Boolean) : []);
       for (const id of expected.keys()) {
         if (!have.has(id)) {
           f.error(file, 0, `"${id}" steht in einem Delta, fehlt aber in ${name} - der Merge ist unvollstaendig`);

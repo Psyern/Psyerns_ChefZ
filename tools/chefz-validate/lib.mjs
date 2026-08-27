@@ -26,8 +26,19 @@ export const COMP_DIRS = [
   path.join(ROOT, 'Psyerns_ChefZ_COT_Comp'),
 ];
 
+// Die zusammengefuehrten Registries. Sie liegen seit Meilenstein 2 NICHT mehr in
+// ChefZ_Core: der Core ist eine Regelmaschine ohne eigenes Vokabular und liefert
+// keine Datensaetze aus. Ihr Addon deklariert sie in dataFiles[] - nur dadurch
+// sind sie ueberhaupt ladbar.
+export const REGISTRY_ADDON = 'ChefZ_Registry';
+export const REGISTRY_DIR = path.join(ADDONS_DIR, REGISTRY_ADDON, 'Config');
+
+// Prozesse fehlen hier absichtlich: ihre Records gehoeren den Slices, die sie in
+// Rang 1 und Rang 2 selbst deklarieren. Die Registry wuerde sie im selben Rang
+// ein zweites Mal einbringen, und ChefZ_RecordSink weist einen doppelten Record
+// desselben Rangs ab, statt ihn zu patchen.
 export const CORE_REGISTRIES = [
-  'Categories.json', 'Tags.json', 'Processing.json',
+  'Categories.json', 'Tags.json',
   'Nutrition.json', 'Preservation.json',
 ];
 

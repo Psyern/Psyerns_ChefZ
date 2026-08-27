@@ -1,33 +1,21 @@
 {
-    "_comment": "Erzeugt vom chefz-registry-integrator aus Psyerns_ChefZ_Core/_deltas/*.json (Workflow §5). Nicht von Hand bearbeiten - Aenderungen gehen in das Delta des zustaendigen Slice. Reihenfolge: Slices alphabetisch, innerhalb eines Slice nach ID. Feldnamen wie in den Deltas (Delta-Schema aus Workflow §5); die Abbildung auf die ChefZ_*Def-Felder des Rang-2-Laders ({kind, schemaVersion, records[]}) ist offen und liegt beim Core/Architekt - siehe Integrationsbericht, Punkt REG-FORMAT.",
+    "kind": "category",
     "schemaVersion": 1,
-    "slices": [
-        "dairy",
-        "grain",
-        "herbs",
-        "meat",
-        "produce",
-        "salt"
-    ],
-    "categories": [
+    "records": [
         {
             "id": "DAIRY",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_DAIRY"
         },
         {
             "id": "EGG",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_EGG"
         },
         {
             "id": "BREAD",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_BREAD"
         },
         {
             "id": "DOUGH",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_DOUGH"
         },
         {
@@ -37,12 +25,10 @@
         },
         {
             "id": "GRAIN",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_GRAIN"
         },
         {
             "id": "PASTA",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_PASTA"
         },
         {
@@ -52,27 +38,22 @@
         },
         {
             "id": "HERB",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_HERB"
         },
         {
             "id": "SPICE",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_SPICE"
         },
         {
             "id": "VEGETABLE",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_VEGETABLE"
         },
         {
             "id": "BONE",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_BONE"
         },
         {
             "id": "CASING",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_CASING"
         },
         {
@@ -82,12 +63,10 @@
         },
         {
             "id": "FAT",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_FAT"
         },
         {
             "id": "MEAT",
-            "parent": null,
             "displayName": "#STR_CHEFZ_CAT_MEAT"
         },
         {

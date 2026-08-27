@@ -1,0 +1,88 @@
+{
+    "kind": "process",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "PROCESS_CHURN_BUTTER",
+            "exec": "STATION_TIMED",
+            "baseDurationSec": 180
+        },
+        {
+            "id": "PROCESS_PRESS_CHEESE",
+            "exec": "STATION_TIMED",
+            "baseDurationSec": 300
+        },
+        {
+            "id": "PROCESS_SEPARATE_CREAM",
+            "exec": "STATION_TIMED",
+            "baseDurationSec": 120
+        },
+        {
+            "id": "PROCESS_DRY",
+            "exec": "STATION_TIMED",
+            "baseDurationSec": 600
+        },
+        {
+            "id": "PROCESS_GRIND_HERB",
+            "exec": "STATION_ACTION",
+            "baseDurationSec": 15
+        },
+        {
+            "id": "PROCESS_GRIND_SPICE",
+            "exec": "STATION_ACTION",
+            "baseDurationSec": 20
+        },
+        {
+            "id": "PROCESS_CLEAN_CASING",
+            "exec": "STATION_ACTION",
+            "toolGroups": [
+                "CUTTING_TOOL"
+            ],
+            "baseDurationSec": 12
+        },
+        {
+            "id": "PROCESS_CUT_MEAT",
+            "exec": "HANDCRAFT",
+            "toolGroups": [
+                "CUTTING_TOOL"
+            ],
+            "baseDurationSec": 4
+        },
+        {
+            "id": "PROCESS_GRIND_MEAT",
+            "exec": "STATION_ACTION",
+            "baseDurationSec": 20
+        },
+        {
+            "id": "PROCESS_STUFF_SAUSAGE",
+            "exec": "STATION_ACTION",
+            "baseDurationSec": 15
+        },
+        {
+            "id": "PROCESS_CHOP_VEGETABLE",
+            "exec": "HANDCRAFT",
+            "toolGroups": [
+                "CUTTING_TOOL"
+            ],
+            "baseDurationSec": 5
+        },
+        {
+            "id": "PROCESS_CUT_OUT_SEEDS",
+            "exec": "HANDCRAFT",
+            "toolGroups": [
+                "CUTTING_TOOL"
+            ],
+            "baseDurationSec": 6
+        },
+        {
+            "id": "PROCESS_BOIL_BRINE",
+            "exec": "STATION_TIMED",
+            "baseDurationSec": 900
+        },
+        {
+            "id": "PROCESS_DRY_SALT",
+            "exec": "STATION_TIMED",
+            "baseDurationSec": 1200
+        }
+    ]
+}

@@ -1,0 +1,461 @@
+{
+    "kind": "nutrition",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_Butter",
+            "scope": "class",
+            "energy": 600,
+            "water": 20,
+            "fullness": 15
+        },
+        {
+            "id": "ChefZ_Cheese",
+            "scope": "class",
+            "energy": 450,
+            "water": 60,
+            "fullness": 35
+        },
+        {
+            "id": "ChefZ_Cream",
+            "scope": "class",
+            "energy": 350,
+            "water": 150,
+            "fullness": 20
+        },
+        {
+            "id": "ChefZ_Egg",
+            "scope": "class",
+            "energy": 90,
+            "water": 40,
+            "fullness": 12
+        },
+        {
+            "id": "ChefZ_Milk",
+            "scope": "class",
+            "energy": 200,
+            "water": 400,
+            "fullness": 30
+        },
+        {
+            "id": "ChefZ_Bread",
+            "scope": "class",
+            "energy": 500,
+            "water": 20,
+            "fullness": 45
+        },
+        {
+            "id": "ChefZ_DriedPasta",
+            "scope": "class",
+            "energy": 380,
+            "water": 5,
+            "fullness": 28
+        },
+        {
+            "id": "ChefZ_Flatbread",
+            "scope": "class",
+            "energy": 320,
+            "water": 15,
+            "fullness": 30
+        },
+        {
+            "id": "ChefZ_Flour",
+            "scope": "class",
+            "energy": 340,
+            "water": 2,
+            "fullness": 25
+        },
+        {
+            "id": "ChefZ_PastaDough",
+            "scope": "class",
+            "energy": 320,
+            "water": 70,
+            "fullness": 32
+        },
+        {
+            "id": "ChefZ_RawPasta",
+            "scope": "class",
+            "energy": 260,
+            "water": 60,
+            "fullness": 30
+        },
+        {
+            "id": "ChefZ_SimpleDough",
+            "scope": "class",
+            "energy": 300,
+            "water": 90,
+            "fullness": 35
+        },
+        {
+            "id": "ChefZ_Wheat",
+            "scope": "class",
+            "energy": 180,
+            "water": 5,
+            "fullness": 20
+        },
+        {
+            "id": "ChefZ_Yeast",
+            "scope": "class",
+            "energy": 90,
+            "water": 4,
+            "fullness": 5
+        },
+        {
+            "id": "ChefZ_YeastDough",
+            "scope": "class",
+            "energy": 310,
+            "water": 90,
+            "fullness": 35
+        },
+        {
+            "id": "ChefZ_BlackPepper",
+            "scope": "class",
+            "energy": 4,
+            "water": 0,
+            "fullness": 1
+        },
+        {
+            "id": "ChefZ_Dill",
+            "scope": "class",
+            "energy": 15,
+            "water": 12,
+            "fullness": 5
+        },
+        {
+            "id": "ChefZ_DriedDill",
+            "scope": "class",
+            "energy": 8,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_DriedPaprika",
+            "scope": "class",
+            "energy": 30,
+            "water": 2,
+            "fullness": 8
+        },
+        {
+            "id": "ChefZ_DriedParsley",
+            "scope": "class",
+            "energy": 8,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_DriedPeppercorns",
+            "scope": "class",
+            "energy": 6,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_DriedRosemary",
+            "scope": "class",
+            "energy": 8,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_DriedThyme",
+            "scope": "class",
+            "energy": 8,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_DriedWildGarlic",
+            "scope": "class",
+            "energy": 8,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_HerbMix",
+            "scope": "class",
+            "energy": 10,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_HunterSeasoning",
+            "scope": "class",
+            "energy": 12,
+            "water": 0,
+            "fullness": 2
+        },
+        {
+            "id": "ChefZ_Paprika",
+            "scope": "class",
+            "energy": 60,
+            "water": 45,
+            "fullness": 20
+        },
+        {
+            "id": "ChefZ_PaprikaPowder",
+            "scope": "class",
+            "energy": 20,
+            "water": 0,
+            "fullness": 3
+        },
+        {
+            "id": "ChefZ_Parsley",
+            "scope": "class",
+            "energy": 15,
+            "water": 12,
+            "fullness": 5
+        },
+        {
+            "id": "ChefZ_PepperBerries",
+            "scope": "class",
+            "energy": 12,
+            "water": 8,
+            "fullness": 4
+        },
+        {
+            "id": "ChefZ_Rosemary",
+            "scope": "class",
+            "energy": 15,
+            "water": 12,
+            "fullness": 5
+        },
+        {
+            "id": "ChefZ_Thyme",
+            "scope": "class",
+            "energy": 15,
+            "water": 12,
+            "fullness": 5
+        },
+        {
+            "id": "ChefZ_WildGarlic",
+            "scope": "class",
+            "energy": 15,
+            "water": 12,
+            "fullness": 5
+        },
+        {
+            "id": "ChefZ_AnimalFat",
+            "scope": "class",
+            "energy": 300,
+            "water": 5,
+            "fullness": 40
+        },
+        {
+            "id": "ChefZ_BoarSausage",
+            "scope": "class",
+            "energy": 505,
+            "water": 17,
+            "fullness": 142
+        },
+        {
+            "id": "ChefZ_CookedSausage",
+            "scope": "class",
+            "energy": 470,
+            "water": 18,
+            "fullness": 140
+        },
+        {
+            "id": "ChefZ_DicedMeat",
+            "scope": "class",
+            "energy": 140,
+            "water": 45,
+            "fullness": 120
+        },
+        {
+            "id": "ChefZ_HunterSausage",
+            "scope": "class",
+            "energy": 525,
+            "water": 16,
+            "fullness": 148
+        },
+        {
+            "id": "ChefZ_MincedBear",
+            "scope": "class",
+            "energy": 205,
+            "water": 36,
+            "fullness": 130
+        },
+        {
+            "id": "ChefZ_MincedBoar",
+            "scope": "class",
+            "energy": 165,
+            "water": 40,
+            "fullness": 112
+        },
+        {
+            "id": "ChefZ_MincedChicken",
+            "scope": "class",
+            "energy": 120,
+            "water": 46,
+            "fullness": 95
+        },
+        {
+            "id": "ChefZ_MincedMeat",
+            "scope": "class",
+            "energy": 150,
+            "water": 40,
+            "fullness": 110
+        },
+        {
+            "id": "ChefZ_MincedPork",
+            "scope": "class",
+            "energy": 185,
+            "water": 38,
+            "fullness": 115
+        },
+        {
+            "id": "ChefZ_MincedVenison",
+            "scope": "class",
+            "energy": 145,
+            "water": 44,
+            "fullness": 108
+        },
+        {
+            "id": "ChefZ_PorkSausage",
+            "scope": "class",
+            "energy": 530,
+            "water": 16,
+            "fullness": 145
+        },
+        {
+            "id": "ChefZ_RawBoarSausage",
+            "scope": "class",
+            "energy": 250,
+            "water": 34,
+            "fullness": 152
+        },
+        {
+            "id": "ChefZ_RawHunterSausage",
+            "scope": "class",
+            "energy": 260,
+            "water": 33,
+            "fullness": 158
+        },
+        {
+            "id": "ChefZ_RawPorkSausage",
+            "scope": "class",
+            "energy": 265,
+            "water": 33,
+            "fullness": 155
+        },
+        {
+            "id": "ChefZ_RawSausage",
+            "scope": "class",
+            "energy": 230,
+            "water": 35,
+            "fullness": 150
+        },
+        {
+            "id": "ChefZ_RawSpicySausage",
+            "scope": "class",
+            "energy": 245,
+            "water": 34,
+            "fullness": 150
+        },
+        {
+            "id": "ChefZ_RawVenisonSausage",
+            "scope": "class",
+            "energy": 235,
+            "water": 36,
+            "fullness": 148
+        },
+        {
+            "id": "ChefZ_SausageCasing",
+            "scope": "class",
+            "energy": 20,
+            "water": 12,
+            "fullness": 15
+        },
+        {
+            "id": "ChefZ_SpicySausage",
+            "scope": "class",
+            "energy": 495,
+            "water": 17,
+            "fullness": 140
+        },
+        {
+            "id": "ChefZ_VenisonSausage",
+            "scope": "class",
+            "energy": 480,
+            "water": 18,
+            "fullness": 138
+        },
+        {
+            "id": "ChefZ_Cabbage",
+            "scope": "class",
+            "energy": 110,
+            "water": 80,
+            "fullness": 45
+        },
+        {
+            "id": "ChefZ_Carrot",
+            "scope": "class",
+            "energy": 100,
+            "water": 60,
+            "fullness": 30
+        },
+        {
+            "id": "ChefZ_ChoppedCabbage",
+            "scope": "class",
+            "energy": 110,
+            "water": 80,
+            "fullness": 45
+        },
+        {
+            "id": "ChefZ_ChoppedCarrot",
+            "scope": "class",
+            "energy": 100,
+            "water": 60,
+            "fullness": 30
+        },
+        {
+            "id": "ChefZ_ChoppedGarlic",
+            "scope": "class",
+            "energy": 40,
+            "water": 15,
+            "fullness": 8
+        },
+        {
+            "id": "ChefZ_ChoppedOnion",
+            "scope": "class",
+            "energy": 90,
+            "water": 55,
+            "fullness": 25
+        },
+        {
+            "id": "ChefZ_ChoppedPaprika",
+            "scope": "class",
+            "energy": 60,
+            "water": 45,
+            "fullness": 20
+        },
+        {
+            "id": "ChefZ_ChoppedTomato",
+            "scope": "class",
+            "energy": 45,
+            "water": 70,
+            "fullness": 20
+        },
+        {
+            "id": "ChefZ_Garlic",
+            "scope": "class",
+            "energy": 40,
+            "water": 15,
+            "fullness": 8
+        },
+        {
+            "id": "ChefZ_Onion",
+            "scope": "class",
+            "energy": 90,
+            "water": 55,
+            "fullness": 25
+        },
+        {
+            "id": "ChefZ_SlicedPotato",
+            "scope": "class",
+            "energy": 180,
+            "water": 40,
+            "fullness": 40
+        }
+    ]
+}

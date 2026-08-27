@@ -1,0 +1,56 @@
+{
+    "kind": "tag",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "CHEFZ_DAIRY"
+        },
+        {
+            "id": "CHEFZ_EGG"
+        },
+        {
+            "id": "CHEFZ_BAKED_GOOD",
+            "displayName": "#STR_CHEFZ_TAG_BAKED_GOOD"
+        },
+        {
+            "id": "CHEFZ_GRAIN",
+            "displayName": "#STR_CHEFZ_TAG_GRAIN"
+        },
+        {
+            "id": "CHEFZ_HERB"
+        },
+        {
+            "id": "CHEFZ_SPICE"
+        },
+        {
+            "id": "CHEFZ_WILD_HERB"
+        },
+        {
+            "id": "CHEFZ_HIGH_PROTEIN"
+        },
+        {
+            "id": "CHEFZ_HOT_MEAL"
+        },
+        {
+            "id": "CHEFZ_PREMIUM"
+        },
+        {
+            "id": "CHEFZ_RAW_MEAT"
+        },
+        {
+            "id": "CHEFZ_RAW_SAUSAGE"
+        },
+        {
+            "id": "CHEFZ_WILD_MEAT"
+        },
+        {
+            "id": "CHEFZ_CHOPPED"
+        },
+        {
+            "id": "CHEFZ_FRESH"
+        },
+        {
+            "id": "CHEFZ_SALT"
+        }
+    ]
+}
