@@ -112,7 +112,13 @@ export default function run() {
     }
     const data = res.data;
 
-    if (p.includes('/config/recipes/')) {
+    // Rezeptdateien werden am DOKUMENTTYP erkannt, nicht am Pfad. Die frueher
+    // benutzte Pfadregel (/config/recipes/) uebersah jede Rezeptdatei, die
+    // woanders liegt - etwa ChefZ_Baking/Config/GrainRecipes.json.
+    const isRecipeDoc = data && !Array.isArray(data) && data.kind === 'recipe'
+      || Array.isArray(data) && p.includes('/config/recipes/')
+      || data && !Array.isArray(data) && Array.isArray(data.Recipes);
+    if (isRecipeDoc) {
       // Massgeblich ist die Dokumentform, die der Core tatsaechlich laedt
       // (ChefZ_JsonDocs.c): { kind, schemaVersion, records: [...] }.
       // Die beiden aelteren Formen bleiben lesbar, damit vorhandene Dateien

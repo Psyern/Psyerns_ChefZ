@@ -174,6 +174,27 @@ class CfgChefZStates
       outputs: [{ cls: 'ChefZ_TestGericht', portionClass: 'ChefZ_TestGericht' }],
     }],
   }, null, 2),
+
+  // Rezept ohne Kennung - loest schema aus. Bewusst NICHT in einem
+  // Config/Recipes/-Ordner, damit zugleich belegt ist, dass die Erkennung am
+  // Dokumenttyp haengt und nicht am Pfad.
+  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/MehrRezepte.json': JSON.stringify({
+    kind: 'recipe', schemaVersion: 1,
+    records: [{ outputs: [{ cls: 'ChefZ_TestGericht' }] }],
+  }, null, 2),
+
+  // Zwei Slices definieren dieselbe Kategorie unterschiedlich, und eine
+  // Haltbarkeitsregel zeigt auf einen Zustand, den niemand deklariert -
+  // loest deltas aus.
+  'Psyerns_ChefZ_Core/_deltas/schlecht_a.json': JSON.stringify({
+    slice: 'schlecht_a',
+    categories: [{ id: 'KAT_STREIT', parent: null, displayName: '#STR_A' }],
+    preservation: [{ id: 'NIE_DEKLARIERT', scope: 'state', spoilageMultiplier: 0.5 }],
+  }, null, 2),
+  'Psyerns_ChefZ_Core/_deltas/schlecht_b.json': JSON.stringify({
+    slice: 'schlecht_b',
+    categories: [{ id: 'KAT_STREIT', parent: null, displayName: '#STR_B' }],
+  }, null, 2),
 };
 
 // --- Was zuenden MUSS -------------------------------------------------------
@@ -195,6 +216,9 @@ const EXPECT = [
   ['chefzstage', /ist kochbar \(.*\), deklariert aber keine FoodStageTransitions/, '01 V4: kochbar ohne Uebergaenge'],
   ['chefzproc', /3 Eingaenge/, '01 V12: HANDCRAFT mit mehr als zwei Eingaengen'],
   ['chefzlog', /Ungewachter Log-Aufruf in einer Schleife/, '18 E2: Wache fehlt'],
+  ['schema', /hat keine Kennung/, 'Rezept ohne id - und Erkennung am Dokumenttyp, nicht am Pfad'],
+  ['deltas', /ID-Kollision in "categories"/, 'zwei Slices definieren dieselbe Kategorie unterschiedlich'],
+  ['deltas', /Haltbarkeitsregel "NIE_DEKLARIERT"/, 'Preservation zeigt auf einen undeklarierten Zustand'],
 ];
 
 // --- Ablauf -----------------------------------------------------------------
@@ -264,11 +288,37 @@ if (process.argv.includes('--verbose')) {
 
 console.log(B);
 console.log(`Wegwerf-Modul: Exit-Code ${exitCode} (erwartet 1), `
-  + `${report.errors} Fehler, ${report.warnings} Warnungen.`);
+  + `${report.errors} Fehler, ${report.warnungen ?? report.warnings} Warnungen.`);
 if (exitCode !== 1) { console.log('FEHLER: das Wegwerf-Modul haette Exit-Code 1 liefern muessen.'); failed++; }
+
+// --- Wie weit reicht dieser Selbsttest ueberhaupt? -------------------------
+//
+// Die Erfolgsmeldung hiess frueher "jede Regel hat gezuendet". Das war zu gross
+// gesprochen: das Wegwerf-Modul loest nur Regeln aus, die auf seine Bauart
+// passen. Ein Selbsttest, der seine eigene Reichweite verschweigt, erzeugt genau
+// das falsche Zutrauen, gegen das die Pruefer gebaut wurden.
+const ALL_CHECKS = [
+  'schema', 'configcpp', 'classrefs', 'naming', 'stringtable', 'deltas',
+  'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
+  'chefzvanilla', 'chefzcookable',
+];
+const exercised = new Set(
+  report.checks.filter(c => c.items && c.items.length > 0).map(c => c.name));
+const untested = ALL_CHECKS.filter(n => !exercised.has(n));
+
+console.log(`\nAbdeckung: ${exercised.size} von ${ALL_CHECKS.length} Pruefern werden `
+  + `vom Wegwerf-Modul ausgeloest.`);
+if (untested.length) {
+  console.log(`Nicht ausgeloest: ${untested.join(', ')}`);
+  console.log('Diese Pruefer sind damit NICHT selbstgetestet - sie koennten still');
+  console.log('nichts melden, ohne dass es hier auffiele. Das Wegwerf-Modul braucht');
+  console.log('je einen passenden Fehlerfall, um sie abzudecken.');
+}
+
 console.log(failed === 0
-  ? 'ERGEBNIS: BESTANDEN - jede Regel hat mindestens einmal gezuendet.'
-  : `ERGEBNIS: NICHT BESTANDEN - ${failed} Regel(n) blind.`);
+  ? `\nERGEBNIS: BESTANDEN - jede der ${ALL_CHECKS.length - untested.length} abgedeckten `
+    + `Pruefergruppen hat gezuendet.`
+  : `\nERGEBNIS: NICHT BESTANDEN - ${failed} Regel(n) blind.`);
 console.log(B);
 
 process.exit(failed === 0 ? 0 : 1);

@@ -1,0 +1,270 @@
+# Known Limitations
+
+This page is the honest inventory. Everything here is either not finished, not
+verified, or verified only as far as static analysis reaches. It is kept current
+deliberately: a wiki that only describes what works costs the reader more time than
+it saves.
+
+If you are deciding whether to run ChefZ on a live server, read this page first.
+
+---
+
+## The short version
+
+ChefZ has never been compiled and has never run in DayZ.
+
+167 script files exist, the static validation passes with zero errors across
+fourteen checkers, and every design rule the project set for itself is machine
+enforced. None of that is the same as a build, and none of it is the same as a
+server that starts.
+
+---
+
+## Not yet done
+
+### No compiler run
+
+No Enforce compiler has ever seen this code. What has been checked instead:
+brace balance per file, every referenced type against the project's own class
+index, and every vanilla signature against the real `scripts` sources rather than
+from memory. A compile error is not ruled out.
+
+This is the first thing to do with the repository, and it may produce surprises.
+
+### No PBOs, no signatures
+
+Nothing has been packed. See [Installation](Installation) for the route through
+DayZ Tools. That route has not been walked by anyone yet.
+
+### No in-game test
+
+All four milestone gates stand at **NOT READY**. Each gate report carries a
+numbered in-game checklist — together roughly 150 steps with concrete ingredients,
+quantities, durations and expected RPT lines — and not one step has been executed.
+
+Gate 4 in particular requires two server configurations: one **without** Terje and
+one with. The run without Terje is the more important of the two, because it tests
+the project's central promise.
+
+### No 3D assets
+
+Every item uses a vanilla proxy model. Several unrelated items therefore share a
+mesh and are distinguishable only by size and weight, which makes an in-game test
+harder than it needs to be.
+
+One decision blocks asset production and should be made before anyone models
+anything: **no config declares `hiddenSelections`**, so none of the planned texture
+variants can be applied to a shared mesh. The selection name has to be agreed first.
+Applied consistently, the shared-mesh strategy cuts the V1 mesh count from 161 to
+about 45.
+
+---
+
+## Verified only as far as static analysis reaches
+
+### Vanilla class collisions are unchecked
+
+`tools/chefz-validate/refindex/vanilla-classes.txt` is empty. The reference index
+holds roughly 16,000 class names from Terje, Expansion, COT, CF, Dabs and the
+vanilla *script* sources — but the vanilla *item* classes live in the game configs,
+which are not in this repository.
+
+Consequences, both real:
+
+- A ChefZ class name that collides with a vanilla item name would not be reported.
+- Several findings in the gate reports are marked *plausible* rather than
+  *confirmed* purely because this index is missing.
+
+Filling it is cheap — a class dump from a server is enough — and it closes the
+single largest gap in the checking net. See [Validation](Validation).
+
+### What the checkers cannot see at all
+
+Runtime behaviour, cooking logic under load, whether the balance feels right,
+whether models and textures are correct, and whether the mod loads. That is what
+the gate checklists are for.
+
+Four defects found during development illustrate the point. Each passed every
+static check, and each would have looked like something else in game:
+
+| Defect | What it looked like |
+|---|---|
+| The core never enabled cookability | Recipes "don't work" |
+| 111 food classes had no eat action | Items "are broken" |
+| Cooking attributed no player | XP "isn't implemented" |
+| Two stations derived from cookware | Vanilla cooking "behaves oddly" |
+
+---
+
+## Stations that cannot work
+
+Both of these were found while writing this wiki, not by a gate review, and neither
+is reported by any checker. Both would look in game like "the station is broken".
+
+### Three stations have no cargo
+
+`ChefZ_GrainMill`, `ChefZ_CuttingBoard` and `ChefZ_MeatGrinder` declare no
+`class Cargo` block in `ChefZ_Processing/config.cpp`. The processing station base
+reads its ingredients through the fact collector, which returns immediately when the
+inventory has no cargo — so these three cannot receive input at all.
+
+The five other stations all have one.
+
+What this costs: the grain chain stops at its first step, so no flour and therefore
+no dough, bread, pasta or dumplings. The sausage chain stops at the cutting board,
+so no casing, therefore no raw sausage and none of the six cooked sausage varieties,
+and no dry or smoked sausage either.
+
+### The smoker can never run
+
+Two independent reasons, either of which alone would be enough:
+
+`PROCESS_SMOKE` sets `requiresHeat`, but `ChefZ_Smoker.c` is an empty class that
+never overrides the heat check, which the base answers with `false`.
+`ChefZ_SaltPan` does override it, with a fireplace proximity test — the pattern
+exists, it was just not applied here.
+
+Independently, the station record sets `needsFuel` while the class has no fuel
+attachment slot, so the powered check fails before the heat check is even reached.
+
+All three smoking transforms are unreachable.
+
+---
+
+## Built but inert
+
+Three things exist in the code and do nothing today. None of them fails; they simply
+never fire, which is why no checker reports them.
+
+### The Terje Medicine module is dormant
+
+It registers medicinal effects for `ChefZ_ThymeTea`, `ChefZ_WildGarlicTea` and
+`ChefZ_HerbalTea`. **None of those three items exists in the main mod.** They appear
+in no `config.cpp` and no ingredient record.
+
+The teas fell through a gap in the plan: the Terje analysis listed them under the
+compatibility module's responsibilities, but the *items* belong in the main mod, and
+no milestone 3 slice had them in its brief. The module's own startup check reports
+it — `3 of 3 entries without an item in the main mod` — so the diagnosis is already
+in the log, but loading the PBO today buys nothing.
+
+### Recipe locks are never asked
+
+The capability gate is built and wired, with providers for survival level, the
+herbalist perk and its yield bonus. **No recipe in the entire data set declares
+`requires`**, so the gate is never consulted. This is blocked on an open design
+decision about how hard the locks should be — refuse the recipe, degrade its
+quality, slow it down, or reduce the yield.
+
+### Two herbs earn nothing from the perk
+
+`ChefZ_PepperBerries` carries the spice tag, so it earns harvest XP, but it is not
+highlighted and gets no yield bonus. `ChefZ_Paprika` carries neither harvest tag and
+gets nothing at all. Code comments in the skills module refer to "the seven ChefZ
+herbs"; only five actually carry the herb tag. The behaviour may well be intended —
+the comments are not.
+
+---
+
+## Balance consequences worth knowing
+
+These are decisions the build made that the planning documents did not anticipate.
+They are not defects, but they change how the mod plays.
+
+**Cooking XP is scored by ingredient count, not by dish tier.** The plan spoke of
+simple, complex and premium meals as if that were a property of the dish; nothing in
+the data marks a dish as premium, so the build counts consumed ingredient entries
+instead: two or fewer scores 3, three to five scores 8, more than five scores 15. A
+cheap six-ingredient dish therefore scores premium while an expensive two-ingredient
+one scores simple.
+
+**Hunter Seasoning pays 2 XP.** It consumes five distinct ingredients at the mortar
+and is scored as a generic spice grind. The plan asked for 5. Two other chain-
+correcting overrides exist for exactly this kind of case, so this reads as an
+oversight rather than a decision.
+
+**Chain XP is per step, not per result.** Skipping a step pays only the steps you
+actually performed — smoking meat without curing it first pays 3 rather than 5.
+
+---
+
+## Open decisions
+
+### Flour, yeast and spice powders are food
+
+They carry nutrition records in the merged registry, so they are edible. Whether
+they *should* be is a content decision that belongs in the registry, not in a
+module — a module cannot un-declare nutrition it inherits. Salt shows what the
+alternative looks like: no nutrition, no food node, no findings.
+
+### The modded-class list has grown
+
+The architecture note promised a closed list of modded vanilla classes and stated
+that growth would mean the design is wrong. It has gone from 2 entries to 7 across
+the four milestones:
+
+```
+ActionWorldCraft   Cooking   MissionGameplay   MissionServer
+PluginRecipesManagerBase   WorldCraftActionData   WorldCraftActionReciveData
+```
+
+Every addition was individually justified. The list as a whole has not been
+re-examined since, and it should be before the next one is added.
+
+### Cook attribution after a restart
+
+A dish is attributed to whoever stood alone at the device when its contents grew.
+The first measurement of a session has no prior state and reads whatever is already
+in the pot as growth. After a server restart, someone standing alone at a burning,
+already-filled fireplace can therefore inherit the claim.
+
+The alternative — ignoring the first measurement — was rejected because it breaks
+the normal case: putting a full pot on a fire produces no later growth. See
+[Terje Compatibility](Terje-Compatibility).
+
+### Chernarus in non-Latin scripts
+
+The place name is written in the target script for Russian, Chinese and Japanese
+(`по-чернорусски`, `切爾諾盧斯`, `チェルナルス`) rather than kept in Latin. If the
+project prefers the Latin form everywhere, it is a small, contained change.
+
+---
+
+## Housekeeping
+
+### The registry merge is not reproducible from the repository
+
+The delta merge has been performed by an ad-hoc script written fresh each time and
+kept outside the project. It has been shown to reproduce the shipped state exactly,
+but the script itself is not in the repository, so nobody else can run the merge.
+If the merge is to stay machine-driven, it belongs in `tools/`.
+
+### Redundant data in the deltas
+
+Tag records carry an `appliesTo` list that the registry does not emit and no core
+code reads. Tag membership actually comes from the `tags` field on the ingredient
+records, which covers every entry those lists name. The data is redundant rather
+than broken, but it reads as authoritative and is not.
+
+### Standing warnings
+
+The validation passes with zero errors and 90 warnings. They are not noise to be
+suppressed, and none is a defect:
+
+| Checker | Warnings | What they are |
+|---|---:|---|
+| `naming` | 56 | Vanilla name collisions unverifiable — the empty reference index |
+| `configcpp` | 24 | Every `modded class`, listed on purpose so it stays visible |
+| `chefznut` | 8 | Seeds, containers and salt without a nutrition block, correctly so |
+| `classrefs` | 1 | Foreign classes unverifiable — same missing index |
+| `deltas` | 1 | Two slices define one category with different parents; the concrete one wins |
+
+---
+
+## What to do first
+
+1. Compile. Nothing below this matters until the code builds.
+2. Fill `vanilla-classes.txt`. Cheap, and it upgrades a whole class of findings
+   from *plausible* to decided.
+3. Walk Gate 1's checklist on a server without Terje.
+4. Decide the `hiddenSelections` name before commissioning any mesh.
