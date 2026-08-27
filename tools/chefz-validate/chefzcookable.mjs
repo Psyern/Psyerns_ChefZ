@@ -12,6 +12,10 @@
 // B: Die Skriptklasse sagt CanBeCooked() == true, aber die Configklasse hat kein
 //    Food > FoodStages. Dann entsteht kein FoodStage-Objekt und der Kochtakt
 //    greift ins Leere.
+// C: Die Klasse ist Nahrung, aber keine Klasse ihrer Skriptkette registriert eine
+//    Essaktion. Vanilla setzt sie NICHT auf Edible_Base, sondern auf jeder
+//    Nahrungsklasse einzeln (Potato.c: ActionEatFruit). Ohne sie wird das Item
+//    im Spiel schlicht nicht zum Essen angeboten - wieder ohne Fehlerbild.
 
 import path from 'node:path';
 import { Findings, readText, stripComments, walk, exists, rel } from './lib.mjs';
@@ -57,6 +61,26 @@ function canBeCookedOverrides(files) {
   return out;
 }
 
+/** Skriptklassen, die eine SELBST-Essaktion registrieren (ActionEat*). */
+function eatActionClasses(files) {
+  const out = new Set();
+  for (const file of files) {
+    const txt = readText(file);
+    if (!txt || !txt.includes('AddAction')) continue;
+    const src = stripComments(txt);
+    const classPositions = [...src.matchAll(/class\s+([A-Za-z_]\w*)/g)]
+      .map(m => ({ name: m[1], at: m.index }));
+    // ActionForceFeed zaehlt bewusst NICHT: das ist Fuettern durch einen anderen
+    // Spieler. Wer sein eigenes Essen essen will, braucht ein ActionEat*.
+    for (const m of src.matchAll(/AddAction\s*\(\s*(ActionEat\w*)\s*\)/g)) {
+      let owner = null;
+      for (const c of classPositions) { if (c.at < m.index) owner = c.name; else break; }
+      if (owner) out.add(owner);
+    }
+  }
+  return out;
+}
+
 function vanillaScriptFiles() {
   if (!exists(VANILLA_SCRIPTS)) return [];
   return walk(VANILLA_SCRIPTS, (_f, n) => n.endsWith('.c'));
@@ -79,7 +103,9 @@ export default function run() {
       + 'sicher fehlt.');
   }
 
-  const overrides = canBeCookedOverrides([...chefzFiles, ...vanillaFiles]);
+  const allScriptFiles = [...chefzFiles, ...vanillaFiles];
+  const overrides = canBeCookedOverrides(allScriptFiles);
+  const eaters = eatActionClasses(allScriptFiles);
 
 
   // Vanilla-Skriptklassen und ihre Elternkette, damit die Kette ueber die
@@ -159,6 +185,25 @@ export default function run() {
         + `Schalter den Daten) oder "override bool CanBeCooked() { return true; }" auf der eigenen `
         + `Klasse. Soll sie wirklich nicht kochen, schreib "return false;" hin - dann ist es eine `
         + `Entscheidung und keine Luecke.`);
+    }
+
+    // --- Regel C ---
+    // Nahrung ist, was Naehrwerte oder Garstufen deklariert. Basisklassen ohne
+    // eigene Item-Existenz melden wir mit, weil dort die Loesung hingehoert.
+    const nutrition = hasNode(cls, 'Food', 'Nutrition') || hasNode(cls, 'Nutrition');
+    // Bulk im Kochgeraet wird nicht gegessen, sondern portioniert - dafuer haengt
+    // ChefZ_ActionTakePortion an ChefZ_PortionedFood_Base. Eine Essaktion dort zu
+    // verlangen waere falsch.
+    const isBulk = chain.includes('ChefZ_PortionedFood_Base') || chain.includes('ChefZ_PortionedDish_Base');
+    if (cls.startsWith('ChefZ_') && (stages || nutrition) && !isBulk
+        && !chain.some(n => eaters.has(n))) {
+      f.error(entry.file ?? null, entry.line ?? 0,
+        `"${cls}" ist Nahrung, aber keine Klasse ihrer Skriptkette (${chain.join(' -> ')}) `
+        + `registriert eine Essaktion. Vanilla setzt sie nicht auf Edible_Base, sondern auf jeder `
+        + `Nahrungsklasse einzeln - Potato.c schreibt "AddAction(ActionEatFruit);". Ohne sie wird `
+        + `das Item im Spiel nicht zum Essen angeboten: kein Fehlerbild, keine Logzeile, die `
+        + `Aktion fehlt einfach. Abhilfe: SetActions() ueberschreiben und die passende ActionEat*-`
+        + `Variante hinzufuegen (Fruit, Big, Small, Cereal, Meat je nach Item und Animation).`);
     }
 
     // --- Regel B ---
