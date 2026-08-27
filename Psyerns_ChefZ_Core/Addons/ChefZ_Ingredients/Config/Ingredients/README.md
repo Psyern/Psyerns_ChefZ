@@ -19,3 +19,34 @@ und `Tomato` existieren in Vanilla — ChefZ erweitert sie, statt eine zweite
 Kartoffel zu bauen (Production Map §13, §14). `GreenBellPepper` ist die
 Vanilla-Paprika und laeuft deshalb in dieselbe Schnittstufe wie `ChefZ_Paprika`
 (§15).
+
+## Mushrooms.json
+
+Slice `sauces`. Entwurf 05 §2, zweiter Deklarationsweg: FREMDE Klassen werden im
+Slice-JSON gebunden, nie in ihrer eigenen `config.cpp` (Workflow §10.5). Die
+Pilze existieren in Vanilla; ChefZ baut keinen zweiten Pilz.
+
+Gebunden sind **sieben** der neun Vanilla-Pilzklassen. Nicht gebunden sind
+`AmanitaMushroom` (giftig) und `PsilocybeMushroom` (halluzinogen): waeren sie in
+der Kategorie `MUSHROOM`, liesse `RCP_ChefZ_MushroomCreamSauce` eine Sauce aus
+Fliegenpilzen kochen — und die Ergebnisklasse `ChefZ_MushroomCreamSauce` traegt
+`toxicity = 0`. Das Gift verschwaende beim Kochen, lautlos. Ein spaeterer Slice,
+der Giftpilze bewusst will, gibt ihnen eine eigene Kategorie und ein eigenes
+Ergebnis.
+
+Die Kategorie `MUSHROOM` und der Tag `CHEFZ_MUSHROOM` stehen im Delta
+`_deltas/sauces.json`.
+
+## Nachtraegliche Kategorien des Slice `sauces`
+
+Additiv, ohne Verhaltensaenderung fuer bestehende Selektoren:
+
+- `Dairy.json` — `ChefZ_Cream` bekommt `CREAM`, `ChefZ_Butter` bekommt `BUTTER`
+  (zusaetzlich zu `DAIRY`).
+- `VanillaProduce.json` — `Tomato` bekommt `TOMATO` (zusaetzlich zu `VEGETABLE`).
+- `config.cpp`, `CfgChefZIngredients` — `ChefZ_ChoppedTomato` bekommt `TOMATO`.
+
+Grund: `RCP_ChefZ_TomatoSauce` und `RCP_ChefZ_CreamSauce` brauchen Slots, die
+Tomate, Sahne und Butter treffen und nicht jedes Gemuese beziehungsweise jedes
+Milchprodukt. `ChefZ_Garlic` (ganze Knolle, ChefZ_Farming) hat bewusst **keine**
+neue Kategorie bekommen — dieser Slice schreibt nicht in fremde Module.

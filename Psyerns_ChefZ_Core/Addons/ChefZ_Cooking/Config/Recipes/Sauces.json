@@ -1,0 +1,244 @@
+{
+    "kind": "recipe",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "RCP_ChefZ_TomatoSauce",
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 180.0,
+            "minTemperature": 60.0,
+            "slots": [
+                {
+                    "slotId": "tomato",
+                    "match": { "category": "TOMATO" },
+                    "minCount": 3,
+                    "maxCount": 6,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "GRAM",
+                    "amount": { "min": 8.0 },
+                    "consume": "amount",
+                    "consumeAmount": 8.0
+                },
+                {
+                    "slotId": "aromatics",
+                    "match": { "category": "ROOT_VEGETABLE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 2
+                }
+            ],
+            "policy": { "extraItems": "forbid" },
+            "outputs": [
+                {
+                    "cls": "ChefZ_TomatoSauce",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "nutritionModifier": 1.0,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_CreamSauce",
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron", "FryingPan"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 120.0,
+            "minTemperature": 50.0,
+            "slots": [
+                {
+                    "slotId": "cream",
+                    "match": { "category": "CREAM" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "butter",
+                    "match": { "category": "BUTTER" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0
+                }
+            ],
+            "policy": { "extraItems": "forbid" },
+            "outputs": [
+                {
+                    "cls": "ChefZ_CreamSauce",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "nutritionModifier": 1.0,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_MushroomCreamSauce",
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron", "FryingPan"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 150.0,
+            "minTemperature": 50.0,
+            "slots": [
+                {
+                    "slotId": "mushrooms",
+                    "match": { "category": "MUSHROOM" },
+                    "minCount": 3,
+                    "maxCount": 6,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "cream",
+                    "match": { "category": "CREAM" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0
+                }
+            ],
+            "policy": { "extraItems": "forbid" },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_Parsley",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            { "cls": "ChefZ_Parsley" },
+                            { "cls": "ChefZ_DriedParsley" }
+                        ]
+                    },
+                    "points": 2.0
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_MushroomCreamSauce",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "nutritionModifier": 1.0,
+            "priority": 20
+        },
+
+        {
+            "id": "RCP_ChefZ_BoneBroth",
+            "contexts": [
+                {
+                    "deviceClasses": ["Pot", "Cauldron"],
+                    "methods": ["BOILING"],
+                    "requiresLiquid": true,
+                    "liquidTypes": ["Water"],
+                    "liquidQuantity": { "min": 200.0 }
+                }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 420.0,
+            "minTemperature": 80.0,
+            "slots": [
+                {
+                    "slotId": "bones",
+                    "match": { "category": "BONE" },
+                    "minCount": 2,
+                    "maxCount": 4,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "aromatics",
+                    "match": { "category": "ROOT_VEGETABLE" },
+                    "minCount": 2,
+                    "maxCount": 4,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid" },
+            "outputs": [
+                {
+                    "cls": "ChefZ_BoneBroth",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "nutritionModifier": 1.0,
+            "priority": 0
+        }
+    ]
+}

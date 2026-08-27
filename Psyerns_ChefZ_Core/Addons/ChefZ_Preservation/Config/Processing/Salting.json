@@ -1,0 +1,85 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_SaltMeat",
+            "process": "PROCESS_SALT_CURE",
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": {
+                        "allOf": [
+                            { "category": "MEAT" },
+                            { "state": "RAW" },
+                            { "not": { "category": "SAUSAGE" } }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "amount",
+                    "consumeAmount": 20,
+                    "allowPartial": true
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SaltedMeat",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "SALTED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 0
+        },
+        {
+            "id": "TR_SaltFish",
+            "process": "PROCESS_SALT_CURE",
+            "inputs": [
+                {
+                    "slotId": "fillet",
+                    "match": {
+                        "allOf": [
+                            { "category": "FISH" },
+                            { "state": "RAW" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "amount",
+                    "consumeAmount": 20,
+                    "allowPartial": true
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SaltedFish",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "SALTED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 0
+        }
+    ]
+}

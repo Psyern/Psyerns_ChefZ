@@ -1,0 +1,56 @@
+{
+    "slice": "sauces",
+
+    "categories": [
+        { "id": "SAUCE", "parent": null, "displayName": "#STR_CHEFZ_CAT_SAUCE" },
+        { "id": "TOMATO_SAUCE", "parent": "SAUCE", "displayName": "#STR_CHEFZ_CAT_TOMATO_SAUCE" },
+        { "id": "CREAM_SAUCE", "parent": "SAUCE", "displayName": "#STR_CHEFZ_CAT_CREAM_SAUCE" },
+        { "id": "BROTH", "parent": null, "displayName": "#STR_CHEFZ_CAT_BROTH" },
+        { "id": "MUSHROOM", "parent": null, "displayName": "#STR_CHEFZ_CAT_MUSHROOM" },
+        { "id": "CREAM", "parent": "DAIRY", "displayName": "#STR_CHEFZ_CAT_CREAM" },
+        { "id": "BUTTER", "parent": "DAIRY", "displayName": "#STR_CHEFZ_CAT_BUTTER" },
+        { "id": "TOMATO", "parent": "VEGETABLE", "displayName": "#STR_CHEFZ_CAT_TOMATO" }
+    ],
+
+    "tags": [
+        {
+            "id": "CHEFZ_SAUCE_BASE",
+            "displayName": "#STR_CHEFZ_TAG_SAUCE_BASE",
+            "appliesTo": ["ChefZ_TomatoSauce", "ChefZ_CreamSauce", "ChefZ_MushroomCreamSauce"]
+        },
+        {
+            "id": "CHEFZ_CREAMY",
+            "displayName": "#STR_CHEFZ_TAG_CREAMY",
+            "appliesTo": ["ChefZ_CreamSauce", "ChefZ_MushroomCreamSauce"]
+        },
+        {
+            "id": "CHEFZ_MUSHROOM",
+            "displayName": "#STR_CHEFZ_TAG_MUSHROOM",
+            "appliesTo": [
+                "AgaricusMushroom", "AuriculariaMushroom", "BoletusMushroom",
+                "CraterellusMushroom", "LactariusMushroom", "MacrolepiotaMushroom",
+                "PleurotusMushroom"
+            ]
+        }
+    ],
+
+    "nutrition": [
+        { "class": "ChefZ_BoneBroth", "energy": 150, "water": 320, "stomach": 60 },
+        { "class": "ChefZ_TomatoSauce", "energy": 130, "water": 105, "stomach": 45 },
+        { "class": "ChefZ_CreamSauce", "energy": 620, "water": 90, "stomach": 40 },
+        { "class": "ChefZ_MushroomCreamSauce", "energy": 330, "water": 130, "stomach": 45 }
+    ],
+
+    "preservation": [
+        { "id": "SAUCE", "scope": "category", "spoilageMultiplier": 0.7 },
+        { "id": "BROTH", "scope": "category", "spoilageMultiplier": 0.9 }
+    ],
+
+    "classes": [
+        "ChefZ_SauceItemBase",
+        "ChefZ_BoneBroth",
+        "ChefZ_TomatoSauce",
+        "ChefZ_CreamSauce",
+        "ChefZ_MushroomCreamSauce"
+    ]
+}

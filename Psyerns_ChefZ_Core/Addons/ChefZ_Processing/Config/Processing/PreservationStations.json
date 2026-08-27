@@ -1,0 +1,14 @@
+{
+    "kind": "station",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_Smoker",
+            "stationCategories": ["SMOKER"],
+            "processes": ["PROCESS_SMOKE"],
+            "parallelSlots": 2,
+            "speedMultiplier": 1.0,
+            "needsFuel": true
+        }
+    ]
+}

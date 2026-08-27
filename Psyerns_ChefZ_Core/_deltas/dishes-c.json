@@ -1,0 +1,43 @@
+{
+    "slice": "dishes-c",
+
+    "categories": [
+        {
+            "id": "BEANS",
+            "parent": "VEGETABLE",
+            "displayName": "#STR_CHEFZ_CAT_BEANS"
+        }
+    ],
+
+    "tags": [],
+
+    "processes": [],
+
+    "nutrition": [
+        { "class": "ChefZ_HunterStewBulk",      "energy": 270, "water": 160, "stomach": 90 },
+        { "class": "ChefZ_HunterStewBowl",      "energy": 270, "water": 160, "stomach": 90 },
+        { "class": "ChefZ_FishermanStewBulk",   "energy": 220, "water": 160, "stomach": 75 },
+        { "class": "ChefZ_FishermanStewBowl",   "energy": 220, "water": 160, "stomach": 75 },
+        { "class": "ChefZ_VegetableSoupBulk",   "energy": 165, "water": 195, "stomach": 45 },
+        { "class": "ChefZ_VegetableSoupBowl",   "energy": 165, "water": 195, "stomach": 45 },
+        { "class": "ChefZ_BoneBrothSoupBulk",   "energy": 180, "water": 200, "stomach": 55 },
+        { "class": "ChefZ_BoneBrothSoupBowl",   "energy": 180, "water": 200, "stomach": 55 },
+        { "class": "ChefZ_ChernarusChiliBulk",  "energy": 325, "water": 85,  "stomach": 105 },
+        { "class": "ChefZ_ChernarusChiliBowl",  "energy": 325, "water": 85,  "stomach": 105 }
+    ],
+
+    "preservation": [],
+
+    "classes": [
+        "ChefZ_HunterStewBulk",
+        "ChefZ_HunterStewBowl",
+        "ChefZ_FishermanStewBulk",
+        "ChefZ_FishermanStewBowl",
+        "ChefZ_VegetableSoupBulk",
+        "ChefZ_VegetableSoupBowl",
+        "ChefZ_BoneBrothSoupBulk",
+        "ChefZ_BoneBrothSoupBowl",
+        "ChefZ_ChernarusChiliBulk",
+        "ChefZ_ChernarusChiliBowl"
+    ]
+}

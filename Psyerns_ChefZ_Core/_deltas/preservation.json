@@ -1,0 +1,57 @@
+{
+    "slice": "preservation",
+
+    "categories": [
+        { "id": "FISH", "parent": null, "displayName": "#STR_CHEFZ_CAT_FISH" }
+    ],
+
+    "tags": [
+        { "id": "CHEFZ_PRESERVED", "displayName": "#STR_CHEFZ_TAG_PRESERVED" }
+    ],
+
+    "processes": [
+        { "id": "PROCESS_SMOKE", "station": "ChefZ_Smoker", "durationSec": 1800 },
+        { "id": "PROCESS_SALT_CURE", "durationSec": 6 }
+    ],
+
+    "states": [
+        { "id": "RAW", "displayName": "#STR_CHEFZ_STATE_RAW", "projectsToVanillaStage": "Raw", "edible": true },
+        { "id": "PREPARED", "displayName": "#STR_CHEFZ_STATE_PREPARED", "projectsToVanillaStage": "Raw", "edible": true },
+        { "id": "COOKED", "displayName": "#STR_CHEFZ_STATE_COOKED", "projectsToVanillaStage": "Boiled", "edible": true },
+        { "id": "BAKED", "displayName": "#STR_CHEFZ_STATE_BAKED", "projectsToVanillaStage": "Baked", "edible": true },
+        { "id": "FRIED", "displayName": "#STR_CHEFZ_STATE_FRIED", "projectsToVanillaStage": "Baked", "edible": true },
+        { "id": "SALTED", "displayName": "#STR_CHEFZ_STATE_SALTED", "projectsToVanillaStage": "Raw", "implies": ["CHEFZ_PRESERVED"], "freshnessLifetimeSec": 43200, "edible": true, "preserved": true },
+        { "id": "SMOKED", "displayName": "#STR_CHEFZ_STATE_SMOKED", "projectsToVanillaStage": "Dried", "implies": ["CHEFZ_PRESERVED"], "freshnessLifetimeSec": 86400, "edible": true, "preserved": true },
+        { "id": "DRIED", "displayName": "#STR_CHEFZ_STATE_DRIED", "projectsToVanillaStage": "Dried", "implies": ["CHEFZ_PRESERVED"], "freshnessLifetimeSec": 129600, "edible": true, "preserved": true },
+        { "id": "BURNT", "displayName": "#STR_CHEFZ_STATE_BURNT", "projectsToVanillaStage": "Burned", "edible": false },
+        { "id": "ROTTEN", "displayName": "#STR_CHEFZ_STATE_ROTTEN", "projectsToVanillaStage": "Rotten", "edible": false, "terminal": true }
+    ],
+
+    "preservation": [
+        { "id": "COOKED", "scope": "state", "spoilageMultiplier": 0.8 }
+    ],
+
+    "nutrition": [
+        { "class": "ChefZ_SaltedMeat", "energy": 165, "water": 25, "stomach": 115 },
+        { "class": "ChefZ_DriedMeat", "energy": 320, "water": 5, "stomach": 90 },
+        { "class": "ChefZ_SmokedMeat", "energy": 300, "water": 12, "stomach": 100 },
+        { "class": "ChefZ_SaltedFish", "energy": 130, "water": 22, "stomach": 95 },
+        { "class": "ChefZ_DriedFish", "energy": 260, "water": 4, "stomach": 80 },
+        { "class": "ChefZ_SmokedFish", "energy": 245, "water": 10, "stomach": 88 },
+        { "class": "ChefZ_SmokedSausage", "energy": 500, "water": 14, "stomach": 135 },
+        { "class": "ChefZ_DrySausage", "energy": 545, "water": 6, "stomach": 125 }
+    ],
+
+    "classes": [
+        "ChefZ_PreservedFood_Base",
+        "ChefZ_SaltedMeat",
+        "ChefZ_DriedMeat",
+        "ChefZ_SmokedMeat",
+        "ChefZ_SaltedFish",
+        "ChefZ_DriedFish",
+        "ChefZ_SmokedFish",
+        "ChefZ_SmokedSausage",
+        "ChefZ_DrySausage",
+        "ChefZ_Smoker"
+    ]
+}

@@ -38,6 +38,76 @@
             "fullness": 30
         },
         {
+            "id": "ChefZ_BoneBrothSoupBowl",
+            "scope": "class",
+            "energy": 180,
+            "water": 200,
+            "fullness": 55
+        },
+        {
+            "id": "ChefZ_BoneBrothSoupBulk",
+            "scope": "class",
+            "energy": 180,
+            "water": 200,
+            "fullness": 55
+        },
+        {
+            "id": "ChefZ_ChernarusChiliBowl",
+            "scope": "class",
+            "energy": 325,
+            "water": 85,
+            "fullness": 105
+        },
+        {
+            "id": "ChefZ_ChernarusChiliBulk",
+            "scope": "class",
+            "energy": 325,
+            "water": 85,
+            "fullness": 105
+        },
+        {
+            "id": "ChefZ_FishermanStewBowl",
+            "scope": "class",
+            "energy": 220,
+            "water": 160,
+            "fullness": 75
+        },
+        {
+            "id": "ChefZ_FishermanStewBulk",
+            "scope": "class",
+            "energy": 220,
+            "water": 160,
+            "fullness": 75
+        },
+        {
+            "id": "ChefZ_HunterStewBowl",
+            "scope": "class",
+            "energy": 270,
+            "water": 160,
+            "fullness": 90
+        },
+        {
+            "id": "ChefZ_HunterStewBulk",
+            "scope": "class",
+            "energy": 270,
+            "water": 160,
+            "fullness": 90
+        },
+        {
+            "id": "ChefZ_VegetableSoupBowl",
+            "scope": "class",
+            "energy": 165,
+            "water": 195,
+            "fullness": 45
+        },
+        {
+            "id": "ChefZ_VegetableSoupBulk",
+            "scope": "class",
+            "energy": 165,
+            "water": 195,
+            "fullness": 45
+        },
+        {
             "id": "ChefZ_Bread",
             "scope": "class",
             "energy": 500,
@@ -381,6 +451,62 @@
             "fullness": 138
         },
         {
+            "id": "ChefZ_DriedFish",
+            "scope": "class",
+            "energy": 260,
+            "water": 4,
+            "fullness": 80
+        },
+        {
+            "id": "ChefZ_DriedMeat",
+            "scope": "class",
+            "energy": 320,
+            "water": 5,
+            "fullness": 90
+        },
+        {
+            "id": "ChefZ_DrySausage",
+            "scope": "class",
+            "energy": 545,
+            "water": 6,
+            "fullness": 125
+        },
+        {
+            "id": "ChefZ_SaltedFish",
+            "scope": "class",
+            "energy": 130,
+            "water": 22,
+            "fullness": 95
+        },
+        {
+            "id": "ChefZ_SaltedMeat",
+            "scope": "class",
+            "energy": 165,
+            "water": 25,
+            "fullness": 115
+        },
+        {
+            "id": "ChefZ_SmokedFish",
+            "scope": "class",
+            "energy": 245,
+            "water": 10,
+            "fullness": 88
+        },
+        {
+            "id": "ChefZ_SmokedMeat",
+            "scope": "class",
+            "energy": 300,
+            "water": 12,
+            "fullness": 100
+        },
+        {
+            "id": "ChefZ_SmokedSausage",
+            "scope": "class",
+            "energy": 500,
+            "water": 14,
+            "fullness": 135
+        },
+        {
             "id": "ChefZ_Cabbage",
             "scope": "class",
             "energy": 110,
@@ -456,6 +582,34 @@
             "energy": 180,
             "water": 40,
             "fullness": 40
+        },
+        {
+            "id": "ChefZ_BoneBroth",
+            "scope": "class",
+            "energy": 150,
+            "water": 320,
+            "fullness": 60
+        },
+        {
+            "id": "ChefZ_CreamSauce",
+            "scope": "class",
+            "energy": 620,
+            "water": 90,
+            "fullness": 40
+        },
+        {
+            "id": "ChefZ_MushroomCreamSauce",
+            "scope": "class",
+            "energy": 330,
+            "water": 130,
+            "fullness": 45
+        },
+        {
+            "id": "ChefZ_TomatoSauce",
+            "scope": "class",
+            "energy": 130,
+            "water": 105,
+            "fullness": 45
         }
     ]
 }

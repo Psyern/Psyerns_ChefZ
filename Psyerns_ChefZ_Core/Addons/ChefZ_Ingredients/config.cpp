@@ -778,7 +778,10 @@ class CfgChefZIngredients
     class ChefZ_ChoppedGarlic : ChefZ_ChoppedProduceIngredient  { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
     class ChefZ_ChoppedCarrot : ChefZ_ChoppedProduceIngredient  { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
     class ChefZ_ChoppedCabbage : ChefZ_ChoppedProduceIngredient { categories[] = {"VEGETABLE","LEAF_VEGETABLE"}; };
-    class ChefZ_ChoppedTomato : ChefZ_ChoppedProduceIngredient  {};
+    // TOMATO ergaenzt der Slice "sauces": RCP_ChefZ_TomatoSauce braucht einen
+    // Slot, der Tomaten trifft und nicht jedes Gemuese. Rein additiv - VEGETABLE
+    // bleibt, jeder bestehende Selektor trifft weiter (Delta _deltas/sauces.json).
+    class ChefZ_ChoppedTomato : ChefZ_ChoppedProduceIngredient  { categories[] = {"VEGETABLE","TOMATO"}; };
     class ChefZ_ChoppedPaprika : ChefZ_ChoppedProduceIngredient {};
 };
 
@@ -917,6 +920,41 @@ class CfgChefZ
         dataFiles[] =
         {
             "ChefZ_Ingredients/Config/Ingredients/Spices.json"
+        };
+    };
+
+    // ### SLICE sauces ###
+    //
+    // Speisepilze. Eigener Knoten, eigene Datei - die Slices teilen sich das
+    // Modul, aber keine Datei.
+    //
+    // Warum die Pilze hier und nicht in ChefZ_Cooking liegen: es sind FREMDE
+    // Klassen, und Entwurf 05 §2 bindet fremde Klassen im Slice-JSON eines
+    // ZUTATEN-Moduls - genau wie Potato, Tomato und GreenBellPepper darueber.
+    // ChefZ_Cooking enthaelt Gerichte und Saucen, keine Rohstoffbindungen.
+    //
+    // Mushrooms.json bindet SIEBEN der neun Vanilla-Pilzklassen. NICHT
+    // gebunden sind AmanitaMushroom (giftig) und PsilocybeMushroom
+    // (halluzinogen): wer sie in die Kategorie MUSHROOM aufnaehme, liesse
+    // RCP_ChefZ_MushroomCreamSauce eine Sauce aus Fliegenpilzen kochen, deren
+    // Ergebnisklasse keine Toxizitaet mehr traegt - das Gift verschwaende beim
+    // Kochen. Ein spaeterer Slice, der Giftpilze bewusst will, gibt ihnen eine
+    // eigene Kategorie und ein eigenes Ergebnis.
+    //
+    // loadOrder 230: Pilze sind Zutat FUER andere Ketten (Pilzrahmsauce,
+    // Pilzpfanne), nie umgekehrt. Der Core haengt Records nicht voneinander
+    // ab; die Reihenfolge ist Vorsorge und kostet nichts.
+    //
+    // handcraftRecipeSlots = 0: Pilze werden nicht verarbeitet, sie werden
+    // gekocht. Vanillas Rezeptliste bleibt um kein Bit veraendert.
+    class ChefZ_SauceIngredients
+    {
+        chefzApiVersion = 1;
+        loadOrder = 230;
+        handcraftRecipeSlots = 0;
+        dataFiles[] =
+        {
+            "ChefZ_Ingredients/Config/Ingredients/Mushrooms.json"
         };
     };
 };

@@ -1,0 +1,731 @@
+{
+    "_comment": [
+        "==========================================================================",
+        "SLICE dishes-c - die fuenf Bowl-Gerichte aus Production Map §62 und die",
+        "Gruppenrezepte aus DME-Plan §44.",
+        "",
+        "Quellen: Production Map §62 (Zutaten), §60 (Behaelter), §63 (Qualitaet),",
+        "DME-Plan §41 (Qualitaetsstufen), §42 (Gerichtsnutzen), §43 (Effekt-IDs),",
+        "§44 (Gruppenrezepte); Entwuerfe 08 (Recipe Engine), 09 (Priority),",
+        "12 (Quality), 15 (Portionen), 16 (Behaelter); OF-04, OF-05, OF-09.",
+        "==========================================================================",
+        "",
+        "WARUM ON_STAGE UND NICHT TIMED (08 E5, OF-09 'A fuer V1'):",
+        "Vanilla besitzt bereits ein vollstaendiges Gar- und Verbrennungssystem.",
+        "doneStages nennt die Vanilla-Endstufe, policy.forbiddenStates schliesst",
+        "das Ueberkochen aus. Kein eigener Timer, kein persistenter Kochzustand",
+        "auf einer Vanilla-Klasse, und TIMED bleibt fuer den Betreiber global",
+        "abschaltbar - was diese zwoelf Rezepte nicht treffen darf.",
+        "",
+        "WARUM deviceClasses UND NICHT deviceCategories (08 E4 waere schoener):",
+        "Der Namensraum der Geraetekategorien ist projektweit LEER - CfgChefZDevices",
+        "in diesem Modul deklariert fuer Pot/Cauldron/FryingPan nur",
+        "portionCapacity, kein deviceCategories[]. Ein Slot auf 'POT' zeigte damit",
+        "ins Nichts. Sobald jemand die Geraetekategorien nachtraegt, ist der Tausch",
+        "hier eine Zeile je Rezept. Der Slice sauces hat aus demselben Grund",
+        "deviceClasses gewaehlt; zwei Schreibweisen nebeneinander waeren schlimmer",
+        "als eine, die noch nicht die endgueltige ist.",
+        "",
+        "DIE QUALITAETSLEITER (DME §41, Architekturplan §9, 12 §3):",
+        "Pflicht-Slots geben NULL Punkte - 'Simple' ist per Definition nur die",
+        "Grundzutat. Alles darueber kommt aus optionalen Slots und gradeRules:",
+        "",
+        "    SIMPLE    0  nur die Grundzutaten",
+        "    PREPARED  2  + Kraeuter (das vollstaendige normale Rezept)",
+        "    SEASONED  4  + Salz und ein Gewuerz",
+        "    PREMIUM   7  + Bruehe / Hunter Seasoning / frische Kraeuter",
+        "",
+        "Die Schwellen stehen NICHT hier, sondern im Stufensatz DISH_DEFAULT",
+        "(12 §3). Den gibt es projektweit noch nicht - siehe Gate-2-Befund G2-B6.",
+        "Bis er existiert, ist jede Punktzahl korrekt berechnet und ohne Wirkung.",
+        "",
+        "QUALITAET WIRKT UEBER DIE AUSBEUTE, NICHT UEBER DEN NAEHRWERT (OF-05 B):",
+        "PlayerStomach.AddToStomach holt den Naehrwert ueber Klasse x Foodstage und",
+        "kennt keine Instanzdaten (01 V6). Deshalb gibt es hier KEINE",
+        "outputs[].variants und keine _Premium-Klassen: yieldMultiplier und",
+        "portionBonus des Stufensatzes machen aus demselben Kessel mehr Portionen.",
+        "",
+        "DIE ZWEITE PORTIONSSPERRE (15 §5.2):",
+        "amountPerPortion ist bei JEDEM der zwoelf Rezepte gesetzt. Ohne sie",
+        "ergaebe eine Minimalfuellung im Kessel zwoelf Portionen - der",
+        "offensichtlichste Nahrungsexploit des Mods. Gerechnet ist sie so, dass",
+        "die Sollmenge genau aufgeht:",
+        "    Basisrezept  6 Pflichteinheiten / 1.5 = 4 Portionen (Pot-Deckel 4)",
+        "    Gruppenrezept 10 Pflichteinheiten / 1.25 = 8 Portionen (DME §44)",
+        "",
+        "VERDECKUNGSPRUEFUNG (09 §4, aktiv durchgerechnet):",
+        "1. Gruppenrezept vs. Basisrezept: das Gruppenrezept fordert vier statt",
+        "   zwei Pflichtstuecke (min(minCount,3) hebt die Spezifitaet) und nennt",
+        "   nur den Cauldron. Es rangiert damit ueber dem Basisrezept und gewinnt,",
+        "   sobald genug Zutaten da sind; darunter bindet es gar nicht erst.",
+        "2. _Broth vs. Basisrezept: das Bruehe-Rezept hat einen PFLICHT-Slot mehr",
+        "   (BROTH) und rangiert hoeher. Das Basisrezept verlangt Wasser im",
+        "   Gefaess und wuerde die Bruehe als Fremdkoerper abweisen",
+        "   (extraItems 'forbid') - die beiden koennen sich also gar nicht",
+        "   ueberschneiden, die Rangordnung ist nur die zweite Absicherung.",
+        "3. Zwischen den fuenf Gerichten: jedes fordert mindestens einen",
+        "   Pflicht-Slot, den kein anderes kennt (MUSHROOM / FISH / LEAF_VEGETABLE",
+        "   / BROTH / BEANS), und alle stehen auf extraItems 'forbid'. Ein Kessel",
+        "   kann damit nie zwei dieser Rezepte gleichzeitig erfuellen.",
+        "4. Gegenueber dishes-a und dishes-b: alle zwoelf binden ausschliesslich",
+        "   an Pot und Cauldron und geben in einen BOWL aus. Tellergerichte",
+        "   laufen in der Pfanne und geben in einen PLATE aus.",
+        "",
+        "priority bleibt ueberall 0 (09 E1). Die Ordnung entsteht aus der",
+        "berechneten Spezifitaet; eine Handzahl waere hier ein Rauschen im Review."
+    ],
+    "kind": "recipe",
+    "schemaVersion": 1,
+    "records": [
+
+        {
+            "id": "RCP_ChefZ_HunterStew",
+            "_note": "§62 Hunter Stew: Wild Meat + Potato + Mushrooms + Water + Thyme. Der Thymian ist ein OPTIONALER Slot: ohne ihn ist es SIMPLE, mit ihm das vollstaendige Rezept (DME §41 'Prepared').",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.1,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled"],
+            "contexts": [
+                {
+                    "deviceClasses": ["Pot", "Cauldron"],
+                    "methods": ["BOILING"],
+                    "requiresLiquid": true,
+                    "liquidTypes": ["Water"],
+                    "liquidQuantity": { "min": 200.0 }
+                }
+            ],
+            "slots": [
+                { "slotId": "meat",      "match": { "category": "WILD_MEAT" },      "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots",     "match": { "category": "ROOT_VEGETABLE" }, "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "mushrooms", "match": { "category": "MUSHROOM" },       "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",      "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",      "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 6.0 }, "consume": "amount", "consumeAmount": 6.0, "gradePoints": 1 },
+                { "slotId": "spice",     "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_HS_Thyme",      "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Thyme" }, { "cls": "ChefZ_DriedThyme" } ] }, "points": 1.0 },
+                { "ruleId": "GR_HS_Seasoning",  "when": "anyItem", "selector": { "cls": "ChefZ_HunterSeasoning" }, "points": 2.0 },
+                { "ruleId": "GR_HS_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15,
+                "liquidConsumed": 200.0
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_HunterStewBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 4,
+                    "portionClass": "ChefZ_HunterStewBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.5,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED", "CHEFZ_HUNTERS_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_HunterStewBroth",
+            "_note": "§62 schreibt 'Water/Broth'. Das ist der Bruehe-Weg: die Knochenbruehe (§55, Premium-Basis) ersetzt das Wasser im Gefaess. Ohne Gefaessfluessigkeit gart Vanilla per BAKING - deshalb beide Methoden und beide Endstufen.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.15,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled", "Baked"],
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "slots": [
+                { "slotId": "broth",     "match": { "category": "BROTH" },          "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "meat",      "match": { "category": "WILD_MEAT" },      "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots",     "match": { "category": "ROOT_VEGETABLE" }, "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "mushrooms", "match": { "category": "MUSHROOM" },       "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",      "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",      "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 6.0 }, "consume": "amount", "consumeAmount": 6.0, "gradePoints": 1 },
+                { "slotId": "spice",     "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_HSB_Thyme",      "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Thyme" }, { "cls": "ChefZ_DriedThyme" } ] }, "points": 1.0 },
+                { "ruleId": "GR_HSB_Seasoning",  "when": "anyItem", "selector": { "cls": "ChefZ_HunterSeasoning" }, "points": 2.0 },
+                { "ruleId": "GR_HSB_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_HunterStewBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 5,
+                    "portionClass": "ChefZ_HunterStewBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.5,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED", "CHEFZ_HUNTERS_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_HunterStewGroup",
+            "_note": "DME-Plan §44 woertlich: 4x Meat, 4x Potato, 2x Tomato, Water, Herbs -> 8x Hunter Stew Portion. Nur im Cauldron. Pilze sind hier optional, weil §44 sie nicht nennt - sie heben stattdessen die Stufe.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.1,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled"],
+            "contexts": [
+                {
+                    "deviceClasses": ["Cauldron"],
+                    "methods": ["BOILING"],
+                    "requiresLiquid": true,
+                    "liquidTypes": ["Water"],
+                    "liquidQuantity": { "min": 600.0 }
+                }
+            ],
+            "slots": [
+                { "slotId": "meat",      "match": { "category": "WILD_MEAT" },      "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots",     "match": { "category": "ROOT_VEGETABLE" }, "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "tomato",    "match": { "category": "TOMATO" },         "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "mushrooms", "match": { "category": "MUSHROOM" },       "minCount": 2, "maxCount": 4, "optional": true, "consume": "whole", "gradePoints": 1 },
+                { "slotId": "herb",      "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 3, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",      "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 12.0 }, "consume": "amount", "consumeAmount": 12.0, "gradePoints": 1 },
+                { "slotId": "spice",     "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_HSG_Thyme",      "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Thyme" }, { "cls": "ChefZ_DriedThyme" } ] }, "points": 1.0 },
+                { "ruleId": "GR_HSG_Seasoning",  "when": "anyItem", "selector": { "cls": "ChefZ_HunterSeasoning" }, "points": 2.0 },
+                { "ruleId": "GR_HSG_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15,
+                "liquidConsumed": 600.0
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_HunterStewBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 12,
+                    "portionClass": "ChefZ_HunterStewBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.25,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED", "CHEFZ_HUNTERS_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_FishermanStew",
+            "_note": "§62 Fisherman's Stew: Fish + Potato + Carrot + Water + Dill. Der Dill hebt die Stufe, er ist nicht Pflicht.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.1,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled"],
+            "contexts": [
+                {
+                    "deviceClasses": ["Pot", "Cauldron"],
+                    "methods": ["BOILING"],
+                    "requiresLiquid": true,
+                    "liquidTypes": ["Water"],
+                    "liquidQuantity": { "min": 200.0 }
+                }
+            ],
+            "slots": [
+                { "slotId": "fish",  "match": { "category": "FISH" },           "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 3, "maxCount": 5, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 6.0 }, "consume": "amount", "consumeAmount": 6.0, "gradePoints": 1 },
+                { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_FS_Dill",       "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Dill" }, { "cls": "ChefZ_DriedDill" } ] }, "points": 1.0 },
+                { "ruleId": "GR_FS_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 },
+                { "ruleId": "GR_FS_FreshFish",  "when": "anyItem", "selector": { "allOf": [ { "category": "FISH" }, { "freshness": { "min": 0.85 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15,
+                "liquidConsumed": 200.0
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_FishermanStewBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 4,
+                    "portionClass": "ChefZ_FishermanStewBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.25,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_FishermanStewBroth",
+            "_note": "Der Bruehe-Weg von §62 'Water/Broth' fuer den Fischeintopf.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.15,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled", "Baked"],
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "slots": [
+                { "slotId": "broth", "match": { "category": "BROTH" },          "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "fish",  "match": { "category": "FISH" },           "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 3, "maxCount": 5, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 6.0 }, "consume": "amount", "consumeAmount": 6.0, "gradePoints": 1 },
+                { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_FSB_Dill",       "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Dill" }, { "cls": "ChefZ_DriedDill" } ] }, "points": 1.0 },
+                { "ruleId": "GR_FSB_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_FishermanStewBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 5,
+                    "portionClass": "ChefZ_FishermanStewBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.25,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_FishermanStewGroup",
+            "_note": "Gruppenfassung nach DME §44, uebertragen auf den Fischeintopf: 4x Fisch, 6x Wurzelgemuese, viel Wasser -> 8 Portionen.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.1,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled"],
+            "contexts": [
+                {
+                    "deviceClasses": ["Cauldron"],
+                    "methods": ["BOILING"],
+                    "requiresLiquid": true,
+                    "liquidTypes": ["Water"],
+                    "liquidQuantity": { "min": 600.0 }
+                }
+            ],
+            "slots": [
+                { "slotId": "fish",  "match": { "category": "FISH" },           "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 6, "maxCount": 8, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 3, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 12.0 }, "consume": "amount", "consumeAmount": 12.0, "gradePoints": 1 },
+                { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_FSG_Dill",       "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Dill" }, { "cls": "ChefZ_DriedDill" } ] }, "points": 1.0 },
+                { "ruleId": "GR_FSG_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15,
+                "liquidConsumed": 600.0
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_FishermanStewBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 12,
+                    "portionClass": "ChefZ_FishermanStewBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.25,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_VegetableSoup",
+            "_note": "§62 Vegetable Soup: Potato + Carrot + Onion + Cabbage + Water. Kartoffel, Karotte und Zwiebel sind alle ROOT_VEGETABLE - drei Stueck davon plus ein Blattgemuese bilden das Rezept ab, ohne vier Einzelklassen zu nennen. DME §37 fuehrt sie als 'Basic': fruehes Ueberlebensgericht, keine Zusatzstoffe noetig.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.0,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled"],
+            "contexts": [
+                {
+                    "deviceClasses": ["Pot", "Cauldron"],
+                    "methods": ["BOILING"],
+                    "requiresLiquid": true,
+                    "liquidTypes": ["Water"],
+                    "liquidQuantity": { "min": 250.0 }
+                }
+            ],
+            "slots": [
+                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 3, "maxCount": 5, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "leaf",  "match": { "category": "LEAF_VEGETABLE" }, "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 5.0 }, "consume": "amount", "consumeAmount": 5.0, "gradePoints": 1 },
+                { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_VS_Garlic",     "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Garlic" }, { "cls": "ChefZ_ChoppedGarlic" }, { "cls": "ChefZ_WildGarlic" }, { "cls": "ChefZ_DriedWildGarlic" } ] }, "points": 1.0 },
+                { "ruleId": "GR_VS_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 },
+                { "ruleId": "GR_VS_FreshVeg",   "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_FRESH" }, { "freshness": { "min": 0.85 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15,
+                "liquidConsumed": 250.0
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_VegetableSoupBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 4,
+                    "portionClass": "ChefZ_VegetableSoupBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.0,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED", "CHEFZ_HEALTHY_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_VegetableSoupGroup",
+            "_note": "Gruppenfassung nach DME §44: 6x Wurzelgemuese, 2x Blattgemuese, viel Wasser -> 8 Portionen. Das billigste Gruppengericht des Mods und damit der Einstieg fuer eine Gruppe ohne Jaeger.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.0,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled"],
+            "contexts": [
+                {
+                    "deviceClasses": ["Cauldron"],
+                    "methods": ["BOILING"],
+                    "requiresLiquid": true,
+                    "liquidTypes": ["Water"],
+                    "liquidQuantity": { "min": 700.0 }
+                }
+            ],
+            "slots": [
+                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 6, "maxCount": 9, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "leaf",  "match": { "category": "LEAF_VEGETABLE" }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 3, "optional": true, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 10.0 }, "consume": "amount", "consumeAmount": 10.0, "gradePoints": 1 },
+                { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_VSG_Garlic",     "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Garlic" }, { "cls": "ChefZ_ChoppedGarlic" }, { "cls": "ChefZ_WildGarlic" }, { "cls": "ChefZ_DriedWildGarlic" } ] }, "points": 1.0 },
+                { "ruleId": "GR_VSG_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15,
+                "liquidConsumed": 700.0
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_VegetableSoupBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 12,
+                    "portionClass": "ChefZ_VegetableSoupBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.0,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED", "CHEFZ_HEALTHY_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_BoneBrothSoup",
+            "_note": "§62 Bone Broth Soup: Bone Broth + Vegetables + Herbs. Die Bruehe IST die Fluessigkeit - deshalb keine Gefaessfluessigkeit gefordert und beide Garmethoden zugelassen. Die Kraeuter sind hier Pflicht: ohne sie waere das Gericht von einer aufgewaermten Bruehe nicht zu unterscheiden.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.05,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled", "Baked"],
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "slots": [
+                { "slotId": "broth",  "match": { "category": "BROTH" },     "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "veg",    "match": { "category": "VEGETABLE" }, "minCount": 3, "maxCount": 5, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",   "match": { "tag": "CHEFZ_HERB" },     "minCount": 1, "maxCount": 1, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "salt",   "match": { "category": "SALT" },      "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 5.0 }, "consume": "amount", "consumeAmount": 5.0, "gradePoints": 1 },
+                { "slotId": "spice",  "match": { "tag": "CHEFZ_SPICE" },    "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 },
+                { "slotId": "extraHerb", "match": { "tag": "CHEFZ_HERB" },  "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_BB_Parsley",    "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Parsley" }, { "cls": "ChefZ_DriedParsley" } ] }, "points": 1.0 },
+                { "ruleId": "GR_BB_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_BoneBrothSoupBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 4,
+                    "portionClass": "ChefZ_BoneBrothSoupBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.25,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED", "CHEFZ_HEALTHY_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_BoneBrothSoupGroup",
+            "_note": "Gruppenfassung nach DME §44: 4x Bruehe, 6x Gemuese, Kraeuter -> 8 Portionen. Der Kessel voll Bruehe ist das, was §55 mit 'Premium-Basis' meint.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.05,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled", "Baked"],
+            "contexts": [
+                { "deviceClasses": ["Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "slots": [
+                { "slotId": "broth", "match": { "category": "BROTH" },     "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "veg",   "match": { "category": "VEGETABLE" }, "minCount": 6, "maxCount": 9, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },     "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "salt",  "match": { "category": "SALT" },      "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 10.0 }, "consume": "amount", "consumeAmount": 10.0, "gradePoints": 1 },
+                { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },    "minCount": 1, "maxCount": 3, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_BBG_Parsley",    "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Parsley" }, { "cls": "ChefZ_DriedParsley" } ] }, "points": 1.0 },
+                { "ruleId": "GR_BBG_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 2.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_BoneBrothSoupBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 12,
+                    "portionClass": "ChefZ_BoneBrothSoupBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.5,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HYDRATED", "CHEFZ_HEALTHY_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_ChernarusChili",
+            "_note": "§62 Chernarus Chili: Meat + Baked Beans + Tomato + Paprika + Paprika Powder. KEINE Gefaessfluessigkeit gefordert - Bohnen und Tomaten bringen sie mit; deshalb sind BOILING und BAKING beide zugelassen. Paprika und Paprikapulver werden ueber KLASSEN gebunden und nicht ueber eine Kategorie, entgegen der sonst durchgehaltenen Regel. Der Grund ist eine Luecke, keine Bequemlichkeit: eine Kategorie PAPRIKA gibt es nicht, und die Zutatendatensaetze von ChefZ_Paprika (ChefZ_Farming), ChefZ_ChoppedPaprika und ChefZ_PaprikaPowder (ChefZ_Ingredients) gehoeren fremden Modulen. Der Delta-Weg hilft hier nicht: der Integrator uebernimmt aus einem Tag-Delta nur id und displayName, appliesTo faellt weg - ein hier deklarierter Tag CHEFZ_PAPRIKA haenge an keiner Klasse. FOLGE, offen benannt: chefzstage meldet fuer genau diese drei Klassen 'kochbar ohne FoodStageTransitions'. Der Befund ist hier gegenstandslos - keine der drei hat ueberhaupt einen Food-Knoten, HasFoodStage() liefert false (ItemBase.c:2654), es entsteht kein FoodStage und damit kann auch nichts auf BURNED fallen (FoodStage.c:472). Aufloesen kann ihn nur, wem die drei Klassen gehoeren - entweder durch eine Kategorie PAPRIKA an ihren Zutatendatensaetzen (dann steht hier ein Kategorieselektor) oder durch einen Food-Knoten mit Uebergaengen. Ein unscharfer Selektor auf VEGETABLE waere die schlechtere Antwort: dann ergaebe eine Zwiebel ein Chili.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.1,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled", "Baked"],
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "slots": [
+                { "slotId": "meat",    "match": { "category": "MEAT" },     "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "beans",   "match": { "category": "BEANS" },    "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "tomato",  "match": { "category": "TOMATO" },   "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "paprika", "match": { "anyOf": [ { "cls": "ChefZ_Paprika" }, { "cls": "ChefZ_ChoppedPaprika" }, { "cls": "GreenBellPepper" } ] }, "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "powder",  "match": { "cls": "ChefZ_PaprikaPowder" }, "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",    "match": { "category": "SALT" },     "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 6.0 }, "consume": "amount", "consumeAmount": 6.0, "gradePoints": 1 },
+                { "slotId": "spice",   "match": { "tag": "CHEFZ_SPICE" },   "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 },
+                { "slotId": "herb",    "match": { "tag": "CHEFZ_HERB" },    "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_CC_Pepper",    "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_BlackPepper" }, { "cls": "ChefZ_DriedPeppercorns" } ] }, "points": 1.0 },
+                { "ruleId": "GR_CC_WildMeat",  "when": "anyItem", "selector": { "category": "WILD_MEAT" }, "points": 1.0 },
+                { "ruleId": "GR_CC_Seasoning", "when": "anyItem", "selector": { "cls": "ChefZ_HunterSeasoning" }, "points": 2.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_ChernarusChiliBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 4,
+                    "portionClass": "ChefZ_ChernarusChiliBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.75,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"]
+                }
+            ]
+        },
+
+        {
+            "id": "RCP_ChefZ_ChernarusChiliGroup",
+            "_note": "Gruppenfassung nach DME §44: 4x Fleisch, 2x Bohnen, 4x Tomate, 2x Paprika, 2x Paprikapulver -> 8 Portionen aus dem Kessel.",
+            "priority": 0,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.1,
+            "completion": "ON_STAGE",
+            "doneStages": ["Boiled", "Baked"],
+            "contexts": [
+                { "deviceClasses": ["Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "slots": [
+                { "slotId": "meat",    "match": { "category": "MEAT" },     "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "beans",   "match": { "category": "BEANS" },    "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "tomato",  "match": { "category": "TOMATO" },   "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "paprika", "match": { "anyOf": [ { "cls": "ChefZ_Paprika" }, { "cls": "ChefZ_ChoppedPaprika" }, { "cls": "GreenBellPepper" } ] }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "powder",  "match": { "cls": "ChefZ_PaprikaPowder" }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "salt",    "match": { "category": "SALT" },     "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 12.0 }, "consume": "amount", "consumeAmount": 12.0, "gradePoints": 1 },
+                { "slotId": "spice",   "match": { "tag": "CHEFZ_SPICE" },   "minCount": 1, "maxCount": 3, "optional": true, "consume": "whole", "gradePoints": 1 },
+                { "slotId": "herb",    "match": { "tag": "CHEFZ_HERB" },    "minCount": 1, "maxCount": 3, "optional": true, "consume": "whole", "gradePoints": 1 }
+            ],
+            "gradeRules": [
+                { "ruleId": "GR_CCG_Pepper",    "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_BlackPepper" }, { "cls": "ChefZ_DriedPeppercorns" } ] }, "points": 1.0 },
+                { "ruleId": "GR_CCG_WildMeat",  "when": "anyItem", "selector": { "category": "WILD_MEAT" }, "points": 1.0 },
+                { "ruleId": "GR_CCG_Seasoning", "when": "anyItem", "selector": { "cls": "ChefZ_HunterSeasoning" }, "points": 2.0 }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_ChernarusChiliBulk",
+                    "quantity": 1, "quantityMode": "fixed",
+                    "portions": 12,
+                    "portionClass": "ChefZ_ChernarusChiliBowl",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 1.75,
+                    "containerCategory": "BOWL",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "setState": "COOKED",
+                    "inheritFreshness": true, "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"]
+                }
+            ]
+        }
+    ]
+}

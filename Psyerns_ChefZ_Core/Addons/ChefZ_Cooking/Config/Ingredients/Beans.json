@@ -1,0 +1,30 @@
+{
+    "_comment": [
+        "SLICE dishes-c. Zutatenbindung fuer eine FREMDKLASSE (Vanilla).",
+        "05 §2: eigene Klassen deklarieren sich in der eigenen config.cpp,",
+        "FREMDE im Slice-JSON - Regel §10.5, Vanilla-Dateien werden nie veraendert.",
+        "",
+        "Production Map §62 nennt fuer die Chernarus Chili 'Baked Beans'. Das ist",
+        "Vanillas Bohnendose. Nur die GEOEFFNETE Dose ist Nahrung; die",
+        "ungeoeffnete ist ein Behaelter und darf nie als Zutat binden, sonst",
+        "verschwindet sie samt Inhalt im Kessel.",
+        "",
+        "ACHTUNG KOORDINATION: dishes-a baut Tellergericht §61 Nr. 10",
+        "(Bohnen-Wurst-Teller) und braucht dieselbe Bindung. Existiert dieser",
+        "Datensatz dort ein zweites Mal, gewinnt der erste und der Core meldet",
+        "einen ERROR im Ladebericht. Genau EINER von beiden bleibt."
+    ],
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "BakedBeansCan_Opened",
+            "categories": ["VEGETABLE", "BEANS"],
+            "tags": ["CHEFZ_HOT_MEAL"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        }
+    ]
+}

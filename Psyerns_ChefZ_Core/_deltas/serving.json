@@ -1,0 +1,19 @@
+{
+    "slice": "serving",
+
+    "processes": [
+        { "id": "PROCESS_CARVE_PLATE", "tool": "CUTTING_TOOL", "durationSec": 20 },
+        { "id": "PROCESS_CARVE_BOWL", "tool": "CUTTING_TOOL", "durationSec": 25 }
+    ],
+
+    "classes": [
+        "ChefZ_ContainerItemBase",
+        "ChefZ_EmptyPlate",
+        "ChefZ_EmptyBowl",
+        "ChefZ_EmptyCan",
+        "ChefZ_EmptyJar",
+        "ChefZ_EmptyBox",
+        "ChefZ_PortionedDish_Base",
+        "ChefZ_ServedDish_Base"
+    ]
+}

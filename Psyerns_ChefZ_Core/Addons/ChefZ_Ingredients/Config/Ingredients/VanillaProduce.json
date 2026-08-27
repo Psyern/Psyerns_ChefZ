@@ -12,7 +12,7 @@
         },
         {
             "id": "Tomato",
-            "categories": ["VEGETABLE"],
+            "categories": ["VEGETABLE", "TOMATO"],
             "tags": ["CHEFZ_FRESH"],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",

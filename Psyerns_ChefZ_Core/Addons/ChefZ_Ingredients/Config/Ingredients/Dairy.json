@@ -10,13 +10,13 @@
         },
         {
             "id": "ChefZ_Cream",
-            "categories": ["DAIRY"],
+            "categories": ["DAIRY", "CREAM"],
             "tags": ["CHEFZ_DAIRY"],
             "decays": true
         },
         {
             "id": "ChefZ_Butter",
-            "categories": ["DAIRY"],
+            "categories": ["DAIRY", "BUTTER"],
             "tags": ["CHEFZ_DAIRY"],
             "decays": true
         },

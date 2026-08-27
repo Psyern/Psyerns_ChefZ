@@ -1,0 +1,32 @@
+{
+    "slice": "dishes-b",
+
+    "categories": [],
+    "tags": [],
+    "processes": [],
+    "nutrition": [],
+    "preservation": [],
+
+    "classes": [
+        "ChefZ_TacticalBreakfastBulk",
+        "ChefZ_TacticalBreakfast",
+        "ChefZ_ScrambledEggSausageBulk",
+        "ChefZ_ScrambledEggSausage",
+        "ChefZ_FarmersBreakfastBulk",
+        "ChefZ_FarmersBreakfast",
+        "ChefZ_CheeseFlatbreadBulk",
+        "ChefZ_CheeseFlatbread",
+        "ChefZ_SausageBreadPlateBulk",
+        "ChefZ_SausageBreadPlate",
+        "ChefZ_MushroomPanBulk",
+        "ChefZ_MushroomPan",
+        "ChefZ_PotatoPancakesBulk",
+        "ChefZ_PotatoPancakes",
+        "ChefZ_MeatDumplingsBulk",
+        "ChefZ_MeatDumplings",
+        "ChefZ_MilkRiceBulk",
+        "ChefZ_MilkRice",
+        "ChefZ_HoneyBreadPlateBulk",
+        "ChefZ_HoneyBreadPlate"
+    ]
+}

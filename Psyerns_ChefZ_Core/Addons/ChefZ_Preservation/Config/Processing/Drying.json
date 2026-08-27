@@ -1,0 +1,86 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_SaltedMeatToDried",
+            "process": "PROCESS_DRY",
+            "stationsAllowed": ["ChefZ_DryingRack"],
+            "durationOverrideSec": 3600,
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "cls": "ChefZ_SaltedMeat" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_DriedMeat",
+                    "quantityMode": "fromInput",
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100
+        },
+        {
+            "id": "TR_SaltedFishToDried",
+            "process": "PROCESS_DRY",
+            "stationsAllowed": ["ChefZ_DryingRack"],
+            "durationOverrideSec": 2700,
+            "inputs": [
+                {
+                    "slotId": "fillet",
+                    "match": { "cls": "ChefZ_SaltedFish" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_DriedFish",
+                    "quantityMode": "fromInput",
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100
+        },
+        {
+            "id": "TR_RawSausageToDry",
+            "process": "PROCESS_DRY",
+            "stationsAllowed": ["ChefZ_DryingRack"],
+            "durationOverrideSec": 5400,
+            "inputs": [
+                {
+                    "slotId": "sausage",
+                    "match": {
+                        "allOf": [
+                            { "category": "SAUSAGE" },
+                            { "state": "RAW" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_DrySausage",
+                    "quantityMode": "fromInput",
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100
+        }
+    ]
+}

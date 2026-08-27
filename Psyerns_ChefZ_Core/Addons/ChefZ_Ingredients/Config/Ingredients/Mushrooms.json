@@ -1,0 +1,62 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "AgaricusMushroom",
+            "categories": ["MUSHROOM"],
+            "tags": ["CHEFZ_MUSHROOM", "CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "AuriculariaMushroom",
+            "categories": ["MUSHROOM"],
+            "tags": ["CHEFZ_MUSHROOM", "CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "BoletusMushroom",
+            "categories": ["MUSHROOM"],
+            "tags": ["CHEFZ_MUSHROOM", "CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "CraterellusMushroom",
+            "categories": ["MUSHROOM"],
+            "tags": ["CHEFZ_MUSHROOM", "CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "LactariusMushroom",
+            "categories": ["MUSHROOM"],
+            "tags": ["CHEFZ_MUSHROOM", "CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "MacrolepiotaMushroom",
+            "categories": ["MUSHROOM"],
+            "tags": ["CHEFZ_MUSHROOM", "CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "PleurotusMushroom",
+            "categories": ["MUSHROOM"],
+            "tags": ["CHEFZ_MUSHROOM", "CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        }
+    ]
+}

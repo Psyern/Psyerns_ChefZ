@@ -11,6 +11,11 @@
             "displayName": "#STR_CHEFZ_CAT_EGG"
         },
         {
+            "id": "BEANS",
+            "parent": "VEGETABLE",
+            "displayName": "#STR_CHEFZ_CAT_BEANS"
+        },
+        {
             "id": "BREAD",
             "displayName": "#STR_CHEFZ_CAT_BREAD"
         },
@@ -95,6 +100,10 @@
             "displayName": "#STR_CHEFZ_CAT_WILD_MEAT"
         },
         {
+            "id": "FISH",
+            "displayName": "#STR_CHEFZ_CAT_FISH"
+        },
+        {
             "id": "LEAF_VEGETABLE",
             "parent": "VEGETABLE",
             "displayName": "#STR_CHEFZ_CAT_LEAF_VEGETABLE"
@@ -108,6 +117,43 @@
             "id": "SALT",
             "parent": "SPICE",
             "displayName": "#STR_CHEFZ_CAT_SALT"
+        },
+        {
+            "id": "BROTH",
+            "displayName": "#STR_CHEFZ_CAT_BROTH"
+        },
+        {
+            "id": "BUTTER",
+            "parent": "DAIRY",
+            "displayName": "#STR_CHEFZ_CAT_BUTTER"
+        },
+        {
+            "id": "CREAM",
+            "parent": "DAIRY",
+            "displayName": "#STR_CHEFZ_CAT_CREAM"
+        },
+        {
+            "id": "CREAM_SAUCE",
+            "parent": "SAUCE",
+            "displayName": "#STR_CHEFZ_CAT_CREAM_SAUCE"
+        },
+        {
+            "id": "MUSHROOM",
+            "displayName": "#STR_CHEFZ_CAT_MUSHROOM"
+        },
+        {
+            "id": "SAUCE",
+            "displayName": "#STR_CHEFZ_CAT_SAUCE"
+        },
+        {
+            "id": "TOMATO",
+            "parent": "VEGETABLE",
+            "displayName": "#STR_CHEFZ_CAT_TOMATO"
+        },
+        {
+            "id": "TOMATO_SAUCE",
+            "parent": "SAUCE",
+            "displayName": "#STR_CHEFZ_CAT_TOMATO_SAUCE"
         }
     ]
 }

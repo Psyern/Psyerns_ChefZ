@@ -1,0 +1,91 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_SaltedMeatToSmoked",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": ["ChefZ_Smoker"],
+            "durationOverrideSec": 1800,
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "cls": "ChefZ_SaltedMeat" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SmokedMeat",
+                    "quantityMode": "fromInput",
+                    "setState": "SMOKED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100
+        },
+        {
+            "id": "TR_FishToSmoked",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": ["ChefZ_Smoker"],
+            "durationOverrideSec": 1500,
+            "inputs": [
+                {
+                    "slotId": "fillet",
+                    "match": {
+                        "allOf": [
+                            { "category": "FISH" },
+                            { "state": "RAW" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SmokedFish",
+                    "quantityMode": "fromInput",
+                    "setState": "SMOKED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100
+        },
+        {
+            "id": "TR_RawSausageToSmoked",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": ["ChefZ_Smoker"],
+            "durationOverrideSec": 2400,
+            "inputs": [
+                {
+                    "slotId": "sausage",
+                    "match": {
+                        "allOf": [
+                            { "category": "SAUSAGE" },
+                            { "state": "RAW" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SmokedSausage",
+                    "quantityMode": "fromInput",
+                    "setState": "SMOKED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100
+        }
+    ]
+}

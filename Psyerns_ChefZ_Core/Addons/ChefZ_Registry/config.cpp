@@ -51,16 +51,37 @@ class CfgPatches
         // ChefZ_Meat:        ChefZ_DicedMeat, die Minced*- und Sausage-Klassen.
         // ChefZ_Baking:      ChefZ_Bread, ChefZ_Flatbread.
         //
-        // Alle fuenf sind ECHTE Abhaengigkeiten der DATEN, nicht Kosmetik:
+        // Zugekommen mit dem Merge der ERSTEN WELLE (Slices preservation,
+        // serving, sauces):
+        // ChefZ_Preservation: ChefZ_SaltedMeat, ChefZ_DriedMeat,
+        //                     ChefZ_SmokedMeat, ChefZ_SaltedFish,
+        //                     ChefZ_DriedFish, ChefZ_SmokedFish,
+        //                     ChefZ_SmokedSausage, ChefZ_DrySausage.
+        // ChefZ_Cooking:      ChefZ_BoneBroth, ChefZ_TomatoSauce,
+        //                     ChefZ_CreamSauce, ChefZ_MushroomCreamSauce.
+        //
+        // Zugekommen mit dem Merge der ZWEITEN WELLE (Slices dishes-a,
+        // dishes-b, dishes-c): kein neues Addon. Die zehn Nutrition-Records
+        // aus dishes-c (Hunter Stew, Fisherman Stew, Vegetable Soup, Bone
+        // Broth Soup, Chernarus Chili - je Bulk und Bowl) nennen Klassen aus
+        // ChefZ_Cooking, das oben bereits steht. dishes-a und dishes-b bringen
+        // ueberhaupt keinen Nutrition-Record mit; ihre vierzig Gerichtsklassen
+        // tragen ihre Werte allein im "class Nutrition" der eigenen
+        // config.cpp. Diese Ungleichbehandlung ist gemeldet, nicht geheilt -
+        // sie zu heilen hiesse, in fremde Slices zu schreiben.
+        //
+        // Alle sieben sind ECHTE Abhaengigkeiten der DATEN, nicht Kosmetik:
         // jeder Nutrition-Record nennt eine Klasse, und ein Record ohne seine
         // Klasse ist ein Naehrwert fuer nichts. Keines der genannten Module
         // haengt umgekehrt von ChefZ_Registry ab - es gibt also keinen Zyklus.
+        // Geprueft fuer die beiden Neuzugaenge: ChefZ_Preservation (loadOrder
+        // 280) und ChefZ_Cooking (300/310) liegen beide hinter der Registry
+        // (150) und nennen ChefZ_Registry in keinem requiredAddons[].
         //
         // Bis S19 stand hier eine andere Begruendung: Rang-1-Prozesse, die ein
         // Registryrecord feldweise patcht. Die ist mit K1 entfallen - die
         // Registry fuehrt keine Prozesse mehr (siehe dataFiles[] unten). Die
-        // fuenf Eintraege bleiben trotzdem noetig, jetzt aus dem
-        // Nutrition-Grund.
+        // Eintraege bleiben trotzdem noetig, jetzt aus dem Nutrition-Grund.
         requiredAddons[] =
         {
             "DZ_Data",
@@ -69,7 +90,9 @@ class CfgPatches
             "ChefZ_Ingredients",
             "ChefZ_Processing",
             "ChefZ_Meat",
-            "ChefZ_Baking"
+            "ChefZ_Baking",
+            "ChefZ_Preservation",
+            "ChefZ_Cooking"
         };
     };
 };

@@ -1,0 +1,1214 @@
+{
+    "kind": "recipe",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "RCP_ChefZ_SurvivorSpaghetti",
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 180.0,
+            "minTemperature": 60.0,
+            "slots": [
+                {
+                    "slotId": "pasta",
+                    "match": { "category": "PASTA" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "sauce",
+                    "match": { "category": "TOMATO_SAUCE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_SpagParsley",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            { "cls": "ChefZ_Parsley" },
+                            { "cls": "ChefZ_DriedParsley" }
+                        ]
+                    },
+                    "points": 1.0
+                },
+                {
+                    "ruleId": "GR_SpagFreshHerb",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            { "tag": "CHEFZ_HERB" },
+                            { "freshness": { "min": 0.8 } }
+                        ]
+                    },
+                    "points": 1.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_SurvivorSpaghettiBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_SurvivorSpaghetti",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_ENERGIZED"],
+            "nutritionModifier": 1.1,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_SausagePasta",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 200.0,
+            "minTemperature": 60.0,
+            "slots": [
+                {
+                    "slotId": "pasta",
+                    "match": { "category": "PASTA" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "sausage",
+                    "match": { "category": "SAUSAGE" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "fat",
+                    "match": {
+                        "anyOf": [
+                            { "category": "FAT" },
+                            { "category": "BUTTER" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "sauce",
+                    "match": { "category": "SAUCE" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "mushrooms",
+                    "match": { "category": "MUSHROOM" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_SausPastaPremiumSausage",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            { "category": "SAUSAGE" },
+                            { "tag": "CHEFZ_PREMIUM" }
+                        ]
+                    },
+                    "points": 2.0
+                },
+                {
+                    "ruleId": "GR_SausPastaPaprika",
+                    "when": "anyItem",
+                    "selector": { "cls": "ChefZ_PaprikaPowder" },
+                    "points": 1.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_SausagePastaBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_SausagePasta",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"],
+            "nutritionModifier": 1.1,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_HunterPasta",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 240.0,
+            "minTemperature": 70.0,
+            "slots": [
+                {
+                    "slotId": "pasta",
+                    "match": { "category": "PASTA" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "wildmeat",
+                    "match": {
+                        "allOf": [
+                            { "category": "WILD_MEAT" },
+                            { "not": { "category": "SAUSAGE" } }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "mushrooms",
+                    "match": { "category": "MUSHROOM" },
+                    "minCount": 1,
+                    "maxCount": 4,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "cream",
+                    "match": {
+                        "anyOf": [
+                            { "category": "CREAM" },
+                            { "category": "CREAM_SAUCE" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_HuntPastaThyme",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            { "cls": "ChefZ_Thyme" },
+                            { "cls": "ChefZ_DriedThyme" }
+                        ]
+                    },
+                    "points": 1.0
+                },
+                {
+                    "ruleId": "GR_HuntPastaSeasoning",
+                    "when": "anyItem",
+                    "selector": { "cls": "ChefZ_HunterSeasoning" },
+                    "points": 2.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_HunterPastaBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_HunterPasta",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HUNTERS_MEAL"],
+            "nutritionModifier": 1.15,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_CreamMushroomPasta",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 210.0,
+            "minTemperature": 60.0,
+            "slots": [
+                {
+                    "slotId": "pasta",
+                    "match": { "category": "PASTA" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "mushrooms",
+                    "match": { "category": "MUSHROOM" },
+                    "minCount": 2,
+                    "maxCount": 5,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "cream",
+                    "match": { "category": "CREAM" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "butter",
+                    "match": { "category": "BUTTER" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_CreamMushParsley",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            { "cls": "ChefZ_Parsley" },
+                            { "cls": "ChefZ_DriedParsley" }
+                        ]
+                    },
+                    "points": 1.0
+                },
+                {
+                    "ruleId": "GR_CreamMushCount",
+                    "when": "slotCount",
+                    "slotId": "mushrooms",
+                    "pointsPerItem": 0.5,
+                    "maxPoints": 2.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_CreamMushroomPastaBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_CreamMushroomPasta",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_ENERGIZED"],
+            "nutritionModifier": 1.1,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_MacAndCheese",
+            "contexts": [
+                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING", "BAKING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 200.0,
+            "minTemperature": 60.0,
+            "slots": [
+                {
+                    "slotId": "pasta",
+                    "match": { "category": "PASTA" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "dairy",
+                    "match": {
+                        "allOf": [
+                            { "category": "DAIRY" },
+                            { "not": { "category": "BUTTER" } }
+                        ]
+                    },
+                    "minCount": 2,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "butter",
+                    "match": { "category": "BUTTER" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_MacCheese",
+                    "when": "anyItem",
+                    "selector": { "cls": "ChefZ_Cheese" },
+                    "points": 2.0
+                },
+                {
+                    "ruleId": "GR_MacMilk",
+                    "when": "anyItem",
+                    "selector": { "cls": "ChefZ_Milk" },
+                    "points": 1.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_MacAndCheeseBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_MacAndCheese",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_ENERGIZED"],
+            "nutritionModifier": 1.1,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_SausagePotatoes",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 220.0,
+            "minTemperature": 70.0,
+            "slots": [
+                {
+                    "slotId": "potato",
+                    "match": { "cls": "Potato" },
+                    "minCount": 1,
+                    "maxCount": 4,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "sausage",
+                    "match": { "category": "SAUSAGE" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "fat",
+                    "match": {
+                        "anyOf": [
+                            { "category": "FAT" },
+                            { "category": "BUTTER" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "aromatics",
+                    "match": { "category": "ROOT_VEGETABLE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_SausPotRosemary",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            { "cls": "ChefZ_Rosemary" },
+                            { "cls": "ChefZ_DriedRosemary" }
+                        ]
+                    },
+                    "points": 1.0
+                },
+                {
+                    "ruleId": "GR_SausPotPremiumSausage",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            { "category": "SAUSAGE" },
+                            { "tag": "CHEFZ_PREMIUM" }
+                        ]
+                    },
+                    "points": 2.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_SausagePotatoesBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_SausagePotatoes",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"],
+            "nutritionModifier": 1.05,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_HunterPlate",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 260.0,
+            "minTemperature": 70.0,
+            "slots": [
+                {
+                    "slotId": "wildmeat",
+                    "match": {
+                        "allOf": [
+                            { "category": "WILD_MEAT" },
+                            { "not": { "category": "SAUSAGE" } }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "potato",
+                    "match": { "cls": "Potato" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "mushrooms",
+                    "match": { "category": "MUSHROOM" },
+                    "minCount": 1,
+                    "maxCount": 4,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "fat",
+                    "match": {
+                        "anyOf": [
+                            { "category": "FAT" },
+                            { "category": "BUTTER" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_HuntPlateThyme",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            { "cls": "ChefZ_Thyme" },
+                            { "cls": "ChefZ_DriedThyme" }
+                        ]
+                    },
+                    "points": 1.0
+                },
+                {
+                    "ruleId": "GR_HuntPlateSeasoning",
+                    "when": "anyItem",
+                    "selector": { "cls": "ChefZ_HunterSeasoning" },
+                    "points": 2.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_HunterPlateBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_HunterPlate",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HUNTERS_MEAL", "CHEFZ_HEARTY_MEAL"],
+            "nutritionModifier": 1.15,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_BloodSausagePlate",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 220.0,
+            "minTemperature": 70.0,
+            "slots": [
+                {
+                    "slotId": "sausage",
+                    "match": {
+                        "anyOf": [
+                            { "tag": "CHEFZ_BLOOD_SAUSAGE" },
+                            { "category": "SAUSAGE" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "potato",
+                    "match": { "cls": "Potato" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "onion",
+                    "match": { "category": "ROOT_VEGETABLE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_BloodSausage",
+                    "when": "anyItem",
+                    "selector": { "tag": "CHEFZ_BLOOD_SAUSAGE" },
+                    "points": 3.0
+                },
+                {
+                    "ruleId": "GR_BloodPlateMarjoram",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            { "tag": "CHEFZ_HERB" },
+                            { "freshness": { "min": 0.8 } }
+                        ]
+                    },
+                    "points": 1.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_BloodSausagePlateBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_BloodSausagePlate",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"],
+            "nutritionModifier": 1.05,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_FishPotatoPlate",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 200.0,
+            "minTemperature": 65.0,
+            "slots": [
+                {
+                    "slotId": "fish",
+                    "match": { "category": "FISH" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "potato",
+                    "match": { "cls": "Potato" },
+                    "minCount": 1,
+                    "maxCount": 4,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "fat",
+                    "match": {
+                        "anyOf": [
+                            { "category": "FAT" },
+                            { "category": "BUTTER" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_FishDill",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            { "cls": "ChefZ_Dill" },
+                            { "cls": "ChefZ_DriedDill" }
+                        ]
+                    },
+                    "points": 2.0
+                },
+                {
+                    "ruleId": "GR_FishFresh",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            { "category": "FISH" },
+                            { "freshness": { "min": 0.8 } }
+                        ]
+                    },
+                    "points": 1.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_FishPotatoPlateBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_FishPotatoPlate",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEALTHY_MEAL"],
+            "nutritionModifier": 1.1,
+            "priority": 0
+        },
+
+        {
+            "id": "RCP_ChefZ_BeanSausagePlate",
+            "contexts": [
+                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING", "BOILING"] }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 180.0,
+            "minTemperature": 65.0,
+            "slots": [
+                {
+                    "slotId": "beans",
+                    "match": { "category": "BEANS" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "sausage",
+                    "match": { "category": "SAUSAGE" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "onion",
+                    "match": { "category": "ROOT_VEGETABLE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "salt",
+                    "match": { "category": "SALT" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": { "min": 5.0 },
+                    "consume": "amount",
+                    "consumeAmount": 5.0,
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "spice",
+                    "match": { "tag": "CHEFZ_SPICE" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herbs",
+                    "match": { "tag": "CHEFZ_HERB" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
+            "gradeRules": [
+                {
+                    "ruleId": "GR_BeanPaprika",
+                    "when": "anyItem",
+                    "selector": { "cls": "ChefZ_PaprikaPowder" },
+                    "points": 2.0
+                },
+                {
+                    "ruleId": "GR_BeanPremiumSausage",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            { "category": "SAUSAGE" },
+                            { "tag": "CHEFZ_PREMIUM" }
+                        ]
+                    },
+                    "points": 2.0
+                }
+            ],
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_BeanSausagePlateBulk",
+                    "quantity": 1.0,
+                    "quantityMode": "fixed",
+                    "portions": 2,
+                    "portionClass": "ChefZ_BeanSausagePlate",
+                    "portionQuantity": 1.0,
+                    "amountPerPortion": 2.0,
+                    "containerCategory": "PLATE",
+                    "consumesContainer": true,
+                    "returnContainer": "AUTO",
+                    "emptyOnLastPortion": "",
+                    "scaleWithDevice": true,
+                    "inheritQuality": true,
+                    "inheritState": true,
+                    "takeDurationSec": 0.0,
+                    "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"],
+            "nutritionModifier": 1.05,
+            "priority": 0
+        }
+    ]
+}

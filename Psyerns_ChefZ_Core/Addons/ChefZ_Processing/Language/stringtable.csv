@@ -35,3 +35,7 @@
 "STR_CHEFZ_PROC_GRIND_MEAT","Grind meat","Grind meat","Fleisch wolfen"
 "STR_CHEFZ_PROC_STUFF_SAUSAGE","Stuff sausage","Stuff sausage","Wurst fuellen"
 "STR_CHEFZ_PROC_CLEAN_CASING","Clean casings","Clean casings","Wursthuellen reinigen"
+"STR_CHEFZ_ITEM_SMOKER0","Smoker","Smoker","Raeucherschrank"
+"STR_CHEFZ_ITEM_SMOKER1","A wooden cabinet for cold smoking. Needs a fire burning next to it.","A wooden cabinet for cold smoking. Needs a fire burning next to it.","Ein Holzschrank zum Kalt Raeuchern. Braucht ein brennendes Feuer daneben."
+"STR_CHEFZ_PROC_SMOKE","Smoke","Smoke","Raeuchern"
+"STR_CHEFZ_PROC_SALT_CURE","Cure with salt","Cure with salt","Mit Salz poekeln"

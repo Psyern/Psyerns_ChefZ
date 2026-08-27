@@ -1,0 +1,47 @@
+{
+    "_comment": "Slice serving. Woher die erste Schuessel kommt: Brennholz + Messer. Zwei HANDCRAFT-Transforms, je ein Eingang plus Werkzeuggruppe (01 V12: Vanilla kennt MAX_NUMBER_OF_INGREDIENTS = 2, ein Eingang OHNE Werkzeug waere nicht registrierbar). Die Prozesse stehen in Rang 1 in der config.cpp dieses Moduls, weil ActionCondition auch clientseitig den Aktionstext braucht (02 §2).",
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_CarveWoodenPlate",
+            "process": "PROCESS_CARVE_PLATE",
+            "inputs": [
+                {
+                    "slotId": "wood",
+                    "match": { "cls": "Firewood" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_EmptyPlate",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_CarveWoodenBowl",
+            "process": "PROCESS_CARVE_BOWL",
+            "inputs": [
+                {
+                    "slotId": "wood",
+                    "match": { "cls": "Firewood" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_EmptyBowl",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
+            ],
+            "priority": 0
+        }
+    ]
+}

@@ -9,6 +9,10 @@
             "id": "CHEFZ_EGG"
         },
         {
+            "id": "CHEFZ_BLOOD_SAUSAGE",
+            "displayName": "#STR_CHEFZ_TAG_BLOOD_SAUSAGE"
+        },
+        {
             "id": "CHEFZ_BAKED_GOOD",
             "displayName": "#STR_CHEFZ_TAG_BAKED_GOOD"
         },
@@ -44,6 +48,10 @@
             "id": "CHEFZ_WILD_MEAT"
         },
         {
+            "id": "CHEFZ_PRESERVED",
+            "displayName": "#STR_CHEFZ_TAG_PRESERVED"
+        },
+        {
             "id": "CHEFZ_CHOPPED"
         },
         {
@@ -51,6 +59,18 @@
         },
         {
             "id": "CHEFZ_SALT"
+        },
+        {
+            "id": "CHEFZ_CREAMY",
+            "displayName": "#STR_CHEFZ_TAG_CREAMY"
+        },
+        {
+            "id": "CHEFZ_MUSHROOM",
+            "displayName": "#STR_CHEFZ_TAG_MUSHROOM"
+        },
+        {
+            "id": "CHEFZ_SAUCE_BASE",
+            "displayName": "#STR_CHEFZ_TAG_SAUCE_BASE"
         }
     ]
 }

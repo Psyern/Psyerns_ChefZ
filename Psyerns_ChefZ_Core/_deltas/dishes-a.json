@@ -1,0 +1,36 @@
+{
+    "slice": "dishes-a",
+    "categories": [],
+    "tags": [
+        {
+            "id": "CHEFZ_BLOOD_SAUSAGE",
+            "displayName": "#STR_CHEFZ_TAG_BLOOD_SAUSAGE",
+            "appliesTo": []
+        }
+    ],
+    "processes": [],
+    "nutrition": [],
+    "preservation": [],
+    "classes": [
+        "ChefZ_SurvivorSpaghettiBulk",
+        "ChefZ_SurvivorSpaghetti",
+        "ChefZ_SausagePastaBulk",
+        "ChefZ_SausagePasta",
+        "ChefZ_HunterPastaBulk",
+        "ChefZ_HunterPasta",
+        "ChefZ_CreamMushroomPastaBulk",
+        "ChefZ_CreamMushroomPasta",
+        "ChefZ_MacAndCheeseBulk",
+        "ChefZ_MacAndCheese",
+        "ChefZ_SausagePotatoesBulk",
+        "ChefZ_SausagePotatoes",
+        "ChefZ_HunterPlateBulk",
+        "ChefZ_HunterPlate",
+        "ChefZ_BloodSausagePlateBulk",
+        "ChefZ_BloodSausagePlate",
+        "ChefZ_FishPotatoPlateBulk",
+        "ChefZ_FishPotatoPlate",
+        "ChefZ_BeanSausagePlateBulk",
+        "ChefZ_BeanSausagePlate"
+    ]
+}

@@ -50,7 +50,12 @@ class CfgPatches
             // ### SLICE salt ###
             "ChefZ_SaltPan",
             // ### SLICE meat ### (Production Map §57: Schneidebrett, Fleischwolf)
-            "ChefZ_CuttingBoard", "ChefZ_MeatGrinder"
+            "ChefZ_CuttingBoard", "ChefZ_MeatGrinder",
+            // ### SLICE preservation ### (Production Map §57: Raeucherschrank.
+            // Der Trockenrahmen steht schon oben beim Slice "herbs" - er ist
+            // dieselbe Station und bekommt hier nur neue Transforms, keine
+            // zweite Klasse.)
+            "ChefZ_Smoker"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -388,6 +393,62 @@ class CfgVehicles
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
     };
+
+    //==========================================================================
+    // ### SLICE preservation ###   Production Map §41/§46/§57, DME-Plan §31.3
+    //
+    // ChefZ_Smoker - der Raeucherschrank. Die zweite und letzte neue Station
+    // der V1-Preservation-Matrix; der Trockenrahmen steht schon weiter oben.
+    //
+    // WARUM EINE EIGENE STATION UND NICHT VANILLAS RAEUCHERSLOTS (11 E6,
+    // woertlich im Kopf von ChefZ_ProcessingStation_Base.c):
+    // Vanillas Cooking.SmokeItem kennt GENAU EINEN Uebergang RAW -> DRIED und
+    // sonst BURNED (01 V14). Die Matrix §56 verlangt vier Uebergaenge mit
+    // VERSCHIEDENEN Haltbarkeiten - geraeuchert ist nicht getrocknet, obwohl
+    // beide auf dieselbe Vanilla-Garstufe projizieren. In Vanillas Kette ist
+    // das nicht abbildbar, und der Versuch haette ein
+    // "modded class FireplaceBase" gekostet (Verstoss gegen I6).
+    //
+    // Vanilla-Raeuchern in den Smoking-Slots eines Fasses bleibt dadurch EXAKT
+    // wie es ist. Diese Station fasst Vanillas Kochkette an keiner Stelle an.
+    //
+    // WARUM Inventory_Base UND NICHT FireplaceBase ODER Barrel_ColorBase:
+    // beide bringen die gesamte Feuerstellenmechanik mit - Brennstoffverwaltung,
+    // Kochslots, Rauchslots und Cooking.ProcessItemToCook mit seinem
+    // PARAM_BURN_DAMAGE_COEF. Die Wurst im Schrank ginge darin kaputt, bevor
+    // der ChefZ-Job auch nur laeuft. Die Waerme holt sich der Schrank statt
+    // dessen aus einer brennenden Feuerstelle in Reichweite - dieselbe Loesung
+    // wie bei ChefZ_SaltPan und aus demselben Grund.
+    //
+    // Der Cargo-Bereich IST die Eingangsseite: ChefZ_ProcessingStation_Base
+    // liest seine Zutaten ueber ChefZ_FactCollector.CollectFromCargo aus genau
+    // diesem Bereich. 4x3 fasst sechs Wuerste oder Filets - ein Raeuchergang
+    // soll sich lohnen, ohne ein Lager zu sein.
+    //
+    // MODELL: Vanilla-Proxy wooden_case.p3d, eine Holzkiste in der richtigen
+    // Groessenordnung. Ziel ist ein hoher, schmaler Holzschrank mit Rost und
+    // Rauchabzug - eigene Geometrie, siehe Asset-Bedarf des Slice.
+    //==========================================================================
+    class ChefZ_Smoker : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SMOKER0";
+        descriptionShort = "#STR_CHEFZ_ITEM_SMOKER1";
+        model = "\DZ\gear\camping\wooden_case.p3d";
+        rotationFlags = 2;
+        itemSize[] = {6, 5};
+        weight = 11000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        varQuantityDestroyOnMin = 0;
+        lifetime = 172800;
+
+        class Cargo
+        {
+            itemsCargoSize[] = {4, 3};
+            openable = 0;
+        };
+    };
 };
 
 //------------------------------------------------------------------------------
@@ -493,6 +554,32 @@ class CfgChefZ
         dataFiles[] =
         {
             "ChefZ_Processing/Config/Processing/Stations.json"
+        };
+    };
+
+    // ### SLICE preservation ###
+    //
+    // Nur der Stationsdatensatz des Raeucherschranks. Die Transforms der
+    // Konservierungskette liegen in ChefZ_Preservation und melden sich dort an -
+    // hier stuende sonst Content eines anderen Moduls.
+    //
+    // Der Trockenrahmen fehlt in dieser Liste, weil er nicht fehlt: sein
+    // Datensatz steht in HerbStations.json und bietet PROCESS_DRY bereits an.
+    // Ein zweiter Datensatz gleicher ID waere ein doppelter Record desselben
+    // Rangs, und ChefZ_RecordSink weist einen solchen ab, statt ihn zu patchen.
+    //
+    // handcraftRecipeSlots = 0: der einzige HANDCRAFT-Prozess des Slice
+    // (PROCESS_SALT_CURE) traegt seine beiden Transforms in ChefZ_Preservation,
+    // und dort sind die zwei Plaetze auch reserviert. Zweimal reservieren hiesse
+    // vier Plaetze belegen und zwei davon leer lassen.
+    class ChefZ_PreservationStations
+    {
+        chefzApiVersion = 1;
+        loadOrder = 270;
+        handcraftRecipeSlots = 0;
+        dataFiles[] =
+        {
+            "ChefZ_Processing/Config/Processing/PreservationStations.json"
         };
     };
 };
@@ -678,6 +765,63 @@ class CfgChefZProcesses
         toolGroups[] = {"CUTTING_TOOL"};
         baseDurationSec = 12.0;
         toolDamage = 1;
+    };
+
+    //--------------------------------------------------------------------------
+    // ### SLICE preservation ### Die zwei fehlenden Verben der Matrix §56.
+    //
+    // Das dritte, PROCESS_DRY, steht schon oben beim Slice "herbs" und wird
+    // hier BEWUSST NICHT zweitgenannt: der Kopf jenes Blocks sagt ausdruecklich
+    // "PROCESS_DRY ist bewusst allgemein gehalten und traegt keinen
+    // Kraeuterbezug: derselbe Trockenrahmen trocknet laut Production Map §57
+    // auch Fleisch, Fisch und Nudeln". Genau dieser Fall tritt hier ein. Ein
+    // zweiter Knoten gleichen Namens waere eine doppelte Klassendefinition und
+    // ein zweiter Ort fuer dieselbe Dauer.
+    //--------------------------------------------------------------------------
+
+    // §41/§46: Raeuchern. STATION_TIMED - der Schrank arbeitet stundenlang und
+    // ohne Spieler (11 §3).
+    //
+    // requiresHeat = 1: §41 nennt "Raw Sausage + Smoker + FUEL". Das ist der
+    // Preis der laengsten Haltbarkeit der Matrix - 30 Minuten Feuer neben dem
+    // Schrank. Ohne diese Bedingung waere Raeuchern strikt besser als Trocknen
+    // und Trocknen damit sinnlos.
+    //
+    // KEIN minTemperature: die Waermebedingung haengt an einer BRENNENDEN
+    // Feuerstelle in Reichweite, nicht an der Eigentemperatur des Schranks -
+    // dieselbe Festlegung wie bei PROCESS_BOIL_BRINE und aus demselben Grund.
+    // Ein Temperaturschwellwert waere hier eine geratene Zahl.
+    class PROCESS_SMOKE
+    {
+        exec = "STATION_TIMED";
+        displayName = "#STR_CHEFZ_PROC_SMOKE";
+        baseDurationSec = 1800.0;
+        requiresHeat = 1;
+    };
+
+    // §43/§45: Salzen und Poekeln. HANDCRAFT, und das ist die einzige
+    // Ausfuehrungsform, die hier passt:
+    //
+    // - Der Vorgang hat KEINEN Ort. §43 und DME-Plan §31.1 nennen "Raw Meat +
+    //   Salt" und keine Station. Wer gerade ein Reh zerlegt hat, soll es
+    //   einsalzen koennen, ohne erst eine Station zu bauen - Poekeln ist der
+    //   frueheste Schritt der Konservierungskette.
+    // - Er hat GENAU ZWEI Eingaenge, Fleisch und Salz. Das ist woertlich die
+    //   Form, die Vanillas RecipeBase traegt: MAX_NUMBER_OF_INGREDIENTS = 2
+    //   (01 V12). Beide Plaetze sind mit Zutaten belegt - deshalb steht hier
+    //   KEINE toolGroups-Zeile. Ein Werkzeug waere der dritte Platz, und den
+    //   gibt es nicht.
+    //
+    // baseDurationSec = 6: kein Wartevorgang. Das Einreiben dauert Sekunden,
+    // die Haltbarkeit entsteht danach von selbst.
+    class PROCESS_SALT_CURE
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_SALT_CURE";
+        baseDurationSec = 6.0;
+        animationLength = 1.0;
+        specialty = 0.02;
+        toolDamage = 0;
     };
 };
 
