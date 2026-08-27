@@ -6,7 +6,15 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const TOOL_DIR = path.dirname(fileURLToPath(import.meta.url));
-export const ROOT = path.resolve(TOOL_DIR, '..', '..');
+
+// Die Projektwurzel ist normalerweise zwei Ebenen ueber diesem Verzeichnis.
+// CHEFZ_VALIDATE_ROOT haengt sie um - das ist der Pruefstand-Haken: die
+// Selbstpruefung der Validatoren (siehe README, "Wegwerf-Modul") laesst denselben
+// Code ueber einen absichtlich fehlerhaften Baum laufen, ohne diesen Baum ins
+// Projekt legen zu muessen.
+export const ROOT = process.env.CHEFZ_VALIDATE_ROOT
+  ? path.resolve(process.env.CHEFZ_VALIDATE_ROOT)
+  : path.resolve(TOOL_DIR, '..', '..');
 export const MOD_ROOT = path.join(ROOT, 'Psyerns_ChefZ_Core');
 export const ADDONS_DIR = path.join(MOD_ROOT, 'Addons');
 export const DELTA_DIR = path.join(MOD_ROOT, '_deltas');
@@ -114,7 +122,7 @@ export function readText(file) {
 
 // --- config.cpp ------------------------------------------------------------
 
-function stripComments(src) {
+export function stripComments(src) {
   // Blockkommentare und Zeilenkommentare entfernen, Zeilenzahl erhalten.
   let out = src.replace(/\/\*[\s\S]*?\*\//g, m => m.replace(/[^\n]/g, ' '));
   out = out.replace(/\/\/[^\n]*/g, m => ' '.repeat(m.length));
@@ -235,8 +243,21 @@ export function refIndex() {
 
 /** Sammelt jeden ChefZ-Klassennamen, der in JSON-Dateien referenziert wird. */
 export function collectJsonClassRefs(obj, file, acc = [], keyPath = '') {
-  const CLASS_KEYS = new Set(['Item', 'Result', 'ReturnContainer', 'class', 'station', 'Station']);
-  const ARRAY_CLASS_KEYS = new Set(['CookingDevice', 'OptionalIngredients', 'appliesTo', 'classes', 'Tools', 'AnyOf']);
+  // Felder, deren Wert ein KLASSENNAME ist. Die zweite Zeile ist die Erweiterung
+  // aus 19 S19 ("classrefs erw."): cls/portionClass/emptyClass/
+  // emptyOnLastPortion/returnContainer sind die Klassenfelder des Rezept-,
+  // Transform- und Behaeltermodells (08 §3, 15 §3, 16 §3.1).
+  const CLASS_KEYS = new Set([
+    'Item', 'Result', 'ReturnContainer', 'class', 'station', 'Station',
+    'cls', 'portionClass', 'emptyClass', 'emptyOnLastPortion', 'returnContainer',
+  ]);
+  const ARRAY_CLASS_KEYS = new Set([
+    'CookingDevice', 'OptionalIngredients', 'appliesTo', 'classes', 'Tools', 'AnyOf',
+    'deviceClasses',
+  ]);
+  // Werte, die zwar in einem Klassenfeld stehen, aber keine Klasse benennen.
+  // "AUTO" heisst "nimm den Behaelter, aus dem die Zutat kam" (16 §4).
+  const NOT_A_CLASS = new Set(['', 'AUTO']);
   if (obj === null || typeof obj !== 'object') return acc;
   if (Array.isArray(obj)) {
     for (const v of obj) collectJsonClassRefs(v, file, acc, keyPath);
@@ -244,9 +265,9 @@ export function collectJsonClassRefs(obj, file, acc = [], keyPath = '') {
   }
   for (const [k, v] of Object.entries(obj)) {
     if (typeof v === 'string' && CLASS_KEYS.has(k)) {
-      acc.push({ name: v, file, key: `${keyPath}${k}` });
+      if (!NOT_A_CLASS.has(v)) acc.push({ name: v, file, key: `${keyPath}${k}` });
     } else if (Array.isArray(v) && ARRAY_CLASS_KEYS.has(k)) {
-      for (const s of v) if (typeof s === 'string') acc.push({ name: s, file, key: `${keyPath}${k}[]` });
+      for (const s of v) if (typeof s === 'string' && !NOT_A_CLASS.has(s)) acc.push({ name: s, file, key: `${keyPath}${k}[]` });
     } else if (typeof v === 'object') {
       collectJsonClassRefs(v, file, acc, `${keyPath}${k}.`);
     }
@@ -261,4 +282,142 @@ export function lineOf(file, needle) {
   const lines = txt.split(/\r?\n/);
   for (let i = 0; i < lines.length; i++) if (lines[i].includes(needle)) return i + 1;
   return 0;
+}
+
+// --- config.cpp als BAUM ---------------------------------------------------
+//
+// parseConfigCpp() liefert eine flache Klassenliste - fuer CfgPatches und
+// Namenspruefungen genau richtig. Die Pruefer chefznut, chefzstage und chefzsym
+// brauchen dagegen den BAUM mitsamt den Feldwerten: "hat ChefZ_X einen
+// Unterknoten Nutrition", "was steht in scope", "welche Kinder hat
+// CfgChefZCategories". Dafuer ist der folgende Leser da.
+//
+// Bewusst tolerant und ohne Anspruch auf einen vollstaendigen Enfusion-Parser:
+// er kennt Klassen, Zuweisungen (skalar und Array) und sonst nichts. Was er
+// nicht versteht, ueberspringt er - ein Validator, der an einer exotischen
+// Schreibweise aussteigt, waere schlechter als einer, der sie ignoriert.
+
+function newNode(name, parent, line) {
+  return { name, parent, line, props: {}, children: [], childMap: new Map() };
+}
+
+/**
+ * config.cpp als Baum. Wurzelknoten heisst "" und traegt CfgPatches, CfgMods,
+ * CfgVehicles, CfgChefZ* ... als Kinder.
+ *
+ *   node = { name, parent, line, props, children[], childMap }
+ *   props["scope"]        = 0            (Zahl oder String)
+ *   props["categories"]   = ["A","B"]    (aus "categories[] = {...}")
+ */
+export function parseConfigTree(file) {
+  const raw = readText(file);
+  const root = newNode('', null, 0);
+  if (raw === null) return root;
+  const src = stripComments(raw);
+
+  const stack = [root];
+  let i = 0, line = 1;
+  const n = src.length;
+
+  const addChild = (node, child) => {
+    node.children.push(child);
+    if (!node.childMap.has(child.name)) node.childMap.set(child.name, child);
+  };
+
+  while (i < n) {
+    const ch = src[i];
+    if (ch === '\n') { line++; i++; continue; }
+    if (ch === ' ' || ch === '\t' || ch === '\r' || ch === ';') { i++; continue; }
+    if (ch === '}') { if (stack.length > 1) stack.pop(); i++; continue; }
+    if (ch === '{') { i++; continue; }          // Block ohne Kopf - ignorieren
+
+    // Klassendeklaration
+    const cls = /^class\s+([A-Za-z_]\w*)\s*(?::\s*([A-Za-z_]\w*)\s*)?/.exec(src.slice(i));
+    if (cls && (i === 0 || /[^\w]/.test(src[i - 1]))) {
+      const rest = src.slice(i + cls[0].length);
+      const open = /^\s*\{/.exec(rest);
+      const node = newNode(cls[1], cls[2] || null, line);
+      addChild(stack[stack.length - 1], node);
+      const consumed = cls[0].length + (open ? open[0].length : 0);
+      for (const c of src.slice(i, i + consumed)) if (c === '\n') line++;
+      i += consumed;
+      if (open) stack.push(node);
+      continue;
+    }
+
+    // Zuweisung:  name = wert;   oder   name[] = { ... };
+    const assign = /^([A-Za-z_]\w*)\s*(\[\s*\])?\s*=\s*/.exec(src.slice(i));
+    if (assign) {
+      let j = i + assign[0].length;
+      let value;
+      if (assign[2] || src[j] === '{') {
+        const close = src.indexOf('}', j);
+        const body = close < 0 ? '' : src.slice(j + 1, close);
+        value = body.split(',').map(s => s.trim().replace(/^"|"$/g, '')).filter(s => s.length > 0);
+        j = close < 0 ? n : close + 1;
+      } else {
+        const end = src.indexOf(';', j);
+        const rawVal = (end < 0 ? src.slice(j) : src.slice(j, end)).trim();
+        value = rawVal.replace(/^"|"$/g, '');
+        j = end < 0 ? n : end + 1;
+      }
+      for (const c of src.slice(i, j)) if (c === '\n') line++;
+      const node = stack[stack.length - 1];
+      node.props[assign[1]] = value;
+      if (!node.propLines) node.propLines = {};
+      node.propLines[assign[1]] = line;
+      i = j;
+      continue;
+    }
+
+    i++;                                        // alles andere: weiter
+  }
+  return root;
+}
+
+/** Alle config.cpp-Baeume des Projekts, mit Dateipfad. */
+export function configTrees() {
+  return configCppFiles().map(f => ({ file: f, tree: parseConfigTree(f) }));
+}
+
+/** Alle Enforce-Skriptdateien der Module. */
+export function scriptFiles() {
+  return allModuleDirs().flatMap(d => walk(d, (_f, n) => n.toLowerCase().endsWith('.c')));
+}
+
+/**
+ * Alle Enforce-Skripte des Core - der Geltungsbereich von chefzcore und chefzlog.
+ *
+ * Bewusst das GANZE Modulverzeichnis und nicht nur Scripts/: 19 S19 schreibt
+ * "Addons/ChefZ_Core/Scripts/**", aber Testskripte liegen unter Tests/<name>/
+ * Scripts/ und werden ueber missionScriptModule genauso ausgeliefert. Was im PBO
+ * landet, faellt unter I3 und I4 - unabhaengig davon, in welchem Unterordner es
+ * liegt.
+ */
+export function coreScriptFiles() {
+  const dir = path.join(ADDONS_DIR, 'ChefZ_Core');
+  return walk(dir, (_f, n) => n.toLowerCase().endsWith('.c'));
+}
+
+/**
+ * Alle im Projekt deklarierten SKRIPT-Klassen (nicht Config-Klassen).
+ * name -> { parent, file, line, modded }
+ */
+export function scriptClasses() {
+  const map = new Map();
+  const re = /(?:^|\n)\s*(modded\s+)?class\s+([A-Za-z_]\w*)\s*(?:(?::|extends)\s*([A-Za-z_]\w*))?/g;
+  for (const f of scriptFiles()) {
+    const txt = readText(f);
+    if (!txt) continue;
+    const src = stripComments(txt);
+    let m;
+    while ((m = re.exec(src)) !== null) {
+      const name = m[2];
+      const line = src.slice(0, m.index).split('\n').length;
+      const entry = { parent: m[3] || null, file: f, line, modded: !!m[1] };
+      if (m[1]) continue;                       // modded class erweitert, deklariert nicht
+      if (!map.has(name)) map.set(name, entry);
+    }
+  }
+  return map;
 }

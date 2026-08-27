@@ -9,7 +9,14 @@
 
 import { ROOT } from './lib.mjs';
 
-const CHECKS = ['schema', 'configcpp', 'classrefs', 'naming', 'stringtable', 'deltas'];
+// Reihenfolge = Lesereihenfolge im Bericht: erst die Form der Dateien, dann
+// die Bedeutung ihres Inhalts, zuletzt die Regeln des Core selbst.
+const CHECKS = [
+  'schema', 'configcpp', 'classrefs', 'naming', 'stringtable', 'deltas',
+  // S19 (19 §3). chefzsym und chefzcore sind AUFLAGEN aus OF-11, keine Zugaben:
+  // ohne sie ist der datengetriebene Entwurf schlechter als ein enum-basierter.
+  'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
+];
 
 const args = process.argv.slice(2);
 const asJson = args.includes('--json');

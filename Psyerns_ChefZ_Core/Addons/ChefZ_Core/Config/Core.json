@@ -1,0 +1,95 @@
+{
+    "kind": "coreSettings",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "CORE",
+
+            "enabled": true,
+            "strictMode": false,
+            "safeModeErrorThreshold": 25,
+
+            "logLevel": 2,
+            "logChannels": ["ALL"],
+            "logToFile": false,
+            "logServerOnly": true,
+            "logBufferLines": 64,
+            "maxOnceKeys": 512,
+            "maxLogSizeMB": 8,
+            "logReportToFile": false,
+
+            "matcherNodeBudget": 4096,
+            "matcherCooldownSec": 1.0,
+            "matchThrottleTicks": 2,
+            "maxSelectorDepth": 8,
+            "maxCategories": 256,
+            "sessionTtlSec": 300.0,
+
+            "globalSpoilageScale": 1.0,
+            "minDecayScale": 0.01,
+            "maxDecayScale": 10.0,
+            "defaultFreshnessLifetimeSec": 21600.0,
+
+            "priorityScale": 0.01,
+            "maxExternalQualityBonus": 2.0,
+            "capabilityMode": "asAuthored",
+
+            "defaultTakePortionSec": 2.0,
+
+            "containerSearchRadius": 3.0,
+            "maxContainerCandidates": 32,
+
+            "defaultCapabilityValue": 0.0,
+            "capabilityMin": 0.0,
+            "capabilityMax": 10.0,
+
+            "eventMaxDepth": 3,
+            "eventTiming": false,
+            "eventSlowSubscriberMs": 5,
+
+            "priorityWeights": {
+                "wClass": 3.00,
+                "wState": 2.00,
+                "wTag": 1.50,
+                "wVanillaStage": 1.50,
+                "wCategoryBase": 1.00,
+                "wCategoryPerDepth": 0.50,
+                "wNot": 0.50,
+                "wRangePerBound": 0.25,
+                "wMinQuality": 0.75,
+                "wOptionalSlot": 0.25,
+                "wContextDeviceClass": 0.50,
+                "wContextBound": 0.25,
+                "wPolicyForbid": 0.50,
+                "wPolicyPerState": 0.25,
+                "wCapability": 0.25,
+                "wToolGroup": 0.25,
+                "amountCap": 3,
+                "coverageBonus": 0.50,
+                "priorityScale": 0.01
+            },
+
+            "qualityScoring": {
+                "defaultTierSet": "DISH_DEFAULT",
+                "freshnessWeight": 1.0,
+                "ingredientQualityWeight": 0.5,
+                "baseRank": 1.0,
+                "statePenalties": [
+                    { "state": "BURNT",  "points": -3.0 },
+                    { "state": "ROTTEN", "points": -99.0 }
+                ]
+            },
+
+            "enableNutritionAudit": true,
+            "nutritionTolerancePct": 25.0,
+            "nutritionAuditMaxFindings": 64,
+            "nutritionExpectedCap": 100000.0,
+
+            "defaultExtraItems": "forbid",
+            "defaultExcludedStates": ["BURNT", "ROTTEN"],
+
+            "allowProfileOverlay": true,
+            "allowTimedRecipes": true
+        }
+    ]
+}

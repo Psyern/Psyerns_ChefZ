@@ -1,0 +1,9 @@
+{
+    "kind": "coreSettings",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "CORE"
+        }
+    ]
+}
