@@ -266,10 +266,26 @@ class CfgVehicles
     //   PlantBase.c:63-65      liest "CfgVehicles <pflanze> Horticulture
     //                          GrowthStagesCount / CropsCount / CropsType"
     //
-    // KEIN class Food / FoodStages: rohes Gemuese ist Zutat. Stufen OHNE
-    // Uebergaenge waeren die Falle aus 01 V4 (FoodStage.c:472 faellt auf
-    // BURNED zurueck). class Nutrition ist dagegen PFLICHT - PlayerStomach.
-    // InitData registriert nur Klassen mit Nutrition ODER Food (01 V7).
+    // class Food MIT FoodStages UND FoodStageTransitions - der urspruengliche
+    // Satz "rohes Gemuese ist Zutat" hat zwei Pruefungen nicht ueberstanden:
+    //
+    //   1. RCP_ChefZ_FarmersBreakfast verlangt ChefZ_Onion in einem
+    //      PFLICHT-Slot, die nachgebesserten Fischeintoepfe verlangen
+    //      ChefZ_Carrot. Wer in einem Kochgeraet liegt und keine Uebergaenge
+    //      hat, verbrennt beim ersten Garstufenwechsel (01 V4,
+    //      FoodStage.c:472 faellt auf BURNED zurueck).
+    //   2. ChefZ_RecipeEvaluator.CheckStages verlangt von JEDER gebundenen
+    //      Pflichtzutat eine erlaubte Vanilla-Endstufe. Eine Klasse ohne
+    //      FoodStage meldet Stufe 0 (NONE) - das Gericht wuerde nie fertig.
+    //
+    // Vanilla macht es bei seinem eigenen Gemuese genauso: Potato.c,
+    // GreenBellPepper.c und Zucchini.c sind kochbar, ihre Configklassen tragen
+    // Stufen und Uebergaenge. ChefZ-Gemuese ist kein Sonderfall.
+    //
+    // class Nutrition bleibt PFLICHT - PlayerStomach.InitData registriert nur
+    // Klassen mit Nutrition ODER Food (01 V7). Die Stufen-Naehrwerte stehen an
+    // jeder einzelnen Klasse, weil sie class Nutrition schlagen
+    // (Edible_Base.c:394-503).
     //
     // MODELLE: alles Vanilla-Proxys, Bedarf im Slice-Bericht gemeldet.
     //==========================================================================
@@ -288,6 +304,77 @@ class CfgVehicles
         isMeleeWeapon = 0;
         soundImpactType = "food";
         lifetime = 21600;
+
+        // visual_properties[] = { selectionIndex, textureIndex, materialIndex }
+        // Alle Proxys sind einteilige Modelle - deshalb ueberall 0.
+        // cooking_properties[] = { minTemp, cookTime, maxTemp }
+        // woertlich aus enum eCookingPropertyIndices (FoodStage.c:15).
+        //
+        // Die Stufen-NAEHRWERTE stehen NICHT hier, sondern an jeder Klasse:
+        // Zwiebel, Knoblauch, Karotte und Kohl liegen zu weit auseinander, als
+        // dass ein Basiswert fuer mehr als einen von ihnen richtig waere.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                };
+                class Baked
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {100, 60, 200};
+                };
+                class Boiled
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {100, 80, 150};
+                };
+                class Burned
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {200, 20, 0};
+                };
+                class Rotten
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                };
+            };
+
+            // OHNE DIESEN BLOCK VERBRENNT JEDES STUECK GEMUESE BEIM ERSTEN
+            // GARSTUFENWECHSEL (01 V4, FoodStage.c:472).
+            //
+            // transition_to und cooking_method sind ZAHLEN, nicht Namen:
+            // SetupFoodStageTransitionMapping liest sie mit ConfigGetInt
+            // (FoodStage.c:167ff).
+            //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
+            //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+            //
+            // Nur Uebergaenge AUS "Raw". DRYING (3) fehlt absichtlich, obwohl
+            // Vanilla rohes Gemuese trocknen laesst: Trocknen ist in ChefZ ein
+            // Vorgang am eigenen Trockenrahmen (11 E6) mit eigenen
+            // Haltbarkeiten, und Vanillas Trocknen kennt genau einen Uebergang
+            // RAW -> DRIED (01 V14).
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
+            };
+        };
     };
 
     class ChefZ_VegetablePlant_Base : PlantBase
@@ -349,6 +436,21 @@ class CfgVehicles
             toxicity = 0;
             digestibility = 1;
         };
+
+        // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
+        // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
+        // Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {25, 90, 55, 30, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {22, 105, 25, 32, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {24, 95, 63, 26, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {6, 14, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {6, 14, 11, 0, 15, 0, 1}; };
+            };
+        };
     };
 
     // --- §18 Knoblauch -------------------------------------------------------
@@ -393,6 +495,21 @@ class CfgVehicles
             toxicity = 0;
             digestibility = 1;
         };
+
+        // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
+        // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
+        // Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {8, 40, 15, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {7, 46, 7, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {8, 42, 17, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {2, 6, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {2, 6, 3, 0, 15, 0, 1}; };
+            };
+        };
     };
 
     // --- §19 Karotte ---------------------------------------------------------
@@ -434,6 +551,21 @@ class CfgVehicles
             nutritionalIndex = 45;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
+        // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
+        // Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {30, 100, 60, 45, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {27, 115, 27, 47, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {29, 105, 69, 38, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {8, 15, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {8, 15, 12, 0, 15, 0, 1}; };
+            };
         };
     };
 
@@ -479,6 +611,21 @@ class CfgVehicles
             nutritionalIndex = 40;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
+        // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
+        // Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {45, 110, 80, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {40, 125, 36, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {43, 115, 92, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {11, 17, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {11, 17, 16, 0, 15, 0, 1}; };
+            };
         };
     };
 
@@ -804,6 +951,73 @@ class CfgVehicles
             nutritionalIndex = 35;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Der Block steht an DIESER Klasse und nicht an ChefZ_FreshHerbBase.
+        // Paprika ist das einzige Erntestueck des Kraeuterabschnitts, das ein
+        // GEMUESE ist und in einem Kochgeraet liegt: RCP_ChefZ_ChernarusChili
+        // fuehrt ChefZ_Paprika in einem Pflicht-Slot. Petersilie, Dill,
+        // Thymian, Rosmarin, Baerlauch und Pfefferbeeren bleiben ohne Stufen -
+        // sie sind Wuerze und stehen ausschliesslich in optionalen Slots.
+        //
+        // Vorbild ist Vanillas GreenBellPepper: kochbar, mit Stufen, mit
+        // Uebergaengen aus "Raw". Die Werte spiegeln die eigene
+        // class Nutrition, weil FoodStage-Werte sie schlagen
+        // (Edible_Base.c:394-503).
+        //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
+        //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {20, 60, 45, 35, 0, 0, 1};
+                };
+                class Baked
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {100, 50, 200};
+                    nutrition_properties[] = {18, 70, 20, 37, 0, 0, 1};
+                };
+                class Boiled
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {100, 60, 150};
+                    nutrition_properties[] = {19, 63, 52, 30, 0, 0, 1};
+                };
+                class Burned
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {200, 20, 0};
+                    nutrition_properties[] = {5, 9, 0, 0, 0, 0, 1};
+                };
+                class Rotten
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {5, 9, 9, 0, 15, 0, 1};
+                };
+            };
+
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
+            };
         };
     };
 };

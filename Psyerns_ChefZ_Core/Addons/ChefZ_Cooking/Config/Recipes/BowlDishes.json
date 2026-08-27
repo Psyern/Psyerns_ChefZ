@@ -80,7 +80,7 @@
 
         {
             "id": "RCP_ChefZ_HunterStew",
-            "_note": "§62 Hunter Stew: Wild Meat + Potato + Mushrooms + Water + Thyme. Der Thymian ist ein OPTIONALER Slot: ohne ihn ist es SIMPLE, mit ihm das vollstaendige Rezept (DME §41 'Prepared').",
+            "_note": "§62 Hunter Stew: Wild Meat + Potato + Mushrooms + Water + Thyme. Der Thymian ist ein OPTIONALER Slot: ohne ihn ist es SIMPLE, mit ihm das vollstaendige Rezept (DME §41 'Prepared'). I2-ANKER: der Pflicht-Slot meat verlangt ZERKLEINERTES Fleisch (ChefZ_DicedMeat aus TR_DicedMeat - rohes Fleisch plus Messer, ohne Station - oder gewolftes Wild aus der Muehle). Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. ChefZ_DicedMeat kennt seine Herkunft nicht (TR_DicedMeat erzeugt EINE Klasse fuer jedes Fleisch); die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht mehr der Slot.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -96,7 +96,7 @@
                 }
             ],
             "slots": [
-                { "slotId": "meat",      "match": { "category": "WILD_MEAT" },      "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "meat",      "match": { "anyOf": [ { "cls": "ChefZ_DicedMeat" }, { "cls": "ChefZ_MincedVenison" }, { "cls": "ChefZ_MincedBoar" } ] }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "roots",     "match": { "category": "ROOT_VEGETABLE" }, "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "mushrooms", "match": { "category": "MUSHROOM" },       "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "herb",      "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
@@ -138,7 +138,7 @@
 
         {
             "id": "RCP_ChefZ_HunterStewBroth",
-            "_note": "§62 schreibt 'Water/Broth'. Das ist der Bruehe-Weg: die Knochenbruehe (§55, Premium-Basis) ersetzt das Wasser im Gefaess. Ohne Gefaessfluessigkeit gart Vanilla per BAKING - deshalb beide Methoden und beide Endstufen.",
+            "_note": "§62 schreibt 'Water/Broth'. Das ist der Bruehe-Weg: die Knochenbruehe (§55, Premium-Basis) ersetzt das Wasser im Gefaess. Ohne Gefaessfluessigkeit gart Vanilla per BAKING - deshalb beide Methoden und beide Endstufen. I2-ANKER: der Pflicht-Slot meat verlangt ZERKLEINERTES Fleisch (ChefZ_DicedMeat aus TR_DicedMeat - rohes Fleisch plus Messer, ohne Station - oder gewolftes Wild aus der Muehle). Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. ChefZ_DicedMeat kennt seine Herkunft nicht (TR_DicedMeat erzeugt EINE Klasse fuer jedes Fleisch); die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht mehr der Slot.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.15,
@@ -149,7 +149,7 @@
             ],
             "slots": [
                 { "slotId": "broth",     "match": { "category": "BROTH" },          "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
-                { "slotId": "meat",      "match": { "category": "WILD_MEAT" },      "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "meat",      "match": { "anyOf": [ { "cls": "ChefZ_DicedMeat" }, { "cls": "ChefZ_MincedVenison" }, { "cls": "ChefZ_MincedBoar" } ] }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "roots",     "match": { "category": "ROOT_VEGETABLE" }, "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "mushrooms", "match": { "category": "MUSHROOM" },       "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "herb",      "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
@@ -190,7 +190,7 @@
 
         {
             "id": "RCP_ChefZ_HunterStewGroup",
-            "_note": "DME-Plan §44 woertlich: 4x Meat, 4x Potato, 2x Tomato, Water, Herbs -> 8x Hunter Stew Portion. Nur im Cauldron. Pilze sind hier optional, weil §44 sie nicht nennt - sie heben stattdessen die Stufe.",
+            "_note": "DME-Plan §44 woertlich: 4x Meat, 4x Potato, 2x Tomato, Water, Herbs -> 8x Hunter Stew Portion. Nur im Cauldron. Pilze sind hier optional, weil §44 sie nicht nennt - sie heben stattdessen die Stufe. I2-ANKER: der Pflicht-Slot meat verlangt ZERKLEINERTES Fleisch (ChefZ_DicedMeat aus TR_DicedMeat - rohes Fleisch plus Messer, ohne Station - oder gewolftes Wild aus der Muehle). Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. ChefZ_DicedMeat kennt seine Herkunft nicht (TR_DicedMeat erzeugt EINE Klasse fuer jedes Fleisch); die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht mehr der Slot.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -206,7 +206,7 @@
                 }
             ],
             "slots": [
-                { "slotId": "meat",      "match": { "category": "WILD_MEAT" },      "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "meat",      "match": { "anyOf": [ { "cls": "ChefZ_DicedMeat" }, { "cls": "ChefZ_MincedVenison" }, { "cls": "ChefZ_MincedBoar" } ] }, "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "roots",     "match": { "category": "ROOT_VEGETABLE" }, "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "tomato",    "match": { "category": "TOMATO" },         "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "mushrooms", "match": { "category": "MUSHROOM" },       "minCount": 2, "maxCount": 4, "optional": true, "consume": "whole", "gradePoints": 1 },
@@ -249,7 +249,7 @@
 
         {
             "id": "RCP_ChefZ_FishermanStew",
-            "_note": "§62 Fisherman's Stew: Fish + Potato + Carrot + Water + Dill. Der Dill hebt die Stufe, er ist nicht Pflicht.",
+            "_note": "§62 Fisherman's Stew: Fish + Potato + Carrot + Water + Dill. Der Dill hebt die Stufe, er ist nicht Pflicht. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie waechst aus ChefZ_CarrotSeeds im Gartenbeet und ist als ganze oder geschnittene Karotte zulaessig. Die Pflichtmenge bleibt unveraendert.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -266,7 +266,8 @@
             ],
             "slots": [
                 { "slotId": "fish",  "match": { "category": "FISH" },           "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
-                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 3, "maxCount": 5, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots",  "match": { "category": "ROOT_VEGETABLE" }, "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "carrot", "match": { "anyOf": [ { "cls": "ChefZ_Carrot" }, { "cls": "ChefZ_ChoppedCarrot" } ] }, "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
                 { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 6.0 }, "consume": "amount", "consumeAmount": 6.0, "gradePoints": 1 },
                 { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
@@ -306,7 +307,7 @@
 
         {
             "id": "RCP_ChefZ_FishermanStewBroth",
-            "_note": "Der Bruehe-Weg von §62 'Water/Broth' fuer den Fischeintopf.",
+            "_note": "Der Bruehe-Weg von §62 'Water/Broth' fuer den Fischeintopf. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie waechst aus ChefZ_CarrotSeeds im Gartenbeet und ist als ganze oder geschnittene Karotte zulaessig. Die Pflichtmenge bleibt unveraendert.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.15,
@@ -318,7 +319,8 @@
             "slots": [
                 { "slotId": "broth", "match": { "category": "BROTH" },          "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
                 { "slotId": "fish",  "match": { "category": "FISH" },           "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
-                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 3, "maxCount": 5, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots",  "match": { "category": "ROOT_VEGETABLE" }, "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "carrot", "match": { "anyOf": [ { "cls": "ChefZ_Carrot" }, { "cls": "ChefZ_ChoppedCarrot" } ] }, "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },
                 { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 6.0 }, "consume": "amount", "consumeAmount": 6.0, "gradePoints": 1 },
                 { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
@@ -356,7 +358,7 @@
 
         {
             "id": "RCP_ChefZ_FishermanStewGroup",
-            "_note": "Gruppenfassung nach DME §44, uebertragen auf den Fischeintopf: 4x Fisch, 6x Wurzelgemuese, viel Wasser -> 8 Portionen.",
+            "_note": "Gruppenfassung nach DME §44, uebertragen auf den Fischeintopf: 4x Fisch, 6x Wurzelgemuese, viel Wasser -> 8 Portionen. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie waechst aus ChefZ_CarrotSeeds im Gartenbeet und ist als ganze oder geschnittene Karotte zulaessig. Die Pflichtmenge bleibt unveraendert.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -373,7 +375,8 @@
             ],
             "slots": [
                 { "slotId": "fish",  "match": { "category": "FISH" },           "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
-                { "slotId": "roots", "match": { "category": "ROOT_VEGETABLE" }, "minCount": 6, "maxCount": 8, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "roots",  "match": { "category": "ROOT_VEGETABLE" }, "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "carrot", "match": { "anyOf": [ { "cls": "ChefZ_Carrot" }, { "cls": "ChefZ_ChoppedCarrot" } ] }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "herb",  "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 3, "optional": true, "consume": "whole", "gradePoints": 2 },
                 { "slotId": "salt",  "match": { "category": "SALT" },           "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 12.0 }, "consume": "amount", "consumeAmount": 12.0, "gradePoints": 1 },
                 { "slotId": "spice", "match": { "tag": "CHEFZ_SPICE" },         "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }

@@ -486,8 +486,8 @@
                     "consume": "whole"
                 },
                 {
-                    "slotId": "fat",
-                    "match": { "anyOf": [ { "category": "FAT" }, { "category": "BUTTER" } ] },
+                    "slotId": "butter",
+                    "match": { "category": "BUTTER" },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
@@ -536,8 +536,6 @@
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_MP_Butter", "when": "anyItem",
-                  "selector": { "category": "BUTTER" }, "points": 1.0 },
                 { "ruleId": "GR_MP_Parsley", "when": "anyItem",
                   "selector": { "anyOf": [ { "cls": "ChefZ_Parsley" }, { "cls": "ChefZ_DriedParsley" } ] },
                   "points": 1.0 },

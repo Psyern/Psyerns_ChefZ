@@ -17,11 +17,27 @@
 // von einer VANILLA-Klasse, die SKRIPTklasse von ChefZ_Edible_Base. Der Core
 // bringt bewusst keinen CfgVehicles-Eintrag mit (Invariante I3).
 //
-// BEWUSST OHNE class Food / FoodStages: geschnittenes Gemuese ist Zutat, nicht
-// Garobjekt. Wer FoodStages ohne FoodStageTransitions deklariert, baut die
-// Falle aus 01 V4 - FoodStage.GetNextFoodStageType faellt dann auf BURNED
-// zurueck und das Item verbrennt beim ersten Garstufenwechsel. Gegart wird in
-// M3 ueber ChefZ-Rezepte, die eigene Gerichtsklassen erzeugen.
+// GARSTUFEN: geschnittenes Gemuese IST Garobjekt. Der urspruengliche Satz
+// "Zutat, nicht Garobjekt" ist an den Rezepten gescheitert - RCP_ChefZ_
+// FarmersBreakfast verlangt ChefZ_SlicedPotato und ChefZ_ChoppedOnion in
+// PFLICHT-Slots, RCP_ChefZ_ChernarusChili ChefZ_ChoppedPaprika. Was in einem
+// Pflicht-Slot liegt, muss zwei Dinge koennen:
+//
+//   1. es darf nicht verbrennen. Ohne FoodStageTransitions faellt
+//      FoodStage.GetNextFoodStageType auf FoodStageType.BURNED zurueck
+//      (FoodStage.c:472).
+//   2. es muss die Endstufe des Rezepts ERREICHEN. ChefZ_RecipeEvaluator.
+//      CheckStages verlangt von JEDER gebundenen Pflichtzutat eine erlaubte
+//      Vanilla-Endstufe; eine Klasse ohne FoodStage meldet Stufe 0 (NONE),
+//      und das Gericht wuerde nie fertig.
+//
+// Deshalb traegt ChefZ_ChoppedVegetableBase Stufen UND Uebergaenge, und jede
+// Klasse darunter ihre eigenen Stufen-Naehrwerte: sobald FoodStages
+// existieren, schlagen sie class Nutrition (Edible_Base.c:394-503) - eine
+// Stufe ohne nutrition_properties saettigte lautlos nicht.
+//
+// Vorbild ist Vanillas eigenes Gemuese (Potato.c, GreenBellPepper.c,
+// Zucchini.c): kochbar, mit Stufen, mit Uebergaengen aus "Raw".
 //
 // MODELLE: saemtliche model=-Pfade sind VANILLA-PROXIES. Kein Item dieses
 // Slices hat eigene Geometrie; der Bedarf steht im Slice-Bericht und im
@@ -102,8 +118,23 @@ class CfgVehicles
     class GardenLime;   // ### SLICE salt ###
 
     // ### SLICE dairy ### Proxy-Basen
+    //
+    // "class Honey;" stand hier fuer den Sahne-Proxy und ist ERSATZLOS
+    // gestrichen. Grund: eine Vorwaertsdeklaration ist bereits eine
+    // Klassendefinition in CfgVehicles. ChefZ hat damit eine VANILLA-Klasse in
+    // den eigenen Klassenbaum gezogen, die es weder erweitert noch erweitern
+    // darf - und die zugleich als Zutat in zwei Rezepten steht
+    // (RCP_ChefZ_MilkRice, RCP_ChefZ_HoneyBreadPlate).
+    //
+    // Vanillas Honey braucht hier nichts: es gibt keine Honey.c,
+    // Edible_Base.CanBeCooked() liefert false (Edible_Base.c:129),
+    // Cooking.ProcessItemToCook laesst das Glas also unangetastet liegen
+    // (Cooking.c:47), und RCP_ChefZ_HoneyBreadPlate gart ohnehin nicht
+    // (completion INSTANT). Ein Food-Block auf einer Vanilla-Klasse waere kein
+    // Zusatz, sondern ein Umbau: FoodStage-Werte schlagen class Nutrition
+    // (Edible_Base.c:394-503), und Vanillas Honig-Naehrwerte stehen in
+    // Spieldaten, die dieses Projekt nicht liest.
     class PowderedMilk;
-    class Honey;
     class Lard;
     class BoxCerealCrunchin;
     class Marmalade;
@@ -132,6 +163,79 @@ class CfgVehicles
         absorbency = 0.0;
         isMeleeWeapon = 0;
         soundImpactType = "food";
+
+        // visual_properties[] = { selectionIndex, textureIndex, materialIndex }
+        // Alle Proxys sind einteilige Modelle - deshalb ueberall 0.
+        // cooking_properties[] = { minTemp, cookTime, maxTemp }
+        // woertlich aus enum eCookingPropertyIndices (FoodStage.c:15).
+        // Geschnittenes gart schneller als ein ganzes Stueck: 40 s statt 60 s
+        // in der Pfanne, 50 s statt 80 s im Topf.
+        //
+        // Die Stufen-NAEHRWERTE stehen NICHT hier, sondern an jeder einzelnen
+        // Klasse: ein Basiswert waere fuer sechs von sieben falsch.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                };
+                class Baked
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {100, 40, 200};
+                };
+                class Boiled
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {100, 50, 150};
+                };
+                class Burned
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {200, 20, 0};
+                };
+                class Rotten
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                };
+            };
+
+            // OHNE DIESEN BLOCK VERBRENNT JEDES STUECK GESCHNITTENES GEMUESE
+            // BEIM ERSTEN GARSTUFENWECHSEL (01 V4, FoodStage.c:472).
+            //
+            // transition_to und cooking_method sind ZAHLEN, nicht Namen:
+            // SetupFoodStageTransitionMapping liest sie mit ConfigGetInt
+            // (FoodStage.c:167ff).
+            //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
+            //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+            //
+            // Nur Uebergaenge AUS "Raw": aus "Baked" und "Boiled" gibt es
+            // keinen, und genau deshalb liefert GetNextFoodStageType dort
+            // BURNED - wer die Pfanne vergisst, verliert sie. Das ist gewollt.
+            //
+            // DRYING fehlt absichtlich: Trocknen laeuft in ChefZ am eigenen
+            // Trockenrahmen (11 E6) und nicht in Vanillas Smoking-Slots.
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
+            };
+        };
     };
 
     // §13: Potato + Knife -> ChefZ_SlicedPotato
@@ -149,6 +253,22 @@ class CfgVehicles
             nutritionalIndex = 30;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
+        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
+        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
+        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {40, 180, 40, 30, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {36, 205, 18, 32, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {38, 190, 46, 26, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {10, 25, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {10, 25, 8, 0, 15, 0, 1}; };
+            };
         };
     };
 
@@ -168,6 +288,22 @@ class CfgVehicles
             toxicity = 0;
             digestibility = 1;
         };
+
+        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
+        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
+        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
+        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {20, 45, 70, 25, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {18, 50, 32, 26, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {19, 48, 80, 21, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {5, 7, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {5, 7, 14, 0, 15, 0, 1}; };
+            };
+        };
     };
 
     // §15: ChefZ_Paprika (Slice herbs) oder GreenBellPepper + Knife
@@ -186,6 +322,22 @@ class CfgVehicles
             toxicity = 0;
             digestibility = 1;
         };
+
+        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
+        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
+        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
+        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {20, 60, 45, 35, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {18, 70, 20, 37, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {19, 63, 52, 30, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {5, 9, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {5, 9, 9, 0, 15, 0, 1}; };
+            };
+        };
     };
 
     // §17: ChefZ_Onion + Knife -> ChefZ_ChoppedOnion
@@ -202,6 +354,22 @@ class CfgVehicles
             nutritionalIndex = 30;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
+        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
+        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
+        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {25, 90, 55, 30, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {22, 105, 25, 32, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {24, 95, 63, 26, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {6, 14, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {6, 14, 11, 0, 15, 0, 1}; };
+            };
         };
     };
 
@@ -221,6 +389,22 @@ class CfgVehicles
             toxicity = 0;
             digestibility = 1;
         };
+
+        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
+        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
+        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
+        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {8, 40, 15, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {7, 46, 7, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {8, 42, 17, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {2, 6, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {2, 6, 3, 0, 15, 0, 1}; };
+            };
+        };
     };
 
     // §19: ChefZ_Carrot + Knife -> ChefZ_ChoppedCarrot
@@ -237,6 +421,22 @@ class CfgVehicles
             nutritionalIndex = 45;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
+        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
+        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
+        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {30, 100, 60, 45, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {27, 115, 27, 47, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {29, 105, 69, 38, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {8, 15, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {8, 15, 12, 0, 15, 0, 1}; };
+            };
         };
     };
 
@@ -255,6 +455,22 @@ class CfgVehicles
             nutritionalIndex = 40;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
+        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
+        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
+        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {45, 110, 80, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {40, 125, 36, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {43, 115, 92, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {11, 17, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {11, 17, 16, 0, 15, 0, 1}; };
+            };
         };
     };
 
@@ -276,12 +492,22 @@ class CfgVehicles
     // class Nutrition ist PFLICHT: PlayerStomach.InitData registriert nur
     // Klassen mit Nutrition oder Food und scope != 0 (01 V7).
     //
-    // KEIN Food-Block bei Milch, Sahne, Butter und Kaese - und das ist die
-    // sichere Richtung, nicht die faule: ohne FoodStages ist HasFoodStage()
-    // falsch, CanBeCooked() liefert false und Cooking.ProcessItemToCook laesst
-    // das Item unangetastet liegen (Cooking.c:47). Gefaehrlich waeren STUFEN
-    // OHNE UEBERGAENGE - genau die Falle aus 01 V4. Gegart wird ueber
-    // ChefZ-Rezepte, die eigene Gerichtsklassen erzeugen.
+    // KEIN Food-Block bei Milch und Sahne: sie liegen in keinem Pflicht-Slot
+    // eines Kochgeraets. Ohne FoodStages ist HasFoodStage() falsch,
+    // CanBeCooked() liefert false und Cooking.ProcessItemToCook laesst das
+    // Item unangetastet liegen (Cooking.c:47).
+    //
+    // KAESE UND BUTTER TRAGEN EINEN FOOD-BLOCK, und zwar aus zwei Gruenden:
+    //   1. RCP_ChefZ_CheeseFlatbread verlangt ChefZ_Cheese, RCP_ChefZ_
+    //      MushroomPan verlangt ChefZ_Butter - beide in einem PFLICHT-Slot,
+    //      beide in einer Pfanne. Ohne Uebergaenge waere das die Falle aus
+    //      01 V4 (FoodStage.c:472 faellt auf BURNED zurueck).
+    //   2. ChefZ_RecipeEvaluator.CheckStages verlangt von JEDER gebundenen
+    //      Pflichtzutat eine erlaubte Endstufe. Eine Klasse ohne FoodStage
+    //      meldet Stufe 0 (NONE) - das Gericht wuerde nie fertig.
+    // Stufen OHNE Uebergaenge waeren die Falle; Stufen MIT Uebergaengen sind
+    // die Loesung. Die Stufen-Naehrwerte stehen an der Klasse, weil sie
+    // class Nutrition schlagen (Edible_Base.c:394-503).
     //
     // ZUSTAENDE: dieser Slice vergibt bewusst keinen ChefZ-Zustand. Die
     // Milchkette ist ein reiner Klassentausch (06 §2); der Zustandsraum gehoert
@@ -315,8 +541,15 @@ class CfgVehicles
     };
 
     // §48: Sahne. Entsteht am Butterfass aus Milch.
-    // PROXY: Honey (Glas). Ziel: eigenes Sahnegefaess.
-    class ChefZ_Cream : Honey
+    //
+    // PROXY: Marmalade (Glas). Vorher Honey - der Tausch ist die Folge der
+    // gestrichenen Vorwaertsdeklaration oben und kostet nichts: beide sind
+    // Vanilla-Glaeser ohne eigenes Skript. Er raeumt zugleich den Befund aus
+    // dem Asset-Backlog ab, dass Sahne im Inventar wie Vanilla-Honig aussah.
+    // Neue Kollision dafuer: Sahne und Ei teilen sich jetzt das
+    // Marmeladenglas - gemeldet im Asset-Bedarf, aufgeloest mit dem eigenen
+    // Sahnegefaess.
+    class ChefZ_Cream : Marmalade
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CREAM";
@@ -364,6 +597,72 @@ class CfgVehicles
             toxicity = 0;
             digestibility = 1;
         };
+
+        // Butter ist seit der I2-Nachbesserung PFLICHT-Zutat in
+        // RCP_ChefZ_MushroomPan - sie ist es, die aus gebratenen Pilzen eine
+        // Pilzpfanne macht (Production Map §16). Damit liegt sie in einem
+        // Kochgeraet und braucht Stufen und Uebergaenge.
+        //
+        // Der eigene Block hat einen zweiten Nutzen: die Configklasse erbt von
+        // Lard, und Lard ist in Vanilla ein Bratfett MIT Garstufen. Ohne
+        // eigenen Block erbte ChefZ_Butter Lards Stufen-NAEHRWERTE, und die
+        // Werte in class Nutrition oben waeren wirkungslos
+        // (Edible_Base.c:394-503). Hier stehen sie jetzt ausdruecklich.
+        //
+        // visual_properties fehlen absichtlich: das Modell kommt von Lard, und
+        // seine Selection-Indizes kennt nur Lards eigener Block.
+        //
+        // Die Skriptklasse ist Lard (dieser Slice bringt keine eigene mit),
+        // und Lard.c ueberschreibt CanBeCooked() mit true - Butter ist damit
+        // die eine ChefZ-Zutat, die ihre Endstufe heute schon erreicht.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {15, 600, 20, 8, 0, 0, 1};
+                };
+                class Baked
+                {
+                    cooking_properties[] = {80, 30, 200};
+                    nutrition_properties[] = {14, 620, 8, 8, 0, 0, 1};
+                };
+                class Boiled
+                {
+                    cooking_properties[] = {80, 40, 150};
+                    nutrition_properties[] = {14, 610, 15, 8, 0, 0, 1};
+                };
+                class Burned
+                {
+                    cooking_properties[] = {200, 20, 0};
+                    nutrition_properties[] = {4, 90, 0, 0, 0, 0, 1};
+                };
+                class Rotten
+                {
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {4, 90, 4, 0, 15, 0, 1};
+                };
+            };
+
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
+            };
+        };
     };
 
     // §50: Kaese. V1 kennt GENAU EINE Kaeseklasse; mehrere Sorten sind
@@ -390,6 +689,67 @@ class CfgVehicles
             nutritionalIndex = 25;
             toxicity = 0;
             digestibility = 1;
+        };
+
+        // Kaese schmilzt in der Pfanne (Baked) und im Topf (Boiled) - beide
+        // Uebergaenge stehen hier, weil RCP_ChefZ_CheeseFlatbread beide
+        // Geraete zulaesst und ein Topf mit Wasser nach BOILING gart. Aus
+        // Baked und Boiled gibt es keinen Ausgang: wer den Kaese im Feuer
+        // vergisst, bekommt Kohle (FoodStage.c:472). Das ist gewollt.
+        //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
+        //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {35, 450, 60, 25, 0, 0, 1};
+                };
+                class Baked
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {90, 45, 200};
+                    nutrition_properties[] = {32, 470, 35, 26, 0, 0, 1};
+                };
+                class Boiled
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {90, 60, 150};
+                    nutrition_properties[] = {33, 455, 70, 22, 0, 0, 1};
+                };
+                class Burned
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {200, 20, 0};
+                    nutrition_properties[] = {9, 68, 0, 0, 0, 0, 1};
+                };
+                class Rotten
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {9, 68, 12, 0, 15, 0, 1};
+                };
+            };
+
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
+            };
         };
     };
 
@@ -598,10 +958,20 @@ class CfgVehicles
     // Kraeuter saettigen fast nichts - aber "fast nichts" und "lautlos nichts"
     // sind zwei verschiedene Dinge.
     //
-    // Bewusst OHNE class Food / FoodStages: kein Gewuerz dieses Slice ist ein
-    // Garobjekt. Es geht als ZUTAT in ein Gericht ein und liegt nie selbst im
-    // Topf. Wer FoodStages ohne FoodStageTransitions deklariert, baut die
-    // Falle aus 01 V4 (FoodStage.c:472 verbrennt das Item).
+    // OHNE class Food / FoodStages - MIT EINER AUSNAHME.
+    //
+    // Die Regel gilt weiter: ein Gewuerz geht als Zutat in ein Gericht ein und
+    // liegt nie selbst im Topf; Stufen ohne Uebergaenge waeren die Falle aus
+    // 01 V4 (FoodStage.c:472 verbrennt das Item). Genau EIN Gewuerz haelt sich
+    // nicht daran, und das ist keine Meinung, sondern eine Rezeptzeile:
+    // RCP_ChefZ_ChernarusChili fuehrt ChefZ_PaprikaPowder in einem
+    // PFLICHT-Slot. Es liegt damit im Topf, waehrend Vanilla den Garzustand
+    // fortschreibt, und ChefZ_RecipeEvaluator.CheckStages verlangt von jeder
+    // Pflichtzutat eine erlaubte Endstufe - eine Klasse ohne FoodStage meldet
+    // Stufe 0 (NONE), und das Chili wuerde nie fertig. Deshalb traegt
+    // ChefZ_PaprikaPowder als einzige Klasse dieses Abschnitts Stufen UND
+    // Uebergaenge. Alle anderen Gewuerze stehen ausschliesslich in optionalen
+    // Slots; fuer sie bleibt die Regel unveraendert.
     //
     // decays = false steht im Zutatendatensatz (Config/Ingredients/
     // Spices.json), nicht hier: Haltbarkeit ist eine ChefZ-Eigenschaft, kein
@@ -709,6 +1079,74 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PAPRIKAPOWDER";
         descriptionShort = "#STR_CHEFZ_ITEM_PAPRIKAPOWDER_DESC";
+
+        // Die Ausnahme aus dem Abschnittskopf: Pflichtzutat in
+        // RCP_ChefZ_ChernarusChili und damit ein Garobjekt.
+        //
+        // Die Naehrwerte aendern sich ueber die Stufen fast nicht - ein
+        // geloeffeltes Gewuerz saettigt weder roh noch gekocht. Sie stehen
+        // trotzdem an JEDER Stufe: sobald FoodStages existieren, schlagen sie
+        // class Nutrition (Edible_Base.c:394-503), und eine Stufe ohne
+        // nutrition_properties saettigte lautlos gar nicht mehr. Die Rohwerte
+        // sind die geerbten aus ChefZ_SpiceBase.
+        //
+        // Verbranntes Paprikapulver ist bitter, kein Nahrungsmittel - deshalb
+        // gibt es aus Baked und Boiled keinen Ausgang ausser BURNED.
+        //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
+        //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {2, 10, 0, 10, 0, 0, 1};
+                };
+                class Baked
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {90, 30, 200};
+                    nutrition_properties[] = {2, 10, 0, 9, 0, 0, 1};
+                };
+                class Boiled
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {90, 40, 150};
+                    nutrition_properties[] = {2, 10, 0, 9, 0, 0, 1};
+                };
+                class Burned
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {200, 15, 0};
+                    nutrition_properties[] = {1, 2, 0, 0, 0, 0, 1};
+                };
+                class Rotten
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {1, 2, 0, 0, 15, 0, 1};
+                };
+            };
+
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
+            };
+        };
     };
 
     // Pfefferkoerner sind noch kein Pulver - eigenes Modell, Beutelform.
