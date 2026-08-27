@@ -7,9 +7,9 @@
     { "id": "VEGETABLE", "parent": null, "displayName": "#STR_CHEFZ_CAT_VEGETABLE" }
   ],
   "tags": [
-    { "id": "CHEFZ_HERB", "appliesTo": ["ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary", "ChefZ_WildGarlic", "ChefZ_DriedParsley", "ChefZ_DriedDill", "ChefZ_DriedThyme", "ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_HerbMix"] },
-    { "id": "CHEFZ_WILD_HERB", "appliesTo": ["ChefZ_Dill", "ChefZ_Thyme", "ChefZ_WildGarlic", "ChefZ_DriedDill", "ChefZ_DriedThyme", "ChefZ_DriedWildGarlic"] },
-    { "id": "CHEFZ_SPICE", "appliesTo": ["ChefZ_PepperBerries", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper", "ChefZ_DriedPaprika", "ChefZ_PaprikaPowder", "ChefZ_HerbMix", "ChefZ_HunterSeasoning"] }
+    { "id": "CHEFZ_HERB", "displayName": "#STR_CHEFZ_TAG_HERB", "appliesTo": ["ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary", "ChefZ_WildGarlic", "ChefZ_DriedParsley", "ChefZ_DriedDill", "ChefZ_DriedThyme", "ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_HerbMix"] },
+    { "id": "CHEFZ_WILD_HERB", "displayName": "#STR_CHEFZ_TAG_WILD_HERB", "appliesTo": ["ChefZ_Dill", "ChefZ_Thyme", "ChefZ_WildGarlic", "ChefZ_DriedDill", "ChefZ_DriedThyme", "ChefZ_DriedWildGarlic"] },
+    { "id": "CHEFZ_SPICE", "displayName": "#STR_CHEFZ_TAG_SPICE", "appliesTo": ["ChefZ_PepperBerries", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper", "ChefZ_DriedPaprika", "ChefZ_PaprikaPowder", "ChefZ_HerbMix", "ChefZ_HunterSeasoning"] }
   ],
   "processes": [
     { "id": "PROCESS_DRY", "station": "ChefZ_DryingRack", "durationSec": 600 },

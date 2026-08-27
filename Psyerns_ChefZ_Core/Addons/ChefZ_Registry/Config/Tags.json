@@ -21,13 +21,16 @@
             "displayName": "#STR_CHEFZ_TAG_GRAIN"
         },
         {
-            "id": "CHEFZ_HERB"
+            "id": "CHEFZ_HERB",
+            "displayName": "#STR_CHEFZ_TAG_HERB"
         },
         {
-            "id": "CHEFZ_SPICE"
+            "id": "CHEFZ_SPICE",
+            "displayName": "#STR_CHEFZ_TAG_SPICE"
         },
         {
-            "id": "CHEFZ_WILD_HERB"
+            "id": "CHEFZ_WILD_HERB",
+            "displayName": "#STR_CHEFZ_TAG_WILD_HERB"
         },
         {
             "id": "CHEFZ_HIGH_PROTEIN"
