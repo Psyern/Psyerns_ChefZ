@@ -17,10 +17,53 @@
 
 param(
   [string]$Deployment = "D:\Agent\deployments\DME-Test",
-  [int]$TimeoutSec = 180
+  # Diagnose-Schalter: nimmt Mods aus der Liste heraus, ohne das Deployment
+  # anzufassen.
+  [string[]]$OhneMods = @(),
+  [int]$TimeoutSec = 180,
+  # -------------------------------------------------------------------------
+  # WARUM EIN EINZELLAUF KEIN URTEIL IST
+  # -------------------------------------------------------------------------
+  # Dieses Deployment stuerzt SPORADISCH ab, waehrend "[CE][Hive] :: Loading
+  # core data" laeuft - mit wechselnder Fehleradresse, einmal mit
+  # "Out of memory (requested -1346741 KB)". Gemessen am 29.08.2026: derselbe
+  # unveraenderte Build ergab 1x Start und 2x Absturz; dieselbe Quote ohne
+  # ChefZ_Cookbook. Der Fehler ist also vorbestehend und liegt nicht am Mod.
+  #
+  # Wer daraufhin einen Einzellauf als Beleg nimmt, halbiert Rauschen. Genau
+  # das ist am 29.08.2026 ueber eine Stunde lang passiert: aus Einzellaeufen
+  # entstanden drei Schluesse ("das 13. PBO", "eine Mod-Obergrenze",
+  # "modded class ActionConstructor"), von denen KEINER haltbar war.
+  #
+  # Deshalb: fuer jede Aussage ueber Start oder Absturz mindestens 3 Laeufe.
+  [int]$Wiederholungen = 1
 )
 
 $ErrorActionPreference = "Stop"
+
+# Mehrere Laeufe: das Skript ruft sich selbst auf und zaehlt aus. Bewusst als
+# eigene Prozesse - ein Absturz darf den Zaehler nicht mitnehmen.
+if ($Wiederholungen -gt 1) {
+  $ergebnisse = @()
+  for ($n = 1; $n -le $Wiederholungen; $n++) {
+    Write-Host "===== Lauf $n von $Wiederholungen ====="
+    # *>&1 und nicht 2>&1: der Einzellauf berichtet mit Write-Host, und das
+    # schreibt in den Informationsstrom, nicht nach stdout. Ohne die Umleitung
+    # kommt hier nichts an und jeder Lauf zaehlte als "kein Urteil".
+    $aus = & $PSCommandPath -Deployment $Deployment -OhneMods $OhneMods -TimeoutSec $TimeoutSec *>&1 | Out-String
+    $zeile = ($aus -split "`r?`n" | Where-Object { $_ -like "ERGEBNIS*" } | Select-Object -First 1)
+    if (-not $zeile) { $zeile = "ERGEBNIS: (kein Urteil)" }
+    Write-Host "  -> $zeile"
+    $ergebnisse += $zeile
+  }
+  $gestartet = ($ergebnisse | Where-Object { $_ -like "*GESTARTET*" }).Count
+  Write-Host ""
+  Write-Host "GESAMT: $gestartet von $Wiederholungen Laeufen gestartet."
+  if ($gestartet -gt 0 -and $gestartet -lt $Wiederholungen) {
+    Write-Host "  Sporadisch. Kein Beleg fuer eine Aenderung - siehe Kopf dieses Skripts."
+  }
+  exit 0
+}
 
 $sig = @"
 using System;
@@ -51,6 +94,9 @@ Add-Type -TypeDefinition $sig -Language CSharp
 
 $profiles = Join-Path $Deployment "profiles"
 $mods = "@3689057982;@2536780687;@2931560672;@2918418331;@2276010135;@2572331007;@2116157322;@1564026768;@2545327648;@1559212036;@3571685323;@3649957186;@3649958757;@3649957536;@3649959707;@1646187754;@3164839000;@2651195301;@1832448183;@1710977250;@1932611410;@2170927235;@3690289718;@3354681846;@2471347750;@3616635518;@3759357431;@3786175534;@3783149286;@3623510671;@3627848296;@3646233886;@3780383282;@3786176249;@ChefZ;"
+foreach ($weg in $OhneMods) { $mods = $mods.Replace("@$weg;", "") }
+if ($OhneMods.Count -gt 0) { Write-Host "Diagnose: ohne $($OhneMods -join ', ')" }
+
 $serverArgs = @(
   "-config=serverDZ.cfg", "-port=2602", "-profiles=profiles",
   "-adminlog", "-netlog", "-freezeCheck", "-dologs",
@@ -81,7 +127,12 @@ for ($i = 0; $i -lt $TimeoutSec; $i++) {
 
   $new = Get-ChildItem $profiles -File -ErrorAction SilentlyContinue | Where-Object { -not $before.ContainsKey($_.Name) }
   $crash = $new | Where-Object { $_.Name -like "crash_*.log" } | Select-Object -First 1
-  if ($crash) { $verdict = "SKRIPT KOMPILIERT NICHT`n" + ((Get-Content $crash.FullName | Select-Object -Last 6) -join "`n  "); break }
+  # Frueher stand hier "SKRIPT KOMPILIERT NICHT". Das war falsch beschriftet und
+  # hat teuer in die Irre gefuehrt: ein crash log sagt nur, dass der Prozess
+  # gestorben ist, nicht warum - und auf diesem Deployment stirbt er auch ohne
+  # jede ChefZ-Aenderung sporadisch. Die Beschriftung nennt jetzt den Fund,
+  # nicht eine Deutung.
+  if ($crash) { $verdict = "ABSTURZ (crash log) - Ursache unbestimmt, siehe -Wiederholungen im Kopf`n" + ((Get-Content $crash.FullName | Select-Object -Last 6) -join "`n  "); break }
 
   # Das Anlegen des script log ist KEIN Ende: es entsteht, sobald das erste
   # Skriptmodul etwas zu sagen hat, und danach kommen noch GameLib, Game,
