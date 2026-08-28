@@ -83,5 +83,18 @@ Prozess, nicht aus dem Transform.
 ## `Apiary_Hive.json` und `Apiary_Stations.json` — der Stock
 
 Zwei Vorgänge an `ChefZ_Beehive`: `PROCESS_TEND_HIVE` (STATION_TIMED, eine
-Stunde) und `PROCESS_HARVEST_HIVE` (STATION_ACTION, verlangt die Imkerpfeife).
+Stunde) und `PROCESS_HARVEST_HIVE` (STATION_ACTION).
 Die Schleuder liegt in `ChefZ_Processing`, weil Schleudern Verarbeitung ist.
+
+`PROCESS_HARVEST_HIVE` führt **kein** `toolGroups` mehr. Die Imkerpfeife war
+einmal Pflichtwerkzeug — heute ist sie Schutz: die Ernte gelingt auch ohne sie,
+sie kostet dann Blut und Schock. Die Regel steht im Skript an
+`ChefZ_Beehive.ChefZ_OnStationActionFinished()`
+(`Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c`), die Begründung samt der
+Vanilla-Vorlage `CAContinuousMineWood.DamagePlayersHands()` dort und in der
+`config.cpp` am Prozess.
+
+Auf die Zahl der reservierten Handwerksplätze wirkt der Wegfall nicht:
+`ChefZ_HandcraftBridge` reserviert ausschließlich für `exec = HANDCRAFT`, und
+dieser Prozess ist `STATION_ACTION`. `handcraftRecipeSlots` am Knoten
+`ChefZ_Apiary` bleibt bei **6** — den fünf Bau- und dem Entdeckelungsschritt.

@@ -1001,17 +1001,18 @@ class CfgVehicles
     // WARUM ES VIER RAEHMCHEN GIBT UND NICHT DREI
     // -------------------------------------------
     // Der Auftrag nennt drei Zustaende. Ein vierter steht dazwischen, und er
-    // ist der einzige Grund, aus dem die Imkerpfeife im Spiel etwas bedeutet:
+    // ist der Grund, aus dem der Stock ueberhaupt geoeffnet werden muss - und
+    // damit der Grund, aus dem die Imkerpfeife im Spiel etwas bedeutet:
     //
     //   Empty     leer, vom Spieler gebaut, wird in den Stock gehaengt
     //   Sealed    von den Bienen ausgebaut und VERDECKELT - im Stock, voller
     //             Bienen. Kein Eingang irgendeines weiteren Schrittes.
     //   Full      geerntet: aus dem Stock genommen, von Bienen befreit. NUR
-    //             PROCESS_HARVEST_HIVE erzeugt es, und der verlangt die
-    //             Imkerpfeife als Werkzeuggruppe.
+    //             PROCESS_HARVEST_HIVE erzeugt es, und genau dabei stechen
+    //             die Bienen, wenn niemand die Pfeife haelt.
     //   Uncapped  entdeckelt, schleuderfertig (Frame_Ready_To_Spin)
     //
-    // Ohne "Sealed" gaebe es keinen Schritt, an dem die Pfeife haengen
+    // Ohne "Sealed" gaebe es keinen Schritt, an dem der Stich haengen
     // koennte: der Cargo-Bereich einer Station ist fuer den Spieler frei
     // zugaenglich, ein fertiges Raehmchen koennte er einfach herausnehmen.
     // Die Ernte MUSS deshalb ein eigener Vorgang an der Station sein.
@@ -1052,6 +1053,13 @@ class CfgVehicles
     // ChefZ_Processing). Inventory_Base haelt ihn heraus.
     //
     // KEIN ChefZ_HasHeat: Bienen brauchen kein Feuer. needsFuel bleibt false.
+    //
+    // DER BIENENSTICH steht nicht hier, sondern im Skript: ChefZ_Beehive
+    // ueberschreibt ChefZ_OnStationActionFinished() und laesst das Volk sich
+    // wehren, wenn jemand PROCESS_HARVEST_HIVE ohne Imkerpfeife in der Hand
+    // abschliesst (Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c). Das ist
+    // gewoehnliche Vererbung - kein modded class, keine eigene Action, keine
+    // Zeile im Core.
     //
     // PROXY: wooden_case.p3d - eine Holzkiste. Eine Magazinbeute IST eine
     // Holzkiste; von allen im Projekt belegten Pfaden ist das der einzige, der
@@ -1227,7 +1235,12 @@ class CfgVehicles
     //
     // Sie ist reines Werkzeug: sie traegt keinen ChefZ-Zustand und wird nicht
     // verbraucht, sondern nur ueber die Werkzeuggruppe BEE_SMOKER gefunden.
-    // Beim Ernten nutzt sie sich ab (toolDamage an PROCESS_HARVEST_HIVE).
+    //
+    // SCHUTZ, NICHT VORAUSSETZUNG. Sie steht in keinem toolGroups mehr. Wer
+    // sie beim Ernten in der Hand haelt, kommt ungestochen davon und die
+    // Pfeife nimmt den Verschleiss (2.0 je Ernte, wie vorher als toolDamage);
+    // wer sie nicht haelt, erntet trotzdem - und blutet. Die Regel steht an
+    // ChefZ_Beehive.ChefZ_OnStationActionFinished() im Skript.
     //
     // QUELLE: TR_BuildBeeSmoker aus einer TunaCan_Opened plus einem Werkzeug
     // der Gruppe HAND_TOOL. Ohne diesen Weg gaebe es sie im Spiel nicht -
@@ -1317,6 +1330,10 @@ class CfgChefZ
     // Die drei Stationsvorgaenge (PROCESS_TEND_HIVE, PROCESS_HARVEST_HIVE,
     // PROCESS_SPIN_HONEY) brauchen KEINEN Platz - sie laufen ueber
     // ChefZ_ActionProcessAtStation und fassen Vanillas Rezeptliste nicht an.
+    // Deshalb hat der Wegfall der Werkzeuggruppe an PROCESS_HARVEST_HIVE die
+    // Sechs auch nicht angetastet: ChefZ_HandcraftBridge zieht seine Liste
+    // ueber GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT), und dieser
+    // Prozess war dort nie dabei.
     //
     // Die beiden aelteren Knoten dieses Moduls bleiben bei 0, obwohl
     // PROCESS_CUT_OUT_SEEDS vier HANDCRAFT-Transforms traegt: massgeblich ist
@@ -1556,46 +1573,48 @@ class CfgChefZProcesses
     //! ab)" und "[Vollen Rahmen entnehmen]". Beides ist EIN Vorgang, und
     //! das ist er.
     //!
-    //! ABWEICHUNG VOM AUFTRAG, offen benannt: die Imkerpfeife haelt hier
-    //! keinen Schaden ab, sie ist VORAUSSETZUNG. Ohne sie erscheint die
-    //! Aktion nicht.
+    //! KEINE toolGroups - und das ist der Kern des Auftrags, nicht eine
+    //! Auslassung. Hier stand einmal toolGroups[] = {"BEE_SMOKER"}, weil die
+    //! Imkerpfeife als PFLICHTWERKZEUG gefuehrt wurde: ohne sie erschien die
+    //! Aktion nicht. Das war eine Notloesung fuer einen fehlenden
+    //! Angriffspunkt - es gab im Verarbeitungspfad keine Stelle, an der der
+    //! handelnde Spieler und sein Handinhalt gleichzeitig bekannt waren.
     //!
-    //! Der Grund ist kein Geschmack, sondern ein fehlender Angriffspunkt.
-    //! Fuer "wer ohne Pfeife oeffnet, wird gestochen" braeuchte es einen
-    //! Punkt im Ablauf, an dem BEIDES bekannt ist: der handelnde Spieler
-    //! und was er in der Hand haelt. Den gibt es an einer ChefZ-Station
-    //! nicht:
-    //!   - ChefZ_ActionProcessAtStation.OnFinishProgressServer reicht an die
-    //!     Station nur (ItemBase inHands, int actorId) weiter. actorId ist
-    //!     PlayerIdentity.GetPlayerId(), eine Zahl ohne Rueckweg zum
-    //!     PlayerBase - und bei LEEREN Haenden, also genau im Straffall, ist
-    //!     inHands null. Es bleibt kein Zeiger auf den Spieler uebrig.
-    //!   - Ein STATION_ACTION laeuft ausserdem gar nicht ueber
-    //!     ChefZ_BeginJob, sondern ueber RunImmediate - ein Ueberschreiben
-    //!     in der Stockklasse zuendete nie.
-    //! Vanillas eigene Vorlage fuer so etwas ist
-    //! CAContinuousMineWood.DamagePlayersHands() (Handschuhe federn ab,
-    //! sonst Blutung). Sie sitzt in einer EIGENEN Actionkomponente. ChefZ
-    //! nachzubauen hiesse, eine eigene Action neben
-    //! ChefZ_ActionProcessAtStation zu stellen - ein zweiter Weg zur
-    //! Station, den kein anderes Modul des Projekts geht, oder eine
-    //! Aenderung im Core. Beides steht diesem Slice nicht zu.
+    //! Die Stelle gibt es jetzt: ChefZ_ProcessingStation_Base.
+    //! ChefZ_OnStationActionFinished(PlayerBase, ItemBase, ChefZ_Sym, int).
+    //! Die Pfeife ist damit vom Zwang zum SCHUTZ geworden - die Ernte gelingt
+    //! auch ohne sie, sie kostet dann nur Blut und Schock. Die Regel steht
+    //! vollstaendig in Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c an
+    //! ChefZ_Beehive.ChefZ_OnStationActionFinished(); die Werkzeuggruppe
+    //! BEE_SMOKER bleibt bestehen und ist dort die Adresse, unter der die
+    //! Pfeife erkannt wird.
     //!
-    //! Die Werkzeuggruppe erreicht dasselbe Spielergebnis auf dem Weg, den
-    //! das Projekt schon hat: ohne Pfeife kein Honig. Sie ist strenger als
-    //! der Auftrag und nie irrefuehrend - 11 §7 verlangt bei fehlendem
-    //! Werkzeug ausdruecklich "Action erscheint nicht" statt einer
-    //! HUD-Meldung.
+    //! WAS DER WEGFALL NICHT BERUEHRT: handcraftRecipeSlots. Vanillas
+    //! Rezeptplaetze reserviert ChefZ_HandcraftBridge ausschliesslich fuer
+    //! exec = HANDCRAFT (GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT));
+    //! dieser Prozess ist STATION_ACTION und hat nie einen Platz belegt. Die
+    //! Sechs am CfgChefZ-Knoten ChefZ_Apiary bleibt die Sechs.
+    //! Auch die 01-V12-Grenze "zwei Zutatenplaetze" gilt nur fuer HANDCRAFT -
+    //! eine Station kennt sie nicht (11 E1).
+    //!
+    //! toolDamage = 0, und das ist zwingend, nicht kosmetisch.
+    //! ChefZ_ActionProcessAtStation.ApplyToolDamage() beschaedigt
+    //! action_data.m_MainItem - was auch immer in der Hand liegt, ohne jede
+    //! Pruefung gegen toolGroups. Solange die Aktion ohne Pfeife gar nicht
+    //! erschien, konnte dort nur die Pfeife liegen. Ohne Pflichtwerkzeug
+    //! fraesse der Stock am Gewehr, an der Feldflasche oder am Kompass des
+    //! Spielers. Der Verschleiss der Pfeife (unveraendert 2.0) wandert
+    //! deshalb in den Haken, wo geprueft ist, dass es wirklich die Pfeife
+    //! ist.
     //!
     //! STATION_ACTION und nicht STATION_TIMED: der Spieler steht am Stock
-    //! und arbeitet. toolDamage = 2 - die Pfeife brennt aus.
+    //! und arbeitet.
     class PROCESS_HARVEST_HIVE
     {
         exec = "STATION_ACTION";
         displayName = "#STR_CHEFZ_PROC_HARVEST_HIVE";
-        toolGroups[] = {"BEE_SMOKER"};
         baseDurationSec = 25.0;
-        toolDamage = 2;
+        toolDamage = 0;
     };
 
     // ------------------------------------------------------------------
@@ -1681,6 +1700,16 @@ class CfgChefZTools
     //! zweite Klasse, die Rauch in die Hand gibt (gesucht wurde nach "smok" -
     //! die einzigen Treffer sind Rauchgranaten). Sie ist ueber
     //! TR_BuildBeeSmoker herstellbar und damit erreichbar.
+    //!
+    //! DIESE GRUPPE STEHT IN KEINEM toolGroups MEHR, und sie bleibt trotzdem.
+    //! Sie ist seit dem Wegfall des Pflichtwerkzeugs die Adresse, unter der
+    //! ChefZ_Beehive.ChefZ_IsBeeSmoker() den Schutz erkennt
+    //! (ChefZ_ToolRegistry.IsToolOfGroup). Ueber die Gruppe und nicht ueber
+    //! einen festen Klassennamen, damit ein fremdes Modul eine eigene Pfeife
+    //! eintragen kann und den Schutz damit geschenkt bekommt (11 E8). Ein
+    //! Prozess muss eine Werkzeuggruppe nirgends nennen, damit sie existiert -
+    //! ChefZ_ToolRegistry.Build() interniert jeden CfgChefZTools-Eintrag,
+    //! unabhaengig davon, ob ihn ein Prozess fuehrt.
     class BEE_SMOKER
     {
         classes[] = {"ChefZ_BeeSmoker"};
