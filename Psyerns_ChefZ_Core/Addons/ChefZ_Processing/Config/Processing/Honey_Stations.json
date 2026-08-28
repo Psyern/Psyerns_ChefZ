@@ -1,0 +1,14 @@
+{
+    "kind": "station",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_HoneyExtractor",
+            "stationCategories": ["EXTRACTOR"],
+            "processes": ["PROCESS_SPIN_HONEY"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_SpinHoney",
+            "process": "PROCESS_SPIN_HONEY",
+            "stationsAllowed": ["ChefZ_HoneyExtractor"],
+            "inputs": [
+                {
+                    "slotId": "frame",
+                    "match": { "cls": "ChefZ_HoneycombFrameUncapped" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "jar",
+                    "match": { "cls": "GlassBottle" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "Honey", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "byproducts": [
+                { "cls": "ChefZ_HoneycombFrameEmpty", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        }
+    ]
+}

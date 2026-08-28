@@ -70,14 +70,33 @@ class CfgPatches
             "ChefZ_RosemarySeeds", "ChefZ_WildGarlicSeeds",
             "ChefZ_PeppercornSeeds",
             "ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
-            "ChefZ_WildGarlic", "ChefZ_PepperBerries"
+            "ChefZ_WildGarlic", "ChefZ_PepperBerries",
+            // ### SLICE apiary ###
+            "ChefZ_Beehive", "ChefZ_BeehiveKit",
+            "ChefZ_HoneycombFrame_Base",
+            "ChefZ_HoneycombFrameEmpty", "ChefZ_HoneycombFrameSealed",
+            "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
+            "ChefZ_UncappingFork", "ChefZ_BeeSmoker"
         };
         weapons[] = {};
         requiredVersion = 0.1;
-        // ChefZ_Core:          Skriptbasis ChefZ_Edible_Base.
+        // ChefZ_Core:          Skriptbasis ChefZ_Edible_Base und - seit dem
+        //                      Slice apiary - ChefZ_ProcessingStation_Base.
         // DZ_Gear_Cultivation: SeedBase, PlantBase und ihre Proxy-Modelle.
-        // DZ_Gear_Food:        Proxy-Modell des Korns.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "ChefZ_Core"};
+        // DZ_Gear_Food:        Proxy-Modell des Korns und, fuer den Slice
+        //                      apiary, food_can_open.p3d an der Imkerpfeife.
+        // DZ_Gear_Camping:     wooden_case.p3d - Proxy von Bienenstock und
+        //                      Bausatz (### SLICE apiary ###).
+        // DZ_Gear_Tools:       Meat_Tenderizer.p3d - Proxy der
+        //                      Entdeckelungsgabel (### SLICE apiary ###).
+        // DZ_Gear_Consumables: birch_bark.p3d - Proxy der vier Raehmchen
+        //                      (### SLICE apiary ###).
+        //
+        // KEIN ChefZ_Processing: dieses Modul steht in dessen requiredAddons.
+        // Die Gegenrichtung waere ein Zyklus. Der Slice apiary fuehrt deshalb
+        // seine drei Werkzeuggruppen selbst (CfgChefZTools weiter unten),
+        // statt METALWORK_TOOL aus ChefZ_Processing zu benutzen.
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core"};
     };
 };
 
@@ -122,6 +141,10 @@ class CfgVehicles
     class Edible_Base;
     class SeedBase;
     class PlantBase;
+    // ### SLICE apiary ### Configbasis von Bienenstock, Bausatz, Raehmchen,
+    // Gabel und Imkerpfeife. Vorwaertsdeklaration, kein Body - sie definiert
+    // nichts, sie macht die Vanilla-Basis nur aufloesbar.
+    class Inventory_Base;
 
     //--------------------------------------------------------------------------
     // Die gemeinsame Nahrungsbasis der Getreidekette. scope = 0: eine BASIS,
@@ -931,6 +954,303 @@ class CfgVehicles
     // GreenBellPepper: TR_PaprikaToDried (ChefZ_Processing) -> ChefZ_DriedPaprika
     // -> ChefZ_PaprikaPowder. Der Food-Block mit den Garstufen entfaellt
     // ersatzlos - GreenBellPepper bringt ihn aus Vanilla mit.
+
+    //==========================================================================
+    // ### SLICE apiary ###   Imkerei - Honig ernten
+    //
+    // Auftragsnamen -> Klassennamen (DME-Plan §53, ChefZ_PascalCase):
+    //
+    //   Bienenstock            ChefZ_Beehive
+    //   Beehive_Kit            ChefZ_BeehiveKit
+    //   Honigwabe_Leer         ChefZ_HoneycombFrameEmpty
+    //   (ohne Auftragsnamen)   ChefZ_HoneycombFrameSealed   - Begruendung unten
+    //   Honigwabe_Voll         ChefZ_HoneycombFrameFull
+    //   Frame_Ready_To_Spin    ChefZ_HoneycombFrameUncapped
+    //   Uncapping_Fork         ChefZ_UncappingFork
+    //   Smoker                 ChefZ_BeeSmoker
+    //   Honey_Extractor        ChefZ_HoneyExtractor  (in ChefZ_Processing)
+    //   Honey_Jar_Empty        GlassBottle           (VANILLA, siehe unten)
+    //   Honigglas befuellt     Honey                 (VANILLA)
+    //
+    // WAS VANILLA SCHON MITBRINGT UND DESHALB HIER FEHLT
+    // --------------------------------------------------
+    //   Honey            das gefuellte Honigglas. ChefZ_Vanilla_Assets §16
+    //                    fuehrt es mit nominal 60 in Farm/Town/Village/School.
+    //                    Es ist das ERGEBNIS der Kette, keine neue Klasse.
+    //   GlassBottle      das leere Glas. ChefZ_Vanilla_Assets §18 nennt es
+    //                    ausdruecklich "Kandidat fuer das ChefZ-Einmachglas".
+    //   WoodenPlank      die Bretter des Auftrags - und der Griff der Gabel.
+    //   Nails            die Naegel des Auftrags - und die Zinken der Gabel.
+    //   TunaCan_Opened   der Blechkoerper der Imkerpfeife.
+    //   Hammer/Hatchet/Pliers/Screwdriver   HAND_TOOL beim Aufstellen des
+    //                    Stocks und beim Formen der Imkerpfeife.
+    //
+    // Alle Bau-Rezepte kommen bewusst mit GENAU DIESEN drei Vanillaklassen
+    // aus. Der erste Entwurf benutzte zusaetzlich WoodenStick und Rag; beide
+    // sind Stapel mit Menge, und ihr varQuantityMax liegt dem Projekt nicht
+    // vor (die Item-Configs von DayZ fehlen, refindex fuehrt nur Namen). Eine
+    // Mengenangabe darauf waere geraten gewesen. Fuer WoodenPlank und Nails
+    // gibt es einen Beleg - siehe Config/Processing/README_Apiary.md.
+    //
+    // Vanilla hat KEINE Imkerpfeife, KEINE Entdeckelungsgabel, KEINEN
+    // Bienenstock und KEINE Wabe - gesucht wurde in refindex/vanilla-classes.txt
+    // und refindex/vanilla-scripts-classes.txt nach "bee", "honey", "smok" und
+    // "fork". Der einzige Treffer auf "fork" ist Pitchfork, eine Mistgabel.
+    // Diese fuenf Klassen bringt ChefZ deshalb selbst mit.
+    //
+    // WARUM ES VIER RAEHMCHEN GIBT UND NICHT DREI
+    // -------------------------------------------
+    // Der Auftrag nennt drei Zustaende. Ein vierter steht dazwischen, und er
+    // ist der einzige Grund, aus dem die Imkerpfeife im Spiel etwas bedeutet:
+    //
+    //   Empty     leer, vom Spieler gebaut, wird in den Stock gehaengt
+    //   Sealed    von den Bienen ausgebaut und VERDECKELT - im Stock, voller
+    //             Bienen. Kein Eingang irgendeines weiteren Schrittes.
+    //   Full      geerntet: aus dem Stock genommen, von Bienen befreit. NUR
+    //             PROCESS_HARVEST_HIVE erzeugt es, und der verlangt die
+    //             Imkerpfeife als Werkzeuggruppe.
+    //   Uncapped  entdeckelt, schleuderfertig (Frame_Ready_To_Spin)
+    //
+    // Ohne "Sealed" gaebe es keinen Schritt, an dem die Pfeife haengen
+    // koennte: der Cargo-Bereich einer Station ist fuer den Spieler frei
+    // zugaenglich, ein fertiges Raehmchen koennte er einfach herausnehmen.
+    // Die Ernte MUSS deshalb ein eigener Vorgang an der Station sein.
+    //
+    // 3D
+    // --
+    // Alle Klassen tragen VANILLA-PROXY-MODELLE aus im Projekt bereits
+    // belegten Pfaden. Der Bedarf an eigener Geometrie ist im Slice-Bericht
+    // als Asset-Bedarf gemeldet; auf ein Modell wartet hier nichts.
+    //==========================================================================
+
+    //--------------------------------------------------------------------------
+    // Der Bienenstock (Auftrag: "Bienenstock").
+    //
+    // Er ist eine VERARBEITUNGSSTATION im Sinne von
+    // ChefZ_ProcessingStation_Base - die Andockregel steht woertlich im Kopf
+    // jener Datei:
+    //
+    //     config.cpp   class ChefZ_Beehive : Inventory_Base { ... };
+    //     JSON/Rang 2  { "kind":"station", "records":[{ "id":"ChefZ_Beehive" }] }
+    //     Skript       class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
+    //
+    // WARUM STATION UND NICHT ETWAS ANDERES: der Auftrag sagt "Bienenstock
+    // oeffnen" und "vollen Rahmen entnehmen". Beides setzt einen Innenraum
+    // voraus, in dem Raehmchen liegen - und genau das ist der Cargo-Bereich,
+    // aus dem ChefZ_ProcessingStation_Base ueber
+    // ChefZ_FactCollector.CollectFromCargo seine Zutaten liest. Ein Item ohne
+    // Cargo koennte nichts aufnehmen; im Projekt sind Stationen genau daran
+    // schon gescheitert (siehe ChefZ_CuttingBoard in ChefZ_Processing).
+    //
+    // class Cargo IST die Eingangsseite. 4x3 fasst vier Raehmchen nebeneinander
+    // - dieselbe Groessenordnung wie der Trockenrahmen, und sie deckt sich mit
+    // parallelSlots = 4 im Stationsdatensatz.
+    //
+    // KEIN Pot, KEIN Cauldron, KEIN FireplaceBase als Basis: alle drei sind
+    // Vanillas Kochgeschirr bzw. Feuerstellen und wuerden den Stock in Vanillas
+    // Kochkette ziehen (Begruendung ausgeschrieben an ChefZ_ButterChurn in
+    // ChefZ_Processing). Inventory_Base haelt ihn heraus.
+    //
+    // KEIN ChefZ_HasHeat: Bienen brauchen kein Feuer. needsFuel bleibt false.
+    //
+    // PROXY: wooden_case.p3d - eine Holzkiste. Eine Magazinbeute IST eine
+    // Holzkiste; von allen im Projekt belegten Pfaden ist das der einzige, der
+    // nicht nur ungefaehr passt. Eigenes Beutenmesh ist gemeldet.
+    //--------------------------------------------------------------------------
+    class ChefZ_Beehive : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BEEHIVE";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DESC";
+        model = "\DZ\gear\camping\wooden_case.p3d";
+        rotationFlags = 2;
+        itemSize[] = {6, 5};
+        weight = 14000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        varQuantityDestroyOnMin = 0;
+        lifetime = 172800;
+
+        class Cargo
+        {
+            itemsCargoSize[] = {4, 3};
+            openable = 0;
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Der Bausatz (Auftrag: "Beehive_Kit").
+    //
+    // Warum es ihn ueberhaupt gibt, obwohl TR_AssemblePastaMachine in
+    // ChefZ_Processing zeigt, dass ein Geraet auch in EINEM Schritt entstehen
+    // darf: der Auftrag nennt ihn als eigenes Mittel, und er traegt eine
+    // Aussage, die der fertige Stock nicht traegt. Der Bausatz ist flach
+    // gepackt (3x2, 6 kg) und laesst sich tragen; der aufgestellte Stock ist
+    // 6x5 und 14 kg. Gebaut wird am Lager, aufgestellt wird an der Wiese.
+    //
+    // KEIN Hologramm-Deploy: das waere ein neues System (CanBePlaced,
+    // ActionPlaceObject, Hologramm-Config) und steht diesem Slice nicht zu.
+    // Der zweite Schritt laeuft als gewoehnlicher Handwerksschritt
+    // (PROCESS_RAISE_HIVE) - genauso, wie die uebrigen Stationen des Projekts
+    // entstehen.
+    //
+    // PROXY: dieselbe Holzkiste, kleiner gefuehrt.
+    //--------------------------------------------------------------------------
+    class ChefZ_BeehiveKit : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BEEHIVEKIT";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVEKIT_DESC";
+        model = "\DZ\gear\camping\wooden_case.p3d";
+        rotationFlags = 17;
+        itemSize[] = {3, 2};
+        weight = 6000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        lifetime = 43200;
+    };
+
+    //--------------------------------------------------------------------------
+    // Die vier Raehmchen.
+    //
+    // Eine gemeinsame Basis mit scope = 0: sie unterscheiden sich in Name,
+    // Beschreibung und Gewicht, in nichts sonst. Die Basis steht einmal da,
+    // weil configcpp.mjs Klassennamen projektweit auf Eindeutigkeit prueft und
+    // vier gleichlautende Bloecke vier Gelegenheiten waeren, sie
+    // auseinanderlaufen zu lassen.
+    //
+    // KEINE Nahrung: weder Nutrition noch Food noch FoodStages. Eine volle
+    // Wabe waere essbar, und genau deshalb steht hier die Entscheidung: das
+    // Ergebnis der Kette ist Vanillas Honey, und der ist essbar. Ein zweiter
+    // essbarer Honigtraeger haette Nutrition, FoodStageTransitions UND eine
+    // Essaktion gebraucht (01 V7, 01 V4, chefzcookable Regel C) - drei
+    // Zusagen fuer einen Bissen, den niemand verlangt hat.
+    //
+    // PROXY: birch_bark.p3d - ein flaches, plattenfoermiges Objekt in der
+    // richtigen Groessenordnung. UNPLAUSIBEL im Sinne von Asset-Backlog §10.3:
+    // Birkenrinde ist gewellt, ein Raehmchen ist ein rechteckiger Holzrahmen.
+    // Es ist der beste im Projekt belegte Pfad, mehr nicht - und alle vier
+    // Zustaende sehen damit gleich aus. Eigene Geometrie mit vier sichtbar
+    // verschiedenen Fuellgraden ist als Asset-Bedarf gemeldet.
+    //--------------------------------------------------------------------------
+    class ChefZ_HoneycombFrame_Base : Inventory_Base
+    {
+        scope = 0;
+        model = "\dz\gear\consumables\birch_bark.p3d";
+        itemSize[] = {2, 3};
+        absorbency = 0.0;
+        canBeDigged = 0;
+        varQuantityDestroyOnMin = 0;
+        lifetime = 43200;
+        repairableWithKits[] = {};
+    };
+
+    //! Auftrag: "Honigwabe_Leer". Ergebnis von TR_BuildHoneycombFrame,
+    //! Eingang von PROCESS_TEND_HIVE - und Nebenprodukt des Schleuderns, das
+    //! es leer zurueckgibt. Damit ist die Kette ein Kreis, kein Strahl.
+    class ChefZ_HoneycombFrameEmpty : ChefZ_HoneycombFrame_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_COMBFRAME_EMPTY";
+        descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_EMPTY_DESC";
+        weight = 400;
+    };
+
+    //! Verdeckelt, im Stock, voller Bienen. Es gibt fuer diesen Zustand
+    //! ABSICHTLICH keinen weiteren Verwendungszweck: wer ihn aus dem Cargo
+    //! nimmt, hat ein schweres Stueck Wachs und sonst nichts. Der Weg nach
+    //! vorn fuehrt ausschliesslich ueber PROCESS_HARVEST_HIVE.
+    class ChefZ_HoneycombFrameSealed : ChefZ_HoneycombFrame_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_COMBFRAME_SEALED";
+        descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_SEALED_DESC";
+        weight = 2200;
+    };
+
+    //! Auftrag: "Honigwabe_Voll" / "Honeycomb_Frame_Full".
+    class ChefZ_HoneycombFrameFull : ChefZ_HoneycombFrame_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_COMBFRAME_FULL";
+        descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_FULL_DESC";
+        weight = 2200;
+    };
+
+    //! Auftrag: "Frame_Ready_To_Spin". Eingang der Honigschleuder.
+    class ChefZ_HoneycombFrameUncapped : ChefZ_HoneycombFrame_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_COMBFRAME_UNCAPPED";
+        descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_UNCAPPED_DESC";
+        weight = 2100;
+    };
+
+    //--------------------------------------------------------------------------
+    // Die Entdeckelungsgabel (Auftrag: "Uncapping_Fork").
+    //
+    // Sie ist das einzige Mitglied der Werkzeuggruppe UNCAPPING_TOOL. Dass
+    // eine Gruppe nur eine Klasse fuehrt, war im Projekt schon einmal ein
+    // stiller Ausfall (ChefZ_RollingPin: kein Loot, kein Craft, damit war
+    // PROCESS_ROLL unerreichbar und die Backkette tot). Der Unterschied hier
+    // ist, dass diese Klasse eine QUELLE hat: TR_BuildUncappingFork baut sie
+    // aus einem Brett und vier Naegeln, beides gewoehnliches Vanilla-Gut.
+    // Deshalb steht hier KEINE Vanilla-Klasse zusaetzlich in der Gruppe -
+    // ein Kuechenmesser waere ein zweiter Weg zum selben Ziel und machte die
+    // Gabel ueberfluessig.
+    //
+    // PROXY: Meat_Tenderizer.p3d - ein metallenes Kuechengeraet mit Griff.
+    // Derselbe Pfad, den ChefZ_PastaMachine und ChefZ_CuttingBoard tragen und
+    // den Asset-Backlog §10.1 als den korrekten ausweist.
+    //--------------------------------------------------------------------------
+    class ChefZ_UncappingFork : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_UNCAPPINGFORK";
+        descriptionShort = "#STR_CHEFZ_ITEM_UNCAPPINGFORK_DESC";
+        model = "\dz\gear\tools\Meat_Tenderizer.p3d";
+        rotationFlags = 17;
+        itemSize[] = {1, 3};
+        weight = 340;
+        repairableWithKits[] = {};
+        lifetime = 43200;
+    };
+
+    //--------------------------------------------------------------------------
+    // Die Imkerpfeife (Auftrag: "Smoker").
+    //
+    // ACHTUNG, NAMENSGLEICHHEIT: ChefZ_Processing fuehrt bereits eine Klasse
+    // ChefZ_Smoker - das ist der RAEUCHERSCHRANK der Konservierungskette, ein
+    // ganz anderes Geraet. Diese hier heisst deshalb ChefZ_BeeSmoker. Zwei
+    // Klassen gleichen Namens waeren fuer configcpp.mjs ein Fehler und fuer
+    // den Spieler eine Verwechslung.
+    //
+    // Sie ist reines Werkzeug: sie traegt keinen ChefZ-Zustand und wird nicht
+    // verbraucht, sondern nur ueber die Werkzeuggruppe BEE_SMOKER gefunden.
+    // Beim Ernten nutzt sie sich ab (toolDamage an PROCESS_HARVEST_HIVE).
+    //
+    // QUELLE: TR_BuildBeeSmoker aus einer TunaCan_Opened plus einem Werkzeug
+    // der Gruppe HAND_TOOL. Ohne diesen Weg gaebe es sie im Spiel nicht -
+    // ChefZ liefert projektweit keine types.xml (Gate 4, B8) - und mit ihr
+    // fiele der ganze Ernteschritt aus.
+    //
+    // PROXY: food_can_open.p3d - eine offene Blechdose. Eine Imkerpfeife IST
+    // ein Blechbehaelter mit Deckel und Balg; die Dose ist davon die Haelfte,
+    // und sie ist im Projekt belegt (ChefZ_Cooking fuehrt sie bereits).
+    // Eigenes Mesh mit Balg und Rauchtuelle ist gemeldet.
+    //--------------------------------------------------------------------------
+    class ChefZ_BeeSmoker : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BEESMOKER";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEESMOKER_DESC";
+        model = "\dz\gear\food\food_can_open.p3d";
+        rotationFlags = 17;
+        itemSize[] = {2, 3};
+        weight = 900;
+        repairableWithKits[] = {};
+        lifetime = 43200;
+    };
 };
 
 //------------------------------------------------------------------------------
@@ -975,6 +1295,47 @@ class CfgChefZ
         dataFiles[] =
         {
             "ChefZ_Farming/Config/Ingredients/Herbs.json"
+        };
+    };
+
+    // ### SLICE apiary ### Imkerei - Honig ernten.
+    //
+    // handcraftRecipeSlots = 6. Die Zahl ist eine RESERVIERUNG in Vanillas
+    // Rezeptliste und muss VOR dem Laden feststehen; wird sie vergessen,
+    // erscheint kein einziges der Rezepte, und zwar OHNE Fehlermeldung an der
+    // Stelle, an der man sucht (Kopf von ChefZ_HandcraftBridge.c).
+    //
+    // Die sechs, einer je HANDCRAFT-Transform dieses Slice:
+    //
+    //   TR_BuildBeehiveKit      PROCESS_BUILD_HIVE_KIT
+    //   TR_RaiseBeehive         PROCESS_RAISE_HIVE
+    //   TR_BuildHoneycombFrame  PROCESS_BUILD_FRAME
+    //   TR_BuildUncappingFork   PROCESS_BUILD_UNCAPPING_FORK
+    //   TR_BuildBeeSmoker       PROCESS_BUILD_BEE_SMOKER
+    //   TR_UncapHoneycombFrame  PROCESS_UNCAP_COMB
+    //
+    // Die drei Stationsvorgaenge (PROCESS_TEND_HIVE, PROCESS_HARVEST_HIVE,
+    // PROCESS_SPIN_HONEY) brauchen KEINEN Platz - sie laufen ueber
+    // ChefZ_ActionProcessAtStation und fassen Vanillas Rezeptliste nicht an.
+    //
+    // Die beiden aelteren Knoten dieses Moduls bleiben bei 0, obwohl
+    // PROCESS_CUT_OUT_SEEDS vier HANDCRAFT-Transforms traegt: massgeblich ist
+    // die projektweite SUMME, die ChefZ_HandcraftBridge.Reserve() ueber
+    // ChefZ_ManifestReader.ReadHandcraftSlotTotal() liest - welcher Knoten sie
+    // beisteuert, ist der Bruecke gleichgueltig. Diese Reservierung hier ist
+    // die des Slice apiary und wird nicht mit fremdem Ueberschuss verrechnet;
+    // parallel arbeitende Slices koennten ihn jederzeit verbrauchen.
+    class ChefZ_Apiary
+    {
+        chefzApiVersion = 1;
+        loadOrder = 217;
+        handcraftRecipeSlots = 6;
+        dataFiles[] =
+        {
+            "ChefZ_Farming/Config/Processing/Apiary_Ingredients.json",
+            "ChefZ_Farming/Config/Processing/Apiary_Stations.json",
+            "ChefZ_Farming/Config/Processing/Apiary_Crafts.json",
+            "ChefZ_Farming/Config/Processing/Apiary_Hive.json"
         };
     };
 };
@@ -1032,5 +1393,297 @@ class CfgChefZProcesses
         animationLength = 1.0;
         specialty = 0.01;
         toolDamage = 1;
+    };
+
+    //--------------------------------------------------------------------------
+    // ### SLICE apiary ###   Die acht Verben der Imkerei
+    //
+    // Rang 1 und nicht JSON, aus demselben Grund, den ChefZ_Processing an
+    // seinen Prozessen ausschreibt: ChefZ_ActionProcessAtStation.
+    // ActionCondition() laeuft auch auf dem CLIENT und braucht dort
+    // Aktionstext und Dauer (11 E8, 02 §2). Der Client liest die Game-Config
+    // garantiert.
+    //
+    // WARUM FUENF SEPARATE BAU-PROZESSE UND NICHT EIN GEMEINSAMES
+    // "ZUSAMMENNAGELN"
+    // ----------------------------------------------------------
+    // Der Anzeigename eines Handwerksrezepts kommt aus dem PROZESS, nicht aus
+    // dem Transform: ChefZ_GenericCraftRecipe.InitFromDef() setzt woertlich
+    // "m_Name = proc.displayName". Zwei Transforms an EINEM Prozess erscheinen
+    // deshalb unter demselben Menuepunkt.
+    //
+    // Solange sich ihre Eingaenge unterscheiden, ist das folgenlos - so machen
+    // es PROCESS_CUT_OUT_SEEDS (vier Gemuese) und PROCESS_CHOP_VEGETABLE
+    // (sieben). Hier ist es NICHT folgenlos: Bausatz, Raehmchen UND
+    // Entdeckelungsgabel entstehen alle drei aus WoodenPlank + Nails und
+    // unterscheiden sich nur in der Menge. An einem gemeinsamen Prozess
+    // stuenden drei gleichnamige Eintraege im Kontextmenue, und der Spieler
+    // haette keine Moeglichkeit, den richtigen zu treffen.
+    //
+    // Die Vorlage dafuer steht im Projekt: PROCESS_CARVE_PLATE und
+    // PROCESS_CARVE_BOWL in ChefZ_Cooking sind derselbe Vorgang am selben
+    // Material und trotzdem zwei Prozesse - aus genau diesem Grund. Ein Objekt
+    // im Prozessnamen ist der Preis dafuer, dass der Spieler sieht, was er
+    // baut.
+    //--------------------------------------------------------------------------
+    // ------------------------------------------------------------------
+    // 1. BAUEN - vier Handwerksschritte ohne Station.
+    //
+    // Drei davon haben ZWEI Eingaenge (Bretter und Naegel) und deshalb
+    // ausdruecklich KEINE toolGroups-Zeile: Vanillas RecipeBase kennt genau
+    // MAX_NUMBER_OF_INGREDIENTS = 2, und beide Plaetze sind mit Zutaten
+    // belegt. Ein Werkzeug waere der dritte Platz, und den gibt es nicht
+    // (01 V12). Dieselbe Form traegt PROCESS_SALT_CURE in ChefZ_Processing.
+    //
+    // Der vierte - PROCESS_BUILD_BEE_SMOKER - hat EINEN Eingang und deshalb
+    // eine Werkzeuggruppe. Beides ist zwingend miteinander verknuepft: ein
+    // Ein-Eingang-Transform OHNE Werkzeug ist bei Vanilla nicht
+    // registrierbar, weil es nichts zum Kombinieren gaebe.
+    //
+    // WIE MENGEN AUSGEDRUECKT WERDEN, und warum nicht ueber minCount:
+    // minCount zaehlt ITEM-INSTANZEN (ChefZ_SlotEvaluator.CheckCounts),
+    // Bretter und Naegel sind in DayZ aber Stapel MIT MENGE
+    // (Construction.HasMaterialWithQuantityAttached fragt GetQuantity()).
+    // "4x Planks" steht deshalb als amount/consumeAmount in Rezepteinheiten
+    // im Transform, nicht als minCount - die vollstaendige Herleitung samt
+    // der einen im Spiel nachzumessenden Zahl steht in
+    // Config/Processing/README_Apiary.md.
+    // ------------------------------------------------------------------
+
+    //! Auftrag: "Bienenstock bauen: 4x Planks + 10x Nails -> Beehive_Kit".
+    class PROCESS_BUILD_HIVE_KIT
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_BUILD_HIVE_KIT";
+        baseDurationSec = 25.0;
+        animationLength = 4.0;
+        specialty = 0.03;
+        toolDamage = 0;
+    };
+
+    //! Auftrag: "Rahmen bauen: 1x Plank + 2x Nails -> Honeycomb_Frame_Empty".
+    class PROCESS_BUILD_FRAME
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_BUILD_FRAME";
+        baseDurationSec = 12.0;
+        animationLength = 2.0;
+        specialty = 0.02;
+        toolDamage = 0;
+    };
+
+    //! Ohne Auftragsvorgabe: der Auftrag nennt die Gabel als Mittel, sagt
+    //! aber nicht, woher sie kommt. ChefZ liefert projektweit keine
+    //! types.xml (Gate 4, B8) - ohne diesen Schritt gaebe es die Gabel im
+    //! Spiel nicht, und PROCESS_UNCAP_COMB waere unerreichbar. Genau so ist
+    //! die Backkette am Nudelholz einmal stillgestanden.
+    class PROCESS_BUILD_UNCAPPING_FORK
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_BUILD_UNCAPPING_FORK";
+        baseDurationSec = 15.0;
+        animationLength = 2.0;
+        specialty = 0.02;
+        toolDamage = 0;
+    };
+
+    //! Ohne Auftragsvorgabe, gleiche Begruendung wie bei der Gabel: ohne
+    //! diesen Schritt gaebe es die Imkerpfeife nicht, und die Ernte waere
+    //! nicht durchfuehrbar.
+    class PROCESS_BUILD_BEE_SMOKER
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_BUILD_BEE_SMOKER";
+        toolGroups[] = {"HAND_TOOL"};
+        baseDurationSec = 20.0;
+        animationLength = 3.0;
+        specialty = 0.02;
+        toolDamage = 2;
+    };
+
+    // ------------------------------------------------------------------
+    // 2. AUFSTELLEN - ein Eingang plus Werkzeuggruppe.
+    //
+    // Die Gegenform zu den vier oben: EIN Eingang, und die Werkzeuggruppe
+    // belegt den zweiten der zwei Zutatenplaetze (01 V12). Ohne Werkzeug
+    // waere ein Ein-Eingang-Transform bei Vanilla gar nicht registrierbar -
+    // es gaebe nichts zum Kombinieren.
+    // ------------------------------------------------------------------
+    class PROCESS_RAISE_HIVE
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_RAISE_HIVE";
+        toolGroups[] = {"HAND_TOOL"};
+        baseDurationSec = 30.0;
+        animationLength = 4.0;
+        specialty = 0.03;
+        toolDamage = 3;
+    };
+
+    // ------------------------------------------------------------------
+    // 3. DER STOCK - die beiden Vorgaenge an der Station.
+    // ------------------------------------------------------------------
+
+    //! Die Antwort auf "wie werden Raehmchen voll".
+    //!
+    //! STATION_TIMED und nicht STATION_ACTION: ein Volk baut aus, waehrend
+    //! der Spieler nicht da ist. Genau dafuer ist diese Ausfuehrungsform da
+    //! (11 §7: "Spieler verlaesst den Server waehrend STATION_TIMED ->
+    //! irrelevant, der Timer gehoert der Station").
+    //!
+    //! WIE DER SPIELER DEN FORTSCHRITT SIEHT: ueber dieselbe Anzeige, die
+    //! Trockenrahmen und Raeucherschrank benutzen.
+    //! ChefZ_ProcessingStation_Base synchronisiert Progress01 und den
+    //! Ordinal des laufenden Prozesses selbst (11 §6). Dieser Slice baut
+    //! dafuer KEIN eigenes HUD und kein eigenes Sync-Feld - es gibt beides
+    //! schon, und ein zweites waere ein neues Core-System.
+    //!
+    //! 3600 Sekunden - eine Stunde je Raehmchen. Der Stock traegt vier
+    //! Parallelplaetze (Stationsdatensatz), also vier Raehmchen in einer
+    //! Stunde. Das ist die laengste Wartezeit des Projekts und soll es
+    //! sein: Honig ist der einzige Suessstoff der Kette.
+    //!
+    //! KEIN requiresHeat. Bienen brauchen kein Feuer.
+    class PROCESS_TEND_HIVE
+    {
+        exec = "STATION_TIMED";
+        displayName = "#STR_CHEFZ_PROC_TEND_HIVE";
+        baseDurationSec = 3600.0;
+        requiresHeat = 0;
+    };
+
+    //! Auftrag: "[Bienenstock oeffnen] -> (Smoker in der Hand haelt Schaden
+    //! ab)" und "[Vollen Rahmen entnehmen]". Beides ist EIN Vorgang, und
+    //! das ist er.
+    //!
+    //! ABWEICHUNG VOM AUFTRAG, offen benannt: die Imkerpfeife haelt hier
+    //! keinen Schaden ab, sie ist VORAUSSETZUNG. Ohne sie erscheint die
+    //! Aktion nicht.
+    //!
+    //! Der Grund ist kein Geschmack, sondern ein fehlender Angriffspunkt.
+    //! Fuer "wer ohne Pfeife oeffnet, wird gestochen" braeuchte es einen
+    //! Punkt im Ablauf, an dem BEIDES bekannt ist: der handelnde Spieler
+    //! und was er in der Hand haelt. Den gibt es an einer ChefZ-Station
+    //! nicht:
+    //!   - ChefZ_ActionProcessAtStation.OnFinishProgressServer reicht an die
+    //!     Station nur (ItemBase inHands, int actorId) weiter. actorId ist
+    //!     PlayerIdentity.GetPlayerId(), eine Zahl ohne Rueckweg zum
+    //!     PlayerBase - und bei LEEREN Haenden, also genau im Straffall, ist
+    //!     inHands null. Es bleibt kein Zeiger auf den Spieler uebrig.
+    //!   - Ein STATION_ACTION laeuft ausserdem gar nicht ueber
+    //!     ChefZ_BeginJob, sondern ueber RunImmediate - ein Ueberschreiben
+    //!     in der Stockklasse zuendete nie.
+    //! Vanillas eigene Vorlage fuer so etwas ist
+    //! CAContinuousMineWood.DamagePlayersHands() (Handschuhe federn ab,
+    //! sonst Blutung). Sie sitzt in einer EIGENEN Actionkomponente. ChefZ
+    //! nachzubauen hiesse, eine eigene Action neben
+    //! ChefZ_ActionProcessAtStation zu stellen - ein zweiter Weg zur
+    //! Station, den kein anderes Modul des Projekts geht, oder eine
+    //! Aenderung im Core. Beides steht diesem Slice nicht zu.
+    //!
+    //! Die Werkzeuggruppe erreicht dasselbe Spielergebnis auf dem Weg, den
+    //! das Projekt schon hat: ohne Pfeife kein Honig. Sie ist strenger als
+    //! der Auftrag und nie irrefuehrend - 11 §7 verlangt bei fehlendem
+    //! Werkzeug ausdruecklich "Action erscheint nicht" statt einer
+    //! HUD-Meldung.
+    //!
+    //! STATION_ACTION und nicht STATION_TIMED: der Spieler steht am Stock
+    //! und arbeitet. toolDamage = 2 - die Pfeife brennt aus.
+    class PROCESS_HARVEST_HIVE
+    {
+        exec = "STATION_ACTION";
+        displayName = "#STR_CHEFZ_PROC_HARVEST_HIVE";
+        toolGroups[] = {"BEE_SMOKER"};
+        baseDurationSec = 25.0;
+        toolDamage = 2;
+    };
+
+    // ------------------------------------------------------------------
+    // 4. ENTDECKELN - Auftrag: "Rahmen entdeckeln: Honeycomb_Frame_Full +
+    //    Uncapping_Fork -> Frame_Ready_To_Spin".
+    //
+    // Woertlich die Form, die Vanillas RecipeBase traegt: ein Eingang, ein
+    // Werkzeug. Der Auftrag beschreibt sie selbst als "via Crafting", und
+    // genau das ist es - HANDCRAFT, keine Station.
+    // ------------------------------------------------------------------
+    class PROCESS_UNCAP_COMB
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_UNCAP_COMB";
+        toolGroups[] = {"UNCAPPING_TOOL"};
+        baseDurationSec = 18.0;
+        animationLength = 2.0;
+        specialty = 0.02;
+        toolDamage = 1;
+    };
+};
+
+
+//==============================================================================
+// ### SLICE apiary ###   Die drei Werkzeuggruppen der Imkerei, Rang 1
+//
+// Rang 1, weil ActionCondition clientseitig laeuft (02 §2): der Spieler muss
+// sehen, ob er den Schritt tun kann, bevor der Server etwas bestaetigt.
+//
+// Die Namen tragen bewusst KEIN ChefZ_-Praefix: eine Werkzeuggruppe ist ein
+// Symbol in einem offenen Namensraum, keine Item-Klasse. Ein fremdes Modul
+// darf derselben Gruppe eigene Klassen beisteuern - dafuer ist sie da.
+//
+// WARUM DIESES MODUL EINE EIGENE HOLZWERKZEUGGRUPPE FUEHRT und nicht
+// METALWORK_TOOL aus ChefZ_Processing benutzt: ChefZ_Processing hat
+// ChefZ_Farming in seinem requiredAddons. Die Gegenrichtung waere ein Zyklus
+// in der Ladeordnung. Die Gruppen sind auch sachlich verschieden - Bretter
+// nagelt man, Bleche biegt man.
+//==============================================================================
+class CfgChefZTools
+{
+    //! Werkzeug in der Hand - zum Aufstellen des Stocks
+    //! (PROCESS_RAISE_HIVE) und zum Formen der Blechdose zur Imkerpfeife
+    //! (PROCESS_BUILD_BEE_SMOKER).
+    //!
+    //! Der Name traegt bewusst KEIN Material: die Gruppe hiess im ersten
+    //! Entwurf WOODWORK_TOOL und wurde umbenannt, als die Imkerpfeife
+    //! dazukam - ein Hammer, der laut Gruppennamen nur Holz bearbeitet,
+    //! aber eine Dose biegt, waere ein Name, der luegt.
+    //!
+    //! METALWORK_TOOL aus ChefZ_Processing waere fuer die Dose die
+    //! naeherliegende Gruppe und ist trotzdem nicht benutzbar:
+    //! ChefZ_Processing fuehrt ChefZ_Farming in seinem requiredAddons. Eine
+    //! Gruppe aus einem Modul zu benutzen, das dieses hier voraussetzt,
+    //! hiesse, sich auf ein PBO zu verlassen, das nicht geladen sein muss -
+    //! und die Gruppe waere dann leer, ohne Fehlermeldung.
+    //!
+    //! Ausschliesslich Vanillaklassen: ChefZ fasst keine fremde config.cpp
+    //! an, sondern nennt fremde Klassen in einer eigenen Gruppe (11 E8).
+    //! Alle vier sind gewoehnliches Werkzeugloot - der Slice haengt an keinem
+    //! einzelnen seltenen Fund.
+    class HAND_TOOL
+    {
+        classes[] =
+        {
+            "Hammer",
+            "Hatchet",
+            "Pliers",
+            "Screwdriver"
+        };
+        allowSubclasses = 1;
+    };
+
+    //! Werkzeug zum Entdeckeln. GENAU EIN Mitglied, und das ist Absicht -
+    //! die Begruendung steht ausgeschrieben an ChefZ_UncappingFork.
+    class UNCAPPING_TOOL
+    {
+        classes[] = {"ChefZ_UncappingFork"};
+        allowSubclasses = 1;
+    };
+
+    //! Die Imkerpfeife. Auch hier genau ein Mitglied: Vanilla hat keine
+    //! zweite Klasse, die Rauch in die Hand gibt (gesucht wurde nach "smok" -
+    //! die einzigen Treffer sind Rauchgranaten). Sie ist ueber
+    //! TR_BuildBeeSmoker herstellbar und damit erreichbar.
+    class BEE_SMOKER
+    {
+        classes[] = {"ChefZ_BeeSmoker"};
+        allowSubclasses = 1;
     };
 };

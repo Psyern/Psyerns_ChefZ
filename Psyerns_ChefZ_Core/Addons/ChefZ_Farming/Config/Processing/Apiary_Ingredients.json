@@ -1,0 +1,22 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "WoodenPlank",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 20,
+            "decays": false
+        },
+        {
+            "id": "Nails",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 99,
+            "decays": false
+        }
+    ]
+}

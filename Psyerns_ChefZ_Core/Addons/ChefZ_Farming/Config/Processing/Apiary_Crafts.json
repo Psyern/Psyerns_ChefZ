@@ -1,0 +1,147 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_BuildBeehiveKit",
+            "process": "PROCESS_BUILD_HIVE_KIT",
+            "inputs": [
+                {
+                    "slotId": "planks",
+                    "match": { "cls": "WoodenPlank" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": { "min": 4.0 },
+                    "consume": "amount",
+                    "consumeAmount": 4.0
+                },
+                {
+                    "slotId": "nails",
+                    "match": { "cls": "Nails" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": { "min": 10.0 },
+                    "consume": "amount",
+                    "consumeAmount": 10.0
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_BeehiveKit", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_RaiseBeehive",
+            "process": "PROCESS_RAISE_HIVE",
+            "inputs": [
+                {
+                    "slotId": "kit",
+                    "match": { "cls": "ChefZ_BeehiveKit" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_Beehive", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_BuildHoneycombFrame",
+            "process": "PROCESS_BUILD_FRAME",
+            "inputs": [
+                {
+                    "slotId": "plank",
+                    "match": { "cls": "WoodenPlank" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": { "min": 1.0 },
+                    "consume": "amount",
+                    "consumeAmount": 1.0
+                },
+                {
+                    "slotId": "nails",
+                    "match": { "cls": "Nails" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": { "min": 2.0 },
+                    "consume": "amount",
+                    "consumeAmount": 2.0
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_HoneycombFrameEmpty", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_BuildUncappingFork",
+            "process": "PROCESS_BUILD_UNCAPPING_FORK",
+            "inputs": [
+                {
+                    "slotId": "handle",
+                    "match": { "cls": "WoodenPlank" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": { "min": 1.0 },
+                    "consume": "amount",
+                    "consumeAmount": 1.0
+                },
+                {
+                    "slotId": "tines",
+                    "match": { "cls": "Nails" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": { "min": 4.0 },
+                    "consume": "amount",
+                    "consumeAmount": 4.0
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_UncappingFork", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_BuildBeeSmoker",
+            "process": "PROCESS_BUILD_BEE_SMOKER",
+            "inputs": [
+                {
+                    "slotId": "body",
+                    "match": { "cls": "TunaCan_Opened" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_BeeSmoker", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_UncapHoneycombFrame",
+            "process": "PROCESS_UNCAP_COMB",
+            "inputs": [
+                {
+                    "slotId": "frame",
+                    "match": { "cls": "ChefZ_HoneycombFrameFull" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_HoneycombFrameUncapped", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        }
+    ]
+}

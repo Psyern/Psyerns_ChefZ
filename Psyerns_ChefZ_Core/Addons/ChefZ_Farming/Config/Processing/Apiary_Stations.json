@@ -1,0 +1,14 @@
+{
+    "kind": "station",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_Beehive",
+            "stationCategories": ["APIARY"],
+            "processes": ["PROCESS_TEND_HIVE", "PROCESS_HARVEST_HIVE"],
+            "parallelSlots": 4,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        }
+    ]
+}

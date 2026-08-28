@@ -1,0 +1,43 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_BeesFillFrame",
+            "process": "PROCESS_TEND_HIVE",
+            "stationsAllowed": ["ChefZ_Beehive"],
+            "durationOverrideSec": 3600,
+            "inputs": [
+                {
+                    "slotId": "frame",
+                    "match": { "cls": "ChefZ_HoneycombFrameEmpty" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_HoneycombFrameSealed", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_HarvestSealedFrame",
+            "process": "PROCESS_HARVEST_HIVE",
+            "stationsAllowed": ["ChefZ_Beehive"],
+            "inputs": [
+                {
+                    "slotId": "frame",
+                    "match": { "cls": "ChefZ_HoneycombFrameSealed" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_HoneycombFrameFull", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        }
+    ]
+}
