@@ -99,3 +99,100 @@ class ChefZ_HunterStewBowl { returnContainer = "AUTO"; };
 Ausgelöst wird sie in `ChefZ_Edible_Base.OnConsume`, **nachdem** Vanilla die
 Menge abgezogen hat und nur bei `Quantity <= 0` (`16` E4). Nicht bei jedem
 Bissen — das wäre ein Duplikations-Exploit erster Ordnung.
+
+## 5. Woher die Behälter kommen — die fünf HANDCRAFT-Transforms
+
+Alle fünf liegen in `Config/Processing/`, nicht hier: es sind `kind: transform`,
+keine `kind: recipe`. Ihre Prozesse stehen in **Rang 1** (`CfgChefZProcesses` in
+der `config.cpp` dieses Moduls), weil `ActionCondition()` den Aktionstext auch
+clientseitig braucht (`02` §2).
+
+| Transform | Datei | Eingang 1 | Eingang 2 / Werkzeug | Ergebnis |
+|---|---|---|---|---|
+| `TR_CarveWoodenPlate` | `Tableware.json` | `Firewood` | `CUTTING_TOOL` | 1 × `ChefZ_EmptyPlate` |
+| `TR_CarveWoodenBowl` | `Tableware.json` | `Firewood` | `CUTTING_TOOL` | 1 × `ChefZ_EmptyBowl` |
+| `TR_BowlFromBark` | `Containers.json` | `Bark_Birch` \| `Bark_Oak` | `CUTTING_TOOL` + `AXE_TOOL` | 1 × `ChefZ_EmptyBowl` |
+| `TR_BoxFromPaper` | `Containers.json` | `Paper` | `Paper` | 1 × `ChefZ_EmptyBox` |
+| `TR_CansFromMetalSheet` | `Containers.json` | `MetalPlate` | `SAWING_TOOL` (`Hacksaw`) | **10 ×** `ChefZ_EmptyCan` |
+
+### Die Form, die ein HANDCRAFT-Transform haben **muss**
+
+`RecipeBase.c` führt `MAX_NUMBER_OF_INGREDIENTS = 2` und `MAXIMUM_RESULTS = 10`
+(`01` V12). Daraus folgen genau zwei zulässige Bauformen, und
+`ChefZ_GenericCraftRecipe.InitFromDef()` weist alles andere ab:
+
+* **ein Eingang + Werkzeuggruppe** — das Werkzeug belegt den zweiten Platz.
+* **zwei Eingänge, keine Werkzeuggruppe** — sonst wäre das Werkzeug der dritte.
+
+Ein Eingang *ohne* Werkzeug ist nicht registrierbar: Vanillas Craftsystem
+kombiniert immer zwei Dinge. Und `stationsAllowed` darf **kein** HANDCRAFT-
+Transform nennen — die Handwerksbrücke weist ihn dann ab, und das Rezept
+erscheint im Spiel nie, ohne Fehlermeldung.
+
+### „paper + paper" sind **zwei Slots**, nicht ein Slot mit `minCount: 2`
+
+`ChefZ_HandcraftBridge` bildet jeden Eingangs-Slot auf **einen** Vanilla-
+Zutatenplatz ab (`InsertIngredient(s, …)` mit `s` = Slotindex). Ein Slot mit
+`minCount: 2` ergäbe deshalb nur **einen** Zutatenplatz — und damit den
+abgewiesenen Fall „ein Eingang ohne Werkzeug". Es sind zwei Slots, `paperA` und
+`paperB`, beide auf `Paper`.
+
+Dass beide Slots dieselbe Klasse fordern, ist unkritisch: der Matcher garantiert
+„ein Item bedient höchstens einen Slot" (`ChefZ_Matcher`, Kopf, Eigenschaft 2).
+Dasselbe Blatt Papier kann nicht beide Plätze füllen.
+
+### Zehn Dosen sind **zehn `outputs`**, keine `quantity: 10`
+
+`quantity` landet über `ChefZ_Applicator` in `item.SetQuantity()` — das ist die
+Füllmenge **eines** Items, kein Stapelzähler. Bei einem Behälter ohne
+`varQuantityMax` bewirkt sie nichts. Vanilla erzeugt dagegen pro `AddResult()`
+genau ein Item; zehn Dosen sind deshalb zehn Einträge in `outputs`.
+
+Das ist exakt die Obergrenze: `MAXIMUM_RESULTS = 10`. `outputs` + `byproducts`
+zusammen dürfen zehn nicht überschreiten — dieser Transform hat für ein
+Nebenprodukt keinen Platz mehr.
+
+### `handcraftRecipeSlots` ist die Zahl, die man vergisst
+
+`CfgChefZ/ChefZ_Serving` nennt `handcraftRecipeSlots = 5` — genau die fünf
+Zeilen der Tabelle oben. Die Reservierung muss **vor** dem Laden feststehen, weil
+Vanilla Rezept-IDs als Position in seiner Liste vergibt. Zu wenige Plätze heißt:
+die überzähligen Transforms erscheinen nicht, und im Spiel deutet nichts darauf
+hin. Wer hier einen Transform ergänzt, erhöht die Zahl in derselben Änderung.
+
+### Werkzeuggruppen: warum `CUTTING_TOOL` nicht erweitert wurde
+
+„any axe or knife" wäre als Erweiterung von `CUTTING_TOOL` billiger gewesen —
+und falsch. `CUTTING_TOOL` ist geteiltes Vokabular: `PROCESS_CUT_MEAT`,
+`PROCESS_CHOP_VEGETABLE`, `PROCESS_CUT_OUT_SEEDS` und `PROCESS_CLEAN_CASING`
+lesen dieselben acht Messer. Eine Feuerwehraxt darin hackt ab sofort auch
+Kräuter. Die Gruppe gehört außerdem `ChefZ_Processing`, nicht diesem Modul.
+
+Stattdessen steht `AXE_TOOL` daneben, und `PROCESS_CARVE_BOWL_BARK` nennt
+**beide**: `ChefZ_HandcraftBridge.CollectToolClasses()` bildet die Vereinigung
+über alle genannten Gruppen — ein Werkzeug aus einer von beiden genügt.
+
+`SAWING_TOOL` (`Hacksaw`) ist aus demselben Grund keine Erweiterung von
+`METALWORK_TOOL`: dort stehen Zange, Hammer, Schraubenschlüssel und
+Schraubendreher — Werkzeuge zum Biegen und Verbinden, nicht zum Zerteilen.
+
+Beide neuen Gruppen stehen **genau einmal** im Projekt, in der `config.cpp`
+dieses Moduls. Die Engine mergt `CfgChefZTools` über alle Addons; zwei Knoten
+gleichen Namens sind keine Redundanz, sondern eine stille Überschreibung.
+
+### Die Holzschale ist `ChefZ_EmptyBowl` — keine neue Klasse
+
+Der Auftrag nennt eine „Holzschale". Es gibt sie bereits: `ChefZ_EmptyBowl`
+heißt im Spiel *Empty Bowl* / *Leere Schüssel* und wird in
+`STR_CHEFZ_ITEM_EMPTYBOWL1` seit jeher als **geschnitzte Holzschüssel**
+beschrieben. Eine zweite Klasse hätte dieselbe Geometrie, dasselbe Gewicht,
+dieselbe Behälterkategorie `BOWL` und denselben Zweck gehabt — und jedes
+Bowl-Gericht mit `returnContainer: "AUTO"` hätte sie zusätzlich kennen müssen.
+Ein zweiter **Weg** zum selben Gegenstand ist ein Transform, keine Klasse.
+
+### Was `ChefZ_EmptyJar` betrifft: nichts
+
+DME-Plan §32 nennt das Einmachglas unter „zusätzlich für ChefZ", ohne einen
+Herstellungsweg. Glasarbeit ist kein Blechschnitt und kein Papierfalz; der Weg
+bleibt offen, statt erfunden zu werden. `ChefZ_EmptyJar` hat damit weiterhin
+null Rezeptreferenzen — bewusst und benannt.

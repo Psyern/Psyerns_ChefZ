@@ -655,6 +655,16 @@ class CfgVehicles
 
     // §60, §18: Schuessel. Traeger der Suppen und Eintoepfe aus §62 und damit
     // der eigentliche Behaelter des Portionssystems (§17).
+    //
+    // ZWEI HERKUENFTE, EINE KLASSE: TR_CarveWoodenBowl (Brennholz + Messer,
+    // Tableware.json) und TR_BowlFromBark (Rinde + Axt oder Messer,
+    // Containers.json). Die "Holzschale" des Auftrags ist genau dieses Item -
+    // Anzeigename und Beschreibung nennen sie seit jeher eine GESCHNITZTE
+    // HOLZschuessel. Eine zweite Schalenklasse haette dieselbe Geometrie,
+    // dasselbe Gewicht, dieselbe Behaelterkategorie BOWL und denselben Zweck
+    // gehabt; jedes Bowl-Rezept mit returnContainer "AUTO" und jede
+    // Behaelterpruefung haette sie zusaetzlich kennen muessen. Ein zweiter
+    // WEG zum selben Gegenstand ist ein Transform, keine Klasse.
     class ChefZ_EmptyBowl : ChefZ_ContainerItemBase
     {
         scope = 2;
@@ -674,13 +684,23 @@ class CfgVehicles
     // selbst ist laut §74 V2; Kategorie und Item stehen bereit, damit ein
     // spaeteres Konservenmodul KEINE Core- und keine Rezeptaenderung braucht
     // (16 E8).
+    //
+    // HERKUNFT (DME-Plan §32): TR_CansFromMetalSheet in
+    // Config/Processing/Containers.json - ein MetalPlate plus Hacksaw ergibt
+    // ZEHN Stueck. Bis dahin war diese Klasse ein Gegenstand ohne jede
+    // Rezeptreferenz; der Vanilla-Audit empfahl deshalb, sie unsichtbar zu
+    // schalten. Sie bleibt sichtbar, weil sie jetzt einen Weg hat.
     class ChefZ_EmptyCan : ChefZ_ContainerItemBase
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_EMPTYCAN0";
         descriptionShort = "#STR_CHEFZ_ITEM_EMPTYCAN1";
-        // PROXY: Dosensilhouette. Bedarf: eigenes Dosenmesh (P3, V2).
-        model = "\dz\gear\food\PowderedMilk.p3d";
+        // PROXY, dauerhaft: eine GEOEFFNETE Vanilla-Konservendose - genau das,
+        // was eine leere Dose ist. Der Pfad ist in den Spieldaten belegt
+        // (Asset-Backlog: acht Fundstellen) und loest den vorherigen
+        // PowderedMilk-Folienbeutel ab, der als Blechdose nicht trug. Kein
+        // eigenes Mesh mehr noetig.
+        model = "\dz\gear\food\food_can_open.p3d";
         itemSize[] = {1, 2};
         weight = 70;
     };
@@ -700,6 +720,11 @@ class CfgVehicles
     };
 
     // §18, DME-Plan §32: Lebensmittelbox fuer Trockenware.
+    //
+    // HERKUNFT (DME-Plan §32, "Paper + Paper -> Cardboard Food Box"):
+    // TR_BoxFromPaper in Config/Processing/Containers.json. Zwei Blatt Papier,
+    // kein Werkzeug - der Transform hat damit zwei Zutatenplaetze und ist
+    // genau ausgereizt (01 V12).
     class ChefZ_EmptyBox : ChefZ_ContainerItemBase
     {
         scope = 2;
@@ -2908,6 +2933,159 @@ class CfgChefZProcesses
         toolGroups[] = {"CUTTING_TOOL"};
         baseDurationSec = 25.0;
     };
+
+    //--------------------------------------------------------------------------
+    // ### SLICE serving ###   DIE DREI CRAFTBAREN BEHAELTER (DME-Plan §32)
+    //
+    // Der Vanilla-Audit haelt fest, dass ChefZ_EmptyCan, ChefZ_EmptyBox und
+    // ChefZ_EmptyJar NULL Rezeptreferenzen haben - drei Gegenstaende ohne
+    // Herkunft. Der Audit schlug vor, sie unsichtbar zu schalten; DME-Plan §32
+    // ("Verpackungsmaterialien") dreht das um und gibt zweien davon einen
+    // Herstellungsweg. Das Einmachglas bleibt bewusst ohne: §32 nennt es unter
+    // "zusaetzlich fuer ChefZ", der Weg dorthin ist Glasarbeit und nicht
+    // Blechschnitt - er bleibt offen, statt erfunden zu werden.
+    //
+    // Alle drei Prozesse sind HANDCRAFT und tragen deshalb dieselbe Form wie
+    // die beiden Schnitzvorgaenge darueber: hoechstens ZWEI Zutatenplaetze
+    // (01 V12, RecipeBase.MAX_NUMBER_OF_INGREDIENTS = 2), und ein Werkzeug
+    // belegt den zweiten. Kein Prozess hier nennt stationsAllowed - ein
+    // Handwerksschritt laeuft ohne Station, und ChefZ_HandcraftBridge wiese
+    // ihn sonst beim Registrieren ab.
+    //
+    // Eigene Prozesse und keine Wiederverwendung der beiden oberen: der
+    // Aktionstext im Kontextmenue kommt aus displayName. "Schuessel schnitzen"
+    // ueber einem Blech waere falsch, und PROCESS_CARVE_BOWL traegt ausserdem
+    // nur CUTTING_TOOL - Aexte kaemen dort nicht hinzu, ohne dass jeder
+    // Gemueseschnitt sie ebenfalls bekaeme.
+    //--------------------------------------------------------------------------
+
+    // "bark + any axe or knife -> Holzschale".
+    //
+    // ZWEI Werkzeuggruppen, und genau darin liegt die Entscheidung:
+    // CUTTING_TOOL (acht Messer, deklariert in ChefZ_Processing) wurde NICHT
+    // um Aexte erweitert. Sie ist geteiltes Vokabular - PROCESS_CUT_MEAT,
+    // PROCESS_CHOP_VEGETABLE und PROCESS_CLEAN_CASING lesen dieselbe Gruppe.
+    // Eine Feuerwehraxt, mit der man Kraeuter hackt, waere der Preis dafuer
+    // gewesen. Stattdessen steht die Axtgruppe daneben; ChefZ_HandcraftBridge.
+    // CollectToolClasses bildet die VEREINIGUNG ueber alle genannten Gruppen,
+    // ein Werkzeug aus EINER von beiden genuegt.
+    //
+    // 30 Sekunden: laenger als der Schnitzvorgang aus Brennholz (25), weil
+    // Rinde die schlechtere Ausgangsform ist. Der Weg ist trotzdem der
+    // billigere - Rinde bekommt man mit demselben Messer vom Baum.
+    class PROCESS_CARVE_BOWL_BARK
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_CARVE_BOWL_BARK";
+        toolGroups[] = {"CUTTING_TOOL", "AXE_TOOL"};
+        baseDurationSec = 30.0;
+        toolDamage = 1;
+    };
+
+    // "paper + paper -> empty box" (DME-Plan §32, "Cardboard Food Box").
+    //
+    // KEINE Werkzeuggruppe, und das ist Pflicht, nicht Sparsamkeit: der
+    // Transform hat ZWEI Eingaenge (zweimal Papier). Ein Werkzeug waere der
+    // dritte Zutatenplatz, und Vanilla kennt zwei. Mit Werkzeug wuerde
+    // ChefZ_GenericCraftRecipe.InitFromDef den Transform abweisen und das
+    // Rezept erschiene nie.
+    class PROCESS_FOLD_BOX
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_FOLD_BOX";
+        baseDurationSec = 12.0;
+    };
+
+    // "metal sheet + hacksaw -> 10 empty cans".
+    //
+    // Eigene Werkzeuggruppe SAWING_TOOL statt METALWORK_TOOL: die Metallgruppe
+    // aus ChefZ_Processing fuehrt Zange, Hammer, Schraubenschluessel und
+    // Schraubendreher - Werkzeuge zum BIEGEN und Verbinden. Blech zerteilt man
+    // damit nicht. Der Auftrag nennt die Saege ausdruecklich, und
+    // ChefZ_Vanilla_Assets.md §20 fuehrt Hacksaw woertlich mit dem Vermerk
+    // "Metallsaege - Dosenherstellung nach DME-Plan §32".
+    //
+    // toolDamage = 5: zehn Dosen aus einem Blech saegen kostet die Saege
+    // spuerbar mehr als ein Schnitt Gemuese (dort 1).
+    class PROCESS_CUT_CANS
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_CUT_CANS";
+        toolGroups[] = {"SAWING_TOOL"};
+        baseDurationSec = 45.0;
+        toolDamage = 5;
+    };
+};
+
+//==============================================================================
+// ### SLICE serving ###   ZWEI NEUE WERKZEUGGRUPPEN
+//
+// Gruppenweise Schreibweise (ChefZ_ToolGroupDef, Kopf): id ist die GRUPPE,
+// classes[] sind ihre Mitglieder. Genau dafuer ist sie da - ChefZ fasst keine
+// fremde config.cpp an, sondern nennt fremde Klassen in einer eigenen Gruppe
+// (11 E8).
+//
+// Beide Gruppen stehen GENAU EINMAL im ganzen Projekt, und zwar hier. Die
+// Engine mergt CfgChefZTools ueber alle Addons; zwei Knoten gleichen Namens
+// waeren keine Redundanz, sondern eine stille Ueberschreibung, deren Gewinner
+// von der Ladereihenfolge abhaengt. CUTTING_TOOL, ROLLING_PIN und
+// METALWORK_TOOL gehoeren ChefZ_Processing und werden hier nur BENUTZT -
+// deshalb steht ChefZ_Processing in requiredAddons.
+//
+// Rang 1 und nicht JSON: ChefZ_ActionProcessAtStation.ActionCondition()
+// entscheidet auch auf dem CLIENT, ob ein passendes Werkzeug in der Hand
+// liegt. Der Client liest die Game-Config garantiert; ob er JSON aus einem PBO
+// lesen kann, ist offen (OF-10).
+//==============================================================================
+class CfgChefZTools
+{
+    // "any axe" aus dem Auftrag, in Klassennamen.
+    //
+    // Alle vier sind Vanillaklassen und im Referenzindex belegt
+    // (refindex/vanilla-scripts-classes.txt). Aufgenommen ist, womit man Holz
+    // bearbeitet:
+    //
+    //   WoodAxe         Spaltaxt
+    //   Hatchet         Beil
+    //   FirefighterAxe  Feuerwehraxt
+    //   Iceaxe          Eispickel mit Axtblatt
+    //
+    // NICHT aufgenommen: Pickaxe (Spitzhacke - ein Bergbauwerkzeug, kein
+    // Axtblatt) und die drei Macheten. Macheten sind weder Axt noch Messer;
+    // wer sie will, deklariert eine eigene Gruppe, statt diese hier
+    // aufzuweichen.
+    //
+    // allowSubclasses = 1 wie bei CUTTING_TOOL: gemoddete Ableitungen einer
+    // Vanillaaxt zaehlen mit.
+    class AXE_TOOL
+    {
+        classes[] =
+        {
+            "WoodAxe",
+            "Hatchet",
+            "FirefighterAxe",
+            "Iceaxe"
+        };
+        allowSubclasses = 1;
+    };
+
+    // Die Metallsaege. EIN Mitglied, und das ist kein Versehen: der Auftrag
+    // nennt die Saege namentlich, und Vanilla fuehrt genau eine
+    // (ChefZ_Vanilla_Assets.md §20, nominal 140, Industrial/Farm - also
+    // erreichbares Loot und keine Rarität, an der die Kette haengen bliebe).
+    //
+    // Eine eigene Gruppe und kein direkter Klassenname im Prozess: ein Prozess
+    // nennt nie ein Werkzeug, sondern immer eine Gruppe (11 E8). Ein
+    // Serverbetreiber, der eine Saege aus einem fremden Mod aufnehmen will,
+    // ergaenzt dann classes[] und muss kein Rezept anfassen.
+    class SAWING_TOOL
+    {
+        classes[] =
+        {
+            "Hacksaw"
+        };
+        allowSubclasses = 1;
+    };
 };
 
 //==============================================================================
@@ -3322,23 +3500,44 @@ class CfgChefZ
     // Eigener Knoten, weil CfgChefZ genau einen Knoten je SLICE traegt
     // (02 §4) - nicht je Modul. Dieses Modul ist ein geteilter Ordner.
     //
-    // handcraftRecipeSlots = 2: dieser Slice bringt GENAU ZWEI Transforms
-    // mit, deren Prozess exec = "HANDCRAFT" hat - TR_CarveWoodenPlate und
-    // TR_CarveWoodenBowl. Die Zahl ist eine Reservierung in Vanillas
-    // Rezeptliste und muss vorab feststehen; die Begruendung steht im Kopf
-    // von ChefZ_HandcraftBridge.c.
+    // handcraftRecipeSlots = 5: dieser Slice bringt GENAU FUENF Transforms
+    // mit, deren Prozess exec = "HANDCRAFT" hat -
+    //
+    //   Tableware.json   TR_CarveWoodenPlate    PROCESS_CARVE_PLATE
+    //                    TR_CarveWoodenBowl     PROCESS_CARVE_BOWL
+    //   Containers.json  TR_BowlFromBark        PROCESS_CARVE_BOWL_BARK
+    //                    TR_BoxFromPaper        PROCESS_FOLD_BOX
+    //                    TR_CansFromMetalSheet  PROCESS_CUT_CANS
+    //
+    // Die Zahl ist eine Reservierung in Vanillas Rezeptliste und muss VOR dem
+    // Laden feststehen; Vanilla vergibt Rezept-IDs als Position in seiner
+    // Liste, und diese Positionen entstehen im Missionskonstruktor. Steht hier
+    // eine zu kleine Zahl, werden die ueberzaehligen Transforms abgewiesen -
+    // steht hier gar keine, erscheint KEIN EINZIGES Handwerksrezept dieses
+    // Slice, und zwar ohne dass im Spiel etwas darauf hinweist. Die
+    // Begruendung im Wortlaut steht im Kopf von ChefZ_HandcraftBridge.c.
+    //
+    // Wer hier einen Transform ergaenzt, erhoeht diese Zahl in derselben
+    // Aenderung. Nachtraeglich eintragen ist keine Loesung: die Rezept-IDs
+    // waeren auf Client und Server verschieden.
     //
     // loadOrder 310, also nach den Saucen: Behaelter und Gerichtebasen werden
     // von den Gerichteslices gelesen, nicht umgekehrt. Der Core haengt
     // Records nicht voneinander ab; die Reihenfolge ist Vorsorge.
+    //
+    // ZWEI dataFiles: Tableware.json bringt die beiden Schnitzvorgaenge aus
+    // Brennholz, Containers.json die drei craftbaren Verpackungen aus
+    // DME-Plan §32. Getrennte Dateien, weil ein Teller kein Verpackungs-
+    // material ist und die beiden Gruppen verschiedene Fragen beantworten.
     class ChefZ_Serving
     {
         chefzApiVersion = 1;
         loadOrder = 310;
-        handcraftRecipeSlots = 2;
+        handcraftRecipeSlots = 5;
         dataFiles[] =
         {
-            "ChefZ_Cooking/Config/Processing/Tableware.json"
+            "ChefZ_Cooking/Config/Processing/Tableware.json",
+            "ChefZ_Cooking/Config/Processing/Containers.json"
         };
     };
 

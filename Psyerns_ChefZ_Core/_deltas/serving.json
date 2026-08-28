@@ -3,7 +3,10 @@
 
     "processes": [
         { "id": "PROCESS_CARVE_PLATE", "tool": "CUTTING_TOOL", "durationSec": 20 },
-        { "id": "PROCESS_CARVE_BOWL", "tool": "CUTTING_TOOL", "durationSec": 25 }
+        { "id": "PROCESS_CARVE_BOWL", "tool": "CUTTING_TOOL", "durationSec": 25 },
+        { "id": "PROCESS_CARVE_BOWL_BARK", "tool": "AXE_TOOL", "durationSec": 30 },
+        { "id": "PROCESS_FOLD_BOX", "durationSec": 12 },
+        { "id": "PROCESS_CUT_CANS", "tool": "SAWING_TOOL", "durationSec": 45 }
     ],
 
     "classes": [

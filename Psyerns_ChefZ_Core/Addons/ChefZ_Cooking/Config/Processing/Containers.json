@@ -1,0 +1,82 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_BowlFromBark",
+            "process": "PROCESS_CARVE_BOWL_BARK",
+            "inputs": [
+                {
+                    "slotId": "bark",
+                    "match": {
+                        "anyOf": [
+                            { "cls": "Bark_Birch" },
+                            { "cls": "Bark_Oak" }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_EmptyBowl",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_BoxFromPaper",
+            "process": "PROCESS_FOLD_BOX",
+            "inputs": [
+                {
+                    "slotId": "paperA",
+                    "match": { "cls": "Paper" },
+                    "minCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "paperB",
+                    "match": { "cls": "Paper" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_EmptyBox",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_CansFromMetalSheet",
+            "process": "PROCESS_CUT_CANS",
+            "inputs": [
+                {
+                    "slotId": "sheet",
+                    "match": { "cls": "MetalPlate" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" },
+                { "cls": "ChefZ_EmptyCan", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        }
+    ]
+}
