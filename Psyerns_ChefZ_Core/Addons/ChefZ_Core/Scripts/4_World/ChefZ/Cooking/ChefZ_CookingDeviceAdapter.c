@@ -546,7 +546,8 @@ class ChefZ_CookingDeviceAdapter
 
         if (device)
         {
-            int low, high;
+            int low;
+            int high;
             if (VesselId(device, low, high))
                 args.SetDeviceNetId(low, high);
         }
@@ -1082,7 +1083,8 @@ class ChefZ_CookingDeviceAdapter
                 if (i == 0)
                 {
                     args.subjectClass = ChefZ_SymbolTable.Intern(item.GetType());
-                    int low, high;
+                    int low;
+                    int high;
                     if (VesselId(item, low, high))
                         args.SetSubjectNetId(low, high);
                 }
@@ -1164,7 +1166,8 @@ class ChefZ_CookingDeviceAdapter
      */
     ChefZ_CookSession GetSession(notnull ItemBase vessel)
     {
-        int low, high;
+        int low;
+        int high;
         if (!VesselId(vessel, low, high))
             return null;
 
@@ -1207,7 +1210,8 @@ class ChefZ_CookingDeviceAdapter
      */
     ChefZ_CookSession PeekSession(notnull ItemBase vessel)
     {
-        int low, high;
+        int low;
+        int high;
         if (!VesselId(vessel, low, high))
             return null;
 

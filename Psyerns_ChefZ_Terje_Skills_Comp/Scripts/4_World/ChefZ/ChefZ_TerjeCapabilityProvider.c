@@ -90,7 +90,7 @@ class ChefZ_TerjeCapabilityProvider extends ChefZ_ICapabilityProvider
         // false - so steht es woertlich in der Schnittstelle.
         if (identityId == 0)
             return false;
-        if (!GetGame() || !GetGame().IsServer())
+        if (!g_Game || !g_Game.IsServer())
             return false;
         if (!ChefZ_TerjeSkillsConfig.CapabilitiesEnabled())
             return false;

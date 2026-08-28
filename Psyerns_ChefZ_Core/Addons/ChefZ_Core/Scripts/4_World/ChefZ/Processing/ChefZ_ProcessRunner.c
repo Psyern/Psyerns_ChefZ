@@ -832,7 +832,8 @@ class ChefZ_ProcessRunner
         // Auskunft, nicht eine erfundene Klasse. Ein Abonnent, der auf
         // deviceClass filtert, sieht ein Handwerksergebnis damit als
         // geraeteloses Ereignis (17 §3.1).
-        int low, high;
+        int low;
+        int high;
         if (station)
         {
             args.deviceClass = ChefZ_SymbolTable.Intern(station.GetType());

@@ -158,8 +158,8 @@ class ChefZ_TerjeXpDamper
         EnsureInit();
 
         float now = 0.0;
-        if (GetGame())
-            now = GetGame().GetTime() * 0.001;
+        if (g_Game)
+            now = g_Game.GetTime() * 0.001;
 
         map<string, ref ChefZ_TerjeXpRepeat> row;
         if (!s_ByPlayer.Find(identityId, row) || !row)

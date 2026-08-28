@@ -405,7 +405,8 @@ class ChefZ_ItemStateComponent
         // zu fuehren - und die zweite laege in einer Nutzlast, die nach dem
         // Rueckruf ungueltig ist (17 §8).
 
-        int low, high;
+        int low;
+        int high;
         if (NetIdOf(item, low, high))
             args.SetSubjectNetId(low, high);
 

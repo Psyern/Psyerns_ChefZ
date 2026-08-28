@@ -98,11 +98,11 @@ class ChefZ_TerjeSkillsBridge
     {
         if (identityId == 0)
             return null;
-        if (!GetGame())
+        if (!g_Game)
             return null;
 
         array<Man> players = new array<Man>();
-        GetGame().GetPlayers(players);
+        g_Game.GetPlayers(players);
 
         for (int i = 0; i < players.Count(); i++)
         {
@@ -142,7 +142,7 @@ class ChefZ_TerjeSkillsBridge
     {
         if (value <= 0)
             return false;
-        if (!GetGame() || !GetGame().IsServer())
+        if (!g_Game || !g_Game.IsServer())
             return false;
 
         TerjePlayerSkillsAccessor skills = SkillsOf(player);

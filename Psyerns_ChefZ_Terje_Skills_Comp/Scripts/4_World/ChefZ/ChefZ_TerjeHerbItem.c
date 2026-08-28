@@ -43,7 +43,7 @@ modded class ChefZ_FreshHerbBase
     {
         super.EEDelete(parent);
 
-        if (GetGame() && GetGame().IsClient() && m_ChefZTerjeHighlight)
+        if (g_Game && g_Game.IsClient() && m_ChefZTerjeHighlight)
         {
             m_ChefZTerjeHighlight.Stop();
             m_ChefZTerjeHighlight = null;
@@ -54,7 +54,7 @@ modded class ChefZ_FreshHerbBase
     {
         super.OnTerjeClientUpdate(deltaTime);
 
-        if (!GetGame() || !GetGame().IsClient())
+        if (!g_Game || !g_Game.IsClient())
             return;
 
         bool show = ShouldHighlight();
@@ -86,7 +86,7 @@ modded class ChefZ_FreshHerbBase
         if (GetHierarchyParent() != null)
             return false;
 
-        PlayerBase localPlayer = PlayerBase.Cast(GetGame().GetPlayer());
+        PlayerBase localPlayer = PlayerBase.Cast(g_Game.GetPlayer());
         if (!localPlayer)
             return false;
 

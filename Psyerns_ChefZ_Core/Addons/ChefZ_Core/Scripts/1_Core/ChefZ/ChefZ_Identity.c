@@ -460,7 +460,8 @@ class ChefZ_IdentityMap
         if (m.ToSyncOrdinal(zustandC.sym) != 3)                 return false;
         if (m.ToSyncOrdinal(ChefZ_SymbolTable.INVALID) != 0)  return false;
 
-        string ca, cb;
+        string ca;
+        string cb;
         if (m.HasHashCollision(ca, cb))         return false;
 
         // Zweiter, unabhaengiger Aufbau derselben IDs in anderer Reihenfolge

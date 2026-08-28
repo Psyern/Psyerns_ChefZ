@@ -69,7 +69,7 @@ class ChefZ_SaltPan extends ChefZ_ProcessingStation_Base
         array<Object> nearby = new array<Object>();
         array<CargoBase> proxies = new array<CargoBase>();
 
-        GetGame().GetObjectsAtPosition(GetPosition(), CHEFZ_HEAT_RADIUS_M, nearby, proxies);
+        g_Game.GetObjectsAtPosition(GetPosition(), CHEFZ_HEAT_RADIUS_M, nearby, proxies);
 
         for (int i = 0; i < nearby.Count(); i++)
         {

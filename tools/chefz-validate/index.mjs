@@ -7,18 +7,8 @@
 //
 // Exit-Code 0 = keine Fehler. 1 = Fehler gefunden. 2 = Validator selbst kaputt.
 
-import { ROOT } from './lib.mjs';
+import { ROOT, CHECKS } from './lib.mjs';
 
-// Reihenfolge = Lesereihenfolge im Bericht: erst die Form der Dateien, dann
-// die Bedeutung ihres Inhalts, zuletzt die Regeln des Core selbst.
-const CHECKS = [
-  'schema', 'configcpp', 'classrefs', 'naming', 'stringtable', 'deltas',
-  // S19 (19 §3). chefzsym und chefzcore sind AUFLAGEN aus OF-11, keine Zugaben:
-  // ohne sie ist der datengetriebene Entwurf schlechter als ein enum-basierter.
-  'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
-  // Invariante I2 - die zentrale Designregel, mechanisch geprueft.
-  'chefzvanilla', 'chefzcookable',
-];
 
 const args = process.argv.slice(2);
 const asJson = args.includes('--json');

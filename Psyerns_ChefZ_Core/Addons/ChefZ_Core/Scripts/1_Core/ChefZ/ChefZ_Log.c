@@ -486,7 +486,9 @@ class ChefZ_Log
 
     static string GetLogFilePath()
     {
-        int year, month, day;
+        int year;
+        int month;
+        int day;
         GetYearMonthDay(year, month, day);
         return LOG_DIR + "\\ChefZ_" + Pad(year, 4) + "-" + Pad(month, 2) + "-" + Pad(day, 2) + ".log";
     }

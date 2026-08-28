@@ -72,7 +72,7 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         // Nur der Server vergibt Erfahrung. Auf einem Listen-Server laeuft
         // beides im selben Prozess; die Abfrage haelt den reinen Client
         // heraus.
-        if (!GetGame() || !GetGame().IsServer())
+        if (!g_Game || !g_Game.IsServer())
             return;
 
         if (!ChefZ_TerjeSkillsConfig.IsXpEnabled())

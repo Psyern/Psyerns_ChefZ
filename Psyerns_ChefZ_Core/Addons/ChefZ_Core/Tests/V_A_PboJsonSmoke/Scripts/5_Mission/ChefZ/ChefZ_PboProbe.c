@@ -121,7 +121,7 @@ class ChefZ_PboProbe
         // P6  Kontrolle: der belegte dz/-Fall. Schlaegt P6 fehl, ist die
         //     Messung selbst kaputt und P1-P5 sind wertlos.
         string world;
-        GetGame().GetWorldName(world);
+        g_Game.GetWorldName(world);
         string vanillaPath = string.Format("dz/worlds/%1/ce/cfggameplay.json", world);
         ProbeRawOnly("P6 kontrolle dz/    ", vanillaPath);
 

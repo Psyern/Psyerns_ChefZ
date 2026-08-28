@@ -30,6 +30,16 @@ export const COMP_DIRS = [
 // ChefZ_Core: der Core ist eine Regelmaschine ohne eigenes Vokabular und liefert
 // keine Datensaetze aus. Ihr Addon deklariert sie in dataFiles[] - nur dadurch
 // sind sie ueberhaupt ladbar.
+// Die Pruefer, in Lesereihenfolge des Berichts: erst die Form der Dateien, dann
+// die Bedeutung ihres Inhalts, dann die Regeln des Core, zuletzt die harten
+// Sprachregeln. EINE Quelle - index.mjs und selftest.mjs lesen beide von hier.
+// Als die Liste doppelt gefuehrt wurde, meldete der Selbsttest "15 von 14".
+export const CHECKS = [
+  'schema', 'configcpp', 'classrefs', 'naming', 'stringtable', 'deltas',
+  'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
+  'chefzvanilla', 'chefzcookable', 'enforce',
+];
+
 export const REGISTRY_ADDON = 'ChefZ_Registry';
 export const REGISTRY_DIR = path.join(ADDONS_DIR, REGISTRY_ADDON, 'Config');
 

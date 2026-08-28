@@ -22,6 +22,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { CHECKS } from './lib.mjs';
 
 const TOOL_DIR = path.dirname(fileURLToPath(import.meta.url));
 
@@ -71,6 +72,15 @@ class ChefZ_Schlecht
     {
         for (int i = 0; i < liste.Count(); i++)
             ChefZ_Log.Debug(ChefZ_LogChannel.CORE, "Eintrag " + liste.Get(i));
+    }
+
+    // Vier harte Enforce-Verstoesse auf einmal -> enforce
+    void MachEsFalsch()
+    {
+        int a, b;                                   // Mehrfachdeklaration
+        string s = GetGame().GetPlayer().GetType(); // GetGame() seit 1.29 verboten
+        int c = a > b ? a : b;                      // Ternaeroperator
+        delete s;                                   // delete auf Verwaltetem
     }
 }
 
@@ -227,6 +237,10 @@ const EXPECT = [
   ['chefzstage', /ist kochbar \(.*\), deklariert aber keine FoodStageTransitions/, '01 V4: kochbar ohne Uebergaenge'],
   ['chefzproc', /3 Eingaenge/, '01 V12: HANDCRAFT mit mehr als zwei Eingaengen'],
   ['chefzlog', /Ungewachter Log-Aufruf in einer Schleife/, '18 E2: Wache fehlt'],
+  ['enforce', /mehrfachdeklaration/, 'zwei Variablen in einer Deklaration'],
+  ['enforce', /GetGame/, 'GetGame() statt g_Game'],
+  ['enforce', /ternaer/, 'Ternaeroperator, den Enforce nicht kennt'],
+  ['enforce', /delete/, 'delete auf einem verwalteten Objekt'],
   ['classrefs', /ChefZ_GibtEsNicht/, 'Rezept zeigt auf eine nicht existierende ChefZ-Klasse'],
   ['naming', /chefz_falschBenannt/, 'Item-Klasse verletzt die Namenskonvention'],
   ['schema', /hat keine Kennung/, 'Rezept ohne id - und Erkennung am Dokumenttyp, nicht am Pfad'],
@@ -310,13 +324,14 @@ if (exitCode !== 1) { console.log('FEHLER: das Wegwerf-Modul haette Exit-Code 1 
 // gesprochen: das Wegwerf-Modul loest nur Regeln aus, die auf seine Bauart
 // passen. Ein Selbsttest, der seine eigene Reichweite verschweigt, erzeugt genau
 // das falsche Zutrauen, gegen das die Pruefer gebaut wurden.
-const ALL_CHECKS = [
-  'schema', 'configcpp', 'classrefs', 'naming', 'stringtable', 'deltas',
-  'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
-  'chefzvanilla', 'chefzcookable',
-];
+const ALL_CHECKS = CHECKS;
+// Nur ECHTE Befunde zaehlen. Mehrere Pruefer geben immer eine info-Zeile aus
+// ("Geprueft: N Dateien ..."); wuerde die mitzaehlen, galte ein Pruefer als
+// ausgeloest, der nichts gefunden hat - und die Abdeckungszahl waere wertlos.
 const exercised = new Set(
-  report.checks.filter(c => c.items && c.items.length > 0).map(c => c.name));
+  report.checks
+    .filter(c => (c.items || []).some(i => i.severity === 'error' || i.severity === 'warning'))
+    .map(c => c.name));
 const untested = ALL_CHECKS.filter(n => !exercised.has(n));
 
 console.log(`\nAbdeckung: ${exercised.size} von ${ALL_CHECKS.length} Pruefern werden `

@@ -77,7 +77,7 @@ modded class ChefZ_HerbPlantBase
 
         if (!didHarvest)
             return;
-        if (!GetGame() || !GetGame().IsServer())
+        if (!g_Game || !g_Game.IsServer())
             return;
         if (!ChefZ_TerjeSkillsConfig.IsEnabled())
             return;
@@ -103,7 +103,7 @@ modded class ChefZ_HerbPlantBase
      */
     protected int BaseCropsCount()
     {
-        int c = GetGame().ConfigGetInt("cfgVehicles " + GetType() + " Horticulture CropsCount");
+        int c = g_Game.ConfigGetInt("cfgVehicles " + GetType() + " Horticulture CropsCount");
         if (c < 1)
             c = 1;
         return c;
@@ -147,7 +147,7 @@ modded class ChefZ_HerbPlantBase
         for (int i = 0; i < extra; i++)
         {
             // Wortgleich zu PlantBase.Harvest:573-575, nur mit Nullpruefung.
-            ItemBase item = ItemBase.Cast(GetGame().CreateObjectEx(cropsType, pos, ECE_PLACE_ON_SURFACE));
+            ItemBase item = ItemBase.Cast(g_Game.CreateObjectEx(cropsType, pos, ECE_PLACE_ON_SURFACE));
             if (!item)
                 continue;
             item.SetQuantity(item.GetQuantityMax());
@@ -216,7 +216,7 @@ modded class ChefZ_HerbPlantBase
     {
         super.EEDelete(parent);
 
-        if (GetGame() && GetGame().IsClient() && m_ChefZTerjeHighlight)
+        if (g_Game && g_Game.IsClient() && m_ChefZTerjeHighlight)
         {
             m_ChefZTerjeHighlight.Stop();
             m_ChefZTerjeHighlight = null;
@@ -227,7 +227,7 @@ modded class ChefZ_HerbPlantBase
     {
         super.OnTerjeClientUpdate(deltaTime);
 
-        if (!GetGame() || !GetGame().IsClient())
+        if (!g_Game || !g_Game.IsClient())
             return;
 
         bool show = ShouldHighlight();
@@ -271,7 +271,7 @@ modded class ChefZ_HerbPlantBase
         if (!IsHarvestable() && !ChefZ_TerjeSkillsConfig.HighlightUnripe())
             return false;
 
-        PlayerBase localPlayer = PlayerBase.Cast(GetGame().GetPlayer());
+        PlayerBase localPlayer = PlayerBase.Cast(g_Game.GetPlayer());
         if (!localPlayer)
             return false;
 
