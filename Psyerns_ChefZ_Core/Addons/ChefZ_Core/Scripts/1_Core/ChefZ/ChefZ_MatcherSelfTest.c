@@ -152,6 +152,20 @@ class ChefZ_MatcherSelfTest
         return sel;
     }
 
+    //! Dasselbe fuer ein KIND der ersten Ebene. Kinder tragen den Typ der
+    //! naechsten Ebene - siehe den Kopf von ChefZ_SelectorNode.c. Von Hand
+    //! gebaute Baeume muessen das nachbilden, sonst uebersetzt der Test nicht.
+    private static ChefZ_SelectorL1 LeafL1(string field, string value)
+    {
+        ChefZ_SelectorL1 sel = new ChefZ_SelectorL1();
+        if (field == "cls")             sel.cls = value;
+        else if (field == "category")   sel.category = value;
+        else if (field == "tag")        sel.tag = value;
+        else if (field == "state")      sel.state = value;
+        else if (field == "stage")      sel.vanillaStage = value;
+        return sel;
+    }
+
     private static ChefZ_ItemFacts AddItem(notnull ChefZ_FactSnapshot snap, int handle, string className)
     {
         ChefZ_ItemFacts facts = snap.Acquire();
@@ -212,23 +226,32 @@ class ChefZ_MatcherSelfTest
 
         // Leeres anyOf.
         ChefZ_Selector emptyAny = new ChefZ_Selector();
-        emptyAny.anyOf = new array<ref ChefZ_Selector>();
+        emptyAny.anyOf = new array<ref ChefZ_SelectorL1>();
         if (ChefZ_SelectorCompiler.Compile(emptyAny, ctx, error))                 return false;
 
         // not mit kaputtem Kind - der Fehler propagiert nach oben.
         ChefZ_Selector badNot = new ChefZ_Selector();
-        badNot.not = Leaf("category", "CHEFZ_MT_GIBTESNICHT");
+        badNot.not = LeafL1("category", "CHEFZ_MT_GIBTESNICHT");
         if (ChefZ_SelectorCompiler.Compile(badNot, ctx, error))                   return false;
 
         // Tiefenbegrenzung.
+        // Ausgeschrieben statt in einer Schleife gewachsen: jede Ebene hat seit
+        // dem Umbau ihren eigenen Typ (ChefZ_SelectorNode.c), eine Schleife
+        // koennte den Baum also gar nicht mehr vertiefen. Sechs Ebenen gegen
+        // eine Grenze von zwei - der Compiler muss abweisen.
         ctx.SetMaxSelectorDepth(2);
-        ChefZ_Selector deep = Leaf("cls", "CHEFZ_MT_KLASSE_A");
-        for (int d = 0; d < 5; d++)
-        {
-            ChefZ_Selector wrap = new ChefZ_Selector();
-            wrap.not = deep;
-            deep = wrap;
-        }
+        ChefZ_SelectorL5 tief5 = new ChefZ_SelectorL5();
+        tief5.cls = "CHEFZ_MT_KLASSE_A";
+        ChefZ_SelectorL4 tief4 = new ChefZ_SelectorL4();
+        tief4.not = tief5;
+        ChefZ_SelectorL3 tief3 = new ChefZ_SelectorL3();
+        tief3.not = tief4;
+        ChefZ_SelectorL2 tief2 = new ChefZ_SelectorL2();
+        tief2.not = tief3;
+        ChefZ_SelectorL1 tief1 = new ChefZ_SelectorL1();
+        tief1.not = tief2;
+        ChefZ_Selector deep = new ChefZ_Selector();
+        deep.not = tief1;
         if (ChefZ_SelectorCompiler.Compile(deep, ctx, error))                     return false;
         ctx.SetMaxSelectorDepth(ChefZ_SelectorLimits.DEFAULT_MAX_DEPTH);
 
@@ -329,9 +352,9 @@ class ChefZ_MatcherSelfTest
         // allOf: Kategorie UND Zustand - Production Map §43, der Fall, wegen
         // dem der Baum gewaehlt wurde (07 E1).
         ChefZ_Selector allOf = new ChefZ_Selector();
-        allOf.allOf = new array<ref ChefZ_Selector>();
-        allOf.allOf.Insert(Leaf("category", "CHEFZ_MT_KAT_TIER"));
-        allOf.allOf.Insert(Leaf("state", "CHEFZ_MT_ZUSTAND_A"));
+        allOf.allOf = new array<ref ChefZ_SelectorL1>();
+        allOf.allOf.Insert(LeafL1("category", "CHEFZ_MT_KAT_TIER"));
+        allOf.allOf.Insert(LeafL1("state", "CHEFZ_MT_ZUSTAND_A"));
 
         ChefZ_CompiledSelector both = ChefZ_SelectorCompiler.Compile(allOf, ctx, error);
         if (!both)                              return false;
@@ -341,9 +364,9 @@ class ChefZ_MatcherSelfTest
 
         // anyOf
         ChefZ_Selector anyOf = new ChefZ_Selector();
-        anyOf.anyOf = new array<ref ChefZ_Selector>();
-        anyOf.anyOf.Insert(Leaf("cls", "CHEFZ_MT_KLASSE_C"));
-        anyOf.anyOf.Insert(Leaf("category", "CHEFZ_MT_KAT_TIER"));
+        anyOf.anyOf = new array<ref ChefZ_SelectorL1>();
+        anyOf.anyOf.Insert(LeafL1("cls", "CHEFZ_MT_KLASSE_C"));
+        anyOf.anyOf.Insert(LeafL1("category", "CHEFZ_MT_KAT_TIER"));
 
         ChefZ_CompiledSelector either = ChefZ_SelectorCompiler.Compile(anyOf, ctx, error);
         if (!either.Test(gesalzen))             return false;
@@ -352,7 +375,7 @@ class ChefZ_MatcherSelfTest
 
         // not
         ChefZ_Selector notSel = new ChefZ_Selector();
-        notSel.not = Leaf("state", "CHEFZ_MT_ZUSTAND_A");
+        notSel.not = LeafL1("state", "CHEFZ_MT_ZUSTAND_A");
 
         ChefZ_CompiledSelector negiert = ChefZ_SelectorCompiler.Compile(notSel, ctx, error);
         if (negiert.Test(gesalzen))             return false;
@@ -489,17 +512,17 @@ class ChefZ_MatcherSelfTest
         // anyOf nimmt das MINIMUM: "anyOf [exakte Klasse, breite Kategorie]"
         // ist nicht spezifischer als die breite Kategorie allein (09 §4.1).
         ChefZ_Selector anySel = new ChefZ_Selector();
-        anySel.anyOf = new array<ref ChefZ_Selector>();
-        anySel.anyOf.Insert(Leaf("cls", "CHEFZ_MT_KLASSE_A"));
-        anySel.anyOf.Insert(Leaf("category", "CHEFZ_MT_KAT_TIER"));
+        anySel.anyOf = new array<ref ChefZ_SelectorL1>();
+        anySel.anyOf.Insert(LeafL1("cls", "CHEFZ_MT_KLASSE_A"));
+        anySel.anyOf.Insert(LeafL1("category", "CHEFZ_MT_KAT_TIER"));
         ChefZ_CompiledSelector any = ChefZ_SelectorCompiler.Compile(anySel, ctx, error);
         if (any.specificity != flach.specificity)                           return false;
 
         // allOf summiert.
         ChefZ_Selector allSel = new ChefZ_Selector();
-        allSel.allOf = new array<ref ChefZ_Selector>();
-        allSel.allOf.Insert(Leaf("category", "CHEFZ_MT_KAT_TIER"));
-        allSel.allOf.Insert(Leaf("state", "CHEFZ_MT_ZUSTAND_A"));
+        allSel.allOf = new array<ref ChefZ_SelectorL1>();
+        allSel.allOf.Insert(LeafL1("category", "CHEFZ_MT_KAT_TIER"));
+        allSel.allOf.Insert(LeafL1("state", "CHEFZ_MT_ZUSTAND_A"));
         ChefZ_CompiledSelector all = ChefZ_SelectorCompiler.Compile(allSel, ctx, error);
         if (all.specificity != w.wCategoryBase + w.wState)                  return false;
 
@@ -860,9 +883,9 @@ class ChefZ_MatcherSelfTest
         snap.SortStable();
 
         ChefZ_Selector kraut = new ChefZ_Selector();
-        kraut.anyOf = new array<ref ChefZ_Selector>();
-        kraut.anyOf.Insert(Leaf("cls", "CHEFZ_MT_KLASSE_D"));
-        kraut.anyOf.Insert(Leaf("cls", "CHEFZ_MT_FEHLT"));
+        kraut.anyOf = new array<ref ChefZ_SelectorL1>();
+        kraut.anyOf.Insert(LeafL1("cls", "CHEFZ_MT_KLASSE_D"));
+        kraut.anyOf.Insert(LeafL1("cls", "CHEFZ_MT_FEHLT"));
 
         array<ref ChefZ_CompiledSlot> slots = new array<ref ChefZ_CompiledSlot>();
         slots.Insert(MakeSlot(ctx, "wild",    Leaf("category", "CHEFZ_MT_KAT_WILD"), 1, 1, 0));
@@ -898,9 +921,9 @@ class ChefZ_MatcherSelfTest
         snap2.SortStable();
 
         ChefZ_Selector entweder = new ChefZ_Selector();
-        entweder.anyOf = new array<ref ChefZ_Selector>();
-        entweder.anyOf.Insert(Leaf("cls", "CHEFZ_MT_KLASSE_A"));
-        entweder.anyOf.Insert(Leaf("cls", "CHEFZ_MT_KLASSE_B"));
+        entweder.anyOf = new array<ref ChefZ_SelectorL1>();
+        entweder.anyOf.Insert(LeafL1("cls", "CHEFZ_MT_KLASSE_A"));
+        entweder.anyOf.Insert(LeafL1("cls", "CHEFZ_MT_KLASSE_B"));
 
         array<ref ChefZ_CompiledSlot> slots2 = new array<ref ChefZ_CompiledSlot>();
         slots2.Insert(MakeSlot(ctx, "eins", entweder, 1, 1, 0));

@@ -48,178 +48,39 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_Selector : Managed
+class ChefZ_Selector : ChefZ_SelectorNode
 {
-    //--- Blatt-Praedikate: genau EINES gesetzt (07 §2.1) ---------------------
-    string  cls;                    // exakte Klasse     (JSON "cls", siehe Kopf)
-    string  category;               // Kategorie inklusive aller Unterkategorien
-    string  tag;                    // effektiver Tag (Klasse + Zustand + Qualitaet)
-    string  state;                  // ChefZ-Zustandssymbol
-    string  vanillaStage;           // "Raw"|"Baked"|"Boiled"|"Dried"|"Burned"|"Rotten"
-
-    //--- Kombinatoren, rekursiv ----------------------------------------------
-    ref array<ref ChefZ_Selector> anyOf;    // ODER
-    ref array<ref ChefZ_Selector> allOf;    // UND
-    ref ChefZ_Selector            not;      // NICHT
-
-    //--- Wertbereiche, additiv UND-verknuepft mit dem Blatt -------------------
-    ref ChefZ_Range health;                 // 0..1
-    ref ChefZ_Range freshness;              // 0..1
-    ref ChefZ_Range temperature;
-    ref ChefZ_Range wetness;
-    ref ChefZ_Range cleanness;              // Vorbereitung Hygiene, V2
-    ref ChefZ_Range quantity;               // absolut
-    ref ChefZ_Range quantityPct;            // 0..1 relativ zu quantityMax
-    string  minQuality;                     // Qualitaetssymbol, "" = egal
-
-    //--- Fluessigkeit ---------------------------------------------------------
+    // Die Kombinatoren zeigen auf die NAECHSTE Ebene, nicht auf sich selbst.
+    // Warum, steht vollstaendig im Kopf von ChefZ_SelectorNode.c: eine
+    // selbstbezuegliche Klasse bringt den JSON-Deserialisierer der Engine zum
+    // Absturz - lautlos, ohne Aufrufkeller, mitten im Serverstart.
     //
-    // isLiquidContainer hat keinen Sentinel - bool hat zwei Werte, und beide
-    // sind Nutzdaten (02 E3). "false" heisst deshalb hier zuverlaessig NUR
-    // "nicht gesetzt". Wer "dieses Item ist KEIN Fluessigkeitsbehaelter"
-    // ausdruecken will, schreibt   { "not": { "isLiquidContainer": true } }  -
-    // dafuer ist der Negationsknoten da.
-    bool    isLiquidContainer;
-    string  liquidType;
+    // Am JSON aendert das nichts: die Schluessel heissen weiter anyOf, allOf
+    // und not, und die Schachtelung sieht aus wie zuvor.
+    ref array<ref ChefZ_SelectorL1> anyOf;    // ODER
+    ref array<ref ChefZ_SelectorL1> allOf;    // UND
+    ref ChefZ_SelectorL1            not;      // NICHT
 
-    void ChefZ_Selector()
+    override void CollectAnyOf(notnull array<ref ChefZ_SelectorNode> outList)
     {
-        // Strings starten leer, ref-Felder null. Beides ist bereits der
-        // Sentinel "nicht gesetzt" (02 E3, Mittel 1 und 2) - fuer Strings ist
-        // der Leerstring genau ChefZ_Undefined.TEXT. Es ist trotzdem
-        // ausgeschrieben, weil ein Selektor auch von Hand gebaut wird (Test,
-        // Vorschau) und dort niemand auf Enforce-Feldinitialisierung wetten
-        // soll.
-        cls               = "";
-        category          = "";
-        tag               = "";
-        state             = "";
-        vanillaStage      = "";
-        minQuality        = "";
-        liquidType        = "";
-        isLiquidContainer = false;
-        anyOf             = null;
-        allOf             = null;
-        not               = null;
-        health            = null;
-        freshness         = null;
-        temperature       = null;
-        wetness           = null;
-        cleanness         = null;
-        quantity          = null;
-        quantityPct       = null;
-    }
-
-    //--------------------------------------------------------------------------
-    // Auskuenfte fuer den Compiler. Bewusst hier und nicht im Compiler: es
-    // sind Aussagen ueber die Rohform, und wer ein Feld hinzufuegt, findet sie
-    // in derselben Datei.
-    //--------------------------------------------------------------------------
-
-    void Normalize()
-    {
-        cls.TrimInPlace();
-        category.TrimInPlace();
-        tag.TrimInPlace();
-        state.TrimInPlace();
-        vanillaStage.TrimInPlace();
-        minQuality.TrimInPlace();
-        liquidType.TrimInPlace();
-
-        NormalizeChildren(anyOf);
-        NormalizeChildren(allOf);
-        if (not)
-            not.Normalize();
-    }
-
-    private void NormalizeChildren(array<ref ChefZ_Selector> list)
-    {
-        if (!list)
+        if (!anyOf)
             return;
-        for (int i = 0; i < list.Count(); i++)
-        {
-            ChefZ_Selector child = list.Get(i);
-            if (child)
-                child.Normalize();
-        }
+        for (int i = 0; i < anyOf.Count(); i++)
+            outList.Insert(anyOf.Get(i));
     }
 
-    //! Anzahl der gesetzten Blatt- und Kombinatorfelder. Genau EINS ist
-    //! zulaessig; mehr als eins ist ein Kompilierfehler (07 §7).
-    int CountPredicates()
+    override void CollectAllOf(notnull array<ref ChefZ_SelectorNode> outList)
     {
-        int n = 0;
-        if (cls != "")              n++;
-        if (category != "")         n++;
-        if (tag != "")              n++;
-        if (state != "")            n++;
-        if (vanillaStage != "")     n++;
-        if (HasLiquidPredicate())   n++;
-        if (anyOf)                  n++;
-        if (allOf)                  n++;
-        if (not)                    n++;
-        return n;
+        if (!allOf)
+            return;
+        for (int i = 0; i < allOf.Count(); i++)
+            outList.Insert(allOf.Get(i));
     }
 
-    //! Namen der gesetzten Praedikatfelder - fuer die Fehlermeldung, die dem
-    //! Autor sagt, WELCHE zwei Felder er gleichzeitig gesetzt hat.
-    string PredicateNames()
-    {
-        string s = "";
-        if (cls != "")              s = Append(s, "cls");
-        if (category != "")         s = Append(s, "category");
-        if (tag != "")              s = Append(s, "tag");
-        if (state != "")            s = Append(s, "state");
-        if (vanillaStage != "")     s = Append(s, "vanillaStage");
-        if (HasLiquidPredicate())   s = Append(s, "isLiquidContainer/liquidType");
-        if (anyOf)                  s = Append(s, "anyOf");
-        if (allOf)                  s = Append(s, "allOf");
-        if (not)                    s = Append(s, "not");
-        if (s == "")
-            return "(keines)";
-        return s;
-    }
-
-    private string Append(string acc, string part)
-    {
-        if (acc == "")
-            return part;
-        return acc + ", " + part;
-    }
-
-    bool HasLiquidPredicate()
-    {
-        return isLiquidContainer || liquidType != "";
-    }
-
-    //! Ist ausser dem Praedikat noch etwas gesetzt, das einschraenkt?
-    bool HasConstraints()
-    {
-        if (minQuality != "")
-            return true;
-        return CountRanges() > 0;
-    }
-
-    int CountRanges()
-    {
-        int n = 0;
-        if (health)         n++;
-        if (freshness)      n++;
-        if (temperature)    n++;
-        if (wetness)        n++;
-        if (cleanness)      n++;
-        if (quantity)       n++;
-        if (quantityPct)    n++;
-        return n;
-    }
-
-    //! Vollstaendig leer - weder Praedikat noch Kind noch Einschraenkung.
-    //! Ein solcher Selektor traefe auf ALLES; 07 §7 verlangt dafuer einen
-    //! Kompilierfehler, keine stille Annahme.
-    bool IsEmpty()
-    {
-        return CountPredicates() == 0 && !HasConstraints();
-    }
+    override ChefZ_SelectorNode GetNot()   { return not; }
+    override bool HasAnyOf()               { return anyOf != null; }
+    override bool HasAllOf()               { return allOf != null; }
+    override bool IsLastLevel()            { return false; }
 }
 
 //==============================================================================

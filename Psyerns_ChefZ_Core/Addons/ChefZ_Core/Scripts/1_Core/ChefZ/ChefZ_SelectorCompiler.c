@@ -63,7 +63,7 @@ class ChefZ_SelectorCompiler
      * ist. Doppelt gemeldet ist besser als gar nicht: der Ladebericht ist die
      * Quelle fuer Gate 2 und Gate 3 des Validators.
      */
-    static ChefZ_CompiledSelector Compile(ChefZ_Selector src, ChefZ_CompileContext ctx, out string error)
+    static ChefZ_CompiledSelector Compile(ChefZ_SelectorNode src, ChefZ_CompileContext ctx, out string error)
     {
         error = "";
 
@@ -79,7 +79,7 @@ class ChefZ_SelectorCompiler
         return CompileNode(src, ctx, 0, error);
     }
 
-    private static ChefZ_CompiledSelector CompileNode(ChefZ_Selector src, notnull ChefZ_CompileContext ctx, int depth, out string error)
+    private static ChefZ_CompiledSelector CompileNode(ChefZ_SelectorNode src, notnull ChefZ_CompileContext ctx, int depth, out string error)
     {
         error = "";
 
@@ -148,7 +148,7 @@ class ChefZ_SelectorCompiler
         return null;
     }
 
-    private static bool CompilePredicate(notnull ChefZ_Selector src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, int depth, out string error)
+    private static bool CompilePredicate(notnull ChefZ_SelectorNode src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, int depth, out string error)
     {
         error = "";
         ChefZ_SymbolResolver res = ctx.Resolver();
@@ -227,23 +227,33 @@ class ChefZ_SelectorCompiler
             return true;
         }
 
-        if (src.anyOf)
+        // Die Kinder werden eingesammelt, nicht direkt gelesen: jede Ebene der
+        // Selektorkette hat ihren eigenen Typ, und Enforce-Templates sind
+        // invariant - array<ref ChefZ_SelectorL2> ist kein
+        // array<ref ChefZ_SelectorNode>. Der Compiler bleibt dadurch EINE
+        // Funktion und muss die Ebenen nicht kennen. Warum es die Kette gibt,
+        // steht im Kopf von ChefZ_SelectorNode.c.
+        if (src.HasAnyOf())
         {
             node.op = ChefZ_SelectorOp.ANY_OF;
-            return CompileChildren(src.anyOf, node, ctx, depth, "anyOf", error);
+            array<ref ChefZ_SelectorNode> anyKinder = new array<ref ChefZ_SelectorNode>();
+            src.CollectAnyOf(anyKinder);
+            return CompileChildren(anyKinder, node, ctx, depth, "anyOf", error);
         }
 
-        if (src.allOf)
+        if (src.HasAllOf())
         {
             node.op = ChefZ_SelectorOp.ALL_OF;
-            return CompileChildren(src.allOf, node, ctx, depth, "allOf", error);
+            array<ref ChefZ_SelectorNode> allKinder = new array<ref ChefZ_SelectorNode>();
+            src.CollectAllOf(allKinder);
+            return CompileChildren(allKinder, node, ctx, depth, "allOf", error);
         }
 
-        if (src.not)
+        if (src.GetNot())
         {
             node.op = ChefZ_SelectorOp.NOT;
             string childError;
-            ChefZ_CompiledSelector child = CompileNode(src.not, ctx, depth + 1, childError);
+            ChefZ_CompiledSelector child = CompileNode(src.GetNot(), ctx, depth + 1, childError);
             if (!child)
             {
                 // 07 §7: "not mit ungueltigem Kind -> Fehler propagiert nach
@@ -259,7 +269,7 @@ class ChefZ_SelectorCompiler
         return false;
     }
 
-    private static bool CompileChildren(notnull array<ref ChefZ_Selector> list, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, int depth, string label, out string error)
+    private static bool CompileChildren(notnull array<ref ChefZ_SelectorNode> list, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, int depth, string label, out string error)
     {
         error = "";
 
@@ -300,7 +310,7 @@ class ChefZ_SelectorCompiler
      * Liefert immer true; der Rueckgabewert steht fuer den Fall bereit, dass
      * ein spaeterer Bereich einmal abweisen soll.
      */
-    private static bool CompileRanges(notnull ChefZ_Selector src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx)
+    private static bool CompileRanges(notnull ChefZ_SelectorNode src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx)
     {
         AddRange(node, ctx, ChefZ_RangeConstraint.HEALTH,       src.health);
         AddRange(node, ctx, ChefZ_RangeConstraint.FRESHNESS,    src.freshness);
@@ -345,7 +355,7 @@ class ChefZ_SelectorCompiler
      * Ergebnis ist eine Aufzaehlung der zulaessigen Stufen, kein Rang -
      * Begruendung im Kopf von ChefZ_CompiledSelector.
      */
-    private static bool CompileMinQuality(notnull ChefZ_Selector src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, out string error)
+    private static bool CompileMinQuality(notnull ChefZ_SelectorNode src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, out string error)
     {
         error = "";
 
