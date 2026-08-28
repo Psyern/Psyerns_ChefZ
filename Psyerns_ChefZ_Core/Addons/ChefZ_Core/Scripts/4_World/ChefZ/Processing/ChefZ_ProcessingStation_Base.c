@@ -1393,7 +1393,10 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         ChefZ_LoadSupportedProcesses();
 
-        outLines.Insert("Station " + GetType() + "  prozesse=[" + ChefZ_TextList.JoinSymbols(m_ChefZ_Processes, ",") + "]" + "  slots=" + m_ChefZ_Jobs.Count().ToString() + "  tempo=" + m_ChefZ_SpeedMultiplier.ToString() + "  waerme=" + ChefZ_HasHeat().ToString() + "  versorgt=" + ChefZ_IsPowered().ToString());
+        string chefzTxt1 = "Station " + GetType() + "  prozesse=[" + ChefZ_TextList.JoinSymbols(m_ChefZ_Processes, ",") + "]";
+        chefzTxt1 = chefzTxt1 + "  slots=" + m_ChefZ_Jobs.Count().ToString() + "  tempo=" + m_ChefZ_SpeedMultiplier.ToString() + "  waerme=";
+        chefzTxt1 = chefzTxt1 + ChefZ_HasHeat().ToString() + "  versorgt=" + ChefZ_IsPowered().ToString();
+        outLines.Insert(chefzTxt1);
 
         for (int i = 0; i < m_ChefZ_Jobs.Count(); i++)
             outLines.Insert("  Slot " + i.ToString() + ": " + m_ChefZ_Jobs.Get(i).ToDebugString());

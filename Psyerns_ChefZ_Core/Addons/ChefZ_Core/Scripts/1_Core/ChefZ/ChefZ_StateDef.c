@@ -304,7 +304,7 @@ class ChefZ_StateDef extends ChefZ_Record
     //--------------------------------------------------------------------------
 
     //! Nur fuer den Selbsttest (S9).
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         ChefZ_ValidationContext ctx = new ChefZ_ValidationContext();
         ctx.Init(null);

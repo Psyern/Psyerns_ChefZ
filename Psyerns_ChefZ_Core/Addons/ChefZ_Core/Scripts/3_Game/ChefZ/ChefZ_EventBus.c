@@ -81,7 +81,7 @@
  * sie ueberlebt ihren Besitzer NICHT (siehe m_Owner) und traegt die Zaehler,
  * mit denen der Bus einen Ausreisser benennen kann.
  */
-class ChefZ_EventSubscription
+class ChefZ_EventSubscription : Managed
 {
     int    id;
     string eventId;
@@ -160,7 +160,9 @@ class ChefZ_EventSubscription
 
     string ToLine()
     {
-        string s = "  " + Label() + "  -> " + eventId + "  prio=" + priority.ToString() + "  aufrufe=" + callCount.ToString();
+        string chefzTxt1 = "  " + Label() + "  -> " + eventId + "  prio=";
+        chefzTxt1 = chefzTxt1 + priority.ToString() + "  aufrufe=" + callCount.ToString();
+        string s = chefzTxt1;
         if (slowCount > 0)
             s = s + "  langsam=" + slowCount.ToString();
         if (!IsAlive())
@@ -171,7 +173,7 @@ class ChefZ_EventSubscription
 
 //==============================================================================
 
-class ChefZ_EventBus
+class ChefZ_EventBus : Managed
 {
     private static ref ChefZ_EventBus s_Instance;
 
@@ -827,7 +829,10 @@ class ChefZ_EventBus
         EventNames(names);
         ChefZ_StringOrder.SortAscending(names);
 
-        outLines.Insert("Event Bus: " + names.Count().ToString() + " Ereignisse, " + m_ById.Count().ToString() + " Anmeldungen" + "  ausgeloest=" + m_CountRaised.ToString() + "  zugestellt=" + m_CountDelivered.ToString() + "  storniert=" + m_CountCancelled.ToString() + "  tot entfernt=" + m_CountDeadPruned.ToString() + "  tiefenabbruch=" + m_CountDepthBlocked.ToString());
+        string chefzTxt2 = "Event Bus: " + names.Count().ToString() + " Ereignisse, " + m_ById.Count().ToString() + " Anmeldungen";
+        chefzTxt2 = chefzTxt2 + "  ausgeloest=" + m_CountRaised.ToString() + "  zugestellt=" + m_CountDelivered.ToString() + "  storniert=";
+        chefzTxt2 = chefzTxt2 + m_CountCancelled.ToString() + "  tot entfernt=" + m_CountDeadPruned.ToString() + "  tiefenabbruch=" + m_CountDepthBlocked.ToString();
+        outLines.Insert(chefzTxt2);
 
         if (names.Count() == 0)
         {

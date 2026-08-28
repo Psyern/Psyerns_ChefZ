@@ -37,7 +37,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_CapabilityGate
+class ChefZ_CapabilityGate : Managed
 {
     /**
      * Die eingehaengte Auskunftsstelle. Genau eine, prozessweit.

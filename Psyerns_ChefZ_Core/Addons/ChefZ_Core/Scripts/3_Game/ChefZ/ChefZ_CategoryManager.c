@@ -52,7 +52,7 @@
 // Engine-Typ - kein ItemBase, kein EntityAI.
 //==============================================================================
 
-class ChefZ_CategoryManager
+class ChefZ_CategoryManager : Managed
 {
     //! 04 E4 / 09: Gewicht = base + perDepth * Tiefe. Wurzel = 1.0, Tiefe 1 =
     //! 1.5, Tiefe 2 = 2.0. Kein Content-Autor pflegt eine Zahl - genau das ist
@@ -174,7 +174,12 @@ class ChefZ_CategoryManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien, " + "Tiefe " + m_MaxDepth.ToString() + ", " + GetTagCount().ToString() + " Tags" + " in " + TickCount(startTick).ToString() + "ms.");
+        {
+            string chefzTxt1 = "Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien, " + "Tiefe " + m_MaxDepth.ToString();
+            chefzTxt1 = chefzTxt1 + ", " + GetTagCount().ToString() + " Tags" + " in " + TickCount(startTick).ToString();
+            chefzTxt1 = chefzTxt1 + "ms.";
+            report.AddInfo(chefzTxt1);
+        }
 
         LogTreeIfDebug();
     }
@@ -913,7 +918,10 @@ class ChefZ_CategoryManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien" + ", Tiefe " + m_MaxDepth.ToString() + ", verworfen " + m_RejectedCount.ToString() + ", Tags " + GetTagCount().ToString() + ", ready=" + m_Ready.ToString());
+        string chefzTxt2 = "Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien" + ", Tiefe " + m_MaxDepth.ToString();
+        chefzTxt2 = chefzTxt2 + ", verworfen " + m_RejectedCount.ToString() + ", Tags " + GetTagCount().ToString() + ", ready=";
+        chefzTxt2 = chefzTxt2 + m_Ready.ToString();
+        outLines.Insert(chefzTxt2);
 
         for (int i = 0; i < m_Parent.Count(); i++)
         {
@@ -941,7 +949,9 @@ class ChefZ_CategoryManager
         int depth = m_Depth.Get(bit);
         float weight = m_WeightBase + m_WeightPerDepth * depth;
 
-        outLines.Insert(indent + m_Id.Get(bit) + "  bit=" + bit.ToString() + " tiefe=" + depth.ToString() + " gewicht=" + weight.ToString() + " closure=" + m_Closures.Get(bit).ToDebugString());
+        string chefzTxt3 = indent + m_Id.Get(bit) + "  bit=" + bit.ToString() + " tiefe=";
+        chefzTxt3 = chefzTxt3 + depth.ToString() + " gewicht=" + weight.ToString() + " closure=" + m_Closures.Get(bit).ToDebugString();
+        outLines.Insert(chefzTxt3);
 
         array<int> children = m_Children.Get(bit);
         for (int i = 0; i < children.Count(); i++)

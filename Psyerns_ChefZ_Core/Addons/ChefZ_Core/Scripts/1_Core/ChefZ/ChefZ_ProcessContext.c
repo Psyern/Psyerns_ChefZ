@@ -50,7 +50,7 @@
  * jeden Spieler dasselbe sein. Er wird ausschliesslich fuer Faehigkeiten
  * (17 §3.3) und fuer die Zuordnung eines laufenden Jobs gebraucht.
  */
-class ChefZ_ProcessContext
+class ChefZ_ProcessContext : Managed
 {
     ChefZ_Sym stationClass;
 
@@ -179,7 +179,7 @@ class ChefZ_ProcessContext
  * persistiert werden (03 E2). Wer einen Job speichert, speichert die Hashes -
  * siehe ChefZ_ProcessJob.
  */
-class ChefZ_TransformMatch
+class ChefZ_TransformMatch : Managed
 {
     bool      matched;
 
@@ -263,7 +263,9 @@ class ChefZ_TransformMatch
             return f + "  kandidaten=" + candidatesTried.ToString();
         }
 
-        return transformId + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym) + " dauer=" + durationSec.ToString() + "s" + " items=" + boundHandles.Count().ToString() + " verbrauch=" + consumePlan.Count().ToString();
+        string chefzTxt1 = transformId + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym) + " dauer=" + durationSec.ToString();
+        chefzTxt1 = chefzTxt1 + "s" + " items=" + boundHandles.Count().ToString() + " verbrauch=" + consumePlan.Count().ToString();
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest.
@@ -305,7 +307,7 @@ class ChefZ_TransformMatch
  * das Eingangsitem bleibt UNVERAENDERT liegen und es gibt ein WARN. Kein
  * Itemverlust durch Content-Aenderungen (11 §6).
  */
-class ChefZ_ProcessJob
+class ChefZ_ProcessJob : Managed
 {
     static const int NO_HASH = 0;
 
@@ -414,7 +416,9 @@ class ChefZ_ProcessJob
         if (!ChefZ_SymbolTable.IsValid(transformSym))
             s = "hash " + transformPersistHash.ToString();
 
-        return s + "  " + elapsedSec.ToString() + "/" + durationSec.ToString() + "s" + " (" + Progress01().ToString() + ")";
+        string chefzTxt2 = s + "  " + elapsedSec.ToString() + "/" + durationSec.ToString();
+        chefzTxt2 = chefzTxt2 + "s" + " (" + Progress01().ToString() + ")";
+        return chefzTxt2;
     }
 
     //! Nur fuer den Selbsttest.

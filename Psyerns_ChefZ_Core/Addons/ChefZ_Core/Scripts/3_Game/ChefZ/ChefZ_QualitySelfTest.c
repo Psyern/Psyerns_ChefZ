@@ -131,10 +131,26 @@ class ChefZ_QualitySelfTest
         return ChefZ_SymbolTable.Lookup(name);
     }
 
+    // Die Fixtures muessen die Pruefung ueberleben.
+    //
+    // Der Manager speichert seine Defs bewusst OHNE ref: Eigentuemer ist in
+    // Produktion die Registry im Config Manager, und die lebt laenger als der
+    // Manager. Eine Registry, die nur als lokale Variable dieser
+    // Hilfsfunktion entsteht, ist dagegen schon abgeraeumt, bevor der Test
+    // den Manager ueberhaupt befragt - der haelt dann ins Leere. Genau daran
+    // ist der Testserver am 28.08.2026 gescheitert: "NULL pointer to
+    // instance". Diese Liste bildet den Eigentuemer nach, den es in
+    // Produktion gibt.
+    private static ref array<ref ChefZ_Registry<ChefZ_QualityTierDef>> s_AliveRegistries;
+
     private static ChefZ_Registry<ChefZ_QualityTierDef> NewRegistry()
     {
+        if (!s_AliveRegistries)
+            s_AliveRegistries = new array<ref ChefZ_Registry<ChefZ_QualityTierDef>>();
+
         ChefZ_Registry<ChefZ_QualityTierDef> reg = new ChefZ_Registry<ChefZ_QualityTierDef>();
         reg.Init(ChefZ_RecordKind.QUALITY_TIER);
+        s_AliveRegistries.Insert(reg);
         return reg;
     }
 
@@ -224,21 +240,21 @@ class ChefZ_QualitySelfTest
         if (mgr.GetTierCount() != 4)                                return false;
         if (mgr.GetTierSetCount() != 1)                             return false;
 
-        ChefZ_Sym set = Sym("CHEFZ_QT_SET");
-        if (!mgr.TierSetExists(set))                                return false;
+        ChefZ_Sym setSym = Sym("CHEFZ_QT_SET");
+        if (!mgr.TierSetExists(setSym))                                return false;
 
         // Aufloesung an und zwischen den Schwellen.
-        if (mgr.ResolveTier(-100.0, set) != Sym("CHEFZ_QT_T0"))     return false;
-        if (mgr.ResolveTier(-1.0, set)   != Sym("CHEFZ_QT_T0"))     return false;
-        if (mgr.ResolveTier(0.0, set)    != Sym("CHEFZ_QT_T1"))     return false;
-        if (mgr.ResolveTier(1.99, set)   != Sym("CHEFZ_QT_T1"))     return false;
-        if (mgr.ResolveTier(2.0, set)    != Sym("CHEFZ_QT_T2"))     return false;
-        if (mgr.ResolveTier(6.99, set)   != Sym("CHEFZ_QT_T2"))     return false;
-        if (mgr.ResolveTier(7.0, set)    != Sym("CHEFZ_QT_T3"))     return false;
-        if (mgr.ResolveTier(9999.0, set) != Sym("CHEFZ_QT_T3"))     return false;
+        if (mgr.ResolveTier(-100.0, setSym) != Sym("CHEFZ_QT_T0"))     return false;
+        if (mgr.ResolveTier(-1.0, setSym)   != Sym("CHEFZ_QT_T0"))     return false;
+        if (mgr.ResolveTier(0.0, setSym)    != Sym("CHEFZ_QT_T1"))     return false;
+        if (mgr.ResolveTier(1.99, setSym)   != Sym("CHEFZ_QT_T1"))     return false;
+        if (mgr.ResolveTier(2.0, setSym)    != Sym("CHEFZ_QT_T2"))     return false;
+        if (mgr.ResolveTier(6.99, setSym)   != Sym("CHEFZ_QT_T2"))     return false;
+        if (mgr.ResolveTier(7.0, setSym)    != Sym("CHEFZ_QT_T3"))     return false;
+        if (mgr.ResolveTier(9999.0, setSym) != Sym("CHEFZ_QT_T3"))     return false;
 
-        if (mgr.GetLowestTier(set)  != Sym("CHEFZ_QT_T0"))          return false;
-        if (mgr.GetHighestTier(set) != Sym("CHEFZ_QT_T3"))          return false;
+        if (mgr.GetLowestTier(setSym)  != Sym("CHEFZ_QT_T0"))          return false;
+        if (mgr.GetHighestTier(setSym) != Sym("CHEFZ_QT_T3"))          return false;
 
         // 12 §8: ein unbekannter Stufensatz faellt auf den Vorgabesatz
         // zurueck. Hier gibt es den Vorgabesatz nicht - dann ist INVALID die
@@ -266,13 +282,13 @@ class ChefZ_QualitySelfTest
         ChefZ_QualityManager mgr = NewManager();
         mgr.Build(reg, null, null, null);
 
-        ChefZ_Sym set = Sym("CHEFZ_QT_RSET");
+        ChefZ_Sym setSym = Sym("CHEFZ_QT_RSET");
         if (mgr.GetRank(Sym("CHEFZ_QT_R_TIEF"))  != 0)              return false;
         if (mgr.GetRank(Sym("CHEFZ_QT_R_MITTE")) != 1)              return false;
         if (mgr.GetRank(Sym("CHEFZ_QT_R_HOCH"))  != 2)              return false;
 
-        if (mgr.ResolveTier(0.0, set)  != Sym("CHEFZ_QT_R_TIEF"))   return false;
-        if (mgr.ResolveTier(10.0, set) != Sym("CHEFZ_QT_R_HOCH"))   return false;
+        if (mgr.ResolveTier(0.0, setSym)  != Sym("CHEFZ_QT_R_TIEF"))   return false;
+        if (mgr.ResolveTier(10.0, setSym) != Sym("CHEFZ_QT_R_HOCH"))   return false;
 
         // 12 §8: die unterste Stufe faengt auch alles darunter ab - ein
         // Gericht faellt nie durch das Raster.
@@ -346,7 +362,7 @@ class ChefZ_QualitySelfTest
         ChefZ_QualityManager mgr = NewManager();
         mgr.Build(StandardLadder(), null, null, null);
 
-        ChefZ_Sym set = Sym("CHEFZ_QT_SET");
+        ChefZ_Sym setSym = Sym("CHEFZ_QT_SET");
         ChefZ_Sym t0  = Sym("CHEFZ_QT_T0");
         ChefZ_Sym t1  = Sym("CHEFZ_QT_T1");
         ChefZ_Sym t3  = Sym("CHEFZ_QT_T3");
@@ -363,26 +379,26 @@ class ChefZ_QualitySelfTest
         b.units        = 3.0;
         inputs.Insert(b);
 
-        if (mgr.CombineRanks(inputs, "MIN", set) != t0)             return false;
-        if (mgr.CombineRanks(inputs, "MAX", set) != t3)             return false;
+        if (mgr.CombineRanks(inputs, "MIN", setSym) != t0)             return false;
+        if (mgr.CombineRanks(inputs, "MAX", setSym) != t3)             return false;
 
         // MEAN: (0 + 3) / 2 = 1.5 -> kaufmaennisch 2
-        if (mgr.CombineRanks(inputs, "MEAN", set) != Sym("CHEFZ_QT_T2"))    return false;
+        if (mgr.CombineRanks(inputs, "MEAN", setSym) != Sym("CHEFZ_QT_T2"))    return false;
 
         // WEIGHTED_MEAN: (0*1 + 3*3) / 4 = 2.25 -> 2
-        if (mgr.CombineRanks(inputs, "WEIGHTED_MEAN", set) != Sym("CHEFZ_QT_T2"))
+        if (mgr.CombineRanks(inputs, "WEIGHTED_MEAN", setSym) != Sym("CHEFZ_QT_T2"))
             return false;
 
         // Unbekannte Regel gilt als MIN - die vorsichtigste Antwort.
-        if (mgr.CombineRanks(inputs, "UNFUG", set) != t0)           return false;
+        if (mgr.CombineRanks(inputs, "UNFUG", setSym) != t0)           return false;
 
         // Ohne verwertbare Eingaben gibt es keine Stufe.
         array<ref ChefZ_ItemFacts> leer = new array<ref ChefZ_ItemFacts>();
-        if (ChefZ_SymbolTable.IsValid(mgr.CombineRanks(leer, "MIN", set)))  return false;
+        if (ChefZ_SymbolTable.IsValid(mgr.CombineRanks(leer, "MIN", setSym)))  return false;
 
         ChefZ_ItemFacts ohne = new ChefZ_ItemFacts();
         leer.Insert(ohne);                      // Zutat ohne Qualitaetsstufe
-        if (ChefZ_SymbolTable.IsValid(mgr.CombineRanks(leer, "MIN", set)))  return false;
+        if (ChefZ_SymbolTable.IsValid(mgr.CombineRanks(leer, "MIN", setSym)))  return false;
 
         return true;
     }
@@ -810,10 +826,10 @@ class ChefZ_QualitySelfTest
         if (!mgr.IsReady())                                         return false;
         if (mgr.GetTierCount() != 0)                                return false;
 
-        ChefZ_Sym set = ChefZ_SymbolTable.Intern("CHEFZ_QT_LEERERSATZ");
-        if (ChefZ_SymbolTable.IsValid(mgr.ResolveTier(5.0, set)))   return false;
-        if (ChefZ_SymbolTable.IsValid(mgr.GetLowestTier(set)))      return false;
-        if (mgr.TierSetExists(set))                                 return false;
+        ChefZ_Sym setSym = ChefZ_SymbolTable.Intern("CHEFZ_QT_LEERERSATZ");
+        if (ChefZ_SymbolTable.IsValid(mgr.ResolveTier(5.0, setSym)))   return false;
+        if (ChefZ_SymbolTable.IsValid(mgr.GetLowestTier(setSym)))      return false;
+        if (mgr.TierSetExists(setSym))                                 return false;
 
         // Alle Wirkungen neutral - Gerichte entstehen weiterhin, nur ohne
         // Qualitaet.
@@ -821,7 +837,7 @@ class ChefZ_QualitySelfTest
         if (!Near(mgr.GetYieldMultiplier(any), 1.0))                return false;
         if (mgr.GetPortionBonus(any) != 0)                          return false;
         if (!Near(mgr.GetSpoilageMultiplier(any), 1.0))             return false;
-        if (mgr.CompareTiers(any, set) != 0)                        return false;
+        if (mgr.CompareTiers(any, setSym) != 0)                        return false;
 
         return true;
     }
@@ -837,18 +853,18 @@ class ChefZ_QualitySelfTest
 
         if (mgr.IsReady())                                          return false;
 
-        ChefZ_Sym set = ChefZ_SymbolTable.Intern("CHEFZ_QT_VORBUILD");
-        if (ChefZ_SymbolTable.IsValid(mgr.ResolveTier(1.0, set)))   return false;
-        if (mgr.GetDef(set))                                        return false;
-        if (mgr.TierSetExists(set))                                 return false;
-        if (mgr.GetRank(set) != -1)                                 return false;
+        ChefZ_Sym setSym = ChefZ_SymbolTable.Intern("CHEFZ_QT_VORBUILD");
+        if (ChefZ_SymbolTable.IsValid(mgr.ResolveTier(1.0, setSym)))   return false;
+        if (mgr.GetDef(setSym))                                        return false;
+        if (mgr.TierSetExists(setSym))                                 return false;
+        if (mgr.GetRank(setSym) != -1)                                 return false;
 
         // Kein Absturz, neutrale Antworten.
-        if (!Near(mgr.GetYieldMultiplier(set), 1.0))                return false;
-        if (mgr.GetPortionBonus(set) != 0)                          return false;
+        if (!Near(mgr.GetYieldMultiplier(setSym), 1.0))                return false;
+        if (mgr.GetPortionBonus(setSym) != 0)                          return false;
 
         array<ChefZ_Sym> tags;
-        mgr.GetGrantedTags(set, tags);
+        mgr.GetGrantedTags(setSym, tags);
         if (tags.Count() != 0)                                      return false;
 
         return true;

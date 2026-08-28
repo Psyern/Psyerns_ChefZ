@@ -66,7 +66,7 @@
  * eine Ableitung, die eine Methode vergisst, liefert "weiss ich nicht" und
  * nicht einen Absturz.
  */
-class ChefZ_ICapabilityProvider
+class ChefZ_ICapabilityProvider : Managed
 {
     //! Erscheint in jeder Meldung ueber diesen Anbieter. Ohne ihn ist ein
     //! Anbieter, der Unsinn liefert, nicht zuzuordnen (17 §9).
@@ -91,16 +91,16 @@ class ChefZ_ICapabilityProvider
      * @return false, wenn dieser Anbieter zu dieser Faehigkeit nichts sagen
      *         kann. Dann wird der naechste Anbieter gefragt.
      */
-    bool TryGetCapability(int identityId, ChefZ_Sym capability, out float value)
+    bool TryGetCapability(int identityId, ChefZ_Sym capability, out float outValue)
     {
-        value = 0.0;
+        outValue = 0.0;
         return false;
     }
 }
 
 //==============================================================================
 
-class ChefZ_CapabilityRegistry
+class ChefZ_CapabilityRegistry : Managed
 {
     private static ref ChefZ_CapabilityRegistry s_Instance;
 
@@ -550,7 +550,11 @@ class ChefZ_CapabilityRegistry
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Faehigkeiten: " + m_Providers.Count().ToString() + " Anbieter, " + "modus=" + m_Mode + "  default=" + m_Default.ToString() + "  bereich=[" + m_Min.ToString() + ".." + m_Max.ToString() + "]" + "  abfragen=" + m_CountQueries.ToString() + "  beantwortet=" + m_CountAnswered.ToString() + "  geklemmt=" + m_CountClamped.ToString());
+        string chefzTxt1 = "Faehigkeiten: " + m_Providers.Count().ToString() + " Anbieter, " + "modus=" + m_Mode;
+        chefzTxt1 = chefzTxt1 + "  default=" + m_Default.ToString() + "  bereich=[" + m_Min.ToString() + "..";
+        chefzTxt1 = chefzTxt1 + m_Max.ToString() + "]" + "  abfragen=" + m_CountQueries.ToString() + "  beantwortet=";
+        chefzTxt1 = chefzTxt1 + m_CountAnswered.ToString() + "  geklemmt=" + m_CountClamped.ToString();
+        outLines.Insert(chefzTxt1);
 
         if (m_Providers.Count() == 0)
         {

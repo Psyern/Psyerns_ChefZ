@@ -67,7 +67,7 @@ enum ChefZ_SelectorOp
  * Wertebereiche hat eine leere Liste, und der heisse Pfad laeuft dann durch
  * eine Schleife mit null Durchlaeufen statt durch sieben Nullpruefungen.
  */
-class ChefZ_RangeConstraint
+class ChefZ_RangeConstraint : Managed
 {
     static const int HEALTH       = 0;
     static const int FRESHNESS    = 1;
@@ -150,7 +150,7 @@ class ChefZ_RangeConstraint
 
 //------------------------------------------------------------------------------
 
-class ChefZ_CompiledSelector
+class ChefZ_CompiledSelector : Managed
 {
     ChefZ_SelectorOp op;
     ChefZ_Sym        sym;                   // CLASS/TAG/STATE/LIQUID: das Symbol

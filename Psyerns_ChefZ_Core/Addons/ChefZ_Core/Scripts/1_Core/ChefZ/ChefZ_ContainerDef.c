@@ -349,7 +349,7 @@ class ChefZ_ContainerDef extends ChefZ_Record
     // Nur fuer den Selbsttest
     //==========================================================================
 
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         ChefZ_RecordProbe.Reset();
 

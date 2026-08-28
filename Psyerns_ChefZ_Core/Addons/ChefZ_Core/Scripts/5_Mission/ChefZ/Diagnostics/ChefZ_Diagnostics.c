@@ -88,8 +88,7 @@ class ChefZ_Diagnostics
     //! Die haeufigste Zeile des ganzen Teilsystems (18 §3, letzter Block).
     //! Sie steht als Konstante da, weil sie die Kernzusage des Mods in einem
     //! Satz wiederholt: kein ChefZ-Match, dann Vanilla-Pfad unveraendert.
-    private static const string VANILLA_UNTOUCHED =
-        "Kein Treffer -> Vanilla-Kochen laeuft unveraendert weiter.";
+    private static const string VANILLA_UNTOUCHED = "Kein Treffer -> Vanilla-Kochen laeuft unveraendert weiter.";
 
     //==========================================================================
     // Torwaechter
@@ -197,7 +196,9 @@ class ChefZ_Diagnostics
         if (Guard(lines))
         {
             ChefZ_NutritionManager nut = ChefZ_NutritionManager.Get();
-            lines.Insert("Angaben " + nut.GetRecordCount().ToString() + "   abgewiesen " + nut.GetRejectedCount().ToString() + "   Audit " + nut.IsAuditEnabled().ToString() + "   gelaufen " + nut.HasAudited().ToString());
+            string chefzTxt1 = "Angaben " + nut.GetRecordCount().ToString() + "   abgewiesen " + nut.GetRejectedCount().ToString() + "   Audit ";
+            chefzTxt1 = chefzTxt1 + nut.IsAuditEnabled().ToString() + "   gelaufen " + nut.HasAudited().ToString();
+            lines.Insert(chefzTxt1);
             nut.DumpFindings(lines);
         }
         outLines = End(lines);
@@ -272,7 +273,9 @@ class ChefZ_Diagnostics
 
         lines.Insert(rec.ToDebugString());
         lines.Insert("Quelle        " + rec.sourceRef);
-        lines.Insert("Spezifitaet   " + rec.specificity.ToString() + "   Prioritaet " + rec.priority.ToString() + "   Pflichtslots " + rec.requiredSlots.ToString() + "   Bedingungen " + rec.totalConstraints.ToString());
+        string chefzTxt2 = "Spezifitaet   " + rec.specificity.ToString() + "   Prioritaet " + rec.priority.ToString() + "   Pflichtslots ";
+        chefzTxt2 = chefzTxt2 + rec.requiredSlots.ToString() + "   Bedingungen " + rec.totalConstraints.ToString();
+        lines.Insert(chefzTxt2);
         lines.Insert("Mindestitems  " + rec.minItemCount.ToString());
         lines.Insert("");
 
@@ -602,7 +605,9 @@ class ChefZ_Diagnostics
         ItemBase item = ItemBase.Cast(obj);
         if (!item)
         {
-            reason = "Objekt " + low.ToString() + ":" + high.ToString() + " ist kein ItemBase (" + obj.GetType() + "). " + "ChefZ wertet nur Gefaesse aus.";
+            string chefzTxt3 = "Objekt " + low.ToString() + ":" + high.ToString() + " ist kein ItemBase (";
+            chefzTxt3 = chefzTxt3 + obj.GetType() + "). " + "ChefZ wertet nur Gefaesse aus.";
+            reason = chefzTxt3;
             return false;
         }
 
@@ -823,7 +828,9 @@ class ChefZ_Diagnostics
             ChefZ_MatchResult one = all.Get(i);
             if (!one)
                 continue;
-            lines.Insert("  " + (i + 1).ToString() + ". " + one.recipeId + "  score=" + one.score.ToString() + "  fertig=" + one.ready.ToString());
+            string chefzTxt4 = "  " + (i + 1).ToString() + ". " + one.recipeId + "  score=";
+            chefzTxt4 = chefzTxt4 + one.score.ToString() + "  fertig=" + one.ready.ToString();
+            lines.Insert(chefzTxt4);
         }
     }
 

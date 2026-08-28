@@ -284,7 +284,10 @@ class ChefZ_AdminCommands
     {
         int mask = ChefZ_Log.GetChannelMask();
 
-        lines.Insert("Log: Stufe " + ChefZ_LogLevel.Name(ChefZ_Log.GetLevel()) + "   Datei " + ChefZ_Log.IsFileOutputActive().ToString() + " (" + ChefZ_Log.GetLogFilePath() + ")" + "   Fehler " + ChefZ_Log.GetErrorCount().ToString() + "   Warnungen " + ChefZ_Log.GetWarnCount().ToString());
+        string chefzTxt1 = "Log: Stufe " + ChefZ_LogLevel.Name(ChefZ_Log.GetLevel()) + "   Datei " + ChefZ_Log.IsFileOutputActive().ToString() + " (";
+        chefzTxt1 = chefzTxt1 + ChefZ_Log.GetLogFilePath() + ")" + "   Fehler " + ChefZ_Log.GetErrorCount().ToString() + "   Warnungen ";
+        chefzTxt1 = chefzTxt1 + ChefZ_Log.GetWarnCount().ToString();
+        lines.Insert(chefzTxt1);
 
         string active = "";
         string inactive = "";

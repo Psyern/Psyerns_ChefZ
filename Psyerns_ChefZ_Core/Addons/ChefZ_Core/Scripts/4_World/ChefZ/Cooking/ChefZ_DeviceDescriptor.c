@@ -33,7 +33,7 @@
 // Layer: 4_World.
 //==============================================================================
 
-class ChefZ_DeviceDescriptor
+class ChefZ_DeviceDescriptor : Managed
 {
     //! Klasse des Gefaesses selbst (Pot, Cauldron, FryingPan ...).
     ChefZ_Sym deviceClass;
@@ -96,7 +96,9 @@ class ChefZ_DeviceDescriptor
         if (ChefZ_SymbolTable.IsValid(deviceRootClass))
             s = s + " auf " + ChefZ_SymbolTable.Name(deviceRootClass);
 
-        s = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]" + " portionen=" + portionCapacity.ToString() + " qmod=" + qualityModifier.ToString();
+        string chefzTxt1 = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]" + " portionen=";
+        chefzTxt1 = chefzTxt1 + portionCapacity.ToString() + " qmod=" + qualityModifier.ToString();
+        s = chefzTxt1;
         return s;
     }
 }

@@ -762,8 +762,7 @@ class ChefZ_ProcessingSelfTest
         AddRecord(stations, Station(STATION_A, PROZ_ACTION, PROZ_TIMED));
         AddRecord(stations, Station(STATION_B, PROZ_ACTION, "CHEFZ_PT_GIBTSNICHT"));
 
-        ChefZ_Registry<ChefZ_TransformDef> transforms =
-            new ChefZ_Registry<ChefZ_TransformDef>();
+        ChefZ_Registry<ChefZ_TransformDef> transforms = new ChefZ_Registry<ChefZ_TransformDef>();
         transforms.Init(ChefZ_RecordKind.TRANSFORM);
 
         AddRecord(transforms, Transform("CHEFZ_PT_T_BREIT", PROZ_ACTION, KAT_A));

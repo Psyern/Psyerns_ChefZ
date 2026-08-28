@@ -56,7 +56,7 @@
 //==============================================================================
 
 //! Ein Zaehler je Spieler und Aktion.
-class ChefZ_TerjeXpRepeat
+class ChefZ_TerjeXpRepeat : Managed
 {
     int   count;
     float lastTime;

@@ -281,7 +281,9 @@ class ChefZ_QualityTierDef extends ChefZ_Record
 
     string ToLine()
     {
-        string s = id + " [" + ChefZ_SymbolTable.NameOrMark(tierSetSym) + "]" + " rang=" + rank.ToString() + " ab=" + minScore.ToString() + " ausbeute=" + yieldMultiplier.ToString();
+        string chefzTxt1 = id + " [" + ChefZ_SymbolTable.NameOrMark(tierSetSym) + "]" + " rang=";
+        chefzTxt1 = chefzTxt1 + rank.ToString() + " ab=" + minScore.ToString() + " ausbeute=" + yieldMultiplier.ToString();
+        string s = chefzTxt1;
 
         if (portionBonus != 0)
             s = s + " portionen+" + portionBonus.ToString();
@@ -298,7 +300,7 @@ class ChefZ_QualityTierDef extends ChefZ_Record
     //--------------------------------------------------------------------------
 
     //! Nur fuer den Selbsttest (S10).
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         ChefZ_ValidationContext ctx = new ChefZ_ValidationContext();
         ctx.Init(null);
@@ -330,15 +332,15 @@ class ChefZ_QualityTierDef extends ChefZ_Record
         if (bad.rank != 0)                                  return false;
 
         // 3. Stufensatz wird beim Compile zum Symbol.
-        ChefZ_QualityTierDef set = new ChefZ_QualityTierDef();
-        set.id      = "CHEFZ_SELFTEST_TIER_C";
-        set.tierSet = "CHEFZ_SELFTEST_TIERSET";
-        set.ResolveDefaults();
-        if (!set.HasTierSet())                              return false;
-        if (!set.Validate(ctx))                             return false;
-        set.Compile(null);
-        if (!ChefZ_SymbolTable.IsValid(set.tierSetSym))     return false;
-        if (set.tierSetSym != ChefZ_SymbolTable.Lookup("CHEFZ_SELFTEST_TIERSET"))
+        ChefZ_QualityTierDef tierDef = new ChefZ_QualityTierDef();
+        tierDef.id      = "CHEFZ_SELFTEST_TIER_C";
+        tierDef.tierSet = "CHEFZ_SELFTEST_TIERSET";
+        tierDef.ResolveDefaults();
+        if (!tierDef.HasTierSet())                              return false;
+        if (!tierDef.Validate(ctx))                             return false;
+        tierDef.Compile(null);
+        if (!ChefZ_SymbolTable.IsValid(tierDef.tierSetSym))     return false;
+        if (tierDef.tierSetSym != ChefZ_SymbolTable.Lookup("CHEFZ_SELFTEST_TIERSET"))
             return false;
 
         // 4. Patch: nur gesetzte Felder wandern, der Rest bleibt.

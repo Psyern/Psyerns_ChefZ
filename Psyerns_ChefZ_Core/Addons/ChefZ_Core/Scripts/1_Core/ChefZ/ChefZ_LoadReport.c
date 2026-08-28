@@ -30,7 +30,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_LoadReportEntry
+class ChefZ_LoadReportEntry : Managed
 {
     int    severity;        // ChefZ_LogLevel.ERR | WARN | INFO
     string sourceRef;       // Datei, Config-Pfad oder Registryname
@@ -62,7 +62,7 @@ class ChefZ_LoadReportEntry
     }
 }
 
-class ChefZ_LoadReport
+class ChefZ_LoadReport : Managed
 {
     //! Deckel gegen einen Bericht, der bei einer kaputten Massendatei den
     //! Speicher frisst. Darueber hinaus wird nur noch gezaehlt.
@@ -216,7 +216,9 @@ class ChefZ_LoadReport
 
     string SummaryLine()
     {
-        return "Ladebericht: " + m_Errors.ToString() + " Fehler, " + m_Warns.ToString() + " Warnungen, " + m_Infos.ToString() + " Hinweise";
+        string chefzTxt1 = "Ladebericht: " + m_Errors.ToString() + " Fehler, " + m_Warns.ToString() + " Warnungen, ";
+        chefzTxt1 = chefzTxt1 + m_Infos.ToString() + " Hinweise";
+        return chefzTxt1;
     }
 
     /**

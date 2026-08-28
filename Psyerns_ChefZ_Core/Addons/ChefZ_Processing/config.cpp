@@ -134,9 +134,15 @@ class CfgVehicles
     // ueber den Aufstieg entlang CfgVehicles als Kochgeraet erkannt. Siehe den
     // Block "### SLICE dairy ###" weiter unten.
     class Inventory_Base;
-    // ChefZ_GrainFoodBase kommt aus ChefZ_Farming und wird NICHT
-    // vorwaertsdeklariert: eine leere Vorwaertsdeklaration wuerde den
-    // echten Knoten mitsamt Nutrition und Food verdecken.
+    // ChefZ_GrainFoodBase kommt aus ChefZ_Farming und MUSS hier
+    // vorwaertsdeklariert werden - aus demselben Grund wie Inventory_Base eine
+    // Zeile darueber. DayZ loest eine Elternklasse nur innerhalb DERSELBEN
+    // config.cpp auf; fehlt sie, bricht der Configlauf mit "Undefined base
+    // class" ab. Die frueher hier notierte Sorge, eine leere
+    // Vorwaertsdeklaration verdecke den echten Knoten, trifft nicht zu: eine
+    // Deklaration ohne Rumpf ersetzt nichts. Siehe den ausfuehrlichen Vermerk
+    // in ChefZ_Baking/config.cpp.
+    class ChefZ_GrainFoodBase;
 
     //--------------------------------------------------------------------------
     // Die Getreidemuehle (Production Map §57).

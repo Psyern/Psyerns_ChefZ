@@ -47,7 +47,7 @@
  * NICHT gelesener Strafenblock waere die gefaehrlichste Sorte Fehler: alles
  * sieht richtig aus, nur verbranntes Fleisch kostet nichts mehr.
  */
-class ChefZ_StatePenaltyDef
+class ChefZ_StatePenaltyDef : Managed
 {
     string state;
     float  points;
@@ -81,7 +81,7 @@ class ChefZ_StatePenaltyDef
  * ueber alle Items laeuft. Ein Stringvergleich waere dort die teuerste Zeile
  * des ganzen Kochticks.
  */
-class ChefZ_QualityScoring
+class ChefZ_QualityScoring : Managed
 {
     /**
      * Vorgabesatz fuer Rezepte und Stufen ohne eigenen tierSet (12 §8, Zeile
@@ -214,7 +214,9 @@ class ChefZ_QualityScoring
 
     string ToDebugString()
     {
-        string s = "satz=" + defaultTierSet + " frische=" + freshnessWeight.ToString() + " zutatenqualitaet=" + ingredientQualityWeight.ToString() + " bezugsrang=" + baseRank.ToString() + " strafen=" + StatePenaltyCount().ToString();
+        string chefzTxt1 = "satz=" + defaultTierSet + " frische=" + freshnessWeight.ToString() + " zutatenqualitaet=";
+        chefzTxt1 = chefzTxt1 + ingredientQualityWeight.ToString() + " bezugsrang=" + baseRank.ToString() + " strafen=" + StatePenaltyCount().ToString();
+        string s = chefzTxt1;
 
         for (int i = 0; i < m_PenaltyOrder.Count(); i++)
         {

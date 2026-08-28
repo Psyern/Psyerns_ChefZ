@@ -35,7 +35,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_MatchResult
+class ChefZ_MatchResult : Managed
 {
     //--- Ergebnis ------------------------------------------------------------
     bool      matched;
@@ -210,7 +210,10 @@ class ChefZ_MatchResult
             return f + "  kandidaten=" + candidatesTried.ToString() + " knoten=" + nodesExplored.ToString();
         }
 
-        string s = recipeId + "  score=" + score.ToString() + " punkte=" + gradeScore.ToString() + " items=" + boundItemCount.ToString() + "/" + itemsInVessel.ToString() + " knoten=" + nodesExplored.ToString();
+        string chefzTxt1 = recipeId + "  score=" + score.ToString() + " punkte=" + gradeScore.ToString();
+        chefzTxt1 = chefzTxt1 + " items=" + boundItemCount.ToString() + "/" + itemsInVessel.ToString() + " knoten=";
+        chefzTxt1 = chefzTxt1 + nodesExplored.ToString();
+        string s = chefzTxt1;
         if (ready)
             s = s + "  FERTIG";
         else
@@ -257,7 +260,7 @@ class ChefZ_MatchResult
  * Fuer das Cookbook ab V1.1 und fuer "chefz why" (18 §3): nicht "kein Rezept
  * passt", sondern "dir fehlt noch eines davon".
  */
-class ChefZ_SlotShortfall
+class ChefZ_SlotShortfall : Managed
 {
     string slotId;
     bool   satisfied;

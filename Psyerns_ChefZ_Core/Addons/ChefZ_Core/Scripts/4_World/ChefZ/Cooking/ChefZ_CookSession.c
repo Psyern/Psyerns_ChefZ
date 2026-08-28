@@ -49,7 +49,7 @@
 // Layer: 4_World.
 //==============================================================================
 
-class ChefZ_CookSession
+class ChefZ_CookSession : Managed
 {
     /**
      * Startwert von ticksSinceMatch.

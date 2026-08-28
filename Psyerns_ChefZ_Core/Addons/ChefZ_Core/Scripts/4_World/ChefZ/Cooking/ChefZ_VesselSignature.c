@@ -49,7 +49,7 @@
 // Layer: 4_World.
 //==============================================================================
 
-class ChefZ_VesselSignature
+class ChefZ_VesselSignature : Managed
 {
     /**
      * Stufenbreite der Mengenerfassung.
@@ -224,7 +224,11 @@ class ChefZ_VesselSignature
         if (!IsMeasured())
             return "(nie gemessen)";
 
-        return "items=" + itemCount.ToString() + " sum=" + typeHashSum.ToString() + " xor=" + typeHashXor.ToString() + " stages=" + foodStageMask.ToString() + " states=" + chefzStateMask.ToString() + " liquid=" + liquidType.ToString() + " qty~" + quantityBucket.ToString() + " methode=" + methodType.ToString();
+        string chefzTxt1 = "items=" + itemCount.ToString() + " sum=" + typeHashSum.ToString() + " xor=";
+        chefzTxt1 = chefzTxt1 + typeHashXor.ToString() + " stages=" + foodStageMask.ToString() + " states=" + chefzStateMask.ToString();
+        chefzTxt1 = chefzTxt1 + " liquid=" + liquidType.ToString() + " qty~" + quantityBucket.ToString() + " methode=";
+        chefzTxt1 = chefzTxt1 + methodType.ToString();
+        return chefzTxt1;
     }
 
     //==========================================================================

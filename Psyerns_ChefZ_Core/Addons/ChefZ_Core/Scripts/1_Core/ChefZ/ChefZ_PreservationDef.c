@@ -115,7 +115,9 @@ class ChefZ_PreservationScope
     //! Fuer Fehlermeldungen: "unbekannter scope X, gueltig sind: ...".
     static string ValidNames()
     {
-        return NAME_STATE + ", " + NAME_CLASS + ", " + NAME_CATEGORY + ", " + NAME_TAG + ", " + NAME_QUALITY;
+        string chefzTxt1 = NAME_STATE + ", " + NAME_CLASS + ", " + NAME_CATEGORY;
+        chefzTxt1 = chefzTxt1 + ", " + NAME_TAG + ", " + NAME_QUALITY;
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest (S11).
@@ -189,8 +191,7 @@ class ChefZ_PreservationDef extends ChefZ_Record
     ref ChefZ_Range environmentTemperature;
 
     /**
-     * Zusaetzlicher Faktor, solange das Item am Spieler haengt. Sentinel =
-     * Vanilla-Verhalten.
+     * Zusaetzlicher Faktor, solange das Item am Spieler haengt. Sentinel = * Vanilla-Verhalten.
      *
      * EHRLICH BENANNTE PRAEZISIERUNG gegenueber 14 §5: das ist ein ZUSAETZLICHER
      * Faktor, kein Ersatz fuer Vanillas GameConstants.DECAY_RATE_ON_PLAYER.
@@ -446,7 +447,7 @@ class ChefZ_PreservationDef extends ChefZ_Record
     //--------------------------------------------------------------------------
 
     //! Nur fuer den Selbsttest (S11).
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         ChefZ_ValidationContext ctx = new ChefZ_ValidationContext();
         ctx.Init(null);

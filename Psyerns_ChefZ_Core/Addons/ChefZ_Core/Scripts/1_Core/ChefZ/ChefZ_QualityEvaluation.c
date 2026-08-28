@@ -30,7 +30,7 @@
 // Layer: 1_Core. Reine Daten, kein Engine-Typ, kein Itemzugriff.
 //==============================================================================
 
-class ChefZ_QualityEvaluation
+class ChefZ_QualityEvaluation : Managed
 {
     //--- die Summanden aus 12 §4, in der Reihenfolge der Formel ---------------
     float SlotPoints;               // SUM ueber belegte Slots: slot.gradePoints
@@ -97,7 +97,9 @@ class ChefZ_QualityEvaluation
     //! sich selbst, "8.8" nicht.
     float AdditiveSum()
     {
-        return SlotPoints + RulePoints + FreshnessTerm + IngredientQualityTerm + StatePenalty + Bias + ExternalBonus;
+        float sum = SlotPoints + RulePoints + FreshnessTerm + IngredientQualityTerm + StatePenalty;
+        sum = sum + Bias + ExternalBonus;
+        return sum;
     }
 
     void AddNote(string text)
@@ -140,7 +142,11 @@ class ChefZ_QualityEvaluation
     //! Eine Zeile fuer das Log. Alle Summanden, in der Reihenfolge der Formel.
     string ToLine()
     {
-        string s = "score=" + TotalScore.ToString() + "  stufe=" + ChefZ_SymbolTable.NameOrMark(ResultTier) + "  slots=" + SlotPoints.ToString() + " regeln=" + RulePoints.ToString() + " frische=" + FreshnessTerm.ToString() + " zutatenqualitaet=" + IngredientQualityTerm.ToString() + " zustandsstrafe=" + StatePenalty.ToString() + " bias=" + Bias.ToString() + " extern=" + ExternalBonus.ToString() + " geraet=x" + DeviceModifier.ToString();
+        string chefzTxt1 = "score=" + TotalScore.ToString() + "  stufe=" + ChefZ_SymbolTable.NameOrMark(ResultTier) + "  slots=";
+        chefzTxt1 = chefzTxt1 + SlotPoints.ToString() + " regeln=" + RulePoints.ToString() + " frische=" + FreshnessTerm.ToString();
+        chefzTxt1 = chefzTxt1 + " zutatenqualitaet=" + IngredientQualityTerm.ToString() + " zustandsstrafe=" + StatePenalty.ToString() + " bias=";
+        chefzTxt1 = chefzTxt1 + Bias.ToString() + " extern=" + ExternalBonus.ToString() + " geraet=x" + DeviceModifier.ToString();
+        string s = chefzTxt1;
         return s;
     }
 

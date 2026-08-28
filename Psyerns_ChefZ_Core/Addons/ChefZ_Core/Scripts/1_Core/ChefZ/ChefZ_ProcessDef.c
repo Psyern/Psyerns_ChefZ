@@ -273,7 +273,7 @@ class ChefZ_ProcessDef extends ChefZ_Record
     }
 
     //! Nur fuer den Selbsttest.
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         ChefZ_RecordProbe.Reset();
 

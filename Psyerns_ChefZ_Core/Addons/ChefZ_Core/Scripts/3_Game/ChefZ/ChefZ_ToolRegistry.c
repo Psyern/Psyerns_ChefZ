@@ -48,7 +48,7 @@
 // Layer: 3_Game.
 //==============================================================================
 
-class ChefZ_ToolRegistry
+class ChefZ_ToolRegistry : Managed
 {
     static const string CFG_VEHICLES     = "CfgVehicles";
     static const int    MAX_PARENT_CHAIN = 64;
@@ -133,7 +133,9 @@ class ChefZ_ToolRegistry
 
         if (report)
         {
-            report.AddInfo("Werkzeuge: " + m_Groups.Count().ToString() + " Gruppen, " + m_ClassCount.ToString() + " Klassen zugeordnet, " + m_SubclassRoots.Count().ToString() + " Gruppen mit Vererbung" + ", " + m_RejectedCount.ToString() + " Eintraege verworfen.");
+            string chefzTxt1 = "Werkzeuge: " + m_Groups.Count().ToString() + " Gruppen, " + m_ClassCount.ToString() + " Klassen zugeordnet, ";
+            chefzTxt1 = chefzTxt1 + m_SubclassRoots.Count().ToString() + " Gruppen mit Vererbung" + ", " + m_RejectedCount.ToString() + " Eintraege verworfen.";
+            report.AddInfo(chefzTxt1);
         }
 
         LogIfDebug();
@@ -186,7 +188,7 @@ class ChefZ_ToolRegistry
             }
 
             ChefZ_Sym classSym = ChefZ_SymbolTable.Intern(cls);
-            Link(classSym, group);
+            LinkGroup(classSym, group);
 
             if (def.allowSubclasses)
                 RegisterSubclassRoot(group, classSym);
@@ -221,7 +223,7 @@ class ChefZ_ToolRegistry
 
             ChefZ_Sym group = ChefZ_SymbolTable.Intern(name);
             RegisterGroup(group);
-            Link(classSym, group);
+            LinkGroup(classSym, group);
 
             if (def.allowSubclasses)
                 RegisterSubclassRoot(group, classSym);
@@ -251,7 +253,7 @@ class ChefZ_ToolRegistry
             roots.Insert(rootClass);
     }
 
-    private void Link(ChefZ_Sym classSym, ChefZ_Sym group)
+    private void LinkGroup(ChefZ_Sym classSym, ChefZ_Sym group)
     {
         if (!ChefZ_SymbolTable.IsValid(classSym) || !ChefZ_SymbolTable.IsValid(group))
             return;

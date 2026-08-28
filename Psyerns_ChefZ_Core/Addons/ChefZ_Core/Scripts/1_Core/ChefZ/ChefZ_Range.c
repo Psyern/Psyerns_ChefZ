@@ -15,7 +15,7 @@
 // Layer: 1_Core. Reine Datenverarbeitung, kein Engine-Typ.
 //==============================================================================
 
-class ChefZ_Range
+class ChefZ_Range : Managed
 {
     float min;
     float max;

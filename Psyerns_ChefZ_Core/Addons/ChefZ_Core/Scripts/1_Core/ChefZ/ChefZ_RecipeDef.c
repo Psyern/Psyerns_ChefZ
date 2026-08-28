@@ -152,7 +152,7 @@ class ChefZ_ExtraItemsMode
  * Betreiber ihn in die Kategorie eintraegt - ohne dass ein Rezept oder gar
  * Core-Code angefasst wird.
  */
-class ChefZ_ContextRule
+class ChefZ_ContextRule : Managed
 {
     ref array<string> deviceClasses;        // exakte Klassen
     ref array<string> deviceCategories;     // Geraetekategorien
@@ -209,7 +209,7 @@ class ChefZ_ContextRule
  * Auflage 1 macht davon Gebrauch - sie gehoert allerdings ins CONTENT-Modul,
  * nicht hierher.
  */
-class ChefZ_RecipePolicy
+class ChefZ_RecipePolicy : Managed
 {
     //! "" => CoreSettings.defaultExtraItems (V-B Auflage 2: S2 baut, S6 liest)
     string             extraItems;
@@ -244,7 +244,7 @@ class ChefZ_RecipePolicy
 //------------------------------------------------------------------------------
 
 //! Eine Ergebnisklasse je Qualitaetsstufe (08 §2, 12 §2).
-class ChefZ_OutputVariant
+class ChefZ_OutputVariant : Managed
 {
     string tier;
     string cls;
@@ -277,7 +277,7 @@ class ChefZ_OutputVariant
  * Bool-Sonde wie bei den Records (ChefZ_RecordProbe) - ohne sie waere der
  * dokumentierte Default unerreichbar.
  */
-class ChefZ_OutputDef
+class ChefZ_OutputDef : Managed
 {
     string  cls;                    // Ergebnisklasse (JSON "cls", siehe Kopf)
     float   quantity;               // Sentinel = Klassendefault
@@ -487,7 +487,7 @@ class ChefZ_OutputDef
  * ChefZ_QualityManager sie beim Boot in ChefZ_CompiledGradeRule und fuellt
  * beim Kochen ChefZ_MatchResult.qualityTier.
  */
-class ChefZ_GradeRule
+class ChefZ_GradeRule : Managed
 {
     string             ruleId;
     string             when;        // "slotFilled" | "slotCount" | "anyItem"
@@ -554,7 +554,7 @@ class ChefZ_GradeRule
  * Solange es keinen Anbieter gibt, blockiert nichts davon - 17 §3.3: "Ohne
  * Provider: Default aus ChefZ_CoreSettingsDef. Nie Fehler."
  */
-class ChefZ_CapabilityReq
+class ChefZ_CapabilityReq : Managed
 {
     string capability;
     float  min;
@@ -936,7 +936,7 @@ class ChefZ_RecipeDef extends ChefZ_Record
     }
 
     //! Nur fuer den Selbsttest.
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         ChefZ_RecordProbe.Reset();
 

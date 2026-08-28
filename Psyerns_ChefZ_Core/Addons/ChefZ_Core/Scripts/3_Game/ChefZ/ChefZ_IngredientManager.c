@@ -39,7 +39,7 @@
 // heisst ChefZ_FactCollector und liegt in 4_World.
 //==============================================================================
 
-class ChefZ_IngredientManager
+class ChefZ_IngredientManager : Managed
 {
     //! Reissleine gegen eine kaputte oder zyklische Config-Elternkette. Ein
     //! echter CfgVehicles-Baum ist keine 20 Stufen tief; 64 ist bequem
@@ -163,7 +163,12 @@ class ChefZ_IngredientManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen, " + m_InheritedCount.ToString() + " davon mit geerbten Feldern, " + m_RejectedCount.ToString() + " abgewiesen, " + m_ByCategory.Count().ToString() + " Kategorien und " + m_ByTag.Count().ToString() + " Tags rueckwaerts indiziert" + " in " + TickCount(startTick).ToString() + "ms.");
+        {
+            string chefzTxt1 = "Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen, " + m_InheritedCount.ToString() + " davon mit geerbten Feldern, ";
+            chefzTxt1 = chefzTxt1 + m_RejectedCount.ToString() + " abgewiesen, " + m_ByCategory.Count().ToString() + " Kategorien und " + m_ByTag.Count().ToString();
+            chefzTxt1 = chefzTxt1 + " Tags rueckwaerts indiziert" + " in " + TickCount(startTick).ToString() + "ms.";
+            report.AddInfo(chefzTxt1);
+        }
 
         LogIfDebug();
     }
@@ -795,7 +800,10 @@ class ChefZ_IngredientManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen" + ", abgewiesen " + m_RejectedCount.ToString() + ", Kategorien indiziert " + m_ByCategory.Count().ToString() + ", Tags indiziert " + m_ByTag.Count().ToString() + ", ready=" + m_Ready.ToString());
+        string chefzTxt2 = "Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen" + ", abgewiesen " + m_RejectedCount.ToString();
+        chefzTxt2 = chefzTxt2 + ", Kategorien indiziert " + m_ByCategory.Count().ToString() + ", Tags indiziert " + m_ByTag.Count().ToString() + ", ready=";
+        chefzTxt2 = chefzTxt2 + m_Ready.ToString();
+        outLines.Insert(chefzTxt2);
 
         for (int i = 0; i < m_Infos.Count(); i++)
             outLines.Insert("  " + m_Infos.Get(i).ToLine());

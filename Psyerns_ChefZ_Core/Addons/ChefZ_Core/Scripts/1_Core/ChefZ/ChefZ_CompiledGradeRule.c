@@ -261,7 +261,7 @@ class ChefZ_GradeContextKey
  * Layer: 1_Core. Die Signatur nennt bewusst KEINEN Spieler, sondern nur die
  * Identitaets-ID aus dem Kochkontext - 1_Core darf kein PlayerBase kennen.
  */
-class ChefZ_CapabilityProbe
+class ChefZ_CapabilityProbe : Managed
 {
     /**
      * @param capability  Name der Faehigkeit, opaque fuer den Core.
@@ -286,7 +286,7 @@ class ChefZ_CapabilityProbe
  * Zahl plus ein Merker geworden. Zur Laufzeit kostet die Auswertung damit
  * keinen Stringvergleich und keine Sentinelpruefung.
  */
-class ChefZ_CompiledGradeRule
+class ChefZ_CompiledGradeRule : Managed
 {
     string    ruleId;
     int       when;                 // ChefZ_GradeWhen.*
@@ -407,7 +407,9 @@ class ChefZ_CompiledGradeRule
         // ChefZ_GradeContextKey.Value().
         float count = n;
         float value = Cap(per * count);
-        note = Label() + ": Slot \"" + slotId + "\" mit " + n.ToString() + " Zutat(en) x " + per.ToString() + " = " + value.ToString() + " Punkte";
+        string chefzTxt1 = Label() + ": Slot \"" + slotId + "\" mit " + n.ToString() + " Zutat(en) x " + per.ToString();
+        chefzTxt1 = chefzTxt1 + " = " + value.ToString() + " Punkte";
+        note = chefzTxt1;
         return value;
     }
 
@@ -462,7 +464,9 @@ class ChefZ_CompiledGradeRule
             }
 
             value = Cap(points);
-            note = Label() + ": alle " + considered.ToString() + " Zutaten erfuellen den " + "Selektor, " + value.ToString() + " Punkte";
+            string chefzTxt2 = Label() + ": alle " + considered.ToString() + " Zutaten erfuellen den " + "Selektor, ";
+            chefzTxt2 = chefzTxt2 + value.ToString() + " Punkte";
+            note = chefzTxt2;
             return value;
         }
 
@@ -479,7 +483,9 @@ class ChefZ_CompiledGradeRule
         {
             float hitCount = hits;
             value = Cap(pointsPerItem * hitCount);
-            note = Label() + ": " + hits.ToString() + " Zutat(en) x " + pointsPerItem.ToString() + " = " + value.ToString() + " Punkte";
+            string chefzTxt3 = Label() + ": " + hits.ToString() + " Zutat(en) x " + pointsPerItem.ToString();
+            chefzTxt3 = chefzTxt3 + " = " + value.ToString() + " Punkte";
+            note = chefzTxt3;
             return value;
         }
 
@@ -495,12 +501,16 @@ class ChefZ_CompiledGradeRule
 
         if (!range.Contains(value))
         {
-            note = Label() + ": " + keyName + " = " + value.ToString() + " liegt nicht in " + range.ToDebugString() + ", 0 Punkte";
+            string chefzTxt4 = Label() + ": " + keyName + " = " + value.ToString();
+            chefzTxt4 = chefzTxt4 + " liegt nicht in " + range.ToDebugString() + ", 0 Punkte";
+            note = chefzTxt4;
             return 0.0;
         }
 
         float given = Cap(points);
-        note = Label() + ": " + keyName + " = " + value.ToString() + " liegt in " + range.ToDebugString() + ", " + given.ToString() + " Punkte";
+        string chefzTxt5 = Label() + ": " + keyName + " = " + value.ToString();
+        chefzTxt5 = chefzTxt5 + " liegt in " + range.ToDebugString() + ", " + given.ToString() + " Punkte";
+        note = chefzTxt5;
         return given;
     }
 

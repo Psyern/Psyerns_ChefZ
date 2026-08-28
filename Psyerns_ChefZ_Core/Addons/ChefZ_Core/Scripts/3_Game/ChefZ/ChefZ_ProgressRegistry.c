@@ -53,7 +53,7 @@
  * kopiert sie im Rueckruf. Ein festgehaltener ref auf eine Nutzlast mit der
  * Netz-ID einer laengst geloeschten Entity ist die typische Fehlerquelle.
  */
-class ChefZ_IProgressSink
+class ChefZ_IProgressSink : Managed
 {
     string GetSinkName()
     {
@@ -253,7 +253,9 @@ class ChefZ_ProgressRegistry
             outLines = new array<string>();
         EnsureInit();
 
-        outLines.Insert("Fortschritt: " + s_Sinks.Count().ToString() + " Empfaenger, " + "gemeldet=" + s_CountReported.ToString() + "  zugestellt=" + s_CountDelivered.ToString());
+        string chefzTxt1 = "Fortschritt: " + s_Sinks.Count().ToString() + " Empfaenger, " + "gemeldet=" + s_CountReported.ToString();
+        chefzTxt1 = chefzTxt1 + "  zugestellt=" + s_CountDelivered.ToString();
+        outLines.Insert(chefzTxt1);
 
         for (int i = 0; i < s_Sinks.Count(); i++)
         {

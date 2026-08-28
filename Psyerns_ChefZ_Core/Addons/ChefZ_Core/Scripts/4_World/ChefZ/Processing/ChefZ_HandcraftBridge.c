@@ -864,7 +864,10 @@ class ChefZ_HandcraftBridge
      */
     private static void Report()
     {
-        ChefZ_Log.Banner("Handwerk  rezepte=" + s_Filled.ToString() + "  abgewiesen=" + s_Rejected.ToString() + "  plaetze=" + s_SlotCount.ToString() + "  ab Rezept-ID " + s_BaseIndex.ToString() + "  kennsumme=" + s_Fingerprint.ToString() + "  (alle vier muessen auf Client und Server gleich sein)");
+        string chefzTxt1 = "Handwerk  rezepte=" + s_Filled.ToString() + "  abgewiesen=" + s_Rejected.ToString() + "  plaetze=";
+        chefzTxt1 = chefzTxt1 + s_SlotCount.ToString() + "  ab Rezept-ID " + s_BaseIndex.ToString() + "  kennsumme=" + s_Fingerprint.ToString();
+        chefzTxt1 = chefzTxt1 + "  (alle vier muessen auf Client und Server gleich sein)";
+        ChefZ_Log.Banner(chefzTxt1);
     }
 
     static int  GetRegisteredCount() { return s_Filled; }
@@ -881,7 +884,10 @@ class ChefZ_HandcraftBridge
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Handwerk  rezepte=" + s_Filled.ToString() + "  abgewiesen=" + s_Rejected.ToString() + "  plaetze=" + s_SlotCount.ToString() + "  ab Rezept-ID " + s_BaseIndex.ToString() + "  kennsumme=" + s_Fingerprint.ToString() + "  verweigert=" + s_IntentRefusals.ToString());
+        string chefzTxt2 = "ChefZ Handwerk  rezepte=" + s_Filled.ToString() + "  abgewiesen=" + s_Rejected.ToString() + "  plaetze=";
+        chefzTxt2 = chefzTxt2 + s_SlotCount.ToString() + "  ab Rezept-ID " + s_BaseIndex.ToString() + "  kennsumme=" + s_Fingerprint.ToString();
+        chefzTxt2 = chefzTxt2 + "  verweigert=" + s_IntentRefusals.ToString();
+        outLines.Insert(chefzTxt2);
 
         if (!s_Order)
             return;

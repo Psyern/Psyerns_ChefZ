@@ -77,6 +77,23 @@ const RULES = [
        + 'Zwischenvariablen zerlegen.',
   },
   {
+    id: 'zeilenende-gleich',
+    severity: 'error',
+    test: l => /[^=!<>+\-*/%&|^]=\s*$/.test(l),
+    why: 'Eine Zeile, die auf "=" endet, setzt die Zuweisung in der naechsten '
+       + 'Zeile fort. Enforce parst zeilenweise und meldet den Fehler dann an der '
+       + 'FOLGEZEILE - am 28.08.2026 als "Syntax error" in '
+       + 'ChefZ_RecipeCompiler.c(248). Abhilfe: die Zuweisung auf eine Zeile.',
+  },
+  {
+    id: 'typname-variable',
+    severity: 'error',
+    test: l => /\b[A-Za-z_]\w*(?:<[^>]*>)?\s+(?:set|map|array|string|int|float|bool|vector|void|class|typename)\s*(?:=[^=]|;|\))/.test(l),
+    why: 'Eine Variable darf nicht heissen wie ein Typ. "ChefZ_Sym set" bricht mit '
+       + '"Variable name \'set\' already used as type name" - set, map und array '
+       + 'sind Enforce-Typen, nicht nur Woerter. Am 28.08.2026 zweimal aufgetreten.',
+  },
+  {
     id: 'schluesselwort-bezeichner',
     severity: 'error',
     test: l => /\b(?:out|in|inout|ref|new|delete|class|const|static|void|int|float|bool|string|vector|return|super|this|null|true|false|override|modded|enum|array|set|map|owner|notnull|autoptr|proto|native|typedef|private|protected|auto|var)[0-9]/.test(l),

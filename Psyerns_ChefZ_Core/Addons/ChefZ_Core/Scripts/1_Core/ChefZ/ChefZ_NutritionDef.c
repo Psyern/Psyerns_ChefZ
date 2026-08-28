@@ -359,11 +359,13 @@ class ChefZ_NutritionDef extends ChefZ_Record
     //! einzelne Ausnahme machte die Dumpzeilen zwischen den Arten uneinheitlich.
     string DescribeValues()
     {
-        return id + " scope=" + scope + " energie=" + energy.ToString() + " perUnit=" + perUnit.ToString();
+        string chefzTxt1 = id + " scope=" + scope + " energie=" + energy.ToString();
+        chefzTxt1 = chefzTxt1 + " perUnit=" + perUnit.ToString();
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest (S12).
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         if (!ChefZ_NutritionScope.SelfCheck())
             return false;

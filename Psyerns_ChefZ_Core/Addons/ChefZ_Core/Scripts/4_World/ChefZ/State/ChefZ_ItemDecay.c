@@ -44,7 +44,7 @@
  * wirkte eine Balancing-Aenderung des Betreibers nie auf bestehende Items - so
  * wirkt sie sofort, ohne Migration.
  */
-class ChefZ_DecayPlan
+class ChefZ_DecayPlan : Managed
 {
     //! Faktor auf das delta, das an Vanilla geht. Immer > 0.
     float scale;

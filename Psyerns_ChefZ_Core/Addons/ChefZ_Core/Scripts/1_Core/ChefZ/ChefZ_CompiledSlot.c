@@ -77,7 +77,7 @@ class ChefZ_ConsumeMode
  * Diese Lesart ist die einzige, die beide Stellen des Entwurfs erfuellt, und
  * sie steht hier ausdruecklich, weil sie eine Auslegung ist.
  */
-class ChefZ_CompiledSlot
+class ChefZ_CompiledSlot : Managed
 {
     //! Index in der DEKLARATIONSreihenfolge des Rezepts. Die Suchreihenfolge
     //! ist eine andere (07 §4, Schritt 2); der Verbrauch folgt der
@@ -240,7 +240,7 @@ class ChefZ_CompiledSlot
  * soll nicht selbst umrechnen muessen. Die Umrechnung Einheit -> Quantity
  * geschieht dort, wo beide Zahlen vorliegen, naemlich im Snapshot (05 §6).
  */
-class ChefZ_ConsumePlan
+class ChefZ_ConsumePlan : Managed
 {
     int       handle;
     bool      destroyWhole;

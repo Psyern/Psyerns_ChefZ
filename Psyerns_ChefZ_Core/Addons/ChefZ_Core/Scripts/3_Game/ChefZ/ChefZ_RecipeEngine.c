@@ -45,7 +45,7 @@
 // Layer: 3_Game.
 //==============================================================================
 
-class ChefZ_RecipeEngine
+class ChefZ_RecipeEngine : Managed
 {
     private static ref ChefZ_RecipeEngine s_Instance;
 
@@ -253,7 +253,7 @@ class ChefZ_RecipeEngine
         {
             int from = order.Get(i);
             sortedRecipes.Insert(m_Recipes.Get(from));
-            ChefZ_RecipeRank rank = m_Ranks.Get(from);
+            rank = m_Ranks.Get(from);
             rank.recipeIndex = i;
             sortedRanks.Insert(rank);
         }
@@ -384,7 +384,10 @@ class ChefZ_RecipeEngine
         if (!report)
             return;
 
-        report.AddInfo("Recipe Engine: " + m_Recipes.Count().ToString() + " Rezepte, " + m_ByDeviceClass.Count().ToString() + " Geraeteklassen im Index, " + m_ByDeviceCategory.Count().ToString() + " Geraetekategorien, " + m_AnyDevice.Count().ToString() + " ohne Geraetebindung. Knotenbudget " + m_NodeBudget.ToString() + ".");
+        string chefzTxt1 = "Recipe Engine: " + m_Recipes.Count().ToString() + " Rezepte, " + m_ByDeviceClass.Count().ToString() + " Geraeteklassen im Index, ";
+        chefzTxt1 = chefzTxt1 + m_ByDeviceCategory.Count().ToString() + " Geraetekategorien, " + m_AnyDevice.Count().ToString() + " ohne Geraetebindung. Knotenbudget " + m_NodeBudget.ToString();
+        chefzTxt1 = chefzTxt1 + ".";
+        report.AddInfo(chefzTxt1);
     }
 
     //==========================================================================

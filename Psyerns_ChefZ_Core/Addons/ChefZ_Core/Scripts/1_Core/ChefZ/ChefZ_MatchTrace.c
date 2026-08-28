@@ -108,7 +108,9 @@ class ChefZ_MatchTrace
 
     void SlotAssigned(string slotId, ChefZ_Sym itemClass, int count, float units)
     {
-        Add("    Slot " + slotId + " <- " + ChefZ_SymbolTable.NameOrMark(itemClass) + " x" + count.ToString() + "  Einheiten=" + units.ToString());
+        string chefzTxt1 = "    Slot " + slotId + " <- " + ChefZ_SymbolTable.NameOrMark(itemClass) + " x";
+        chefzTxt1 = chefzTxt1 + count.ToString() + "  Einheiten=" + units.ToString();
+        Add(chefzTxt1);
     }
 
     void RecipeRejected(ChefZ_Sym recipe, string reason, string slotId)
@@ -126,7 +128,9 @@ class ChefZ_MatchTrace
 
     void Winner(ChefZ_Sym recipe, float score, ChefZ_Sym tier, int nodes)
     {
-        Add("  GEWINNER " + ChefZ_SymbolTable.NameOrMark(recipe) + "  score=" + score.ToString() + "  stufe=" + ChefZ_SymbolTable.NameOrMark(tier) + "  knoten=" + nodes.ToString());
+        string chefzTxt2 = "  GEWINNER " + ChefZ_SymbolTable.NameOrMark(recipe) + "  score=" + score.ToString() + "  stufe=";
+        chefzTxt2 = chefzTxt2 + ChefZ_SymbolTable.NameOrMark(tier) + "  knoten=" + nodes.ToString();
+        Add(chefzTxt2);
     }
 
     void Readiness(bool ready, string reason)

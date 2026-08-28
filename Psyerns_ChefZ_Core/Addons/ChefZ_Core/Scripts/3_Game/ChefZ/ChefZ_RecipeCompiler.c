@@ -245,8 +245,7 @@ class ChefZ_RecipeCompiler
             if (def.policy.extraItemsAllowedIf)
             {
                 string selError;
-                policy.extraItemsAllowedIf =
-                    ChefZ_SelectorCompiler.Compile(def.policy.extraItemsAllowedIf, m_Ctx, selError);
+                policy.extraItemsAllowedIf = ChefZ_SelectorCompiler.Compile(def.policy.extraItemsAllowedIf, m_Ctx, selError);
 
                 if (!policy.extraItemsAllowedIf)
                 {

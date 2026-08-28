@@ -177,7 +177,7 @@ class ChefZ_ValidationContext
  * ChefZ_SymbolResolver. Der loest nichts auf, und damit wird jedes Rezept mit
  * einer Kategorie abgewiesen - laut, mit Meldung, statt still zu matchen.
  */
-class ChefZ_CompileContext
+class ChefZ_CompileContext : Managed
 {
     private ChefZ_LoadReport m_Report;
     private int m_Compiled;
@@ -329,7 +329,7 @@ class ChefZ_CompileContext
  * Basis aller Records. Schnittstelle woertlich aus 02 §5.1, erweitert um die
  * Mittel des feldweisen Patches (02 E3) und um sym (03 §5, COMPILE-Stufe).
  */
-class ChefZ_Record
+class ChefZ_Record : Managed
 {
     string  id;                     // fachliche ID, z.B. "MEAT"
     string  sourceRef;              // "CfgChefZ ChefZ_Meat" | "<pfad>.json" | "$profile:..."

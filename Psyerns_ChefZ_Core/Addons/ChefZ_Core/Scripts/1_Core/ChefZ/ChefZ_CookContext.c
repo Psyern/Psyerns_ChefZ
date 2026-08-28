@@ -22,7 +22,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_CookContext
+class ChefZ_CookContext : Managed
 {
     //! Die Klasse des Gefaesses, in dem gekocht wird.
     ChefZ_Sym deviceClass;
@@ -157,7 +157,9 @@ class ChefZ_CookContext
         if (ChefZ_SymbolTable.IsValid(deviceRootClass))
             s = s + " auf " + ChefZ_SymbolTable.Name(deviceRootClass);
 
-        s = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]" + " methode=" + ChefZ_SymbolTable.NameOrMark(method) + " temp=" + deviceTemperature.ToString();
+        string chefzTxt1 = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]" + " methode=";
+        chefzTxt1 = chefzTxt1 + ChefZ_SymbolTable.NameOrMark(method) + " temp=" + deviceTemperature.ToString();
+        s = chefzTxt1;
 
         if (HasLiquid())
         {

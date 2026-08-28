@@ -27,7 +27,7 @@
 // der binarisierten config.cpp - und wird deshalb einmal gebaut.
 // ============================================================================
 
-class ChefZ_TerjeMedRegistry
+class ChefZ_TerjeMedRegistry : Managed
 {
     // Wurzelknoten dieses Moduls. Bewusst NICHT "CfgVehicles": die Tee-Klassen
     // gehoeren dem Hauptmod, und ein Compatibility-Modul oeffnet keine fremde

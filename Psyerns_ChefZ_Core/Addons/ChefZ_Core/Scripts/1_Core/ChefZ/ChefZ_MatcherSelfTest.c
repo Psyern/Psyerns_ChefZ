@@ -233,13 +233,11 @@ class ChefZ_MatcherSelfTest
         ctx.SetMaxSelectorDepth(ChefZ_SelectorLimits.DEFAULT_MAX_DEPTH);
 
         // Unbekannte KLASSE ist ausdruecklich KEIN Fehler (07 §7 nennt sie nicht).
-        ChefZ_CompiledSelector unknownClass =
-            ChefZ_SelectorCompiler.Compile(Leaf("cls", "CHEFZ_MT_FREMDMOD"), ctx, error);
+        ChefZ_CompiledSelector unknownClass = ChefZ_SelectorCompiler.Compile(Leaf("cls", "CHEFZ_MT_FREMDMOD"), ctx, error);
         if (!unknownClass)                                                        return false;
 
         // Gueltiger Selektor kompiliert und traegt den Bitindex.
-        ChefZ_CompiledSelector good =
-            ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_WILD"), ctx, error);
+        ChefZ_CompiledSelector good = ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_WILD"), ctx, error);
         if (!good)                                                                return false;
         if (good.op != ChefZ_SelectorOp.CATEGORY)                                 return false;
         if (good.categoryBitIndex != BIT_WILD)                                    return false;
@@ -269,32 +267,27 @@ class ChefZ_MatcherSelfTest
         b.closure.SetBit(BIT_GRUEN);
 
         // class
-        ChefZ_CompiledSelector cls =
-            ChefZ_SelectorCompiler.Compile(Leaf("cls", "CHEFZ_MT_KLASSE_A"), ctx, error);
+        ChefZ_CompiledSelector cls = ChefZ_SelectorCompiler.Compile(Leaf("cls", "CHEFZ_MT_KLASSE_A"), ctx, error);
         if (!cls.Test(a))                       return false;
         if (cls.Test(b))                        return false;
 
         // category: trifft die Unterkategorie UND die Oberkategorie
-        ChefZ_CompiledSelector kat =
-            ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_TIER"), ctx, error);
+        ChefZ_CompiledSelector kat = ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_TIER"), ctx, error);
         if (!kat.Test(a))                       return false;
         if (kat.Test(b))                        return false;
 
         // tag
-        ChefZ_CompiledSelector tag =
-            ChefZ_SelectorCompiler.Compile(Leaf("tag", "CHEFZ_MT_TAG_X"), ctx, error);
+        ChefZ_CompiledSelector tag = ChefZ_SelectorCompiler.Compile(Leaf("tag", "CHEFZ_MT_TAG_X"), ctx, error);
         if (!tag.Test(a))                       return false;
         if (tag.Test(b))                        return false;
 
         // state
-        ChefZ_CompiledSelector state =
-            ChefZ_SelectorCompiler.Compile(Leaf("state", "CHEFZ_MT_ZUSTAND_A"), ctx, error);
+        ChefZ_CompiledSelector state = ChefZ_SelectorCompiler.Compile(Leaf("state", "CHEFZ_MT_ZUSTAND_A"), ctx, error);
         if (!state.Test(a))                     return false;
         if (state.Test(b))                      return false;
 
         // vanillaStage
-        ChefZ_CompiledSelector stage =
-            ChefZ_SelectorCompiler.Compile(Leaf("stage", "Boiled"), ctx, error);
+        ChefZ_CompiledSelector stage = ChefZ_SelectorCompiler.Compile(Leaf("stage", "Boiled"), ctx, error);
         if (!stage.Test(a))                     return false;
         if (stage.Test(b))                      return false;
 
@@ -482,16 +475,13 @@ class ChefZ_MatcherSelfTest
         ChefZ_PriorityWeights w = ctx.Weights();
         string error;
 
-        ChefZ_CompiledSelector cls =
-            ChefZ_SelectorCompiler.Compile(Leaf("cls", "CHEFZ_MT_KLASSE_A"), ctx, error);
+        ChefZ_CompiledSelector cls = ChefZ_SelectorCompiler.Compile(Leaf("cls", "CHEFZ_MT_KLASSE_A"), ctx, error);
         if (cls.specificity != w.wClass)        return false;
 
         // Tiefere Kategorie ist spezifischer - ohne dass ein Autor eine Zahl
         // pflegt (09 E3).
-        ChefZ_CompiledSelector flach =
-            ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_TIER"), ctx, error);
-        ChefZ_CompiledSelector tief =
-            ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_WILD"), ctx, error);
+        ChefZ_CompiledSelector flach = ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_TIER"), ctx, error);
+        ChefZ_CompiledSelector tief = ChefZ_SelectorCompiler.Compile(Leaf("category", "CHEFZ_MT_KAT_WILD"), ctx, error);
         if (flach.specificity != w.wCategoryBase)                           return false;
         if (tief.specificity != w.wCategoryBase + w.wCategoryPerDepth)      return false;
         if (tief.specificity <= flach.specificity)                          return false;

@@ -53,7 +53,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_SlotBinding
+class ChefZ_SlotBinding : Managed
 {
     int    slotIndex;           // Deklarationsindex im Rezept
     string slotId;
@@ -103,7 +103,7 @@ class ChefZ_SlotBinding
  * Hier steht nur, was die Slotbindung selbst weiss. S6 haengt seine Felder
  * darum herum, statt sie hier vorwegzunehmen.
  */
-class ChefZ_BindResult
+class ChefZ_BindResult : Managed
 {
     bool matched;
 

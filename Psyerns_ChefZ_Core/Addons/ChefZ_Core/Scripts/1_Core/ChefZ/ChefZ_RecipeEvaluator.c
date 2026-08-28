@@ -175,7 +175,7 @@ class ChefZ_RecipeEvaluator
         {
             for (i = 0; i < bind.boundHandles.Count(); i++)
             {
-                ChefZ_ItemFacts facts = snapshot.FindByHandle(bind.boundHandles.Get(i));
+                facts = snapshot.FindByHandle(bind.boundHandles.Get(i));
                 if (!facts)
                     continue;
                 if (facts.health01 < policy.minMatchedHealth01)

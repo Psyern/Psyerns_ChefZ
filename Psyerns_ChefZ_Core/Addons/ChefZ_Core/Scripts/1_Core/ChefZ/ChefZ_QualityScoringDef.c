@@ -33,7 +33,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_QualityScoringDef
+class ChefZ_QualityScoringDef : Managed
 {
     string defaultTierSet;
     float  freshnessWeight;

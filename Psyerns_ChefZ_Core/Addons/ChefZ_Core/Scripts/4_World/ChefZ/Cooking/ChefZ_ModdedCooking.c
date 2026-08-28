@@ -115,8 +115,7 @@ modded class Cooking
         if (!cooking_equipment)
             return CookingMethodType.NONE;
 
-        Param2<CookingMethodType, float> method =
-            GetCookingMethodWithTimeOverride(cooking_equipment);
+        Param2<CookingMethodType, float> method = GetCookingMethodWithTimeOverride(cooking_equipment);
         if (!method)
             return CookingMethodType.NONE;
 

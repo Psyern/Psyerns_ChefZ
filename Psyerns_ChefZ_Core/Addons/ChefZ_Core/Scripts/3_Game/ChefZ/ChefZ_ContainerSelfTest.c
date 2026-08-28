@@ -157,10 +157,26 @@ class ChefZ_ContainerSelfTest
         return ChefZ_SymbolTable.Intern(name);
     }
 
+    // Die Fixtures muessen die Pruefung ueberleben.
+    //
+    // Der Manager speichert seine Defs bewusst OHNE ref: Eigentuemer ist in
+    // Produktion die Registry im Config Manager, und die lebt laenger als der
+    // Manager. Eine Registry, die nur als lokale Variable dieser
+    // Hilfsfunktion entsteht, ist dagegen schon abgeraeumt, bevor der Test
+    // den Manager ueberhaupt befragt - der haelt dann ins Leere. Genau daran
+    // ist der Testserver am 28.08.2026 gescheitert: "NULL pointer to
+    // instance". Diese Liste bildet den Eigentuemer nach, den es in
+    // Produktion gibt.
+    private static ref array<ref ChefZ_Registry<ChefZ_ContainerDef>> s_AliveRegistries;
+
     private static ChefZ_Registry<ChefZ_ContainerDef> NewRegistry()
     {
+        if (!s_AliveRegistries)
+            s_AliveRegistries = new array<ref ChefZ_Registry<ChefZ_ContainerDef>>();
+
         ChefZ_Registry<ChefZ_ContainerDef> reg = new ChefZ_Registry<ChefZ_ContainerDef>();
         reg.Init(ChefZ_RecordKind.CONTAINER);
+        s_AliveRegistries.Insert(reg);
         return reg;
     }
 

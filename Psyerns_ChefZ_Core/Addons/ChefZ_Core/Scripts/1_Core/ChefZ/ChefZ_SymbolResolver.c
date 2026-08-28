@@ -36,7 +36,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_SymbolResolver
+class ChefZ_SymbolResolver : Managed
 {
     //! Antwort auf "unbekannt" - fuer Bitindex, Tiefe und Rang gleichermassen.
     static const int UNKNOWN = -1;

@@ -34,7 +34,7 @@
  * Gleitkommavergleich gegen float.LOWEST, und der ist weder schneller noch
  * lesbarer als ein bool.
  */
-class ChefZ_CompiledProcess
+class ChefZ_CompiledProcess : Managed
 {
     ChefZ_Sym processSym;
     string    id;
@@ -187,7 +187,7 @@ class ChefZ_CompiledProcess
  * einer falsch geschrieben ist, bietet danach zwei an - und das ist die
  * richtige Richtung: der Tippfehler kostet einen Prozess, nicht die Station.
  */
-class ChefZ_CompiledStation
+class ChefZ_CompiledStation : Managed
 {
     ChefZ_Sym stationSym;
     string    id;
@@ -246,7 +246,10 @@ class ChefZ_CompiledStation
 
     string ToDebugString()
     {
-        return id + "  slots=" + parallelSlots.ToString() + " tempo=" + speedMultiplier.ToString() + " prozesse=[" + ChefZ_TextList.JoinSymbols(processes, ",") + "]" + " kategorien=[" + ChefZ_TextList.JoinSymbols(categories, ",") + "]";
+        string chefzTxt1 = id + "  slots=" + parallelSlots.ToString() + " tempo=" + speedMultiplier.ToString();
+        chefzTxt1 = chefzTxt1 + " prozesse=[" + ChefZ_TextList.JoinSymbols(processes, ",") + "]" + " kategorien=[" + ChefZ_TextList.JoinSymbols(categories, ",");
+        chefzTxt1 = chefzTxt1 + "]";
+        return chefzTxt1;
     }
 }
 
@@ -259,7 +262,7 @@ class ChefZ_CompiledStation
  * benutzt, aus genau demselben Compiler (11 E4). Der ChefZ_Matcher bindet sie
  * mit genau derselben Methode. Es gibt keinen zweiten Zuordnungsalgorithmus.
  */
-class ChefZ_CompiledTransform
+class ChefZ_CompiledTransform : Managed
 {
     ChefZ_Sym transformSym;
     string    id;
@@ -359,7 +362,10 @@ class ChefZ_CompiledTransform
 
     string ToDebugString()
     {
-        string s = id + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym) + " spez=" + specificity.ToString() + " prio=" + priority.ToString() + " eingaenge=" + inputs.Count().ToString() + " minItems=" + minItemCount.ToString();
+        string chefzTxt2 = id + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym) + " spez=" + specificity.ToString();
+        chefzTxt2 = chefzTxt2 + " prio=" + priority.ToString() + " eingaenge=" + inputs.Count().ToString() + " minItems=";
+        chefzTxt2 = chefzTxt2 + minItemCount.ToString();
+        string s = chefzTxt2;
         if (pureStateChange)
             s = s + " ZUSTANDSWECHSEL";
         else

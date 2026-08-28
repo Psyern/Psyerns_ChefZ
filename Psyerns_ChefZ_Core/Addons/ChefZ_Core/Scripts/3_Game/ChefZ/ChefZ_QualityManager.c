@@ -49,7 +49,7 @@
 // ItemBase, kein FoodStage, kein Enum aus 4_World.
 //==============================================================================
 
-class ChefZ_QualityManager
+class ChefZ_QualityManager : Managed
 {
     private static ref ChefZ_QualityManager s_Instance;
 
@@ -757,7 +757,9 @@ class ChefZ_QualityManager
 
         if (e.DeviceModifier != 1.0)
         {
-            e.AddNote("Geraetefaktor " + e.DeviceModifier.ToString() + ": " + e.AdditiveSum().ToString() + " -> " + e.TotalScore.ToString() + " Punkte");
+            string chefzTxt1 = "Geraetefaktor " + e.DeviceModifier.ToString() + ": " + e.AdditiveSum().ToString() + " -> ";
+            chefzTxt1 = chefzTxt1 + e.TotalScore.ToString() + " Punkte";
+            e.AddNote(chefzTxt1);
         }
     }
 
@@ -876,7 +878,7 @@ class ChefZ_QualityManager
                     // WARN einmal je Klasse." Die Zutat zaehlt fuer den
                     // Mittelwert dann gar nicht - sie mit Rang 0 zu werten
                     // waere eine Behauptung, die niemand geschrieben hat.
-                    QuietOnce(ChefZ_LogLevel.WARN, "quality.unknowntier." + facts.classSym.ToString(), "Zutat \"" + ChefZ_SymbolTable.NameOrMark(facts.classSym) + "\" traegt die unbekannte Qualitaetsstufe \"" + ChefZ_SymbolTable.NameOrMark(facts.chefzQuality) + "\". Sie zaehlt fuer den Zutatenqualitaetsterm nicht mit. " + "Haeufigste Ursache: das Modul mit dieser Stufe ist nicht geladen.");
+                    QuietOnce(ChefZ_LogLevel.WARN, "quality.unknowntier." + ChefZ_SymbolTable.Ordinal(facts.classSym), "Zutat \"" + ChefZ_SymbolTable.NameOrMark(facts.classSym) + "\" traegt die unbekannte Qualitaetsstufe \"" + ChefZ_SymbolTable.NameOrMark(facts.chefzQuality) + "\". Sie zaehlt fuer den Zutatenqualitaetsterm nicht mit. " + "Haeufigste Ursache: das Modul mit dieser Stufe ist nicht geladen.");
                 }
             }
 
@@ -903,7 +905,9 @@ class ChefZ_QualityManager
 
         eval.MinFreshness  = minFreshness;
         eval.FreshnessTerm = (minFreshness - 0.5) * 2.0 * sc.freshnessWeight;
-        eval.AddNote("geringste Frische " + minFreshness.ToString() + " (Minimum ueber " + considered.ToString() + " Zutaten, nicht Mittelwert): " + eval.FreshnessTerm.ToString() + " Punkte");
+        string chefzTxt2 = "geringste Frische " + minFreshness.ToString() + " (Minimum ueber " + considered.ToString() + " Zutaten, nicht Mittelwert): ";
+        chefzTxt2 = chefzTxt2 + eval.FreshnessTerm.ToString() + " Punkte";
+        eval.AddNote(chefzTxt2);
 
         if (rankCount == 0)
         {
@@ -914,7 +918,9 @@ class ChefZ_QualityManager
         float count = rankCount;
         float meanRank = rankSum / count;
         eval.IngredientQualityTerm = (meanRank - sc.baseRank) * sc.ingredientQualityWeight;
-        eval.AddNote("mittlerer Zutatenrang " + meanRank.ToString() + " gegen Bezugsrang " + sc.baseRank.ToString() + ": " + eval.IngredientQualityTerm.ToString() + " Punkte");
+        string chefzTxt3 = "mittlerer Zutatenrang " + meanRank.ToString() + " gegen Bezugsrang " + sc.baseRank.ToString() + ": ";
+        chefzTxt3 = chefzTxt3 + eval.IngredientQualityTerm.ToString() + " Punkte";
+        eval.AddNote(chefzTxt3);
     }
 
     /**
@@ -1486,7 +1492,9 @@ class ChefZ_QualityManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Qualitaetsstufen: " + GetTierCount().ToString() + "  saetze=" + GetTierSetCount().ToString() + "  regeln=" + m_RuleCount.ToString() + "  bereit=" + m_Ready.ToString());
+        string chefzTxt4 = "Qualitaetsstufen: " + GetTierCount().ToString() + "  saetze=" + GetTierSetCount().ToString() + "  regeln=";
+        chefzTxt4 = chefzTxt4 + m_RuleCount.ToString() + "  bereit=" + m_Ready.ToString();
+        outLines.Insert(chefzTxt4);
         outLines.Insert("    " + Scoring().ToDebugString());
 
         for (int s = 0; s < m_SetOrder.Count(); s++)

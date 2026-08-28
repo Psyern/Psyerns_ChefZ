@@ -26,7 +26,7 @@
 // Layer: 1_Core. Reine Datenverarbeitung, kein Engine-Typ.
 //==============================================================================
 
-class ChefZ_IngredientInfo
+class ChefZ_IngredientInfo : Managed
 {
     //! Klassenname als Symbol. Bei einer deklarierten Zutat immer gueltig.
     ChefZ_Sym classSym;
@@ -101,7 +101,9 @@ class ChefZ_IngredientInfo
         }
         s = s + "]";
 
-        s = s + " closure=" + closure.ToDebugString() + " einheit=" + ChefZ_SymbolTable.Name(quantityUnit) + "x" + unitsPerWholeItem.ToString() + " verdirbt=" + decays.ToString();
+        string chefzTxt1 = s + " closure=" + closure.ToDebugString() + " einheit=" + ChefZ_SymbolTable.Name(quantityUnit);
+        chefzTxt1 = chefzTxt1 + "x" + unitsPerWholeItem.ToString() + " verdirbt=" + decays.ToString();
+        s = chefzTxt1;
 
         if (ChefZ_SymbolTable.IsValid(defaultState))
             s = s + " zustand=" + ChefZ_SymbolTable.Name(defaultState);

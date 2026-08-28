@@ -735,10 +735,10 @@ class ChefZ_JsonRecordReader
         if (!Read(ChefZ_RecordKind.CONTAINER, doc, "Selbsttest", ChefZ_SourceRank.PROFILE_OVERLAY, withBool, err3))
             return false;
         if (withBool.Count() != 2)                              return false;
-        ChefZ_ContainerDef set   = ChefZ_ContainerDef.Cast(withBool.Get(0));
+        ChefZ_ContainerDef contDef   = ChefZ_ContainerDef.Cast(withBool.Get(0));
         ChefZ_ContainerDef unset = ChefZ_ContainerDef.Cast(withBool.Get(1));
-        if (!set || !unset)                                     return false;
-        if (!set.HasExplicit("reusable"))                       return false;
+        if (!contDef || !unset)                                     return false;
+        if (!contDef.HasExplicit("reusable"))                       return false;
         if (unset.HasExplicit("reusable"))                      return false;
 
         return true;

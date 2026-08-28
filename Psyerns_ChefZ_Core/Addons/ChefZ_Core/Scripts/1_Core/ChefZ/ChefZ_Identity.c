@@ -31,7 +31,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_Identity
+class ChefZ_Identity : Managed
 {
     ChefZ_Sym sym;              // Laufzeit
     int       persistHash;      // = id.Hash()        -> OnStoreSave
@@ -48,7 +48,9 @@ class ChefZ_Identity
 
     string ToLine()
     {
-        return syncOrdinal.ToString() + "  " + id + "  sym=" + sym.ToString() + "  hash=" + persistHash.ToString();
+        string chefzTxt1 = syncOrdinal.ToString() + "  " + id + "  sym=" + ChefZ_SymbolTable.Ordinal(sym);
+        chefzTxt1 = chefzTxt1 + "  hash=" + persistHash.ToString();
+        return chefzTxt1;
     }
 }
 
@@ -71,7 +73,7 @@ class ChefZ_SyncLimits
     static const int NO_LIMIT            = 0;
 }
 
-class ChefZ_IdentityMap
+class ChefZ_IdentityMap : Managed
 {
     private string m_RegistryName;
     private bool   m_Built;
@@ -398,7 +400,9 @@ class ChefZ_IdentityMap
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert(SourceRef() + "  gebaut=" + m_Built.ToString() + "  Ordinale=" + GetMaxOrdinal().ToString() + "  Deckel=" + m_SyncLimit.ToString());
+        string chefzTxt2 = SourceRef() + "  gebaut=" + m_Built.ToString() + "  Ordinale=" + GetMaxOrdinal().ToString();
+        chefzTxt2 = chefzTxt2 + "  Deckel=" + m_SyncLimit.ToString();
+        outLines.Insert(chefzTxt2);
 
         for (int i = 1; i < m_ByOrdinal.Count(); i++)
         {

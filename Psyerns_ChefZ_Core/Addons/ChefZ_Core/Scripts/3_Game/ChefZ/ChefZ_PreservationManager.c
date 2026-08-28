@@ -50,7 +50,7 @@
 // ItemBase, kein FoodStage, kein Enum aus 4_World.
 //==============================================================================
 
-class ChefZ_PreservationManager
+class ChefZ_PreservationManager : Managed
 {
     private static ref ChefZ_PreservationManager s_Instance;
 
@@ -210,7 +210,14 @@ class ChefZ_PreservationManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Haltbarkeitsregeln: " + GetRuleCount().ToString() + " geladen" + " (Zustand " + m_ByState.Count().ToString() + ", Klasse " + m_ByClass.Count().ToString() + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag " + m_ByTag.Count().ToString() + ", Qualitaet " + m_ByQuality.Count().ToString() + ")" + ", Skala " + m_GlobalScale.ToString() + ", Grenzen [" + m_MinScale.ToString() + ".." + m_MaxScale.ToString() + "]" + ", Frischevorgabe " + m_DefaultFreshnessLifetimeSec.ToString() + "s.");
+        {
+            string chefzTxt1 = "Haltbarkeitsregeln: " + GetRuleCount().ToString() + " geladen" + " (Zustand " + m_ByState.Count().ToString();
+            chefzTxt1 = chefzTxt1 + ", Klasse " + m_ByClass.Count().ToString() + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag ";
+            chefzTxt1 = chefzTxt1 + m_ByTag.Count().ToString() + ", Qualitaet " + m_ByQuality.Count().ToString() + ")" + ", Skala ";
+            chefzTxt1 = chefzTxt1 + m_GlobalScale.ToString() + ", Grenzen [" + m_MinScale.ToString() + ".." + m_MaxScale.ToString();
+            chefzTxt1 = chefzTxt1 + "]" + ", Frischevorgabe " + m_DefaultFreshnessLifetimeSec.ToString() + "s.";
+            report.AddInfo(chefzTxt1);
+        }
 
         LogIfDebug();
     }
@@ -999,7 +1006,10 @@ class ChefZ_PreservationManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Haltbarkeit: " + GetRuleCount().ToString() + " Regel(n), Skala " + m_GlobalScale.ToString() + ", Grenzen [" + m_MinScale.ToString() + ".." + m_MaxScale.ToString() + "], Frischevorgabe " + m_DefaultFreshnessLifetimeSec.ToString() + "s");
+        string chefzTxt2 = "Haltbarkeit: " + GetRuleCount().ToString() + " Regel(n), Skala " + m_GlobalScale.ToString() + ", Grenzen [";
+        chefzTxt2 = chefzTxt2 + m_MinScale.ToString() + ".." + m_MaxScale.ToString() + "], Frischevorgabe " + m_DefaultFreshnessLifetimeSec.ToString();
+        chefzTxt2 = chefzTxt2 + "s";
+        outLines.Insert(chefzTxt2);
 
         for (int i = 0; i < m_Order.Count(); i++)
         {

@@ -48,7 +48,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_EventArgs
+class ChefZ_EventArgs : Managed
 {
     //! Der Name, unter dem dieses Ereignis ausgeloest wurde. Ein Abonnent, der
     //! mehrere Ereignisse mit demselben Callback bedient, unterscheidet sie

@@ -24,7 +24,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_PriorityWeights
+class ChefZ_PriorityWeights : Managed
 {
     float wClass;               // Slot nennt eine exakte Klasse
     float wState;
@@ -138,7 +138,12 @@ class ChefZ_PriorityWeights
 
     string ToDebugString()
     {
-        return "class=" + wClass.ToString() + " state=" + wState.ToString() + " tag=" + wTag.ToString() + " stage=" + wVanillaStage.ToString() + " kat=" + wCategoryBase.ToString() + "+" + wCategoryPerDepth.ToString() + "/Tiefe" + " not=" + wNot.ToString() + " range=" + wRangePerBound.ToString() + " minQual=" + wMinQuality.ToString() + " amountCap=" + amountCap.ToString();
+        string chefzTxt1 = "class=" + wClass.ToString() + " state=" + wState.ToString() + " tag=";
+        chefzTxt1 = chefzTxt1 + wTag.ToString() + " stage=" + wVanillaStage.ToString() + " kat=" + wCategoryBase.ToString();
+        chefzTxt1 = chefzTxt1 + "+" + wCategoryPerDepth.ToString() + "/Tiefe" + " not=" + wNot.ToString();
+        chefzTxt1 = chefzTxt1 + " range=" + wRangePerBound.ToString() + " minQual=" + wMinQuality.ToString() + " amountCap=";
+        chefzTxt1 = chefzTxt1 + amountCap.ToString();
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest (S5).

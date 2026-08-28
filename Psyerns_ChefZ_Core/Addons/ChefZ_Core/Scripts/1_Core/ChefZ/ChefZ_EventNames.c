@@ -148,7 +148,13 @@ class ChefZ_EventNames
     //! Content-Ereignisse aus emitEvents stehen hier nie.
     static string CoreEventNames()
     {
-        return CONFIG_LOADED + ", " + RECIPE_MATCHED + ", " + RECIPE_COMPLETED + ", " + RECIPE_FAILED + ", " + INGREDIENT_PROCESSED + ", " + PROCESS_JOB_STARTED + ", " + PROCESS_JOB_CANCELLED + ", " + FOOD_STATE_CHANGED + ", " + FOOD_PRESERVED + ", " + FOOD_CONSUMED + ", " + FOOD_SPOILED + ", " + PORTION_TAKEN + ", " + CONTAINER_RETURNED + ", " + RECIPE_DISCOVERED + ", " + QUALITY_BONUS_QUERY;
+        string chefzTxt1 = CONFIG_LOADED + ", " + RECIPE_MATCHED + ", " + RECIPE_COMPLETED;
+        chefzTxt1 = chefzTxt1 + ", " + RECIPE_FAILED + ", " + INGREDIENT_PROCESSED + ", ";
+        chefzTxt1 = chefzTxt1 + PROCESS_JOB_STARTED + ", " + PROCESS_JOB_CANCELLED + ", " + FOOD_STATE_CHANGED;
+        chefzTxt1 = chefzTxt1 + ", " + FOOD_PRESERVED + ", " + FOOD_CONSUMED + ", ";
+        chefzTxt1 = chefzTxt1 + FOOD_SPOILED + ", " + PORTION_TAKEN + ", " + CONTAINER_RETURNED;
+        chefzTxt1 = chefzTxt1 + ", " + RECIPE_DISCOVERED + ", " + QUALITY_BONUS_QUERY;
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest (S13).
@@ -226,7 +232,9 @@ class ChefZ_ProgressKind
 
     static string ValidNames()
     {
-        return COOK + ", " + PROCESS + ", " + PRESERVE + ", " + CONSUME + ", " + DISCOVER;
+        string chefzTxt2 = COOK + ", " + PROCESS + ", " + PRESERVE;
+        chefzTxt2 = chefzTxt2 + ", " + CONSUME + ", " + DISCOVER;
+        return chefzTxt2;
     }
 
     //! Nur fuer den Selbsttest (S13).

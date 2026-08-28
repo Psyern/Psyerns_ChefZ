@@ -56,7 +56,7 @@
 // Layer: 3_Game.
 //==============================================================================
 
-class ChefZ_ProcessingManager
+class ChefZ_ProcessingManager : Managed
 {
     private static ref ChefZ_ProcessingManager s_Instance;
 
@@ -469,7 +469,11 @@ class ChefZ_ProcessingManager
         if (!report)
             return;
 
-        report.AddInfo("Processing Manager: " + m_Processes.Count().ToString() + " Prozesse, " + m_Stations.Count().ToString() + " Stationen, " + m_Transforms.Count().ToString() + " Transforms (" + m_ByProcessAnyStation.Count().ToString() + " Prozesse mit stationsfreien " + "Transforms, " + m_ByProcessAndStation.Count().ToString() + " exklusive " + "Zuordnungen). Abgewiesen: " + m_RejectedProcesses.ToString() + " Prozesse, " + m_RejectedTransforms.ToString() + " Transforms. Knotenbudget " + m_NodeBudget.ToString() + ".");
+        string chefzTxt1 = "Processing Manager: " + m_Processes.Count().ToString() + " Prozesse, " + m_Stations.Count().ToString() + " Stationen, ";
+        chefzTxt1 = chefzTxt1 + m_Transforms.Count().ToString() + " Transforms (" + m_ByProcessAnyStation.Count().ToString() + " Prozesse mit stationsfreien " + "Transforms, ";
+        chefzTxt1 = chefzTxt1 + m_ByProcessAndStation.Count().ToString() + " exklusive " + "Zuordnungen). Abgewiesen: " + m_RejectedProcesses.ToString() + " Prozesse, ";
+        chefzTxt1 = chefzTxt1 + m_RejectedTransforms.ToString() + " Transforms. Knotenbudget " + m_NodeBudget.ToString() + ".";
+        report.AddInfo(chefzTxt1);
     }
 
     //==========================================================================
@@ -949,7 +953,9 @@ class ChefZ_ProcessingManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Processing Manager  bereit=" + m_Ready.ToString() + "  prozesse=" + m_Processes.Count().ToString() + "  stationen=" + m_Stations.Count().ToString() + "  transforms=" + m_Transforms.Count().ToString() + "  budget=" + m_NodeBudget.ToString());
+        string chefzTxt2 = "ChefZ Processing Manager  bereit=" + m_Ready.ToString() + "  prozesse=" + m_Processes.Count().ToString() + "  stationen=";
+        chefzTxt2 = chefzTxt2 + m_Stations.Count().ToString() + "  transforms=" + m_Transforms.Count().ToString() + "  budget=" + m_NodeBudget.ToString();
+        outLines.Insert(chefzTxt2);
 
         int i;
         for (i = 0; i < m_Processes.Count(); i++)

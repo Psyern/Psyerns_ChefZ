@@ -63,7 +63,7 @@
 // Engine-Itemtyp - kein ItemBase, kein FoodStage, kein NutritionalProfile.
 //==============================================================================
 
-class ChefZ_NutritionManager
+class ChefZ_NutritionManager : Managed
 {
     private static ref ChefZ_NutritionManager s_Instance;
 
@@ -214,7 +214,12 @@ class ChefZ_NutritionManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Naehrwertangaben: " + GetRecordCount().ToString() + " geladen" + " (Klasse " + m_ByClass.Count().ToString() + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag " + m_ByTag.Count().ToString() + ")" + ", Audit " + AuditStateName() + ", Toleranz " + m_TolerancePct.ToString() + "%.");
+        {
+            string chefzTxt1 = "Naehrwertangaben: " + GetRecordCount().ToString() + " geladen" + " (Klasse " + m_ByClass.Count().ToString();
+            chefzTxt1 = chefzTxt1 + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag " + m_ByTag.Count().ToString() + ")";
+            chefzTxt1 = chefzTxt1 + ", Audit " + AuditStateName() + ", Toleranz " + m_TolerancePct.ToString() + "%.";
+            report.AddInfo(chefzTxt1);
+        }
 
         LogIfDebug();
     }
@@ -1194,7 +1199,9 @@ class ChefZ_NutritionManager
             return;
         }
 
-        Banner("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString() + " Rezepte, " + findings.Count().ToString() + " Befunde (" + m_LastErrorCount.ToString() + " davon FEHLER).");
+        string chefzTxt2 = "Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString() + " Rezepte, " + findings.Count().ToString() + " Befunde (";
+        chefzTxt2 = chefzTxt2 + m_LastErrorCount.ToString() + " davon FEHLER).";
+        Banner(chefzTxt2);
 
         int shown = 0;
         for (int i = 0; i < findings.Count(); i++)
@@ -1421,7 +1428,9 @@ class ChefZ_NutritionManager
             return;
         }
 
-        outLines.Insert("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString() + " Rezepte: " + m_LastFindings.Count().ToString() + " Befunde, davon " + m_LastErrorCount.ToString() + " FEHLER. Toleranz " + m_TolerancePct.ToString() + "%.");
+        string chefzTxt3 = "Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString() + " Rezepte: " + m_LastFindings.Count().ToString() + " Befunde, davon ";
+        chefzTxt3 = chefzTxt3 + m_LastErrorCount.ToString() + " FEHLER. Toleranz " + m_TolerancePct.ToString() + "%.";
+        outLines.Insert(chefzTxt3);
 
         for (int i = 0; i < m_LastFindings.Count(); i++)
         {

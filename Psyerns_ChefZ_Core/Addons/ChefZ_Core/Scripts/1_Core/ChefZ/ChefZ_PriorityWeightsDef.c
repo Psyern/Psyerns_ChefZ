@@ -31,7 +31,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_PriorityWeightsDef
+class ChefZ_PriorityWeightsDef : Managed
 {
     float wClass;
     float wState;

@@ -48,7 +48,7 @@
  * die zu 08 §2 passt: dort ist jedes Feld der Regel optional, und eine Regel,
  * die nur "methods" nennt, soll an jedem Geraet gelten.
  */
-class ChefZ_CompiledContext
+class ChefZ_CompiledContext : Managed
 {
     ref array<ChefZ_Sym> deviceClasses;
     ref array<ChefZ_Sym> deviceCategories;
@@ -216,7 +216,7 @@ class ChefZ_CompiledContext
  * EFFEKTIVEN Wert, nicht darauf, ob ein Autor den Default ausgeschrieben hat.
  * Sonst haenge die Rezeptprioritaet an einer Schreibgewohnheit.
  */
-class ChefZ_CompiledPolicy
+class ChefZ_CompiledPolicy : Managed
 {
     int  extraItemsMode;
     ref ChefZ_CompiledSelector extraItemsAllowedIf;
@@ -285,7 +285,7 @@ class ChefZ_CompiledPolicy
  * die Felder, die es in der Rohform NICHT gibt und die erst beim Build
  * entstehen: Spezifitaet, Rangzahlen und das Torsymbol des Index.
  */
-class ChefZ_CompiledRecipe
+class ChefZ_CompiledRecipe : Managed
 {
     //--- Identitaet ----------------------------------------------------------
     ChefZ_Sym recipeSym;
@@ -533,7 +533,10 @@ class ChefZ_CompiledRecipe
 
     string ToDebugString()
     {
-        string s = id + "  spez=" + specificity.ToString() + " prio=" + priority.ToString() + " slots=" + requiredSlots.ToString() + "/" + slots.Count().ToString() + " minItems=" + minItemCount.ToString() + " abschluss=" + ChefZ_Completion.Name(completion);
+        string chefzTxt1 = id + "  spez=" + specificity.ToString() + " prio=" + priority.ToString();
+        chefzTxt1 = chefzTxt1 + " slots=" + requiredSlots.ToString() + "/" + slots.Count().ToString() + " minItems=";
+        chefzTxt1 = chefzTxt1 + minItemCount.ToString() + " abschluss=" + ChefZ_Completion.Name(completion);
+        string s = chefzTxt1;
         if (gateKind != ChefZ_GateKind.NONE)
             s = s + " tor=" + ChefZ_SymbolTable.NameOrMark(gateSym);
         return s;

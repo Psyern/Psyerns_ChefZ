@@ -360,7 +360,10 @@ class ChefZ_TerjeSkillsConfig
     static string Summary()
     {
         Load();
-        return "aktiv=" + s_Enabled.ToString() + " xp=" + s_XpEnabled.ToString() + " skill=" + s_Skill + " kraut=" + s_HerbTag + " hervorheben=" + s_HighlightEnabled.ToString() + " ausbeute=" + s_YieldEnabled.ToString() + " faehigkeiten=" + s_CapEnabled.ToString();
+        string chefzTxt1 = "aktiv=" + s_Enabled.ToString() + " xp=" + s_XpEnabled.ToString() + " skill=";
+        chefzTxt1 = chefzTxt1 + s_Skill + " kraut=" + s_HerbTag + " hervorheben=" + s_HighlightEnabled.ToString();
+        chefzTxt1 = chefzTxt1 + " ausbeute=" + s_YieldEnabled.ToString() + " faehigkeiten=" + s_CapEnabled.ToString();
+        return chefzTxt1;
     }
 }
 #endif // TERJE_SKILLS_MOD

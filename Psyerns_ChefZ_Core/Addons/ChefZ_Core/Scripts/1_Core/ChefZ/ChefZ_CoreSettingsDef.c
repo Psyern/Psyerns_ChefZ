@@ -872,13 +872,16 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
 
     string ToDebugString()
     {
-        return "enabled=" + enabled.ToString() + " strict=" + strictMode.ToString() + " safeModeAt=" + safeModeErrorThreshold.ToString() + " logLevel=" + ChefZ_LogLevel.Name(logLevel) + " overlay=" + allowProfileOverlay.ToString() + " extraItems=" + defaultExtraItems + " naehrwertaudit=" + enableNutritionAudit.ToString();
+        string chefzTxt1 = "enabled=" + enabled.ToString() + " strict=" + strictMode.ToString() + " safeModeAt=";
+        chefzTxt1 = chefzTxt1 + safeModeErrorThreshold.ToString() + " logLevel=" + ChefZ_LogLevel.Name(logLevel) + " overlay=" + allowProfileOverlay.ToString();
+        chefzTxt1 = chefzTxt1 + " extraItems=" + defaultExtraItems + " naehrwertaudit=" + enableNutritionAudit.ToString();
+        return chefzTxt1;
     }
 
     //--------------------------------------------------------------------------
 
     //! Nur fuer den Selbsttest.
-    static bool SelfCheck()
+    override static bool SelfCheck()
     {
         // 1. Nackter Datensatz -> vollstaendige Code-Defaults aus 02 §5.4.
         ChefZ_RecordProbe.Reset();

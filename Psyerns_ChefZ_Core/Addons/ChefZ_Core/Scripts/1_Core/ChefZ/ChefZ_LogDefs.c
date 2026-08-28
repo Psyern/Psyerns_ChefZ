@@ -85,19 +85,28 @@ class ChefZ_LogLevel
 
 class ChefZ_LogChannel
 {
-    static const int CORE    = 1 << 0;
-    static const int CONFIG  = 1 << 1;
-    static const int MATCH   = 1 << 2;
-    static const int COOK    = 1 << 3;
-    static const int PROCESS = 1 << 4;
-    static const int STATE   = 1 << 5;
-    static const int QUALITY = 1 << 6;
-    static const int NUTRI   = 1 << 7;
-    static const int PRESERV = 1 << 8;
-    static const int PORTION = 1 << 9;
-    static const int CONTAIN = 1 << 10;
-    static const int EVENT   = 1 << 11;
-    static const int PERF    = 1 << 12;
+    // LITERALE, KEINE SCHIEBEAUSDRUECKE. "1 << 3" ist gut lesbar, taugt in
+    // Enforce aber nicht als case-Marke: der Compiler faltet den Ausdruck nicht
+    // zu einer Konstante, der switch in Name() trifft dann NICHTS - und Name()
+    // ist rekursiv. Der Server ist daran am 28.08.2026 nach dem vollstaendigen
+    // Uebersetzen aller Module abgestuerzt: "Virtual Machine Exception, Reason:
+    // Stack overflow, Function: 'Name'".
+    //
+    // Vanilla schreibt seine switch-Konstanten aus demselben Grund als Literale
+    // (human.c:349ff., static const int STATE_NONE = 0).
+    static const int CORE    = 1;      // Bit 0
+    static const int CONFIG  = 2;      // Bit 1
+    static const int MATCH   = 4;      // Bit 2
+    static const int COOK    = 8;      // Bit 3
+    static const int PROCESS = 16;     // Bit 4
+    static const int STATE   = 32;     // Bit 5
+    static const int QUALITY = 64;     // Bit 6
+    static const int NUTRI   = 128;    // Bit 7
+    static const int PRESERV = 256;    // Bit 8
+    static const int PORTION = 512;    // Bit 9
+    static const int CONTAIN = 1024;   // Bit 10
+    static const int EVENT   = 2048;   // Bit 11
+    static const int PERF    = 4096;   // Bit 12
 
     static const int NONE    = 0;
     static const int ALL     = 0x1FFF;      // Bits 0..12, deckt genau die 13 Kanaele
@@ -129,8 +138,16 @@ class ChefZ_LogChannel
         for (int bit = 0; bit < 13; bit++)
         {
             int single = 1 << bit;
-            if ((channel & single) != 0)
-                return Name(single) + "+";
+            if ((channel & single) == 0)
+                continue;
+            // Ist bereits nur EIN Bit gesetzt, hat der switch oben es schon nicht
+            // erkannt - ein zweiter Anlauf mit demselben Wert liefert dasselbe
+            // Ergebnis und nichts als einen Stack overflow. Diese Zeile ist der
+            // Grund, dass eine kuenftige unbenannte Kanalnummer den Server nur
+            // ein "?" kostet und nicht den Start.
+            if (single == channel)
+                return "?";
+            return Name(single) + "+";
         }
         return "?";
     }

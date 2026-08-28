@@ -109,9 +109,20 @@ class CfgMods
 
 class CfgVehicles
 {
-    // ChefZ_GrainFoodBase kommt aus ChefZ_Farming und wird NICHT
-    // vorwaertsdeklariert: eine leere Vorwaertsdeklaration wuerde den
-    // echten Knoten mitsamt Nutrition und Food verdecken.
+    // ChefZ_GrainFoodBase kommt aus ChefZ_Farming und MUSS hier
+    // vorwaertsdeklariert werden. DayZ loest eine Elternklasse nur innerhalb
+    // DERSELBEN config.cpp auf; steht sie dort weder mit Rumpf noch als
+    // Deklaration, bricht der Configlauf mit "Undefined base class" ab und der
+    // Server bleibt an einem Fehlerdialog stehen, den auf einem Server niemand
+    // wegklickt. Genau das ist am 28.08.2026 passiert.
+    //
+    // Hier stand vorher die Annahme, eine leere Vorwaertsdeklaration wuerde den
+    // echten Knoten mitsamt Nutrition und Food verdecken. Sie ist falsch: eine
+    // Deklaration ohne Rumpf ersetzt nichts, sie macht den Namen nur
+    // aufloesbar. ChefZ_Farming selbst fuehrt es vor - es deklariert
+    // Edible_Base auf dieselbe Weise und erbt dessen Nutrition vollstaendig.
+    // Die Ladereihenfolge sichert requiredAddons[] weiter oben zu.
+    class ChefZ_GrainFoodBase;
 
     //--------------------------------------------------------------------------
     // Hefe (Production Map §9). V1 ausschliesslich Loot - keine Hefekultur.

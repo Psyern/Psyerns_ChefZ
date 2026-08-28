@@ -75,7 +75,7 @@
 /**
  * Eine Kategorie: Anzeigename plus die Klassennamen, die sie fuehrt.
  */
-class ChefZ_CotCategory
+class ChefZ_CotCategory : Managed
 {
 	protected string m_FilterId;
 	protected string m_Label;

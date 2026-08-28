@@ -26,7 +26,7 @@
 // Layer: 3_Game (JsonFileLoader und g_Game.ConfigGet* liegen hier).
 //==============================================================================
 
-class ChefZ_IRecordSource
+class ChefZ_IRecordSource : Managed
 {
     //! Name fuer Log und Ladebericht. Erscheint als Quellenangabe.
     string GetName()
@@ -79,7 +79,7 @@ class ChefZ_IRecordSource
  * Das ist die einzige Datei ausserhalb seines Modulordners, die ein
  * Content-Autor je anfassen muss - und sie gehoert ihm.
  */
-class ChefZ_SliceManifest
+class ChefZ_SliceManifest : Managed
 {
     string name;
     int    apiVersion;

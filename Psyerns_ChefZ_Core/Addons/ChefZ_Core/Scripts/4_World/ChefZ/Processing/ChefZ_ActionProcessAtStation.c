@@ -442,9 +442,15 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
         return s_ClientProcesses.Count() > 1;
     }
 
-    override void UpdateVariants(Object item, Object target, int componentIndex)
+    // Der dritte Parameter heisst hier "componet_index" und nicht
+    // "componentIndex", weil ActionBase.UpdateVariants ihn so schreibt
+    // (ActionBase.c:958, Tippfehler von Bohemia). Enforce uebernimmt beim
+    // Ueberschreiben die Namen des Prototyps: mit der richtigen Schreibweise
+    // meldet der Compiler "Can't find variable 'componentIndex'" - der Name
+    // existiert im Rumpf dann schlicht nicht.
+    override void UpdateVariants(Object item, Object target, int componet_index)
     {
-        super.UpdateVariants(item, target, componentIndex);
+        super.UpdateVariants(item, target, componet_index);
         RefreshProcesses(item, target);
     }
 
@@ -505,8 +511,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
             if (Class.CastTo(station, target.GetObject()))
             {
                 ChefZ_Sym process = SelectProcess(station, item);
-                data.m_ChefZ_ProcessHash =
-                    ChefZ_ProcessingManager.Get().GetProcessPersistHash(process);
+                data.m_ChefZ_ProcessHash = ChefZ_ProcessingManager.Get().GetProcessPersistHash(process);
             }
         }
 

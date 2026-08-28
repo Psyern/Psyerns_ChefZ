@@ -42,7 +42,7 @@ enum ChefZ_ConfigHealth
     SAFE_MODE
 }
 
-class ChefZ_ConfigManager
+class ChefZ_ConfigManager : Managed
 {
     //! Manifestversion, die dieser Core versteht (CfgChefZ chefzApiVersion).
     static const int API_VERSION = 1;
@@ -767,7 +767,7 @@ class ChefZ_ConfigManager
      * vorhanden, aber der Overlay-Teil eben nicht - deshalb wird hier hart
      * nach sourceRank gefiltert und ein Verstoss gemeldet.
      */
-    private void BuildIdentities(ChefZ_RegistryBase registry, ChefZ_IdentityMap map, string kind)
+    private void BuildIdentities(ChefZ_RegistryBase registry, ChefZ_IdentityMap identityMap, string kind)
     {
         array<string> rank1Ids = new array<string>();
 
@@ -790,7 +790,7 @@ class ChefZ_ConfigManager
         }
 
         ChefZ_StringOrder.SortAscending(rank1Ids);
-        map.Build(rank1Ids, m_Report, ChefZ_RecordKind.SyncLimit(kind));
+        identityMap.Build(rank1Ids, m_Report, ChefZ_RecordKind.SyncLimit(kind));
     }
 
     private void FreezeAll()
@@ -975,7 +975,11 @@ class ChefZ_ConfigManager
     private void ReportSummary()
     {
         // Format woertlich aus 02 §8.
-        string line = "slices=" + m_SliceCount.ToString() + " files=" + m_FileCount.ToString() + " records=" + m_Sink.GetSubmittedCount().ToString() + " ok=" + m_Sink.GetAcceptedCount().ToString() + " rejected=" + m_Sink.GetRejectedCount().ToString() + " patched=" + m_Sink.GetPatchedCount().ToString() + " health=" + HealthName(m_Health) + " in " + m_LoadMillis.ToString() + "ms";
+        string chefzTxt1 = "slices=" + m_SliceCount.ToString() + " files=" + m_FileCount.ToString() + " records=";
+        chefzTxt1 = chefzTxt1 + m_Sink.GetSubmittedCount().ToString() + " ok=" + m_Sink.GetAcceptedCount().ToString() + " rejected=" + m_Sink.GetRejectedCount().ToString();
+        chefzTxt1 = chefzTxt1 + " patched=" + m_Sink.GetPatchedCount().ToString() + " health=" + HealthName(m_Health) + " in ";
+        chefzTxt1 = chefzTxt1 + m_LoadMillis.ToString() + "ms";
+        string line = chefzTxt1;
 
         // Geht an der Stufenpruefung vorbei: 18 §4 verlangt diese Zeile IMMER,
         // auch bei Erfolg und auch bei Stufe WARN.
@@ -1171,7 +1175,9 @@ class ChefZ_ConfigManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Registries  health=" + HealthName(m_Health) + "  records=" + TotalRecordCount().ToString() + "  fehler=" + m_Report.ErrorCount().ToString() + "  warnungen=" + m_Report.WarnCount().ToString());
+        string chefzTxt2 = "ChefZ Registries  health=" + HealthName(m_Health) + "  records=" + TotalRecordCount().ToString() + "  fehler=";
+        chefzTxt2 = chefzTxt2 + m_Report.ErrorCount().ToString() + "  warnungen=" + m_Report.WarnCount().ToString();
+        outLines.Insert(chefzTxt2);
         outLines.Insert("Einstellungen: " + m_Settings.ToDebugString());
 
         array<string> order = ChefZ_RecordKind.LoadOrder();

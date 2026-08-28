@@ -57,7 +57,7 @@
 // Layer: 4_World.
 //==============================================================================
 
-class ChefZ_ItemStateComponent
+class ChefZ_ItemStateComponent : Managed
 {
     //! "CHZ1". Selbstbeschreibender Marker vor dem eigenen Block - Vanillas
     //! eigenes Muster (ItemBase.c:3221, "Keep track of if we should actually
@@ -323,14 +323,14 @@ class ChefZ_ItemStateComponent
 
         if (ChefZ_SymbolTable.IsValid(current) && mgr.IsTerminal(current))
         {
-            Note(ChefZ_LogLevel.WARN, "state.terminal." + current.ToString(), "Zustandswechsel abgelehnt, reason = \"terminal state\": \"" + ChefZ_SymbolTable.NameOrMark(current) + "\" ist als terminal deklariert. " + "Ein terminaler Zustand ist das Ende einer Kette, kein Zwischenschritt.");
+            Note(ChefZ_LogLevel.WARN, "state.terminal." + ChefZ_SymbolTable.Ordinal(current), "Zustandswechsel abgelehnt, reason = \"terminal state\": \"" + ChefZ_SymbolTable.NameOrMark(current) + "\" ist als terminal deklariert. " + "Ein terminaler Zustand ist das Ende einer Kette, kein Zwischenschritt.");
             return false;
         }
 
         ChefZ_StateDef def = mgr.GetDef(state);
         if (!def)
         {
-            Note(ChefZ_LogLevel.ERR, "state.setunknown." + state.ToString(), "ChefZ_SetState auf den unbekannten Zustand \"" + ChefZ_SymbolTable.NameOrMark(state) + "\". Es wird nichts gesetzt - ein Item " + "mit einem Zustand, den kein Rezept und keine Anzeige kennt, waere schlimmer " + "als eines ohne Zustand.");
+            Note(ChefZ_LogLevel.ERR, "state.setunknown." + ChefZ_SymbolTable.Ordinal(state), "ChefZ_SetState auf den unbekannten Zustand \"" + ChefZ_SymbolTable.NameOrMark(state) + "\". Es wird nichts gesetzt - ein Item " + "mit einem Zustand, den kein Rezept und keine Anzeige kennt, waere schlimmer " + "als eines ohne Zustand.");
             return false;
         }
 
@@ -574,7 +574,7 @@ class ChefZ_ItemStateComponent
         int hash = ids.ToPersistHash(tier);
         if (hash == 0 && ChefZ_SymbolTable.IsValid(tier))
         {
-            Note(ChefZ_LogLevel.WARN, "quality.unknown." + tier.ToString(), "Unbekannte Qualitaetsstufe \"" + ChefZ_SymbolTable.NameOrMark(tier) + "\" - sie wird nicht gesetzt.");
+            Note(ChefZ_LogLevel.WARN, "quality.unknown." + ChefZ_SymbolTable.Ordinal(tier), "Unbekannte Qualitaetsstufe \"" + ChefZ_SymbolTable.NameOrMark(tier) + "\" - sie wird nicht gesetzt.");
             return false;
         }
 
@@ -978,6 +978,9 @@ class ChefZ_ItemStateComponent
 
     string ToLine()
     {
-        return "state ord=" + m_ChefZ_StateOrdinal.ToString() + " hash=" + m_ChefZ_StatePersist.ToString() + "  qual ord=" + m_ChefZ_QualityOrdinal.ToString() + " hash=" + m_ChefZ_QualityPersist.ToString() + "  frische=" + m_ChefZ_Freshness.ToString() + "  portionen=" + m_ChefZ_Portions.ToString() + "  rueckgabe=\"" + m_ChefZ_ReturnContainer + "\"";
+        string chefzTxt1 = "state ord=" + m_ChefZ_StateOrdinal.ToString() + " hash=" + m_ChefZ_StatePersist.ToString() + "  qual ord=";
+        chefzTxt1 = chefzTxt1 + m_ChefZ_QualityOrdinal.ToString() + " hash=" + m_ChefZ_QualityPersist.ToString() + "  frische=" + m_ChefZ_Freshness.ToString();
+        chefzTxt1 = chefzTxt1 + "  portionen=" + m_ChefZ_Portions.ToString() + "  rueckgabe=\"" + m_ChefZ_ReturnContainer + "\"";
+        return chefzTxt1;
     }
 }

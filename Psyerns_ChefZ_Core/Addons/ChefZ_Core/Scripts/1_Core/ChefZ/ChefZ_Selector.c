@@ -48,7 +48,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_Selector
+class ChefZ_Selector : Managed
 {
     //--- Blatt-Praedikate: genau EINES gesetzt (07 §2.1) ---------------------
     string  cls;                    // exakte Klasse     (JSON "cls", siehe Kopf)
@@ -254,7 +254,7 @@ class ChefZ_Selector
  * geschrieben" nicht von "allowPartial: false" zu unterscheiden, und der
  * dokumentierte Default waere unerreichbar.
  */
-class ChefZ_SlotDef
+class ChefZ_SlotDef : Managed
 {
     string             slotId;         // stabil, erscheint in Trace und Grade-Regeln
     ref ChefZ_Selector match;

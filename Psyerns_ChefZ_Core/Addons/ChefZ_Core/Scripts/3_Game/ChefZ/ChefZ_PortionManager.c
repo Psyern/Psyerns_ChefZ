@@ -74,7 +74,7 @@
 // Layer: 3_Game.
 //==============================================================================
 
-class ChefZ_PortionManager
+class ChefZ_PortionManager : Managed
 {
     private static ref ChefZ_PortionManager s_Instance;
 
@@ -180,7 +180,9 @@ class ChefZ_PortionManager
             }
             else
             {
-                report.AddInfo("Portionsgerichte: " + m_Order.Count().ToString() + " (aus Rezepten " + fromRecipes.ToString() + ", aus Transforms " + fromTransforms.ToString() + ")" + ", Namenskollisionen " + m_Collisions.ToString() + ".");
+                string chefzTxt1 = "Portionsgerichte: " + m_Order.Count().ToString() + " (aus Rezepten " + fromRecipes.ToString() + ", aus Transforms ";
+                chefzTxt1 = chefzTxt1 + fromTransforms.ToString() + ")" + ", Namenskollisionen " + m_Collisions.ToString() + ".";
+                report.AddInfo(chefzTxt1);
             }
         }
 
@@ -364,7 +366,7 @@ class ChefZ_PortionManager
         if (n < ChefZ_PortionLimits.MIN)
             n = ChefZ_PortionLimits.MIN;
 
-        Step(steps, "Rezept nennt " + n.ToString() + " Portionen");
+        AddStep(steps, "Rezept nennt " + n.ToString() + " Portionen");
 
         //--- Deckel 1: das Geraet (15 §5.1) -----------------------------------
         //
@@ -376,7 +378,7 @@ class ChefZ_PortionManager
         if (spec.scaleWithDevice && ctx.portionCapacity > 0 && ctx.portionCapacity < n)
         {
             n = ctx.portionCapacity;
-            Step(steps, "Geraetedeckel " + ChefZ_SymbolTable.NameOrMark(ctx.deviceClass) + " -> " + n.ToString());
+            AddStep(steps, "Geraetedeckel " + ChefZ_SymbolTable.NameOrMark(ctx.deviceClass) + " -> " + n.ToString());
         }
 
         //--- Deckel 2: die Zutatenmenge (15 §5.2) -----------------------------
@@ -390,7 +392,7 @@ class ChefZ_PortionManager
             if (byAmount < n)
             {
                 n = byAmount;
-                Step(steps, "Mengendeckel " + consumedRequiredUnits.ToString() + " Einheiten / " + spec.amountPerPortion.ToString() + " je Portion -> " + n.ToString());
+                AddStep(steps, "Mengendeckel " + consumedRequiredUnits.ToString() + " Einheiten / " + spec.amountPerPortion.ToString() + " je Portion -> " + n.ToString());
             }
         }
 
@@ -423,14 +425,14 @@ class ChefZ_PortionManager
                 int floored = Math.Floor(scaled);
                 n = floored + bonus;
 
-                Step(steps, "Stufe " + ChefZ_SymbolTable.Name(qualityTier) + ": x" + yield.ToString() + " +" + bonus.ToString() + " -> " + n.ToString());
+                AddStep(steps, "Stufe " + ChefZ_SymbolTable.Name(qualityTier) + ": x" + yield.ToString() + " +" + bonus.ToString() + " -> " + n.ToString());
             }
         }
 
         //--- Sync-Grenze (15 §4) ----------------------------------------------
         int clamped = ChefZ_PortionLimits.Clamp(n);
         if (clamped != n)
-            Step(steps, "geklemmt auf " + clamped.ToString());
+            AddStep(steps, "geklemmt auf " + clamped.ToString());
 
         return clamped;
     }
@@ -517,7 +519,7 @@ class ChefZ_PortionManager
         return units;
     }
 
-    private void Step(array<string> trace, string line)
+    private void AddStep(array<string> trace, string line)
     {
         if (trace)
             trace.Insert(line);
@@ -766,7 +768,9 @@ class ChefZ_PortionManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Portionsgerichte: " + m_Order.Count().ToString() + "  behaeltersystem=" + s_ContainerSystemReady.ToString() + "  vorgabedauer=" + m_DefaultTakeSec.ToString() + "s");
+        string chefzTxt2 = "Portionsgerichte: " + m_Order.Count().ToString() + "  behaeltersystem=" + s_ContainerSystemReady.ToString() + "  vorgabedauer=";
+        chefzTxt2 = chefzTxt2 + m_DefaultTakeSec.ToString() + "s";
+        outLines.Insert(chefzTxt2);
 
         for (int i = 0; i < m_Order.Count(); i++)
         {
@@ -906,7 +910,9 @@ class ChefZ_PortionOutputAudit
         // ein Autor soll die Zahl in seiner Datei korrigieren koennen.
         if (def.portions > ChefZ_PortionLimits.MAX)
         {
-            outWarnings.Insert(where + ": " + def.portions.ToString() + " Portionen sind mehr " + "als die " + ChefZ_PortionLimits.MAX.ToString() + ", die sich zum Client " + "synchronisieren lassen - geklemmt (03 §4).");
+            string chefzTxt3 = where + ": " + def.portions.ToString() + " Portionen sind mehr " + "als die ";
+            chefzTxt3 = chefzTxt3 + ChefZ_PortionLimits.MAX.ToString() + ", die sich zum Client " + "synchronisieren lassen - geklemmt (03 §4).";
+            outWarnings.Insert(chefzTxt3);
             def.portions = ChefZ_PortionLimits.MAX;
         }
 

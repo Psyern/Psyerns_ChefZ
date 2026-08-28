@@ -80,7 +80,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
     // Die API aus 15 §3
     //==========================================================================
 
-    int ChefZ_GetPortionsMax()
+    override int ChefZ_GetPortionsMax()
     {
         // Wer nie eine Hoechstzahl bekommen hat - ein Item aus einem
         // Spielstand vor S16, ein Adminspawn - bekommt den aktuellen Stand als

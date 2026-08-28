@@ -74,7 +74,7 @@ class ChefZ_GateKind
  * Rein lesend gegenueber dem Snapshot: kein Feld wird angefasst, insbesondere
  * nicht slotBoundTo. Der Vorfilter darf die Bindung nicht vorwegnehmen.
  */
-class ChefZ_VesselKeys
+class ChefZ_VesselKeys : Managed
 {
     private ref array<ChefZ_Sym>        m_Classes;
     private ref array<ChefZ_Sym>        m_Tags;
@@ -205,7 +205,9 @@ class ChefZ_VesselKeys
 
     string ToDebugString()
     {
-        return "items=" + m_ItemCount.ToString() + " klassen=" + m_Classes.Count().ToString() + " tags=" + m_Tags.Count().ToString() + " zustaende=" + m_States.Count().ToString() + " kategoriebits=" + m_Categories.CountBits().ToString();
+        string chefzTxt1 = "items=" + m_ItemCount.ToString() + " klassen=" + m_Classes.Count().ToString() + " tags=";
+        chefzTxt1 = chefzTxt1 + m_Tags.Count().ToString() + " zustaende=" + m_States.Count().ToString() + " kategoriebits=" + m_Categories.CountBits().ToString();
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest.

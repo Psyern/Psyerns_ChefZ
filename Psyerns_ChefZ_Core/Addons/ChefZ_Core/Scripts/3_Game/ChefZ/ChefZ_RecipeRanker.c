@@ -306,7 +306,9 @@ class ChefZ_RecipeRanker
 
         if (n > MAX_PAIRWISE_RECIPES)
         {
-            report.AddInfo("Ambiguitaetsanalyse uebersprungen: " + n.ToString() + " Rezepte liegen ueber der Grenze von " + MAX_PAIRWISE_RECIPES.ToString() + ". Die Pruefung ist paarweise und damit quadratisch; sie wuerde den " + "Serverstart merklich verzoegern. Die Rangordnung selbst ist davon " + "unberuehrt (09 E5).");
+            string chefzTxt1 = "Ambiguitaetsanalyse uebersprungen: " + n.ToString() + " Rezepte liegen ueber der Grenze von " + MAX_PAIRWISE_RECIPES.ToString() + ". Die Pruefung ist paarweise und damit quadratisch; sie wuerde den ";
+            chefzTxt1 = chefzTxt1 + "Serverstart merklich verzoegern. Die Rangordnung selbst ist davon " + "unberuehrt (09 E5).";
+            report.AddInfo(chefzTxt1);
             return;
         }
 

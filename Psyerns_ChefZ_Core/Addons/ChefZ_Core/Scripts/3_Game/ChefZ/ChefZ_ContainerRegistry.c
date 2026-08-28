@@ -53,7 +53,7 @@
 // Layer: 3_Game.
 //==============================================================================
 
-class ChefZ_ContainerRegistry
+class ChefZ_ContainerRegistry : Managed
 {
     private static ref ChefZ_ContainerRegistry s_Instance;
 
@@ -152,7 +152,10 @@ class ChefZ_ContainerRegistry
 
         if (report)
         {
-            report.AddInfo("Behaelter: " + m_Classes.Count().ToString() + " Klassen in " + m_Categories.Count().ToString() + " Kategorien" + ", " + m_RejectedCount.ToString() + " verworfen" + ", " + m_MissingEmptyClass.ToString() + " ohne auffindbare Leerklasse" + ", " + m_ForeignClasses.ToString() + " Nicht-ChefZ-Klassen.");
+            string chefzTxt1 = "Behaelter: " + m_Classes.Count().ToString() + " Klassen in " + m_Categories.Count().ToString() + " Kategorien";
+            chefzTxt1 = chefzTxt1 + ", " + m_RejectedCount.ToString() + " verworfen" + ", " + m_MissingEmptyClass.ToString();
+            chefzTxt1 = chefzTxt1 + " ohne auffindbare Leerklasse" + ", " + m_ForeignClasses.ToString() + " Nicht-ChefZ-Klassen.";
+            report.AddInfo(chefzTxt1);
         }
 
         LogIfDebug();
@@ -255,11 +258,11 @@ class ChefZ_ContainerRegistry
             string name = def.containerCategories.Get(c);
             if (name == "")
                 continue;
-            Link(ChefZ_SymbolTable.Intern(name), classSym);
+            LinkCategory(ChefZ_SymbolTable.Intern(name), classSym);
         }
     }
 
-    private void Link(ChefZ_Sym category, ChefZ_Sym classSym)
+    private void LinkCategory(ChefZ_Sym category, ChefZ_Sym classSym)
     {
         if (!ChefZ_SymbolTable.IsValid(category) || !ChefZ_SymbolTable.IsValid(classSym))
             return;

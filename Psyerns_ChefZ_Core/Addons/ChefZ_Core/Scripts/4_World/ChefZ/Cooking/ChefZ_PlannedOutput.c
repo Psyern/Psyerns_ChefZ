@@ -33,7 +33,7 @@
 // Layer: 4_World.
 //==============================================================================
 
-class ChefZ_PlannedOutput
+class ChefZ_PlannedOutput : Managed
 {
     //! Die Rohdefinition aus dem Rezept. Siehe Kopf: bewusst ohne ref.
     ChefZ_OutputDef def;

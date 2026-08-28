@@ -271,7 +271,9 @@ class ChefZ_GenericCraftRecipe : RecipeBase
 
         if (inputs > ChefZ_ProcessingLimits.HANDCRAFT_MAX_INPUTS)
         {
-            Reject("der Transform hat " + inputs.ToString() + " Eingaenge, Vanillas " + "Craftsystem kennt hoechstens " + ChefZ_ProcessingLimits.HANDCRAFT_MAX_INPUTS.ToString() + " (01 V12). " + "Fuer mehr Eingaenge ist STATION_ACTION oder STATION_TIMED die " + "richtige Ausfuehrungsform");
+            string chefzTxt1 = "der Transform hat " + inputs.ToString() + " Eingaenge, Vanillas " + "Craftsystem kennt hoechstens " + ChefZ_ProcessingLimits.HANDCRAFT_MAX_INPUTS.ToString();
+            chefzTxt1 = chefzTxt1 + " (01 V12). " + "Fuer mehr Eingaenge ist STATION_ACTION oder STATION_TIMED die " + "richtige Ausfuehrungsform";
+            Reject(chefzTxt1);
             return;
         }
 

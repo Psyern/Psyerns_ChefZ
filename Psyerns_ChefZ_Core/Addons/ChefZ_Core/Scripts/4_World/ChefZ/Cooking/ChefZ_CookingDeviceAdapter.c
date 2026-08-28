@@ -48,7 +48,7 @@
 // Layer: 4_World.
 //==============================================================================
 
-class ChefZ_CookingDeviceAdapter
+class ChefZ_CookingDeviceAdapter : Managed
 {
     /**
      * Fehlversuche am selben Gefaess bis SUPPRESSED (10 E6).

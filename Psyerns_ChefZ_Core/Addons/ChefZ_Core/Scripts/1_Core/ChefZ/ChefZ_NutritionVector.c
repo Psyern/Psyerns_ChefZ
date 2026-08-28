@@ -54,7 +54,7 @@
 // FoodStageType, kein NutritionalProfile (die leben in 4_World).
 //==============================================================================
 
-class ChefZ_NutritionVector
+class ChefZ_NutritionVector : Managed
 {
     /**
      * Die Grenze, an der eine Zahl aufhoert, eine Zahl zu sein.
@@ -267,7 +267,10 @@ class ChefZ_NutritionVector
 
     string ToDebugString()
     {
-        return "energie=" + energy.ToString() + " saettigung=" + fullness.ToString() + " wasser=" + water.ToString() + " naehrwert=" + nutritionalIndex.ToString() + " toxisch=" + toxicity.ToString() + " verdaulich=" + digestibility.ToString();
+        string chefzTxt1 = "energie=" + energy.ToString() + " saettigung=" + fullness.ToString() + " wasser=";
+        chefzTxt1 = chefzTxt1 + water.ToString() + " naehrwert=" + nutritionalIndex.ToString() + " toxisch=" + toxicity.ToString();
+        chefzTxt1 = chefzTxt1 + " verdaulich=" + digestibility.ToString();
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest (S12).
@@ -413,7 +416,7 @@ class ChefZ_NutritionFindingKind
  * drei Fangstellen (13 §3) und nennt den Klassennamen, den die erste
  * (tools/chefz-validate) statisch nicht immer kennen kann.
  */
-class ChefZ_NutritionFinding
+class ChefZ_NutritionFinding : Managed
 {
     string kind;              // ChefZ_NutritionFindingKind.*
     string recipeId;

@@ -93,13 +93,33 @@ class ChefZ_SymbolTable
         return s_ByOrdinal.Get(sym);
     }
 
+    /**
+     * Die Ordnungszahl eines Symbols als Text.
+     *
+     * ChefZ_Sym ist ein "typedef int", aber Enforce behandelt den Aliasnamen
+     * beim Methodenaufruf als eigenen Typ: "sym.ToString()" scheitert mit
+     * "Undefined function 'ChefZ_Sym.ToString'" und der ganze Skriptmodul
+     * kompiliert nicht. Die Zuweisung an ein int ist dagegen zulaessig - der
+     * Umweg ueber die lokale Variable ist also kein Schoenheitsfehler, sondern
+     * die einzige Form, die uebersetzt.
+     *
+     * Deshalb steht das hier EINMAL und nicht an jeder Aufrufstelle: eine
+     * Ordnungszahl im Text ist fast immer ein Diagnosefall, und die will man
+     * nicht in drei Schreibweisen suchen.
+     */
+    static string Ordinal(ChefZ_Sym sym)
+    {
+        int value = sym;
+        return value.ToString();
+    }
+
     //! Wie Name(), aber mit sichtbarem Platzhalter statt Leerstring. Fuer
     //! Traces, in denen ein leerer Name wie ein fehlendes Feld aussaehe.
     static string NameOrMark(ChefZ_Sym sym)
     {
         string n = Name(sym);
         if (n == "")
-            return "<invalid:" + sym.ToString() + ">";
+            return "<invalid:" + Ordinal(sym) + ">";
         return n;
     }
 

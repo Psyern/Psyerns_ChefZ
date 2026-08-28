@@ -46,7 +46,7 @@
 //==============================================================================
 
 //! Eine Zeile aus CfgChefZTerjeSkills ChefZ_Capabilities ChefZ_Names.
-class ChefZ_TerjeCapabilityDef
+class ChefZ_TerjeCapabilityDef : Managed
 {
     string source;      // "skill" | "perkLevel" | "perkValue"
     string skillId;

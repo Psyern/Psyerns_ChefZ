@@ -468,7 +468,9 @@ class ChefZ_Log
             int avg   = 0;
             if (count > 0)
                 avg = total / count;
-            outLines.Insert(s_PerfNames.Get(i) + "  n=" + count.ToString() + "  gesamt=" + total.ToString() + "  mittel=" + avg.ToString());
+            string chefzTxt1 = s_PerfNames.Get(i) + "  n=" + count.ToString() + "  gesamt=" + total.ToString();
+            chefzTxt1 = chefzTxt1 + "  mittel=" + avg.ToString();
+            outLines.Insert(chefzTxt1);
         }
     }
 
@@ -490,7 +492,9 @@ class ChefZ_Log
         int month;
         int day;
         GetYearMonthDay(year, month, day);
-        return LOG_DIR + "\\ChefZ_" + Pad(year, 4) + "-" + Pad(month, 2) + "-" + Pad(day, 2) + ".log";
+        string chefzTxt2 = LOG_DIR + "\\ChefZ_" + Pad(year, 4) + "-" + Pad(month, 2);
+        chefzTxt2 = chefzTxt2 + "-" + Pad(day, 2) + ".log";
+        return chefzTxt2;
     }
 
     static bool IsFileOutputActive()

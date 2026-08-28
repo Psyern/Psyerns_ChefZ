@@ -22,7 +22,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_RecipeRank
+class ChefZ_RecipeRank : Managed
 {
     ChefZ_Sym recipeSym;
 
@@ -100,7 +100,9 @@ class ChefZ_RecipeRank
 
     string ToDebugString()
     {
-        return id + "  spez=" + specificity.ToString() + " prio=" + priority.ToString() + " pflichtslots=" + requiredSlots.ToString() + " bedingungen=" + totalConstraints.ToString();
+        string chefzTxt1 = id + "  spez=" + specificity.ToString() + " prio=" + priority.ToString();
+        chefzTxt1 = chefzTxt1 + " pflichtslots=" + requiredSlots.ToString() + " bedingungen=" + totalConstraints.ToString();
+        return chefzTxt1;
     }
 
     //! Nur fuer den Selbsttest.

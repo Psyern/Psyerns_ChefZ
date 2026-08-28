@@ -22,7 +22,7 @@
 // Layer: 1_Core. Reine Datenverarbeitung, kein Engine-Typ.
 //==============================================================================
 
-class ChefZ_CategoryClosure
+class ChefZ_CategoryClosure : Managed
 {
     static const int BITS_PER_WORD = 32;
 

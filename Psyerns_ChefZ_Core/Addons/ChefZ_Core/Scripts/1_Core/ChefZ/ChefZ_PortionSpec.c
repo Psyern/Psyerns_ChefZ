@@ -95,7 +95,7 @@ class ChefZ_PortionLimits
 
 //------------------------------------------------------------------------------
 
-class ChefZ_PortionSpec
+class ChefZ_PortionSpec : Managed
 {
     //--- Identitaet (Ergaenzung, siehe Kopf) ----------------------------------
     string    bulkClass;

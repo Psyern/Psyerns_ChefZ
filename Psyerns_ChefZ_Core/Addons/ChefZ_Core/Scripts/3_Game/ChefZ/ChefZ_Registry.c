@@ -20,7 +20,7 @@
 // Layer: 3_Game.
 //==============================================================================
 
-class ChefZ_RegistryBase
+class ChefZ_RegistryBase : Managed
 {
     private string m_Kind;
     private bool   m_Frozen;
@@ -28,7 +28,7 @@ class ChefZ_RegistryBase
     private ref array<ref ChefZ_Record> m_Records;   // Eigentuemer der Records
     private ref map<int, int>           m_BySym;     // ChefZ_Sym -> Index
     private ref map<string, int>        m_ByName;    // id        -> Index
-    private ref array<int>              m_Keys;      // Symbole, stabil sortiert
+    private ref array<ChefZ_Sym>        m_Keys;      // Symbole, stabil sortiert
 
     void ChefZ_RegistryBase()
     {
@@ -37,7 +37,7 @@ class ChefZ_RegistryBase
         m_Records = new array<ref ChefZ_Record>();
         m_BySym   = new map<int, int>();
         m_ByName  = new map<string, int>();
-        m_Keys    = new array<int>();
+        m_Keys    = new array<ChefZ_Sym>();
     }
 
     void Init(string kind)

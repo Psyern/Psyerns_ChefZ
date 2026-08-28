@@ -24,7 +24,7 @@
 // Layer: 3_Game.
 //==============================================================================
 
-class ChefZ_RecordSink
+class ChefZ_RecordSink : Managed
 {
     private ChefZ_LoadReport m_Report;      // bewusst ohne ref: Eigentuemer ist
                                             // der Config Manager
@@ -127,12 +127,14 @@ class ChefZ_RecordSink
             // Feld-Patches auf sync-relevanten Arten sind erlaubt, solange sie
             // den Ordinal nicht bewegen - und das tut ein Patch nie, weil er
             // die ID nicht aendert und keinen Record hinzufuegt (03 §4).
-            Debug("Overlay patcht sync-relevanten Record " + kind + " \"" + rec.id + "\" - erlaubt, solange kein Record hinzukommt.");
+            DebugLine("Overlay patcht sync-relevanten Record " + kind + " \"" + rec.id + "\" - erlaubt, solange kein Record hinzukommt.");
         }
 
         existing.PatchFrom(rec);
         m_Patched++;
-        Debug("Rang " + rec.sourceRank.ToString() + " patcht " + kind + " \"" + rec.id + "\" (" + rec.sourceRef + ")");
+        string chefzTxt1 = "Rang " + rec.sourceRank.ToString() + " patcht " + kind + " \"" + rec.id + "\" (";
+        chefzTxt1 = chefzTxt1 + rec.sourceRef + ")";
+        DebugLine(chefzTxt1);
     }
 
     //--------------------------------------------------------------------------
@@ -237,7 +239,7 @@ class ChefZ_RecordSink
         ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONFIG, key, msg);
     }
 
-    private void Debug(string msg)
+    private void DebugLine(string msg)
     {
         // Enabled-Wache nach 18 E2: der zusammengesetzte String entsteht beim
         // Aufrufer, deshalb ist die Wache dort ebenfalls noetig, wenn sie teuer

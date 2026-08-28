@@ -33,7 +33,7 @@
 // Layer: 1_Core.
 //==============================================================================
 
-class ChefZ_ItemFacts
+class ChefZ_ItemFacts : Managed
 {
     //! Index in die parallele Entity-Liste des Collectors. -1 = ohne Entity
     //! (Selbsttest, Vorschau). Die Zuordnung Handle -> ItemBase existiert
@@ -142,11 +142,15 @@ class ChefZ_ItemFacts
         if (ChefZ_SymbolTable.IsValid(chefzQuality))
             s = s + " qualitaet=" + ChefZ_SymbolTable.Name(chefzQuality);
 
-        s = s + " menge=" + quantity.ToString() + "/" + quantityMax.ToString() + " einheiten=" + units.ToString();
+        string chefzTxt1 = s + " menge=" + quantity.ToString() + "/" + quantityMax.ToString();
+        chefzTxt1 = chefzTxt1 + " einheiten=" + units.ToString();
+        s = chefzTxt1;
         if (ChefZ_SymbolTable.IsValid(quantityUnit))
             s = s + " " + ChefZ_SymbolTable.Name(quantityUnit);
 
-        s = s + " stage=" + vanillaFoodStage.ToString() + " zustandGesund=" + health01.ToString() + " temp=" + temperature.ToString();
+        string chefzTxt2 = s + " stage=" + vanillaFoodStage.ToString() + " zustandGesund=" + health01.ToString();
+        chefzTxt2 = chefzTxt2 + " temp=" + temperature.ToString();
+        s = chefzTxt2;
 
         if (isFrozen)
             s = s + " gefroren";
@@ -188,7 +192,7 @@ class ChefZ_ItemFacts
  *    Entity - deshalb darf sortiert werden, ohne die parallele Entity-Liste
  *    anzufassen. Das ist der ganze Zweck des Handles.
  */
-class ChefZ_FactSnapshot
+class ChefZ_FactSnapshot : Managed
 {
     //! Die aktive Sicht. Reihenfolge nach SortStable() (05 §3.3).
     ref array<ref ChefZ_ItemFacts> items;

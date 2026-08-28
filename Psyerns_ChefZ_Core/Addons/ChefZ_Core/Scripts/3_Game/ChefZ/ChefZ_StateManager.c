@@ -32,7 +32,7 @@
 // ItemBase, kein FoodStage, kein Enum aus 4_World.
 //==============================================================================
 
-class ChefZ_StateManager
+class ChefZ_StateManager : Managed
 {
     private static ref ChefZ_StateManager s_Instance;
 
@@ -171,7 +171,11 @@ class ChefZ_StateManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Zustaende: " + GetStateCount().ToString() + " geladen, " + m_SymByStage.Count().ToString() + " Vanilla-Garstufen rueckabbildbar" + ", Sync-Ordinale " + GetMaxOrdinal().ToString() + ".");
+        {
+            string chefzTxt1 = "Zustaende: " + GetStateCount().ToString() + " geladen, " + m_SymByStage.Count().ToString() + " Vanilla-Garstufen rueckabbildbar";
+            chefzTxt1 = chefzTxt1 + ", Sync-Ordinale " + GetMaxOrdinal().ToString() + ".";
+            report.AddInfo(chefzTxt1);
+        }
 
         LogIfDebug();
     }
@@ -352,7 +356,7 @@ class ChefZ_StateManager
 
         if (ChefZ_SymbolTable.IsValid(state))
         {
-            QuietOnce(ChefZ_LogLevel.WARN, "state.unknown." + state.ToString(), "Unbekannter Zustand \"" + ChefZ_SymbolTable.NameOrMark(state) + "\" - es gilt der neutrale Rueckfall (essbar, keine Projektion, Verderb " + "unveraendert). Haeufigste Ursache: das Modul mit diesem Zustand ist nicht " + "geladen. Diese Meldung erscheint je Zustand genau einmal.");
+            QuietOnce(ChefZ_LogLevel.WARN, "state.unknown." + ChefZ_SymbolTable.Ordinal(state), "Unbekannter Zustand \"" + ChefZ_SymbolTable.NameOrMark(state) + "\" - es gilt der neutrale Rueckfall (essbar, keine Projektion, Verderb " + "unveraendert). Haeufigste Ursache: das Modul mit diesem Zustand ist nicht " + "geladen. Diese Meldung erscheint je Zustand genau einmal.");
         }
         return m_Fallback;
     }
