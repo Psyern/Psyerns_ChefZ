@@ -1,6 +1,6 @@
 # Validation
 
-ChefZ ships a static validator: **fourteen checkers**, no dependencies, Node 18
+ChefZ ships a static validator: **eighteen checkers**, no dependencies, Node 18
 or newer. It reads the project on disk and reports what is wrong before a server
 ever sees it.
 
@@ -125,7 +125,7 @@ Each item carries `severity`, `summary`, and where applicable `file` and `line`.
 
 ---
 
-## 4. The fourteen checkers
+## 4. The eighteen checkers
 
 ### Form of the files
 
@@ -159,6 +159,19 @@ keep content out of the core would be declarations of intent instead of rules.
 |---|---|
 | `chefzvanilla.mjs` | **Invariant I2.** A ChefZ recipe that can be satisfied *entirely with vanilla ingredients* breaks the rule from the other side: three vanilla mushrooms in a pan would produce a ChefZ dish without the player ever touching ChefZ. Only whether a recipe *is* vanilla-satisfiable is checked; whether it happens often in play is a human judgement, and the rule knows no threshold. |
 | `chefzcookable.mjs` | Declared cooking path against the switch that is actually on. Three rules: **A** — class declares `Food > FoodStages` and `FoodStageTransitions` but no class in its script chain enables cookability; the transitions are dead text. **B** — the script class says `CanBeCooked() == true` but the config class has no `Food > FoodStages`; no `FoodStage` object exists and the cooking tick hits nothing. **C** — the class is food but no class in its script chain registers an eat action; vanilla puts eat actions on each food class individually, not on `Edible_Base`. |
+
+### The hard language rules
+
+Added after the first real compiler run, on 28.08.2026. Every rule here cost a
+build-and-start cycle before it existed.
+
+| File | Rule |
+|---|---|
+| `enforce.mjs` | Ten hard Enforce rules: no ternary, no `GetGame()` since 1.29, no `var`/`auto`, no `?.`/`??`, no `delete`, no parent on a `modded class`, one variable per declaration, `ref` only on members, no line beginning with an operator, no variable named like a type. |
+| `chefzbase.mjs` | A parent class must be resolvable inside its own `config.cpp` — with a body or as a forward declaration. Otherwise DayZ aborts with *Undefined base class*, in a modal window nobody on a server ever clicks away. |
+| `chefzmanaged.mjs` | Anything held by `ref` must be `Managed`, including plain members where the compiler says nothing at all. Without it nothing counts references and the object is freed under the pointer. |
+| `chefzswitch.mjs` | A `case` label must be a literal. `static const int FLAG = 1 << 3;` compiles and then matches nothing at runtime — silently. |
+
 
 `chefzcookable` exists because of a blocker that walked past every other
 checker: `ChefZ_Edible_Base` did not override `CanBeCooked()`, vanilla's default
@@ -346,7 +359,7 @@ Last full run:
 
 ```
 node tools/chefz-validate/index.mjs    -> Exit 0
-                                          0 errors, 90 warnings, 14/14 checkers green,
+                                          0 errors, 55 warnings, 18/18 checkers green,
                                           0 tool failures
 node tools/chefz-validate/selftest.mjs -> Exit 0, 16/16 rules fire
 ```
