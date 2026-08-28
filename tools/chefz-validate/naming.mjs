@@ -20,9 +20,17 @@ export default function run() {
   const defined = projectClasses();
   const ref = refIndex();
 
+  // Nur ITEM-Klassen tragen die Namenskonvention. Alles andere in einer
+  // config.cpp ist ein Knoten, kein Gegenstand: "Food", "FoodStages", "Baked",
+  // "Horticulture" sind Vanilla-Unterknoten, "PROCESS_DRY", "PREMIUM" und
+  // "CUTTING_TOOL" sind Eintraege in ChefZ' eigenen CfgChefZ*-Wurzeln. Von ihnen
+  // ein ChefZ_-Praefix zu verlangen hiesse, gegen die Engine zu benennen.
+  const ITEM_ROOTS = new Set(['CfgVehicles', 'CfgWeapons', 'CfgMagazines']);
+
   for (const [name, defs] of defined) {
     const d = defs[0];
-    const inCfgVehicles = d.scope.includes('CfgVehicles') || d.scope.includes('CfgWeapons') || d.scope.includes('CfgMagazines');
+    if (!(d.scope.length === 1 && ITEM_ROOTS.has(d.scope[0]))) continue;
+    const inCfgVehicles = true;
 
     // 1. Praefix
     if (!name.startsWith('ChefZ_')) {

@@ -106,6 +106,12 @@ class CfgVehicles
         displayName = "Testgericht";
     };
 
+    // Item-Klasse ohne ChefZ_-Praefix und ohne Vanilla-Entsprechung -> naming
+    class chefz_falschBenannt : Edible_Base
+    {
+        scope = 2;
+    };
+
     // Kochbare Zutat ohne FoodStageTransitions -> 01 V4
     class ChefZ_TestZutat : Edible_Base
     {
@@ -180,7 +186,12 @@ class CfgChefZStates
   // Dokumenttyp haengt und nicht am Pfad.
   'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/MehrRezepte.json': JSON.stringify({
     kind: 'recipe', schemaVersion: 1,
-    records: [{ outputs: [{ cls: 'ChefZ_TestGericht' }] }],
+    records: [
+      // ohne Kennung -> schema
+      { outputs: [{ cls: 'ChefZ_TestGericht' }] },
+      // Ergebnisklasse, die es nirgends gibt -> classrefs
+      { id: 'REZ_GEISTERKLASSE', outputs: [{ cls: 'ChefZ_GibtEsNicht' }] },
+    ],
   }, null, 2),
 
   // Zwei Slices definieren dieselbe Kategorie unterschiedlich, und eine
@@ -216,6 +227,8 @@ const EXPECT = [
   ['chefzstage', /ist kochbar \(.*\), deklariert aber keine FoodStageTransitions/, '01 V4: kochbar ohne Uebergaenge'],
   ['chefzproc', /3 Eingaenge/, '01 V12: HANDCRAFT mit mehr als zwei Eingaengen'],
   ['chefzlog', /Ungewachter Log-Aufruf in einer Schleife/, '18 E2: Wache fehlt'],
+  ['classrefs', /ChefZ_GibtEsNicht/, 'Rezept zeigt auf eine nicht existierende ChefZ-Klasse'],
+  ['naming', /chefz_falschBenannt/, 'Item-Klasse verletzt die Namenskonvention'],
   ['schema', /hat keine Kennung/, 'Rezept ohne id - und Erkennung am Dokumenttyp, nicht am Pfad'],
   ['deltas', /ID-Kollision in "categories"/, 'zwei Slices definieren dieselbe Kategorie unterschiedlich'],
   ['deltas', /Haltbarkeitsregel "NIE_DEKLARIERT"/, 'Preservation zeigt auf einen undeklarierten Zustand'],

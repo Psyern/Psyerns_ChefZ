@@ -1,10 +1,201 @@
-# Vanilla-DayZ-Klassen - NOCH NICHT BEFUELLT
+# Vanilla-DayZ-Klassen
 #
-# Solange diese Datei leer ist, koennen classrefs.mjs und naming.mjs
-# Kollisionen mit Vanilla-Item-Klassen nicht pruefen und melden nur Warnungen.
+# Erhoben aus Psyerns_ChefZ_Docs/ChefZ_Vanilla_Assets.md, das seinerseits aus
+# der types.xml (1.924 Eintraege) erstellt wurde. Damit sind die Vanilla-ITEM-
+# Klassen erfasst, die in den Game-Configs stehen und deshalb weder in
+# "scripts - 1.29" noch in einem Mod-Repository zu finden sind.
 #
-# So befuellen (eine der beiden Wege):
-#  a) DayZ-Game-Data entpacken und dann:
-#     node tools/chefz-validate/build-refindex.mjs "<pfad zu den entpackten Daten>"
-#  b) Auf einem Testserver einen Klassendump erzeugen und die Namen hier
-#     einfuegen - eine Klasse je Zeile, Zeilen mit # sind Kommentare.
+# Das ist die Luecke, die seit Meilenstein 1 offen war: ohne diese Namen konnte
+# classrefs.mjs Referenzen auf Vanilla-Items nicht pruefen und naming.mjs keine
+# Namenskollision erkennen.
+#
+# Die Liste ist nicht vollstaendig - sie deckt ab, was die Asset-Liste nennt,
+# also den fuer ChefZ relevanten Ausschnitt. Ein vollstaendiger Klassendump vom
+# Server bleibt die bessere Quelle; bis dahin ist das hier deutlich besser als
+# nichts.
+#
+# Neu erzeugen: siehe build-refindex.mjs
+
+AgaricusMushroom
+Animal_CapraHircusF
+Animal_CapreolusCapreolus
+Animal_CapreolusCapreolusF
+Animal_CervusElaphus
+Animal_CervusElaphusF
+Animal_GallusGallusDomesticus
+Animal_LepusEuropaeus
+Animal_OvisAries
+Animal_OvisAriesF
+Animal_RangiferTarandus
+Animal_SusDomesticus
+Animal_SusScrofa
+Animal_UrsusArctos
+Animal_VulpesVulpes
+Apple
+AuriculariaMushroom
+Bait
+BakedBeansCan
+BearPelt
+BearSteakMeat
+BearTrap
+Bitterlings
+BoarSteakMeat
+BoletusMushroom
+Bone
+BoneBait
+BoneHook
+BoneKnife
+BoxCerealCrunchin
+BrisketSpread
+CanOpener
+Candycane_Green
+Candycane_Red
+Candycane_RedGreen
+Candycane_Yellow
+CaninaBerry
+Canteen
+Carp
+CarpFilletMeat
+CatFoodCan
+Cauldron
+ChickenBreastMeat
+ChickenFeather
+Chips
+Cleaver
+CombatKnife
+CookingPot
+CookingStand
+CowPelt
+CowSteakMeat
+CrabCan
+Crackers
+CraterellusMushroom
+CrudeMachete
+DeadChicken_Brown
+DeadChicken_Spotted
+DeadChicken_White
+DeadFox
+DeadRabbit
+DeadRooster
+DeerPelt
+DeerSteakMeat
+DogFoodCan
+FangeKnife
+FarmingHoe
+FieldShovel
+FilteringBottle
+Fireplace
+FireplaceFireBarrel
+FireplaceIndoor
+FishNetTrap
+FishingRod
+FoxPelt
+FoxSteakMeat
+FryingPan
+GardenLime
+GardenPlot
+GardenPlotGreenhouse
+GardenPlotPolytunnel
+GlassBottle
+GoatPelt
+GoatSteakMeat
+GreenBellPepper
+Guts
+Hacksaw
+Honey
+Hook
+HumanSteakMeat
+HuntingKnife
+ImprovisedFishingRod
+Jig
+KitchenKnife
+KukriKnife
+LactariusMushroom
+Lard
+LargeGasCanister
+Lunchmeat
+Machete
+Mackerel
+MackerelFilletMeat
+MacrolepiotaMushroom
+Marmalade
+MeatTenderizer
+MediumGasCanister
+OrientalMachete
+OvenIndoor
+Pajka
+Pate
+PeachesCan
+Pear
+PepperSeeds
+PepperSeedsPack
+PigPelt
+PigSteakMeat
+PlantMaterial
+Plant_Pepper
+Plant_Potato
+Plant_Pumpkin
+Plant_Tomato
+Plant_Zucchini
+PleurotusMushroom
+Plum
+PorkCan
+PortableGasStove
+Pot
+Potato
+PotatoSeed
+PowderedMilk
+Pumpkin
+PumpkinSeeds
+PumpkinSeedsPack
+RabbitLegMeat
+RabbitPelt
+RabbitSnareTrap
+RedCaviar
+ReindeerPelt
+ReindeerSteakMeat
+ReturnContainer
+Rice
+SaltySticks
+SambucusBerry
+Sardines
+SardinesCan
+SeasonalEvent
+SheepPelt
+SheepSteakMeat
+Shovel
+Sickle
+SlicedPumpkin
+SmallFishTrap
+SmallGasCanister
+SmallGuts
+SodaCan_Cola
+SodaCan_Fronta
+SodaCan_Kvass
+SodaCan_Pipsi
+SodaCan_Spite
+SpaghettiCan
+SteakKnife
+SteelheadTrout
+SteelheadTroutFilletMeat
+StoneKnife
+TacticalBaconCan
+Tomato
+TomatoSeeds
+TomatoSeedsPack
+Tripod
+TunaCan
+UnknownFoodCan
+WalleyePollock
+WalleyePollockFilletMeat
+WaterBottle
+WildboarPelt
+WolfPelt
+WolfSteakMeat
+WoodenHook
+Zagorky
+ZagorkyChocolate
+ZagorkyPeanuts
+Zucchini
+ZucchiniSeeds
+ZucchiniSeedsPack
