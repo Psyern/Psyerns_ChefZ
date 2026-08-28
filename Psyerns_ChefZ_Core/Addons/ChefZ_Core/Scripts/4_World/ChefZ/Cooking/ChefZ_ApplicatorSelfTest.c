@@ -379,16 +379,16 @@ class ChefZ_ApplicatorSelfTest
         recipe.id        = TEST_RECIPE;
         recipe.recipeSym = ChefZ_SymbolTable.Intern(TEST_RECIPE);
 
-        ChefZ_OutputDef out0 = new ChefZ_OutputDef();
-        out0.cls = cls;
+        ChefZ_OutputDef outDef = new ChefZ_OutputDef();
+        outDef.cls = cls;
 
         // Wie im Ladeweg: der Sondendurchgang setzt Sentinel, ResolveDefaults
         // ersetzt sie. Ohne diesen Aufruf waere chance ein Sentinel, und die
         // Planung liesse das Ergebnis aus - was der Applicator sicher, aber
         // ohne Ergebnis beantwortete.
-        out0.ResolveDefaults();
+        outDef.ResolveDefaults();
 
-        recipe.outputs.Insert(out0);
+        recipe.outputs.Insert(outDef);
         return recipe;
     }
 
@@ -456,7 +456,6 @@ class ChefZ_ApplicatorSelfTest
         if (!s_Ran)
             return "Selbsttest S8 (Applicator): nicht gelaufen";
 
-        return "Selbsttest S8 (Applicator): " + s_Passed.ToString() + " bestanden, "
-             + s_Failed.ToString() + " fehlgeschlagen";
+        return "Selbsttest S8 (Applicator): " + s_Passed.ToString() + " bestanden, " + s_Failed.ToString() + " fehlgeschlagen";
     }
 }

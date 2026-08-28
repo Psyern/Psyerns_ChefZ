@@ -978,12 +978,6 @@ class ChefZ_ItemStateComponent
 
     string ToLine()
     {
-        return "state ord=" + m_ChefZ_StateOrdinal.ToString()
-             + " hash=" + m_ChefZ_StatePersist.ToString()
-             + "  qual ord=" + m_ChefZ_QualityOrdinal.ToString()
-             + " hash=" + m_ChefZ_QualityPersist.ToString()
-             + "  frische=" + m_ChefZ_Freshness.ToString()
-             + "  portionen=" + m_ChefZ_Portions.ToString()
-             + "  rueckgabe=\"" + m_ChefZ_ReturnContainer + "\"";
+        return "state ord=" + m_ChefZ_StateOrdinal.ToString() + " hash=" + m_ChefZ_StatePersist.ToString() + "  qual ord=" + m_ChefZ_QualityOrdinal.ToString() + " hash=" + m_ChefZ_QualityPersist.ToString() + "  frische=" + m_ChefZ_Freshness.ToString() + "  portionen=" + m_ChefZ_Portions.ToString() + "  rueckgabe=\"" + m_ChefZ_ReturnContainer + "\"";
     }
 }

@@ -163,8 +163,7 @@ class ChefZ_LogChannel
 
     static string ValidNames()
     {
-        return "CORE, CONFIG, MATCH, COOK, PROCESS, STATE, QUALITY, NUTRI, "
-             + "PRESERV, PORTION, CONTAIN, EVENT, PERF, ALL, NONE";
+        return "CORE, CONFIG, MATCH, COOK, PROCESS, STATE, QUALITY, NUTRI, " + "PRESERV, PORTION, CONTAIN, EVENT, PERF, ALL, NONE";
     }
 
     /**

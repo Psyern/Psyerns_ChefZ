@@ -59,8 +59,7 @@ class ChefZ_TerjeSkillsEntry
 
         if (!ChefZ_TerjeSkillsConfig.IsEnabled())
         {
-            ChefZ_Log.Banner("TerjeSkills-Anbindung v" + MODULE_VERSION
-                + " geladen, aber per Config abgeschaltet.");
+            ChefZ_Log.Banner("TerjeSkills-Anbindung v" + MODULE_VERSION + " geladen, aber per Config abgeschaltet.");
             return;
         }
 
@@ -83,8 +82,7 @@ class ChefZ_TerjeSkillsEntry
             ChefZ_CapabilityRegistry.Get().RegisterProvider(s_Provider);
         }
 
-        ChefZ_Log.Banner("TerjeSkills-Anbindung v" + MODULE_VERSION + " aktiv  "
-            + ChefZ_TerjeSkillsConfig.Summary());
+        ChefZ_Log.Banner("TerjeSkills-Anbindung v" + MODULE_VERSION + " aktiv  " + ChefZ_TerjeSkillsConfig.Summary());
         ChefZ_Log.Flush();
     }
 

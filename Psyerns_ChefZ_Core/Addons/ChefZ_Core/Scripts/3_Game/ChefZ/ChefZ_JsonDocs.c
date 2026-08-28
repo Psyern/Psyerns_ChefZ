@@ -710,8 +710,7 @@ class ChefZ_JsonRecordReader
         string err;
 
         // 1. gueltiges Dokument
-        string good = "{ \"kind\": \"category\", \"schemaVersion\": 1, \"records\": ["
-                    + "{ \"id\": \"CHEFZ_ST_A\", \"parent\": \"CHEFZ_ST_ROOT\" } ] }";
+        string good = "{ \"kind\": \"category\", \"schemaVersion\": 1, \"records\": [" + "{ \"id\": \"CHEFZ_ST_A\", \"parent\": \"CHEFZ_ST_ROOT\" } ] }";
         if (!Read(ChefZ_RecordKind.CATEGORY, good, "Selbsttest", ChefZ_SourceRank.ADDON_JSON, recs, err))
             return false;
         if (recs.Count() != 1)                                  return false;
@@ -732,9 +731,7 @@ class ChefZ_JsonRecordReader
         // 3. Bool-Sonde: gesetztes bool landet in explicitFields
         array<ref ChefZ_Record> withBool = new array<ref ChefZ_Record>();
         string err3;
-        string doc = "{ \"kind\": \"container\", \"records\": ["
-                   + "{ \"id\": \"CHEFZ_ST_BOWL\", \"reusable\": false },"
-                   + "{ \"id\": \"CHEFZ_ST_CUP\" } ] }";
+        string doc = "{ \"kind\": \"container\", \"records\": [" + "{ \"id\": \"CHEFZ_ST_BOWL\", \"reusable\": false }," + "{ \"id\": \"CHEFZ_ST_CUP\" } ] }";
         if (!Read(ChefZ_RecordKind.CONTAINER, doc, "Selbsttest", ChefZ_SourceRank.PROFILE_OVERLAY, withBool, err3))
             return false;
         if (withBool.Count() != 2)                              return false;

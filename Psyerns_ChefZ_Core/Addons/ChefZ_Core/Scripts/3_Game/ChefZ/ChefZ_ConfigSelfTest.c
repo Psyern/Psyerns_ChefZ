@@ -67,8 +67,7 @@ class ChefZ_ConfigSelfTest
      */
     private static void ProbeUnknownFieldTolerance()
     {
-        string doc = "{ \"kind\": \"tag\", \"_kommentar\": \"nur zur Messung\", \"records\": ["
-                   + "{ \"id\": \"CHEFZ_ST_PROBE\", \"gibtEsNicht\": 42 } ] }";
+        string doc = "{ \"kind\": \"tag\", \"_kommentar\": \"nur zur Messung\", \"records\": [" + "{ \"id\": \"CHEFZ_ST_PROBE\", \"gibtEsNicht\": 42 } ] }";
 
         array<ref ChefZ_Record> recs = new array<ref ChefZ_Record>();
         string err;
@@ -190,8 +189,7 @@ class ChefZ_ConfigSelfTest
         // 1. eine gute Datei
         array<ref ChefZ_Record> good = new array<ref ChefZ_Record>();
         string errGood;
-        string goodDoc = "{ \"kind\": \"tag\", \"schemaVersion\": 1, \"records\": ["
-                       + "{ \"id\": \"CHEFZ_ST_TAG_A\" } ] }";
+        string goodDoc = "{ \"kind\": \"tag\", \"schemaVersion\": 1, \"records\": [" + "{ \"id\": \"CHEFZ_ST_TAG_A\" } ] }";
         if (!ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, goodDoc, "Selbsttest/gut.json", ChefZ_SourceRank.ADDON_JSON, good, errGood))
             return false;
         for (int i = 0; i < good.Count(); i++)

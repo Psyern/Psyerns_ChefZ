@@ -254,8 +254,7 @@ class ChefZ_PortionSpec
 
     string ToDebugString()
     {
-        string s = bulkClass + " -> " + portionClass
-                 + " x" + portions.ToString();
+        string s = bulkClass + " -> " + portionClass + " x" + portions.ToString();
 
         if (HasAmountCap())
             s = s + " je=" + amountPerPortion.ToString() + "E";

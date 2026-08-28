@@ -198,8 +198,7 @@ class ChefZ_CompiledSlot
         if (gradePoints != 0)
             s = s + " punkte=" + gradePoints.ToString();
 
-        s = s + " hint=" + selectivityHint.ToString()
-              + " spez=" + specificity.ToString();
+        s = s + " hint=" + selectivityHint.ToString() + " spez=" + specificity.ToString();
 
         if (excludeStates && excludeStates.Count() > 0)
         {

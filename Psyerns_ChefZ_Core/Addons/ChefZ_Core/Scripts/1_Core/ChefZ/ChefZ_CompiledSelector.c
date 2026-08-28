@@ -347,8 +347,7 @@ class ChefZ_CompiledSelector
                 if (rc.Test(facts))
                     continue;
                 float v = ChefZ_RangeConstraint.ValueOf(rc.field, facts);
-                reason = ChefZ_RangeConstraint.FieldName(rc.field) + " " + v.ToString()
-                       + " ausserhalb " + rc.ToDebugString();
+                reason = ChefZ_RangeConstraint.FieldName(rc.field) + " " + v.ToString() + " ausserhalb " + rc.ToDebugString();
                 return false;
             }
         }
@@ -361,8 +360,7 @@ class ChefZ_CompiledSelector
         switch (op)
         {
             case ChefZ_SelectorOp.CLASS:
-                return "class " + ChefZ_SymbolTable.NameOrMark(facts.classSym)
-                     + " != " + ChefZ_SymbolTable.NameOrMark(sym);
+                return "class " + ChefZ_SymbolTable.NameOrMark(facts.classSym) + " != " + ChefZ_SymbolTable.NameOrMark(sym);
 
             case ChefZ_SelectorOp.CATEGORY:
                 return "nicht in Kategorie " + ChefZ_SymbolTable.NameOrMark(sym);
@@ -371,12 +369,10 @@ class ChefZ_CompiledSelector
                 return "ohne Tag " + ChefZ_SymbolTable.NameOrMark(sym);
 
             case ChefZ_SelectorOp.STATE:
-                return "state " + ChefZ_SymbolTable.NameOrMark(facts.chefzState)
-                     + " nicht zulaessig, gebraucht wird " + ChefZ_SymbolTable.NameOrMark(sym);
+                return "state " + ChefZ_SymbolTable.NameOrMark(facts.chefzState) + " nicht zulaessig, gebraucht wird " + ChefZ_SymbolTable.NameOrMark(sym);
 
             case ChefZ_SelectorOp.VANILLA_STAGE:
-                return "Garstufe " + ChefZ_VanillaStage.Name(facts.vanillaFoodStage)
-                     + " != " + ChefZ_VanillaStage.Name(vanillaStageValue);
+                return "Garstufe " + ChefZ_VanillaStage.Name(facts.vanillaFoodStage) + " != " + ChefZ_VanillaStage.Name(vanillaStageValue);
 
             case ChefZ_SelectorOp.LIQUID:
                 return "kein passender Fluessigkeitsbehaelter";

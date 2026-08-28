@@ -115,8 +115,7 @@ class ChefZ_ProcessingSelfTest
     static string Summary()
     {
         int total = s_Passed + s_Failed;
-        string s = "Selbsttest S14: " + s_Passed.ToString() + "/" + total.ToString()
-                 + " Gruppen ok";
+        string s = "Selbsttest S14: " + s_Passed.ToString() + "/" + total.ToString() + " Gruppen ok";
         if (s_Failed > 0 && s_FailedNames)
         {
             s = s + "  gescheitert:";
@@ -216,9 +215,9 @@ class ChefZ_ProcessingSelfTest
         def.inputs.Insert(CategorySlot("in", category, ChefZ_ConsumeMode.WHOLE_NAME));
 
         def.outputs = new array<ref ChefZ_OutputDef>();
-        ChefZ_OutputDef out0 = new ChefZ_OutputDef();
-        out0.cls = ERGEBNIS;
-        def.outputs.Insert(out0);
+        ChefZ_OutputDef outDef = new ChefZ_OutputDef();
+        outDef.cls = ERGEBNIS;
+        def.outputs.Insert(outDef);
 
         def.Normalize();
         def.ResolveDefaults();

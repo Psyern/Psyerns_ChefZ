@@ -216,9 +216,7 @@ class ChefZ_LoadReport
 
     string SummaryLine()
     {
-        return "Ladebericht: " + m_Errors.ToString() + " Fehler, "
-             + m_Warns.ToString() + " Warnungen, "
-             + m_Infos.ToString() + " Hinweise";
+        return "Ladebericht: " + m_Errors.ToString() + " Fehler, " + m_Warns.ToString() + " Warnungen, " + m_Infos.ToString() + " Hinweise";
     }
 
     /**

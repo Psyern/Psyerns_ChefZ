@@ -48,9 +48,7 @@ class ChefZ_Identity
 
     string ToLine()
     {
-        return syncOrdinal.ToString() + "  " + id
-             + "  sym=" + sym.ToString()
-             + "  hash=" + persistHash.ToString();
+        return syncOrdinal.ToString() + "  " + id + "  sym=" + sym.ToString() + "  hash=" + persistHash.ToString();
     }
 }
 

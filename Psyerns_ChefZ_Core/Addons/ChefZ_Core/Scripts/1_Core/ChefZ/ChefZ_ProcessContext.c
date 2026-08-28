@@ -126,9 +126,7 @@ class ChefZ_ProcessContext
 
     string ToDebugString()
     {
-        string s = ChefZ_SymbolTable.NameOrMark(stationClass)
-                 + " [" + ChefZ_TextList.JoinSymbols(stationCategories, ",") + "]"
-                 + " temp=" + stationTemperature.ToString();
+        string s = ChefZ_SymbolTable.NameOrMark(stationClass) + " [" + ChefZ_TextList.JoinSymbols(stationCategories, ",") + "]" + " temp=" + stationTemperature.ToString();
         if (hasHeat)
             s = s + " +waerme";
         if (!stationPowered)
@@ -265,11 +263,7 @@ class ChefZ_TransformMatch
             return f + "  kandidaten=" + candidatesTried.ToString();
         }
 
-        return transformId
-             + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym)
-             + " dauer=" + durationSec.ToString() + "s"
-             + " items=" + boundHandles.Count().ToString()
-             + " verbrauch=" + consumePlan.Count().ToString();
+        return transformId + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym) + " dauer=" + durationSec.ToString() + "s" + " items=" + boundHandles.Count().ToString() + " verbrauch=" + consumePlan.Count().ToString();
     }
 
     //! Nur fuer den Selbsttest.

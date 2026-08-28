@@ -138,8 +138,7 @@ class ChefZ_ContainerSelfTest
     static string Summary()
     {
         int total = s_Passed + s_Failed;
-        string s = "Selbsttest S17: " + s_Passed.ToString() + "/" + total.ToString()
-                 + " Gruppen ok";
+        string s = "Selbsttest S17: " + s_Passed.ToString() + "/" + total.ToString() + " Gruppen ok";
         if (s_Failed > 0 && s_FailedNames)
         {
             s = s + "  gescheitert:";

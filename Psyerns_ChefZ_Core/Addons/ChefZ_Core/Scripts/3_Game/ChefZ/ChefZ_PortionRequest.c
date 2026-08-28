@@ -85,8 +85,7 @@ class ChefZ_PortionRequest
 
     string ToDebugString()
     {
-        string s = ChefZ_SymbolTable.NameOrMark(sourceClass)
-                 + "  portionen=" + portionsLeft.ToString();
+        string s = ChefZ_SymbolTable.NameOrMark(sourceClass) + "  portionen=" + portionsLeft.ToString();
 
         if (ChefZ_SymbolTable.IsValid(sourceQuality))
             s = s + " stufe=" + ChefZ_SymbolTable.Name(sourceQuality);

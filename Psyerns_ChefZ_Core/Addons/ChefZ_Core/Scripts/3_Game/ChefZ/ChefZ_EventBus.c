@@ -160,9 +160,7 @@ class ChefZ_EventSubscription
 
     string ToLine()
     {
-        string s = "  " + Label() + "  -> " + eventId
-                 + "  prio=" + priority.ToString()
-                 + "  aufrufe=" + callCount.ToString();
+        string s = "  " + Label() + "  -> " + eventId + "  prio=" + priority.ToString() + "  aufrufe=" + callCount.ToString();
         if (slowCount > 0)
             s = s + "  langsam=" + slowCount.ToString();
         if (!IsAlive())

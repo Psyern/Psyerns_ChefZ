@@ -517,8 +517,7 @@ class ChefZ_FactCollector
         int max = 0;
         if (g_Game)
         {
-            string path = ChefZ_IngredientManager.CFG_VEHICLES + " " + item.GetType()
-                        + " varCleannessMax";
+            string path = ChefZ_IngredientManager.CFG_VEHICLES + " " + item.GetType() + " varCleannessMax";
             if (g_Game.ConfigIsExisting(path))
                 max = g_Game.ConfigGetInt(path);
         }

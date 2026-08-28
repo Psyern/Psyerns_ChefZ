@@ -224,14 +224,7 @@ class ChefZ_VesselSignature
         if (!IsMeasured())
             return "(nie gemessen)";
 
-        return "items=" + itemCount.ToString()
-             + " sum=" + typeHashSum.ToString()
-             + " xor=" + typeHashXor.ToString()
-             + " stages=" + foodStageMask.ToString()
-             + " states=" + chefzStateMask.ToString()
-             + " liquid=" + liquidType.ToString()
-             + " qty~" + quantityBucket.ToString()
-             + " methode=" + methodType.ToString();
+        return "items=" + itemCount.ToString() + " sum=" + typeHashSum.ToString() + " xor=" + typeHashXor.ToString() + " stages=" + foodStageMask.ToString() + " states=" + chefzStateMask.ToString() + " liquid=" + liquidType.ToString() + " qty~" + quantityBucket.ToString() + " methode=" + methodType.ToString();
     }
 
     //==========================================================================

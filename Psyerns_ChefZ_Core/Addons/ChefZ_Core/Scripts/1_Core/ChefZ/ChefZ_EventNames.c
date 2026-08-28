@@ -120,9 +120,7 @@ class ChefZ_EventNames
      */
     static bool IsCancellable(string eventId)
     {
-        return eventId == RECIPE_MATCHED
-            || eventId == PROCESS_JOB_STARTED
-            || eventId == PORTION_TAKEN;
+        return eventId == RECIPE_MATCHED || eventId == PROCESS_JOB_STARTED || eventId == PORTION_TAKEN;
     }
 
     //! Genau eines (17 §5). Der Rueckgabewert dieser Funktion ist die einzige
@@ -143,32 +141,14 @@ class ChefZ_EventNames
      */
     static bool IsCoreEvent(string eventId)
     {
-        return eventId == CONFIG_LOADED
-            || eventId == RECIPE_MATCHED
-            || eventId == RECIPE_COMPLETED
-            || eventId == RECIPE_FAILED
-            || eventId == INGREDIENT_PROCESSED
-            || eventId == PROCESS_JOB_STARTED
-            || eventId == PROCESS_JOB_CANCELLED
-            || eventId == FOOD_STATE_CHANGED
-            || eventId == FOOD_PRESERVED
-            || eventId == FOOD_CONSUMED
-            || eventId == FOOD_SPOILED
-            || eventId == PORTION_TAKEN
-            || eventId == CONTAINER_RETURNED
-            || eventId == RECIPE_DISCOVERED
-            || eventId == QUALITY_BONUS_QUERY;
+        return eventId == CONFIG_LOADED || eventId == RECIPE_MATCHED || eventId == RECIPE_COMPLETED || eventId == RECIPE_FAILED || eventId == INGREDIENT_PROCESSED || eventId == PROCESS_JOB_STARTED || eventId == PROCESS_JOB_CANCELLED || eventId == FOOD_STATE_CHANGED || eventId == FOOD_PRESERVED || eventId == FOOD_CONSUMED || eventId == FOOD_SPOILED || eventId == PORTION_TAKEN || eventId == CONTAINER_RETURNED || eventId == RECIPE_DISCOVERED || eventId == QUALITY_BONUS_QUERY;
     }
 
     //! Fuer Fehlermeldungen und "chefz events". Ausdruecklich unvollstaendig -
     //! Content-Ereignisse aus emitEvents stehen hier nie.
     static string CoreEventNames()
     {
-        return CONFIG_LOADED + ", " + RECIPE_MATCHED + ", " + RECIPE_COMPLETED + ", "
-             + RECIPE_FAILED + ", " + INGREDIENT_PROCESSED + ", " + PROCESS_JOB_STARTED + ", "
-             + PROCESS_JOB_CANCELLED + ", " + FOOD_STATE_CHANGED + ", " + FOOD_PRESERVED + ", "
-             + FOOD_CONSUMED + ", " + FOOD_SPOILED + ", " + PORTION_TAKEN + ", "
-             + CONTAINER_RETURNED + ", " + RECIPE_DISCOVERED + ", " + QUALITY_BONUS_QUERY;
+        return CONFIG_LOADED + ", " + RECIPE_MATCHED + ", " + RECIPE_COMPLETED + ", " + RECIPE_FAILED + ", " + INGREDIENT_PROCESSED + ", " + PROCESS_JOB_STARTED + ", " + PROCESS_JOB_CANCELLED + ", " + FOOD_STATE_CHANGED + ", " + FOOD_PRESERVED + ", " + FOOD_CONSUMED + ", " + FOOD_SPOILED + ", " + PORTION_TAKEN + ", " + CONTAINER_RETURNED + ", " + RECIPE_DISCOVERED + ", " + QUALITY_BONUS_QUERY;
     }
 
     //! Nur fuer den Selbsttest (S13).

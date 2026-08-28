@@ -557,8 +557,7 @@ class ChefZ_QualityManager
         int when = ChefZ_GradeWhen.FromName(raw.when);
         if (when == ChefZ_GradeWhen.NONE)
         {
-            why = "\"when\" ist \"" + raw.when + "\" und damit keine bekannte Regelart. "
-                + "Gueltig: " + ChefZ_GradeWhen.ValidNames() + ".";
+            why = "\"when\" ist \"" + raw.when + "\" und damit keine bekannte Regelart. " + "Gueltig: " + ChefZ_GradeWhen.ValidNames() + ".";
             return null;
         }
 
@@ -581,8 +580,7 @@ class ChefZ_QualityManager
 
             if (!rule.range.IsValid())
             {
-                why = "\"range\" hat min > max (" + rule.range.ToDebugString() + ") und "
-                    + "koennte damit nie erfuellt werden.";
+                why = "\"range\" hat min > max (" + rule.range.ToDebugString() + ") und " + "koennte damit nie erfuellt werden.";
                 return null;
             }
         }
@@ -624,8 +622,7 @@ class ChefZ_QualityManager
 
         if (raw.slotId == "")
         {
-            why = "eine Regel mit when \"" + ChefZ_GradeWhen.Name(rule.when)
-                + "\" braucht das Feld \"slotId\".";
+            why = "eine Regel mit when \"" + ChefZ_GradeWhen.Name(rule.when) + "\" braucht das Feld \"slotId\".";
             return false;
         }
 
@@ -649,15 +646,13 @@ class ChefZ_QualityManager
 
         if (!raw.selector)
         {
-            why = "eine Regel mit when \"" + ChefZ_GradeWhen.Name(rule.when)
-                + "\" braucht das Feld \"selector\".";
+            why = "eine Regel mit when \"" + ChefZ_GradeWhen.Name(rule.when) + "\" braucht das Feld \"selector\".";
             return false;
         }
 
         if (!ctx)
         {
-            why = "es gibt keinen Kompilierkontext - der Selektor liesse sich nicht "
-                + "aufloesen.";
+            why = "es gibt keinen Kompilierkontext - der Selektor liesse sich nicht " + "aufloesen.";
             return false;
         }
 
@@ -679,23 +674,20 @@ class ChefZ_QualityManager
 
         if (raw.contextKey == "")
         {
-            why = "eine Regel mit when \"context\" braucht das Feld \"contextKey\". "
-                + "Gueltig: " + ChefZ_GradeContextKey.ValidNames() + ".";
+            why = "eine Regel mit when \"context\" braucht das Feld \"contextKey\". " + "Gueltig: " + ChefZ_GradeContextKey.ValidNames() + ".";
             return false;
         }
 
         int key = ChefZ_GradeContextKey.FromName(raw.contextKey);
         if (key == ChefZ_GradeContextKey.NONE)
         {
-            why = "contextKey \"" + raw.contextKey + "\" ist unbekannt. Gueltig: "
-                + ChefZ_GradeContextKey.ValidNames() + ".";
+            why = "contextKey \"" + raw.contextKey + "\" ist unbekannt. Gueltig: " + ChefZ_GradeContextKey.ValidNames() + ".";
             return false;
         }
 
         if (rule.range.IsUnbounded())
         {
-            why = "eine Regel mit when \"context\" braucht ein \"range\" - ohne Grenzen "
-                + "waere sie immer erfuellt.";
+            why = "eine Regel mit when \"context\" braucht ein \"range\" - ohne Grenzen " + "waere sie immer erfuellt.";
             return false;
         }
 

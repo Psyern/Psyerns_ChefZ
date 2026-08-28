@@ -205,11 +205,7 @@ class ChefZ_VesselKeys
 
     string ToDebugString()
     {
-        return "items=" + m_ItemCount.ToString()
-             + " klassen=" + m_Classes.Count().ToString()
-             + " tags=" + m_Tags.Count().ToString()
-             + " zustaende=" + m_States.Count().ToString()
-             + " kategoriebits=" + m_Categories.CountBits().ToString();
+        return "items=" + m_ItemCount.ToString() + " klassen=" + m_Classes.Count().ToString() + " tags=" + m_Tags.Count().ToString() + " zustaende=" + m_States.Count().ToString() + " kategoriebits=" + m_Categories.CountBits().ToString();
     }
 
     //! Nur fuer den Selbsttest.

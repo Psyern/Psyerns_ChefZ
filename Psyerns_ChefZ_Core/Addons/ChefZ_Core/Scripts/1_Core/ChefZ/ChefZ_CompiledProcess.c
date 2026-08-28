@@ -146,15 +146,13 @@ class ChefZ_CompiledProcess
 
         if (hasMinTemperature && ctx.stationTemperature < minTemperature)
         {
-            reason = "Temperatur " + ctx.stationTemperature.ToString() + " liegt unter "
-                   + minTemperature.ToString();
+            reason = "Temperatur " + ctx.stationTemperature.ToString() + " liegt unter " + minTemperature.ToString();
             return false;
         }
 
         if (hasMaxTemperature && ctx.stationTemperature > maxTemperature)
         {
-            reason = "Temperatur " + ctx.stationTemperature.ToString() + " liegt ueber "
-                   + maxTemperature.ToString();
+            reason = "Temperatur " + ctx.stationTemperature.ToString() + " liegt ueber " + maxTemperature.ToString();
             return false;
         }
 
@@ -163,8 +161,7 @@ class ChefZ_CompiledProcess
 
     string ToDebugString()
     {
-        string s = id + "  " + ChefZ_ProcessExec.Name(exec)
-                 + " dauer=" + baseDurationSec.ToString() + "s";
+        string s = id + "  " + ChefZ_ProcessExec.Name(exec) + " dauer=" + baseDurationSec.ToString() + "s";
         if (toolGroups.Count() > 0)
             s = s + " werkzeug=[" + ChefZ_TextList.JoinSymbols(toolGroups, "|") + "]";
         if (requiresHeat)
@@ -249,10 +246,7 @@ class ChefZ_CompiledStation
 
     string ToDebugString()
     {
-        return id + "  slots=" + parallelSlots.ToString()
-             + " tempo=" + speedMultiplier.ToString()
-             + " prozesse=[" + ChefZ_TextList.JoinSymbols(processes, ",") + "]"
-             + " kategorien=[" + ChefZ_TextList.JoinSymbols(categories, ",") + "]";
+        return id + "  slots=" + parallelSlots.ToString() + " tempo=" + speedMultiplier.ToString() + " prozesse=[" + ChefZ_TextList.JoinSymbols(processes, ",") + "]" + " kategorien=[" + ChefZ_TextList.JoinSymbols(categories, ",") + "]";
     }
 }
 
@@ -365,12 +359,7 @@ class ChefZ_CompiledTransform
 
     string ToDebugString()
     {
-        string s = id
-                 + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym)
-                 + " spez=" + specificity.ToString()
-                 + " prio=" + priority.ToString()
-                 + " eingaenge=" + inputs.Count().ToString()
-                 + " minItems=" + minItemCount.ToString();
+        string s = id + "  prozess=" + ChefZ_SymbolTable.NameOrMark(processSym) + " spez=" + specificity.ToString() + " prio=" + priority.ToString() + " eingaenge=" + inputs.Count().ToString() + " minItems=" + minItemCount.ToString();
         if (pureStateChange)
             s = s + " ZUSTANDSWECHSEL";
         else

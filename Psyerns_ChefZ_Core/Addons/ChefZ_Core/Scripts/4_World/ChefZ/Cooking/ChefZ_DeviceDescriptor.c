@@ -96,9 +96,7 @@ class ChefZ_DeviceDescriptor
         if (ChefZ_SymbolTable.IsValid(deviceRootClass))
             s = s + " auf " + ChefZ_SymbolTable.Name(deviceRootClass);
 
-        s = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]"
-              + " portionen=" + portionCapacity.ToString()
-              + " qmod=" + qualityModifier.ToString();
+        s = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]" + " portionen=" + portionCapacity.ToString() + " qmod=" + qualityModifier.ToString();
         return s;
     }
 }

@@ -138,15 +138,7 @@ class ChefZ_PriorityWeights
 
     string ToDebugString()
     {
-        return "class=" + wClass.ToString()
-             + " state=" + wState.ToString()
-             + " tag=" + wTag.ToString()
-             + " stage=" + wVanillaStage.ToString()
-             + " kat=" + wCategoryBase.ToString() + "+" + wCategoryPerDepth.ToString() + "/Tiefe"
-             + " not=" + wNot.ToString()
-             + " range=" + wRangePerBound.ToString()
-             + " minQual=" + wMinQuality.ToString()
-             + " amountCap=" + amountCap.ToString();
+        return "class=" + wClass.ToString() + " state=" + wState.ToString() + " tag=" + wTag.ToString() + " stage=" + wVanillaStage.ToString() + " kat=" + wCategoryBase.ToString() + "+" + wCategoryPerDepth.ToString() + "/Tiefe" + " not=" + wNot.ToString() + " range=" + wRangePerBound.ToString() + " minQual=" + wMinQuality.ToString() + " amountCap=" + amountCap.ToString();
     }
 
     //! Nur fuer den Selbsttest (S5).

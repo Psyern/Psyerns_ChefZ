@@ -526,8 +526,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
         {
             if (portion.SetQuantity(plan.quantityToApply))
             {
-                err = "die Portionsmenge " + plan.quantityToApply.ToString()
-                    + " liegt unter dem Minimum von \"" + plan.portionClass + "\"";
+                err = "die Portionsmenge " + plan.quantityToApply.ToString() + " liegt unter dem Minimum von \"" + plan.portionClass + "\"";
                 return false;
             }
         }
@@ -690,8 +689,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
         if (left <= 0)
             return text;
 
-        string line = left.ToString() + " / " + ChefZ_GetPortionsMax().ToString()
-                    + " " + Widget.TranslateString(ChefZ_ActionTakePortion.PORTIONS_TEXT);
+        string line = left.ToString() + " / " + ChefZ_GetPortionsMax().ToString() + " " + Widget.TranslateString(ChefZ_ActionTakePortion.PORTIONS_TEXT);
 
         if (text == "")
             return line;

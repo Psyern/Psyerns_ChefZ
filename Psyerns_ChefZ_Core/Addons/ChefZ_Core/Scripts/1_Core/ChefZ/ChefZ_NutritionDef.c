@@ -359,9 +359,7 @@ class ChefZ_NutritionDef extends ChefZ_Record
     //! einzelne Ausnahme machte die Dumpzeilen zwischen den Arten uneinheitlich.
     string DescribeValues()
     {
-        return id + " scope=" + scope
-             + " energie=" + energy.ToString()
-             + " perUnit=" + perUnit.ToString();
+        return id + " scope=" + scope + " energie=" + energy.ToString() + " perUnit=" + perUnit.ToString();
     }
 
     //! Nur fuer den Selbsttest (S12).

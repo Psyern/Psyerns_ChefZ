@@ -594,9 +594,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
         if (job.transformPersistHash == ChefZ_ProcessJob.NO_HASH)
         {
             job.Clear();
-            err = "der Transform \"" + match.transformId + "\" hat keinen Persistenzschluessel "
-                + "(Hash-Kollision beim Laden?) - der Job wird nicht angelegt, damit er nach "
-                + "einem Neustart nicht als Geisterjob zurueckbleibt.";
+            err = "der Transform \"" + match.transformId + "\" hat keinen Persistenzschluessel " + "(Hash-Kollision beim Laden?) - der Job wird nicht angelegt, damit er nach " + "einem Neustart nicht als Geisterjob zurueckbleibt.";
             return false;
         }
 

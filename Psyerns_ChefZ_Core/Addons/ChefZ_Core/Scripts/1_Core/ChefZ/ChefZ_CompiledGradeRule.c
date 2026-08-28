@@ -173,8 +173,7 @@ class ChefZ_GradeContextKey
 
     static string ValidNames()
     {
-        return "deviceTemperature, liquidQuantity, elapsedSec, portionCapacity, "
-             + "qualityModifier, itemsInVessel, boundItemCount, coverage";
+        return "deviceTemperature, liquidQuantity, elapsedSec, portionCapacity, " + "qualityModifier, itemsInVessel, boundItemCount, coverage";
     }
 
     //! Der Wert zur Kennung. 0 fuer NONE - eine Regel mit unbekannter Kennung
@@ -408,8 +407,7 @@ class ChefZ_CompiledGradeRule
         // ChefZ_GradeContextKey.Value().
         float count = n;
         float value = Cap(per * count);
-        note = Label() + ": Slot \"" + slotId + "\" mit " + n.ToString() + " Zutat(en) x "
-             + per.ToString() + " = " + value.ToString() + " Punkte";
+        note = Label() + ": Slot \"" + slotId + "\" mit " + n.ToString() + " Zutat(en) x " + per.ToString() + " = " + value.ToString() + " Punkte";
         return value;
     }
 
@@ -459,21 +457,18 @@ class ChefZ_CompiledGradeRule
         {
             if (hits < considered)
             {
-                note = Label() + ": nur " + hits.ToString() + " von " + considered.ToString()
-                     + " Zutaten erfuellen den Selektor, 0 Punkte";
+                note = Label() + ": nur " + hits.ToString() + " von " + considered.ToString() + " Zutaten erfuellen den Selektor, 0 Punkte";
                 return 0.0;
             }
 
             value = Cap(points);
-            note = Label() + ": alle " + considered.ToString() + " Zutaten erfuellen den "
-                 + "Selektor, " + value.ToString() + " Punkte";
+            note = Label() + ": alle " + considered.ToString() + " Zutaten erfuellen den " + "Selektor, " + value.ToString() + " Punkte";
             return value;
         }
 
         if (hits == 0)
         {
-            note = Label() + ": keine der " + considered.ToString()
-                 + " Zutaten erfuellt den Selektor, 0 Punkte";
+            note = Label() + ": keine der " + considered.ToString() + " Zutaten erfuellt den Selektor, 0 Punkte";
             return 0.0;
         }
 
@@ -484,14 +479,12 @@ class ChefZ_CompiledGradeRule
         {
             float hitCount = hits;
             value = Cap(pointsPerItem * hitCount);
-            note = Label() + ": " + hits.ToString() + " Zutat(en) x "
-                 + pointsPerItem.ToString() + " = " + value.ToString() + " Punkte";
+            note = Label() + ": " + hits.ToString() + " Zutat(en) x " + pointsPerItem.ToString() + " = " + value.ToString() + " Punkte";
             return value;
         }
 
         value = Cap(points);
-        note = Label() + ": " + hits.ToString() + " Zutat(en) erfuellen den Selektor, "
-             + value.ToString() + " Punkte";
+        note = Label() + ": " + hits.ToString() + " Zutat(en) erfuellen den Selektor, " + value.ToString() + " Punkte";
         return value;
     }
 
@@ -502,14 +495,12 @@ class ChefZ_CompiledGradeRule
 
         if (!range.Contains(value))
         {
-            note = Label() + ": " + keyName + " = " + value.ToString() + " liegt nicht in "
-                 + range.ToDebugString() + ", 0 Punkte";
+            note = Label() + ": " + keyName + " = " + value.ToString() + " liegt nicht in " + range.ToDebugString() + ", 0 Punkte";
             return 0.0;
         }
 
         float given = Cap(points);
-        note = Label() + ": " + keyName + " = " + value.ToString() + " liegt in "
-             + range.ToDebugString() + ", " + given.ToString() + " Punkte";
+        note = Label() + ": " + keyName + " = " + value.ToString() + " liegt in " + range.ToDebugString() + ", " + given.ToString() + " Punkte";
         return given;
     }
 
@@ -517,8 +508,7 @@ class ChefZ_CompiledGradeRule
     {
         if (!caps)
         {
-            note = Label() + ": kein Faehigkeitsanbieter registriert, 0 Punkte "
-                 + "(kein Fehler - ohne Skillmodul gibt es keinen Skillbonus)";
+            note = Label() + ": kein Faehigkeitsanbieter registriert, 0 Punkte " + "(kein Fehler - ohne Skillmodul gibt es keinen Skillbonus)";
             return 0.0;
         }
 
@@ -531,14 +521,12 @@ class ChefZ_CompiledGradeRule
 
         if (!range.Contains(value))
         {
-            note = Label() + ": Faehigkeit \"" + capability + "\" = " + value.ToString()
-                 + " liegt nicht in " + range.ToDebugString() + ", 0 Punkte";
+            note = Label() + ": Faehigkeit \"" + capability + "\" = " + value.ToString() + " liegt nicht in " + range.ToDebugString() + ", 0 Punkte";
             return 0.0;
         }
 
         float given = Cap(points);
-        note = Label() + ": Faehigkeit \"" + capability + "\" = " + value.ToString()
-             + ", " + given.ToString() + " Punkte";
+        note = Label() + ": Faehigkeit \"" + capability + "\" = " + value.ToString() + ", " + given.ToString() + " Punkte";
         return given;
     }
 

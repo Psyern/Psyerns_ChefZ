@@ -800,8 +800,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         if (m_ChefZ_Match.transformSym != m_ChefZ_TransformSym)
         {
             m_ChefZ_Match.matched    = false;
-            m_ChefZ_Match.failReason = "es passt " + m_ChefZ_Match.transformId
-                                     + " besser als " + m_ChefZ_TransformId;
+            m_ChefZ_Match.failReason = "es passt " + m_ChefZ_Match.transformId + " besser als " + m_ChefZ_TransformId;
             return false;
         }
 
@@ -918,8 +917,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
 
     string ChefZ_ToDebugString()
     {
-        string s = m_ChefZ_TransformId + " (" + m_ChefZ_ProcessId + ")"
-                 + " eingaenge=" + m_ChefZ_InputCount.ToString();
+        string s = m_ChefZ_TransformId + " (" + m_ChefZ_ProcessId + ")" + " eingaenge=" + m_ChefZ_InputCount.ToString();
 
         if (m_ChefZ_ToolIndex >= 0)
             s = s + " werkzeugplatz=" + m_ChefZ_ToolIndex.ToString();

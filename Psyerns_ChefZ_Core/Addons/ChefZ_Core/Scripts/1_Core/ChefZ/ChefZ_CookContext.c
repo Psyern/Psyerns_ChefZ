@@ -157,14 +157,11 @@ class ChefZ_CookContext
         if (ChefZ_SymbolTable.IsValid(deviceRootClass))
             s = s + " auf " + ChefZ_SymbolTable.Name(deviceRootClass);
 
-        s = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]"
-              + " methode=" + ChefZ_SymbolTable.NameOrMark(method)
-              + " temp=" + deviceTemperature.ToString();
+        s = s + " [" + ChefZ_TextList.JoinSymbols(deviceCategories, ",") + "]" + " methode=" + ChefZ_SymbolTable.NameOrMark(method) + " temp=" + deviceTemperature.ToString();
 
         if (HasLiquid())
         {
-            s = s + " fluessig=" + ChefZ_SymbolTable.NameOrMark(liquidType)
-                  + "/" + liquidQuantity.ToString();
+            s = s + " fluessig=" + ChefZ_SymbolTable.NameOrMark(liquidType) + "/" + liquidQuantity.ToString();
         }
         if (elapsedSec > 0.0)
             s = s + " seit=" + elapsedSec.ToString() + "s";

@@ -960,8 +960,7 @@ class ChefZ_PreservationManager
 
     int GetRuleCount()
     {
-        return m_ByState.Count() + m_ByClass.Count() + m_ByTag.Count()
-             + m_ByQuality.Count() + m_CategoryDefs.Count();
+        return m_ByState.Count() + m_ByClass.Count() + m_ByTag.Count() + m_ByQuality.Count() + m_CategoryDefs.Count();
     }
 
     int GetRejectedCount()

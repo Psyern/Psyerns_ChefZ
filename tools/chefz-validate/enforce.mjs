@@ -67,6 +67,25 @@ const RULES = [
     why: 'Eine Variable je Deklaration. "int a, b;" uebersetzt Enforce nicht.',
   },
   {
+    id: 'fortsetzungszeile',
+    severity: 'error',
+    test: l => /^\s*(\+(?!\+)|\|\||&&|==|!=|<=|>=)/.test(l),
+    why: 'Enforce parst zeilenweise. Eine Zeile, die mit einem Operator BEGINNT, '
+       + 'ist fuer den Compiler eine neue Anweisung - er meldet "Missing \';\' at the '
+       + 'end of line" und raet den Rest zusammen. Der Server hat daran schon einmal '
+       + 'den Start verweigert. Abhilfe: den Ausdruck auf EINE Zeile ziehen oder in '
+       + 'Zwischenvariablen zerlegen.',
+  },
+  {
+    id: 'schluesselwort-bezeichner',
+    severity: 'error',
+    test: l => /\b(?:out|in|inout|ref|new|delete|class|const|static|void|int|float|bool|string|vector|return|super|this|null|true|false|override|modded|enum|array|set|map|owner|notnull|autoptr|proto|native|typedef|private|protected|auto|var)[0-9]/.test(l),
+    why: 'Der Lexer greift das Schluesselwort zuerst und laesst die Ziffer stehen: '
+       + '"outDef" ist ein Bezeichner, "out0" zerfaellt in "out" und "0". Das ergibt '
+       + '"Broken expression" - genau daran ist der Testserver am 28.08. gescheitert. '
+       + 'Abhilfe: den Bezeichner nicht mit einem Schluesselwort plus Ziffer beginnen.',
+  },
+  {
     id: 'ref-parameter',
     severity: 'error',
     test: l => /\([^)]*\bref\s+\w+\s*[,)]/.test(l) && !/^\s*(?:\/\/|\*)/.test(l),

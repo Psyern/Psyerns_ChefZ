@@ -207,15 +207,10 @@ class ChefZ_MatchResult
                 f = f + ", Slot " + failSlotId;
             if (failReason != "")
                 f = f + ")";
-            return f + "  kandidaten=" + candidatesTried.ToString()
-                     + " knoten=" + nodesExplored.ToString();
+            return f + "  kandidaten=" + candidatesTried.ToString() + " knoten=" + nodesExplored.ToString();
         }
 
-        string s = recipeId
-                 + "  score=" + score.ToString()
-                 + " punkte=" + gradeScore.ToString()
-                 + " items=" + boundItemCount.ToString() + "/" + itemsInVessel.ToString()
-                 + " knoten=" + nodesExplored.ToString();
+        string s = recipeId + "  score=" + score.ToString() + " punkte=" + gradeScore.ToString() + " items=" + boundItemCount.ToString() + "/" + itemsInVessel.ToString() + " knoten=" + nodesExplored.ToString();
         if (ready)
             s = s + "  FERTIG";
         else

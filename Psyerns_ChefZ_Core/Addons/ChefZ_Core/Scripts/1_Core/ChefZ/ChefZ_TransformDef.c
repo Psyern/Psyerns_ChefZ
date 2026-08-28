@@ -427,15 +427,15 @@ class ChefZ_TransformDef extends ChefZ_Record
         if (t.Validate(ctx))                            return false;   // ohne outputs
 
         t.outputs = new array<ref ChefZ_OutputDef>();
-        ChefZ_OutputDef out0 = new ChefZ_OutputDef();
-        t.outputs.Insert(out0);
+        ChefZ_OutputDef outDef = new ChefZ_OutputDef();
+        t.outputs.Insert(outDef);
         if (!t.Validate(ctx))                           return false;
 
         // Reiner Zustandswechsel: kein Output nennt eine Klasse.
         if (!t.IsPureStateChange())                     return false;
         if (t.HasClassOutput())                         return false;
 
-        out0.cls = "CHEFZ_TD_KLASSE";
+        outDef.cls = "CHEFZ_TD_KLASSE";
         if (t.IsPureStateChange())                      return false;
         if (!t.HasClassOutput())                        return false;
 

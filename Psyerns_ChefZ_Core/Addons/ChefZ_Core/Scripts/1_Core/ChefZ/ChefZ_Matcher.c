@@ -163,8 +163,7 @@ class ChefZ_BindResult
 
     string ToDebugString()
     {
-        string s = "matched=" + matched.ToString()
-                 + " knoten=" + nodesExplored.ToString();
+        string s = "matched=" + matched.ToString() + " knoten=" + nodesExplored.ToString();
         if (budgetExhausted)
             s = s + " BUDGET";
         if (!matched)
@@ -388,8 +387,7 @@ class ChefZ_Matcher
             if (cand.Count() < slot.minCount)
             {
                 work.result.failSlotId = slot.slotId;
-                work.result.failReason = "nur " + cand.Count().ToString()
-                                       + " passende Items, gebraucht werden " + slot.minCount.ToString();
+                work.result.failReason = "nur " + cand.Count().ToString() + " passende Items, gebraucht werden " + slot.minCount.ToString();
                 if (work.trace)
                     work.trace.SlotResult(ChefZ_SymbolTable.INVALID, slot.slotId, false, work.result.failReason + " - " + ExplainFirstMiss(slot, work.snapshot));
                 return false;

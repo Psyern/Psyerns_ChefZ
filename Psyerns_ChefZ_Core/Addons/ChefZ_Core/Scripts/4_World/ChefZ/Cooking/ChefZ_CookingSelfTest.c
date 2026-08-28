@@ -63,7 +63,6 @@ class ChefZ_CookingSelfTest
         if (!s_Ran)
             return "Selbsttest S7 (Kochadapter): nicht gelaufen";
 
-        return "Selbsttest S7 (Kochadapter): " + s_Passed.ToString() + " bestanden, "
-             + s_Failed.ToString() + " fehlgeschlagen";
+        return "Selbsttest S7 (Kochadapter): " + s_Passed.ToString() + " bestanden, " + s_Failed.ToString() + " fehlgeschlagen";
     }
 }

@@ -97,13 +97,7 @@ class ChefZ_QualityEvaluation
     //! sich selbst, "8.8" nicht.
     float AdditiveSum()
     {
-        return SlotPoints
-             + RulePoints
-             + FreshnessTerm
-             + IngredientQualityTerm
-             + StatePenalty
-             + Bias
-             + ExternalBonus;
+        return SlotPoints + RulePoints + FreshnessTerm + IngredientQualityTerm + StatePenalty + Bias + ExternalBonus;
     }
 
     void AddNote(string text)
@@ -146,16 +140,7 @@ class ChefZ_QualityEvaluation
     //! Eine Zeile fuer das Log. Alle Summanden, in der Reihenfolge der Formel.
     string ToLine()
     {
-        string s = "score=" + TotalScore.ToString()
-                 + "  stufe=" + ChefZ_SymbolTable.NameOrMark(ResultTier)
-                 + "  slots=" + SlotPoints.ToString()
-                 + " regeln=" + RulePoints.ToString()
-                 + " frische=" + FreshnessTerm.ToString()
-                 + " zutatenqualitaet=" + IngredientQualityTerm.ToString()
-                 + " zustandsstrafe=" + StatePenalty.ToString()
-                 + " bias=" + Bias.ToString()
-                 + " extern=" + ExternalBonus.ToString()
-                 + " geraet=x" + DeviceModifier.ToString();
+        string s = "score=" + TotalScore.ToString() + "  stufe=" + ChefZ_SymbolTable.NameOrMark(ResultTier) + "  slots=" + SlotPoints.ToString() + " regeln=" + RulePoints.ToString() + " frische=" + FreshnessTerm.ToString() + " zutatenqualitaet=" + IngredientQualityTerm.ToString() + " zustandsstrafe=" + StatePenalty.ToString() + " bias=" + Bias.ToString() + " extern=" + ExternalBonus.ToString() + " geraet=x" + DeviceModifier.ToString();
         return s;
     }
 

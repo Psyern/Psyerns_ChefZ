@@ -333,8 +333,7 @@ class ChefZ_ContainerDef extends ChefZ_Record
         else
             s = s + " [keine Kategorie]";
 
-        s = s + " leer=" + emptyClass
-              + " scope=" + ChefZ_ContainerScope.Name(searchScope);
+        s = s + " leer=" + emptyClass + " scope=" + ChefZ_ContainerScope.Name(searchScope);
 
         if (!reusable)
             s = s + " keineRueckgabe";

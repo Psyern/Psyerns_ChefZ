@@ -104,8 +104,7 @@ class ChefZ_DiagnosticsSelfTest
     static string Summary()
     {
         int total = s_Passed + s_Failed;
-        string s = "Selbsttest S18: " + s_Passed.ToString() + "/" + total.ToString()
-                 + " Gruppen ok";
+        string s = "Selbsttest S18: " + s_Passed.ToString() + "/" + total.ToString() + " Gruppen ok";
         if (s_Failed > 0 && s_FailedNames)
         {
             s = s + "  gescheitert:";

@@ -363,16 +363,13 @@ class ChefZ_Applicator
 
             if (!target.HasQuantity())
             {
-                why = "Verbrauchsziel #" + plan.handle.ToString()
-                    + " fuehrt keine Menge, es sollen aber " + plan.quantityDelta.ToString()
-                    + " abgezogen werden";
+                why = "Verbrauchsziel #" + plan.handle.ToString() + " fuehrt keine Menge, es sollen aber " + plan.quantityDelta.ToString() + " abgezogen werden";
                 return false;
             }
 
             if (target.GetQuantity() + EPS < plan.quantityDelta)
             {
-                why = "Verbrauchsziel #" + plan.handle.ToString() + " hat nur noch "
-                    + target.GetQuantity().ToString() + " von " + plan.quantityDelta.ToString();
+                why = "Verbrauchsziel #" + plan.handle.ToString() + " hat nur noch " + target.GetQuantity().ToString() + " von " + plan.quantityDelta.ToString();
                 return false;
             }
         }
@@ -779,8 +776,7 @@ class ChefZ_Applicator
 
             if (!item || item.IsSetForDeletion())
             {
-                why = p.Where() + " (" + p.cls + ") ist unmittelbar nach der Erzeugung "
-                    + "wieder verschwunden";
+                why = p.Where() + " (" + p.cls + ") ist unmittelbar nach der Erzeugung " + "wieder verschwunden";
                 return false;
             }
 
@@ -790,9 +786,7 @@ class ChefZ_Applicator
                 // wieder geloescht (varQuantityDestroyOnMin). Weiterzumachen
                 // hiesse: Zutaten weg, Gericht weg - genau der Fall, gegen den
                 // Invariante I5 steht.
-                why = p.Where() + " (" + p.cls + ") wurde beim Setzen der Menge "
-                    + "geloescht - die Menge des Rezepts liegt unter dem Minimum der "
-                    + "Klasse";
+                why = p.Where() + " (" + p.cls + ") wurde beim Setzen der Menge " + "geloescht - die Menge des Rezepts liegt unter dem Minimum der " + "Klasse";
                 return false;
             }
 
@@ -1297,8 +1291,7 @@ class ChefZ_Applicator
 
         if (device.GetQuantity() + EPS < needed)
         {
-            why = "im Gefaess sind nur " + device.GetQuantity().ToString()
-                + " von " + needed.ToString();
+            why = "im Gefaess sind nur " + device.GetQuantity().ToString() + " von " + needed.ToString();
             return false;
         }
 

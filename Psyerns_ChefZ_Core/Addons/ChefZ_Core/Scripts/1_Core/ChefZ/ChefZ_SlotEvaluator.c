@@ -107,8 +107,7 @@ class ChefZ_SlotEvaluator
         // 4. Einheit.
         if (ChefZ_SymbolTable.IsValid(slot.unitSym) && facts.quantityUnit != slot.unitSym)
         {
-            reason = "Einheit " + ChefZ_SymbolTable.NameOrMark(facts.quantityUnit)
-                   + " != " + ChefZ_SymbolTable.Name(slot.unitSym);
+            reason = "Einheit " + ChefZ_SymbolTable.NameOrMark(facts.quantityUnit) + " != " + ChefZ_SymbolTable.Name(slot.unitSym);
             return false;
         }
 

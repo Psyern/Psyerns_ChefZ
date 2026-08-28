@@ -275,8 +275,7 @@ class ChefZ_CookSession
 
     bool IsInert()
     {
-        return state == ChefZ_ESessionState.DONE
-            || state == ChefZ_ESessionState.SUPPRESSED;
+        return state == ChefZ_ESessionState.DONE || state == ChefZ_ESessionState.SUPPRESSED;
     }
 
     bool HasBinding()
@@ -332,8 +331,7 @@ class ChefZ_CookSession
 
     string ToDebugString()
     {
-        string s = "Gefaess " + vesselId.ToString() + "  " + StateName(state)
-                 + "  seitMatch=" + ticksSinceMatch.ToString();
+        string s = "Gefaess " + vesselId.ToString() + "  " + StateName(state) + "  seitMatch=" + ticksSinceMatch.ToString();
 
         if (outcome)
             s = s + "  rezept=" + outcome.recipeId;

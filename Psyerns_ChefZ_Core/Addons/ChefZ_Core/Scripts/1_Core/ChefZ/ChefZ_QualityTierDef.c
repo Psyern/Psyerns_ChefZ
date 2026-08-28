@@ -281,10 +281,7 @@ class ChefZ_QualityTierDef extends ChefZ_Record
 
     string ToLine()
     {
-        string s = id + " [" + ChefZ_SymbolTable.NameOrMark(tierSetSym) + "]"
-                 + " rang=" + rank.ToString()
-                 + " ab=" + minScore.ToString()
-                 + " ausbeute=" + yieldMultiplier.ToString();
+        string s = id + " [" + ChefZ_SymbolTable.NameOrMark(tierSetSym) + "]" + " rang=" + rank.ToString() + " ab=" + minScore.ToString() + " ausbeute=" + yieldMultiplier.ToString();
 
         if (portionBonus != 0)
             s = s + " portionen+" + portionBonus.ToString();

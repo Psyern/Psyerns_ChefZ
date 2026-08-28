@@ -115,8 +115,7 @@ class ChefZ_PreservationScope
     //! Fuer Fehlermeldungen: "unbekannter scope X, gueltig sind: ...".
     static string ValidNames()
     {
-        return NAME_STATE + ", " + NAME_CLASS + ", " + NAME_CATEGORY + ", "
-             + NAME_TAG + ", " + NAME_QUALITY;
+        return NAME_STATE + ", " + NAME_CLASS + ", " + NAME_CATEGORY + ", " + NAME_TAG + ", " + NAME_QUALITY;
     }
 
     //! Nur fuer den Selbsttest (S11).
@@ -430,8 +429,7 @@ class ChefZ_PreservationDef extends ChefZ_Record
 
     string ToLine()
     {
-        string s = ChefZ_PreservationScope.Name(scopeKind) + " " + id
-                 + "  verderb=" + spoilageMultiplier.ToString();
+        string s = ChefZ_PreservationScope.Name(scopeKind) + " " + id + "  verderb=" + spoilageMultiplier.ToString();
 
         if (stopsDecay)
             s = s + "  stopsDecay";

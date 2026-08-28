@@ -107,16 +107,13 @@ class ChefZ_Diagnostics
 
         if (!g_Game || !g_Game.IsServer())
         {
-            reason = "Diagnose laeuft ausschliesslich serverseitig (18 §4). "
-                   + "Ein Client trifft keine ChefZ-Entscheidung und hat deshalb "
-                   + "auch keine zu erklaeren.";
+            reason = "Diagnose laeuft ausschliesslich serverseitig (18 §4). " + "Ein Client trifft keine ChefZ-Entscheidung und hat deshalb " + "auch keine zu erklaeren.";
             return false;
         }
 
         if (!ChefZ_Boot.HasBootedServer())
         {
-            reason = "Der Core hat noch nicht gebootet. MissionServer.OnInit "
-                   + "laeuft frueh, aber nicht vor dem ersten Tastendruck.";
+            reason = "Der Core hat noch nicht gebootet. MissionServer.OnInit " + "laeuft frueh, aber nicht vor dem ersten Tastendruck.";
             return false;
         }
 
@@ -591,25 +588,21 @@ class ChefZ_Diagnostics
 
         if (low == 0 && high == 0)
         {
-            reason = "\"" + text + "\" ist keine Netz-ID. Erwartet wird "
-                   + "<low> oder <low>:<high>.";
+            reason = "\"" + text + "\" ist keine Netz-ID. Erwartet wird " + "<low> oder <low>:<high>.";
             return false;
         }
 
         Object obj = g_Game.GetObjectByNetworkId(low, high);
         if (!obj)
         {
-            reason = "Zur Netz-ID " + low.ToString() + ":" + high.ToString()
-                   + " gibt es kein Objekt. Es kann geloescht oder ausgeladen sein.";
+            reason = "Zur Netz-ID " + low.ToString() + ":" + high.ToString() + " gibt es kein Objekt. Es kann geloescht oder ausgeladen sein.";
             return false;
         }
 
         ItemBase item = ItemBase.Cast(obj);
         if (!item)
         {
-            reason = "Objekt " + low.ToString() + ":" + high.ToString()
-                   + " ist kein ItemBase (" + obj.GetType() + "). "
-                   + "ChefZ wertet nur Gefaesse aus.";
+            reason = "Objekt " + low.ToString() + ":" + high.ToString() + " ist kein ItemBase (" + obj.GetType() + "). " + "ChefZ wertet nur Gefaesse aus.";
             return false;
         }
 
@@ -722,10 +715,7 @@ class ChefZ_Diagnostics
 
         if (!found.enabled)
         {
-            reason = "\"" + device.GetType() + "\" ist fuer ChefZ kein Kochgeraet. "
-                   + "Das ist der Normalfall und kein Fehler (10 E7): was nicht in "
-                   + "CfgChefZDevices steht - weder selbst noch ueber eine "
-                   + "Vorfahrenklasse -, verhaelt sich exakt wie ohne ChefZ.";
+            reason = "\"" + device.GetType() + "\" ist fuer ChefZ kein Kochgeraet. " + "Das ist der Normalfall und kein Fehler (10 E7): was nicht in " + "CfgChefZDevices steht - weder selbst noch ueber eine " + "Vorfahrenklasse -, verhaelt sich exakt wie ohne ChefZ.";
             return false;
         }
 
@@ -770,8 +760,7 @@ class ChefZ_Diagnostics
     {
         if (!ChefZ_CookingHook.IsEnabled())
         {
-            return "Stufe 0 HAELT: der Core ist inert (enabled=false, SAFE_MODE oder "
-                 + "Config nie geladen). Kochen ist bitgenau Vanilla.";
+            return "Stufe 0 HAELT: der Core ist inert (enabled=false, SAFE_MODE oder " + "Config nie geladen). Kochen ist bitgenau Vanilla.";
         }
 
         if (device.IsRuined())
@@ -780,8 +769,7 @@ class ChefZ_Diagnostics
         ChefZ_RecipeEngine engine = ChefZ_RecipeEngine.Get();
         if (!engine.HasAnyRecipeFor(desc.deviceClass, desc.deviceRootClass))
         {
-            return "Stufe 0 HAELT: der Rezeptindex kennt kein Rezept fuer diese "
-                 + "Geraeteklasse. Ein Bool-Test, sonst nichts (19 S7).";
+            return "Stufe 0 HAELT: der Rezeptindex kennt kein Rezept fuer diese " + "Geraeteklasse. Ein Bool-Test, sonst nichts (19 S7).";
         }
 
         if (itemCount <= 0)
@@ -790,8 +778,7 @@ class ChefZ_Diagnostics
         int minItems = engine.GetMinItemCountFor(desc.deviceClass);
         if (itemCount < minItems)
         {
-            return "Stufe 0 HAELT: " + itemCount.ToString() + " Items, das guenstigste "
-                 + "Rezept braucht " + minItems.ToString() + ".";
+            return "Stufe 0 HAELT: " + itemCount.ToString() + " Items, das guenstigste " + "Rezept braucht " + minItems.ToString() + ".";
         }
 
         return "Stufe 0 passiert (Mindestitems " + minItems.ToString() + ").";

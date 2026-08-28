@@ -267,12 +267,7 @@ class ChefZ_NutritionVector
 
     string ToDebugString()
     {
-        return "energie=" + energy.ToString()
-             + " saettigung=" + fullness.ToString()
-             + " wasser=" + water.ToString()
-             + " naehrwert=" + nutritionalIndex.ToString()
-             + " toxisch=" + toxicity.ToString()
-             + " verdaulich=" + digestibility.ToString();
+        return "energie=" + energy.ToString() + " saettigung=" + fullness.ToString() + " wasser=" + water.ToString() + " naehrwert=" + nutritionalIndex.ToString() + " toxisch=" + toxicity.ToString() + " verdaulich=" + digestibility.ToString();
     }
 
     //! Nur fuer den Selbsttest (S12).

@@ -291,13 +291,11 @@ class ChefZ_EventArgs
 
         if (ChefZ_SymbolTable.IsValid(stateBefore) || ChefZ_SymbolTable.IsValid(stateAfter))
         {
-            s = s + " zustand=" + ChefZ_SymbolTable.NameOrMark(stateBefore)
-                  + "->" + ChefZ_SymbolTable.NameOrMark(stateAfter);
+            s = s + " zustand=" + ChefZ_SymbolTable.NameOrMark(stateBefore) + "->" + ChefZ_SymbolTable.NameOrMark(stateAfter);
         }
         if (ChefZ_SymbolTable.IsValid(qualityTier))
         {
-            s = s + " stufe=" + ChefZ_SymbolTable.Name(qualityTier)
-                  + "/" + qualityScore.ToString();
+            s = s + " stufe=" + ChefZ_SymbolTable.Name(qualityTier) + "/" + qualityScore.ToString();
         }
 
         if (identityId != 0)

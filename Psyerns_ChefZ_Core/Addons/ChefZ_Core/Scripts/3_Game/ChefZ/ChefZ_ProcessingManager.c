@@ -723,8 +723,7 @@ class ChefZ_ProcessingManager
         ChefZ_CompiledProcess proc = GetProcess(process);
         if (!proc)
         {
-            match.failReason = "Prozess " + ChefZ_SymbolTable.NameOrMark(process)
-                             + " ist nicht geladen";
+            match.failReason = "Prozess " + ChefZ_SymbolTable.NameOrMark(process) + " ist nicht geladen";
             return false;
         }
 

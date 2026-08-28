@@ -142,14 +142,11 @@ class ChefZ_ItemFacts
         if (ChefZ_SymbolTable.IsValid(chefzQuality))
             s = s + " qualitaet=" + ChefZ_SymbolTable.Name(chefzQuality);
 
-        s = s + " menge=" + quantity.ToString() + "/" + quantityMax.ToString()
-              + " einheiten=" + units.ToString();
+        s = s + " menge=" + quantity.ToString() + "/" + quantityMax.ToString() + " einheiten=" + units.ToString();
         if (ChefZ_SymbolTable.IsValid(quantityUnit))
             s = s + " " + ChefZ_SymbolTable.Name(quantityUnit);
 
-        s = s + " stage=" + vanillaFoodStage.ToString()
-              + " zustandGesund=" + health01.ToString()
-              + " temp=" + temperature.ToString();
+        s = s + " stage=" + vanillaFoodStage.ToString() + " zustandGesund=" + health01.ToString() + " temp=" + temperature.ToString();
 
         if (isFrozen)
             s = s + " gefroren";

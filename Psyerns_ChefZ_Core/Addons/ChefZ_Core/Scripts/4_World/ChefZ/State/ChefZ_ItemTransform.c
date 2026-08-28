@@ -253,8 +253,7 @@ class ChefZ_ItemTransform
 
             if (target.IsSetForDeletion())
             {
-                err = "das erzeugte Item wurde beim Setzen der Menge geloescht - der "
-                    + "Mengenanteil der Quelle liegt unter dem Minimum der Zielklasse";
+                err = "das erzeugte Item wurde beim Setzen der Menge geloescht - der " + "Mengenanteil der Quelle liegt unter dem Minimum der Zielklasse";
                 return false;
             }
         }

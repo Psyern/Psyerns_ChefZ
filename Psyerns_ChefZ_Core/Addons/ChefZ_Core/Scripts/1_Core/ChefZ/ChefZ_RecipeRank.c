@@ -100,11 +100,7 @@ class ChefZ_RecipeRank
 
     string ToDebugString()
     {
-        return id
-             + "  spez=" + specificity.ToString()
-             + " prio=" + priority.ToString()
-             + " pflichtslots=" + requiredSlots.ToString()
-             + " bedingungen=" + totalConstraints.ToString();
+        return id + "  spez=" + specificity.ToString() + " prio=" + priority.ToString() + " pflichtslots=" + requiredSlots.ToString() + " bedingungen=" + totalConstraints.ToString();
     }
 
     //! Nur fuer den Selbsttest.

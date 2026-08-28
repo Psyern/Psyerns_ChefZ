@@ -163,9 +163,7 @@ class ChefZ_RecipeEvaluator
                     continue;
                 if (policy.IsStateForbidden(facts.chefzState))
                 {
-                    reason = ChefZ_SymbolTable.NameOrMark(facts.classSym)
-                           + " ist im Zustand " + ChefZ_SymbolTable.NameOrMark(facts.chefzState)
-                           + ", den dieses Rezept ausschliesst";
+                    reason = ChefZ_SymbolTable.NameOrMark(facts.classSym) + " ist im Zustand " + ChefZ_SymbolTable.NameOrMark(facts.chefzState) + ", den dieses Rezept ausschliesst";
                     return false;
                 }
             }
@@ -182,9 +180,7 @@ class ChefZ_RecipeEvaluator
                     continue;
                 if (facts.health01 < policy.minMatchedHealth01)
                 {
-                    reason = ChefZ_SymbolTable.NameOrMark(facts.classSym)
-                           + " ist zu beschaedigt (" + facts.health01.ToString()
-                           + " < " + policy.minMatchedHealth01.ToString() + ")";
+                    reason = ChefZ_SymbolTable.NameOrMark(facts.classSym) + " ist zu beschaedigt (" + facts.health01.ToString() + " < " + policy.minMatchedHealth01.ToString() + ")";
                     return false;
                 }
             }
@@ -205,9 +201,7 @@ class ChefZ_RecipeEvaluator
             if (policy.extraItemsAllowedIf && policy.extraItemsAllowedIf.Test(extra))
                 continue;
 
-            reason = ChefZ_SymbolTable.NameOrMark(extra.classSym)
-                   + " liegt zusaetzlich im Gefaess und wird von diesem Rezept nicht "
-                   + "geduldet - gekocht wird Vanilla";
+            reason = ChefZ_SymbolTable.NameOrMark(extra.classSym) + " liegt zusaetzlich im Gefaess und wird von diesem Rezept nicht " + "geduldet - gekocht wird Vanilla";
             return false;
         }
 
@@ -303,8 +297,7 @@ class ChefZ_RecipeEvaluator
         {
             if (ctx.deviceTemperature < recipe.minTemperature)
             {
-                reason = "zu kalt (" + ctx.deviceTemperature.ToString()
-                       + " < " + recipe.minTemperature.ToString() + ")";
+                reason = "zu kalt (" + ctx.deviceTemperature.ToString() + " < " + recipe.minTemperature.ToString() + ")";
                 return false;
             }
             if (ctx.elapsedSec < recipe.cookSeconds)

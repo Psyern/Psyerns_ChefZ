@@ -89,15 +89,13 @@ class ChefZ_CompiledContext
 
         if (methods.Count() > 0 && methods.Find(ctx.method) < 0)
         {
-            reason = "Kochmethode " + ChefZ_SymbolTable.NameOrMark(ctx.method)
-                   + " passt nicht (erwartet: " + ChefZ_TextList.JoinSymbols(methods, "/") + ")";
+            reason = "Kochmethode " + ChefZ_SymbolTable.NameOrMark(ctx.method) + " passt nicht (erwartet: " + ChefZ_TextList.JoinSymbols(methods, "/") + ")";
             return false;
         }
 
         if (deviceTemperature && !deviceTemperature.Contains(ctx.deviceTemperature))
         {
-            reason = "Temperatur " + ctx.deviceTemperature.ToString()
-                   + " ausserhalb " + deviceTemperature.ToDebugString();
+            reason = "Temperatur " + ctx.deviceTemperature.ToString() + " ausserhalb " + deviceTemperature.ToDebugString();
             return false;
         }
 
@@ -109,15 +107,13 @@ class ChefZ_CompiledContext
 
         if (liquidTypes.Count() > 0 && liquidTypes.Find(ctx.liquidType) < 0)
         {
-            reason = "Fluessigkeit " + ChefZ_SymbolTable.NameOrMark(ctx.liquidType)
-                   + " passt nicht (erwartet: " + ChefZ_TextList.JoinSymbols(liquidTypes, "/") + ")";
+            reason = "Fluessigkeit " + ChefZ_SymbolTable.NameOrMark(ctx.liquidType) + " passt nicht (erwartet: " + ChefZ_TextList.JoinSymbols(liquidTypes, "/") + ")";
             return false;
         }
 
         if (liquidQuantity && !liquidQuantity.Contains(ctx.liquidQuantity))
         {
-            reason = "Fluessigkeitsmenge " + ctx.liquidQuantity.ToString()
-                   + " ausserhalb " + liquidQuantity.ToDebugString();
+            reason = "Fluessigkeitsmenge " + ctx.liquidQuantity.ToString() + " ausserhalb " + liquidQuantity.ToDebugString();
             return false;
         }
 
@@ -537,12 +533,7 @@ class ChefZ_CompiledRecipe
 
     string ToDebugString()
     {
-        string s = id
-                 + "  spez=" + specificity.ToString()
-                 + " prio=" + priority.ToString()
-                 + " slots=" + requiredSlots.ToString() + "/" + slots.Count().ToString()
-                 + " minItems=" + minItemCount.ToString()
-                 + " abschluss=" + ChefZ_Completion.Name(completion);
+        string s = id + "  spez=" + specificity.ToString() + " prio=" + priority.ToString() + " slots=" + requiredSlots.ToString() + "/" + slots.Count().ToString() + " minItems=" + minItemCount.ToString() + " abschluss=" + ChefZ_Completion.Name(completion);
         if (gateKind != ChefZ_GateKind.NONE)
             s = s + " tor=" + ChefZ_SymbolTable.NameOrMark(gateSym);
         return s;

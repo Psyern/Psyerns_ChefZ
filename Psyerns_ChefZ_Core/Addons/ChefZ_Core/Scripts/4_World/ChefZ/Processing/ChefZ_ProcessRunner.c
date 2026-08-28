@@ -258,9 +258,7 @@ class ChefZ_ProcessRunner
             if (changed == 0)
             {
                 s_CountFailed++;
-                err = "kein einziger Eingang konnte den Zustand wechseln - keines der "
-                    + "gebundenen Items fuehrt einen ChefZ-Zustandsblock (06 §4.3). "
-                    + "Nichts veraendert.";
+                err = "kein einziger Eingang konnte den Zustand wechseln - keines der " + "gebundenen Items fuehrt einen ChefZ-Zustandsblock (06 §4.3). " + "Nichts veraendert.";
                 return false;
             }
             s_CountStateOnly++;
@@ -539,8 +537,7 @@ class ChefZ_ProcessRunner
         if (!ChefZ_Applicator.Apply(result, entities, station, ctx, created, applyErr))
         {
             s_CountFailed++;
-            err = "Anwendung von " + tr.id + " abgebrochen: " + applyErr
-                + " (nichts verbraucht, nichts erzeugt)";
+            err = "Anwendung von " + tr.id + " abgebrochen: " + applyErr + " (nichts verbraucht, nichts erzeugt)";
             return false;
         }
 
@@ -692,8 +689,7 @@ class ChefZ_ProcessRunner
         if (changed == 0)
         {
             s_CountFailed++;
-            err = "kein einziger Eingang konnte den Zustand wechseln - keines der gebundenen "
-                + "Items fuehrt einen ChefZ-Zustandsblock (06 §4.3). Nichts veraendert.";
+            err = "kein einziger Eingang konnte den Zustand wechseln - keines der gebundenen " + "Items fuehrt einen ChefZ-Zustandsblock (06 §4.3). Nichts veraendert.";
             return false;
         }
 

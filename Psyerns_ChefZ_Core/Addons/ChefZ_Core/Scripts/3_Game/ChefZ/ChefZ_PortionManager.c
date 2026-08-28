@@ -595,8 +595,7 @@ class ChefZ_PortionManager
         ChefZ_PortionSpec spec;
         if (!GetSpecForBulk(req.sourceClass, spec))
         {
-            failReason = ChefZ_SymbolTable.NameOrMark(req.sourceClass)
-                       + " ist kein Portionsgericht";
+            failReason = ChefZ_SymbolTable.NameOrMark(req.sourceClass) + " ist kein Portionsgericht";
             return false;
         }
 
@@ -644,8 +643,7 @@ class ChefZ_PortionManager
         // Fadenkreuzes.
         if (!ChefZ_ContainerRegistry.Get().CategoryExists(spec.containerCategorySym))
         {
-            failReason = "die Behaelterkategorie \"" + spec.containerCategory
-                       + "\" ist auf diesem Server nicht deklariert";
+            failReason = "die Behaelterkategorie \"" + spec.containerCategory + "\" ist auf diesem Server nicht deklariert";
             return false;
         }
 
@@ -916,9 +914,7 @@ class ChefZ_PortionOutputAudit
         // Entnahme erzeugte wieder ein Bulk mit vollem Zaehler.
         if (def.portionClass == def.cls)
         {
-            rejectReason = where + ": \"portionClass\" ist dieselbe Klasse wie \"cls\" (\""
-                + def.cls + "\") - abgewiesen. Jede Entnahme erzeugte wieder ein volles "
-                + "Portionsgericht; das waere eine unbegrenzte Nahrungsquelle.";
+            rejectReason = where + ": \"portionClass\" ist dieselbe Klasse wie \"cls\" (\"" + def.cls + "\") - abgewiesen. Jede Entnahme erzeugte wieder ein volles " + "Portionsgericht; das waere eine unbegrenzte Nahrungsquelle.";
             return false;
         }
 

@@ -975,8 +975,7 @@ class ChefZ_ConfigManager
     private void ReportSummary()
     {
         // Format woertlich aus 02 §8.
-        string line = "slices=" + m_SliceCount.ToString() + " files=" + m_FileCount.ToString() + " records=" + m_Sink.GetSubmittedCount().ToString() + " ok=" + m_Sink.GetAcceptedCount().ToString() + " rejected=" + m_Sink.GetRejectedCount().ToString() + " patched=" + m_Sink.GetPatchedCount().ToString() + " health=" + HealthName(m_Health)
-                    + " in " + m_LoadMillis.ToString() + "ms";
+        string line = "slices=" + m_SliceCount.ToString() + " files=" + m_FileCount.ToString() + " records=" + m_Sink.GetSubmittedCount().ToString() + " ok=" + m_Sink.GetAcceptedCount().ToString() + " rejected=" + m_Sink.GetRejectedCount().ToString() + " patched=" + m_Sink.GetPatchedCount().ToString() + " health=" + HealthName(m_Health) + " in " + m_LoadMillis.ToString() + "ms";
 
         // Geht an der Stufenpruefung vorbei: 18 §4 verlangt diese Zeile IMMER,
         // auch bei Erfolg und auch bei Stufe WARN.

@@ -91,8 +91,7 @@ class ChefZ_SelectorCompiler
 
         if (depth > ctx.MaxSelectorDepth())
         {
-            error = "Selektor ist tiefer als maxSelectorDepth ("
-                  + ctx.MaxSelectorDepth().ToString() + ") - meist zyklisches Copy-Paste";
+            error = "Selektor ist tiefer als maxSelectorDepth (" + ctx.MaxSelectorDepth().ToString() + ") - meist zyklisches Copy-Paste";
             return Reject(ctx, error);
         }
 
@@ -100,8 +99,7 @@ class ChefZ_SelectorCompiler
 
         if (predicates > 1)
         {
-            error = "Selektor setzt mehrere Praedikate gleichzeitig (" + src.PredicateNames()
-                  + ") - nutze allOf, wenn beides gelten soll";
+            error = "Selektor setzt mehrere Praedikate gleichzeitig (" + src.PredicateNames() + ") - nutze allOf, wenn beides gelten soll";
             return Reject(ctx, error);
         }
 
@@ -214,8 +212,7 @@ class ChefZ_SelectorCompiler
             node.vanillaStageValue = ChefZ_VanillaStage.FromName(src.vanillaStage);
             if (node.vanillaStageValue < 0)
             {
-                error = "unbekannte Vanilla-Garstufe \"" + src.vanillaStage
-                      + "\" - gueltig: " + ChefZ_VanillaStage.ValidNames();
+                error = "unbekannte Vanilla-Garstufe \"" + src.vanillaStage + "\" - gueltig: " + ChefZ_VanillaStage.ValidNames();
                 return false;
             }
             return true;
@@ -274,8 +271,7 @@ class ChefZ_SelectorCompiler
 
         if (list.Count() > ChefZ_SelectorLimits.MAX_CHILDREN)
         {
-            error = label + " hat " + list.Count().ToString() + " Kinder - Obergrenze ist "
-                  + ChefZ_SelectorLimits.MAX_CHILDREN.ToString();
+            error = label + " hat " + list.Count().ToString() + " Kinder - Obergrenze ist " + ChefZ_SelectorLimits.MAX_CHILDREN.ToString();
             return false;
         }
 
@@ -376,8 +372,7 @@ class ChefZ_SelectorCompiler
             // Kann nur passieren, wenn der Nachschlager sich widerspricht -
             // die Stufe existiert, liegt aber in keinem Stufensatz. Abweisen
             // statt "matcht nie" zu bauen.
-            error = "Qualitaetsstufe \"" + src.minQuality + "\" laesst sich zu keiner "
-                  + "Stufenliste aufloesen";
+            error = "Qualitaetsstufe \"" + src.minQuality + "\" laesst sich zu keiner " + "Stufenliste aufloesen";
             return false;
         }
 
@@ -864,8 +859,7 @@ class ChefZ_SelectorCompiler
 
         if (slot.excludeStates.Count() == 0 && dropped > 0)
         {
-            error = "excludeStates enthaelt ausschliesslich unbekannte Zustaende - der Filter "
-                  + "waere damit still abgeschaltet";
+            error = "excludeStates enthaelt ausschliesslich unbekannte Zustaende - der Filter " + "waere damit still abgeschaltet";
             return false;
         }
 

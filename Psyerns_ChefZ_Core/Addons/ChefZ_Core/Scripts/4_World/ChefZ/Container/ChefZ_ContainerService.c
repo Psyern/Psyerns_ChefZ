@@ -258,8 +258,7 @@ class ChefZ_ContainerService
         // dieser Zeit gefuellt wurde, ist keine freie Schuessel mehr.
         if (!IsUsable(container))
         {
-            err = "\"" + container.GetType() + "\" ist nicht mehr frei (gefuellt oder "
-                + "ruiniert)";
+            err = "\"" + container.GetType() + "\" ist nicht mehr frei (gefuellt oder " + "ruiniert)";
             return false;
         }
 
@@ -300,8 +299,7 @@ class ChefZ_ContainerService
         ItemBase container = FindBestOfClass(containerClass, actor, device);
         if (!container)
         {
-            err = "kein Behaelter der Klasse \""
-                + ChefZ_SymbolTable.NameOrMark(containerClass) + "\" mehr im Zugriff";
+            err = "kein Behaelter der Klasse \"" + ChefZ_SymbolTable.NameOrMark(containerClass) + "\" mehr im Zugriff";
             return false;
         }
 
@@ -870,8 +868,7 @@ class ChefZ_ContainerService
     {
         ChefZ_EventBus bus = ChefZ_EventBus.Get();
 
-        bool anyListener = bus.HasSubscribers(ChefZ_EventNames.FOOD_CONSUMED)
-                        || ChefZ_ProgressRegistry.HasSinks();
+        bool anyListener = bus.HasSubscribers(ChefZ_EventNames.FOOD_CONSUMED) || ChefZ_ProgressRegistry.HasSinks();
         if (!anyListener)
             return;
 

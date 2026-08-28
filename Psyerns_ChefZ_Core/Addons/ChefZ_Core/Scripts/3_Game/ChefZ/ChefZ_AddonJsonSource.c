@@ -252,8 +252,7 @@ class ChefZ_AddonJsonSource extends ChefZ_IRecordSource
             return;
 
         string where = "CfgChefZ " + m_SliceName;
-        string what  = "Im Manifest genannte Datei ist nicht lesbar. Geprueft wurde "
-                     + ChefZ_PathTools.TriedForms(declared) + ".";
+        string what  = "Im Manifest genannte Datei ist nicht lesbar. Geprueft wurde " + ChefZ_PathTools.TriedForms(declared) + ".";
 
         if (m_MissingIsWarnOnly)
         {

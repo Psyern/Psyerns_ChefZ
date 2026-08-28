@@ -150,10 +150,7 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))
         {
             ChefZ_Log.Debug(ChefZ_LogChannel.EVENT,
-                "TerjeSkills: +" + xp.ToString() + " surv fuer " + progressKind
-                + " \"" + key + "\" (Spieler " + args.identityId.ToString()
-                + ", Ergebnisse " + produced.ToString()
-                + ", Daempfung " + percent.ToString() + "%)");
+                "TerjeSkills: +" + xp.ToString() + " surv fuer " + progressKind + " \"" + key + "\" (Spieler " + args.identityId.ToString() + ", Ergebnisse " + produced.ToString() + ", Daempfung " + percent.ToString() + "%)");
         }
     }
 

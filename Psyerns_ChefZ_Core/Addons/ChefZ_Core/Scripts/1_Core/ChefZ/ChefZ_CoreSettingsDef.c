@@ -872,13 +872,7 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
 
     string ToDebugString()
     {
-        return "enabled=" + enabled.ToString()
-             + " strict=" + strictMode.ToString()
-             + " safeModeAt=" + safeModeErrorThreshold.ToString()
-             + " logLevel=" + ChefZ_LogLevel.Name(logLevel)
-             + " overlay=" + allowProfileOverlay.ToString()
-             + " extraItems=" + defaultExtraItems
-             + " naehrwertaudit=" + enableNutritionAudit.ToString();
+        return "enabled=" + enabled.ToString() + " strict=" + strictMode.ToString() + " safeModeAt=" + safeModeErrorThreshold.ToString() + " logLevel=" + ChefZ_LogLevel.Name(logLevel) + " overlay=" + allowProfileOverlay.ToString() + " extraItems=" + defaultExtraItems + " naehrwertaudit=" + enableNutritionAudit.ToString();
     }
 
     //--------------------------------------------------------------------------

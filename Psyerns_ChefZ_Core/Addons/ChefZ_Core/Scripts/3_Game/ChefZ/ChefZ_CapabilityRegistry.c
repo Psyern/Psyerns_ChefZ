@@ -381,8 +381,7 @@ class ChefZ_CapabilityRegistry
             return true;
 
         degradeSteps = req.degradeSteps;
-        failReason   = "Faehigkeit \"" + req.capability + "\" ist " + value.ToString()
-                     + ", gefordert sind " + req.min.ToString();
+        failReason   = "Faehigkeit \"" + req.capability + "\" ist " + value.ToString() + ", gefordert sind " + req.min.ToString();
         return false;
     }
 

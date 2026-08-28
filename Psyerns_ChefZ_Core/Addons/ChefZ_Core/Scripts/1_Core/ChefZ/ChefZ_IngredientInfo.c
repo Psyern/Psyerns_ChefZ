@@ -101,10 +101,7 @@ class ChefZ_IngredientInfo
         }
         s = s + "]";
 
-        s = s + " closure=" + closure.ToDebugString()
-              + " einheit=" + ChefZ_SymbolTable.Name(quantityUnit)
-              + "x" + unitsPerWholeItem.ToString()
-              + " verdirbt=" + decays.ToString();
+        s = s + " closure=" + closure.ToDebugString() + " einheit=" + ChefZ_SymbolTable.Name(quantityUnit) + "x" + unitsPerWholeItem.ToString() + " verdirbt=" + decays.ToString();
 
         if (ChefZ_SymbolTable.IsValid(defaultState))
             s = s + " zustand=" + ChefZ_SymbolTable.Name(defaultState);
