@@ -56,6 +56,25 @@
 // Aktion, die der Server im Zweifel ablehnt, statt eine anzubieten, die es
 // nie gibt.
 //
+// ---------------------------------------------------------------------------
+// Der eine Punkt, an dem der SPIELER selbst durchgereicht wird
+// ---------------------------------------------------------------------------
+// Der ganze Verarbeitungspfad arbeitet mit (ItemBase inHands, int actorId) -
+// die Station braucht nicht mehr, und ein Timer-Tick hat ohnehin keinen
+// Spieler. actorId ist PlayerIdentity.GetPlayerId(): eine Zahl ohne Rueckweg
+// zum PlayerBase.
+//
+// Eine Station, die auf den Spieler SELBST wirken soll, kaeme damit nicht aus.
+// Sie braucht den PlayerBase, und sie braucht ihn auch dann, wenn die Haende
+// LEER sind - dann ist inHands null und es bliebe gar kein Zeiger uebrig.
+//
+// OnFinishProgressServer ist der einzige Ort im Verarbeitungspfad, an dem
+// beides gleichzeitig vorliegt: ActionData.m_Player und ActionData.m_MainItem.
+// Deshalb ruft er zum Schluss NotifyStation(), und die reicht an
+// ChefZ_ProcessingStation_Base.ChefZ_OnStationActionFinished() weiter. Der
+// Core entscheidet dort NICHTS - er stellt die Gelegenheit her; was daraus
+// folgt, gehoert dem Content-Modul, das die Station anlegt.
+//
 // KEIN CONTENT: kein Prozessname, kein Stationsname, kein Anzeigetext.
 //
 // Layer: 4_World.
@@ -514,6 +533,11 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      *                   (11 §7: "Spieler verlaesst den Server waehrend
      *                   STATION_TIMED -> irrelevant, der Timer gehoert der
      *                   Station").
+     *
+     * ZULETZT, in beiden Zweigen: NotifyStation(). Das ist der einzige Punkt
+     * des Verarbeitungspfades, an dem der handelnde SPIELER, sein Handinhalt
+     * und der Ausgang gleichzeitig bekannt sind - siehe dort und an
+     * ChefZ_ProcessingStation_Base.ChefZ_OnStationActionFinished().
      */
     override void OnFinishProgressServer(ActionData action_data)
     {
@@ -537,20 +561,36 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
         if (!proc)
             return;
 
+        // Ueber EINE lokale Ergebnisvariable und genau EINEN Ausgang. Die
+        // frueheren "return" mitten im Zweig sind absichtlich verschwunden:
+        // ein Haken, den ein Fehlerpfad ueberspringt, waere schlimmer als gar
+        // keiner - er zuendete nur bei Erfolg und niemand saehe, warum.
+        //
+        // Vorbelegt mit UNKNOWN, obwohl beide Zweige zuweisen: faellt hier je
+        // ein Zweig ohne Zuweisung dazu, meldet der Haken "unbekannt" und
+        // nicht "geglueckt".
+        int outcome = ChefZ_StationActionOutcome.UNKNOWN;
+
         if (proc.exec == ChefZ_ProcessExec.STATION_TIMED)
         {
             string beginErr;
-            if (!station.ChefZ_BeginJob(process, action_data.m_MainItem, actorId, beginErr))
+            if (station.ChefZ_BeginJob(process, action_data.m_MainItem, actorId, beginErr))
+            {
+                ApplyToolDamage(action_data, proc);
+                outcome = ChefZ_StationActionOutcome.JOB_STARTED;
+            }
+            else
             {
                 ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS, "action.begin." + station.GetType(), "Der Job an \"" + station.GetType() + "\" konnte nicht starten: " + beginErr + ". Es wurde nichts veraendert.");
-                return;
+                outcome = ChefZ_StationActionOutcome.JOB_REFUSED;
             }
-
-            ApplyToolDamage(action_data, proc);
-            return;
+        }
+        else
+        {
+            outcome = RunImmediate(station, action_data, proc, process, actorId);
         }
 
-        RunImmediate(station, action_data, proc, process, actorId);
+        NotifyStation(station, action_data, process, outcome);
     }
 
     /**
@@ -561,8 +601,14 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      * kann ein zweiter Spieler die Station leergeraeumt haben. 11 §5 verlangt
      * genau das - und der ChefZ_ProcessRunner revalidiert danach ein drittes
      * Mal, unmittelbar vor dem Verbrauch (08 §6, Schritt 1).
+     *
+     * @return ChefZ_StationActionOutcome.*. Frueher void; der Rueckgabewert
+     *         geht ausschliesslich an NotifyStation und wird sonst nirgends
+     *         ausgewertet. Ein zweiter, aus dem Aufrufer abgeleiteter
+     *         "hat es geklappt"-Test haette dieselbe Frage ein zweites Mal
+     *         und moeglicherweise anders beantwortet.
      */
-    protected void RunImmediate(notnull ChefZ_ProcessingStation_Base station, notnull ActionData action_data, notnull ChefZ_CompiledProcess proc, ChefZ_Sym process, int actorId)
+    protected int RunImmediate(notnull ChefZ_ProcessingStation_Base station, notnull ActionData action_data, notnull ChefZ_CompiledProcess proc, ChefZ_Sym process, int actorId)
     {
         ChefZ_ProcessContext ctx = new ChefZ_ProcessContext();
         station.ChefZ_BuildContext(action_data.m_MainItem, actorId, ctx);
@@ -576,16 +622,73 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
         if (!ChefZ_ProcessingManager.Get().FindTransform(process, ctx, snapshot, null, match))
         {
             ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS, "action.nomatch." + station.GetType(), "An \"" + station.GetType() + "\" passt beim Abschluss kein Transform mehr: " + match.failReason + ". Es wurde nichts veraendert.");
-            return;
+            return ChefZ_StationActionOutcome.NO_MATCH;
         }
 
         array<ItemBase> created;
         string err;
 
         if (!ChefZ_ProcessRunner.Run(station, match, entities, snapshot, actorId, created, err))
-            return;
+            return ChefZ_StationActionOutcome.RUN_FAILED;
 
         ApplyToolDamage(action_data, proc);
+        return ChefZ_StationActionOutcome.APPLIED;
+    }
+
+    /**
+     * Der Station sagen, dass ein SPIELER hier eben fertig geworden ist.
+     *
+     * Das ist die Bruecke, die dem Verarbeitungspfad sonst fehlt. Die Station
+     * arbeitet durchgehend mit (ItemBase inHands, int actorId) - eine Zahl
+     * ohne Rueckweg zum PlayerBase. Hier, und nur hier, liegt der PlayerBase
+     * noch vor: ActionData.m_Player.
+     *
+     * DREI Eigenschaften, die diese Methode haben MUSS:
+     *
+     *   SERVER    g_Game.IsServer(). OnFinishProgressServer laeuft schon nur
+     *             dort, aber der Haken darf nichts Autoritatives auf dem
+     *             Client anstossen (00 §5), und ein Wachposten an der Grenze
+     *             kostet nichts.
+     *   LEERE     HAENDE sind kein Fehlerfall. action_data.m_MainItem ist
+     *             null, wenn der Spieler nichts haelt - die Action laeuft mit
+     *             CCINone ausdruecklich auch so. Der Haken bekommt dann null
+     *             und feuert trotzdem. Waere er an inHands gebunden, fiele
+     *             genau der Fall aus, fuer den er gebaut wurde.
+     *   IMMER     auch bei NO_MATCH, RUN_FAILED und JOB_REFUSED. Ob eine
+     *             Station auch dann wirkt, wenn nichts entstanden ist, ist
+     *             eine Content-Frage; der Core beantwortet sie nicht, indem
+     *             er den Haken verschweigt.
+     *
+     * Ohne Spieler feuert nichts. Das ist kein Fehler, sondern der Fall
+     * "Serveraktion oder Bot" - dieselbe Regel wie bei IdentityOf(), das dann
+     * 0 liefert.
+     */
+    protected void NotifyStation(notnull ChefZ_ProcessingStation_Base station, notnull ActionData action_data, ChefZ_Sym process, int outcome)
+    {
+        if (!g_Game || !g_Game.IsServer())
+            return;
+
+        PlayerBase actor = action_data.m_Player;
+        if (!actor)
+            return;
+
+        // Die Spur liegt HIER und nicht im Haken: sie soll auch dann im Log
+        // stehen, wenn eine Ueberschreibung nichts tut oder es gar keine gibt.
+        if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
+        {
+            ChefZ_Log.Debug(ChefZ_LogChannel.PROCESS, "Stationsaktion beendet an " + station.GetType() + ": prozess=" + ChefZ_SymbolTable.NameOrMark(process) + " ausgang=" + ChefZ_StationActionOutcome.Name(outcome) + " haende=" + ChefZ_ItemName(action_data.m_MainItem) + ".");
+        }
+
+        station.ChefZ_OnStationActionFinished(actor, action_data.m_MainItem, process, outcome);
+    }
+
+    //! "-" statt eines leeren Feldes im Log. Leere Haende sind hier eine
+    //! Aussage und kein fehlender Wert.
+    protected static string ChefZ_ItemName(ItemBase item)
+    {
+        if (!item)
+            return "-";
+        return item.GetType();
     }
 
     /**

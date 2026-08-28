@@ -76,8 +76,114 @@
 //    Frage "reicht die Temperatur" ist auf ihr gar nicht beantwortbar, ohne
 //    die Klemmung des Compilers zu wiederholen.
 //
+//    Beide Abweichungen bleiben stehen. Der EINE Punkt, an dem ein
+//    Content-Modul den Spieler selbst braucht, ist eigens ausgewiesen:
+//    ChefZ_OnStationActionFinished (siehe dort).
+//
 // Layer: 4_World.
 //==============================================================================
+
+/**
+ * Wie eine Stationsaktion geendet hat - der vierte Parameter von
+ * ChefZ_ProcessingStation_Base.ChefZ_OnStationActionFinished().
+ *
+ * Als Konstantenklasse und nicht als enum, aus demselben Grund wie bei
+ * ChefZ_ProcessExec: der Wert geht ueber eine Methodengrenze, die ein FREMDES
+ * Modul ueberschreibt. Ein int-Parameter bindet die Ueberschreibung an keinen
+ * Typnamen, und eine spaeter ergaenzte Konstante bricht keine bestehende
+ * Signatur.
+ *
+ * Ein unbekannter Wert ist moeglich - wer hier ein switch schreibt, braucht
+ * einen default-Zweig. Das ist Absicht: die Liste darf wachsen.
+ *
+ * NULL IST KEIN ERFOLG. Das ist die eine Entscheidung dieser Klasse, die kein
+ * Geschmack ist: ein nicht zugewiesener int ist in Enforce 0, und wenn 0
+ * "APPLIED" hiesse, laese ein vergessenes Zuweisen sich als geglueckter Lauf.
+ * Ein Modul, das daraufhin belohnt statt bestraft, faellt niemandem auf. 0 ist
+ * deshalb UNKNOWN, und IsSuccess() sagt dazu nein.
+ */
+class ChefZ_StationActionOutcome
+{
+    //! Nicht gesetzt. Der Core sendet diesen Wert nie - er ist der Vorgabewert
+    //! eines int und existiert nur, damit er nicht wie ein Erfolg aussieht.
+    static const int UNKNOWN     = 0;
+
+    //! Der Transform lief durch. Ergebnisse liegen in der Station.
+    static const int APPLIED     = 1;
+
+    //! Beim Abschluss passte kein Transform mehr (jemand hat ausgeraeumt).
+    //! Es wurde NICHTS verbraucht und NICHTS erzeugt.
+    static const int NO_MATCH    = 2;
+
+    //! Gebunden, aber die Ausfuehrung schlug fehl. Die Welt ist unveraendert.
+    static const int RUN_FAILED  = 3;
+
+    //! STATION_TIMED: der Job wurde angelegt und laeuft jetzt. Was dabei
+    //! herauskommt, entscheidet spaeter ein Timer-Tick OHNE Spieler - dieser
+    //! Haken feuert dafuer NICHT noch einmal.
+    static const int JOB_STARTED = 4;
+
+    //! STATION_TIMED: der Job konnte nicht starten (Slots belegt, storniert,
+    //! kein Transform).
+    static const int JOB_REFUSED = 5;
+
+    //! Klartext fuer Log und Trace. "?" bei unbekanntem Wert.
+    static string Name(int outcome)
+    {
+        switch (outcome)
+        {
+            case UNKNOWN:     return "UNKNOWN";
+            case APPLIED:     return "APPLIED";
+            case NO_MATCH:    return "NO_MATCH";
+            case RUN_FAILED:  return "RUN_FAILED";
+            case JOB_STARTED: return "JOB_STARTED";
+            case JOB_REFUSED: return "JOB_REFUSED";
+        }
+        return "?";
+    }
+
+    //! Hat der Abschluss tatsaechlich gewirkt (Ergebnis oder laufender Job)?
+    static bool IsSuccess(int outcome)
+    {
+        return outcome == APPLIED || outcome == JOB_STARTED;
+    }
+
+    /**
+     * Ohne Welt pruefbar, und genau deshalb geprueft: die Zusage "0 ist kein
+     * Erfolg" ist eine Zahl, keine Struktur. Faellt sie um - etwa weil jemand
+     * die Konstanten neu nummeriert -, faellt sie lautlos in die gefaehrliche
+     * Richtung.
+     */
+    static bool SelfCheck()
+    {
+        if (UNKNOWN != 0)                return false;
+        if (IsSuccess(UNKNOWN))          return false;
+        if (!IsSuccess(APPLIED))         return false;
+        if (!IsSuccess(JOB_STARTED))     return false;
+        if (IsSuccess(NO_MATCH))         return false;
+        if (IsSuccess(RUN_FAILED))       return false;
+        if (IsSuccess(JOB_REFUSED))      return false;
+        if (Name(UNKNOWN) != "UNKNOWN")  return false;
+        if (Name(APPLIED) == "?")        return false;
+        if (Name(-1) != "?")             return false;
+
+        // Keine zwei Konstanten duerfen denselben Wert tragen - sonst waeren
+        // zwei Ausgaenge im Log und im Modul nicht mehr unterscheidbar.
+        array<int> all = { UNKNOWN, APPLIED, NO_MATCH, RUN_FAILED, JOB_STARTED, JOB_REFUSED };
+        for (int i = 0; i < all.Count(); i++)
+        {
+            for (int j = i + 1; j < all.Count(); j++)
+            {
+                if (all.Get(i) == all.Get(j))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+//------------------------------------------------------------------------------
 
 class ChefZ_ProcessingStation_Base extends ItemBase
 {
@@ -711,6 +817,121 @@ class ChefZ_ProcessingStation_Base extends ItemBase
     {
         for (int i = 0; i < m_ChefZ_Jobs.Count(); i++)
             ChefZ_CancelJob(i, reasonTag);
+    }
+
+    //==========================================================================
+    // Der eine Haken mit Spielerzugriff (11 §5, 00 §5)
+    //==========================================================================
+
+    /**
+     * Ein Spieler hat eine Stationsaktion an DIESER Station zu Ende gefuehrt.
+     *
+     * SERVER, immer. Der Aufrufer (ChefZ_ActionProcessAtStation.NotifyStation)
+     * prueft g_Game.IsServer() vorher; eine Ueberschreibung darf sich darauf
+     * verlassen und muss nichts an den Client melden, was die normale
+     * Inventar- und Variablensynchronisation ohnehin traegt (00 §5).
+     *
+     * -------------------------------------------------------------------------
+     * WARUM ES DIESEN HAKEN GIBT
+     * -------------------------------------------------------------------------
+     * Die Station arbeitet sonst durchgehend mit (ItemBase inHands, int
+     * actorId) - siehe die "Zwei Abweichungen" im Dateikopf. Das reicht fuer
+     * alles, was ChefZ selbst tut: Werkzeuge finden und Faehigkeiten pruefen.
+     *
+     * Es reicht NICHT fuer eine Station, die auf den Spieler selbst wirken
+     * soll. actorId ist PlayerIdentity.GetPlayerId(), eine Zahl ohne Rueckweg
+     * zum PlayerBase, und im interessanten Fall - leere Haende - ist inHands
+     * null, es bliebe also gar kein Zeiger uebrig. Genau dieser Fall ist hier
+     * der Regelfall und nicht der Sonderfall.
+     *
+     * Ein STATION_ACTION laeuft ausserdem NICHT ueber ChefZ_BeginJob, sondern
+     * sofort durch. Wer dort einhaengen wollte, haette ChefZ_BeginJob
+     * ueberschrieben und nie gezuendet.
+     *
+     * Der Haken ist deshalb an den Aktionsabschluss gebunden, nicht an den
+     * Jobstart, und er feuert fuer BEIDE Stationsausfuehrungsformen - denn in
+     * beiden stand ein Spieler an der Station und hat die Aktion durchgezogen.
+     * Der Timer-Tick, der einen STATION_TIMED-Job spaeter abschliesst, hat
+     * keinen Spieler und ruft ihn folgerichtig nicht.
+     *
+     * -------------------------------------------------------------------------
+     * WAS DER CORE HIER ENTSCHEIDET: NICHTS
+     * -------------------------------------------------------------------------
+     * Der Rumpf ist leer und bleibt leer. Der Core stellt die GELEGENHEIT
+     * bereit - den einen Punkt, an dem Spieler, Handinhalt, Prozess und
+     * Ausgang gleichzeitig bekannt sind. Was daraus folgt, ist eine
+     * Content-Entscheidung und gehoert in das Modul, das die Station anlegt
+     * (Invariante I3).
+     *
+     * -------------------------------------------------------------------------
+     * BAUFORM FUER CONTENT-MODULE
+     * -------------------------------------------------------------------------
+     * Vorbild ist Vanillas CAContinuousMineWood.DamagePlayersHands(): ein
+     * Ausruestungsstueck faengt den Schaden ab, und nur wenn keines da ist,
+     * trifft es den Spieler. Ein Modul baut das so nach - ohne eine Zeile im
+     * Core, ohne eigene Action, ohne modded class:
+     *
+     *     class Meine_Station extends ChefZ_ProcessingStation_Base
+     *     {
+     *         override void ChefZ_OnStationActionFinished(PlayerBase actor, ItemBase inHands, ChefZ_Sym process, int outcome)
+     *         {
+     *             super.ChefZ_OnStationActionFinished(actor, inHands, process, outcome);
+     *
+     *             if (!actor)
+     *                 return;
+     *             if (process != ChefZ_SymbolTable.Lookup("MEIN_PROZESS"))
+     *                 return;
+     *
+     *             // Werkzeug in der Hand faengt ab und nutzt sich ab.
+     *             if (inHands)
+     *             {
+     *                 inHands.DecreaseHealth("", "", 5.0);
+     *                 return;
+     *             }
+     *
+     *             // Leere Haende - der Straffall. Erst die Ausruestung ...
+     *             ItemBase worn = ItemBase.Cast(actor.FindAttachmentBySlotName("Gloves"));
+     *             if (worn && !worn.IsDamageDestroyed())
+     *             {
+     *                 worn.DecreaseHealth("", "", 5.0);
+     *                 return;
+     *             }
+     *
+     *             // ... dann der Spieler selbst.
+     *             if (Math.RandomIntInclusive(0, 9) == 0)
+     *                 actor.GetBleedingManagerServer().AttemptAddBleedingSourceBySelection("LeftForeArmRoll");
+     *         }
+     *     }
+     *
+     * Der Aufruf von super ist nicht noetig (der Rumpf ist leer), aber
+     * empfohlen: ein Modul, das seine eigene Zwischenbasis einzieht, verliert
+     * ihn sonst.
+     *
+     * -------------------------------------------------------------------------
+     * WAS HIER BEWUSST NICHT UEBERGEBEN WIRD
+     * -------------------------------------------------------------------------
+     * Die erzeugten Items. Sie liegen im Cargo dieser Station, und die Station
+     * ist "this" - ein Modul, das sie braucht, sieht sie dort. Eine
+     * Ergebnisliste im Parameter waere fuer den Jobstart ohnehin leer und
+     * haette den Haken damit fuer die Haelfte seiner Aufrufe belogen.
+     *
+     * @param actor    der handelnde Spieler. Nie null - der Aufrufer prueft
+     *                 das; ohne Spieler feuert der Haken gar nicht. Eine
+     *                 Ueberschreibung, die auch aus eigenem Code gerufen wird,
+     *                 prueft trotzdem selbst.
+     * @param inHands  was er in der Hand hielt, oder NULL. Null ist ein
+     *                 gueltiger, erwarteter Zustand: die Aktion laeuft mit
+     *                 CCINone und damit ausdruecklich auch mit leeren Haenden.
+     * @param process  der Prozess, den die Aktion abgeschlossen hat. Immer
+     *                 gueltig (ChefZ_SymbolTable.IsValid), und immer einer aus
+     *                 dem Angebot dieser Station.
+     * @param outcome  ChefZ_StationActionOutcome.*. Auch die Misserfolge
+     *                 feuern - ob eine Station auch dann wirkt, wenn nichts
+     *                 entstanden ist, ist eine Content-Frage und keine des
+     *                 Core.
+     */
+    void ChefZ_OnStationActionFinished(PlayerBase actor, ItemBase inHands, ChefZ_Sym process, int outcome)
+    {
     }
 
     //==========================================================================

@@ -35,6 +35,8 @@
 //   - jede Abweisung aus dem Kopf von ChefZ_GenericCraftRecipe
 //   - dass Init() aus dem Konstruktor folgenlos bleibt (11 E3)
 //   - die Ueber-Naeherung Selektor -> Klassennamen
+//   - als GAST aus S14: die Ausgangskennung der Stationsaktion
+//     (ChefZ_StationActionOutcome). Begruendung am Aufruf in Run().
 //
 // NICHT PRUEFBAR OHNE WELT, und deshalb dem Servertest vorbehalten:
 //   - dass das Rezept in der Craftliste des Spielers auftaucht. Das braucht
@@ -95,6 +97,19 @@ class ChefZ_HandcraftSelfTest
         // einer Fehlermeldung, die auf einen Versatz zeigt, den es gar nicht
         // gibt.
         Check("Kennung Craftaktion",  ChefZ_CraftIntent.SelfCheck());
+
+        // GAST in dieser Datei, offen benannt: die Ausgangskennung der
+        // Stationsaktion gehoert zu S14 und nicht zu S15. Sie kann trotzdem
+        // nicht in ChefZ_ProcessingSelfTest stehen - der liegt in 3_Game und
+        // sieht keine 4_World-Klasse. Dies hier ist der einzige Selbsttest im
+        // Verzeichnis Processing, der auf der richtigen Schicht laeuft.
+        //
+        // Und geprueft werden MUSS sie, aus demselben Grund wie die Zeile
+        // darueber: ihre Zusage ist eine ZAHL. "0 bedeutet nicht Erfolg" haelt,
+        // solange niemand die Konstanten neu nummeriert - und wenn es
+        // jemand tut, belohnt ein Content-Modul kuenftig einen Lauf, der nie
+        // stattgefunden hat. Kein Absturz, keine Logzeile.
+        Check("Ausgang Stationsaktion", ChefZ_StationActionOutcome.SelfCheck());
 
         return s_Failed == 0;
     }
