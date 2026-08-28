@@ -5,35 +5,60 @@
         {
             "id": "RCP_ChefZ_TacticalBreakfast",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "ON_STAGE",
-            "doneStages": ["Baked"],
+            "doneStages": [
+                "Baked"
+            ],
             "slots": [
                 {
                     "slotId": "bacon",
-                    "match": { "anyOf": [ { "cls": "TacticalBaconCan_Opened" }, { "cls": "TacticalBaconCan" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "TacticalBaconCan_Opened"
+                            },
+                            {
+                                "cls": "TacticalBaconCan"
+                            }
+                        ]
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "egg",
-                    "match": { "category": "EGG" },
+                    "match": {
+                        "category": "EGG"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "bread",
-                    "match": { "category": "BREAD" },
+                    "match": {
+                        "category": "BREAD"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "tomato",
-                    "match": { "category": "TOMATO" },
+                    "match": {
+                        "category": "TOMATO"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -42,17 +67,33 @@
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 4.0 },
+                    "amount": {
+                        "min": 4
+                    },
                     "consume": "amount",
-                    "consumeAmount": 4.0,
+                    "consumeAmount": 4,
                     "gradePoints": 1
                 },
                 {
                     "slotId": "spice",
-                    "match": { "anyOf": [ { "category": "SPICE" }, { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "SPICE"
+                            },
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -62,15 +103,37 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_TB_FreshHerb", "when": "anyItem",
-                  "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] },
-                  "points": 1.0 },
-                { "ruleId": "GR_TB_TwoEggs", "when": "slotCount", "slotId": "egg",
-                  "pointsPerItem": 1.0, "maxPoints": 2.0 }
+                {
+                    "ruleId": "GR_TB_FreshHerb",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "tag": "CHEFZ_HERB"
+                            },
+                            {
+                                "freshness": {
+                                    "min": 0.8
+                                }
+                            }
+                        ]
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_TB_TwoEggs",
+                    "when": "slotCount",
+                    "slotId": "egg",
+                    "pointsPerItem": 1,
+                    "maxPoints": 2
+                }
             ],
             "outputs": [
                 {
@@ -93,53 +156,87 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_HEARTY_MEAL"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_ScrambledEggSausage",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "ON_STAGE",
-            "doneStages": ["Baked"],
+            "doneStages": [
+                "Baked"
+            ],
             "slots": [
                 {
                     "slotId": "egg",
-                    "match": { "category": "EGG" },
+                    "match": {
+                        "category": "EGG"
+                    },
                     "minCount": 2,
                     "maxCount": 4,
                     "consume": "whole"
                 },
                 {
                     "slotId": "dairy",
-                    "match": { "category": "DAIRY" },
+                    "match": {
+                        "category": "DAIRY"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "sausage",
-                    "match": { "category": "SAUSAGE" },
+                    "match": {
+                        "category": "SAUSAGE"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 4.0 },
+                    "amount": {
+                        "min": 4
+                    },
                     "consume": "amount",
-                    "consumeAmount": 4.0,
+                    "consumeAmount": 4,
                     "gradePoints": 1
                 },
                 {
                     "slotId": "spice",
-                    "match": { "anyOf": [ { "category": "SPICE" }, { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "SPICE"
+                            },
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -149,18 +246,50 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_SES_Parsley", "when": "anyItem",
-                  "selector": { "anyOf": [ { "cls": "ChefZ_Parsley" }, { "cls": "ChefZ_DriedParsley" } ] },
-                  "points": 1.0 },
-                { "ruleId": "GR_SES_PremiumSausage", "when": "anyItem",
-                  "selector": { "allOf": [ { "category": "SAUSAGE" }, { "tag": "CHEFZ_PREMIUM" } ] },
-                  "points": 2.0 },
-                { "ruleId": "GR_SES_ManyEggs", "when": "slotCount", "slotId": "egg",
-                  "pointsPerItem": 0.5, "maxPoints": 2.0 }
+                {
+                    "ruleId": "GR_SES_Parsley",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_Parsley"
+                            },
+                            {
+                                "cls": "ChefZ_DriedParsley"
+                            }
+                        ]
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_SES_PremiumSausage",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "category": "SAUSAGE"
+                            },
+                            {
+                                "tag": "CHEFZ_PREMIUM"
+                            }
+                        ]
+                    },
+                    "points": 2
+                },
+                {
+                    "ruleId": "GR_SES_ManyEggs",
+                    "when": "slotCount",
+                    "slotId": "egg",
+                    "pointsPerItem": 0.5,
+                    "maxPoints": 2
+                }
             ],
             "outputs": [
                 {
@@ -171,7 +300,7 @@
                     "portions": 2,
                     "portionClass": "ChefZ_ScrambledEggSausage",
                     "portionQuantity": 1,
-                    "amountPerPortion": 2.0,
+                    "amountPerPortion": 2,
                     "containerCategory": "PLATE",
                     "consumesContainer": true,
                     "returnContainer": "AUTO",
@@ -183,50 +312,93 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_WARM_MEAL"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_FarmersBreakfast",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot", "Cauldron"], "methods": ["BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot",
+                        "Cauldron"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "ON_STAGE",
-            "doneStages": ["Baked"],
+            "doneStages": [
+                "Baked"
+            ],
             "slots": [
                 {
                     "slotId": "potato",
-                    "match": { "anyOf": [ { "cls": "ChefZ_SlicedPotato" }, { "cls": "Potato" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_SlicedPotato"
+                            },
+                            {
+                                "cls": "Potato"
+                            }
+                        ]
+                    },
                     "minCount": 2,
                     "maxCount": 4,
                     "consume": "whole"
                 },
                 {
                     "slotId": "egg",
-                    "match": { "category": "EGG" },
+                    "match": {
+                        "category": "EGG"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "sausage",
-                    "match": { "category": "SAUSAGE" },
+                    "match": {
+                        "category": "SAUSAGE"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "onion",
-                    "match": { "anyOf": [ { "cls": "ChefZ_ChoppedOnion" }, { "cls": "ChefZ_Onion" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_ChoppedOnion"
+                            },
+                            {
+                                "cls": "ChefZ_Onion"
+                            }
+                        ]
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "fat",
-                    "match": { "anyOf": [ { "category": "FAT" }, { "category": "BUTTER" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "FAT"
+                            },
+                            {
+                                "category": "BUTTER"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -235,17 +407,33 @@
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 5.0 },
+                    "amount": {
+                        "min": 5
+                    },
                     "consume": "amount",
-                    "consumeAmount": 5.0,
+                    "consumeAmount": 5,
                     "gradePoints": 1
                 },
                 {
                     "slotId": "spice",
-                    "match": { "anyOf": [ { "category": "SPICE" }, { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "SPICE"
+                            },
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -255,16 +443,45 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_FB_PremiumSausage", "when": "anyItem",
-                  "selector": { "allOf": [ { "category": "SAUSAGE" }, { "tag": "CHEFZ_PREMIUM" } ] },
-                  "points": 2.0 },
-                { "ruleId": "GR_FB_FreshHerb", "when": "anyItem",
-                  "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] },
-                  "points": 1.0 }
+                {
+                    "ruleId": "GR_FB_PremiumSausage",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "category": "SAUSAGE"
+                            },
+                            {
+                                "tag": "CHEFZ_PREMIUM"
+                            }
+                        ]
+                    },
+                    "points": 2
+                },
+                {
+                    "ruleId": "GR_FB_FreshHerb",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "tag": "CHEFZ_HERB"
+                            },
+                            {
+                                "freshness": {
+                                    "min": 0.8
+                                }
+                            }
+                        ]
+                    },
+                    "points": 1
+                }
             ],
             "outputs": [
                 {
@@ -287,46 +504,75 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_HEARTY_MEAL"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_CheeseFlatbread",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "ON_STAGE",
-            "doneStages": ["Baked"],
+            "doneStages": [
+                "Baked"
+            ],
             "slots": [
                 {
                     "slotId": "dough",
-                    "match": { "category": "DOUGH" },
+                    "match": {
+                        "category": "DOUGH"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "cheese",
-                    "match": { "cls": "ChefZ_Cheese" },
+                    "match": {
+                        "cls": "ChefZ_Cheese"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 4.0 },
+                    "amount": {
+                        "min": 4
+                    },
                     "consume": "amount",
-                    "consumeAmount": 4.0,
+                    "consumeAmount": 4,
                     "gradePoints": 1
                 },
                 {
                     "slotId": "herb",
-                    "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 2,
@@ -335,7 +581,9 @@
                 },
                 {
                     "slotId": "spice",
-                    "match": { "category": "SPICE" },
+                    "match": {
+                        "category": "SPICE"
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -345,18 +593,52 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_CF_DoubleCheese", "when": "slotCount", "slotId": "cheese",
-                  "pointsPerItem": 1.0, "maxPoints": 2.0 },
-                { "ruleId": "GR_CF_Rosemary", "when": "anyItem",
-                  "selector": { "anyOf": [ { "cls": "ChefZ_Rosemary" }, { "cls": "ChefZ_DriedRosemary" } ] },
-                  "points": 1.0 },
-                { "ruleId": "GR_CF_FreshHerb", "when": "anyItem",
-                  "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] },
-                  "points": 1.0 }
+                {
+                    "ruleId": "GR_CF_DoubleCheese",
+                    "when": "slotCount",
+                    "slotId": "cheese",
+                    "pointsPerItem": 1,
+                    "maxPoints": 2
+                },
+                {
+                    "ruleId": "GR_CF_Rosemary",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_Rosemary"
+                            },
+                            {
+                                "cls": "ChefZ_DriedRosemary"
+                            }
+                        ]
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_CF_FreshHerb",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "tag": "CHEFZ_HERB"
+                            },
+                            {
+                                "freshness": {
+                                    "min": 0.8
+                                }
+                            }
+                        ]
+                    },
+                    "points": 1
+                }
             ],
             "outputs": [
                 {
@@ -367,7 +649,7 @@
                     "portions": 2,
                     "portionClass": "ChefZ_CheeseFlatbread",
                     "portionQuantity": 1,
-                    "amountPerPortion": 1.0,
+                    "amountPerPortion": 1,
                     "containerCategory": "PLATE",
                     "consumesContainer": true,
                     "returnContainer": "AUTO",
@@ -379,42 +661,71 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_WARM_MEAL"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_SausageBreadPlate",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["NONE", "BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot"
+                    ],
+                    "methods": [
+                        "NONE",
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "INSTANT",
             "slots": [
                 {
                     "slotId": "bread",
-                    "match": { "category": "BREAD" },
+                    "match": {
+                        "category": "BREAD"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "sausage",
-                    "match": { "category": "SAUSAGE" },
+                    "match": {
+                        "category": "SAUSAGE"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "cheese",
-                    "match": { "cls": "ChefZ_Cheese" },
+                    "match": {
+                        "cls": "ChefZ_Cheese"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "butter",
-                    "match": { "category": "BUTTER" },
+                    "match": {
+                        "category": "BUTTER"
+                    },
+                    "optional": true,
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spread",
+                    "match": {
+                        "category": "CANNED_MEAT"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -423,7 +734,19 @@
                 },
                 {
                     "slotId": "spice",
-                    "match": { "anyOf": [ { "category": "SPICE" }, { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "SPICE"
+                            },
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -433,16 +756,43 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_SBP_PremiumSausage", "when": "anyItem",
-                  "selector": { "allOf": [ { "category": "SAUSAGE" }, { "tag": "CHEFZ_PREMIUM" } ] },
-                  "points": 2.0 },
-                { "ruleId": "GR_SBP_Preserved", "when": "anyItem",
-                  "selector": { "allOf": [ { "category": "SAUSAGE" }, { "tag": "CHEFZ_PRESERVED" } ] },
-                  "points": 1.0 }
+                {
+                    "ruleId": "GR_SBP_PremiumSausage",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "category": "SAUSAGE"
+                            },
+                            {
+                                "tag": "CHEFZ_PREMIUM"
+                            }
+                        ]
+                    },
+                    "points": 2
+                },
+                {
+                    "ruleId": "GR_SBP_Preserved",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "category": "SAUSAGE"
+                            },
+                            {
+                                "tag": "CHEFZ_PRESERVED"
+                            }
+                        ]
+                    },
+                    "points": 1
+                }
             ],
             "outputs": [
                 {
@@ -465,46 +815,74 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_HEARTY_MEAL"],
+            "effects": [
+                "CHEFZ_HEARTY_MEAL"
+            ],
             "nutritionModifier": 0.95,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_MushroomPan",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "ON_STAGE",
-            "doneStages": ["Baked"],
+            "doneStages": [
+                "Baked"
+            ],
             "slots": [
                 {
                     "slotId": "mushrooms",
-                    "match": { "category": "MUSHROOM" },
+                    "match": {
+                        "category": "MUSHROOM"
+                    },
                     "minCount": 3,
                     "maxCount": 6,
                     "consume": "whole"
                 },
                 {
                     "slotId": "butter",
-                    "match": { "category": "BUTTER" },
+                    "match": {
+                        "category": "BUTTER"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 4.0 },
+                    "amount": {
+                        "min": 4
+                    },
                     "consume": "amount",
-                    "consumeAmount": 4.0,
+                    "consumeAmount": 4,
                     "gradePoints": 1
                 },
                 {
                     "slotId": "herb",
-                    "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 2,
@@ -513,7 +891,9 @@
                 },
                 {
                     "slotId": "aromatics",
-                    "match": { "category": "ROOT_VEGETABLE" },
+                    "match": {
+                        "category": "ROOT_VEGETABLE"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 2,
@@ -522,7 +902,9 @@
                 },
                 {
                     "slotId": "spice",
-                    "match": { "category": "SPICE" },
+                    "match": {
+                        "category": "SPICE"
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -532,21 +914,73 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_MP_Parsley", "when": "anyItem",
-                  "selector": { "anyOf": [ { "cls": "ChefZ_Parsley" }, { "cls": "ChefZ_DriedParsley" } ] },
-                  "points": 1.0 },
-                { "ruleId": "GR_MP_Garlic", "when": "anyItem",
-                  "selector": { "anyOf": [ { "cls": "ChefZ_ChoppedGarlic" }, { "cls": "ChefZ_Garlic" }, { "cls": "ChefZ_WildGarlic" }, { "cls": "ChefZ_DriedWildGarlic" } ] },
-                  "points": 1.0 },
-                { "ruleId": "GR_MP_ManyMushrooms", "when": "slotCount", "slotId": "mushrooms",
-                  "pointsPerItem": 0.5, "maxPoints": 2.0 },
-                { "ruleId": "GR_MP_FreshMushrooms", "when": "anyItem",
-                  "selector": { "allOf": [ { "tag": "CHEFZ_MUSHROOM" }, { "freshness": { "min": 0.8 } } ] },
-                  "points": 1.0 }
+                {
+                    "ruleId": "GR_MP_Parsley",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_Parsley"
+                            },
+                            {
+                                "cls": "ChefZ_DriedParsley"
+                            }
+                        ]
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_MP_Garlic",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_ChoppedGarlic"
+                            },
+                            {
+                                "cls": "ChefZ_Garlic"
+                            },
+                            {
+                                "cls": "ChefZ_WildGarlic"
+                            },
+                            {
+                                "cls": "ChefZ_DriedWildGarlic"
+                            }
+                        ]
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_MP_ManyMushrooms",
+                    "when": "slotCount",
+                    "slotId": "mushrooms",
+                    "pointsPerItem": 0.5,
+                    "maxPoints": 2
+                },
+                {
+                    "ruleId": "GR_MP_FreshMushrooms",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "tag": "CHEFZ_MUSHROOM"
+                            },
+                            {
+                                "freshness": {
+                                    "min": 0.8
+                                }
+                            }
+                        ]
+                    },
+                    "points": 1
+                }
             ],
             "outputs": [
                 {
@@ -557,7 +991,7 @@
                     "portions": 2,
                     "portionClass": "ChefZ_MushroomPan",
                     "portionQuantity": 1,
-                    "amountPerPortion": 2.0,
+                    "amountPerPortion": 2,
                     "containerCategory": "PLATE",
                     "consumesContainer": true,
                     "returnContainer": "AUTO",
@@ -569,63 +1003,112 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEALTHY_MEAL"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_HEALTHY_MEAL"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_PotatoPancakes",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "ON_STAGE",
-            "doneStages": ["Baked"],
+            "doneStages": [
+                "Baked"
+            ],
             "slots": [
                 {
                     "slotId": "potato",
-                    "match": { "anyOf": [ { "cls": "ChefZ_SlicedPotato" }, { "cls": "Potato" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_SlicedPotato"
+                            },
+                            {
+                                "cls": "Potato"
+                            }
+                        ]
+                    },
                     "minCount": 2,
                     "maxCount": 4,
                     "consume": "whole"
                 },
                 {
                     "slotId": "flour",
-                    "match": { "category": "FLOUR" },
+                    "match": {
+                        "category": "FLOUR"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "GRAM",
-                    "amount": { "min": 100.0 },
+                    "amount": {
+                        "min": 100
+                    },
                     "consume": "amount",
-                    "consumeAmount": 100.0
+                    "consumeAmount": 100
                 },
                 {
                     "slotId": "egg",
-                    "match": { "category": "EGG" },
+                    "match": {
+                        "category": "EGG"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "fat",
-                    "match": { "anyOf": [ { "category": "FAT" }, { "category": "BUTTER" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "FAT"
+                            },
+                            {
+                                "category": "BUTTER"
+                            }
+                        ]
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 4.0 },
+                    "amount": {
+                        "min": 4
+                    },
                     "consume": "amount",
-                    "consumeAmount": 4.0,
+                    "consumeAmount": 4,
                     "gradePoints": 1
                 },
                 {
                     "slotId": "onion",
-                    "match": { "anyOf": [ { "cls": "ChefZ_ChoppedOnion" }, { "cls": "ChefZ_Onion" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_ChoppedOnion"
+                            },
+                            {
+                                "cls": "ChefZ_Onion"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -634,7 +1117,19 @@
                 },
                 {
                     "slotId": "spice",
-                    "match": { "anyOf": [ { "category": "SPICE" }, { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "SPICE"
+                            },
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -644,14 +1139,28 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_PP_Butter", "when": "anyItem",
-                  "selector": { "category": "BUTTER" }, "points": 1.0 },
-                { "ruleId": "GR_PP_ManyPotatoes", "when": "slotCount", "slotId": "potato",
-                  "pointsPerItem": 0.5, "maxPoints": 2.0 }
+                {
+                    "ruleId": "GR_PP_Butter",
+                    "when": "anyItem",
+                    "selector": {
+                        "category": "BUTTER"
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_PP_ManyPotatoes",
+                    "when": "slotCount",
+                    "slotId": "potato",
+                    "pointsPerItem": 0.5,
+                    "maxPoints": 2
+                }
             ],
             "outputs": [
                 {
@@ -662,7 +1171,7 @@
                     "portions": 2,
                     "portionClass": "ChefZ_PotatoPancakes",
                     "portionQuantity": 1,
-                    "amountPerPortion": 2.0,
+                    "amountPerPortion": 2,
                     "containerCategory": "PLATE",
                     "consumesContainer": true,
                     "returnContainer": "AUTO",
@@ -674,53 +1183,87 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_ENERGIZED"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_ENERGIZED"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_MeatDumplings",
             "contexts": [
-                { "deviceClasses": ["Pot", "Cauldron", "FryingPan"], "methods": ["BOILING", "BAKING"] }
+                {
+                    "deviceClasses": [
+                        "Pot",
+                        "Cauldron",
+                        "FryingPan"
+                    ],
+                    "methods": [
+                        "BOILING",
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "ON_STAGE",
-            "doneStages": ["Boiled", "Baked"],
+            "doneStages": [
+                "Boiled",
+                "Baked"
+            ],
             "slots": [
                 {
                     "slotId": "dough",
-                    "match": { "category": "DOUGH" },
+                    "match": {
+                        "category": "DOUGH"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "meat",
-                    "match": { "category": "MINCED_MEAT" },
+                    "match": {
+                        "category": "MINCED_MEAT"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "onion",
-                    "match": { "anyOf": [ { "cls": "ChefZ_ChoppedOnion" }, { "cls": "ChefZ_Onion" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_ChoppedOnion"
+                            },
+                            {
+                                "cls": "ChefZ_Onion"
+                            }
+                        ]
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 5.0 },
+                    "amount": {
+                        "min": 5
+                    },
                     "consume": "amount",
-                    "consumeAmount": 5.0,
+                    "consumeAmount": 5,
                     "gradePoints": 1
                 },
                 {
                     "slotId": "spice",
-                    "match": { "category": "SPICE" },
+                    "match": {
+                        "category": "SPICE"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 2,
@@ -729,7 +1272,16 @@
                 },
                 {
                     "slotId": "herb",
-                    "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 2,
@@ -739,19 +1291,60 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_MD_Pepper", "when": "anyItem",
-                  "selector": { "anyOf": [ { "cls": "ChefZ_BlackPepper" }, { "cls": "ChefZ_DriedPeppercorns" } ] },
-                  "points": 1.0 },
-                { "ruleId": "GR_MD_WildMeat", "when": "anyItem",
-                  "selector": { "allOf": [ { "category": "MINCED_MEAT" }, { "category": "WILD_MEAT" } ] },
-                  "points": 2.0 },
-                { "ruleId": "GR_MD_FreshHerb", "when": "anyItem",
-                  "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] },
-                  "points": 1.0 }
+                {
+                    "ruleId": "GR_MD_Pepper",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_BlackPepper"
+                            },
+                            {
+                                "cls": "ChefZ_DriedPeppercorns"
+                            }
+                        ]
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_MD_WildMeat",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "category": "MINCED_MEAT"
+                            },
+                            {
+                                "category": "WILD_MEAT"
+                            }
+                        ]
+                    },
+                    "points": 2
+                },
+                {
+                    "ruleId": "GR_MD_FreshHerb",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "tag": "CHEFZ_HERB"
+                            },
+                            {
+                                "freshness": {
+                                    "min": 0.8
+                                }
+                            }
+                        ]
+                    },
+                    "points": 1
+                }
             ],
             "outputs": [
                 {
@@ -774,36 +1367,60 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_HEARTY_MEAL"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_HEARTY_MEAL"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         },
-
         {
             "id": "RCP_ChefZ_MilkRice",
             "contexts": [
-                { "deviceClasses": ["Pot", "Cauldron"], "methods": ["BOILING"] }
+                {
+                    "deviceClasses": [
+                        "Pot",
+                        "Cauldron"
+                    ],
+                    "methods": [
+                        "BOILING"
+                    ]
+                }
             ],
-            "completion": "ON_STAGE",
-            "doneStages": ["Boiled"],
+            "completion": "TIMED",
             "slots": [
                 {
                     "slotId": "rice",
-                    "match": { "cls": "Rice" },
+                    "match": {
+                        "cls": "Rice"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "dairy",
-                    "match": { "allOf": [ { "category": "DAIRY" }, { "not": { "category": "BUTTER" } } ] },
+                    "match": {
+                        "allOf": [
+                            {
+                                "category": "DAIRY"
+                            },
+                            {
+                                "not": {
+                                    "category": "BUTTER"
+                                }
+                            }
+                        ]
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "honey",
-                    "match": { "cls": "Honey" },
+                    "match": {
+                        "cls": "Honey"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -812,7 +1429,9 @@
                 },
                 {
                     "slotId": "butter",
-                    "match": { "category": "BUTTER" },
+                    "match": {
+                        "category": "BUTTER"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -821,25 +1440,43 @@
                 },
                 {
                     "slotId": "salt",
-                    "match": { "category": "SALT" },
+                    "match": {
+                        "category": "SALT"
+                    },
                     "optional": true,
                     "unit": "GRAM",
-                    "amount": { "min": 3.0 },
+                    "amount": {
+                        "min": 3
+                    },
                     "consume": "amount",
-                    "consumeAmount": 3.0,
+                    "consumeAmount": 3,
                     "gradePoints": 1
                 }
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_MR_DoubleMilk", "when": "slotCount", "slotId": "dairy",
-                  "pointsPerItem": 1.0, "maxPoints": 2.0 },
-                { "ruleId": "GR_MR_RealMilk", "when": "anyItem",
-                  "selector": { "cls": "ChefZ_Milk" }, "points": 1.0 }
+                {
+                    "ruleId": "GR_MR_DoubleMilk",
+                    "when": "slotCount",
+                    "slotId": "dairy",
+                    "pointsPerItem": 1,
+                    "maxPoints": 2
+                },
+                {
+                    "ruleId": "GR_MR_RealMilk",
+                    "when": "anyItem",
+                    "selector": {
+                        "cls": "ChefZ_Milk"
+                    },
+                    "points": 1
+                }
             ],
             "outputs": [
                 {
@@ -850,7 +1487,7 @@
                     "portions": 2,
                     "portionClass": "ChefZ_MilkRice",
                     "portionQuantity": 1,
-                    "amountPerPortion": 1.0,
+                    "amountPerPortion": 1,
                     "containerCategory": "BOWL",
                     "consumesContainer": true,
                     "returnContainer": "AUTO",
@@ -862,35 +1499,53 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_WARM_MEAL", "CHEFZ_ENERGIZED"],
-            "nutritionModifier": 1.0,
-            "priority": 0
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_ENERGIZED"
+            ],
+            "nutritionModifier": 1,
+            "priority": 0,
+            "minTemperature": 60
         },
-
         {
             "id": "RCP_ChefZ_HoneyBreadPlate",
             "contexts": [
-                { "deviceClasses": ["FryingPan", "Pot"], "methods": ["NONE", "BAKING"] }
+                {
+                    "deviceClasses": [
+                        "FryingPan",
+                        "Pot"
+                    ],
+                    "methods": [
+                        "NONE",
+                        "BAKING"
+                    ]
+                }
             ],
             "completion": "INSTANT",
             "slots": [
                 {
                     "slotId": "bread",
-                    "match": { "category": "BREAD" },
+                    "match": {
+                        "category": "BREAD"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "honey",
-                    "match": { "cls": "Honey" },
+                    "match": {
+                        "cls": "Honey"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "butter",
-                    "match": { "category": "BUTTER" },
+                    "match": {
+                        "category": "BUTTER"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -899,7 +1554,19 @@
                 },
                 {
                     "slotId": "spice",
-                    "match": { "anyOf": [ { "category": "SPICE" }, { "category": "HERB" }, { "category": "DRIED_HERB" } ] },
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "SPICE"
+                            },
+                            {
+                                "category": "HERB"
+                            },
+                            {
+                                "category": "DRIED_HERB"
+                            }
+                        ]
+                    },
                     "optional": true,
                     "minCount": 0,
                     "maxCount": 1,
@@ -909,15 +1576,37 @@
             ],
             "policy": {
                 "extraItems": "forbid",
-                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
                 "minMatchedHealth01": 0.15
             },
             "gradeRules": [
-                { "ruleId": "GR_HBP_DoubleBread", "when": "slotCount", "slotId": "bread",
-                  "pointsPerItem": 1.0, "maxPoints": 2.0 },
-                { "ruleId": "GR_HBP_FreshBread", "when": "anyItem",
-                  "selector": { "allOf": [ { "category": "BREAD" }, { "freshness": { "min": 0.8 } } ] },
-                  "points": 1.0 }
+                {
+                    "ruleId": "GR_HBP_DoubleBread",
+                    "when": "slotCount",
+                    "slotId": "bread",
+                    "pointsPerItem": 1,
+                    "maxPoints": 2
+                },
+                {
+                    "ruleId": "GR_HBP_FreshBread",
+                    "when": "anyItem",
+                    "selector": {
+                        "allOf": [
+                            {
+                                "category": "BREAD"
+                            },
+                            {
+                                "freshness": {
+                                    "min": 0.8
+                                }
+                            }
+                        ]
+                    },
+                    "points": 1
+                }
             ],
             "outputs": [
                 {
@@ -928,7 +1617,7 @@
                     "portions": 2,
                     "portionClass": "ChefZ_HoneyBreadPlate",
                     "portionQuantity": 1,
-                    "amountPerPortion": 1.0,
+                    "amountPerPortion": 1,
                     "containerCategory": "PLATE",
                     "consumesContainer": true,
                     "returnContainer": "AUTO",
@@ -940,8 +1629,10 @@
                 }
             ],
             "qualityTierSet": "DISH_DEFAULT",
-            "effects": ["CHEFZ_ENERGIZED"],
-            "nutritionModifier": 1.0,
+            "effects": [
+                "CHEFZ_ENERGIZED"
+            ],
+            "nutritionModifier": 1,
             "priority": 0
         }
     ]

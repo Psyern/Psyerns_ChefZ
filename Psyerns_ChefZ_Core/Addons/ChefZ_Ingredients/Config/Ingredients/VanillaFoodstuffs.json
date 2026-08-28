@@ -1,0 +1,186 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "Zucchini",
+            "categories": ["VEGETABLE"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "SlicedPumpkin",
+            "categories": ["VEGETABLE"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_CHOPPED"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Apple",
+            "categories": ["FRUIT"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Pear",
+            "categories": ["FRUIT"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Plum",
+            "categories": ["FRUIT"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "CaninaBerry",
+            "categories": ["BERRY"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "SambucusBerry",
+            "categories": ["BERRY"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Sardines",
+            "categories": ["FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Bitterlings",
+            "categories": ["FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "TunaCan_Opened",
+            "categories": ["CANNED_FISH"],
+            "tags": ["CHEFZ_PRESERVED", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "SardinesCan_Opened",
+            "categories": ["CANNED_FISH"],
+            "tags": ["CHEFZ_PRESERVED", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "CrabCan_Opened",
+            "categories": ["CANNED_FISH"],
+            "tags": ["CHEFZ_PRESERVED", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "PeachesCan_Opened",
+            "categories": ["CANNED_FRUIT"],
+            "tags": ["CHEFZ_PRESERVED"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "PorkCan_Opened",
+            "categories": ["CANNED_MEAT"],
+            "tags": ["CHEFZ_PRESERVED", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Lunchmeat",
+            "categories": ["CANNED_MEAT"],
+            "tags": ["CHEFZ_PRESERVED", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Pate",
+            "categories": ["CANNED_MEAT"],
+            "tags": ["CHEFZ_PRESERVED"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Pajka",
+            "categories": ["CANNED_MEAT"],
+            "tags": ["CHEFZ_PRESERVED"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "BrisketSpread",
+            "categories": ["CANNED_MEAT"],
+            "tags": ["CHEFZ_PRESERVED"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Rice",
+            "categories": ["GRAIN"],
+            "tags": ["CHEFZ_GRAIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "Honey",
+            "categories": ["SWEETENER"],
+            "tags": [],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        }
+    ]
+}

@@ -1,13 +1,7 @@
 {
     "slice": "dishes-a",
     "categories": [],
-    "tags": [
-        {
-            "id": "CHEFZ_BLOOD_SAUSAGE",
-            "displayName": "#STR_CHEFZ_TAG_BLOOD_SAUSAGE",
-            "appliesTo": []
-        }
-    ],
+    "tags": [],
     "processes": [],
     "nutrition": [],
     "preservation": [],

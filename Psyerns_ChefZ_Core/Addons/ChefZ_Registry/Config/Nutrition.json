@@ -617,6 +617,20 @@
             "energy": 130,
             "water": 105,
             "fullness": 45
+        },
+        {
+            "id": "ChefZ_ChoppedZucchini",
+            "scope": "class",
+            "energy": 55,
+            "water": 75,
+            "fullness": 25
+        },
+        {
+            "id": "ChefZ_DriedBerries",
+            "scope": "class",
+            "energy": 130,
+            "water": 4,
+            "fullness": 12
         }
     ]
 }

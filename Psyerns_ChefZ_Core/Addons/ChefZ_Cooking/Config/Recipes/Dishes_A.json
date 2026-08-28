@@ -874,12 +874,7 @@
             "slots": [
                 {
                     "slotId": "sausage",
-                    "match": {
-                        "anyOf": [
-                            { "tag": "CHEFZ_BLOOD_SAUSAGE" },
-                            { "category": "SAUSAGE" }
-                        ]
-                    },
+                    "match": { "category": "SAUSAGE" },
                     "minCount": 1,
                     "maxCount": 3,
                     "consume": "whole",
@@ -933,9 +928,9 @@
             "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
             "gradeRules": [
                 {
-                    "ruleId": "GR_BloodSausage",
+                    "ruleId": "GR_BloodPlateFineSausage",
                     "when": "anyItem",
-                    "selector": { "tag": "CHEFZ_BLOOD_SAUSAGE" },
+                    "selector": { "tag": "CHEFZ_PREMIUM" },
                     "points": 3.0
                 },
                 {
@@ -990,7 +985,7 @@
             "slots": [
                 {
                     "slotId": "fish",
-                    "match": { "category": "FISH" },
+                    "match": { "anyOf": [ { "category": "FISH" }, { "category": "CANNED_FISH" } ] },
                     "minCount": 1,
                     "maxCount": 3,
                     "consume": "whole",

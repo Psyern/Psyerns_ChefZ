@@ -146,14 +146,52 @@ Production Map §61.8 nennt als Zutat „Blood Sausage" und sagt im selben Absat
 *„Blutwurst selbst kann optional V1.1 werden, falls Blutbeschaffung zu aufwendig
 ist."* In V1 gibt es weder `ChefZ_BloodSausage` noch eine Blutquelle.
 
-Das Rezept ist trotzdem gebaut und kochbar. Sein Wurstslot lautet
+**Stand bis zum Vanilla-Audit.** Der Wurstslot lautete
 
 ```json
 { "anyOf": [ { "tag": "CHEFZ_BLOOD_SAUSAGE" }, { "category": "SAUSAGE" } ] }
 ```
 
-und eine `gradeRule` gibt **3 Punkte**, wenn die Wurst den Tag trägt. Heute entsteht
-das Gericht also mit jeder Wurst und erreicht ohne Weiteres SEASONED; sobald eine
-Blutwurst existiert, muss ihr Zutatendatensatz **nur den Tag tragen** — kein Rezept,
-keine Klasse und keine Zeile Code wird dafür angefasst. Der Tag steht in
-`_deltas/dishes-a.json` mit leerem `appliesTo` und wartet dort auf seinen Träger.
+und eine `gradeRule` gab **3 Punkte**, wenn die Wurst den Tag trug. Der Gedanke war,
+den Tag als Steckplatz stehenzulassen, bis eine Blutwurst kommt.
+
+**Warum das nicht getragen hat (Vanilla-Audit §4.2 B).** Den Tag trug kein einziges
+Item — weder Vanilla noch ChefZ, nachgezählt über alle 92 Zutaten-Records und alle
+`CfgChefZIngredients`-Knoten. Damit waren die 3 Punkte nicht „noch nicht erreichbar",
+sondern **nie** erreichbar, und die Rechnung des Gerichts ging nicht auf:
+
+| Quelle | Punkte |
+|---|---|
+| Wurstslot | 1 |
+| Salz (optional) | 2 |
+| Kräuter (optional) | 1 |
+| Gewürz (optional) | 1 |
+| `GR_BloodPlateMarjoram` (frische Kräuter) | 1 |
+| **erreichbare Summe** | **6** |
+
+`PREMIUM` beginnt bei `minScore = 7.0` (`CfgChefZQualityTiers`, `ChefZ_Cooking/config.cpp`).
+Die Blutwurstplatte konnte ihre höchste Stufe also unter keinen Umständen erreichen —
+ohne Log, ohne Meldung, der Spieler sieht nur, dass es nie besser wird.
+
+**Entscheidung: Tagzweig und Punktregel entfernt.** Ein Träger nachzurüsten wäre der
+schönere Weg gewesen, ist aber in V1 nicht ehrlich machbar: eine Blutwurst braucht
+Blut, Vanilla gibt beim Zerlegen kein Blutitem her, und die Wurstkette liegt in
+`ChefZ_Meat`. Eine vorhandene Wurst einfach zu taggen wäre eine Behauptung über ein
+Item, die nicht stimmt.
+
+Geändert wurde deshalb genau zweierlei, beides in `Dishes_A.json`:
+
+* der Wurstslot ist jetzt schlicht `{ "category": "SAUSAGE" }` — der I2-Anker des
+  Gerichts bleibt damit unverändert, `SAUSAGE` hat ausschließlich ChefZ-Mitglieder;
+* aus `GR_BloodSausage` wurde `GR_BloodPlateFineSausage` mit demselben Gewicht von
+  3 Punkten, aber dem Selektor `{ "tag": "CHEFZ_PREMIUM" }`. Den Tag trägt
+  `ChefZ_HunterSausage` (Slice meat), und der ist in V1 herstellbar. Die erreichbare
+  Summe steigt damit auf **9** und `PREMIUM` liegt wieder im Bereich.
+
+**Inzwischen erledigt:** der Tag-Record `CHEFZ_BLOOD_SAUSAGE` ist aus
+`_deltas/dishes-a.json` und aus `ChefZ_Registry/Config/Tags.json` entfernt, der
+Stringtable-Schlüssel `STR_CHEFZ_TAG_BLOOD_SAUSAGE` ebenfalls. Nach der Änderung
+oben fragte ihn kein Rezept mehr ab — er war ein Tag ohne Träger **und** ohne
+Abfrage. Kommt die Blutwurst
+in V1.1, ist sie in derselben Bewegung wieder da: ein Tag im Delta, ein `anyOf` im
+Slot, eine `gradeRule`.

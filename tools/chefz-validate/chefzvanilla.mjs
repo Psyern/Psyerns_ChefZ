@@ -94,6 +94,28 @@ export default function run() {
     };
     add(match);
     for (const m of (match.anyOf ?? [])) add(m);
+
+    // allOf schneidet, statt zu vereinigen: eine Klasse erfuellt den Slot nur,
+    // wenn sie JEDE Teilbedingung erfuellt. Wurde das hier uebersehen, galt ein
+    // allOf-Slot als "unbekannt" und der ganze Slot fiel aus der I2-Pruefung -
+    // ein Rezept, das sich rein mit Vanilla erfuellen laesst, waere unbemerkt
+    // geblieben. Bedingungen ohne Klassenbezug (etwa vanillaStage) schraenken
+    // die Menge nicht ein und werden uebersprungen.
+    if (Array.isArray(match.allOf) && match.allOf.length > 0) {
+      let acc = null;
+      for (const m of match.allOf) {
+        const part = new Set();
+        const before = part.size;
+        if (typeof m?.cls === 'string') part.add(m.cls);
+        if (typeof m?.category === 'string') for (const c of (byCategory.get(m.category) ?? [])) part.add(c);
+        if (typeof m?.tag === 'string') for (const c of (byTag.get(m.tag) ?? [])) part.add(c);
+        const hasClassTerm = typeof m?.cls === 'string'
+          || typeof m?.category === 'string' || typeof m?.tag === 'string';
+        if (!hasClassTerm) continue;          // z. B. vanillaStage - kein Klassenfilter
+        acc = acc === null ? part : new Set([...acc].filter(c => part.has(c)));
+      }
+      if (acc) for (const c of acc) out.add(c);
+    }
     return out;
   }
 

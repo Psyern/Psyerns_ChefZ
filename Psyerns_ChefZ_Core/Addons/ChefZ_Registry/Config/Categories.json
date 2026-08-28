@@ -158,6 +158,31 @@
             "id": "TOMATO_SAUCE",
             "parent": "SAUCE",
             "displayName": "#STR_CHEFZ_CAT_TOMATO_SAUCE"
+        },
+        {
+            "id": "BERRY",
+            "parent": "FRUIT",
+            "displayName": "#STR_CHEFZ_CAT_BERRY"
+        },
+        {
+            "id": "CANNED_FISH",
+            "displayName": "#STR_CHEFZ_CAT_CANNED_FISH"
+        },
+        {
+            "id": "CANNED_FRUIT",
+            "displayName": "#STR_CHEFZ_CAT_CANNED_FRUIT"
+        },
+        {
+            "id": "CANNED_MEAT",
+            "displayName": "#STR_CHEFZ_CAT_CANNED_MEAT"
+        },
+        {
+            "id": "FRUIT",
+            "displayName": "#STR_CHEFZ_CAT_FRUIT"
+        },
+        {
+            "id": "SWEETENER",
+            "displayName": "#STR_CHEFZ_CAT_SWEETENER"
         }
     ]
 }

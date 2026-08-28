@@ -1,0 +1,56 @@
+{
+    "slice": "vanilla-foods",
+    "categories": [
+        {
+            "id": "FRUIT",
+            "parent": null,
+            "displayName": "#STR_CHEFZ_CAT_FRUIT"
+        },
+        {
+            "id": "BERRY",
+            "parent": "FRUIT",
+            "displayName": "#STR_CHEFZ_CAT_BERRY"
+        },
+        {
+            "id": "SWEETENER",
+            "parent": null,
+            "displayName": "#STR_CHEFZ_CAT_SWEETENER"
+        },
+        {
+            "id": "CANNED_MEAT",
+            "parent": null,
+            "displayName": "#STR_CHEFZ_CAT_CANNED_MEAT"
+        },
+        {
+            "id": "CANNED_FISH",
+            "parent": null,
+            "displayName": "#STR_CHEFZ_CAT_CANNED_FISH"
+        },
+        {
+            "id": "CANNED_FRUIT",
+            "parent": null,
+            "displayName": "#STR_CHEFZ_CAT_CANNED_FRUIT"
+        }
+    ],
+    "tags": [],
+    "processes": [],
+    "nutrition": [
+        {
+            "class": "ChefZ_ChoppedZucchini",
+            "energy": 55,
+            "water": 75,
+            "stomach": 25
+        },
+        {
+            "class": "ChefZ_DriedBerries",
+            "energy": 130,
+            "water": 4,
+            "stomach": 12
+        }
+    ],
+    "preservation": [],
+    "classes": [
+        "ChefZ_ChoppedZucchini",
+        "ChefZ_DriedBerries"
+    ]
+}

@@ -1,0 +1,79 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_ChopZucchini",
+            "process": "PROCESS_CHOP_VEGETABLE",
+            "inputs": [
+                {
+                    "slotId": "veg",
+                    "match": { "cls": "Zucchini" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_ChoppedZucchini",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true
+                }
+            ]
+        },
+        {
+            "id": "TR_CaninaBerriesToDried",
+            "process": "PROCESS_DRY",
+            "stationsAllowed": ["ChefZ_DryingRack"],
+            "durationOverrideSec": 420,
+            "qualityRule": "MIN",
+            "inputs": [
+                {
+                    "slotId": "berries",
+                    "match": { "cls": "CaninaBerry" },
+                    "minCount": 2,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_DriedBerries",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1,
+            "priority": 100
+        },
+        {
+            "id": "TR_SambucusBerriesToDried",
+            "process": "PROCESS_DRY",
+            "stationsAllowed": ["ChefZ_DryingRack"],
+            "durationOverrideSec": 420,
+            "qualityRule": "MIN",
+            "inputs": [
+                {
+                    "slotId": "berries",
+                    "match": { "cls": "SambucusBerry" },
+                    "minCount": 2,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_DriedBerries",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1,
+            "priority": 100
+        }
+    ]
+}

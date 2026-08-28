@@ -171,7 +171,17 @@ class CfgPatches
             "ChefZ_FishPotatoPlateBulk",
             "ChefZ_FishPotatoPlate",
             "ChefZ_BeanSausagePlateBulk",
-            "ChefZ_BeanSausagePlate"
+            "ChefZ_BeanSausagePlate",
+
+            // ### SLICE dishes-vanilla ###   drei Gerichte aus den bisher
+            // ungenutzten Vanilla-Assets (Vanilla-Audit §3). Dasselbe Paar je
+            // Gericht wie in dishes-a bis dishes-c.
+            "ChefZ_PumpkinSoupBulk",
+            "ChefZ_PumpkinSoupBowl",
+            "ChefZ_SmallFishPanBulk",
+            "ChefZ_SmallFishPan",
+            "ChefZ_FruitCompoteBulk",
+            "ChefZ_FruitCompoteBowl"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -2079,6 +2089,228 @@ class CfgVehicles
     };
 
     //==========================================================================
+    // ### SLICE dishes-vanilla ###   DREI GERICHTE AUS UNGENUTZTEN VANILLA-ASSETS
+    //
+    // Quelle: Vanilla-Audit §3. Rund 106 Vanilla-Klassen waren ungebunden; die
+    // drei Gerichte hier sind die, fuer die es keine bestehende Schuessel und
+    // keinen bestehenden Teller gibt:
+    //
+    //   Kuerbissuppe      SlicedPumpkin - Vanillas geschnittener Kuerbis hatte
+    //                     bisher gar keinen Weg in ein ChefZ-Gericht.
+    //   Kleinfischpfanne  Sardines und Bitterlings - der HAEUFIGSTE Angelfang
+    //                     in Vanilla, ohne Filet-Pendant und deshalb bisher
+    //                     wertlos (Audit §3 D).
+    //   Obstkompott       Apple, Pear, Plum, die zwei Waldbeeren und der Honig -
+    //                     das erste suesse Gericht des Mods ueberhaupt.
+    //
+    // BAUFORM: dieselbe wie in dishes-a, dishes-b und dishes-c, und aus
+    // demselben Grund - ZWEI Klassen je Gericht. Das Bulk entsteht im
+    // Kochgeraet und traegt den Portionszaehler, die servierte Portion ist
+    // das, was der Spieler isst (Config/Recipes/README_Serving.md §1). Suppe
+    // und Kompott geben in eine Schuessel und heissen deshalb ...Bowl, die
+    // Fischpfanne auf einen Teller und heisst nur nach dem Gericht.
+    //
+    // NAEHRWERT: die Zahl unter jeder Klasse ist die Summe EINER Portion aus
+    // den Zutatenwerten der Registry, mal nutritionModifier des Rezepts. Bulk
+    // und Portion tragen dieselben Werte - der Naehrwert eines Bissens haengt
+    // an Klasse x Foodstage und nie an der Restmenge (01 V6).
+    //
+    // MODELLE: kein Gericht hat ein eigenes Mesh. Bulk = CookingPot.p3d,
+    // Portion = FryingPan.p3d (flach, liest sich als Teller). Der Bedarf steht
+    // im Slice-Bericht; kein Item wartet auf ein Modell.
+    //==========================================================================
+
+    //--------------------------------------------------------------------------
+    // Kuerbissuppe        Behaelter: BOWL      Geraet: Pot / Cauldron
+    //
+    // NAEHRWERTHERLEITUNG: 3 SlicedPumpkin (~150/210/95 als fullness/energy/
+    // water) + 1 ChefZ_Butter (15/600/20) auf DREI Portionen, mal 1.05.
+    // Wenig Energie, viel Wasser - eine Suppe saettigt und traenkt, sie mistet
+    // keinen Tagesbedarf ab.
+    //--------------------------------------------------------------------------
+    class ChefZ_PumpkinSoupBulk : ChefZ_PortionedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_PUMPKINSOUP_BULK";
+        descriptionShort = "#STR_CHEFZ_ITEM_PUMPKINSOUP_BULK_DESC";
+        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
+        itemSize[] = {3, 2};
+        weight = 1150;
+        lifetime = 10800;
+
+        class Nutrition
+        {
+            fullnessIndex = 58;
+            energy = 285;
+            water = 115;
+            nutritionalIndex = 45;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {58, 285, 115, 45, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {58, 299, 92, 45, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {58, 285, 115, 45, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {14, 71, 28, 8, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {23, 114, 46, 9, 20, 16, 1}; };
+            };
+        };
+    };
+
+    class ChefZ_PumpkinSoupBowl : ChefZ_ServedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_PUMPKINSOUP";
+        descriptionShort = "#STR_CHEFZ_ITEM_PUMPKINSOUP_DESC";
+        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        itemSize[] = {2, 2};
+        weight = 480;
+        lifetime = 7200;
+
+        class Nutrition
+        {
+            fullnessIndex = 58;
+            energy = 285;
+            water = 115;
+            nutritionalIndex = 45;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Kleinfischpfanne    Behaelter: PLATE     Geraet: FryingPan
+    //
+    // NAEHRWERTHERLEITUNG: 4 Kleinfische (~4x110 Energie) + 1 Fett
+    // (Lard 300 / ChefZ_Butter 600) + 1 Knoblauch (40) auf ZWEI Portionen,
+    // mal 1.1. Hoher Proteinanteil, wenig Wasser - eine Pfanne, kein Eintopf.
+    //--------------------------------------------------------------------------
+    class ChefZ_SmallFishPanBulk : ChefZ_PortionedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SMALLFISHPAN_BULK";
+        descriptionShort = "#STR_CHEFZ_ITEM_SMALLFISHPAN_BULK_DESC";
+        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        itemSize[] = {3, 2};
+        weight = 780;
+        lifetime = 10800;
+
+        class Nutrition
+        {
+            fullnessIndex = 72;
+            energy = 430;
+            water = 35;
+            nutritionalIndex = 55;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {72, 430, 35, 55, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {72, 452, 28, 55, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {72, 430, 42, 50, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {18, 107, 8, 11, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {28, 172, 14, 11, 20, 16, 1}; };
+            };
+        };
+    };
+
+    class ChefZ_SmallFishPan : ChefZ_ServedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SMALLFISHPAN";
+        descriptionShort = "#STR_CHEFZ_ITEM_SMALLFISHPAN_DESC";
+        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        itemSize[] = {2, 2};
+        weight = 400;
+        lifetime = 7200;
+
+        class Nutrition
+        {
+            fullnessIndex = 72;
+            energy = 430;
+            water = 35;
+            nutritionalIndex = 55;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Obstkompott         Behaelter: BOWL      Geraet: Pot / Cauldron
+    //
+    // NAEHRWERTHERLEITUNG: 4 Fruechte (~4x70 Energie) + 1 getrocknete Beeren
+    // (130) auf DREI Portionen, mal 1.05. Der Zucker steckt im optionalen
+    // Honigslot und nicht in der Grundrechnung - ohne ihn ist es SIMPLE.
+    //--------------------------------------------------------------------------
+    class ChefZ_FruitCompoteBulk : ChefZ_PortionedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_FRUITCOMPOTE_BULK";
+        descriptionShort = "#STR_CHEFZ_ITEM_FRUITCOMPOTE_BULK_DESC";
+        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
+        itemSize[] = {3, 2};
+        weight = 980;
+        lifetime = 10800;
+
+        class Nutrition
+        {
+            fullnessIndex = 40;
+            energy = 145;
+            water = 95;
+            nutritionalIndex = 60;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {40, 145, 95, 60, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {40, 152, 76, 60, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {40, 145, 95, 60, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {10, 36, 23, 12, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {16, 58, 38, 12, 20, 16, 1}; };
+            };
+        };
+    };
+
+    class ChefZ_FruitCompoteBowl : ChefZ_ServedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_FRUITCOMPOTE";
+        descriptionShort = "#STR_CHEFZ_ITEM_FRUITCOMPOTE_DESC";
+        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        itemSize[] = {2, 2};
+        weight = 420;
+        lifetime = 7200;
+
+        class Nutrition
+        {
+            fullnessIndex = 40;
+            energy = 145;
+            water = 95;
+            nutritionalIndex = 60;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+    };
+
+    //==========================================================================
     // ### SLICE dishes-a ###   TELLERGERICHTE 1-10
     //
     // Production Map §61.1-§61.10, DME-Plan §38, §41 (Rezeptqualitaet),
@@ -3463,6 +3695,62 @@ class CfgChefZIngredients
     class ChefZ_FishPotatoPlate : ChefZ_DishesAPlate {};
     class ChefZ_BeanSausagePlateBulk : ChefZ_DishesABulk {};
     class ChefZ_BeanSausagePlate : ChefZ_DishesAPlate {};
+
+    //==========================================================================
+    // ### SLICE dishes-vanilla ###   Zutatenbindung der drei neuen Gerichte
+    //
+    // Gleiche Bauform und gleiche Begruendung wie bei dishes-a und dishes-b
+    // weiter oben - sie steht dort und wird hier nicht abgeschrieben. Der Zweck
+    // in einem Satz: diese Records sind der Weg AM REZEPT VORBEI, damit ein
+    // Teller aus Admin- oder Lootspawn beim Leeressen trotzdem seinen Behaelter
+    // zurueckgibt (README_Serving.md §4).
+    //
+    // Eigene, slice-eindeutige Basisknoten, weil ChefZ_DishesA... und
+    // ChefZ_DishesB... bereits vergeben sind und zwei gleichnamige Knoten eine
+    // doppelte Definition waeren.
+    //
+    // ZWEI Portionsknoten und nicht einer: die Kuerbissuppe und das Kompott
+    // gehen in eine Schuessel, die Fischpfanne auf einen Teller.
+    //
+    // KEINE categories[] und KEINE tags[] ausser CHEFZ_HOT_MEAL: ein fertiges
+    // Gericht ist Endprodukt und nie wieder Zutat.
+    //==========================================================================
+    class ChefZ_DishesVanillaBulk
+    {
+        defaultState      = "COOKED";
+        quantityUnit      = "PIECE";
+        unitsPerWholeItem = 1;
+        decays            = 1;
+    };
+
+    class ChefZ_DishesVanillaBowl
+    {
+        tags[]            = {"CHEFZ_HOT_MEAL"};
+        defaultState      = "COOKED";
+        quantityUnit      = "PIECE";
+        unitsPerWholeItem = 1;
+        decays            = 1;
+        containerCategory = "BOWL";
+        returnContainer   = "AUTO";
+    };
+
+    class ChefZ_DishesVanillaPlate
+    {
+        tags[]            = {"CHEFZ_HOT_MEAL"};
+        defaultState      = "COOKED";
+        quantityUnit      = "PIECE";
+        unitsPerWholeItem = 1;
+        decays            = 1;
+        containerCategory = "PLATE";
+        returnContainer   = "AUTO";
+    };
+
+    class ChefZ_PumpkinSoupBulk : ChefZ_DishesVanillaBulk {};
+    class ChefZ_PumpkinSoupBowl : ChefZ_DishesVanillaBowl {};
+    class ChefZ_SmallFishPanBulk : ChefZ_DishesVanillaBulk {};
+    class ChefZ_SmallFishPan : ChefZ_DishesVanillaPlate {};
+    class ChefZ_FruitCompoteBulk : ChefZ_DishesVanillaBulk {};
+    class ChefZ_FruitCompoteBowl : ChefZ_DishesVanillaBowl {};
 };
 
 //==============================================================================
@@ -3628,6 +3916,33 @@ class CfgChefZ
         dataFiles[] =
         {
             "ChefZ_Cooking/Config/Recipes/Dishes_A.json"
+        };
+    };
+
+    // ### SLICE dishes-vanilla ###
+    //
+    // Die drei Gerichte aus den bisher ungenutzten Vanilla-Assets
+    // (Vanilla-Audit §3). Eigener Knoten, weil CfgChefZ genau EINEN Knoten je
+    // SLICE traegt (02 §4) - dieses Modul ist ein geteilter Ordner.
+    //
+    // loadOrder 350: nach allen anderen Gerichteslices. Die drei lesen aus der
+    // Zutatenbindung des Slice vanilla-foods (loadOrder 240) und aus der Bruehe
+    // und den Behaeltern dieses Moduls; niemand liest aus ihnen. Der Core
+    // haengt Records nicht voneinander ab - die Reihenfolge ist Vorsorge.
+    //
+    // handcraftRecipeSlots = 0: alle drei Rezepte zuenden am Kochgeraet.
+    // Dieser Slice registriert KEIN Handcraft-Rezept; Vanillas Rezeptliste
+    // bleibt um kein Bit veraendert. Der eine HANDCRAFT-Transform, den die
+    // Erweiterung mitbringt (TR_ChopZucchini), gehoert dem Slice vanilla-foods
+    // und ist dort reserviert.
+    class ChefZ_DishesVanilla
+    {
+        chefzApiVersion = 1;
+        loadOrder = 350;
+        handcraftRecipeSlots = 0;
+        dataFiles[] =
+        {
+            "ChefZ_Cooking/Config/Recipes/DishesVanilla.json"
         };
     };
 
