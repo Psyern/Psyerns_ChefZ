@@ -37,12 +37,82 @@
 // ---------------------------------------------------------------------------
 // ChefZ laeuft ohne dieses PBO vollstaendig. Alles hier ist rein additiv:
 // keine Terje-Datei wird veraendert, keine ChefZ-Datei wird veraendert. Ohne
-// TerjeSkills wird dieses Modul gar nicht erst geladen (requiredAddons), und
-// ohne dieses Modul merkt weder ChefZ noch Terje etwas davon.
+// TerjeSkills bleibt dieses Modul vollstaendig untaetig (siehe "WEICHE
+// ABHAENGIGKEIT" weiter unten), und ohne dieses Modul merkt weder ChefZ noch
+// Terje etwas davon.
 //
 // KEIN CfgVehicles-Eintrag, kein Item, kein Rezept. Dieses Modul erzeugt
 // keinen Content - es verknuepft zwei bestehende Systeme.
 //==============================================================================
+
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT  -  warum TerjeSkills NICHT in requiredAddons steht
+// ---------------------------------------------------------------------------
+// requiredAddons[] ist eine HARTE Abhaengigkeit. Fehlt ein dort genannter
+// Eintrag, laedt das Addon nicht - und der Betreiber faengt sich einen
+// Startfehler ein, obwohl er nur einen OPTIONALEN Comp-Mod im Ordner liegen
+// hat. Genau das ist unerwuenscht.
+//
+// Der Weg, den DayZ dafuer vorsieht, ist der Praeprozessor. Jeder Mod darf in
+// CfgMods "defines[]" veroeffentlichen; diese Symbole gelten beim Kompilieren
+// JEDES Skriptmoduls JEDES geladenen Mods - unabhaengig von der
+// Ladereihenfolge und unabhaengig von requiredAddons. Fehlt der Mod, fehlt das
+// Symbol, und der Praeprozessor entfernt den abhaengigen Code, bevor der
+// Compiler ihn sieht.
+//
+// TerjeSkills veroeffentlicht sein Symbol selbst:
+//   TerjeMods-master-main/TerjeSkills/config.cpp:29
+//       defines[] = { "TERJE_SKILLS_MOD" };
+// und nennt TerjeCore seinerseits in requiredAddons
+//   (TerjeMods-master-main/TerjeSkills/config.cpp:8-11).
+// TERJE_SKILLS_MOD impliziert also TerjeCore; ein zweites Symbol waere
+// ueberfluessig.
+//
+// BELEGE, dass im Fremdcode genau so gebaut wird:
+//   TerjeMods-master-main/TerjeRadiation/Scripts/4_Compatibility/
+//     TerjeToDogTagsCompatibility.c:1 - "#ifdef WRDG_DOGTAGS" um eine
+//     modded class. WRDG_DOGTAGS steht NICHT in requiredAddons von
+//     TerjeRadiation; dort steht nur "TerjeCore"
+//     (TerjeRadiation/config.cpp:5-10).
+//   DayZExpansion/AI/Scripts/5_Mission/DayZExpansion_AI/COT/JMPlayerForm.c:13
+//     - "#ifdef JM_COT" um "modded class JMPlayerForm", waehrend
+//     DayZExpansion_AI_Scripts in requiredAddons nur DZ_Characters und
+//     DayZExpansion_Core_Scripts nennt (DayZExpansion/AI/Scripts/config.cpp:8-12).
+//
+// GEGENPROBE im selben Fremdcode: TerjeCompatibilityCOT und
+// TerjeCompatibilityVPP nennen ihren Zielmod SEHR WOHL in requiredAddons
+// (TerjeCompatibilityCOT/config.cpp:7). Das ist die harte Bauart. Sie ist
+// zulaessig - und sie ist genau der Startfehler, den dieser Umbau beseitigt.
+//
+// VERWORFENE ALTERNATIVEN:
+//   - Laufzeitpruefung ueber GetGame().ConfigIsExisting(): hilft nicht.
+//     "modded class ChefZ_FreshHerbBase { override void
+//     OnTerjeClientUpdate(...) }" und "GetTerjeSkills()" werden vom
+//     Enforce-Compiler aufgeloest, lange bevor irgendeine if-Abfrage laeuft.
+//     Ein fehlender Bezeichner ist ein Kompilierfehler, kein Laufzeitfall.
+//     Eine Laufzeitpruefung kann nur ENTSCHEIDEN, nicht KOMPILIEREN.
+//   - Weiche Anmeldung ueber die ChefZ-Registries (ChefZ_ProgressRegistry,
+//     ChefZ_CapabilityRegistry): entkoppelt bereits die Richtung
+//     ChefZ -> Comp-Mod und wird hier auch genutzt (siehe
+//     Scripts/5_Mission/ChefZ/ChefZ_TerjeSkillsEntry.c). Sie kann aber die
+//     Richtung Comp-Mod -> Terje NICHT entkoppeln: dort stehen die
+//     Terje-Bezeichner im eigenen Quelltext. Registrierung ersetzt keine
+//     Symbolaufloesung.
+//   - requiredAddons ganz leeren: unzulaessig. Ohne ChefZ_Farming waere
+//     "modded class ChefZ_HerbPlantBase" unaufloesbar, und
+//     tools/chefz-validate/configcpp.mjs meldet leere requiredAddons als
+//     Fehler ("die Ladereihenfolge ist damit undefiniert").
+//
+// WAS HART BLEIBT UND WARUM - alles Addons DESSELBEN Mods, im selben Ordner
+// ausgeliefert. Die Richtung bleibt einseitig: dieser Mod kennt ChefZ,
+// ChefZ kennt ihn nicht.
+//
+// VERHALTEN OHNE TerjeSkills: das PBO laedt, alle Skriptdateien sind nach dem
+// Praeprozessorlauf leer, CfgTerjeSkills und CfgChefZTerjeSkills bleiben
+// Configknoten, die niemand liest, und
+// Scripts/5_Mission/ChefZ/ChefZ_TerjeSkillsAbsent.c schreibt beim Serverstart
+// genau eine erklaerende Zeile ins RPT - keine Warnung, kein Fehler.
+// ---------------------------------------------------------------------------
 
 class CfgPatches
 {
@@ -52,21 +122,31 @@ class CfgPatches
         weapons[] = {};
         requiredVersion = 0.1;
 
-        // ChefZ_Core:    ChefZ_ProgressRegistry, ChefZ_IngredientManager,
-        //                ChefZ_ProcessingManager, ChefZ_CapabilityRegistry.
-        // ChefZ_Farming: ChefZ_HerbPlantBase und ChefZ_FreshHerbBase - die
-        //                beiden einzigen ChefZ-Klassen, die hier per
-        //                "modded class" erweitert werden.
-        // TerjeCore:     GetTerjeSkills(), GetTerjeGameConfig(),
-        //                OnTerjeClientUpdate().
-        // TerjeSkills:   der Skill "surv", ParticleList.TERJE_SKILLS_*.
+        // Hier steht NUR, was ohne Ausnahme vorhanden sein muss, damit dieses
+        // PBO ueberhaupt kompiliert:
+        //
+        //   DZ_Data        Basisdaten der Engine.
+        //   ChefZ_Core     ChefZ_ProgressRegistry, ChefZ_CapabilityRegistry,
+        //                  ChefZ_IProgressSink, ChefZ_ICapabilityProvider,
+        //                  ChefZ_Log - Bezeichner im eigenen Quelltext.
+        //   ChefZ_Farming  ChefZ_HerbPlantBase und ChefZ_FreshHerbBase - die
+        //                  beiden einzigen ChefZ-Klassen, die hier per
+        //                  "modded class" erweitert werden.
+        //
+        // TerjeCore und TerjeSkills stehen bewusst NICHT hier. Sie werden
+        // ueber "#ifdef TERJE_SKILLS_MOD" in jeder Skriptdatei geprueft; die
+        // ausfuehrliche Begruendung mit Belegstellen steht im Kopf dieser
+        // Datei unter "WEICHE ABHAENGIGKEIT".
+        //
+        // Was aus Terje benutzt wird, damit die Liste nicht verlorengeht:
+        //   TerjeCore    GetTerjeSkills(), GetTerjeGameConfig(),
+        //                OnTerjeClientUpdate(), GetTerjeSkillsRegistry().
+        //   TerjeSkills  der Skill "surv", ParticleList.TERJE_SKILLS_*.
         requiredAddons[] =
         {
             "DZ_Data",
             "ChefZ_Core",
-            "ChefZ_Farming",
-            "TerjeCore",
-            "TerjeSkills"
+            "ChefZ_Farming"
         };
     };
 };
@@ -110,6 +190,12 @@ class CfgMods
             // 5_Mission: genau ein Anmeldezeitpunkt je Seite, derselbe, den
             // auch ChefZ_Core benutzt (MissionServer.OnInit /
             // MissionGameplay.OnInit).
+            //
+            // Zwei Dateien, die sich gegenseitig ausschliessen:
+            // ChefZ_TerjeSkillsEntry.c steht unter "#ifdef TERJE_SKILLS_MOD",
+            // ChefZ_TerjeSkillsAbsent.c unter "#ifndef". Es ist immer genau
+            // eine von beiden kompiliert, nie beide - also gibt es aus diesem
+            // PBO auch nie zwei aktive "modded class MissionServer".
             class missionScriptModule
             {
                 value = "";

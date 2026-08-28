@@ -1,0 +1,34 @@
+//==============================================================================
+// ChefZ_CotAbsent - die Gegenseite der weichen Abhaengigkeit.
+//
+// Gegenstueck zu ChefZ_CotObjectSpawner.c: dort "#ifdef JM_COT", hier
+// "#ifndef". Immer nur eine von beiden wird kompiliert, also gibt es aus
+// diesem PBO nie zwei aktive Erweiterungen derselben Klasse.
+//
+// Hier wird ausdruecklich MissionServer erweitert und NICHT
+// JMObjectSpawnerForm - diese COT-Klasse gibt es in genau der Lage nicht, in
+// der diese Datei kompiliert wird.
+//
+// ------------------------------------------------------------------------
+// WARUM PrintToRPT
+// ------------------------------------------------------------------------
+// Engine-Funktion, in jedem Skriptmodul jedes Mods vorhanden, kann nicht
+// selbst zur Fehlerquelle werden. Das Praefix ist woertlich das von ChefZ_Log
+// (Psyerns_ChefZ_Core/Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Log.c:35),
+// damit ein Betreiber dieselbe Zeichenkette greppen kann wie sonst auch.
+//
+// Die Zeile ist bewusst KEINE Warnung und KEIN Fehler. Ein Comp-Mod ohne
+// seinen Zielmod ist kein Defekt, sondern ein zulaessiger Betriebszustand -
+// und dieses Modul ist ohnehin nur ein Adminwerkzeug ohne Spielmechanik.
+//==============================================================================
+#ifndef JM_COT
+modded class MissionServer
+{
+    override void OnInit()
+    {
+        super.OnInit();
+
+        PrintToRPT("[ChefZ][CORE] COT-Anbindung geladen, aber Community Online Tools ist nicht installiert - dieses Modul bleibt vollstaendig untaetig. Kein Fehler: ChefZ laeuft unveraendert weiter.");
+    }
+}
+#endif // !JM_COT

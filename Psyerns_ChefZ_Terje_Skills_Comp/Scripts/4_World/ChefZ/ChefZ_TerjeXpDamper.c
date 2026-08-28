@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT: alles unterhalb existiert nur, wenn TerjeSkills
+// geladen ist. Fehlt der Mod, ist TERJE_SKILLS_MOD nicht gesetzt, der
+// Praeprozessor entfernt den gesamten Rumpf, und es bleibt eine leere Datei
+// ohne unaufloesbare Bezeichner. Begruendung, Beleg und Vorbilder stehen im
+// Kopf der config.cpp, Abschnitt "WEICHE ABHAENGIGKEIT".
+// ---------------------------------------------------------------------------
+#ifdef TERJE_SKILLS_MOD
 //==============================================================================
 // ChefZ_TerjeXpDamper - Anti-XP-Farming, Terje-Analyse §27
 //
@@ -248,3 +256,4 @@ class ChefZ_TerjeXpDamper
         return s_ByPlayer.Count();
     }
 }
+#endif // TERJE_SKILLS_MOD

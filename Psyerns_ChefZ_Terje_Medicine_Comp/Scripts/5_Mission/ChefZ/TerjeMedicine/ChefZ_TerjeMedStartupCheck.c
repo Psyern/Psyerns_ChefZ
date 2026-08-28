@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT: alles unterhalb existiert nur, wenn TerjeMedicine
+// geladen ist. Fehlt der Mod, ist TERJE_MEDICINE_MOD nicht gesetzt, der
+// Praeprozessor entfernt den gesamten Rumpf, und es bleibt eine leere Datei
+// ohne unaufloesbare Bezeichner. Begruendung, Beleg und Vorbilder stehen im
+// Kopf der config.cpp, Abschnitt "WEICHE ABHAENGIGKEIT".
+// ---------------------------------------------------------------------------
+#ifdef TERJE_MEDICINE_MOD
 // ============================================================================
 // Startpruefung des Compatibility-Moduls (nur Server, nur Logausgabe).
 //
@@ -104,3 +112,4 @@ modded class MissionServer
         }
     }
 }
+#endif // TERJE_MEDICINE_MOD

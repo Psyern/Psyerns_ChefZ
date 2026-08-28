@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT: alles unterhalb existiert nur, wenn Community Online Tools
+// geladen ist. Fehlt der Mod, ist JM_COT nicht gesetzt, der
+// Praeprozessor entfernt den gesamten Rumpf, und es bleibt eine leere Datei
+// ohne unaufloesbare Bezeichner. Begruendung, Beleg und Vorbilder stehen im
+// Kopf der config.cpp, Abschnitt "WEICHE ABHAENGIGKEIT".
+// ---------------------------------------------------------------------------
+#ifdef JM_COT
 // ChefZ_CotCategories - die acht ChefZ-Spawnkategorien fuer COTs Object Spawner.
 //
 // Diese Datei ist eine TABELLE und sonst nichts: acht Namen, acht Klassenlisten.
@@ -58,8 +66,11 @@
 // Nur, wenn sie in einer config.cpp unter Psyerns_ChefZ_Core/Addons/ mit
 // scope = 2 wirklich existiert. Ein geratener Name faellt hier nicht auf - er
 // wird zur Laufzeit lautlos verworfen, und der Admin sucht ein Item, das es nie
-// gab. Und: das Addon, dem sie gehoert, muss in requiredAddons[] der
-// config.cpp stehen.
+// gab. Ein Eintrag in requiredAddons[] ist dafuer NICHT noetig und auch nicht
+// erwuenscht: dort steht seit dem Umbau auf weiche Abhaengigkeiten nur noch
+// ChefZ_Core, damit ein fehlendes ChefZ-Addon genau die oben beschriebene
+// lautlose Nachsicht ausloest und nicht den Start des ganzen PBOs verhindert
+// (Begruendung im Kopf der config.cpp, Abschnitt "requiredAddons[]").
 
 /**
  * Eine Kategorie: Anzeigename plus die Klassennamen, die sie fuehrt.
@@ -352,3 +363,4 @@ class ChefZ_CotCategories
 		});
 	}
 }
+#endif // JM_COT

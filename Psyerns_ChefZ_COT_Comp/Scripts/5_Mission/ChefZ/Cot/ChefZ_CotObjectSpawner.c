@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT: alles unterhalb existiert nur, wenn Community Online Tools
+// geladen ist. Fehlt der Mod, ist JM_COT nicht gesetzt, der
+// Praeprozessor entfernt den gesamten Rumpf, und es bleibt eine leere Datei
+// ohne unaufloesbare Bezeichner. Begruendung, Beleg und Vorbilder stehen im
+// Kopf der config.cpp, Abschnitt "WEICHE ABHAENGIGKEIT".
+// ---------------------------------------------------------------------------
+#ifdef JM_COT
 // ChefZ_CotObjectSpawner - haengt die acht ChefZ-Kategorien an COTs Object
 // Spawner.
 //
@@ -297,3 +305,4 @@ modded class JMObjectSpawnerForm
 		}
 	}
 }
+#endif // JM_COT

@@ -9,6 +9,78 @@
 // nichts abstuerzen. Terje-Dateien werden nirgends veraendert, nur erweitert.
 //
 // ----------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT  -  warum TerjeMedicine NICHT in requiredAddons steht
+// ----------------------------------------------------------------------------
+// requiredAddons[] ist eine HARTE Abhaengigkeit. Fehlt ein dort genannter
+// Eintrag, laedt das Addon nicht - und der Betreiber faengt sich einen
+// Startfehler ein, obwohl er nur einen OPTIONALEN Comp-Mod im Ordner liegen
+// hat. Genau das ist unerwuenscht.
+//
+// Der Weg, den DayZ dafuer vorsieht, ist der Praeprozessor. Jeder Mod darf in
+// CfgMods "defines[]" veroeffentlichen; diese Symbole gelten beim Kompilieren
+// JEDES Skriptmoduls JEDES geladenen Mods - unabhaengig von der
+// Ladereihenfolge und unabhaengig von requiredAddons. Fehlt der Mod, fehlt das
+// Symbol, und der Praeprozessor entfernt den abhaengigen Code, bevor der
+// Compiler ihn sieht.
+//
+// TerjeMedicine veroeffentlicht sein Symbol selbst:
+//   TerjeMods-master-main/TerjeMedicine/config.cpp:29
+//       defines[] = { "TERJE_MEDICINE_MOD" };
+// und nennt TerjeCore seinerseits in requiredAddons
+//   (TerjeMods-master-main/TerjeMedicine/config.cpp:8-11).
+// TERJE_MEDICINE_MOD impliziert also TerjeCore. Das ist wichtig, weil dieses
+// Modul aus BEIDEN Mods Bezeichner benutzt:
+//   TerjeCore      TerjeConsumableEffects, GetTerjeGameConfig(),
+//                  GetTerjeSkillsRegistry(), TerjeSkillCfg, TerjeLog_*,
+//                  player.GetTerjeSkills(), player.GetTerjeStats()
+//                  (TerjeCore/Scripts/4_World/Entities/PlayerBase.c:88 ff.)
+//   TerjeMedicine  SetImmunityGainValue / GetImmunityGainValue und
+//                  SetHealthExtraRegenTimer / GetHealthExtraRegenTimer
+//                  (TerjeMedicine/Scripts/4_World/Classes/
+//                   TerjePlayerStats.c:1131 und :1192)
+// Ein zweites Symbol fuer TerjeCore waere deshalb ueberfluessig.
+//
+// BELEGE, dass im Fremdcode genau so gebaut wird:
+//   TerjeMods-master-main/TerjeRadiation/Scripts/4_Compatibility/
+//     TerjeToDogTagsCompatibility.c:1 - "#ifdef WRDG_DOGTAGS" um eine
+//     modded class. WRDG_DOGTAGS steht NICHT in requiredAddons von
+//     TerjeRadiation; dort steht nur "TerjeCore".
+//   DayZExpansion/AI/Scripts/5_Mission/DayZExpansion_AI/COT/JMPlayerForm.c:13
+//     - "#ifdef JM_COT" um "modded class JMPlayerForm", waehrend
+//     DayZExpansion_AI_Scripts in requiredAddons nur DZ_Characters und
+//     DayZExpansion_Core_Scripts nennt.
+//
+// GEGENPROBE: TerjeCompatibilityCOT/config.cpp:7 nennt seinen Zielmod SEHR
+// WOHL in requiredAddons. Das ist die harte Bauart - zulaessig, aber genau der
+// Startfehler, den dieser Umbau beseitigt.
+//
+// VERWORFENE ALTERNATIVEN:
+//   - Laufzeitpruefung ueber ConfigIsExisting: hilft nicht. "modded class
+//     TerjeConsumableEffects" und "player.GetTerjeStats().SetImmunityGain-
+//     Value(...)" werden vom Enforce-Compiler aufgeloest, lange bevor
+//     irgendeine if-Abfrage laeuft. Eine Laufzeitpruefung kann ENTSCHEIDEN,
+//     nicht KOMPILIEREN.
+//   - Weiche Anmeldung ueber eine ChefZ-Registry: dieses Modul haengt gar
+//     nicht an einer ChefZ-Registry, sondern an Terjes Consumable-Kette. Es
+//     gibt hier nichts anzumelden.
+//   - requiredAddons ganz leeren: unzulaessig, tools/chefz-validate/
+//     configcpp.mjs meldet leere requiredAddons als Fehler.
+//
+// VERHALTEN OHNE TerjeMedicine: das PBO laedt, alle Skriptdateien sind nach
+// dem Praeprozessorlauf leer, CfgChefZTerjeMedicine bleibt ein Configknoten,
+// den niemand liest, und
+// Scripts/5_Mission/ChefZ/TerjeMedicine/ChefZ_TerjeMedAbsent.c schreibt beim
+// Serverstart genau eine erklaerende Zeile ins RPT - keine Warnung, kein
+// Fehler.
+//
+// DIE STARTPRUEFUNG BLEIBT SICHTBAR. ChefZ_TerjeMedStartupCheck meldet
+// weiterhin "N von M Eintraegen ohne Item im Hauptmod" (bekannter Befund,
+// ChefZ_Wiki/Known-Limitations.md). Sie steht unter "#ifdef
+// TERJE_MEDICINE_MOD" und laeuft damit in JEDEM Fall, in dem dieses Modul
+// ueberhaupt wirken koennte. Ohne TerjeMedicine gaebe es nichts zu melden,
+// weil dann ohnehin keine Wirkung angewendet werden koennte.
+//
+// ----------------------------------------------------------------------------
 // WARUM DIE WERTE HIER STEHEN UND NICHT AUF DEN ITEM-KLASSEN
 // ----------------------------------------------------------------------------
 // TerjeMedicine liest seine Consumable-Parameter woertlich so:
@@ -93,12 +165,15 @@ class CfgPatches
         weapons[] = {};
         requiredVersion = 0.1;
 
-        // TerjeCore liefert TerjeConsumableEffects, TerjeGameConfig und die
-        // Accessoren; TerjeMedicine liefert TerjePlayerStats mit
-        // SetImmunityGainValue/SetHealthExtraRegenTimer und die modded class,
-        // auf die wir aufsetzen. ChefZ_Core sichert die Ladereihenfolge
-        // gegenueber dem Hauptmod.
-        requiredAddons[] = {"TerjeCore", "TerjeMedicine", "ChefZ_Core"};
+        // TerjeCore und TerjeMedicine stehen bewusst NICHT hier - sie werden
+        // ueber "#ifdef TERJE_MEDICINE_MOD" in jeder Skriptdatei geprueft.
+        // Begruendung mit Belegstellen im Kopf dieser Datei unter "WEICHE
+        // ABHAENGIGKEIT".
+        //
+        // ChefZ_Core bleibt: es ist die Ladewurzel desselben Mods, liegt im
+        // selben Ordner und wird zusammen ausgeliefert. Die Richtung bleibt
+        // einseitig - dieser Mod kennt ChefZ, ChefZ kennt ihn nicht.
+        requiredAddons[] = {"ChefZ_Core"};
     };
 };
 
@@ -132,6 +207,12 @@ class CfgMods
                 files[] = {"Psyerns_ChefZ_Terje_Medicine_Comp/Scripts/4_World"};
             };
 
+            // 5_Mission: zwei Dateien, die sich gegenseitig ausschliessen.
+            // ChefZ_TerjeMedStartupCheck.c steht unter "#ifdef
+            // TERJE_MEDICINE_MOD", ChefZ_TerjeMedAbsent.c unter "#ifndef".
+            // Es ist immer genau eine von beiden kompiliert, nie beide - also
+            // gibt es aus diesem PBO nie zwei aktive
+            // "modded class MissionServer".
             class missionScriptModule
             {
                 value = "";

@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT: alles unterhalb existiert nur, wenn TerjeMedicine
+// geladen ist. Fehlt der Mod, ist TERJE_MEDICINE_MOD nicht gesetzt, der
+// Praeprozessor entfernt den gesamten Rumpf, und es bleibt eine leere Datei
+// ohne unaufloesbare Bezeichner. Begruendung, Beleg und Vorbilder stehen im
+// Kopf der config.cpp, Abschnitt "WEICHE ABHAENGIGKEIT".
+// ---------------------------------------------------------------------------
+#ifdef TERJE_MEDICINE_MOD
 // ============================================================================
 // modded class TerjeConsumableEffects  -  ChefZ-Kraeutertees
 //
@@ -125,7 +133,8 @@ modded class TerjeConsumableEffects
 
     // Tooltip. Verwendet Terjes eigene, bereits in 15 Sprachen uebersetzte
     // Schluessel (TerjeMedicine/stringtable.csv:316 und :318) statt eigene
-    // anzulegen - dieses Modul haengt hart von TerjeMedicine ab, die Schluessel
+    // anzulegen - diese Datei wird nur mit geladenem TerjeMedicine ueberhaupt
+    // kompiliert ("#ifdef TERJE_MEDICINE_MOD" ganz oben), die Schluessel
     // sind also immer da, und ein Spieler soll ChefZ-Tee und Terje-Medikament
     // im selben Wortlaut lesen.
     //
@@ -163,3 +172,4 @@ modded class TerjeConsumableEffects
         return result;
     }
 }
+#endif // TERJE_MEDICINE_MOD

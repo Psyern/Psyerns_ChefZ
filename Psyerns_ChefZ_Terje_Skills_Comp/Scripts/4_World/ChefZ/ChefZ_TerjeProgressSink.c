@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT: alles unterhalb existiert nur, wenn TerjeSkills
+// geladen ist. Fehlt der Mod, ist TERJE_SKILLS_MOD nicht gesetzt, der
+// Praeprozessor entfernt den gesamten Rumpf, und es bleibt eine leere Datei
+// ohne unaufloesbare Bezeichner. Begruendung, Beleg und Vorbilder stehen im
+// Kopf der config.cpp, Abschnitt "WEICHE ABHAENGIGKEIT".
+// ---------------------------------------------------------------------------
+#ifdef TERJE_SKILLS_MOD
 //==============================================================================
 // ChefZ_TerjeProgressSink - die XP-Vergabe fuer Kochen und Verarbeiten
 //
@@ -217,3 +225,4 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         return ChefZ_TerjeSkillsConfig.TransformXp(transformId, fallback);
     }
 }
+#endif // TERJE_SKILLS_MOD
