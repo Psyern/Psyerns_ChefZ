@@ -84,6 +84,35 @@ class ChefZ_Schlecht
     }
 }
 
+// Basislos, wird aber per ref gehalten -> chefzmanaged
+class ChefZ_SchlechtHalter
+{
+    int wert;
+}
+
+class ChefZ_SchlechtBesitzer
+{
+    ref array<ref ChefZ_SchlechtHalter> liste;
+    ref ChefZ_SchlechtHalter einzeln;
+}
+
+// case-Marke aus einem Schiebeausdruck -> chefzswitch
+class ChefZ_SchlechtSchalter
+{
+    static const int FLAGGE_A = 1 << 0;
+    static const int FLAGGE_B = 1 << 1;
+
+    static string Name(int wert)
+    {
+        switch (wert)
+        {
+            case FLAGGE_A: return "A";
+            case FLAGGE_B: return "B";
+        }
+        return "?";
+    }
+}
+
 enum ChefZ_EFoodState
 {
     SMOKED,
@@ -114,6 +143,13 @@ class CfgVehicles
     {
         scope = 0;
         displayName = "Testgericht";
+    };
+
+    // Elternklasse, die in DIESER config.cpp nirgends bekannt ist -> chefzbase
+    class ChefZ_TestErbe : ChefZ_NirgendsDeklariert
+    {
+        scope = 2;
+        displayName = "Erbe ohne Basis";
     };
 
     // Item-Klasse ohne ChefZ_-Praefix und ohne Vanilla-Entsprechung -> naming
@@ -221,6 +257,9 @@ class CfgChefZStates
 // --- Was zuenden MUSS -------------------------------------------------------
 
 const EXPECT = [
+  ['chefzbase', /ChefZ_NirgendsDeklariert/, 'Elternklasse in der eigenen config.cpp unbekannt'],
+  ['chefzmanaged', /ChefZ_SchlechtHalter/, 'per ref gehaltene Klasse ohne Managed'],
+  ['chefzswitch', /FLAGGE_A|FLAGGE_B/, 'case-Marke aus einem Schiebeausdruck'],
   ['chefzsym', /Kategorie "KAT_B"/, 'unbekannte Kategorie in einem Selektor'],
   ['chefzsym', /Zustand "DRYY"/, 'unbekannter Zustand in setStateAfter'],
   ['chefzsym', /completion: "IRGENDWANN"/, 'Wert ausserhalb der geschlossenen Liste'],
