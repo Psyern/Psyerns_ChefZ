@@ -46,13 +46,25 @@ class ChefZ_JsonSourceHelper
      */
     static int ReadInto(string declaredPath, int rank, ChefZ_RecordSink sink, ChefZ_LoadReport report, string sliceName)
     {
+        // Spuren je Stufe. Der Grund steht in ChefZ_JsonDocs.ReadTransform:
+        // Datei-I/O und Deserialisierung sind nativ. Geht dort etwas unter,
+        // endet der Prozess ohne Skriptausnahme und ohne Aufrufkeller - und
+        // ohne diese Zeilen weiss niemand, bei welcher Datei und in welcher
+        // Stufe. Sie kosten nur etwas, wenn TRACE eingeschaltet ist.
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadInto: aufloesen \"" + declaredPath + "\"");
+
         string resolved = ChefZ_PathTools.Resolve(declaredPath);
         if (resolved == "")
             return -1;
 
         ReportPathForm(declaredPath, resolved);
 
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadInto: lesen \"" + resolved + "\"");
+
         string text = ChefZ_JsonText.ReadWhole(resolved);
+
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadInto: gelesen, " + text.Length().ToString() + " Zeichen");
+
         if (text == "")
         {
             // Existiert, ist aber nicht lesbar oder leer. Beides ist ein

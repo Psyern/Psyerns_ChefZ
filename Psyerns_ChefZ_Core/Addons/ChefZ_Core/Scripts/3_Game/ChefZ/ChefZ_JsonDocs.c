@@ -656,16 +656,27 @@ class ChefZ_JsonRecordReader
 
     private static bool ReadTransform(string text, out array<ref ChefZ_Record> outRecords, out string errorOut)
     {
+        // Die drei Spuren sind kein Beiwerk. Der Deserialisierer der Engine ist
+        // nativ: geht er unter, gibt es KEINE Skriptausnahme und keinen
+        // Aufrufkeller, nur einen beendeten Serverprozess. Ohne diese Zeilen
+        // sieht man am 28.08.2026 nur, dass irgendwo zwischen zwei Dateien
+        // Schluss war.
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 1 (Werte) beginnt");
+
         ChefZ_TransformDoc a = new ChefZ_TransformDoc();
         if (!JsonFileLoader<ChefZ_TransformDoc>.LoadData(text, a, errorOut))
             return false;
         if (!a.records)
             return true;
 
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 1 ok, " + a.records.Count().ToString() + " Records - Durchgang 2 (Sonde) beginnt");
+
         ChefZ_RecordProbe.Set(true);
         string ignored;
         ChefZ_TransformDoc b = new ChefZ_TransformDoc();
         bool probeOk = JsonFileLoader<ChefZ_TransformDoc>.LoadData(text, b, ignored);
+
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 2 beendet, probeOk=" + probeOk.ToString());
 
         for (int i = 0; i < a.records.Count(); i++)
         {
