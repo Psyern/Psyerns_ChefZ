@@ -29,11 +29,15 @@
 // an Terje, und laeuft genau einmal.
 // ============================================================================
 
-modded class MissionServer
+// Am Haken des Cores statt an MissionServer: zwei Comp-Module mit je einem
+// eigenen MissionServer-Override haben den Server am 28.08.2026 beendet, jedes
+// einzeln lief. Siehe ChefZ_CompNotice. An der Pruefung selbst aendert sich
+// nichts - sie laeuft weiterhin genau einmal beim Serverstart, nach dem Boot.
+modded class ChefZ_CompNotice
 {
-    override void OnInit()
+    override void Emit()
     {
-        super.OnInit();
+        super.Emit();
         ChefZ_TerjeMed_RunStartupCheck();
     }
 

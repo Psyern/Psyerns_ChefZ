@@ -35,13 +35,16 @@
 // seinen Zielmod ist kein Defekt, sondern ein zulaessiger Betriebszustand.
 //==============================================================================
 #ifndef TERJE_MEDICINE_MOD
-modded class MissionServer
+// Kein eigener "modded class MissionServer" mehr: zwei Comp-Module mit je
+// einem eigenen Override haben den Server am 28.08.2026 mit einer
+// Zugriffsverletzung beendet, jedes einzeln lief. Der Core stellt dafuer genau
+// einen Haken bereit - siehe ChefZ_CompNotice.
+modded class ChefZ_CompNotice
 {
-    override void OnInit()
+    override void Emit()
     {
-        super.OnInit();
-
-        PrintToRPT("[ChefZ][CORE] TerjeMedicine-Anbindung geladen, aber TerjeMedicine ist nicht installiert - dieses Modul bleibt vollstaendig untaetig. Kein Fehler: ChefZ laeuft unveraendert weiter.");
+        super.Emit();
+        ChefZ_Log.Banner("TerjeMedicine-Anbindung geladen, aber TerjeMedicine ist nicht installiert - dieses Modul bleibt vollstaendig untaetig. Kein Fehler.");
     }
 }
 #endif // !TERJE_MEDICINE_MOD

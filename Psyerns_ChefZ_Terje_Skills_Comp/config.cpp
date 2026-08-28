@@ -153,7 +153,7 @@ class CfgPatches
 
 class CfgMods
 {
-    class Psyerns_ChefZ_Terje_Skills_Comp
+    class ChefZ_TerjeSkillsComp
     {
         dir = "Psyerns_ChefZ_Terje_Skills_Comp";
 

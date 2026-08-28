@@ -22,13 +22,16 @@
 // und dieses Modul ist ohnehin nur ein Adminwerkzeug ohne Spielmechanik.
 //==============================================================================
 #ifndef JM_COT
-modded class MissionServer
+// Kein eigener "modded class MissionServer" mehr: zwei Comp-Module mit je
+// einem eigenen Override haben den Server am 28.08.2026 mit einer
+// Zugriffsverletzung beendet, jedes einzeln lief. Der Core stellt dafuer genau
+// einen Haken bereit - siehe ChefZ_CompNotice.
+modded class ChefZ_CompNotice
 {
-    override void OnInit()
+    override void Emit()
     {
-        super.OnInit();
-
-        PrintToRPT("[ChefZ][CORE] COT-Anbindung geladen, aber Community Online Tools ist nicht installiert - dieses Modul bleibt vollstaendig untaetig. Kein Fehler: ChefZ laeuft unveraendert weiter.");
+        super.Emit();
+        ChefZ_Log.Banner("COT-Anbindung geladen, aber Community Online Tools ist nicht installiert - dieses Modul bleibt vollstaendig untaetig. Kein Fehler.");
     }
 }
 #endif // !JM_COT

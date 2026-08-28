@@ -88,6 +88,12 @@ modded class MissionServer
         super.OnInit();
         ChefZ_CoreEntry.BootServer();
 
+        // Der eine Haken fuer die Comp-Module. Sie brachten frueher jeweils
+        // einen eigenen "modded class MissionServer" mit; zwei davon
+        // gleichzeitig haben den Server am 28.08.2026 umgebracht. Warum das
+        // hier steht und nicht dort, erklaert ChefZ_CompNotice.
+        ChefZ_CompNotice.EmitAll();
+
         // ---- TEMPORAER: Vorarbeit V-A ----------------------------------
         // Faellt zusammen mit Tests/V_A_PboJsonSmoke/ und dessen
         // files[]-Eintrag in config.cpp weg, sobald das Ergebnis im

@@ -38,13 +38,16 @@
 // dort ist ohnehin nichts anzubinden.
 //==============================================================================
 #ifndef TERJE_SKILLS_MOD
-modded class MissionServer
+// Kein eigener "modded class MissionServer" mehr: zwei Comp-Module mit je
+// einem eigenen Override haben den Server am 28.08.2026 mit einer
+// Zugriffsverletzung beendet, jedes einzeln lief. Der Core stellt dafuer genau
+// einen Haken bereit - siehe ChefZ_CompNotice.
+modded class ChefZ_CompNotice
 {
-    override void OnInit()
+    override void Emit()
     {
-        super.OnInit();
-
-        PrintToRPT("[ChefZ][CORE] TerjeSkills-Anbindung geladen, aber TerjeSkills ist nicht installiert - dieses Modul bleibt vollstaendig untaetig. Kein Fehler: ChefZ laeuft unveraendert weiter.");
+        super.Emit();
+        ChefZ_Log.Banner("TerjeSkills-Anbindung geladen, aber TerjeSkills ist nicht installiert - dieses Modul bleibt vollstaendig untaetig. Kein Fehler.");
     }
 }
 #endif // !TERJE_SKILLS_MOD
