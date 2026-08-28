@@ -1,89 +1,297 @@
 {
-    "slice": "meat",
-
-    "categories": [
-        { "id": "MEAT", "parent": null, "displayName": "#STR_CHEFZ_CAT_MEAT" },
-        { "id": "DOMESTIC_MEAT", "parent": "MEAT", "displayName": "#STR_CHEFZ_CAT_DOMESTIC_MEAT" },
-        { "id": "WILD_MEAT", "parent": "MEAT", "displayName": "#STR_CHEFZ_CAT_WILD_MEAT" },
-        { "id": "POULTRY", "parent": "MEAT", "displayName": "#STR_CHEFZ_CAT_POULTRY" },
-        { "id": "PREDATOR_MEAT", "parent": "MEAT", "displayName": "#STR_CHEFZ_CAT_PREDATOR_MEAT" },
-        { "id": "MINCED_MEAT", "parent": "MEAT", "displayName": "#STR_CHEFZ_CAT_MINCED_MEAT" },
-        { "id": "SAUSAGE", "parent": "MEAT", "displayName": "#STR_CHEFZ_CAT_SAUSAGE" },
-        { "id": "FAT", "parent": null, "displayName": "#STR_CHEFZ_CAT_FAT" },
-        { "id": "BONE", "parent": null, "displayName": "#STR_CHEFZ_CAT_BONE" },
-        { "id": "CASING", "parent": null, "displayName": "#STR_CHEFZ_CAT_CASING" },
-        { "id": "SPICE", "parent": null, "displayName": "#STR_CHEFZ_CAT_SPICE" },
-        { "id": "HERB", "parent": null, "displayName": "#STR_CHEFZ_CAT_HERB" },
-        { "id": "DRIED_HERB", "parent": null, "displayName": "#STR_CHEFZ_CAT_DRIED_HERB" }
-    ],
-
-    "tags": [
-        { "id": "CHEFZ_RAW_MEAT" },
-        { "id": "CHEFZ_WILD_MEAT" },
-        { "id": "CHEFZ_HIGH_PROTEIN" },
-        { "id": "CHEFZ_RAW_SAUSAGE" },
-        { "id": "CHEFZ_HOT_MEAL" },
-        { "id": "CHEFZ_PREMIUM" }
-    ],
-
-    "processes": [
-        { "id": "PROCESS_CUT_MEAT", "tool": "CUTTING_TOOL", "durationSec": 4 },
-        { "id": "PROCESS_GRIND_MEAT", "station": "ChefZ_MeatGrinder", "durationSec": 20 },
-        { "id": "PROCESS_STUFF_SAUSAGE", "station": "ChefZ_MeatGrinder", "durationSec": 15 },
-        { "id": "PROCESS_CLEAN_CASING", "tool": "CUTTING_TOOL", "durationSec": 12 }
-    ],
-
-    "nutrition": [
-        { "class": "ChefZ_DicedMeat", "energy": 140, "water": 45, "stomach": 120 },
-        { "class": "ChefZ_MincedMeat", "energy": 150, "water": 40, "stomach": 110 },
-        { "class": "ChefZ_MincedPork", "energy": 185, "water": 38, "stomach": 115 },
-        { "class": "ChefZ_MincedVenison", "energy": 145, "water": 44, "stomach": 108 },
-        { "class": "ChefZ_MincedBoar", "energy": 165, "water": 40, "stomach": 112 },
-        { "class": "ChefZ_MincedChicken", "energy": 120, "water": 46, "stomach": 95 },
-        { "class": "ChefZ_MincedBear", "energy": 205, "water": 36, "stomach": 130 },
-        { "class": "ChefZ_SausageCasing", "energy": 20, "water": 12, "stomach": 15 },
-        { "class": "ChefZ_RawSausage", "energy": 230, "water": 35, "stomach": 150 },
-        { "class": "ChefZ_RawPorkSausage", "energy": 265, "water": 33, "stomach": 155 },
-        { "class": "ChefZ_RawVenisonSausage", "energy": 235, "water": 36, "stomach": 148 },
-        { "class": "ChefZ_RawBoarSausage", "energy": 250, "water": 34, "stomach": 152 },
-        { "class": "ChefZ_RawHunterSausage", "energy": 260, "water": 33, "stomach": 158 },
-        { "class": "ChefZ_RawSpicySausage", "energy": 245, "water": 34, "stomach": 150 },
-        { "class": "ChefZ_CookedSausage", "energy": 470, "water": 18, "stomach": 140 },
-        { "class": "ChefZ_PorkSausage", "energy": 530, "water": 16, "stomach": 145 },
-        { "class": "ChefZ_VenisonSausage", "energy": 480, "water": 18, "stomach": 138 },
-        { "class": "ChefZ_BoarSausage", "energy": 505, "water": 17, "stomach": 142 },
-        { "class": "ChefZ_HunterSausage", "energy": 525, "water": 16, "stomach": 148 },
-        { "class": "ChefZ_SpicySausage", "energy": 495, "water": 17, "stomach": 140 }
-    ],
-
-    "preservation": [
-        { "id": "SMOKED", "scope": "state", "spoilageMultiplier": 0.25 },
-        { "id": "DRIED", "scope": "state", "spoilageMultiplier": 0.15 }
-    ],
-
-    "classes": [
-        "ChefZ_MeatItemBase",
-        "ChefZ_DicedMeat",
-        "ChefZ_MincedMeat",
-        "ChefZ_MincedPork",
-        "ChefZ_MincedVenison",
-        "ChefZ_MincedBoar",
-        "ChefZ_MincedChicken",
-        "ChefZ_MincedBear",
-        "ChefZ_SausageCasing",
-        "ChefZ_RawSausage",
-        "ChefZ_RawPorkSausage",
-        "ChefZ_RawVenisonSausage",
-        "ChefZ_RawBoarSausage",
-        "ChefZ_RawHunterSausage",
-        "ChefZ_RawSpicySausage",
-        "ChefZ_CookedSausage",
-        "ChefZ_PorkSausage",
-        "ChefZ_VenisonSausage",
-        "ChefZ_BoarSausage",
-        "ChefZ_HunterSausage",
-        "ChefZ_SpicySausage",
-        "ChefZ_CuttingBoard",
-        "ChefZ_MeatGrinder"
-    ]
+  "slice": "meat",
+  "categories": [
+    {
+      "id": "MEAT",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_MEAT"
+    },
+    {
+      "id": "DOMESTIC_MEAT",
+      "parent": "MEAT",
+      "displayName": "#STR_CHEFZ_CAT_DOMESTIC_MEAT"
+    },
+    {
+      "id": "WILD_MEAT",
+      "parent": "MEAT",
+      "displayName": "#STR_CHEFZ_CAT_WILD_MEAT"
+    },
+    {
+      "id": "POULTRY",
+      "parent": "MEAT",
+      "displayName": "#STR_CHEFZ_CAT_POULTRY"
+    },
+    {
+      "id": "PREDATOR_MEAT",
+      "parent": "MEAT",
+      "displayName": "#STR_CHEFZ_CAT_PREDATOR_MEAT"
+    },
+    {
+      "id": "MINCED_MEAT",
+      "parent": "MEAT",
+      "displayName": "#STR_CHEFZ_CAT_MINCED_MEAT"
+    },
+    {
+      "id": "SAUSAGE",
+      "parent": "MEAT",
+      "displayName": "#STR_CHEFZ_CAT_SAUSAGE"
+    },
+    {
+      "id": "FAT",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_FAT"
+    },
+    {
+      "id": "BONE",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_BONE"
+    },
+    {
+      "id": "CASING",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_CASING"
+    },
+    {
+      "id": "SPICE",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_SPICE"
+    },
+    {
+      "id": "HERB",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_HERB"
+    },
+    {
+      "id": "DRIED_HERB",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_DRIED_HERB"
+    },
+    {
+      "id": "PRIMAL_CUT",
+      "parent": null,
+      "displayName": "#STR_CHEFZ_CAT_PRIMAL_CUT"
+    }
+  ],
+  "tags": [
+    {
+      "id": "CHEFZ_RAW_MEAT"
+    },
+    {
+      "id": "CHEFZ_WILD_MEAT"
+    },
+    {
+      "id": "CHEFZ_HIGH_PROTEIN"
+    },
+    {
+      "id": "CHEFZ_RAW_SAUSAGE"
+    },
+    {
+      "id": "CHEFZ_HOT_MEAL"
+    },
+    {
+      "id": "CHEFZ_PREMIUM"
+    }
+  ],
+  "processes": [
+    {
+      "id": "PROCESS_CUT_MEAT",
+      "tool": "CUTTING_TOOL",
+      "durationSec": 4
+    },
+    {
+      "id": "PROCESS_GRIND_MEAT",
+      "station": "ChefZ_MeatGrinder",
+      "durationSec": 20
+    },
+    {
+      "id": "PROCESS_STUFF_SAUSAGE",
+      "station": "ChefZ_MeatGrinder",
+      "durationSec": 15
+    },
+    {
+      "id": "PROCESS_CLEAN_CASING",
+      "tool": "CUTTING_TOOL",
+      "durationSec": 12
+    }
+  ],
+  "nutrition": [
+    {
+      "class": "ChefZ_DicedMeat",
+      "energy": 140,
+      "water": 45,
+      "stomach": 120
+    },
+    {
+      "class": "ChefZ_MincedMeat",
+      "energy": 150,
+      "water": 40,
+      "stomach": 110
+    },
+    {
+      "class": "ChefZ_MincedPork",
+      "energy": 185,
+      "water": 38,
+      "stomach": 115
+    },
+    {
+      "class": "ChefZ_MincedVenison",
+      "energy": 145,
+      "water": 44,
+      "stomach": 108
+    },
+    {
+      "class": "ChefZ_MincedBoar",
+      "energy": 165,
+      "water": 40,
+      "stomach": 112
+    },
+    {
+      "class": "ChefZ_MincedChicken",
+      "energy": 120,
+      "water": 46,
+      "stomach": 95
+    },
+    {
+      "class": "ChefZ_MincedBear",
+      "energy": 205,
+      "water": 36,
+      "stomach": 130
+    },
+    {
+      "class": "ChefZ_SausageCasing",
+      "energy": 20,
+      "water": 12,
+      "stomach": 15
+    },
+    {
+      "class": "ChefZ_RawSausage",
+      "energy": 230,
+      "water": 35,
+      "stomach": 150
+    },
+    {
+      "class": "ChefZ_RawPorkSausage",
+      "energy": 265,
+      "water": 33,
+      "stomach": 155
+    },
+    {
+      "class": "ChefZ_RawVenisonSausage",
+      "energy": 235,
+      "water": 36,
+      "stomach": 148
+    },
+    {
+      "class": "ChefZ_RawBoarSausage",
+      "energy": 250,
+      "water": 34,
+      "stomach": 152
+    },
+    {
+      "class": "ChefZ_RawHunterSausage",
+      "energy": 260,
+      "water": 33,
+      "stomach": 158
+    },
+    {
+      "class": "ChefZ_RawSpicySausage",
+      "energy": 245,
+      "water": 34,
+      "stomach": 150
+    },
+    {
+      "class": "ChefZ_CookedSausage",
+      "energy": 470,
+      "water": 18,
+      "stomach": 140
+    },
+    {
+      "class": "ChefZ_PorkSausage",
+      "energy": 530,
+      "water": 16,
+      "stomach": 145
+    },
+    {
+      "class": "ChefZ_VenisonSausage",
+      "energy": 480,
+      "water": 18,
+      "stomach": 138
+    },
+    {
+      "class": "ChefZ_BoarSausage",
+      "energy": 505,
+      "water": 17,
+      "stomach": 142
+    },
+    {
+      "class": "ChefZ_HunterSausage",
+      "energy": 525,
+      "water": 16,
+      "stomach": 148
+    },
+    {
+      "class": "ChefZ_SpicySausage",
+      "energy": 495,
+      "water": 17,
+      "stomach": 140
+    },
+    {
+      "class": "ChefZ_BeefLeg",
+      "energy": 265,
+      "water": 85,
+      "stomach": 230
+    },
+    {
+      "class": "ChefZ_PorkLeg",
+      "energy": 350,
+      "water": 72,
+      "stomach": 240
+    },
+    {
+      "class": "ChefZ_VenisonLeg",
+      "energy": 275,
+      "water": 84,
+      "stomach": 205
+    }
+  ],
+  "preservation": [
+    {
+      "id": "SMOKED",
+      "scope": "state",
+      "spoilageMultiplier": 0.25
+    },
+    {
+      "id": "DRIED",
+      "scope": "state",
+      "spoilageMultiplier": 0.15
+    }
+  ],
+  "classes": [
+    "ChefZ_MeatItemBase",
+    "ChefZ_BeefLeg",
+    "ChefZ_PorkLeg",
+    "ChefZ_VenisonLeg",
+    "ChefZ_DicedMeat",
+    "ChefZ_MincedMeat",
+    "ChefZ_MincedPork",
+    "ChefZ_MincedVenison",
+    "ChefZ_MincedBoar",
+    "ChefZ_MincedChicken",
+    "ChefZ_MincedBear",
+    "ChefZ_SausageCasing",
+    "ChefZ_RawSausage",
+    "ChefZ_RawPorkSausage",
+    "ChefZ_RawVenisonSausage",
+    "ChefZ_RawBoarSausage",
+    "ChefZ_RawHunterSausage",
+    "ChefZ_RawSpicySausage",
+    "ChefZ_CookedSausage",
+    "ChefZ_PorkSausage",
+    "ChefZ_VenisonSausage",
+    "ChefZ_BoarSausage",
+    "ChefZ_HunterSausage",
+    "ChefZ_SpicySausage",
+    "ChefZ_CuttingBoard",
+    "ChefZ_MeatGrinder"
+  ]
 }

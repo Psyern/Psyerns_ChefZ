@@ -4,112 +4,228 @@
     "records": [
         {
             "id": "PigSteakMeat",
-            "categories": ["MEAT", "DOMESTIC_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "DOMESTIC_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "CowSteakMeat",
-            "categories": ["MEAT", "DOMESTIC_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "DOMESTIC_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "SheepSteakMeat",
-            "categories": ["MEAT", "DOMESTIC_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "DOMESTIC_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "GoatSteakMeat",
-            "categories": ["MEAT", "DOMESTIC_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "DOMESTIC_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "DeerSteakMeat",
-            "categories": ["MEAT", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "BoarSteakMeat",
-            "categories": ["MEAT", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "RabbitLegMeat",
-            "categories": ["MEAT", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT"],
+            "categories": [
+                "MEAT",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "ChickenBreastMeat",
-            "categories": ["MEAT", "POULTRY"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "POULTRY"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "WolfSteakMeat",
-            "categories": ["MEAT", "PREDATOR_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT"],
+            "categories": [
+                "MEAT",
+                "PREDATOR_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "BearSteakMeat",
-            "categories": ["MEAT", "PREDATOR_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "PREDATOR_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
-
         {
             "id": "Lard",
-            "categories": ["FAT"],
+            "categories": [
+                "FAT"
+            ],
             "tags": [],
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "Bone",
-            "categories": ["BONE"],
+            "categories": [
+                "BONE"
+            ],
             "tags": [],
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
         {
             "id": "Guts",
-            "categories": ["CASING"],
+            "categories": [
+                "CASING"
+            ],
             "tags": [],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
         },
-
+        {
+            "id": "ChefZ_BeefLeg",
+            "categories": [
+                "PRIMAL_CUT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_PorkLeg",
+            "categories": [
+                "PRIMAL_CUT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_VenisonLeg",
+            "categories": [
+                "PRIMAL_CUT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
         {
             "id": "ChefZ_DicedMeat",
-            "categories": ["MEAT", "MINCED_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -117,8 +233,14 @@
         },
         {
             "id": "ChefZ_MincedMeat",
-            "categories": ["MEAT", "MINCED_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -126,8 +248,15 @@
         },
         {
             "id": "ChefZ_MincedPork",
-            "categories": ["MEAT", "MINCED_MEAT", "DOMESTIC_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT",
+                "DOMESTIC_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -135,8 +264,16 @@
         },
         {
             "id": "ChefZ_MincedVenison",
-            "categories": ["MEAT", "MINCED_MEAT", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -144,8 +281,16 @@
         },
         {
             "id": "ChefZ_MincedBoar",
-            "categories": ["MEAT", "MINCED_MEAT", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -153,8 +298,15 @@
         },
         {
             "id": "ChefZ_MincedChicken",
-            "categories": ["MEAT", "MINCED_MEAT", "POULTRY"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT",
+                "POULTRY"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -162,8 +314,16 @@
         },
         {
             "id": "ChefZ_MincedBear",
-            "categories": ["MEAT", "MINCED_MEAT", "PREDATOR_MEAT"],
-            "tags": ["CHEFZ_RAW_MEAT", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT",
+                "PREDATOR_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -171,18 +331,25 @@
         },
         {
             "id": "ChefZ_SausageCasing",
-            "categories": ["CASING"],
+            "categories": [
+                "CASING"
+            ],
             "tags": [],
             "defaultState": "PREPARED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
             "decays": true
         },
-
         {
             "id": "ChefZ_RawSausage",
-            "categories": ["MEAT", "SAUSAGE"],
-            "tags": ["CHEFZ_RAW_SAUSAGE", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE"
+            ],
+            "tags": [
+                "CHEFZ_RAW_SAUSAGE",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -190,8 +357,15 @@
         },
         {
             "id": "ChefZ_RawPorkSausage",
-            "categories": ["MEAT", "SAUSAGE", "DOMESTIC_MEAT"],
-            "tags": ["CHEFZ_RAW_SAUSAGE", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "DOMESTIC_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_SAUSAGE",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -199,8 +373,16 @@
         },
         {
             "id": "ChefZ_RawVenisonSausage",
-            "categories": ["MEAT", "SAUSAGE", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_SAUSAGE", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_SAUSAGE",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -208,8 +390,16 @@
         },
         {
             "id": "ChefZ_RawBoarSausage",
-            "categories": ["MEAT", "SAUSAGE", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_SAUSAGE", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_SAUSAGE",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -217,8 +407,16 @@
         },
         {
             "id": "ChefZ_RawHunterSausage",
-            "categories": ["MEAT", "SAUSAGE", "WILD_MEAT"],
-            "tags": ["CHEFZ_RAW_SAUSAGE", "CHEFZ_WILD_MEAT", "CHEFZ_PREMIUM"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_SAUSAGE",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_PREMIUM"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -226,18 +424,29 @@
         },
         {
             "id": "ChefZ_RawSpicySausage",
-            "categories": ["MEAT", "SAUSAGE"],
-            "tags": ["CHEFZ_RAW_SAUSAGE", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE"
+            ],
+            "tags": [
+                "CHEFZ_RAW_SAUSAGE",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
             "decays": true
         },
-
         {
             "id": "ChefZ_CookedSausage",
-            "categories": ["MEAT", "SAUSAGE"],
-            "tags": ["CHEFZ_HOT_MEAL", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE"
+            ],
+            "tags": [
+                "CHEFZ_HOT_MEAL",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "COOKED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -245,8 +454,15 @@
         },
         {
             "id": "ChefZ_PorkSausage",
-            "categories": ["MEAT", "SAUSAGE", "DOMESTIC_MEAT"],
-            "tags": ["CHEFZ_HOT_MEAL", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "DOMESTIC_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_HOT_MEAL",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "COOKED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -254,8 +470,16 @@
         },
         {
             "id": "ChefZ_VenisonSausage",
-            "categories": ["MEAT", "SAUSAGE", "WILD_MEAT"],
-            "tags": ["CHEFZ_HOT_MEAL", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_HOT_MEAL",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "COOKED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -263,8 +487,16 @@
         },
         {
             "id": "ChefZ_BoarSausage",
-            "categories": ["MEAT", "SAUSAGE", "WILD_MEAT"],
-            "tags": ["CHEFZ_HOT_MEAL", "CHEFZ_WILD_MEAT", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_HOT_MEAL",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "COOKED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -272,8 +504,16 @@
         },
         {
             "id": "ChefZ_HunterSausage",
-            "categories": ["MEAT", "SAUSAGE", "WILD_MEAT"],
-            "tags": ["CHEFZ_HOT_MEAL", "CHEFZ_WILD_MEAT", "CHEFZ_PREMIUM"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_HOT_MEAL",
+                "CHEFZ_WILD_MEAT",
+                "CHEFZ_PREMIUM"
+            ],
             "defaultState": "COOKED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
@@ -281,8 +521,14 @@
         },
         {
             "id": "ChefZ_SpicySausage",
-            "categories": ["MEAT", "SAUSAGE"],
-            "tags": ["CHEFZ_HOT_MEAL", "CHEFZ_HIGH_PROTEIN"],
+            "categories": [
+                "MEAT",
+                "SAUSAGE"
+            ],
+            "tags": [
+                "CHEFZ_HOT_MEAL",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
             "defaultState": "COOKED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,

@@ -297,6 +297,13 @@
             "fullness": 5
         },
         {
+            "id": "ChefZ_BeefLeg",
+            "scope": "class",
+            "energy": 265,
+            "water": 85,
+            "fullness": 230
+        },
+        {
             "id": "ChefZ_BoarSausage",
             "scope": "class",
             "energy": 505,
@@ -367,6 +374,13 @@
             "fullness": 108
         },
         {
+            "id": "ChefZ_PorkLeg",
+            "scope": "class",
+            "energy": 350,
+            "water": 72,
+            "fullness": 240
+        },
+        {
             "id": "ChefZ_PorkSausage",
             "scope": "class",
             "energy": 530,
@@ -428,6 +442,13 @@
             "energy": 495,
             "water": 17,
             "fullness": 140
+        },
+        {
+            "id": "ChefZ_VenisonLeg",
+            "scope": "class",
+            "energy": 275,
+            "water": 84,
+            "fullness": 205
         },
         {
             "id": "ChefZ_VenisonSausage",

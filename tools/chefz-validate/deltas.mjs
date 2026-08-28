@@ -150,9 +150,17 @@ export default function run() {
       const list = Array.isArray(res.data) ? res.data
         : (res.data.records ?? res.data[section] ?? res.data.entries ?? []);
       const have = new Set(Array.isArray(list) ? list.map(e => e?.id ?? e?.class ?? e?.state).filter(Boolean) : []);
+      // Warnung, nicht Fehler: ein Slice schreibt sein Delta, der Integrator
+      // merged spaeter - das ist der vorgesehene Ablauf, und dazwischen liegt
+      // regulaer ein Zustand, in dem der Eintrag noch nicht angekommen ist. Als
+      // Fehler gefuehrt, kann ein Content-Agent Registry-Bedarf gar nicht
+      // uebergeben, ohne den Lauf rot zu machen - er laesst ihn dann lieber weg,
+      // und der Bedarf geht verloren. Genau das ist einmal passiert.
       for (const id of expected.keys()) {
         if (!have.has(id)) {
-          f.error(file, 0, `"${id}" steht in einem Delta, fehlt aber in ${name} - der Merge ist unvollstaendig`);
+          f.warn(file, 0,
+            `"${id}" steht in einem Delta, aber noch nicht in ${name}. `
+            + `Der Integrator muss mergen, bevor der Eintrag wirksam wird.`);
         }
       }
       // Und die Gegenrichtung. Ohne sie ueberlebt ein Record in der Registry,

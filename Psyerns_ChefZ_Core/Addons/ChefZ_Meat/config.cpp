@@ -5,6 +5,7 @@
 // (§27, Uebergabepunkt). Dieses Modul enthaelt deshalb keinen Zerlegeschritt
 // und keine Terje-Referenz, in keiner Form.
 //
+//   Keule    --Messer-->        2x Vanilla-Steak + Knochen  (Zerteilen)
 //   Fleisch  --Messer-->        ChefZ_DicedMeat            §29
 //   Fleisch  --Fleischwolf-->   ChefZ_Minced*              §30
 //   Guts     --Schneidebrett--> ChefZ_SausageCasing        §33
@@ -14,6 +15,40 @@
 // Raeuchern und Trocknen (§41, §42) stehen NICHT hier: sie gehoeren dem Slice
 // "preservation", der PROCESS_SMOKE und PROCESS_DRY mitbringt. Dieses Modul
 // endet bei der rohen und der gebratenen Wurst.
+//
+// ---------------------------------------------------------------------------
+// DIE KEULEN - und warum sie die Systemgrenze zu Terje NICHT verschieben
+// ---------------------------------------------------------------------------
+// ChefZ_BeefLeg / ChefZ_PorkLeg / ChefZ_VenisonLeg fallen beim Zerlegen an.
+// Angebunden sind sie ueber Vanillas EIGENE Zerlegeausbeute und ueber sonst
+// nichts:
+//
+//   ActionSkinning.OnFinishProgressServer -> SpawnItems(action_data)
+//   ActionSkinning.c:236
+//       string cfgAnimalClassPath = "cfgVehicles " + body.GetType() + " " + "Skinning ";
+//   ActionSkinning.c:245-257
+//       ConfigGetChildrenCount(...) ueber ALLE Kinder von "Skinning";
+//       je Kind: ConfigGetText(... "item"), ConfigGetInt(... "count")
+//
+// Vanilla zaehlt also jedes Unterklassenkind von "Skinning" ab und spawnt, was
+// dort unter "item" steht. Ein zusaetzliches Kind ist eine reine DATENZEILE in
+// einer Vanilla-Tabelle - keine neue Aktion, kein modded class, kein Eingriff
+// in den Zerlegevorgang.
+//
+// Terje-Analyse §14 sagt: das Zerlegen gehoert Terje Hunting, ChefZ beginnt beim
+// fertigen Fleischstueck. Das bleibt so. Terje Hunting haengt sich seinerseits
+// per "modded class ActionSkinning" AN dieselbe Vanilla-Ausbeute an: es ruft
+// super.OnFinishProgressServer() - also Vanillas SpawnItems() mit genau dieser
+// Configtabelle - und rechnet danach in TerjeProcessServerSpawnedItems() die
+// Perks auf die entstandenen Items. Beide Seiten lesen bzw. beschreiben damit
+// unterschiedliche Dinge: ChefZ sagt WAS es gibt, Terje sagt WIE VIEL davon und
+// WIE SCHNELL. Es gibt keine gemeinsame Datei, keine Ladereihenfolgefrage und
+// keine Terje-Referenz in diesem Modul.
+//
+// Was das Modul dadurch NICHT tut: es aendert keine vorhandene Ausbeute. Kein
+// "count" eines Vanilla-Eintrags wird angefasst, keine Steakzahl gesenkt. Ein
+// zusaetzlicher Eintrag ist zusaetzliches Fleisch - das ist eine bewusste
+// Balanceentscheidung und steht im Slice-Bericht.
 //
 // PFADWURZEL: das PBO-Praefix ist der ORDNERNAME des Addons. Jeder Laufzeitpfad
 // beginnt deshalb mit "ChefZ_Meat/" (Entwurf 02 §4.1).
@@ -62,6 +97,9 @@ class CfgPatches
     {
         units[] =
         {
+            "ChefZ_BeefLeg",
+            "ChefZ_PorkLeg",
+            "ChefZ_VenisonLeg",
             "ChefZ_DicedMeat",
             "ChefZ_MincedMeat",
             "ChefZ_MincedPork",
@@ -94,7 +132,29 @@ class CfgPatches
         //   DZ_Data          Grundlage von allem
         // Nicht mehr und nicht weniger - eine zu breite Liste verschiebt die
         // Ladereihenfolge fremder Mods ohne Grund.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Processing"};
+        //
+        // Die sieben DZ_Animals_*-Eintraege kamen mit den Keulen dazu und sind
+        // genau die PBOs, in denen die unten erweiterten Tierklassen stehen.
+        // Ohne sie waere die Ladereihenfolge undefiniert: die Erweiterung
+        // "class Animal_BosTaurus: AnimalBase { class Skinning { ... }; };"
+        // braucht die Originalklasse VOR sich, sonst legt sie eine neue Klasse
+        // gleichen Namens an - und die Kuh im Spiel bleibt die alte, ohne dass
+        // irgendwo etwas gemeldet wuerde. Die Namen sind die, die auch
+        // TerjeSkills_Animals und DayZExpansion_VanillaFixes_Animals fuehren.
+        requiredAddons[] =
+        {
+            "DZ_Data",
+            "DZ_Gear_Food",
+            "ChefZ_Core",
+            "ChefZ_Processing",
+            "DZ_Animals_bos_taurus",
+            "DZ_Animals_bos_taurus_fem",
+            "DZ_Animals_sus_domesticus",
+            "DZ_Animals_cervus_elaphus",
+            "DZ_Animals_cervus_elaphus_feminam",
+            "DZ_Animals_capreolus_capreolus",
+            "DZ_Animals_capreolus_capreolus_fem"
+        };
     };
 };
 
@@ -152,6 +212,11 @@ class CfgMods
 class CfgVehicles
 {
     class Edible_Base;
+
+    // Vorwaertsdeklaration der Vanilla-Tierbasis. Sie definiert nichts - sie
+    // macht den Namen sichtbar, damit die Erweiterungen am Ende dieser Datei
+    // ihre Elternklasse nennen koennen, ohne sie neu zu erfinden.
+    class AnimalBase;
 
     // ------------------------------------------------------------------------
     // Gemeinsame Configbasis dieses Moduls.
@@ -250,6 +315,156 @@ class CfgVehicles
                         cooking_method = 2;
                     };
                 };
+            };
+        };
+    };
+
+
+    // ------------------------------------------------------------------------
+    // DIE KEULEN
+    //
+    // Ein Grobteilstueck mit Knochen, wie es beim Zerlegen anfaellt. Es ist
+    // AUSDRUECKLICH kein zweites Steak: es traegt in Config/Ingredients/Meat.json
+    // KEINE Kategorie, sondern nur Tags. Der Grund steht dort und ist die
+    // wichtigste Entscheidung an diesen drei Klassen - kurz: Kategorien sind in
+    // ChefZ self-or-ancestor (ChefZ_CategoryClosure), und eine Keule in "MEAT"
+    // waere fuer TR_DicedMeat und TR_MeatToMinced EIN Fleischstueck. Eine ganze
+    // Rinderkeule ergaebe dann ein einziges Hackfleisch.
+    //
+    // Adressiert wird die Keule deshalb ausschliesslich ueber ihren
+    // Klassennamen, und zwar von genau einem Transform je Sorte
+    // (TR_CutBeefLeg / TR_CutPorkLeg / TR_CutVenisonLeg). Der loest sie in zwei
+    // VANILLA-Steaks plus Knochen bzw. Fett auf, und ab da laeuft die
+    // vorhandene Kette weiter - Wuerfeln, Wolfen, Wurst. Die Keule braucht
+    // damit keinen einzigen neuen Rezeptslot und ist trotzdem nirgends eine
+    // Sackgasse.
+    //
+    // Kochbar ist sie: sie erbt Food > FoodStages UND FoodStageTransitions von
+    // ChefZ_MeatItemBase, also brennt sie nicht an (01 V4), und die Essaktion
+    // steht auf der Skriptbasis (ChefZ_MeatItemBase.SetActions). Ein ganzer
+    // Braten am Feuer ist die zweite, teurere Verwendung: viel Energie auf
+    // einmal, dafuer schleppt man vier Inventarfelder mit sich herum.
+    //
+    // Die Zahlen sind NICHT frei gewaehlt. Sie sind das Doppelte der
+    // entsprechenden Hack-/Wuerfelklasse dieses Moduls - zwei Steaks - abzueglich
+    // eines Abschlags fuer den Knochen, der zwar mitgewogen, aber nicht
+    // mitgegessen wird:
+    //
+    //   ChefZ_BeefLeg     <- 2 x ChefZ_DicedMeat    (Raw 140 -> 265 statt 280)
+    //   ChefZ_PorkLeg     <- 2 x ChefZ_MincedPork   (Raw 185 -> 350 statt 370)
+    //   ChefZ_VenisonLeg  <- 2 x ChefZ_MincedVenison(Raw 145 -> 275 statt 290)
+    //
+    // itemSize 2x2: vier Felder fuer zwei Steaks (je 2x1) plus Knochen. Die
+    // Keule ist damit im Rucksack minimal guenstiger als ihr zerlegter Inhalt -
+    // genau das ist ihr Sinn als Transportform.
+    //
+    // MODELL: alle drei tragen das Steak-Proxy. Es gibt kein Keulenmodell in
+    // Vanilla, das im Projekt belegt waere; geraten wird nicht. Der Bedarf steht
+    // im Slice-Bericht.
+    // ------------------------------------------------------------------------
+
+    // Rind, aus Animal_BosTaurus* (Vanilla-Assets §20d).
+    class ChefZ_BeefLeg : ChefZ_MeatItemBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BEEFLEG0";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEEFLEG1";
+        model = "\dz\gear\food\steak.p3d";
+        itemSize[] = {2, 2};
+        weight = 700;
+
+        class Nutrition
+        {
+            fullnessIndex = 230;
+            energy = 265;
+            water = 85;
+            nutritionalIndex = 26;
+            toxicity = 0;
+            agents = 4;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw { nutrition_properties[] = {230, 265, 85, 26, 0, 4, 1}; };
+                class Baked { nutrition_properties[] = {210, 570, 46, 44, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {215, 535, 112, 44, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {120, 150, 18, 10, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {180, 175, 55, 10, 20, 16, 1}; };
+            };
+        };
+    };
+
+    // Schwein, aus Animal_SusDomesticus. Fetter als Rind - dieselbe Stufung wie
+    // ChefZ_MincedPork gegenueber ChefZ_MincedMeat.
+    class ChefZ_PorkLeg : ChefZ_MeatItemBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_PORKLEG0";
+        descriptionShort = "#STR_CHEFZ_ITEM_PORKLEG1";
+        model = "\dz\gear\food\steak.p3d";
+        itemSize[] = {2, 2};
+        weight = 700;
+
+        class Nutrition
+        {
+            fullnessIndex = 240;
+            energy = 350;
+            water = 72;
+            nutritionalIndex = 28;
+            toxicity = 0;
+            agents = 4;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw { nutrition_properties[] = {240, 350, 72, 28, 0, 4, 1}; };
+                class Baked { nutrition_properties[] = {220, 685, 34, 46, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {225, 640, 98, 46, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {125, 170, 18, 10, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {190, 210, 46, 10, 20, 16, 1}; };
+            };
+        };
+    };
+
+    // Wild, aus Animal_CervusElaphus* (Rotwild) und Animal_CapreolusCapreolus*
+    // (Rehwild). Beide liefern in Vanilla DeerSteakMeat, deshalb EINE Keule fuer
+    // beide - genau so, wie TR_VenisonToMinced es schon haelt. Mager, dafuer
+    // hoher Naehrwertindex.
+    class ChefZ_VenisonLeg : ChefZ_MeatItemBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_VENISONLEG0";
+        descriptionShort = "#STR_CHEFZ_ITEM_VENISONLEG1";
+        model = "\dz\gear\food\steak.p3d";
+        itemSize[] = {2, 2};
+        weight = 620;
+
+        class Nutrition
+        {
+            fullnessIndex = 205;
+            energy = 275;
+            water = 84;
+            nutritionalIndex = 38;
+            toxicity = 0;
+            agents = 4;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw { nutrition_properties[] = {205, 275, 84, 38, 0, 4, 1}; };
+                class Baked { nutrition_properties[] = {188, 570, 42, 58, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {195, 535, 110, 58, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {105, 148, 18, 12, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {165, 178, 52, 12, 20, 16, 1}; };
             };
         };
     };
@@ -943,15 +1158,182 @@ class CfgVehicles
             };
         };
     };
+
+
+    // ========================================================================
+    // ZERLEGEAUSBEUTE - je Tierart EIN zusaetzliches Kind in Vanillas
+    // "Skinning"-Tabelle.
+    //
+    // Der Mechanismus steht woertlich im Dateikopf von ActionSkinning.c:
+    //
+    //     class Skinning
+    //     {
+    //         // All classes in this scope are parsed, so they can have any name.
+    //         class ObtainedSteaks
+    //         {
+    //             item = "DeerSteakMeat";
+    //             count = 10;
+    //             transferToolDamageCoef = 1;
+    //         };
+    //     };
+    //
+    // "All classes in this scope are parsed" ist die ganze Anbindung: ein
+    // zusaetzliches Kind wird mitgezaehlt, die vorhandenen bleiben unberuehrt.
+    // Kein "count" eines Vanilla-Eintrags wird hier angefasst.
+    //
+    // WARUM NUR DIE BASISKLASSEN, NICHT DIE FARBVARIANTEN
+    // ---------------------------------------------------
+    // Vanilla hat Animal_BosTaurus_Brown/_Spotted/_White und weitere Varianten.
+    // Sie stehen hier bewusst NICHT, und das ist keine Luecke: die Configkette
+    // loest geerbte Knoten mit auf, und genau darauf baut auch TerjeSkills.
+    // Dessen Animals/config.cpp nennt ebenfalls nur "Animal_BosTaurus" und
+    // "Animal_BosTaurusF", waehrend sein Skript den Wert ueber
+    // ConfigGetInt("CfgVehicles " + animalBody.GetType() + " ...") mit dem
+    // KONKRETEN Typ (Animal_BosTaurus_Brown) liest. Dass das seit Jahren
+    // funktioniert, ist der Beleg. Eine Variante hier namentlich zu nennen,
+    // deren Elternklasse das Projekt nicht belegen kann, waere Raten.
+    //
+    // WARUM count = 1 UND NICHT itemZones/countByZone
+    // -----------------------------------------------
+    // ActionSkinning kann die Stueckzahl aus der Gesundheit einzelner
+    // Schadenszonen ableiten (itemZones[]/countByZone[], ActionSkinning.c:249ff)
+    // - "die Keule gibt es nur, wenn du ihr nicht in die Laeufe geschossen hast"
+    // waere die schoenere Regel. Sie braucht aber den exakten Namen der
+    // Schadenszone je Tierart, und den fuehrt keine Quelle dieses Projekts.
+    // Ein falscher Zonenname liefert GetHealth01 == 0, damit floor(0) == 0, und
+    // die Keule erscheint NIE - ohne Fehlermeldung. Deshalb die deterministische
+    // Form; die Zonenvariante steht als Nachtrag im Slice-Bericht.
+    //
+    // transferToolDamageCoef = 1: ein stumpfes Messer liefert eine
+    // angeschlagene Keule. Derselbe Schalter, den Vanilla fuer seine eigenen
+    // Steaks benutzt - er kostet nichts und macht die Messerpflege spuerbar.
+    // ========================================================================
+
+    // --- Rind -> ChefZ_BeefLeg (Vanilla-Assets §20d) ---
+    class Animal_BosTaurus : AnimalBase
+    {
+        class Skinning
+        {
+            class ChefZ_BeefLegYield
+            {
+                item = "ChefZ_BeefLeg";
+                count = 1;
+                transferToolDamageCoef = 1;
+            };
+        };
+    };
+
+    class Animal_BosTaurusF : AnimalBase
+    {
+        class Skinning
+        {
+            class ChefZ_BeefLegYield
+            {
+                item = "ChefZ_BeefLeg";
+                count = 1;
+                transferToolDamageCoef = 1;
+            };
+        };
+    };
+
+    // --- Schwein -> ChefZ_PorkLeg ---
+    class Animal_SusDomesticus : AnimalBase
+    {
+        class Skinning
+        {
+            class ChefZ_PorkLegYield
+            {
+                item = "ChefZ_PorkLeg";
+                count = 1;
+                transferToolDamageCoef = 1;
+            };
+        };
+    };
+
+    // --- Wild -> ChefZ_VenisonLeg ---
+    //
+    // Rotwild (CervusElaphus) und Rehwild (CapreolusCapreolus). Beide liefern in
+    // Vanilla DeerSteakMeat, also dieselbe Keule. Rentier (RangiferTarandus)
+    // steht bewusst NICHT dabei: es liefert ReindeerSteakMeat und kommt in der
+    // ganzen Wildkette dieses Moduls nicht vor - TR_VenisonToMinced nimmt
+    // ausschliesslich DeerSteakMeat. Eine Rentierkeule, die zu Rotwildsteaks
+    // zerfaellt, waere eine stille Umetikettierung.
+    class Animal_CervusElaphus : AnimalBase
+    {
+        class Skinning
+        {
+            class ChefZ_VenisonLegYield
+            {
+                item = "ChefZ_VenisonLeg";
+                count = 1;
+                transferToolDamageCoef = 1;
+            };
+        };
+    };
+
+    class Animal_CervusElaphusF : AnimalBase
+    {
+        class Skinning
+        {
+            class ChefZ_VenisonLegYield
+            {
+                item = "ChefZ_VenisonLeg";
+                count = 1;
+                transferToolDamageCoef = 1;
+            };
+        };
+    };
+
+    class Animal_CapreolusCapreolus : AnimalBase
+    {
+        class Skinning
+        {
+            class ChefZ_VenisonLegYield
+            {
+                item = "ChefZ_VenisonLeg";
+                count = 1;
+                transferToolDamageCoef = 1;
+            };
+        };
+    };
+
+    class Animal_CapreolusCapreolusF : AnimalBase
+    {
+        class Skinning
+        {
+            class ChefZ_VenisonLegYield
+            {
+                item = "ChefZ_VenisonLeg";
+                count = 1;
+                transferToolDamageCoef = 1;
+            };
+        };
+    };
 };
 
 // ---------------------------------------------------------------------------
 // Anmeldung beim Core (02 §4).
 //
-// handcraftRecipeSlots = 1: dieses Modul bringt GENAU EINEN Transform mit,
-// dessen Prozess exec = "HANDCRAFT" hat - TR_DicedMeat ueber PROCESS_CUT_MEAT.
+// handcraftRecipeSlots = 5: dieses Modul bringt GENAU FUENF Transforms mit,
+// deren Prozess exec = "HANDCRAFT" hat. Die Liste, damit die Zahl nachpruefbar
+// bleibt und nicht wieder driftet:
+//
+//   TR_DicedMeat        PROCESS_CUT_MEAT       Fleisch + Messer -> Wuerfel §29
+//   TR_SausageCasing    PROCESS_CLEAN_CASING   Guts    + Messer -> Huelle  §33
+//   TR_CutBeefLeg       PROCESS_CUT_MEAT       Keule   + Messer -> 2x CowSteakMeat  + Bone
+//   TR_CutPorkLeg       PROCESS_CUT_MEAT       Keule   + Messer -> 2x PigSteakMeat  + Lard
+//   TR_CutVenisonLeg    PROCESS_CUT_MEAT       Keule   + Messer -> 2x DeerSteakMeat + Bone
+//
 // Die Zahl ist eine Reservierung in Vanillas Rezeptliste und muss vorab
-// feststehen; die Begruendung steht im Kopf von ChefZ_HandcraftBridge.c.
+// feststehen; die Begruendung steht im Kopf von ChefZ_HandcraftBridge.c. Nennt
+// ein Slice zu wenig Plaetze, weist ChefZ_HandcraftBridge.Reserve die
+// ueberzaehligen Transforms ab - sie erscheinen dann nie im Kontextmenue.
+//
+// SIE STAND VORHER AUF 1 UND WAR DAMIT SCHON VOR DEN KEULEN ZU KLEIN.
+// PROCESS_CLEAN_CASING wurde irgendwann von STATION_ACTION auf HANDCRAFT
+// umgestellt (siehe den Kommentar dort in ChefZ_Processing), ohne dass diese
+// Zahl mitgezogen wurde. Einer der beiden - TR_DicedMeat oder TR_SausageCasing -
+// wurde seitdem abgewiesen. Mit den drei Keulen sind es fuenf.
 // Alles andere laeuft an einer Station und braucht keinen Platz.
 //
 // dataFiles[] beginnt mit dem PBO-Praefix, also dem ORDNERNAMEN des Addons.
@@ -962,7 +1344,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 200;
-        handcraftRecipeSlots = 1;
+        handcraftRecipeSlots = 5;
         dataFiles[] =
         {
             "ChefZ_Meat/Config/Ingredients/Meat.json",

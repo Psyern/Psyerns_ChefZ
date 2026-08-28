@@ -27,6 +27,67 @@
         },
 
         {
+            "id": "TR_CutBeefLeg",
+            "process": "PROCESS_CUT_MEAT",
+            "inputs": [
+                {
+                    "slotId": "leg",
+                    "match": { "cls": "ChefZ_BeefLeg" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "CowSteakMeat", "quantityMode": "fixed" },
+                { "cls": "CowSteakMeat", "quantityMode": "fixed" }
+            ],
+            "byproducts": [
+                { "cls": "Bone", "quantityMode": "fixed" }
+            ],
+            "priority": 20
+        },
+        {
+            "id": "TR_CutPorkLeg",
+            "process": "PROCESS_CUT_MEAT",
+            "inputs": [
+                {
+                    "slotId": "leg",
+                    "match": { "cls": "ChefZ_PorkLeg" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "PigSteakMeat", "quantityMode": "fixed" },
+                { "cls": "PigSteakMeat", "quantityMode": "fixed" }
+            ],
+            "byproducts": [
+                { "cls": "Lard", "quantityMode": "fixed" }
+            ],
+            "priority": 20
+        },
+        {
+            "id": "TR_CutVenisonLeg",
+            "process": "PROCESS_CUT_MEAT",
+            "inputs": [
+                {
+                    "slotId": "leg",
+                    "match": { "cls": "ChefZ_VenisonLeg" },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "DeerSteakMeat", "quantityMode": "fixed" },
+                { "cls": "DeerSteakMeat", "quantityMode": "fixed" }
+            ],
+            "byproducts": [
+                { "cls": "Bone", "quantityMode": "fixed" }
+            ],
+            "priority": 20
+        },
+
+        {
             "id": "TR_MeatToMinced",
             "process": "PROCESS_GRIND_MEAT",
             "stationsAllowed": ["ChefZ_MeatGrinder"],

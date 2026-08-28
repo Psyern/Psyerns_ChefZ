@@ -15,11 +15,46 @@ Erlaeuterung dorthin zu verschieben haette den Text von seinem Gegenstand getren
 
 ### `TR_DicedMeat`
 
-§29: Raw Meat + Knife -> ChefZ_DicedMeat. Der EINZIGE HANDCRAFT-Transform des
-Moduls — deshalb `handcraftRecipeSlots = 1` im CfgChefZ-Knoten. Ein Eingang plus
-Werkzeuggruppe: genau die Form, die Vanillas RecipeBase traegt (01 V12).
-`vanillaStage` statt `state`, weil die Garstufe eines Vanilla-Steaks unabhaengig
-von jeder ChefZ-Registry entscheidbar ist.
+§29: Raw Meat + Knife -> ChefZ_DicedMeat. Ein Eingang plus Werkzeuggruppe: genau
+die Form, die Vanillas RecipeBase traegt (01 V12). `vanillaStage` statt `state`,
+weil die Garstufe eines Vanilla-Steaks unabhaengig von jeder ChefZ-Registry
+entscheidbar ist.
+
+Dieser Abschnitt sagte bis zu den Keulen "der EINZIGE HANDCRAFT-Transform des
+Moduls — deshalb `handcraftRecipeSlots = 1`". Das stimmte schon damals nicht:
+`TR_SausageCasing` laeuft ueber `PROCESS_CLEAN_CASING`, und der wurde irgendwann
+von `STATION_ACTION` auf `HANDCRAFT` umgestellt, ohne dass die Platzzahl
+mitgezogen wurde. Einer der beiden wurde seitdem von
+`ChefZ_HandcraftBridge.Reserve` abgewiesen. Die Zahl steht jetzt auf **5** und
+die Liste dazu im CfgChefZ-Knoten der `config.cpp` — sie ist dort ausgeschrieben,
+damit sie nicht wieder driftet.
+
+### `TR_CutBeefLeg`, `TR_CutPorkLeg`, `TR_CutVenisonLeg`
+
+Die Keule zerteilen: `PROCESS_CUT_MEAT`, ein Eingang plus Messer. Ergebnis sind
+**zwei VANILLA-Steaks** der passenden Sorte plus ein Nebenausgang — Knochen bei
+Rind und Wild, Fett beim Schwein.
+
+**Warum zwei Ausgangseintraege derselben Klasse und nicht `quantity: 2`:**
+`quantity` ist in `ChefZ_OutputDef` die Menge AM Item
+(`ChefZ_ProcessRunner.ApplyHandcraftLayer` ruft `item.SetQuantity(value)`), nicht
+die Stueckzahl. `quantity: 2` an einem `CowSteakMeat` ergaebe **ein** fast leeres
+Steak. Zwei Stueck sind zwei Eintraege; `ChefZ_GenericCraftRecipe.AddOutputs`
+ruft `AddResult()` je Eintrag. `quantity` fehlt bewusst ganz — der Sentinel laesst
+die Klassenvorgabe stehen, und die kennt nur Vanilla.
+
+**Warum kein `setState` und kein `inheritFreshness`:** aus demselben Grund, der
+weiter unten beim `Lard` aus `TR_MeatToMinced` steht. Beide werden in
+`ApplyHandcraftLayer` nur innerhalb von `if (ChefZ_ItemStateComponent.IsManaged(item))`
+angewandt; ein Vanilla-Steak ist dort nicht drin. Der Eintrag waere wirkungslose
+Daten.
+
+**Warum die Keule ueber `cls` und nicht ueber eine Kategorie gematcht wird:**
+siehe `../Ingredients/README.md`, Abschnitt "Keulen".
+
+`priority 20` wie bei den Sortenregeln: die Keule ist der spezielle Fall
+gegenueber `TR_DicedMeat` — der matcht sie ohnehin nicht, aber die Rangfolge
+bleibt damit lesbar.
 
 ### `TR_MeatToMinced`
 

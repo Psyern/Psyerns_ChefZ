@@ -27,6 +27,41 @@ ausschliesslich hier.
 Vanilla-Klassen. ChefZ legt fuer sie KEINE eigene Klasse an — es waere eine
 zweite Sorte desselben Dings.
 
+### 2b. Keulen (`ChefZ_BeefLeg`, `ChefZ_PorkLeg`, `ChefZ_VenisonLeg`)
+
+Grobteilstuecke mit Knochen, die beim Zerlegen anfallen. Die Anbindung an die
+Zerlegung ist eine reine Datenzeile in Vanillas `Skinning`-Tabelle; sie steht im
+Kopf der `config.cpp` samt Belegstellen aus `ActionSkinning.c`.
+
+**Sie tragen `categories: []` — keine einzige Kategorie. Das ist die zentrale
+Entscheidung an diesen drei Records und keine Nachlaessigkeit.**
+
+Kategorien sind in ChefZ *self-or-ancestor*: `ChefZ_CategoryClosure` setzt fuer
+jede Kategorie eines Items auch alle Vorfahren, und ein Slot fuer `MEAT` trifft
+damit jedes Item, das `DOMESTIC_MEAT` oder `WILD_MEAT` traegt. Eine Keule mit
+Fleischkategorie waere fuer die vorhandenen Slots **ein Fleischstueck**:
+
+* `TR_DicedMeat` (`category: MEAT` + `vanillaStage: Raw`) machte aus einer ganzen
+  Rinderkeule **einen** Wuerfel.
+* `TR_MeatToMinced` (dieselbe Bedingung) machte daraus **ein** Hackfleisch.
+* `TR_RawHunterSausage` (`category: WILD_MEAT`, `minCount 2`) machte aus zwei
+  Wildkeulen ohne jedes Wolfen direkt eine Jaegerwurst.
+
+Jeder dieser drei Wege waere eine stille Wertvernichtung bzw. eine Abkuerzung,
+die niemand beabsichtigt hat und die kein Validator meldet. Die Keule wird
+deshalb ausschliesslich ueber ihren **Klassennamen** adressiert, naemlich von
+`TR_CutBeefLeg` / `TR_CutPorkLeg` / `TR_CutVenisonLeg`. Ihre Identitaet fuer
+kuenftige Regeln traegt sie ueber **Tags** (`CHEFZ_RAW_MEAT`,
+`CHEFZ_HIGH_PROTEIN`, bei Wild zusaetzlich `CHEFZ_WILD_MEAT`) — Tags haben keine
+Vorfahrenkette und ziehen deshalb keine Slots an, die es nicht gibt.
+
+**Die schoenere Form waere eine eigene Kategorie** — etwa `PRIMAL_CUT` mit
+`parent: null`, ausdruecklich **nicht** unter `MEAT`, sonst faengt das Problem von
+vorne an. Sie ist ein Eintrag in der zentralen `Categories.json`, den nur der
+`chefz-registry-integrator` schreiben darf. Der Vorschlag steht im Slice-Bericht;
+solange er nicht gemergt ist, waere ein Delta-Eintrag dafuer ein harter
+Validatorfehler (`deltas.mjs`, "der Merge ist unvollstaendig") und kein Fortschritt.
+
 ### 3. Eigene Zwischenprodukte (`ChefZ_DicedMeat` … `ChefZ_SausageCasing`)
 
 §29/§30: die eigenen Zwischenprodukte.

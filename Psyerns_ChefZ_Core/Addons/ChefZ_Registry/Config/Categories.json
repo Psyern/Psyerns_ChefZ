@@ -90,6 +90,10 @@
             "displayName": "#STR_CHEFZ_CAT_PREDATOR_MEAT"
         },
         {
+            "id": "PRIMAL_CUT",
+            "displayName": "#STR_CHEFZ_CAT_PRIMAL_CUT"
+        },
+        {
             "id": "SAUSAGE",
             "parent": "MEAT",
             "displayName": "#STR_CHEFZ_CAT_SAUSAGE"
