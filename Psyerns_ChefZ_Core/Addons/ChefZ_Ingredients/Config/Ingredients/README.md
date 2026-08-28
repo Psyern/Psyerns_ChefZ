@@ -17,8 +17,22 @@ Slice produce. Entwurf 05 §2, zweiter Deklarationsweg: FREMDE Klassen werden im
 Slice-JSON gebunden, nie in ihrer eigenen `config.cpp` (Workflow §10.5). `Potato`
 und `Tomato` existieren in Vanilla — ChefZ erweitert sie, statt eine zweite
 Kartoffel zu bauen (Production Map §13, §14). `GreenBellPepper` ist die
-Vanilla-Paprika und laeuft deshalb in dieselbe Schnittstufe wie `ChefZ_Paprika`
-(§15).
+Paprika des Mods (§15): es gibt keine eigene frische Paprikaklasse mehr, und
+`TR_ChopBellPepper` ist der einzige Weg zu `ChefZ_ChoppedPaprika`
+(Vanilla-Audit §2).
+
+**Warum der Datensatz von `GreenBellPepper` kein `decays` bekommen hat.** Das
+abgeloeste `ChefZ_Paprika` trug `decays: true`. Uebernommen wurde es NICHT, und
+zwar nicht aus Nachlaessigkeit: `decays` wird an genau einer Stelle gelesen, in
+`ChefZ_Edible_Base.CanDecay()` (01 V9). Vanilla-Klassen erben nicht von
+`ChefZ_Edible_Base` — der Wert waere wirkungslose Daten, die spaeter jemand als
+Zusage liest. `GreenBellPepper` verdirbt ohnehin ueber Vanillas eigenen
+Verfall; die ChefZ-Fahne braucht es dafuer nicht. Aus demselben Grund tragen
+`Potato` und `Tomato` hier kein `decays`.
+
+Umgekehrt ist der Tausch ein GEWINN: `ChefZ_Paprika` hatte `tags: []` und konnte
+die Punktregel `GR_VS_FreshVeg` (Tag `CHEFZ_FRESH`, `BowlDishes.json`) nie
+ausloesen. `GreenBellPepper` traegt `CHEFZ_FRESH` und tut es.
 
 ## Mushrooms.json
 

@@ -273,10 +273,7 @@ class ChefZ_EventSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.EVENT,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Die Ereignisschicht verhaelt sich nicht "
-            + "wie entworfen - Comp-Module bekommen ab hier falsche oder gar keine Meldungen. "
-            + "Kochen und Vanilla sind davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.EVENT, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Ereignisschicht verhaelt sich nicht " + "wie entworfen - Comp-Module bekommen ab hier falsche oder gar keine Meldungen. " + "Kochen und Vanilla sind davon unberuehrt.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -310,8 +307,7 @@ class ChefZ_EventSelfTest
         return bus;
     }
 
-    private static int Sub(notnull ChefZ_EventBus bus, string eventId,
-                           notnull ChefZ_EventTestSubscriber sub, int priority = 0)
+    private static int Sub(notnull ChefZ_EventBus bus, string eventId, notnull ChefZ_EventTestSubscriber sub, int priority = 0)
     {
         return bus.Subscribe(eventId, sub, ScriptCaller.Create(sub.OnEvent), sub.name, priority);
     }
@@ -452,14 +448,12 @@ class ChefZ_EventSelfTest
         blocker.cancelReason = "kein Skill";
         ChefZ_EventTestSubscriber later   = new ChefZ_EventTestSubscriber("Danach");
 
-        bus.Subscribe(ChefZ_EventNames.RECIPE_MATCHED, blocker,
-                      ScriptCaller.Create(blocker.OnCancel), blocker.name, 10);
+        bus.Subscribe(ChefZ_EventNames.RECIPE_MATCHED, blocker, ScriptCaller.Create(blocker.OnCancel), blocker.name, 10);
         Sub(bus, ChefZ_EventNames.RECIPE_MATCHED, later, 0);
 
         string reason;
         string who;
-        bool cancelled = bus.RaiseCancellable(bus.Acquire(ChefZ_EventNames.RECIPE_MATCHED),
-                                              reason, who);
+        bool cancelled = bus.RaiseCancellable(bus.Acquire(ChefZ_EventNames.RECIPE_MATCHED), reason, who);
 
         if (!cancelled)                         return false;
         if (reason != "kein Skill")             return false;
@@ -502,14 +496,12 @@ class ChefZ_EventSelfTest
         blocker.cancelReason = "zu spaet";
         ChefZ_EventTestSubscriber later   = new ChefZ_EventTestSubscriber("Danach");
 
-        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, blocker,
-                      ScriptCaller.Create(blocker.OnCancel), blocker.name, 10);
+        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, blocker, ScriptCaller.Create(blocker.OnCancel), blocker.name, 10);
         Sub(bus, ChefZ_EventNames.RECIPE_COMPLETED, later, 0);
 
         string reason;
         string who;
-        bool cancelled = bus.RaiseCancellable(bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED),
-                                              reason, who);
+        bool cancelled = bus.RaiseCancellable(bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED), reason, who);
 
         if (cancelled)              return false;      // die Stornierung wurde verworfen
         if (reason != "")           return false;
@@ -535,10 +527,8 @@ class ChefZ_EventSelfTest
         a.bonus = 0.75;
         b.bonus = 0.50;
 
-        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, a,
-                      ScriptCaller.Create(a.OnBonus), a.name);
-        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, b,
-                      ScriptCaller.Create(b.OnBonus), b.name);
+        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, a, ScriptCaller.Create(a.OnBonus), a.name);
+        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, b, ScriptCaller.Create(b.OnBonus), b.name);
 
         // Additiv: beide tragen bei, keiner loescht den anderen.
         float sum = bus.RaiseQuery(bus.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0);
@@ -550,8 +540,7 @@ class ChefZ_EventSelfTest
         ChefZ_EventBus greedy = NewBus();
         ChefZ_EventTestSubscriber hog = new ChefZ_EventTestSubscriber("Gierig");
         hog.bonus = 999.0;
-        greedy.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, hog,
-                         ScriptCaller.Create(hog.OnBonus), hog.name);
+        greedy.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, hog, ScriptCaller.Create(hog.OnBonus), hog.name);
 
         float clamped = greedy.RaiseQuery(greedy.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0);
         if (clamped != 2.0)             return false;
@@ -587,8 +576,7 @@ class ChefZ_EventSelfTest
 
         ChefZ_EventTestSubscriber a = new ChefZ_EventTestSubscriber("A");
         a.bonus = 5.0;
-        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a,
-                      ScriptCaller.Create(a.OnBonus), a.name);
+        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, ScriptCaller.Create(a.OnBonus), a.name);
 
         ChefZ_EventArgs args = bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED);
         bus.RaiseKeep(args);
@@ -618,8 +606,7 @@ class ChefZ_EventSelfTest
 
         ChefZ_EventTestSubscriber loop = new ChefZ_EventTestSubscriber("Schleife");
         loop.bus = bus;
-        bus.Subscribe(ChefZ_EventNames.FOOD_STATE_CHANGED, loop,
-                      ScriptCaller.Create(loop.OnNested), loop.name);
+        bus.Subscribe(ChefZ_EventNames.FOOD_STATE_CHANGED, loop, ScriptCaller.Create(loop.OnNested), loop.name);
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_STATE_CHANGED));
 
@@ -653,9 +640,7 @@ class ChefZ_EventSelfTest
         Sub(bus, ChefZ_EventNames.FOOD_PRESERVED, first, 30);
 
         leaver.bus = bus;
-        leaver.selfSubscriptionId = bus.Subscribe(ChefZ_EventNames.FOOD_PRESERVED, leaver,
-                                                  ScriptCaller.Create(leaver.OnUnsubscribeSelf),
-                                                  leaver.name, 20);
+        leaver.selfSubscriptionId = bus.Subscribe(ChefZ_EventNames.FOOD_PRESERVED, leaver, ScriptCaller.Create(leaver.OnUnsubscribeSelf), leaver.name, 20);
         Sub(bus, ChefZ_EventNames.FOOD_PRESERVED, last, 10);
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_PRESERVED));
@@ -775,8 +760,7 @@ class ChefZ_EventSelfTest
     //! der Test laeuft VOR LoadAll(), also bevor irgendein Comp-Modul etwas
     //! angemeldet haben kann, und ChefZ_ConfigManager konfiguriert sie danach
     //! ohnehin aus Core.json.
-    private static ChefZ_CapabilityRegistry FreshRegistry(string mode, float def,
-                                                          float minV, float maxV)
+    private static ChefZ_CapabilityRegistry FreshRegistry(string mode, float def, float minV, float maxV)
     {
         ChefZ_CapabilityRegistry reg = ChefZ_CapabilityRegistry.Get();
         reg.SetQuietForTest(true);
@@ -805,8 +789,7 @@ class ChefZ_EventSelfTest
      */
     private static bool NoProviderCheck()
     {
-        ChefZ_CapabilityRegistry reg = FreshRegistry(
-            ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 1.5, 0.0, 10.0);
+        ChefZ_CapabilityRegistry reg = FreshRegistry( ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 1.5, 0.0, 10.0);
 
         bool ok = NoProviderInner(reg);
         RestoreRegistry();
@@ -869,8 +852,7 @@ class ChefZ_EventSelfTest
 
     private static bool ProviderCheck()
     {
-        ChefZ_CapabilityRegistry reg = FreshRegistry(
-            ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 10.0);
+        ChefZ_CapabilityRegistry reg = FreshRegistry( ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 10.0);
 
         bool ok = ProviderInner(reg);
         RestoreRegistry();
@@ -925,8 +907,7 @@ class ChefZ_EventSelfTest
      */
     private static bool ClampCheck()
     {
-        ChefZ_CapabilityRegistry reg = FreshRegistry(
-            ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 5.0);
+        ChefZ_CapabilityRegistry reg = FreshRegistry( ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 5.0);
 
         bool ok = ClampInner(reg);
         RestoreRegistry();
@@ -983,8 +964,7 @@ class ChefZ_EventSelfTest
         string why;
 
         // asAuthored: "block" sperrt.
-        ChefZ_CapabilityRegistry reg = FreshRegistry(
-            ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 10.0);
+        ChefZ_CapabilityRegistry reg = FreshRegistry( ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 10.0);
         if (reg.EffectiveOnFail(blocker) != ChefZ_CapabilityRegistry.ON_FAIL_BLOCK) return false;
         if (!reg.BlocksAny(reqs, 1, why))       return false;
         if (why == "")                          return false;
@@ -1079,8 +1059,7 @@ class ChefZ_EventSelfTest
 
         // Mit einem Anbieter, der die Faehigkeit liefert: nichts sperrt mehr.
         ChefZ_Sym cap = ChefZ_SymbolTable.Intern("CHEFZ_EVTEST_CAP");
-        ChefZ_CapabilityRegistry.Get().RegisterProvider(
-            new ChefZ_EventTestProvider("Koennen", 1, cap, 9.0));
+        ChefZ_CapabilityRegistry.Get().RegisterProvider( new ChefZ_EventTestProvider("Koennen", 1, cap, 9.0));
         if (ChefZ_CapabilityGate.Denies(reqs, 1, why))      return false;
 
         return true;

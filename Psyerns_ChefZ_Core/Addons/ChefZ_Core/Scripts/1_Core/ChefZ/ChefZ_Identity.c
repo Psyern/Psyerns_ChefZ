@@ -174,10 +174,7 @@ class ChefZ_IdentityMap
         // --- 2. Reihenfolge sicherstellen ----------------------------------
         if (!ChefZ_StringOrder.IsAscending(ids))
         {
-            Report(report, false, src, "",
-                "IDs waren nicht ordinal aufsteigend sortiert. Build sortiert nach. "
-                + "Der Sync-Ordinal bleibt dadurch symmetrisch, aber der Aufrufer "
-                + "sollte bereits sortiert uebergeben (03 §4).");
+            Report(report, false, src, "", "IDs waren nicht ordinal aufsteigend sortiert. Build sortiert nach. " + "Der Sync-Ordinal bleibt dadurch symmetrisch, aber der Aufrufer " + "sollte bereits sortiert uebergeben (03 §4).");
             ChefZ_StringOrder.SortAscending(ids);
         }
 
@@ -188,8 +185,7 @@ class ChefZ_IdentityMap
             string cur = ids.Get(d);
             if (d > 0 && cur == ids.Get(d - 1))
             {
-                Report(report, true, src, cur,
-                    "ID doppelt in derselben Registry - das zweite Vorkommen wird abgewiesen.");
+                Report(report, true, src, cur, "ID doppelt in derselben Registry - das zweite Vorkommen wird abgewiesen.");
                 m_Rejected.Insert(cur);
                 continue;
             }
@@ -215,10 +211,7 @@ class ChefZ_IdentityMap
                 }
                 collided.Insert(other);
                 collided.Insert(id);
-                Report(report, true, src, id,
-                    "Hash-Kollision mit \"" + other + "\" (beide Hash " + hash.ToString()
-                    + "). BEIDE Records werden abgewiesen - eine Kollision macht die "
-                    + "Persistenz mehrdeutig. Abhilfe: eine der beiden IDs umbenennen.");
+                Report(report, true, src, id, "Hash-Kollision mit \"" + other + "\" (beide Hash " + hash.ToString() + "). BEIDE Records werden abgewiesen - eine Kollision macht die " + "Persistenz mehrdeutig. Abhilfe: eine der beiden IDs umbenennen.");
                 continue;
             }
             firstByHash.Set(hash, id);
@@ -242,10 +235,7 @@ class ChefZ_IdentityMap
             for (int over = m_SyncLimit; over < accepted.Count(); over++)
             {
                 string dropped = accepted.Get(over);
-                Report(report, true, src, dropped,
-                    "Registry ueberschreitet ihre Sync-Obergrenze von "
-                    + m_SyncLimit.ToString() + " Eintraegen. Dieser Record wird abgewiesen. "
-                    + "Eine harte Grenze ist besser als eine stille Sync-Verstuemmelung.");
+                Report(report, true, src, dropped, "Registry ueberschreitet ihre Sync-Obergrenze von " + m_SyncLimit.ToString() + " Eintraegen. Dieser Record wird abgewiesen. " + "Eine harte Grenze ist besser als eine stille Sync-Verstuemmelung.");
                 m_Rejected.Insert(dropped);
             }
             accepted.Resize(m_SyncLimit);
@@ -265,9 +255,7 @@ class ChefZ_IdentityMap
         m_Built = true;
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.CONFIG, ChefZ_LogLevel.INFO))
-            ChefZ_Log.Info(ChefZ_LogChannel.CONFIG,
-                src + ": " + GetMaxOrdinal().ToString() + " Identitaeten, "
-                + m_Rejected.Count().ToString() + " abgewiesen");
+            ChefZ_Log.Info(ChefZ_LogChannel.CONFIG, src + ": " + GetMaxOrdinal().ToString() + " Identitaeten, " + m_Rejected.Count().ToString() + " abgewiesen");
     }
 
     private string SourceRef()
@@ -317,9 +305,7 @@ class ChefZ_IdentityMap
         if (!m_UseBeforeBuildReported)
         {
             m_UseBeforeBuildReported = true;
-            ChefZ_Log.Error(ChefZ_LogChannel.CONFIG,
-                SourceRef() + ": Abfrage vor Build(). Liefert INVALID. "
-                + "Das ist ein Reihenfolgefehler im Boot, kein Datenfehler.");
+            ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, SourceRef() + ": Abfrage vor Build(). Liefert INVALID. " + "Das ist ein Reihenfolgefehler im Boot, kein Datenfehler.");
         }
         return false;
     }
@@ -414,8 +400,7 @@ class ChefZ_IdentityMap
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert(SourceRef() + "  gebaut=" + m_Built.ToString() + "  Ordinale=" + GetMaxOrdinal().ToString()
-            + "  Deckel=" + m_SyncLimit.ToString());
+        outLines.Insert(SourceRef() + "  gebaut=" + m_Built.ToString() + "  Ordinale=" + GetMaxOrdinal().ToString() + "  Deckel=" + m_SyncLimit.ToString());
 
         for (int i = 1; i < m_ByOrdinal.Count(); i++)
         {

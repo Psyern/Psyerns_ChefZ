@@ -72,22 +72,15 @@ class ChefZ_ConfigSelfTest
 
         array<ref ChefZ_Record> recs = new array<ref ChefZ_Record>();
         string err;
-        bool tolerant = ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, doc, "Selbsttest/sonde.json",
-            ChefZ_SourceRank.ADDON_JSON, recs, err);
+        bool tolerant = ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, doc, "Selbsttest/sonde.json", ChefZ_SourceRank.ADDON_JSON, recs, err);
 
         if (tolerant)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.INFO, ChefZ_LogChannel.CONFIG, "config.unknownfields",
-                "Messung: unbekannte JSON-Felder werden vom Serializer ignoriert. "
-                + "Vorwaertskompatibilitaet nach 02 §8 ist damit belegt.");
+            ChefZ_Log.Once(ChefZ_LogLevel.INFO, ChefZ_LogChannel.CONFIG, "config.unknownfields", "Messung: unbekannte JSON-Felder werden vom Serializer ignoriert. " + "Vorwaertskompatibilitaet nach 02 §8 ist damit belegt.");
             return;
         }
 
-        ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONFIG, "config.unknownfields",
-            "Messung: unbekannte JSON-Felder lassen den Serializer scheitern ("
-            + err + "). Die Annahme aus 02 §8 traegt NICHT - eine Datendatei mit einem Feld "
-            + "aus einer neueren Core-Version wird komplett verworfen. Content-Autoren "
-            + "duerfen keine Kommentarfelder in JSON schreiben.");
+        ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONFIG, "config.unknownfields", "Messung: unbekannte JSON-Felder lassen den Serializer scheitern (" + err + "). Die Annahme aus 02 §8 traegt NICHT - eine Datendatei mit einem Feld " + "aus einer neueren Core-Version wird komplett verworfen. Content-Autoren " + "duerfen keine Kommentarfelder in JSON schreiben.");
     }
 
     private static void Check(string name, bool ok)
@@ -102,9 +95,7 @@ class ChefZ_ConfigSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Der Config Manager verhaelt sich nicht "
-            + "wie entworfen - jede Aussage ueber geladene Daten ist ab hier unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "Selbsttest " + name + " FEHLGESCHLAGEN. Der Config Manager verhaelt sich nicht " + "wie entworfen - jede Aussage ueber geladene Daten ist ab hier unzuverlaessig.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -201,8 +192,7 @@ class ChefZ_ConfigSelfTest
         string errGood;
         string goodDoc = "{ \"kind\": \"tag\", \"schemaVersion\": 1, \"records\": ["
                        + "{ \"id\": \"CHEFZ_ST_TAG_A\" } ] }";
-        if (!ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, goodDoc, "Selbsttest/gut.json",
-                ChefZ_SourceRank.ADDON_JSON, good, errGood))
+        if (!ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, goodDoc, "Selbsttest/gut.json", ChefZ_SourceRank.ADDON_JSON, good, errGood))
             return false;
         for (int i = 0; i < good.Count(); i++)
             sink.Submit(good.Get(i));
@@ -211,23 +201,20 @@ class ChefZ_ConfigSelfTest
         array<ref ChefZ_Record> broken = new array<ref ChefZ_Record>();
         string errBroken;
         string brokenDoc = "{ \"kind\": \"tag\", \"records\": [ { \"id\": \"CHEFZ_ST_TAG_B\" ";
-        bool ok = ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, brokenDoc, "Selbsttest/kaputt.json",
-            ChefZ_SourceRank.ADDON_JSON, broken, errBroken);
+        bool ok = ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, brokenDoc, "Selbsttest/kaputt.json", ChefZ_SourceRank.ADDON_JSON, broken, errBroken);
         if (ok)                                     return false;   // muss scheitern
         if (broken.Count() != 0)                    return false;   // nichts halb angewandt
         if (errBroken == "")                        return false;   // mit Parsermeldung
 
         // Genau EIN Fehlereintrag - so, wie der Helfer ihn im Betrieb setzt.
-        report.AddError("Selbsttest/kaputt.json", "",
-            "JSON nicht lesbar - die gesamte Datei wird verworfen. Parsermeldung: " + errBroken);
+        report.AddError("Selbsttest/kaputt.json", "", "JSON nicht lesbar - die gesamte Datei wird verworfen. Parsermeldung: " + errBroken);
         if (report.ErrorCount() != 1)               return false;
 
         // 3. eine gute Datei DANACH - der Strom laeuft weiter
         array<ref ChefZ_Record> after = new array<ref ChefZ_Record>();
         string errAfter;
         string afterDoc = "{ \"kind\": \"tag\", \"records\": [ { \"id\": \"CHEFZ_ST_TAG_C\" } ] }";
-        if (!ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, afterDoc, "Selbsttest/danach.json",
-                ChefZ_SourceRank.ADDON_JSON, after, errAfter))
+        if (!ChefZ_JsonRecordReader.Read(ChefZ_RecordKind.TAG, afterDoc, "Selbsttest/danach.json", ChefZ_SourceRank.ADDON_JSON, after, errAfter))
             return false;
         for (int k = 0; k < after.Count(); k++)
             sink.Submit(after.Get(k));

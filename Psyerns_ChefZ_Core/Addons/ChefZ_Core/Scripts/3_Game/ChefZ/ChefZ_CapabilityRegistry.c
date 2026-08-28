@@ -184,8 +184,7 @@ class ChefZ_CapabilityRegistry
             // Betreiberschalter, der jede Faehigkeitsanforderung aushebelt,
             // gehoert ins Startlog - sonst sucht irgendwann jemand stundenlang,
             // warum sein Rezeptschloss nicht greift.
-            ChefZ_Log.Info(ChefZ_LogChannel.EVENT,
-                "capabilityMode = \"" + m_Mode + "\": " + ModeExplanation(m_Mode));
+            ChefZ_Log.Info(ChefZ_LogChannel.EVENT, "capabilityMode = \"" + m_Mode + "\": " + ModeExplanation(m_Mode));
         }
     }
 
@@ -206,9 +205,7 @@ class ChefZ_CapabilityRegistry
     {
         if (m_Providers.Find(provider) >= 0)
         {
-            Warn("cap.provider.dup." + provider.GetProviderName(),
-                "Anbieter \"" + provider.GetProviderName() + "\" ist bereits registriert. "
-                + "Die zweite Anmeldung wird verworfen.");
+            Warn("cap.provider.dup." + provider.GetProviderName(), "Anbieter \"" + provider.GetProviderName() + "\" ist bereits registriert. " + "Die zweite Anmeldung wird verworfen.");
             return;
         }
 
@@ -224,20 +221,14 @@ class ChefZ_CapabilityRegistry
             {
                 // 17 §9: "Zwei Provider antworten -> hoechste GetPriority()
                 // gewinnt; bei Gleichstand der zuerst registrierte, WARN."
-                Warn("cap.provider.tie." + prio.ToString(),
-                    "Anbieter \"" + provider.GetProviderName() + "\" und \""
-                    + other.GetProviderName() + "\" haben dieselbe Prioritaet ("
-                    + prio.ToString() + "). Es antwortet der zuerst registrierte. "
-                    + "Wer das entscheiden will, vergibt unterschiedliche Prioritaeten.");
+                Warn("cap.provider.tie." + prio.ToString(), "Anbieter \"" + provider.GetProviderName() + "\" und \"" + other.GetProviderName() + "\" haben dieselbe Prioritaet (" + prio.ToString() + "). Es antwortet der zuerst registrierte. " + "Wer das entscheiden will, vergibt unterschiedliche Prioritaeten.");
                 break;
             }
         }
 
         InsertByPriority(provider, prio);
 
-        ChefZ_Log.Info(ChefZ_LogChannel.EVENT,
-            "Faehigkeitsanbieter \"" + provider.GetProviderName() + "\" registriert (prio "
-            + prio.ToString() + ", jetzt " + m_Providers.Count().ToString() + ").");
+        ChefZ_Log.Info(ChefZ_LogChannel.EVENT, "Faehigkeitsanbieter \"" + provider.GetProviderName() + "\" registriert (prio " + prio.ToString() + ", jetzt " + m_Providers.Count().ToString() + ").");
     }
 
     void UnregisterProvider(notnull ChefZ_ICapabilityProvider provider)
@@ -340,30 +331,21 @@ class ChefZ_CapabilityRegistry
         if (!ChefZ_EventArgs.IsFinite(raw))
         {
             m_CountClamped++;
-            Warn("cap.nan." + provider.GetProviderName(),
-                "Anbieter \"" + provider.GetProviderName() + "\" liefert keine Zahl. "
-                + "Es gilt der Default " + m_Default.ToString()
-                + " (CoreSettings.defaultCapabilityValue).");
+            Warn("cap.nan." + provider.GetProviderName(), "Anbieter \"" + provider.GetProviderName() + "\" liefert keine Zahl. " + "Es gilt der Default " + m_Default.ToString() + " (CoreSettings.defaultCapabilityValue).");
             return m_Default;
         }
 
         if (raw < m_Min)
         {
             m_CountClamped++;
-            Warn("cap.low." + provider.GetProviderName(),
-                "Anbieter \"" + provider.GetProviderName() + "\" liefert " + raw.ToString()
-                + " - geklemmt auf " + m_Min.ToString()
-                + " (CoreSettings.capabilityMin). Diese Meldung erscheint einmal je Anbieter.");
+            Warn("cap.low." + provider.GetProviderName(), "Anbieter \"" + provider.GetProviderName() + "\" liefert " + raw.ToString() + " - geklemmt auf " + m_Min.ToString() + " (CoreSettings.capabilityMin). Diese Meldung erscheint einmal je Anbieter.");
             return m_Min;
         }
 
         if (raw > m_Max)
         {
             m_CountClamped++;
-            Warn("cap.high." + provider.GetProviderName(),
-                "Anbieter \"" + provider.GetProviderName() + "\" liefert " + raw.ToString()
-                + " - geklemmt auf " + m_Max.ToString()
-                + " (CoreSettings.capabilityMax). Diese Meldung erscheint einmal je Anbieter.");
+            Warn("cap.high." + provider.GetProviderName(), "Anbieter \"" + provider.GetProviderName() + "\" liefert " + raw.ToString() + " - geklemmt auf " + m_Max.ToString() + " (CoreSettings.capabilityMax). Diese Meldung erscheint einmal je Anbieter.");
             return m_Max;
         }
 
@@ -384,8 +366,7 @@ class ChefZ_CapabilityRegistry
      * capabilityMode "ignore" laesst JEDE Anforderung als erfuellt gelten -
      * der Betreiberschalter fuer Server ohne Skillmod (17 §9).
      */
-    bool MeetsRequirement(int identityId, notnull ChefZ_CapabilityReq req,
-                          out string failReason, out int degradeSteps)
+    bool MeetsRequirement(int identityId, notnull ChefZ_CapabilityReq req, out string failReason, out int degradeSteps)
     {
         failReason   = "";
         degradeSteps = 0;
@@ -469,8 +450,7 @@ class ChefZ_CapabilityRegistry
      * nicht Maximum: zwei fehlende Faehigkeiten sind zwei Gruende, und ein
      * Rezept, das beide fordert, meint auch beide.
      */
-    int DegradeStepsFor(array<ref ChefZ_CapabilityReq> reqs, int identityId,
-                        out string reason)
+    int DegradeStepsFor(array<ref ChefZ_CapabilityReq> reqs, int identityId, out string reason)
     {
         reason = "";
 
@@ -571,18 +551,11 @@ class ChefZ_CapabilityRegistry
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Faehigkeiten: " + m_Providers.Count().ToString() + " Anbieter, "
-            + "modus=" + m_Mode
-            + "  default=" + m_Default.ToString()
-            + "  bereich=[" + m_Min.ToString() + ".." + m_Max.ToString() + "]"
-            + "  abfragen=" + m_CountQueries.ToString()
-            + "  beantwortet=" + m_CountAnswered.ToString()
-            + "  geklemmt=" + m_CountClamped.ToString());
+        outLines.Insert("Faehigkeiten: " + m_Providers.Count().ToString() + " Anbieter, " + "modus=" + m_Mode + "  default=" + m_Default.ToString() + "  bereich=[" + m_Min.ToString() + ".." + m_Max.ToString() + "]" + "  abfragen=" + m_CountQueries.ToString() + "  beantwortet=" + m_CountAnswered.ToString() + "  geklemmt=" + m_CountClamped.ToString());
 
         if (m_Providers.Count() == 0)
         {
-            outLines.Insert("  (kein Anbieter - jeder Spieler gilt als "
-                + m_Default.ToString() + ", der Server ist voll spielbar)");
+            outLines.Insert("  (kein Anbieter - jeder Spieler gilt als " + m_Default.ToString() + ", der Server ist voll spielbar)");
             return;
         }
 
@@ -682,8 +655,7 @@ class ChefZ_RegistryCapabilityProbe extends ChefZ_CapabilityProbe
  */
 class ChefZ_RegistryCapabilityGate extends ChefZ_CapabilityGate
 {
-    override bool BlocksRecipe(array<ref ChefZ_CapabilityReq> reqs, int actorId,
-                               out string reason)
+    override bool BlocksRecipe(array<ref ChefZ_CapabilityReq> reqs, int actorId, out string reason)
     {
         reason = "";
         return ChefZ_CapabilityRegistry.Get().BlocksAny(reqs, actorId, reason);

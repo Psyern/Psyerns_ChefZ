@@ -103,10 +103,7 @@ class ChefZ_QualitySelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.QUALITY,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Die Qualitaetsbewertung verhaelt sich "
-            + "nicht wie entworfen - Stufen, Ausbeute und Haltbarkeit sind ab hier "
-            + "unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.QUALITY, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Qualitaetsbewertung verhaelt sich " + "nicht wie entworfen - Stufen, Ausbeute und Haltbarkeit sind ab hier " + "unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -141,9 +138,7 @@ class ChefZ_QualitySelfTest
         return reg;
     }
 
-    private static ChefZ_QualityTierDef AddTier(notnull ChefZ_Registry<ChefZ_QualityTierDef> reg,
-                                                string id, string tierSet,
-                                                int rank, float minScore)
+    private static ChefZ_QualityTierDef AddTier(notnull ChefZ_Registry<ChefZ_QualityTierDef> reg, string id, string tierSet, int rank, float minScore)
     {
         ChefZ_QualityTierDef def = new ChefZ_QualityTierDef();
         def.id       = id;
@@ -745,8 +740,7 @@ class ChefZ_QualitySelfTest
         return r;
     }
 
-    private static ChefZ_GradeRule RuleSlotCount(string id, string slotId,
-                                                 float perItem, float maxPoints)
+    private static ChefZ_GradeRule RuleSlotCount(string id, string slotId, float perItem, float maxPoints)
     {
         ChefZ_GradeRule r = new ChefZ_GradeRule();
         r.ruleId        = id;
@@ -791,8 +785,7 @@ class ChefZ_QualitySelfTest
         return r;
     }
 
-    private static ChefZ_GradeRule RuleCapability(string id, string capability,
-                                                  float min, float points)
+    private static ChefZ_GradeRule RuleCapability(string id, string capability, float min, float points)
     {
         ChefZ_GradeRule r = new ChefZ_GradeRule();
         r.ruleId     = id;

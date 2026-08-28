@@ -109,10 +109,7 @@ class ChefZ_IngredientSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Die Zutatenaufloesung verhaelt sich nicht "
-            + "wie entworfen - jede Faktenerhebung und damit jede Rezeptauswahl ist ab hier "
-            + "unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Zutatenaufloesung verhaelt sich nicht " + "wie entworfen - jede Faktenerhebung und damit jede Rezeptauswahl ist ab hier " + "unzuverlaessig.");
     }
 
     static int PassedCount() { return s_Passed; }

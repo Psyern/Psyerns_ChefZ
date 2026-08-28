@@ -333,11 +333,7 @@ class ChefZ_CompiledGradeRule
      * @param note Klartextbegruendung fuer ChefZ_QualityEvaluation.Notes.
      *             Immer belegt, auch bei 0 Punkten - gerade dann.
      */
-    float Evaluate(notnull ChefZ_MatchResult match,
-                   notnull ChefZ_FactSnapshot snapshot,
-                   notnull ChefZ_CookContext ctx,
-                   ChefZ_CapabilityProbe caps,
-                   out string note)
+    float Evaluate(notnull ChefZ_MatchResult match, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_CookContext ctx, ChefZ_CapabilityProbe caps, out string note)
     {
         note = "";
 
@@ -429,10 +425,7 @@ class ChefZ_CompiledGradeRule
      * erfuellt". Die leere Allaussage ist logisch wahr und hier trotzdem
      * falsch: sie belohnte ein Rezept dafuer, nichts gebunden zu haben.
      */
-    private float EvalItems(notnull ChefZ_MatchResult match,
-                            notnull ChefZ_FactSnapshot snapshot,
-                            bool requireAll,
-                            out string note)
+    private float EvalItems(notnull ChefZ_MatchResult match, notnull ChefZ_FactSnapshot snapshot, bool requireAll, out string note)
     {
         if (!selector)
         {
@@ -502,9 +495,7 @@ class ChefZ_CompiledGradeRule
         return value;
     }
 
-    private float EvalContext(notnull ChefZ_MatchResult match,
-                              notnull ChefZ_CookContext ctx,
-                              out string note)
+    private float EvalContext(notnull ChefZ_MatchResult match, notnull ChefZ_CookContext ctx, out string note)
     {
         float value = ChefZ_GradeContextKey.Value(contextKey, ctx, match);
         string keyName = ChefZ_GradeContextKey.Name(contextKey);
@@ -522,9 +513,7 @@ class ChefZ_CompiledGradeRule
         return given;
     }
 
-    private float EvalCapability(notnull ChefZ_CookContext ctx,
-                                 ChefZ_CapabilityProbe caps,
-                                 out string note)
+    private float EvalCapability(notnull ChefZ_CookContext ctx, ChefZ_CapabilityProbe caps, out string note)
     {
         if (!caps)
         {

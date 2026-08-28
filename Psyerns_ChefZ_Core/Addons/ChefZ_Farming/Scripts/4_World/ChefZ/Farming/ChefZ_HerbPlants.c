@@ -76,11 +76,6 @@ class ChefZ_PepperPlant extends ChefZ_HerbPlantBase
     }
 }
 
-//! Paprika - Gemuese, Zeit wie Vanillas Tomate.
-class ChefZ_PaprikaPlant extends ChefZ_HerbPlantBase
-{
-    void ChefZ_PaprikaPlant()
-    {
-        m_FullMaturityTime = 1650;
-    }
-}
+//! Keine ChefZ-Paprikapflanze: Vanillas Plant_Pepper traegt GreenBellPepper und
+//! hat mit PepperSeedsPack/PepperSeeds/CutOutPepperSeeds bereits einen
+//! geschlossenen Kreis (Vanilla-Audit §2).

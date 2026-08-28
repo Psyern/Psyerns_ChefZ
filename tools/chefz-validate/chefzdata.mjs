@@ -270,6 +270,12 @@ export function configItemIndex() {
     for (const root of tree.children) {
       if (!ITEM_ROOTS.test(root.name)) continue;
       const visit = (node) => {
+        // Vorwaertsdeklarationen ("class Lard;") ueberspringen. Sie definieren
+        // nichts - sie machen eine FREMDE Basisklasse sichtbar. Als Projektklasse
+        // gezaehlt, greift der Vanilla-Skip der nachgelagerten Pruefer nicht mehr,
+        // und Lard wird gemeldet, weil es "weder Nutrition noch Food" habe - was
+        // in Vanilla selbstverstaendlich beides hat.
+        if (node.hasBody === false) return;
         if (!map.has(node.name)) map.set(node.name, { node, file, parent: node.parent });
         for (const c of node.children) visit(c);
       };

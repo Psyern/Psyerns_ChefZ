@@ -257,9 +257,7 @@ class ChefZ_ManifestReader
 
         if (m.apiVersion <= 0)
         {
-            report.AddWarn(m.SourceRef(), "",
-                "chefzApiVersion fehlt oder ist 0 - angenommen wird " + API_VERSION.ToString()
-                + ". Der Slice wird geladen; der Eintrag gehoert trotzdem gesetzt.");
+            report.AddWarn(m.SourceRef(), "", "chefzApiVersion fehlt oder ist 0 - angenommen wird " + API_VERSION.ToString() + ". Der Slice wird geladen; der Eintrag gehoert trotzdem gesetzt.");
             m.apiVersion = API_VERSION;
             return;
         }
@@ -269,10 +267,7 @@ class ChefZ_ManifestReader
             // Vorwaertskompatibel wie schemaVersion (02 §8): laden, warnen,
             // Unbekanntes ignorieren. Ein blockierender Fehler hiesse, dass
             // ein Content-Update den Core-Betrieb anhaelt.
-            report.AddWarn(m.SourceRef(), "",
-                "chefzApiVersion " + m.apiVersion.ToString() + " ist neuer als dieser Core ("
-                + API_VERSION.ToString() + "). Der Slice wird geladen, unbekannte Angaben "
-                + "werden ignoriert.");
+            report.AddWarn(m.SourceRef(), "", "chefzApiVersion " + m.apiVersion.ToString() + " ist neuer als dieser Core (" + API_VERSION.ToString() + "). Der Slice wird geladen, unbekannte Angaben " + "werden ignoriert.");
         }
     }
 

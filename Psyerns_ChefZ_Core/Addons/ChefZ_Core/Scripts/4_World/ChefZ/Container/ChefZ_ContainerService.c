@@ -113,8 +113,7 @@ class ChefZ_ContainerService
      *
      * @return Zahl der Fundstellen.
      */
-    static int FindCandidates(ChefZ_Sym category, PlayerBase actor, ItemBase device,
-                              out array<ItemBase> outCandidates)
+    static int FindCandidates(ChefZ_Sym category, PlayerBase actor, ItemBase device, out array<ItemBase> outCandidates)
     {
         if (!outCandidates)
             outCandidates = new array<ItemBase>();
@@ -139,8 +138,7 @@ class ChefZ_ContainerService
         }
 
         // ---- 2. INVENTAR ----------------------------------------------------
-        if (outCandidates.Count() < limit
-            && ChefZ_ContainerScope.Has(scope, ChefZ_ContainerScope.INVENTORY) && actor)
+        if (outCandidates.Count() < limit && ChefZ_ContainerScope.Has(scope, ChefZ_ContainerScope.INVENTORY) && actor)
         {
             array<ItemBase> inv = new array<ItemBase>();
             CollectInventory(actor, inv);
@@ -148,13 +146,11 @@ class ChefZ_ContainerService
         }
 
         // ---- 3. UMGEBUNG ----------------------------------------------------
-        if (outCandidates.Count() < limit
-            && ChefZ_ContainerScope.Has(scope, ChefZ_ContainerScope.NEARBY_CARGO))
+        if (outCandidates.Count() < limit && ChefZ_ContainerScope.Has(scope, ChefZ_ContainerScope.NEARBY_CARGO))
         {
             array<ItemBase> nearby = new array<ItemBase>();
             CollectNearbyCargo(actor, device, nearby);
-            AppendStage(nearby, category, ChefZ_ContainerScope.NEARBY_CARGO,
-                        outCandidates, limit);
+            AppendStage(nearby, category, ChefZ_ContainerScope.NEARBY_CARGO, outCandidates, limit);
         }
 
         return outCandidates.Count();
@@ -231,8 +227,7 @@ class ChefZ_ContainerService
      *        auf "AUTO" (16 §4): wer eine Emailleschuessel hineingab, bekommt
      *        eine Emailleschuessel zurueck.
      */
-    static bool ConsumeForServing(notnull ItemBase container, out ChefZ_Sym usedClass,
-                                  out string err)
+    static bool ConsumeForServing(notnull ItemBase container, out ChefZ_Sym usedClass, out string err)
     {
         usedClass = ChefZ_SymbolTable.INVALID;
         err       = "";
@@ -240,10 +235,7 @@ class ChefZ_ContainerService
         if (!g_Game || !g_Game.IsServer())
         {
             err = "Behaelterverbrauch ausserhalb des Servers angefordert";
-            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONTAIN,
-                "container.consume.client",
-                "ChefZ_ContainerService.ConsumeForServing wurde clientseitig gerufen. Es "
-                + "passiert nichts. Nichts Autoritatives laeuft auf dem Client (00 §5).");
+            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONTAIN, "container.consume.client", "ChefZ_ContainerService.ConsumeForServing wurde clientseitig gerufen. Es " + "passiert nichts. Nichts Autoritatives laeuft auf dem Client (00 §5).");
             return false;
         }
 
@@ -281,9 +273,7 @@ class ChefZ_ContainerService
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.CONTAIN, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.CONTAIN,
-                "Behaelter \"" + container.GetType() + "\" fuer das Servieren " + BoolWord(def.consumedOnServe, "verbraucht", "benutzt, aber nicht verbraucht")
-                + ".");
+            ChefZ_Log.Debug(ChefZ_LogChannel.CONTAIN, "Behaelter \"" + container.GetType() + "\" fuer das Servieren " + BoolWord(def.consumedOnServe, "verbraucht", "benutzt, aber nicht verbraucht") + ".");
         }
 
         return true;
@@ -302,8 +292,7 @@ class ChefZ_ContainerService
      *
      * In beiden Faellen false und NICHTS veraendert.
      */
-    static bool ConsumeByClass(ChefZ_Sym containerClass, PlayerBase actor, ItemBase device,
-                               out ChefZ_Sym usedClass, out string err)
+    static bool ConsumeByClass(ChefZ_Sym containerClass, PlayerBase actor, ItemBase device, out ChefZ_Sym usedClass, out string err)
     {
         usedClass = ChefZ_SymbolTable.INVALID;
         err       = "";
@@ -347,8 +336,7 @@ class ChefZ_ContainerService
      *
      * @return das erzeugte Item oder null.
      */
-    static ItemBase ReturnEmpty(ChefZ_Sym emptyClass, PlayerBase consumer,
-                                vector fallbackPos, out string err)
+    static ItemBase ReturnEmpty(ChefZ_Sym emptyClass, PlayerBase consumer, vector fallbackPos, out string err)
     {
         err = "";
 
@@ -379,11 +367,7 @@ class ChefZ_ContainerService
         if (!created)
         {
             s_CountReturnFailed++;
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN,
-                "container.return." + cls,
-                "Der leere Behaelter \"" + cls + "\" konnte nicht zurueckgegeben werden ("
-                + err + "). Das Gericht war trotzdem verzehrt - es geht nur der Behaelter "
-                + "verloren. Diese Meldung erscheint je Klasse einmal.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN, "container.return." + cls, "Der leere Behaelter \"" + cls + "\" konnte nicht zurueckgegeben werden (" + err + "). Das Gericht war trotzdem verzehrt - es geht nur der Behaelter " + "verloren. Diese Meldung erscheint je Klasse einmal.");
             return null;
         }
 
@@ -480,14 +464,7 @@ class ChefZ_ContainerService
 
         if (cls == ChefZ_ContainerDef.AUTO)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN,
-                "container.auto." + dish.GetType(),
-                "\"" + dish.GetType() + "\" traegt als Rueckgabe woertlich \""
-                + ChefZ_ContainerDef.AUTO + "\". Das ist eine Aufloesungsregel fuer den "
-                + "Moment des Servierens (16 §4) und beim Verzehr nicht mehr aufloesbar - "
-                + "es kommt nichts zurueck. Ein Rezept setzt die aufgeloeste Klasse am "
-                + "Item; eine Klassenbindung in CfgChefZIngredients muss eine echte "
-                + "Klasse nennen.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN, "container.auto." + dish.GetType(), "\"" + dish.GetType() + "\" traegt als Rueckgabe woertlich \"" + ChefZ_ContainerDef.AUTO + "\". Das ist eine Aufloesungsregel fuer den " + "Moment des Servierens (16 §4) und beim Verzehr nicht mehr aufloesbar - " + "es kommt nichts zurueck. Ein Rezept setzt die aufgeloeste Klasse am " + "Item; eine Klassenbindung in CfgChefZIngredients muss eine echte " + "Klasse nennen.");
             return ChefZ_SymbolTable.INVALID;
         }
 
@@ -657,8 +634,7 @@ class ChefZ_ContainerService
      * Zutat, nicht Behaelter (01 V13, dieselbe Regel wie im
      * ChefZ_FactCollector).
      */
-    private static void CollectNearbyCargo(PlayerBase actor, ItemBase device,
-                                           notnull array<ItemBase> outItems)
+    private static void CollectNearbyCargo(PlayerBase actor, ItemBase device, notnull array<ItemBase> outItems)
     {
         if (!g_Game)
             return;
@@ -720,9 +696,7 @@ class ChefZ_ContainerService
      * Innerhalb der Stufe: hoechste Gesundheit, dann Klassenname - also
      * deterministisch und nicht nach Slot-Zufall.
      */
-    private static void AppendStage(notnull array<ItemBase> stage, ChefZ_Sym category,
-                                    int stageBit, notnull array<ItemBase> outCandidates,
-                                    int limit)
+    private static void AppendStage(notnull array<ItemBase> stage, ChefZ_Sym category, int stageBit, notnull array<ItemBase> outCandidates, int limit)
     {
         ChefZ_ContainerRegistry reg = ChefZ_ContainerRegistry.Get();
 
@@ -822,8 +796,7 @@ class ChefZ_ContainerService
      * demselben Grund: wer gerade aufgegessen hat, hat die Hand frei, und ein
      * Teller im Rucksack waere ein zusaetzlicher Handgriff.
      */
-    private static ItemBase SpawnFor(string cls, PlayerBase consumer, vector fallbackPos,
-                                     out string err)
+    private static ItemBase SpawnFor(string cls, PlayerBase consumer, vector fallbackPos, out string err)
     {
         err = "";
 
@@ -853,11 +826,7 @@ class ChefZ_ContainerService
             ItemBase onGround = ItemBase.Cast(consumer.SpawnEntityOnGroundRaycastDispersed(cls));
             if (onGround)
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.INFO, ChefZ_LogChannel.CONTAIN,
-                    "container.ground." + cls,
-                    "Der leere Behaelter \"" + cls + "\" ist zu Boden gefallen: Haende "
-                    + "belegt und Inventar voll. Das ist kein Fehler; er liegt vor dem "
-                    + "Spieler.");
+                ChefZ_Log.Once(ChefZ_LogLevel.INFO, ChefZ_LogChannel.CONTAIN, "container.ground." + cls, "Der leere Behaelter \"" + cls + "\" ist zu Boden gefallen: Haende " + "belegt und Inventar voll. Das ist kein Fehler; er liegt vor dem " + "Spieler.");
                 return onGround;
             }
         }
@@ -897,8 +866,7 @@ class ChefZ_ContainerService
      * Zuerst HasSubscribers(), dann erst die Nutzlast (17 E2). Ohne
      * Comp-Module kostet die Zeile einen Map-Zugriff und sonst nichts.
      */
-    private static void RaiseFoodConsumed(notnull ItemBase dish, PlayerBase consumer,
-                                          ItemBase returned, float amount)
+    private static void RaiseFoodConsumed(notnull ItemBase dish, PlayerBase consumer, ItemBase returned, float amount)
     {
         ChefZ_EventBus bus = ChefZ_EventBus.Get();
 

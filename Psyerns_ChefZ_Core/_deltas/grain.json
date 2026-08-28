@@ -30,7 +30,8 @@
     "processes": [
         { "id": "PROCESS_MILL",  "station": "ChefZ_GrainMill", "durationSec": 25 },
         { "id": "PROCESS_KNEAD", "durationSec": 8 },
-        { "id": "PROCESS_ROLL",  "tool": "ChefZ_RollingPin", "durationSec": 10 }
+        { "id": "PROCESS_ROLL",  "tool": "ROLLING_PIN", "durationSec": 10 },
+        { "id": "PROCESS_ASSEMBLE", "tool": "METALWORK_TOOL", "durationSec": 25 }
     ],
 
     "nutrition": [
@@ -52,7 +53,7 @@
         "ChefZ_WheatSeeds",
         "ChefZ_Wheat",
         "ChefZ_GrainMill",
-        "ChefZ_RollingPin",
+        "ChefZ_PastaMachine",
         "ChefZ_Flour",
         "ChefZ_Yeast",
         "ChefZ_SimpleDough",

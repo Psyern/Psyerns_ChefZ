@@ -4,9 +4,20 @@
 // Slice "produce". Production Map §17 (Zwiebel), §18 (Knoblauch),
 // §19 (Karotte), §20 (Kohl).
 //
-// Kartoffel und Tomate kommen hier NICHT vor: Plant_Potato, Plant_Tomato,
-// PotatoSeed und TomatoSeeds sind Vanilla und werden erweitert, nicht
-// nachgebaut (Workflow §10.5).
+// Kartoffel, Tomate und Paprika kommen hier NICHT vor: Plant_Potato,
+// Plant_Tomato, Plant_Pepper, PotatoSeed, TomatoSeeds, PepperSeeds und
+// PepperSeedsPack sind Vanilla und werden erweitert, nicht nachgebaut
+// (Workflow §10.5).
+//
+// Die Paprikakette ist seit dem Vanilla-Audit (§2) VOLLSTAENDIG Vanilla:
+// PepperSeedsPack -> PepperSeeds -> Plant_Pepper -> GreenBellPepper ->
+// CutOutPepperSeeds -> PepperSeeds. ChefZ haengt sich an EINER Stelle ein, an
+// der Frucht: der Zutaten-Datensatz von GreenBellPepper in
+// ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json. Von dort laufen
+// TR_ChopBellPepper (-> ChefZ_ChoppedPaprika) und TR_PaprikaToDried
+// (-> ChefZ_DriedPaprika -> ChefZ_PaprikaPowder). Es fehlt KEIN Glied: das
+// Zurueckgewinnen von Saatgut erledigt Vanillas CutOutPepperSeeds, deshalb
+// braucht ProduceSeeds.json keinen fuenften Samen-Transform.
 //
 // Andockregel aus dem Kopf von ChefZ_Edible_Base.c: die CONFIGklasse erbt von
 // einer Vanilla-Klasse, die SKRIPTklasse von der ChefZ-Basis.

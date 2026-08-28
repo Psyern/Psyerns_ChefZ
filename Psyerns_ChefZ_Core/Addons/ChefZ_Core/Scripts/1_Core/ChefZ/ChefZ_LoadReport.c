@@ -154,8 +154,7 @@ class ChefZ_LoadReport
         // zusammengesetzte String sonst gebaut und weggeworfen. ERR und WARN
         // laufen ohne Wache, weil sie ohnehin durchgehen sollen und ihre
         // Zaehler stufenunabhaengig sind.
-        if (severity > ChefZ_LogLevel.WARN
-            && !ChefZ_Log.Enabled(m_Channel, severity))
+        if (severity > ChefZ_LogLevel.WARN && !ChefZ_Log.Enabled(m_Channel, severity))
             return;
 
         string where = sourceRef;
@@ -212,8 +211,7 @@ class ChefZ_LoadReport
             outLines.Insert("  " + m_Entries.Get(i).ToLine());
 
         if (m_Dropped > 0)
-            outLines.Insert("  ... " + m_Dropped.ToString()
-                + " weitere Eintraege verworfen (Deckel " + m_MaxEntries.ToString() + ")");
+            outLines.Insert("  ... " + m_Dropped.ToString() + " weitere Eintraege verworfen (Deckel " + m_MaxEntries.ToString() + ")");
     }
 
     string SummaryLine()
@@ -266,10 +264,7 @@ class ChefZ_LoadReport
         FileHandle fh = OpenFile(path, FileMode.WRITE);
         if (fh == 0)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONFIG,
-                "loadreport.write.failed",
-                "Ladebericht konnte nicht nach \"" + path + "\" geschrieben werden. "
-                + "Der Bericht steht weiterhin im RPT.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONFIG, "loadreport.write.failed", "Ladebericht konnte nicht nach \"" + path + "\" geschrieben werden. " + "Der Bericht steht weiterhin im RPT.");
             return false;
         }
 

@@ -424,13 +424,9 @@ class ChefZ_Edible_Base extends Edible_Base
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
         {
             if (has)
-                ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-                    type + ": Food > FoodStageTransitions vorhanden - kochbar (01 V4).");
+                ChefZ_Log.Debug(ChefZ_LogChannel.COOK, type + ": Food > FoodStageTransitions vorhanden - kochbar (01 V4).");
             else
-                ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-                    type + ": kein Food > FoodStageTransitions - NICHT kochbar. Die Klasse "
-                    + "bleibt im Kochgeraet auf ihrer Garstufe stehen; ein ON_STAGE-Rezept, "
-                    + "das sie als Pflichtzutat fuehrt, wird nie fertig (01 V4).");
+                ChefZ_Log.Debug(ChefZ_LogChannel.COOK, type + ": kein Food > FoodStageTransitions - NICHT kochbar. Die Klasse " + "bleibt im Kochgeraet auf ihrer Garstufe stehen; ein ON_STAGE-Rezept, " + "das sie als Pflichtzutat fuehrt, wird nie fertig (01 V4).");
         }
 
         return has;
@@ -559,9 +555,7 @@ class ChefZ_Edible_Base extends Edible_Base
         if (new_food_stage_type == FoodStageType.ROTTEN && ChefZ_ItemDecay.PreventsRotten(this))
         {
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.PRESERV, ChefZ_LogLevel.DEBUG))
-                ChefZ_Log.Debug(ChefZ_LogChannel.PRESERV,
-                    GetType() + ": Uebergang nach ROTTEN unterdrueckt (preventsRotten, 14 E7). "
-                    + "Der Verfall laeuft weiter, die Garstufe bleibt stehen.");
+                ChefZ_Log.Debug(ChefZ_LogChannel.PRESERV, GetType() + ": Uebergang nach ROTTEN unterdrueckt (preventsRotten, 14 E7). " + "Der Verfall laeuft weiter, die Garstufe bleibt stehen.");
             return;
         }
 

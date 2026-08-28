@@ -52,10 +52,7 @@ class ChefZ_CategorySelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Der Kategoriebaum verhaelt sich nicht wie "
-            + "entworfen - jede Kategorieabfrage und damit jede Rezeptauswahl ist ab hier "
-            + "unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "Selbsttest " + name + " FEHLGESCHLAGEN. Der Kategoriebaum verhaelt sich nicht wie " + "entworfen - jede Kategorieabfrage und damit jede Rezeptauswahl ist ab hier " + "unzuverlaessig.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -85,8 +82,7 @@ class ChefZ_CategorySelfTest
         return reg;
     }
 
-    private static bool AddCat(notnull ChefZ_Registry<ChefZ_CategoryDef> reg,
-                               string id, string parent, string displayName)
+    private static bool AddCat(notnull ChefZ_Registry<ChefZ_CategoryDef> reg, string id, string parent, string displayName)
     {
         ChefZ_CategoryDef def = new ChefZ_CategoryDef();
         def.id          = id;

@@ -23,16 +23,6 @@
             ]
         },
         {
-            "id": "TR_ChopPaprika",
-            "process": "PROCESS_CHOP_VEGETABLE",
-            "inputs": [
-                { "slotId": "veg", "match": { "cls": "ChefZ_Paprika" }, "minCount": 1, "consume": "whole" }
-            ],
-            "outputs": [
-                { "cls": "ChefZ_ChoppedPaprika", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
-            ]
-        },
-        {
             "id": "TR_ChopBellPepper",
             "process": "PROCESS_CHOP_VEGETABLE",
             "inputs": [

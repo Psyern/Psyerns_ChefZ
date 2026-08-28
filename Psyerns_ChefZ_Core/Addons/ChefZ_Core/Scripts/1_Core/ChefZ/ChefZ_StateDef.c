@@ -153,10 +153,7 @@ class ChefZ_StateDef extends ChefZ_Record
             if (stage < 0)
             {
                 if (ctx)
-                    ctx.Warn(this, "projectsToVanillaStage \"" + projectsToVanillaStage
-                        + "\" ist keine Vanilla-Garstufe. Der Zustand projiziert dann auf gar "
-                        + "nichts - Optik, Naehrwertbasis und Agentenbereinigung bleiben, wie "
-                        + "sie sind. Gueltig: " + ChefZ_VanillaStage.ValidNames() + ".");
+                    ctx.Warn(this, "projectsToVanillaStage \"" + projectsToVanillaStage + "\" ist keine Vanilla-Garstufe. Der Zustand projiziert dann auf gar " + "nichts - Optik, Naehrwertbasis und Agentenbereinigung bleiben, wie " + "sie sind. Gueltig: " + ChefZ_VanillaStage.ValidNames() + ".");
                 projectsToVanillaStage = ChefZ_Undefined.TEXT;
             }
         }
@@ -164,10 +161,7 @@ class ChefZ_StateDef extends ChefZ_Record
         if (!ChefZ_Undefined.IsFloatUndefined(spoilageMultiplier) && spoilageMultiplier <= 0.0)
         {
             if (ctx)
-                ctx.Warn(this, "spoilageMultiplier ist " + spoilageMultiplier.ToString()
-                    + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"verdirbt nie\" oder "
-                    + "\"verdirbt rueckwaerts\"; gemeint ist das nie. Es gilt 1.0 (neutral). "
-                    + "Wer \"verdirbt nicht\" will, sagt das an der Zutat ueber decays (05).");
+                ctx.Warn(this, "spoilageMultiplier ist " + spoilageMultiplier.ToString() + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"verdirbt nie\" oder " + "\"verdirbt rueckwaerts\"; gemeint ist das nie. Es gilt 1.0 (neutral). " + "Wer \"verdirbt nicht\" will, sagt das an der Zutat ueber decays (05).");
 
             // Direkt 1.0 und NICHT der Sentinel: der Config Manager ruft
             // ResolveDefaults() VOR Validate() (ChefZ_ConfigManager.FillRegistry).
@@ -180,9 +174,7 @@ class ChefZ_StateDef extends ChefZ_Record
         if (!ChefZ_Undefined.IsFloatUndefined(freshnessLifetimeSec) && freshnessLifetimeSec <= 0.0)
         {
             if (ctx)
-                ctx.Warn(this, "freshnessLifetimeSec ist " + freshnessLifetimeSec.ToString()
-                    + " und damit nicht positiv. Der Wert wird ausgelassen; es gilt die "
-                    + "Servervorgabe.");
+                ctx.Warn(this, "freshnessLifetimeSec ist " + freshnessLifetimeSec.ToString() + " und damit nicht positiv. Der Wert wird ausgelassen; es gilt die " + "Servervorgabe.");
 
             // Hier ist der Sentinel richtig: er BEDEUTET "es gilt die
             // Servervorgabe", und ResolveDefaults laesst ihn bewusst stehen

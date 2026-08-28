@@ -129,10 +129,7 @@ class ChefZ_ContainerSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.CONTAIN,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Das Behaeltersystem verhaelt sich "
-            + "nicht wie entworfen - Verbrauch und Rueckgabe von Behaeltern sind ab hier "
-            + "unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONTAIN, "Selbsttest " + name + " FEHLGESCHLAGEN. Das Behaeltersystem verhaelt sich " + "nicht wie entworfen - Verbrauch und Rueckgabe von Behaeltern sind ab hier " + "unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -173,9 +170,7 @@ class ChefZ_ContainerSelfTest
      * normalisiert, validiert, entsentinelt, kompiliert. Genau diese
      * Reihenfolge laeuft im Config Manager (02 §6).
      */
-    private static ChefZ_ContainerDef Add(notnull ChefZ_Registry<ChefZ_ContainerDef> reg,
-                                          string id, string category, string emptyClass,
-                                          int scope)
+    private static ChefZ_ContainerDef Add(notnull ChefZ_Registry<ChefZ_ContainerDef> reg, string id, string category, string emptyClass, int scope)
     {
         ChefZ_ContainerDef def = new ChefZ_ContainerDef();
         def.id                  = id;
@@ -329,8 +324,7 @@ class ChefZ_ContainerSelfTest
 
         // AUTO ohne benutzten Behaelter: nichts. Das ist der Kochfall - beim
         // Kochen wird nie ein Behaelter verbraucht (16 §2).
-        if (ChefZ_SymbolTable.IsValid(
-                probe.ResolveReturnClass(ChefZ_ContainerDef.AUTO, ChefZ_SymbolTable.INVALID)))
+        if (ChefZ_SymbolTable.IsValid( probe.ResolveReturnClass(ChefZ_ContainerDef.AUTO, ChefZ_SymbolTable.INVALID)))
             return false;
 
         // Feste Klasse: unveraendert, und ausdruecklich OHNE Existenzpruefung -

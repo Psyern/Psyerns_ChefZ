@@ -759,26 +759,21 @@ class ChefZ_RecipeDef extends ChefZ_Record
         if (!slots || slots.Count() == 0)
         {
             if (ctx)
-                ctx.Error(this, "Rezept ohne \"slots\" - abgewiesen. Es haette keine "
-                    + "Bedingung und wuerde damit auf jeden Gefaessinhalt passen, auch "
-                    + "auf einen leeren.");
+                ctx.Error(this, "Rezept ohne \"slots\" - abgewiesen. Es haette keine " + "Bedingung und wuerde damit auf jeden Gefaessinhalt passen, auch " + "auf einen leeren.");
             return false;
         }
 
         if (!outputs || outputs.Count() == 0)
         {
             if (ctx)
-                ctx.Error(this, "Rezept ohne \"outputs\" - abgewiesen. Es wuerde die "
-                    + "Zutaten verbrauchen und nichts erzeugen.");
+                ctx.Error(this, "Rezept ohne \"outputs\" - abgewiesen. Es wuerde die " + "Zutaten verbrauchen und nichts erzeugen.");
             return false;
         }
 
         if (!contexts || contexts.Count() == 0)
         {
             if (ctx)
-                ctx.Error(this, "Rezept ohne \"contexts\" - abgewiesen. Es zuendete in "
-                    + "jedem Topf, jeder Pfanne und jedem Kessel (08 E4: Rezepte binden "
-                    + "an Geraetekategorien).");
+                ctx.Error(this, "Rezept ohne \"contexts\" - abgewiesen. Es zuendete in " + "jedem Topf, jeder Pfanne und jedem Kessel (08 E4: Rezepte binden " + "an Geraetekategorien).");
             return false;
         }
 
@@ -861,8 +856,7 @@ class ChefZ_RecipeDef extends ChefZ_Record
         CaptureOutputBools(byproducts, o.byproducts);
     }
 
-    private void CaptureOutputBools(array<ref ChefZ_OutputDef> mine,
-                                    array<ref ChefZ_OutputDef> probe)
+    private void CaptureOutputBools(array<ref ChefZ_OutputDef> mine, array<ref ChefZ_OutputDef> probe)
     {
         if (!mine || !probe)
             return;

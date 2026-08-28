@@ -123,9 +123,7 @@ class ChefZ_Log
         {
             // 18 §6: TRACE funktioniert auf einem Produktivserver, ist aber
             // teuer. Das soll niemand versehentlich stehen lassen.
-            Warn(ChefZ_LogChannel.CORE,
-                "Logstufe TRACE ist aktiv. Das ist auf einem Produktivserver teuer - "
-                + "bitte nur zur Fehlersuche einschalten.");
+            Warn(ChefZ_LogChannel.CORE, "Logstufe TRACE ist aktiv. Das ist auf einem Produktivserver teuer - " + "bitte nur zur Fehlersuche einschalten.");
         }
     }
 
@@ -470,8 +468,7 @@ class ChefZ_Log
             int avg   = 0;
             if (count > 0)
                 avg = total / count;
-            outLines.Insert(s_PerfNames.Get(i) + "  n=" + count.ToString()
-                + "  gesamt=" + total.ToString() + "  mittel=" + avg.ToString());
+            outLines.Insert(s_PerfNames.Get(i) + "  n=" + count.ToString() + "  gesamt=" + total.ToString() + "  mittel=" + avg.ToString());
         }
     }
 
@@ -588,8 +585,7 @@ class ChefZ_Log
             s_InFileWrite = false;
             s_Buffer.Clear();
             // Nicht ueber Once(), weil Once() wieder hier landen wuerde.
-            PrintToRPT(PREFIX + "[WARN][CORE] Logdatei \"" + path
-                + "\" ist nicht schreibbar. Dateiausgabe abgeschaltet, RPT-Ausgabe laeuft weiter.");
+            PrintToRPT(PREFIX + "[WARN][CORE] Logdatei \"" + path + "\" ist nicht schreibbar. Dateiausgabe abgeschaltet, RPT-Ausgabe laeuft weiter.");
             s_WarnCount++;
             return;
         }

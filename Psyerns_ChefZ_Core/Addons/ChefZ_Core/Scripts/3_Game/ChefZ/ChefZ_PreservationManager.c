@@ -161,9 +161,7 @@ class ChefZ_PreservationManager
      * antwortete er auf jede Abfrage mit dem Fehler "vor Build aufgerufen",
      * obwohl schlicht keine Haltbarkeitsregeln konfiguriert sind.
      */
-    void Build(ChefZ_Registry<ChefZ_PreservationDef> defs,
-               ChefZ_LoadReport report,
-               ChefZ_CoreSettingsDef settings = null)
+    void Build(ChefZ_Registry<ChefZ_PreservationDef> defs, ChefZ_LoadReport report, ChefZ_CoreSettingsDef settings = null)
     {
         ResetState();
         ApplySettings(settings, report);
@@ -178,9 +176,7 @@ class ChefZ_PreservationManager
             // Content-Modul hat berechtigterweise keine Haltbarkeitsregeln,
             // und ein WARN bei jedem Start waere eine Warnung ohne Fehler.
             if (report)
-                report.AddInfo("Keine Haltbarkeitsregeln definiert - der Verfall von "
-                    + "ChefZ-Nahrung entspricht Vanilla, skaliert nur mit globalSpoilageScale ("
-                    + m_GlobalScale.ToString() + "). Vanilla-Nahrung ist ohnehin unberuehrt.");
+                report.AddInfo("Keine Haltbarkeitsregeln definiert - der Verfall von " + "ChefZ-Nahrung entspricht Vanilla, skaliert nur mit globalSpoilageScale (" + m_GlobalScale.ToString() + "). Vanilla-Nahrung ist ohnehin unberuehrt.");
             m_Ready = true;
             return;
         }
@@ -214,15 +210,7 @@ class ChefZ_PreservationManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Haltbarkeitsregeln: " + GetRuleCount().ToString() + " geladen"
-                + " (Zustand " + m_ByState.Count().ToString()
-                + ", Klasse " + m_ByClass.Count().ToString()
-                + ", Kategorie " + m_CategoryDefs.Count().ToString()
-                + ", Tag " + m_ByTag.Count().ToString()
-                + ", Qualitaet " + m_ByQuality.Count().ToString() + ")"
-                + ", Skala " + m_GlobalScale.ToString()
-                + ", Grenzen [" + m_MinScale.ToString() + ".." + m_MaxScale.ToString() + "]"
-                + ", Frischevorgabe " + m_DefaultFreshnessLifetimeSec.ToString() + "s.");
+            report.AddInfo("Haltbarkeitsregeln: " + GetRuleCount().ToString() + " geladen" + " (Zustand " + m_ByState.Count().ToString() + ", Klasse " + m_ByClass.Count().ToString() + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag " + m_ByTag.Count().ToString() + ", Qualitaet " + m_ByQuality.Count().ToString() + ")" + ", Skala " + m_GlobalScale.ToString() + ", Grenzen [" + m_MinScale.ToString() + ".." + m_MaxScale.ToString() + "]" + ", Frischevorgabe " + m_DefaultFreshnessLifetimeSec.ToString() + "s.");
 
         LogIfDebug();
     }
@@ -266,12 +254,7 @@ class ChefZ_PreservationManager
             // Faktor, und ein Faktor 0 hiesse "verdirbt nie" - genau der
             // Betreiberfehler, den 14 §8 fuer spoilageMultiplier abfaengt.
             // Also dieselbe Antwort: klemmen und melden.
-            report.AddWarn("Core.json", ChefZ_CoreSettingsDef.PRIMARY_ID,
-                "globalSpoilageScale ist " + m_GlobalScale.ToString() + " und damit nicht "
-                + "positiv. Das hiesse \"ChefZ-Nahrung verdirbt nie\". Es gilt "
-                + m_MinScale.ToString() + ". Wer den Verfall SERVERWEIT abschalten will, "
-                + "benutzt die dafuer vorgesehene Vanilla-Stellschraube und nicht diesen "
-                + "Faktor (14 E2).");
+            report.AddWarn("Core.json", ChefZ_CoreSettingsDef.PRIMARY_ID, "globalSpoilageScale ist " + m_GlobalScale.ToString() + " und damit nicht " + "positiv. Das hiesse \"ChefZ-Nahrung verdirbt nie\". Es gilt " + m_MinScale.ToString() + ". Wer den Verfall SERVERWEIT abschalten will, " + "benutzt die dafuer vorgesehene Vanilla-Stellschraube und nicht diesen " + "Faktor (14 E2).");
         }
         if (m_GlobalScale <= 0.0)
             m_GlobalScale = m_MinScale;
@@ -283,12 +266,7 @@ class ChefZ_PreservationManager
             // das eine zulaessige, aber weitreichende Aussage: die Frische
             // JEDES Items bleibt dann stehen, und damit auch die Frischeregel
             // des Quality Managers (12 §4.1). Deshalb steht sie im Bericht.
-            report.AddWarn("Core.json", ChefZ_CoreSettingsDef.PRIMARY_ID,
-                "defaultFreshnessLifetimeSec ist " + m_DefaultFreshnessLifetimeSec.ToString()
-                + ". Die Restfrische wird damit fuer jeden Zustand ohne eigene Lebensdauer "
-                + "EINGEFROREN - sie faellt nie, und Gerichte aus altem Fleisch bekommen "
-                + "dieselbe Qualitaet wie Gerichte aus frischem (12 §4.1). Der Verfall selbst "
-                + "ist davon unberuehrt.");
+            report.AddWarn("Core.json", ChefZ_CoreSettingsDef.PRIMARY_ID, "defaultFreshnessLifetimeSec ist " + m_DefaultFreshnessLifetimeSec.ToString() + ". Die Restfrische wird damit fuer jeden Zustand ohne eigene Lebensdauer " + "EINGEFROREN - sie faellt nie, und Gerichte aus altem Fleisch bekommen " + "dieselbe Qualitaet wie Gerichte aus frischem (12 §4.1). Der Verfall selbst " + "ist davon unberuehrt.");
         }
     }
 
@@ -309,8 +287,7 @@ class ChefZ_PreservationManager
     {
         if (!ChefZ_SymbolTable.IsValid(def.sym))
         {
-            Report(report, true, def, "Der Record hat kein gueltiges Symbol - er wurde nie "
-                + "kompiliert. Das ist ein Fehler im Ladeweg, nicht in den Daten.");
+            Report(report, true, def, "Der Record hat kein gueltiges Symbol - er wurde nie " + "kompiliert. Das ist ein Fehler im Ladeweg, nicht in den Daten.");
             return false;
         }
 
@@ -326,9 +303,7 @@ class ChefZ_PreservationManager
         // Unerreichbar: ChefZ_PreservationDef.Validate weist einen unbekannten
         // scope bereits ab. Die Zeile steht trotzdem, weil ein spaeter
         // ergaenzter scope sonst still in gar keine Tabelle fiele.
-        Report(report, true, def, "scope \"" + def.scope + "\" ist dem Preservation Manager "
-            + "unbekannt - der Record wirkt nicht. Gueltig: "
-            + ChefZ_PreservationScope.ValidNames() + ".");
+        Report(report, true, def, "scope \"" + def.scope + "\" ist dem Preservation Manager " + "unbekannt - der Record wirkt nicht. Gueltig: " + ChefZ_PreservationScope.ValidNames() + ".");
         return false;
     }
 
@@ -337,10 +312,7 @@ class ChefZ_PreservationManager
         ChefZ_StateManager states = States();
         if (states && states.IsReady() && !states.Exists(def.sym))
         {
-            Report(report, true, def, "scope \"state\", aber \"" + def.id + "\" ist kein "
-                + "geladener ChefZ-Zustand. Der Record wird abgewiesen; alle uebrigen "
-                + "Haltbarkeitsregeln wirken weiter. Ursache ist fast immer ein Tippfehler "
-                + "oder ein Content-Modul, das nicht geladen wurde.");
+            Report(report, true, def, "scope \"state\", aber \"" + def.id + "\" ist kein " + "geladener ChefZ-Zustand. Der Record wird abgewiesen; alle uebrigen " + "Haltbarkeitsregeln wirken weiter. Ursache ist fast immer ein Tippfehler " + "oder ein Content-Modul, das nicht geladen wurde.");
             return false;
         }
 
@@ -369,13 +341,7 @@ class ChefZ_PreservationManager
             ChefZ_IngredientInfo info = ChefZ_IngredientManager.Get().Resolve(def.sym);
             if (!info)
             {
-                report.AddWarn(def.sourceRef, def.id,
-                    "scope \"class\": \"" + def.id + "\" ist keine deklarierte ChefZ-Zutat. "
-                    + "Die Regel bleibt geladen, wirkt aber NUR, wenn die Klasse von "
-                    + "ChefZ_Edible_Base ableitet - auf reiner Vanilla-Nahrung greift ChefZ "
-                    + "nicht in den Verfall ein (14 E2). Wer die Haltbarkeit einer "
-                    + "Vanilla-Klasse aendern will, benutzt die Vanilla-Stellschraube "
-                    + "GetFoodDecayModifier.");
+                report.AddWarn(def.sourceRef, def.id, "scope \"class\": \"" + def.id + "\" ist keine deklarierte ChefZ-Zutat. " + "Die Regel bleibt geladen, wirkt aber NUR, wenn die Klasse von " + "ChefZ_Edible_Base ableitet - auf reiner Vanilla-Nahrung greift ChefZ " + "nicht in den Verfall ein (14 E2). Wer die Haltbarkeit einer " + "Vanilla-Klasse aendern will, benutzt die Vanilla-Stellschraube " + "GetFoodDecayModifier.");
             }
         }
 
@@ -387,17 +353,14 @@ class ChefZ_PreservationManager
         ChefZ_CategoryManager cats = Cats();
         if (!cats || !cats.IsReady())
         {
-            Report(report, true, def, "scope \"category\", aber es gibt keinen "
-                + "Kategoriebaum. Der Record wird abgewiesen.");
+            Report(report, true, def, "scope \"category\", aber es gibt keinen " + "Kategoriebaum. Der Record wird abgewiesen.");
             return false;
         }
 
         int bit = cats.GetBitIndex(def.sym);
         if (bit < 0)
         {
-            Report(report, true, def, "scope \"category\", aber \"" + def.id + "\" ist keine "
-                + "geladene Kategorie. Der Record wird abgewiesen; alle uebrigen "
-                + "Haltbarkeitsregeln wirken weiter.");
+            Report(report, true, def, "scope \"category\", aber \"" + def.id + "\" ist keine " + "geladene Kategorie. Der Record wird abgewiesen; alle uebrigen " + "Haltbarkeitsregeln wirken weiter.");
             return false;
         }
 
@@ -414,10 +377,7 @@ class ChefZ_PreservationManager
         ChefZ_CategoryManager cats = Cats();
         if (cats && cats.IsReady() && !cats.TagExists(def.sym))
         {
-            Report(report, true, def, "scope \"tag\", aber \"" + def.id + "\" ist kein "
-                + "deklarierter Tag. Der Record wird abgewiesen; alle uebrigen "
-                + "Haltbarkeitsregeln wirken weiter. Tags werden in CfgChefZTags bzw. "
-                + "Tags.json deklariert - ein undeklarierter Tag matcht nirgends (04 §6).");
+            Report(report, true, def, "scope \"tag\", aber \"" + def.id + "\" ist kein " + "deklarierter Tag. Der Record wird abgewiesen; alle uebrigen " + "Haltbarkeitsregeln wirken weiter. Tags werden in CfgChefZTags bzw. " + "Tags.json deklariert - ein undeklarierter Tag matcht nirgends (04 §6).");
             return false;
         }
 
@@ -430,9 +390,7 @@ class ChefZ_PreservationManager
         ChefZ_QualityManager quality = Quality();
         if (quality && quality.IsReady() && !quality.Exists(def.sym))
         {
-            Report(report, true, def, "scope \"quality\", aber \"" + def.id + "\" ist keine "
-                + "geladene Qualitaetsstufe. Der Record wird abgewiesen; alle uebrigen "
-                + "Haltbarkeitsregeln wirken weiter.");
+            Report(report, true, def, "scope \"quality\", aber \"" + def.id + "\" ist keine " + "geladene Qualitaetsstufe. Der Record wird abgewiesen; alle uebrigen " + "Haltbarkeitsregeln wirken weiter.");
             return false;
         }
 
@@ -486,10 +444,7 @@ class ChefZ_PreservationManager
      * @return immer ein Wert in [minDecayScale, maxDecayScale]. Nie 0, nie
      *         negativ, nie NaN.
      */
-    float ComputeDecayScale(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym,
-                            ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags,
-                            float containerModifier, float environmentTemperature,
-                            out array<string> trace)
+    float ComputeDecayScale(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym, ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags, float containerModifier, float environmentTemperature, out array<string> trace)
     {
         if (!m_Ready)
         {
@@ -567,9 +522,7 @@ class ChefZ_PreservationManager
      *
      * @return NEUTRAL, wenn keine Regel etwas sagt.
      */
-    float ComputeOnPlayerScale(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym,
-                               ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags,
-                               float environmentTemperature)
+    float ComputeOnPlayerScale(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym, ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags, float environmentTemperature)
     {
         if (!m_Ready)
             return NEUTRAL;
@@ -618,8 +571,7 @@ class ChefZ_PreservationManager
         return def;
     }
 
-    private float FactorOf(notnull map<int, ChefZ_PreservationDef> table, ChefZ_Sym key,
-                           float environmentTemperature, array<string> trace, string label)
+    private float FactorOf(notnull map<int, ChefZ_PreservationDef> table, ChefZ_Sym key, float environmentTemperature, array<string> trace, string label)
     {
         ChefZ_PreservationDef def = Lookup(table, key);
         if (!def)
@@ -633,8 +585,7 @@ class ChefZ_PreservationManager
         return def.spoilageMultiplier;
     }
 
-    private float CategoryFactor(ChefZ_CategoryClosure closure, float environmentTemperature,
-                                 array<string> trace)
+    private float CategoryFactor(ChefZ_CategoryClosure closure, float environmentTemperature, array<string> trace)
     {
         if (!closure || m_CategoryDefs.Count() == 0)
             return NEUTRAL;
@@ -660,8 +611,7 @@ class ChefZ_PreservationManager
         return mul;
     }
 
-    private float TagFactor(array<ChefZ_Sym> tags, float environmentTemperature,
-                            array<string> trace)
+    private float TagFactor(array<ChefZ_Sym> tags, float environmentTemperature, array<string> trace)
     {
         if (!tags || m_ByTag.Count() == 0)
             return NEUTRAL;
@@ -732,8 +682,7 @@ class ChefZ_PreservationManager
      * Tag-Dimension aus 14 §5 nicht bedienen. Wer sie weglaesst, bekommt
      * genau das Verhalten der Entwurfssignatur.
      */
-    bool StopsDecay(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym,
-                    ChefZ_CategoryClosure closure = null, array<ChefZ_Sym> tags = null)
+    bool StopsDecay(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym, ChefZ_CategoryClosure closure = null, array<ChefZ_Sym> tags = null)
     {
         if (m_StopsDecayCount == 0)
             return false;
@@ -755,8 +704,7 @@ class ChefZ_PreservationManager
 
     //! true => der Verfall laeuft weiter, die Vanilla-Garstufe wechselt aber
     //! nicht auf ROTTEN (14 E7).
-    bool PreventsRotten(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym,
-                        ChefZ_CategoryClosure closure = null, array<ChefZ_Sym> tags = null)
+    bool PreventsRotten(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym, ChefZ_CategoryClosure closure = null, array<ChefZ_Sym> tags = null)
     {
         if (m_PreventsRottenCount == 0)
             return false;
@@ -777,8 +725,7 @@ class ChefZ_PreservationManager
      * Konservenschalter waere ein Item, das je nach Wetter verdirbt oder
      * nicht - ohne dass ein Spieler den Unterschied sehen koennte.
      */
-    private bool AnyFlag(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym,
-                         ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags, bool wantStops)
+    private bool AnyFlag(ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym classSym, ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags, bool wantStops)
     {
         if (!m_Ready)
             return false;
@@ -1053,10 +1000,7 @@ class ChefZ_PreservationManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Haltbarkeit: " + GetRuleCount().ToString() + " Regel(n), Skala "
-            + m_GlobalScale.ToString() + ", Grenzen [" + m_MinScale.ToString() + ".."
-            + m_MaxScale.ToString() + "], Frischevorgabe "
-            + m_DefaultFreshnessLifetimeSec.ToString() + "s");
+        outLines.Insert("Haltbarkeit: " + GetRuleCount().ToString() + " Regel(n), Skala " + m_GlobalScale.ToString() + ", Grenzen [" + m_MinScale.ToString() + ".." + m_MaxScale.ToString() + "], Frischevorgabe " + m_DefaultFreshnessLifetimeSec.ToString() + "s");
 
         for (int i = 0; i < m_Order.Count(); i++)
         {
@@ -1155,14 +1099,10 @@ class ChefZ_PreservationManager
             return;
         m_NotReadyLogged = true;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.PRESERV,
-            "ChefZ_PreservationManager." + what + " wurde vor Build() gerufen. Es gilt der "
-            + "neutrale Faktor 1.0 - der Verfall ist damit bitgenau Vanilla. Diese Meldung "
-            + "erscheint genau einmal.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PRESERV, "ChefZ_PreservationManager." + what + " wurde vor Build() gerufen. Es gilt der " + "neutrale Faktor 1.0 - der Verfall ist damit bitgenau Vanilla. Diese Meldung " + "erscheint genau einmal.");
     }
 
-    private void Report(ChefZ_LoadReport report, bool isError,
-                        notnull ChefZ_PreservationDef def, string msg)
+    private void Report(ChefZ_LoadReport report, bool isError, notnull ChefZ_PreservationDef def, string msg)
     {
         if (report)
         {
@@ -1191,8 +1131,7 @@ class ChefZ_PreservationManager
         m_QuietForTest = quiet;
     }
 
-    void SetManagersForTest(ChefZ_CategoryManager cats, ChefZ_StateManager states,
-                            ChefZ_QualityManager quality)
+    void SetManagersForTest(ChefZ_CategoryManager cats, ChefZ_StateManager states, ChefZ_QualityManager quality)
     {
         m_CategoriesForTest = cats;
         m_StatesForTest     = states;

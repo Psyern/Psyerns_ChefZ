@@ -63,9 +63,7 @@ class ChefZ_SelectorCompiler
      * ist. Doppelt gemeldet ist besser als gar nicht: der Ladebericht ist die
      * Quelle fuer Gate 2 und Gate 3 des Validators.
      */
-    static ChefZ_CompiledSelector Compile(ChefZ_Selector src,
-                                          ChefZ_CompileContext ctx,
-                                          out string error)
+    static ChefZ_CompiledSelector Compile(ChefZ_Selector src, ChefZ_CompileContext ctx, out string error)
     {
         error = "";
 
@@ -81,10 +79,7 @@ class ChefZ_SelectorCompiler
         return CompileNode(src, ctx, 0, error);
     }
 
-    private static ChefZ_CompiledSelector CompileNode(ChefZ_Selector src,
-                                                      notnull ChefZ_CompileContext ctx,
-                                                      int depth,
-                                                      out string error)
+    private static ChefZ_CompiledSelector CompileNode(ChefZ_Selector src, notnull ChefZ_CompileContext ctx, int depth, out string error)
     {
         error = "";
 
@@ -126,8 +121,7 @@ class ChefZ_SelectorCompiler
             // (07 §2.2); der Hinweis kostet nichts und faellt im Ladebericht
             // auf.
             node.op = ChefZ_SelectorOp.TRUE_OP;
-            ctx.Warn("Selektor ohne Praedikat (nur Wertebereiche/minQuality) - "
-                + "er passt auf jede Zutat, die die Bereiche erfuellt. Beabsichtigt?");
+            ctx.Warn("Selektor ohne Praedikat (nur Wertebereiche/minQuality) - " + "er passt auf jede Zutat, die die Bereiche erfuellt. Beabsichtigt?");
         }
         else if (!CompilePredicate(src, node, ctx, depth, error))
         {
@@ -156,11 +150,7 @@ class ChefZ_SelectorCompiler
         return null;
     }
 
-    private static bool CompilePredicate(notnull ChefZ_Selector src,
-                                         notnull ChefZ_CompiledSelector node,
-                                         notnull ChefZ_CompileContext ctx,
-                                         int depth,
-                                         out string error)
+    private static bool CompilePredicate(notnull ChefZ_Selector src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, int depth, out string error)
     {
         error = "";
         ChefZ_SymbolResolver res = ctx.Resolver();
@@ -176,9 +166,7 @@ class ChefZ_SelectorCompiler
                 // auf diesem Server nicht laeuft, matcht schlicht nie - und
                 // das Rezept deswegen zu verwerfen waere schlimmer als es
                 // liegen zu lassen.
-                ctx.Warn("Selektor nennt die Klasse \"" + src.cls + "\", die keine "
-                    + "deklarierte Zutat ist - dieser Slot wird nie gefuellt, "
-                    + "solange das Content-Modul fehlt.");
+                ctx.Warn("Selektor nennt die Klasse \"" + src.cls + "\", die keine " + "deklarierte Zutat ist - dieser Slot wird nie gefuellt, " + "solange das Content-Modul fehlt.");
             }
             return true;
         }
@@ -274,12 +262,7 @@ class ChefZ_SelectorCompiler
         return false;
     }
 
-    private static bool CompileChildren(notnull array<ref ChefZ_Selector> list,
-                                        notnull ChefZ_CompiledSelector node,
-                                        notnull ChefZ_CompileContext ctx,
-                                        int depth,
-                                        string label,
-                                        out string error)
+    private static bool CompileChildren(notnull array<ref ChefZ_Selector> list, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, int depth, string label, out string error)
     {
         error = "";
 
@@ -321,9 +304,7 @@ class ChefZ_SelectorCompiler
      * Liefert immer true; der Rueckgabewert steht fuer den Fall bereit, dass
      * ein spaeterer Bereich einmal abweisen soll.
      */
-    private static bool CompileRanges(notnull ChefZ_Selector src,
-                                      notnull ChefZ_CompiledSelector node,
-                                      notnull ChefZ_CompileContext ctx)
+    private static bool CompileRanges(notnull ChefZ_Selector src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx)
     {
         AddRange(node, ctx, ChefZ_RangeConstraint.HEALTH,       src.health);
         AddRange(node, ctx, ChefZ_RangeConstraint.FRESHNESS,    src.freshness);
@@ -335,18 +316,14 @@ class ChefZ_SelectorCompiler
         return true;
     }
 
-    private static void AddRange(notnull ChefZ_CompiledSelector node,
-                                 notnull ChefZ_CompileContext ctx,
-                                 int field,
-                                 ChefZ_Range range)
+    private static void AddRange(notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, int field, ChefZ_Range range)
     {
         if (!range)
             return;
 
         if (range.IsUnbounded())
         {
-            ctx.Warn("Wertebereich \"" + ChefZ_RangeConstraint.FieldName(field)
-                + "\" hat weder min noch max und schraenkt nichts ein - Feld ignoriert.");
+            ctx.Warn("Wertebereich \"" + ChefZ_RangeConstraint.FieldName(field) + "\" hat weder min noch max und schraenkt nichts ein - Feld ignoriert.");
             return;
         }
 
@@ -354,8 +331,7 @@ class ChefZ_SelectorCompiler
         {
             float lo = range.max;
             float hi = range.min;
-            ctx.Warn("Wertebereich \"" + ChefZ_RangeConstraint.FieldName(field) + "\" hat min > max ("
-                + range.min.ToString() + " > " + range.max.ToString() + ") - Grenzen getauscht.");
+            ctx.Warn("Wertebereich \"" + ChefZ_RangeConstraint.FieldName(field) + "\" hat min > max (" + range.min.ToString() + " > " + range.max.ToString() + ") - Grenzen getauscht.");
             range.Init(lo, hi);
         }
 
@@ -373,10 +349,7 @@ class ChefZ_SelectorCompiler
      * Ergebnis ist eine Aufzaehlung der zulaessigen Stufen, kein Rang -
      * Begruendung im Kopf von ChefZ_CompiledSelector.
      */
-    private static bool CompileMinQuality(notnull ChefZ_Selector src,
-                                          notnull ChefZ_CompiledSelector node,
-                                          notnull ChefZ_CompileContext ctx,
-                                          out string error)
+    private static bool CompileMinQuality(notnull ChefZ_Selector src, notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx, out string error)
     {
         error = "";
 
@@ -431,8 +404,7 @@ class ChefZ_SelectorCompiler
      * schwaechste Zweig bestimmt, denn der Selektor akzeptiert alles, was
      * dieser Zweig akzeptiert.
      */
-    static float ComputeSpecificity(notnull ChefZ_CompiledSelector node,
-                                    notnull ChefZ_CompileContext ctx)
+    static float ComputeSpecificity(notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx)
     {
         ChefZ_PriorityWeights w = ctx.Weights();
         float s = 0.0;
@@ -498,8 +470,7 @@ class ChefZ_SelectorCompiler
         return s;
     }
 
-    private static float MinChildSpecificity(notnull ChefZ_CompiledSelector node,
-                                             notnull ChefZ_CompileContext ctx)
+    private static float MinChildSpecificity(notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx)
     {
         if (!node.children || node.children.Count() == 0)
             return 0.0;
@@ -514,8 +485,7 @@ class ChefZ_SelectorCompiler
         return best;
     }
 
-    private static int CategoryDepthOf(notnull ChefZ_CompiledSelector node,
-                                       notnull ChefZ_CompileContext ctx)
+    private static int CategoryDepthOf(notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx)
     {
         int depth = ctx.Resolver().CategoryDepth(node.sym);
         if (depth < 0)
@@ -540,8 +510,7 @@ class ChefZ_SelectorCompiler
      * eine Obergrenze, und das ist die richtige Richtung - sie sortiert nie
      * einen Slot nach vorne, der in Wahrheit breit ist.
      */
-    static int EstimateSelectivity(notnull ChefZ_CompiledSelector node,
-                                   notnull ChefZ_CompileContext ctx)
+    static int EstimateSelectivity(notnull ChefZ_CompiledSelector node, notnull ChefZ_CompileContext ctx)
     {
         ChefZ_SymbolResolver res = ctx.Resolver();
         int universe = res.UniverseSize();
@@ -598,10 +567,7 @@ class ChefZ_SelectorCompiler
      * der Verbrauch in DEKLARATIONSreihenfolge geschieht (07 §4, Schritt 6) -
      * die Suchreihenfolge ist eine voellig andere.
      */
-    static ChefZ_CompiledSlot CompileSlot(ChefZ_SlotDef src,
-                                          int declIndex,
-                                          ChefZ_CompileContext ctx,
-                                          out string error)
+    static ChefZ_CompiledSlot CompileSlot(ChefZ_SlotDef src, int declIndex, ChefZ_CompileContext ctx, out string error)
     {
         error = "";
 
@@ -631,8 +597,7 @@ class ChefZ_SelectorCompiler
             // und der Trace sprechen ihn ueber die ID an, und "" ist als
             // Ansprache unbrauchbar.
             slot.slotId = "slot" + declIndex.ToString();
-            ctx.Warn("Slot " + declIndex.ToString() + " hat keine slotId - vergeben wurde \""
-                + slot.slotId + "\". Grade-Regeln und Trace sprechen Slots ueber die ID an.");
+            ctx.Warn("Slot " + declIndex.ToString() + " hat keine slotId - vergeben wurde \"" + slot.slotId + "\". Grade-Regeln und Trace sprechen Slots ueber die ID an.");
         }
         slot.slotIdSym = ctx.Intern(slot.slotId);
 
@@ -684,10 +649,7 @@ class ChefZ_SelectorCompiler
      * Eine ganze Slotliste kompilieren. false, sobald EIN Slot scheitert -
      * 07 §7: "Slot ungueltig -> GANZES Rezept abgewiesen".
      */
-    static bool CompileSlotList(array<ref ChefZ_SlotDef> src,
-                                ChefZ_CompileContext ctx,
-                                out array<ref ChefZ_CompiledSlot> outSlots,
-                                out string error)
+    static bool CompileSlotList(array<ref ChefZ_SlotDef> src, ChefZ_CompileContext ctx, out array<ref ChefZ_CompiledSlot> outSlots, out string error)
     {
         error = "";
         if (!outSlots)
@@ -715,8 +677,7 @@ class ChefZ_SelectorCompiler
 
             if (HasDuplicateId(outSlots, slot.slotId) && ctx)
             {
-                ctx.Warn("Slot-ID \"" + slot.slotId + "\" kommt mehrfach vor - "
-                    + "Grade-Regeln und Trace koennen die beiden nicht unterscheiden.");
+                ctx.Warn("Slot-ID \"" + slot.slotId + "\" kommt mehrfach vor - " + "Grade-Regeln und Trace koennen die beiden nicht unterscheiden.");
             }
 
             outSlots.Insert(slot);
@@ -737,49 +698,40 @@ class ChefZ_SelectorCompiler
 
     //--------------------------------------------------------------------------
 
-    private static bool CompileCounts(notnull ChefZ_SlotDef src,
-                                      notnull ChefZ_CompiledSlot slot,
-                                      notnull ChefZ_CompileContext ctx)
+    private static bool CompileCounts(notnull ChefZ_SlotDef src, notnull ChefZ_CompiledSlot slot, notnull ChefZ_CompileContext ctx)
     {
         slot.minCount = src.minCount;
         slot.maxCount = src.maxCount;
 
         if (slot.minCount < 0)
         {
-            ctx.Warn("Slot \"" + slot.slotId + "\": minCount " + slot.minCount.ToString()
-                + " ist negativ - auf 0 gesetzt.");
+            ctx.Warn("Slot \"" + slot.slotId + "\": minCount " + slot.minCount.ToString() + " ist negativ - auf 0 gesetzt.");
             slot.minCount = 0;
         }
 
         if (slot.maxCount < slot.minCount)
         {
             // 07 §7: "minCount > maxCount -> maxCount = minCount, WARN."
-            ctx.Warn("Slot \"" + slot.slotId + "\": maxCount " + slot.maxCount.ToString()
-                + " liegt unter minCount " + slot.minCount.ToString()
-                + " - maxCount auf minCount gesetzt.");
+            ctx.Warn("Slot \"" + slot.slotId + "\": maxCount " + slot.maxCount.ToString() + " liegt unter minCount " + slot.minCount.ToString() + " - maxCount auf minCount gesetzt.");
             slot.maxCount = slot.minCount;
         }
 
         if (!src.optional && slot.minCount == 0)
         {
-            ctx.Warn("Slot \"" + slot.slotId + "\": minCount 0 an einem Pflichtslot - "
-                + "er ist damit faktisch optional. Deutlicher waere \"optional\": true.");
+            ctx.Warn("Slot \"" + slot.slotId + "\": minCount 0 an einem Pflichtslot - " + "er ist damit faktisch optional. Deutlicher waere \"optional\": true.");
         }
 
         return true;
     }
 
-    private static void CompileAmount(notnull ChefZ_SlotDef src,
-                                      notnull ChefZ_CompiledSlot slot,
-                                      notnull ChefZ_CompileContext ctx)
+    private static void CompileAmount(notnull ChefZ_SlotDef src, notnull ChefZ_CompiledSlot slot, notnull ChefZ_CompileContext ctx)
     {
         if (!src.amount)
             return;
 
         if (src.amount.IsUnbounded())
         {
-            ctx.Warn("Slot \"" + slot.slotId + "\": amount ohne min und max schraenkt nichts "
-                + "ein - Feld ignoriert.");
+            ctx.Warn("Slot \"" + slot.slotId + "\": amount ohne min und max schraenkt nichts " + "ein - Feld ignoriert.");
             return;
         }
 
@@ -794,8 +746,7 @@ class ChefZ_SelectorCompiler
         if (src.amount.HasMin() && src.amount.min <= 0.0)
         {
             // 07 §7: "amount <= 0 -> auf 1 gesetzt, WARN."
-            ctx.Warn("Slot \"" + slot.slotId + "\": amount.min " + src.amount.min.ToString()
-                + " ist nicht positiv - auf 1 gesetzt.");
+            ctx.Warn("Slot \"" + slot.slotId + "\": amount.min " + src.amount.min.ToString() + " ist nicht positiv - auf 1 gesetzt.");
             src.amount.min = 1.0;
             if (src.amount.HasMax() && src.amount.max < 1.0)
                 src.amount.max = 1.0;
@@ -804,9 +755,7 @@ class ChefZ_SelectorCompiler
         slot.amount = src.amount;
     }
 
-    private static void CompileUnit(notnull ChefZ_SlotDef src,
-                                    notnull ChefZ_CompiledSlot slot,
-                                    notnull ChefZ_CompileContext ctx)
+    private static void CompileUnit(notnull ChefZ_SlotDef src, notnull ChefZ_CompiledSlot slot, notnull ChefZ_CompileContext ctx)
     {
         if (src.unit == "")
             return;
@@ -818,23 +767,17 @@ class ChefZ_SelectorCompiler
             // 07 §7: "unit gesetzt, aber keine Klasse fuehrt diese Einheit ->
             // kein Kandidat -> Slot nie erfuellbar -> kein Match -> Vanilla.
             // Beim Build WARN, weil es fast sicher ein Autorenfehler ist."
-            ctx.Warn("Slot \"" + slot.slotId + "\": Einheit \"" + src.unit + "\" wird von keiner "
-                + "deklarierten Zutat gefuehrt - dieser Slot kann nie gefuellt werden.");
+            ctx.Warn("Slot \"" + slot.slotId + "\": Einheit \"" + src.unit + "\" wird von keiner " + "deklarierten Zutat gefuehrt - dieser Slot kann nie gefuellt werden.");
         }
     }
 
-    private static bool CompileConsume(notnull ChefZ_SlotDef src,
-                                       notnull ChefZ_CompiledSlot slot,
-                                       notnull ChefZ_CompileContext ctx,
-                                       out string error)
+    private static bool CompileConsume(notnull ChefZ_SlotDef src, notnull ChefZ_CompiledSlot slot, notnull ChefZ_CompileContext ctx, out string error)
     {
         error = "";
         slot.consumeMode = ChefZ_ConsumeMode.FromName(src.consume);
         if (slot.consumeMode < 0)
         {
-            ctx.Warn("Slot \"" + slot.slotId + "\": unbekannter consume-Wert \"" + src.consume
-                + "\" - benutzt wird \"" + ChefZ_ConsumeMode.WHOLE_NAME + "\". Gueltig: "
-                + ChefZ_ConsumeMode.ValidNames() + ".");
+            ctx.Warn("Slot \"" + slot.slotId + "\": unbekannter consume-Wert \"" + src.consume + "\" - benutzt wird \"" + ChefZ_ConsumeMode.WHOLE_NAME + "\". Gueltig: " + ChefZ_ConsumeMode.ValidNames() + ".");
             slot.consumeMode = ChefZ_ConsumeMode.WHOLE;
         }
 
@@ -849,8 +792,7 @@ class ChefZ_SelectorCompiler
                 float fallback = slot.RequiredUnits();
                 if (fallback <= 0.0)
                     fallback = 1.0;
-                ctx.Warn("Slot \"" + slot.slotId + "\": consume \"amount\" ohne brauchbares "
-                    + "consumeAmount - benutzt wird " + fallback.ToString() + ".");
+                ctx.Warn("Slot \"" + slot.slotId + "\": consume \"amount\" ohne brauchbares " + "consumeAmount - benutzt wird " + fallback.ToString() + ".");
                 slot.consumeAmount = fallback;
             }
         }
@@ -866,9 +808,7 @@ class ChefZ_SelectorCompiler
 
             if (slot.consumeMode == ChefZ_ConsumeMode.WHOLE)
             {
-                ctx.Warn("Slot \"" + slot.slotId + "\": setStateAfter an einem Slot mit "
-                    + "consume \"whole\" - das Item wird geloescht, der Zustandswechsel "
-                    + "verpufft. Gemeint ist vermutlich consume \"none\".");
+                ctx.Warn("Slot \"" + slot.slotId + "\": setStateAfter an einem Slot mit " + "consume \"whole\" - das Item wird geloescht, der Zustandswechsel " + "verpufft. Gemeint ist vermutlich consume \"none\".");
             }
         }
 
@@ -884,10 +824,7 @@ class ChefZ_SelectorCompiler
      *   [Tippfehler] -> Eintrag raus; wird die Liste dadurch LEER, ist das ein
      *                   ERROR, sonst schaltete ein Tippfehler den Filter still ab
      */
-    private static bool CompileExcludeStates(notnull ChefZ_SlotDef src,
-                                             notnull ChefZ_CompiledSlot slot,
-                                             notnull ChefZ_CompileContext ctx,
-                                             out string error)
+    private static bool CompileExcludeStates(notnull ChefZ_SlotDef src, notnull ChefZ_CompiledSlot slot, notnull ChefZ_CompileContext ctx, out string error)
     {
         error = "";
         slot.excludeStates = new array<ChefZ_Sym>();
@@ -916,8 +853,7 @@ class ChefZ_SelectorCompiler
             ChefZ_Sym sym = ctx.Intern(name);
             if (!ctx.Resolver().StateExists(sym))
             {
-                ctx.Warn("Slot \"" + slot.slotId + "\": unbekannter Zustand \"" + name
-                    + "\" in excludeStates - Eintrag entfernt.");
+                ctx.Warn("Slot \"" + slot.slotId + "\": unbekannter Zustand \"" + name + "\" in excludeStates - Eintrag entfernt.");
                 dropped++;
                 continue;
             }

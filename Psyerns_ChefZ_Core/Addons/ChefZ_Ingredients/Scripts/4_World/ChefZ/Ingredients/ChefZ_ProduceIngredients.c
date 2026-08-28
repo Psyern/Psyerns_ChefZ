@@ -87,7 +87,8 @@ class ChefZ_SlicedPotato extends ChefZ_ChoppedVegetableBase {}
 //! §14: Tomato + Knife.
 class ChefZ_ChoppedTomato extends ChefZ_ChoppedVegetableBase {}
 
-//! §15: ChefZ_Paprika (Slice herbs) oder Vanillas GreenBellPepper + Knife.
+//! §15: Vanillas GreenBellPepper + Knife. Eine eigene frische Paprikaklasse
+//! gibt es nicht (Vanilla-Audit §2).
 class ChefZ_ChoppedPaprika extends ChefZ_ChoppedVegetableBase {}
 
 //! §17: ChefZ_Onion + Knife.

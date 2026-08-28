@@ -103,6 +103,20 @@ export default function run() {
         + `auf STATION_ACTION umstellen.`);
     }
 
+    // Ein HANDCRAFT-Transform, der eine Station nennt, wird von der
+    // Handwerksbruecke abgewiesen (ChefZ_HandcraftBridge.FillOne: "der Transform
+    // nennt stationsAllowed, sein Prozess ist aber HANDCRAFT"). Ohne diese Regel
+    // sieht der Lauf gruen aus und das Rezept erscheint im Spiel trotzdem nie -
+    // genau die Fehlerart, gegen die dieses Werkzeug gebaut ist.
+    const stations = Array.isArray(o.stationsAllowed) ? o.stationsAllowed : [];
+    if (stations.length > 0) {
+      f.error(tr.file, tr.line,
+        `${head}, nennt aber stationsAllowed (${stations.join(', ')}). Ein Handwerksschritt `
+        + `laeuft ohne Station; ChefZ_HandcraftBridge weist den Transform beim Registrieren ab, `
+        + `und das Rezept erscheint im Spiel nie - ohne Fehlermeldung. Abhilfe: stationsAllowed `
+        + `streichen oder den Prozess auf STATION_ACTION umstellen.`);
+    }
+
     if (outputs > MAXIMUM_RESULTS) {
       f.error(tr.file, tr.line,
         `${head} und nennt ${outputs} Ergebnisse. RecipeBase fuehrt genau `

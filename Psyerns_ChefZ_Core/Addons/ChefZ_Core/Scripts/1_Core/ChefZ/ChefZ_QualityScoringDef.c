@@ -128,17 +128,14 @@ class ChefZ_QualityScoringDef
                 // wirksame Strafe vorzugaukeln.
                 if (report)
                 {
-                    report.AddError("Core.json / qualityScoring", "statePenalties[" + i.ToString() + "]",
-                        "Eintrag ohne \"state\" oder ohne \"points\" - er wird ausgelassen. "
-                        + "Form: { \"state\": \"<Zustands-ID>\", \"points\": -3.0 }.");
+                    report.AddError("Core.json / qualityScoring", "statePenalties[" + i.ToString() + "]", "Eintrag ohne \"state\" oder ohne \"points\" - er wird ausgelassen. " + "Form: { \"state\": \"<Zustands-ID>\", \"points\": -3.0 }.");
                 }
                 continue;
             }
 
             if (sc.HasStatePenalty(ChefZ_SymbolTable.Lookup(p.state)) && report)
             {
-                report.AddWarn("Core.json / qualityScoring", p.state,
-                    "Zustandsstrafe steht mehrfach in der Liste. Der letzte Eintrag gewinnt.");
+                report.AddWarn("Core.json / qualityScoring", p.state, "Zustandsstrafe steht mehrfach in der Liste. Der letzte Eintrag gewinnt.");
             }
 
             sc.SetStatePenalty(p.state, p.points);

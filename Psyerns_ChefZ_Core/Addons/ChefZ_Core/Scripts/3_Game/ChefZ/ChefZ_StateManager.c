@@ -132,9 +132,7 @@ class ChefZ_StateManager
      * Abfrage mit dem Fehler "vor Build aufgerufen", obwohl schlicht keine
      * Zustaende konfiguriert sind (06 §7, erste Zeile).
      */
-    void Build(ChefZ_Registry<ChefZ_StateDef> defs,
-               ChefZ_LoadReport report,
-               ChefZ_IdentityMap identities = null)
+    void Build(ChefZ_Registry<ChefZ_StateDef> defs, ChefZ_LoadReport report, ChefZ_IdentityMap identities = null)
     {
         ResetState();
         m_Identities = identities;
@@ -145,8 +143,7 @@ class ChefZ_StateManager
             // Selektoren mit "state" matchen nie, Rezepte ohne
             // Zustandsbedingung funktionieren normal. Vanilla unberuehrt.
             if (report)
-                report.AddInfo("Keine Zustaende definiert - das Food State System bleibt leer. "
-                    + "Zustands-Selektoren matchen dadurch nie; alles andere ist unberuehrt.");
+                report.AddInfo("Keine Zustaende definiert - das Food State System bleibt leer. " + "Zustands-Selektoren matchen dadurch nie; alles andere ist unberuehrt.");
             m_Ready = true;
             return;
         }
@@ -199,11 +196,7 @@ class ChefZ_StateManager
         {
             m_SymByHash.Remove(hash);
             m_RejectedCount++;
-            Report(report, true, def,
-                "Hash-Kollision mit \"" + ChefZ_SymbolTable.NameOrMark(existing) + "\" (beide Hash "
-                + hash.ToString() + "). BEIDE Zustaende sind ab sofort nicht mehr aus einem "
-                + "Spielstand ruecklesbar; Items mit diesem Zustand fallen beim Laden auf den "
-                + "defaultState ihrer Klasse zurueck. Abhilfe: eine der beiden IDs umbenennen.");
+            Report(report, true, def, "Hash-Kollision mit \"" + ChefZ_SymbolTable.NameOrMark(existing) + "\" (beide Hash " + hash.ToString() + "). BEIDE Zustaende sind ab sofort nicht mehr aus einem " + "Spielstand ruecklesbar; Items mit diesem Zustand fallen beim Laden auf den " + "defaultState ihrer Klasse zurueck. Abhilfe: eine der beiden IDs umbenennen.");
             return;
         }
 
@@ -225,9 +218,7 @@ class ChefZ_StateManager
         // Kann nach Validate/Compile nicht mehr vorkommen. Wenn doch, hat
         // jemand am Record vorbeigeschrieben - und ein ungueltiger Enumwert in
         // SetFoodStageType waere ein Sync-Fehler (06 §7).
-        Report(report, true, def,
-            "projectedStage " + def.projectedStage.ToString() + " liegt ausserhalb von "
-            + ChefZ_VanillaStage.ValidNames() + ". Die Projektion wird abgeschaltet.");
+        Report(report, true, def, "projectedStage " + def.projectedStage.ToString() + " liegt ausserhalb von " + ChefZ_VanillaStage.ValidNames() + ". Die Projektion wird abgeschaltet.");
         def.projectedStage = ChefZ_VanillaStage.NONE;
     }
 
@@ -258,10 +249,7 @@ class ChefZ_StateManager
             ChefZ_Sym tag = ChefZ_SymbolTable.Lookup(name);
             if (!cats.TagExists(tag))
             {
-                Report(report, false, def,
-                    "implies-Tag \"" + name + "\" ist unbekannt und wird fuer diesen Zustand "
-                    + "ausgelassen; die uebrigen bleiben gueltig. Tags werden nie implizit "
-                    + "angelegt (04 §6).");
+                Report(report, false, def, "implies-Tag \"" + name + "\" ist unbekannt und wird fuer diesen Zustand " + "ausgelassen; die uebrigen bleiben gueltig. Tags werden nie implizit " + "angelegt (04 §6).");
                 continue;
             }
 
@@ -364,11 +352,7 @@ class ChefZ_StateManager
 
         if (ChefZ_SymbolTable.IsValid(state))
         {
-            QuietOnce(ChefZ_LogLevel.WARN, "state.unknown." + state.ToString(),
-                "Unbekannter Zustand \"" + ChefZ_SymbolTable.NameOrMark(state)
-                + "\" - es gilt der neutrale Rueckfall (essbar, keine Projektion, Verderb "
-                + "unveraendert). Haeufigste Ursache: das Modul mit diesem Zustand ist nicht "
-                + "geladen. Diese Meldung erscheint je Zustand genau einmal.");
+            QuietOnce(ChefZ_LogLevel.WARN, "state.unknown." + state.ToString(), "Unbekannter Zustand \"" + ChefZ_SymbolTable.NameOrMark(state) + "\" - es gilt der neutrale Rueckfall (essbar, keine Projektion, Verderb " + "unveraendert). Haeufigste Ursache: das Modul mit diesem Zustand ist nicht " + "geladen. Diese Meldung erscheint je Zustand genau einmal.");
         }
         return m_Fallback;
     }
@@ -541,8 +525,7 @@ class ChefZ_StateManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Zustaende: " + GetStateCount().ToString() + "  ordinale=" + GetMaxOrdinal().ToString()
-            + "  bereit=" + m_Ready.ToString());
+        outLines.Insert("Zustaende: " + GetStateCount().ToString() + "  ordinale=" + GetMaxOrdinal().ToString() + "  bereit=" + m_Ready.ToString());
 
         for (int i = 0; i < m_Order.Count(); i++)
         {
@@ -616,10 +599,7 @@ class ChefZ_StateManager
         if (m_QuietForTest)
             return false;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.STATE,
-            "ChefZ_StateManager." + what + "() wurde vor Build() aufgerufen - die Antwort ist "
-            + "\"kein Zustand\". Zustands-Selektoren matchen solange nicht; Vanilla-Kochen ist "
-            + "davon unberuehrt. Diese Meldung erscheint genau einmal.");
+        ChefZ_Log.Error(ChefZ_LogChannel.STATE, "ChefZ_StateManager." + what + "() wurde vor Build() aufgerufen - die Antwort ist " + "\"kein Zustand\". Zustands-Selektoren matchen solange nicht; Vanilla-Kochen ist " + "davon unberuehrt. Diese Meldung erscheint genau einmal.");
         return false;
     }
 
@@ -630,11 +610,7 @@ class ChefZ_StateManager
         if (m_Identities)
             return true;
 
-        QuietOnce(ChefZ_LogLevel.WARN, "state.noidentities",
-            "ChefZ_StateManager." + what + "(): es gibt keine Ordinaltabelle. Zustaende sind "
-            + "serverseitig voll benutzbar, koennen aber nicht zum Client synchronisiert und "
-            + "dort nicht angezeigt werden (03 §4). Ursache ist immer ein Reihenfolgefehler im "
-            + "Boot oder eine Zustandsregistry ohne Rang-1-Eintraege.");
+        QuietOnce(ChefZ_LogLevel.WARN, "state.noidentities", "ChefZ_StateManager." + what + "(): es gibt keine Ordinaltabelle. Zustaende sind " + "serverseitig voll benutzbar, koennen aber nicht zum Client synchronisiert und " + "dort nicht angezeigt werden (03 §4). Ursache ist immer ein Reihenfolgefehler im " + "Boot oder eine Zustandsregistry ohne Rang-1-Eintraege.");
         return false;
     }
 

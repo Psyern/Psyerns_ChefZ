@@ -76,9 +76,7 @@ class ChefZ_RecordSink
         if (kind == "" || !ChefZ_RecordKind.IsKnown(kind))
         {
             m_Rejected++;
-            Error(rec.sourceRef, rec.id,
-                "Unbekannte Record-Art \"" + kind + "\" - abgewiesen. Gueltig: "
-                + ChefZ_RecordKind.ValidNames());
+            Error(rec.sourceRef, rec.id, "Unbekannte Record-Art \"" + kind + "\" - abgewiesen. Gueltig: " + ChefZ_RecordKind.ValidNames());
             return;
         }
 
@@ -94,9 +92,7 @@ class ChefZ_RecordSink
         if (m_Accepted >= MAX_RECORDS)
         {
             m_Rejected++;
-            ErrorOnce("sink.full",
-                "Mehr als " + MAX_RECORDS.ToString() + " Records - weitere werden verworfen. "
-                + "Das ist fast immer eine fehlerhaft erzeugte Datendatei.");
+            ErrorOnce("sink.full", "Mehr als " + MAX_RECORDS.ToString() + " Records - weitere werden verworfen. " + "Das ist fast immer eine fehlerhaft erzeugte Datendatei.");
             return;
         }
 
@@ -114,37 +110,29 @@ class ChefZ_RecordSink
         if (rec.sourceRank == existing.sourceRank)
         {
             m_Rejected++;
-            Error(rec.sourceRef, rec.id,
-                "Doppelte ID im selben Rang " + rec.sourceRank.ToString()
-                + " - die erste gewinnt. Bereits geladen aus: " + existing.sourceRef);
+            Error(rec.sourceRef, rec.id, "Doppelte ID im selben Rang " + rec.sourceRank.ToString() + " - die erste gewinnt. Bereits geladen aus: " + existing.sourceRef);
             return;
         }
 
         if (rec.sourceRank < existing.sourceRank)
         {
             m_Rejected++;
-            Warn(rec.sourceRef, rec.id,
-                "Record aus Rang " + rec.sourceRank.ToString() + " trifft auf einen bereits "
-                + "geladenen aus Rang " + existing.sourceRank.ToString()
-                + " - ignoriert. Quellen wurden nicht in Rangreihenfolge gelesen.");
+            Warn(rec.sourceRef, rec.id, "Record aus Rang " + rec.sourceRank.ToString() + " trifft auf einen bereits " + "geladenen aus Rang " + existing.sourceRank.ToString() + " - ignoriert. Quellen wurden nicht in Rangreihenfolge gelesen.");
             return;
         }
 
         // Hoeherer Rang: das ist der Override-Mechanismus, kein Fehler (02 §8).
-        if (rec.sourceRank >= ChefZ_SourceRank.PROFILE_OVERLAY
-            && ChefZ_RecordKind.IsSyncRelevant(kind))
+        if (rec.sourceRank >= ChefZ_SourceRank.PROFILE_OVERLAY && ChefZ_RecordKind.IsSyncRelevant(kind))
         {
             // Feld-Patches auf sync-relevanten Arten sind erlaubt, solange sie
             // den Ordinal nicht bewegen - und das tut ein Patch nie, weil er
             // die ID nicht aendert und keinen Record hinzufuegt (03 §4).
-            Debug("Overlay patcht sync-relevanten Record " + kind + " \"" + rec.id
-                + "\" - erlaubt, solange kein Record hinzukommt.");
+            Debug("Overlay patcht sync-relevanten Record " + kind + " \"" + rec.id + "\" - erlaubt, solange kein Record hinzukommt.");
         }
 
         existing.PatchFrom(rec);
         m_Patched++;
-        Debug("Rang " + rec.sourceRank.ToString() + " patcht " + kind + " \"" + rec.id
-            + "\" (" + rec.sourceRef + ")");
+        Debug("Rang " + rec.sourceRank.ToString() + " patcht " + kind + " \"" + rec.id + "\" (" + rec.sourceRef + ")");
     }
 
     //--------------------------------------------------------------------------
@@ -166,10 +154,7 @@ class ChefZ_RecordSink
     void RejectOverlayAddition(string kind, string id, string sourceRef)
     {
         m_Rejected++;
-        Error(sourceRef, id,
-            "Overlay (Rang 3) darf die sync-relevante Art \"" + kind + "\" nicht erweitern. "
-            + "Der Sync-Ordinal wird auf Client und Server unabhaengig aus Rang 1 abgeleitet - "
-            + "ein zusaetzlicher Record broeche die Symmetrie (03 §4). Feld-Patches bleiben erlaubt.");
+        Error(sourceRef, id, "Overlay (Rang 3) darf die sync-relevante Art \"" + kind + "\" nicht erweitern. " + "Der Sync-Ordinal wird auf Client und Server unabhaengig aus Rang 1 abgeleitet - " + "ein zusaetzlicher Record broeche die Symmetrie (03 §4). Feld-Patches bleiben erlaubt.");
     }
 
     //--------------------------------------------------------------------------

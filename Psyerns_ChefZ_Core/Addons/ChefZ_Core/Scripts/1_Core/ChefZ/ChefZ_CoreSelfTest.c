@@ -61,9 +61,7 @@ class ChefZ_CoreSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.CORE,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Der Core-Unterbau verhaelt sich "
-            + "nicht wie entworfen - alles darueber ist unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CORE, "Selbsttest " + name + " FEHLGESCHLAGEN. Der Core-Unterbau verhaelt sich " + "nicht wie entworfen - alles darueber ist unzuverlaessig.");
     }
 
     static int PassedCount() { return s_Passed; }

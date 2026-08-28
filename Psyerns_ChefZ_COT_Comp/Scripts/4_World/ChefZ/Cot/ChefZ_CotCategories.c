@@ -232,11 +232,11 @@ class ChefZ_CotCategories
 		{
 			"ChefZ_ParsleyPlant", "ChefZ_DillPlant", "ChefZ_ThymePlant",
 			"ChefZ_RosemaryPlant", "ChefZ_WildGarlicPlant", "ChefZ_PepperPlant",
-			"ChefZ_PaprikaPlant", "ChefZ_ParsleySeeds", "ChefZ_DillSeeds",
+			"ChefZ_ParsleySeeds", "ChefZ_DillSeeds",
 			"ChefZ_ThymeSeeds", "ChefZ_RosemarySeeds", "ChefZ_WildGarlicSeeds",
-			"ChefZ_PepperSeeds", "ChefZ_PaprikaSeeds", "ChefZ_Parsley",
+			"ChefZ_PeppercornSeeds", "ChefZ_Parsley",
 			"ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
-			"ChefZ_WildGarlic", "ChefZ_PepperBerries", "ChefZ_Paprika",
+			"ChefZ_WildGarlic", "ChefZ_PepperBerries",
 			"ChefZ_DriedParsley", "ChefZ_DriedDill", "ChefZ_DriedThyme",
 			"ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_DriedPaprika",
 			"ChefZ_PaprikaPowder", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper",
@@ -261,7 +261,7 @@ class ChefZ_CotCategories
 		{
 			"ChefZ_DicedMeat", "ChefZ_MincedMeat", "ChefZ_MincedPork",
 			"ChefZ_MincedVenison", "ChefZ_MincedBoar", "ChefZ_MincedChicken",
-			"ChefZ_MincedBear", "ChefZ_AnimalFat", "ChefZ_SausageCasing",
+			"ChefZ_MincedBear", "ChefZ_SausageCasing",
 			"ChefZ_RawSausage", "ChefZ_RawPorkSausage", "ChefZ_RawVenisonSausage",
 			"ChefZ_RawBoarSausage", "ChefZ_RawHunterSausage", "ChefZ_RawSpicySausage",
 			"ChefZ_CookedSausage", "ChefZ_PorkSausage", "ChefZ_VenisonSausage",
@@ -307,7 +307,7 @@ class ChefZ_CotCategories
 		// abhandenkommt, ersetzt der Admin - und dafuer muss er sie finden.
 		Add("chefz_cot_stations", "#STR_CHEFZ_COT_CAT_STATIONS",
 		{
-			"ChefZ_GrainMill", "ChefZ_RollingPin", "ChefZ_Mortar",
+			"ChefZ_GrainMill", "ChefZ_PastaMachine", "ChefZ_Mortar",
 			"ChefZ_DryingRack", "ChefZ_ButterChurn", "ChefZ_CheesePress",
 			"ChefZ_SaltPan", "ChefZ_CuttingBoard", "ChefZ_MeatGrinder",
 			"ChefZ_Smoker"

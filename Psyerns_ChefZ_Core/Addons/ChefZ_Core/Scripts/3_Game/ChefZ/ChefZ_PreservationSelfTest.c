@@ -88,10 +88,7 @@ class ChefZ_PreservationSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.PRESERV,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Die Haltbarkeitsrechnung verhaelt sich "
-            + "nicht wie entworfen - Verfallsgeschwindigkeit und Restfrische sind ab hier "
-            + "unzuverlaessig. Vanilla-Nahrung ist davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PRESERV, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Haltbarkeitsrechnung verhaelt sich " + "nicht wie entworfen - Verfallsgeschwindigkeit und Restfrische sind ab hier " + "unzuverlaessig. Vanilla-Nahrung ist davon unberuehrt.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -140,8 +137,7 @@ class ChefZ_PreservationSelfTest
         return reg;
     }
 
-    private static ChefZ_PreservationDef AddRule(notnull ChefZ_Registry<ChefZ_PreservationDef> reg,
-                                                 string id, string scope, float mul)
+    private static ChefZ_PreservationDef AddRule(notnull ChefZ_Registry<ChefZ_PreservationDef> reg, string id, string scope, float mul)
     {
         ChefZ_PreservationDef def = new ChefZ_PreservationDef();
         def.id                 = id;
@@ -183,8 +179,7 @@ class ChefZ_PreservationSelfTest
         return mgr;
     }
 
-    private static void AddCategory(notnull ChefZ_Registry<ChefZ_CategoryDef> reg,
-                                    string id, string parent)
+    private static void AddCategory(notnull ChefZ_Registry<ChefZ_CategoryDef> reg, string id, string parent)
     {
         ChefZ_CategoryDef def = new ChefZ_CategoryDef();
         def.id     = id;
@@ -226,8 +221,7 @@ class ChefZ_PreservationSelfTest
         return mgr;
     }
 
-    private static void AddState(notnull ChefZ_Registry<ChefZ_StateDef> reg, string id,
-                                 float spoilage, float lifetime)
+    private static void AddState(notnull ChefZ_Registry<ChefZ_StateDef> reg, string id, float spoilage, float lifetime)
     {
         ChefZ_StateDef def = new ChefZ_StateDef();
         def.id                   = id;
@@ -256,8 +250,7 @@ class ChefZ_PreservationSelfTest
         return mgr;
     }
 
-    private static void AddTier(notnull ChefZ_Registry<ChefZ_QualityTierDef> reg, string id,
-                                int rank, float spoilage)
+    private static void AddTier(notnull ChefZ_Registry<ChefZ_QualityTierDef> reg, string id, int rank, float spoilage)
     {
         ChefZ_QualityTierDef def = new ChefZ_QualityTierDef();
         def.id                 = id;
@@ -273,9 +266,7 @@ class ChefZ_PreservationSelfTest
 
     //--------------------------------------------------------------------------
 
-    private static ChefZ_PreservationManager NewManager(ChefZ_CategoryManager cats,
-                                                        ChefZ_StateManager states,
-                                                        ChefZ_QualityManager quality)
+    private static ChefZ_PreservationManager NewManager(ChefZ_CategoryManager cats, ChefZ_StateManager states, ChefZ_QualityManager quality)
     {
         ChefZ_PreservationManager mgr = new ChefZ_PreservationManager();
         mgr.SetQuietForTest(true);
@@ -308,13 +299,10 @@ class ChefZ_PreservationSelfTest
         return new array<ChefZ_Sym>();
     }
 
-    private static float Scale(notnull ChefZ_PreservationManager mgr,
-                               ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym cls,
-                               ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags)
+    private static float Scale(notnull ChefZ_PreservationManager mgr, ChefZ_Sym state, ChefZ_Sym quality, ChefZ_Sym cls, ChefZ_CategoryClosure closure, array<ChefZ_Sym> tags)
     {
         array<string> trace = null;
-        return mgr.ComputeDecayScale(state, quality, cls, closure, tags,
-                                     1.0, ChefZ_Undefined.FLOAT, trace);
+        return mgr.ComputeDecayScale(state, quality, cls, closure, tags, 1.0, ChefZ_Undefined.FLOAT, trace);
     }
 
     //==========================================================================
@@ -352,16 +340,13 @@ class ChefZ_PreservationSelfTest
         if (mgr.GetRuleCount() != 2)                    return false;
         if (mgr.GetRejectedCount() != 0)                return false;
 
-        float mul = Scale(mgr,
-            Sym("CHEFZ_PR_STATE_KEEP"), Sym("CHEFZ_PR_TIER_GOOD"), Sym("CHEFZ_PR_CLASS_X"),
-            EmptyClosure(), NoTags());
+        float mul = Scale(mgr, Sym("CHEFZ_PR_STATE_KEEP"), Sym("CHEFZ_PR_TIER_GOOD"), Sym("CHEFZ_PR_CLASS_X"), EmptyClosure(), NoTags());
 
         if (!Near(mul, 2.0 * 0.5 * 0.5 * 0.4 * 0.25))   return false;
 
         // Ohne Zustand, ohne Stufe, ohne bekannte Klasse bleibt nur die
         // globale Skala uebrig.
-        float bare = Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                           Sym("CHEFZ_PR_CLASS_UNKNOWN"), EmptyClosure(), NoTags());
+        float bare = Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, Sym("CHEFZ_PR_CLASS_UNKNOWN"), EmptyClosure(), NoTags());
         if (!Near(bare, 2.0))                           return false;
 
         // Der Behaelterfaktor multipliziert ebenfalls (16, Default 1.0).
@@ -370,9 +355,7 @@ class ChefZ_PreservationSelfTest
         // Ablaufverfolgung" und ist der Normalfall im Verfallstakt (siehe
         // ComputeDecayScale). Der Test will sie, also legt er sie an.
         array<string> trace = new array<string>();
-        float withContainer = mgr.ComputeDecayScale(
-            ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-            EmptyClosure(), NoTags(), 0.5, ChefZ_Undefined.FLOAT, trace);
+        float withContainer = mgr.ComputeDecayScale( ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags(), 0.5, ChefZ_Undefined.FLOAT, trace);
         if (!Near(withContainer, 1.0))                  return false;   // 2.0 * 0.5
 
         // Und der Trace ist nicht leer, wenn er angefordert wird - er ist die
@@ -411,13 +394,11 @@ class ChefZ_PreservationSelfTest
         ChefZ_CategoryClosure closure;
         cats.BuildClosure(direct, closure);
 
-        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, closure, NoTags()), 0.5))
+        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, closure, NoTags()), 0.5))
             return false;
 
         // Ein Item ohne Kategorie bleibt unberuehrt.
-        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()), 1.0))
+        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()), 1.0))
             return false;
 
         // 14 §8: "Mehrere Records treffen zu -> Multipliziert." Zwei Tags mit
@@ -426,13 +407,11 @@ class ChefZ_PreservationSelfTest
         array<ChefZ_Sym> both = new array<ChefZ_Sym>();
         both.Insert(Sym("CHEFZ_PR_TAG_A"));
         both.Insert(Sym("CHEFZ_PR_TAG_B"));
-        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, EmptyClosure(), both), 0.25))
+        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), both), 0.25))
             return false;
 
         // Kategorie UND Tags zusammen: alles multipliziert.
-        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, closure, both), 0.125))
+        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, closure, both), 0.125))
             return false;
 
         return true;
@@ -445,8 +424,7 @@ class ChefZ_PreservationSelfTest
     private static bool TemperatureCheck()
     {
         ChefZ_Registry<ChefZ_PreservationDef> reg = NewRegistry();
-        ChefZ_PreservationDef cold = AddRule(reg, "CHEFZ_PR_TAG_A",
-                                             ChefZ_PreservationScope.NAME_TAG, 0.5);
+        ChefZ_PreservationDef cold = AddRule(reg, "CHEFZ_PR_TAG_A", ChefZ_PreservationScope.NAME_TAG, 0.5);
         if (!cold)                                      return false;
         cold.environmentTemperature = new ChefZ_Range();
         cold.environmentTemperature.Init(-50.0, 5.0);
@@ -460,20 +438,16 @@ class ChefZ_PreservationSelfTest
         array<string> trace = null;
 
         // In der Kaelte greift die Regel.
-        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                  ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, 0.0, trace), 0.5))
+        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, 0.0, trace), 0.5))
             return false;
 
         // In der Waerme nicht.
-        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                  ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, 25.0, trace), 1.0))
+        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, 25.0, trace), 1.0))
             return false;
 
         // Und bei unbekannter Temperatur ebenfalls nicht (02 §8: "Richtung
         // weniger ChefZ, nie Richtung falsches ChefZ").
-        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                  ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0,
-                  ChefZ_Undefined.FLOAT, trace), 1.0))
+        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, ChefZ_Undefined.FLOAT, trace), 1.0))
             return false;
 
         return true;
@@ -487,13 +461,11 @@ class ChefZ_PreservationSelfTest
     {
         ChefZ_Registry<ChefZ_PreservationDef> reg = NewRegistry();
 
-        ChefZ_PreservationDef canned = AddRule(reg, "CHEFZ_PR_TAG_A",
-                                               ChefZ_PreservationScope.NAME_TAG, 1.0);
+        ChefZ_PreservationDef canned = AddRule(reg, "CHEFZ_PR_TAG_A", ChefZ_PreservationScope.NAME_TAG, 1.0);
         if (!canned)                                    return false;
         canned.stopsDecay = true;
 
-        ChefZ_PreservationDef noRot = AddRule(reg, "CHEFZ_PR_STATE_KEEP",
-                                              ChefZ_PreservationScope.NAME_STATE, 1.0);
+        ChefZ_PreservationDef noRot = AddRule(reg, "CHEFZ_PR_STATE_KEEP", ChefZ_PreservationScope.NAME_STATE, 1.0);
         if (!noRot)                                     return false;
         noRot.preventsRotten = true;
 
@@ -519,28 +491,23 @@ class ChefZ_PreservationSelfTest
         if (plain.HasAnyPreventsRotten())               return false;
 
         // stopsDecay ueber einen Tag.
-        if (!mgr.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                            ChefZ_SymbolTable.INVALID, EmptyClosure(), tags))
+        if (!mgr.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags))
             return false;
 
         // 14 E7: die beiden Schalter sind GETRENNT. Ein stopsDecay-Record
         // sagt nichts ueber preventsRotten und umgekehrt.
-        if (mgr.PreventsRotten(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                               ChefZ_SymbolTable.INVALID, EmptyClosure(), tags))
+        if (mgr.PreventsRotten(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags))
             return false;
 
-        if (!mgr.PreventsRotten(Sym("CHEFZ_PR_STATE_KEEP"), ChefZ_SymbolTable.INVALID,
-                                ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()))
+        if (!mgr.PreventsRotten(Sym("CHEFZ_PR_STATE_KEEP"), ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()))
             return false;
 
-        if (mgr.StopsDecay(Sym("CHEFZ_PR_STATE_KEEP"), ChefZ_SymbolTable.INVALID,
-                           ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()))
+        if (mgr.StopsDecay(Sym("CHEFZ_PR_STATE_KEEP"), ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()))
             return false;
 
         // Ein Item, das keine der beiden Regeln trifft, ist von beiden
         // unberuehrt - das ist der Vanilla-Fall.
-        if (mgr.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                           ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()))
+        if (mgr.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()))
             return false;
 
         return true;
@@ -564,8 +531,7 @@ class ChefZ_PreservationSelfTest
         both.Insert(Sym("CHEFZ_PR_TAG_B"));
 
         // 0.02 * 0.02 = 0.0004, geklemmt auf minDecayScale.
-        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, EmptyClosure(), both), 0.01))
+        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), both), 0.01))
             return false;
 
         // Nach oben ebenso.
@@ -575,8 +541,7 @@ class ChefZ_PreservationSelfTest
 
         ChefZ_PreservationManager fast = NewManager(NewCats(), NewStates(), NewQuality());
         fast.Build(up, null, NewSettings(1.0));
-        if (!Near(Scale(fast, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, EmptyClosure(), both), 10.0))
+        if (!Near(Scale(fast, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), both), 10.0))
             return false;
 
         // Und die oeffentliche Klemmung, die der Spielerbonus benutzt.
@@ -595,8 +560,7 @@ class ChefZ_PreservationSelfTest
     {
         ChefZ_Registry<ChefZ_PreservationDef> reg = NewRegistry();
 
-        ChefZ_PreservationDef def = AddRule(reg, "CHEFZ_PR_TAG_A",
-                                            ChefZ_PreservationScope.NAME_TAG, 1.0);
+        ChefZ_PreservationDef def = AddRule(reg, "CHEFZ_PR_TAG_A", ChefZ_PreservationScope.NAME_TAG, 1.0);
         if (!def)                                       return false;
         def.onPlayerMultiplier = 2.0;
 
@@ -606,14 +570,12 @@ class ChefZ_PreservationSelfTest
         array<ChefZ_Sym> tags = new array<ChefZ_Sym>();
         tags.Insert(Sym("CHEFZ_PR_TAG_A"));
 
-        if (!Near(mgr.ComputeOnPlayerScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                  ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, ChefZ_Undefined.FLOAT), 2.0))
+        if (!Near(mgr.ComputeOnPlayerScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, ChefZ_Undefined.FLOAT), 2.0))
             return false;
 
         // Ohne Regel: neutral. Vanillas eigener Spielerbonus bleibt damit die
         // einzige Wirkung - genau das, was der Sentinel bedeutet.
-        if (!Near(mgr.ComputeOnPlayerScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                  ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags(), ChefZ_Undefined.FLOAT), 1.0))
+        if (!Near(mgr.ComputeOnPlayerScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags(), ChefZ_Undefined.FLOAT), 1.0))
             return false;
 
         return true;
@@ -766,8 +728,7 @@ class ChefZ_PreservationSelfTest
         // Der ueberlebende Record wirkt.
         array<ChefZ_Sym> tags = new array<ChefZ_Sym>();
         tags.Insert(Sym("CHEFZ_PR_TAG_A"));
-        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, EmptyClosure(), tags), 0.5))
+        if (!Near(Scale(mgr, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags), 0.5))
             return false;
 
         // Ein unbekannter scope wird schon vom Record abgewiesen und kommt nie
@@ -798,19 +759,16 @@ class ChefZ_PreservationSelfTest
         if (mgr.GetRuleCount() != 0)                    return false;
 
         // 14 §8, erste Zeile: Faktor 1.0, Verfall bitgenau Vanilla.
-        if (!Near(Scale(mgr, Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"),
-                        Sym("CHEFZ_PR_CLASS_X"), EmptyClosure(), NoTags()), 1.0))
+        if (!Near(Scale(mgr, Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"), Sym("CHEFZ_PR_CLASS_X"), EmptyClosure(), NoTags()), 1.0))
             return false;
 
         // Auch ganz ohne Registry und ohne Einstellungen (SAFE_MODE-Rueckbau).
         ChefZ_PreservationManager safe = NewManager(null, null, null);
         safe.Build(null, null, null);
         if (!safe.IsReady())                            return false;
-        if (!Near(Scale(safe, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, null, null), 1.0))
+        if (!Near(Scale(safe, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, null, null), 1.0))
             return false;
-        if (safe.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                            ChefZ_SymbolTable.INVALID))
+        if (safe.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID))
             return false;
 
         return true;
@@ -822,14 +780,11 @@ class ChefZ_PreservationSelfTest
         // KEIN Build.
 
         if (mgr.IsReady())                              return false;
-        if (!Near(Scale(mgr, Sym("CHEFZ_PR_STATE_KEEP"), ChefZ_SymbolTable.INVALID,
-                        ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()), 1.0))
+        if (!Near(Scale(mgr, Sym("CHEFZ_PR_STATE_KEEP"), ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), NoTags()), 1.0))
             return false;
-        if (mgr.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                           ChefZ_SymbolTable.INVALID))
+        if (mgr.StopsDecay(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID))
             return false;
-        if (mgr.PreventsRotten(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID,
-                               ChefZ_SymbolTable.INVALID))
+        if (mgr.PreventsRotten(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID))
             return false;
 
         return true;
@@ -878,23 +833,17 @@ class ChefZ_PreservationSelfTest
 
         for (int i = 0; i < temps.Count(); i++)
         {
-            float mul = mgr.ComputeDecayScale(
-                Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"),
-                Sym("CHEFZ_PR_CLASS_X"), closure, tags, 1.0, temps.Get(i), trace);
+            float mul = mgr.ComputeDecayScale( Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"), Sym("CHEFZ_PR_CLASS_X"), closure, tags, 1.0, temps.Get(i), trace);
             if (!Near(mul, 1.0))
                 return false;
         }
 
-        if (!Near(mgr.ComputeOnPlayerScale(Sym("CHEFZ_PR_STATE_PLAIN"),
-                  Sym("CHEFZ_PR_TIER_PLAIN"), Sym("CHEFZ_PR_CLASS_X"),
-                  closure, tags, 15.0), 1.0))
+        if (!Near(mgr.ComputeOnPlayerScale(Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"), Sym("CHEFZ_PR_CLASS_X"), closure, tags, 15.0), 1.0))
             return false;
 
-        if (mgr.StopsDecay(Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"),
-                           Sym("CHEFZ_PR_CLASS_X"), closure, tags))
+        if (mgr.StopsDecay(Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"), Sym("CHEFZ_PR_CLASS_X"), closure, tags))
             return false;
-        if (mgr.PreventsRotten(Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"),
-                               Sym("CHEFZ_PR_CLASS_X"), closure, tags))
+        if (mgr.PreventsRotten(Sym("CHEFZ_PR_STATE_PLAIN"), Sym("CHEFZ_PR_TIER_PLAIN"), Sym("CHEFZ_PR_CLASS_X"), closure, tags))
             return false;
 
         return true;

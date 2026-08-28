@@ -135,14 +135,10 @@ class ChefZ_ItemStateComponent
      */
     static void RegisterNetSync(notnull EntityAI owner)
     {
-        owner.RegisterNetSyncVariableInt("m_ChefZ_State.m_ChefZ_StateOrdinal",
-                                         0, ChefZ_SyncLimits.STATE_ORDINAL_MAX);
-        owner.RegisterNetSyncVariableInt("m_ChefZ_State.m_ChefZ_QualityOrdinal",
-                                         0, ChefZ_SyncLimits.QUALITY_ORDINAL_MAX);
-        owner.RegisterNetSyncVariableInt("m_ChefZ_State.m_ChefZ_Portions",
-                                         0, ChefZ_SyncLimits.PORTIONS_MAX);
-        owner.RegisterNetSyncVariableFloat("m_ChefZ_State.m_ChefZ_Freshness",
-                                           0.0, 1.0, 2);
+        owner.RegisterNetSyncVariableInt("m_ChefZ_State.m_ChefZ_StateOrdinal", 0, ChefZ_SyncLimits.STATE_ORDINAL_MAX);
+        owner.RegisterNetSyncVariableInt("m_ChefZ_State.m_ChefZ_QualityOrdinal", 0, ChefZ_SyncLimits.QUALITY_ORDINAL_MAX);
+        owner.RegisterNetSyncVariableInt("m_ChefZ_State.m_ChefZ_Portions", 0, ChefZ_SyncLimits.PORTIONS_MAX);
+        owner.RegisterNetSyncVariableFloat("m_ChefZ_State.m_ChefZ_Freshness", 0.0, 1.0, 2);
     }
 
     //==========================================================================
@@ -302,9 +298,7 @@ class ChefZ_ItemStateComponent
         {
             // 06 §7: clientseitiger Aufruf ist ein No-op mit ERROR. Es gibt
             // keinen RPC-Ersatzweg - der Zustand ist eine Serverentscheidung.
-            Note(ChefZ_LogLevel.ERR, "state.clientset",
-                "ChefZ_SetState wurde clientseitig gerufen und ignoriert. Der Zustand ist "
-                + "autoritativ und wird ausschliesslich serverseitig gesetzt (06 §7).");
+            Note(ChefZ_LogLevel.ERR, "state.clientset", "ChefZ_SetState wurde clientseitig gerufen und ignoriert. Der Zustand ist " + "autoritativ und wird ausschliesslich serverseitig gesetzt (06 §7).");
             return false;
         }
 
@@ -329,21 +323,14 @@ class ChefZ_ItemStateComponent
 
         if (ChefZ_SymbolTable.IsValid(current) && mgr.IsTerminal(current))
         {
-            Note(ChefZ_LogLevel.WARN, "state.terminal." + current.ToString(),
-                "Zustandswechsel abgelehnt, reason = \"terminal state\": \""
-                + ChefZ_SymbolTable.NameOrMark(current) + "\" ist als terminal deklariert. "
-                + "Ein terminaler Zustand ist das Ende einer Kette, kein Zwischenschritt.");
+            Note(ChefZ_LogLevel.WARN, "state.terminal." + current.ToString(), "Zustandswechsel abgelehnt, reason = \"terminal state\": \"" + ChefZ_SymbolTable.NameOrMark(current) + "\" ist als terminal deklariert. " + "Ein terminaler Zustand ist das Ende einer Kette, kein Zwischenschritt.");
             return false;
         }
 
         ChefZ_StateDef def = mgr.GetDef(state);
         if (!def)
         {
-            Note(ChefZ_LogLevel.ERR, "state.setunknown." + state.ToString(),
-                "ChefZ_SetState auf den unbekannten Zustand \""
-                + ChefZ_SymbolTable.NameOrMark(state) + "\". Es wird nichts gesetzt - ein Item "
-                + "mit einem Zustand, den kein Rezept und keine Anzeige kennt, waere schlimmer "
-                + "als eines ohne Zustand.");
+            Note(ChefZ_LogLevel.ERR, "state.setunknown." + state.ToString(), "ChefZ_SetState auf den unbekannten Zustand \"" + ChefZ_SymbolTable.NameOrMark(state) + "\". Es wird nichts gesetzt - ein Item " + "mit einem Zustand, den kein Rezept und keine Anzeige kennt, waere schlimmer " + "als eines ohne Zustand.");
             return false;
         }
 
@@ -369,11 +356,7 @@ class ChefZ_ItemStateComponent
         RaiseStateChanged(item, current, state, def);
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.STATE, ChefZ_LogLevel.DEBUG))
-            ChefZ_Log.Debug(ChefZ_LogChannel.STATE,
-                item.GetType() + ": Zustand " + ChefZ_SymbolTable.NameOrMark(current)
-                + " -> " + ChefZ_SymbolTable.NameOrMark(state)
-                + "  ord=" + comp.m_ChefZ_StateOrdinal.ToString()
-                + "  vanillaTransition=" + applyVanillaTransition.ToString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.STATE, item.GetType() + ": Zustand " + ChefZ_SymbolTable.NameOrMark(current) + " -> " + ChefZ_SymbolTable.NameOrMark(state) + "  ord=" + comp.m_ChefZ_StateOrdinal.ToString() + "  vanillaTransition=" + applyVanillaTransition.ToString());
 
         return true;
     }
@@ -397,8 +380,7 @@ class ChefZ_ItemStateComponent
      * ein Item, das von RAW nach RAW_CHOPPED und zurueck geht, waere sonst
      * eine XP-Schleife.
      */
-    private static void RaiseStateChanged(notnull ItemBase item, ChefZ_Sym before,
-                                          ChefZ_Sym after, notnull ChefZ_StateDef def)
+    private static void RaiseStateChanged(notnull ItemBase item, ChefZ_Sym before, ChefZ_Sym after, notnull ChefZ_StateDef def)
     {
         ChefZ_EventBus bus = ChefZ_EventBus.Get();
 
@@ -499,8 +481,7 @@ class ChefZ_ItemStateComponent
      * Fuer ChefZ_Item_Base gibt es keine FoodStage und damit keine Projektion.
      * Das ist kein Fehler - Mehl und Salz haben keine Garstufe.
      */
-    private void ProjectOnto(notnull ItemBase item, notnull ChefZ_StateDef def,
-                             bool applyVanillaTransition)
+    private void ProjectOnto(notnull ItemBase item, notnull ChefZ_StateDef def, bool applyVanillaTransition)
     {
         if (!def.HasProjection())
             return;
@@ -514,11 +495,7 @@ class ChefZ_ItemStateComponent
         {
             // 06 §7: WARN einmal je Klasse, weil dann Visuals fehlen. Die
             // ChefZ-Variable ist trotzdem gesetzt - kein Nullzugriff.
-            Note(ChefZ_LogLevel.WARN, "state.nofoodstage." + item.GetType(),
-                "\"" + item.GetType() + "\" traegt einen Zustand mit Projektion auf \""
-                + ChefZ_VanillaStage.Name(def.projectedStage) + "\", hat aber keine FoodStage. "
-                + "Der ChefZ-Zustand wirkt, die Optik nicht. Abhilfe: der Klasse in CfgVehicles "
-                + "einen Food-FoodStages-Block geben (01 V4) oder die Projektion entfernen.");
+            Note(ChefZ_LogLevel.WARN, "state.nofoodstage." + item.GetType(), "\"" + item.GetType() + "\" traegt einen Zustand mit Projektion auf \"" + ChefZ_VanillaStage.Name(def.projectedStage) + "\", hat aber keine FoodStage. " + "Der ChefZ-Zustand wirkt, die Optik nicht. Abhilfe: der Klasse in CfgVehicles " + "einen Food-FoodStages-Block geben (01 V4) oder die Projektion entfernen.");
             return;
         }
 
@@ -574,9 +551,7 @@ class ChefZ_ItemStateComponent
             item.SetSynchDirty();
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.STATE, ChefZ_LogLevel.DEBUG))
-            ChefZ_Log.Debug(ChefZ_LogChannel.STATE,
-                item.GetType() + ": Vanilla hat " + ChefZ_VanillaStage.Name(stageNew)
-                + " gesetzt - das ChefZ-Overlay wurde geloescht (06 E5).");
+            ChefZ_Log.Debug(ChefZ_LogChannel.STATE, item.GetType() + ": Vanilla hat " + ChefZ_VanillaStage.Name(stageNew) + " gesetzt - das ChefZ-Overlay wurde geloescht (06 E5).");
     }
 
     //--------------------------------------------------------------------------
@@ -591,19 +566,14 @@ class ChefZ_ItemStateComponent
         ChefZ_IdentityMap ids = QualityIdentities();
         if (!ids)
         {
-            Note(ChefZ_LogLevel.WARN, "quality.noidentities",
-                "Es gibt keine Ordinaltabelle fuer Qualitaetsstufen - die Stufe wird nicht "
-                + "gesetzt. Ursache ist immer eine QualityTier-Registry ohne Rang-1-Eintraege "
-                + "(03 §4).");
+            Note(ChefZ_LogLevel.WARN, "quality.noidentities", "Es gibt keine Ordinaltabelle fuer Qualitaetsstufen - die Stufe wird nicht " + "gesetzt. Ursache ist immer eine QualityTier-Registry ohne Rang-1-Eintraege " + "(03 §4).");
             return false;
         }
 
         int hash = ids.ToPersistHash(tier);
         if (hash == 0 && ChefZ_SymbolTable.IsValid(tier))
         {
-            Note(ChefZ_LogLevel.WARN, "quality.unknown." + tier.ToString(),
-                "Unbekannte Qualitaetsstufe \"" + ChefZ_SymbolTable.NameOrMark(tier)
-                + "\" - sie wird nicht gesetzt.");
+            Note(ChefZ_LogLevel.WARN, "quality.unknown." + tier.ToString(), "Unbekannte Qualitaetsstufe \"" + ChefZ_SymbolTable.NameOrMark(tier) + "\" - sie wird nicht gesetzt.");
             return false;
         }
 
@@ -879,11 +849,7 @@ class ChefZ_ItemStateComponent
             // 06 §7: Kontext NICHT weiterlesen. MAGIC richtet den Strom nicht
             // aus - es verhindert nur, dass ChefZ fremde Bytes als eigene
             // deutet (V-B §2 Folge 3).
-            Note(ChefZ_LogLevel.WARN, "state.magic." + item.GetType(),
-                "\"" + item.GetType() + "\": im Spielstand steht an der Stelle des ChefZ-Blocks "
-                + "kein ChefZ-Block. Der Zustand faellt auf die Vorgabe der Klasse zurueck, das "
-                + "Item bleibt vollstaendig spielbar. Ursache ist fast immer ein anderer Mod, "
-                + "der von dieser Klasse ableitet und vor ChefZ schreibt.");
+            Note(ChefZ_LogLevel.WARN, "state.magic." + item.GetType(), "\"" + item.GetType() + "\": im Spielstand steht an der Stelle des ChefZ-Blocks " + "kein ChefZ-Block. Der Zustand faellt auf die Vorgabe der Klasse zurueck, das " + "Item bleibt vollstaendig spielbar. Ursache ist fast immer ein anderer Mod, " + "der von dieser Klasse ableitet und vor ChefZ schreibt.");
             return true;
         }
 
@@ -896,11 +862,7 @@ class ChefZ_ItemStateComponent
             // 06 §7: Rest ueberspringen, Defaults, WARN. Ein neuerer Block
             // kann Felder enthalten, die dieser Core nicht kennt - ihn zu
             // raten waere schlimmer, als ihn liegen zu lassen.
-            Note(ChefZ_LogLevel.WARN, "state.version." + blockVersion.ToString(),
-                "Der gespeicherte ChefZ-Block hat Version " + blockVersion.ToString()
-                + ", dieser Core kennt " + VERSION.ToString() + ". Der Rest des Blocks wird "
-                + "uebersprungen und die Vorgaben gelten. Das passiert nach einem Downgrade "
-                + "des Mods.");
+            Note(ChefZ_LogLevel.WARN, "state.version." + blockVersion.ToString(), "Der gespeicherte ChefZ-Block hat Version " + blockVersion.ToString() + ", dieser Core kennt " + VERSION.ToString() + ". Der Rest des Blocks wird " + "uebersprungen und die Vorgaben gelten. Das passiert nach einem Downgrade " + "des Mods.");
             return true;
         }
 
@@ -931,10 +893,7 @@ class ChefZ_ItemStateComponent
     //! Ein abgebrochener Lesevorgang kostet den Zustand, nicht das Item.
     private static bool ReadFailed(notnull ItemBase item, string field)
     {
-        Note(ChefZ_LogLevel.ERR, "state.readfail." + field,
-            "Der ChefZ-Block von \"" + item.GetType() + "\" bricht beim Feld \"" + field
-            + "\" ab. Der Block gilt als leer, das Item bleibt erhalten. Das ist ein "
-            + "Formatfehler im Spielstand, kein Datenfehler in der Konfiguration.");
+        Note(ChefZ_LogLevel.ERR, "state.readfail." + field, "Der ChefZ-Block von \"" + item.GetType() + "\" bricht beim Feld \"" + field + "\" ab. Der Block gilt als leer, das Item bleibt erhalten. Das ist ein " + "Formatfehler im Spielstand, kein Datenfehler in der Konfiguration.");
         return true;
     }
 
@@ -967,12 +926,7 @@ class ChefZ_ItemStateComponent
                 // Logflut nach einem Content-Rueckbau. Das Item faellt auf den
                 // defaultState seiner Klasse zurueck (Schritt 2 der
                 // Projektionsregel) und bleibt spielbar.
-                Note(ChefZ_LogLevel.WARN, "state.lostpersist." + item.GetType(),
-                    "\"" + item.GetType() + "\": der gespeicherte Zustand (Hash "
-                    + comp.m_ChefZ_StatePersist.ToString() + ") ist keinem geladenen Zustand "
-                    + "mehr zuzuordnen. Das Item faellt auf die Vorgabe seiner Klasse zurueck. "
-                    + "Ursache: der Zustand wurde aus dem Content entfernt oder umbenannt. "
-                    + "Diese Meldung erscheint je Klasse genau einmal.");
+                Note(ChefZ_LogLevel.WARN, "state.lostpersist." + item.GetType(), "\"" + item.GetType() + "\": der gespeicherte Zustand (Hash " + comp.m_ChefZ_StatePersist.ToString() + ") ist keinem geladenen Zustand " + "mehr zuzuordnen. Das Item faellt auf die Vorgabe seiner Klasse zurueck. " + "Ursache: der Zustand wurde aus dem Content entfernt oder umbenannt. " + "Diese Meldung erscheint je Klasse genau einmal.");
 
                 comp.m_ChefZ_StatePersist = NO_HASH;
                 comp.m_ChefZ_StateOrdinal = NO_ORDINAL;
@@ -989,10 +943,7 @@ class ChefZ_ItemStateComponent
             }
             else
             {
-                Note(ChefZ_LogLevel.WARN, "quality.lostpersist." + item.GetType(),
-                    "\"" + item.GetType() + "\": die gespeicherte Qualitaetsstufe ist keiner "
-                    + "geladenen Stufe mehr zuzuordnen. Sie wird verworfen; das Item bleibt "
-                    + "spielbar. Diese Meldung erscheint je Klasse genau einmal.");
+                Note(ChefZ_LogLevel.WARN, "quality.lostpersist." + item.GetType(), "\"" + item.GetType() + "\": die gespeicherte Qualitaetsstufe ist keiner " + "geladenen Stufe mehr zuzuordnen. Sie wird verworfen; das Item bleibt " + "spielbar. Diese Meldung erscheint je Klasse genau einmal.");
                 comp.m_ChefZ_QualityPersist = NO_HASH;
                 comp.m_ChefZ_QualityOrdinal = NO_ORDINAL;
             }

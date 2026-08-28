@@ -81,8 +81,7 @@ class ChefZ_CookingHook
      *
      * Kein Rueckgabewert. Siehe Kopf.
      */
-    static void AfterVanillaCook(ItemBase device, float timeCoef, float updateTime,
-                                 Param2<CookingMethodType, float> method)
+    static void AfterVanillaCook(ItemBase device, float timeCoef, float updateTime, Param2<CookingMethodType, float> method)
     {
         int methodType = CookingMethodType.NONE;
         if (method)
@@ -227,22 +226,15 @@ class ChefZ_CookingHook
     {
         // Die Zuordnung muss auf beiden Wegen dasselbe ergeben - sonst matcht
         // ein Rezept mit "methods": ["BOILING"] am siedenden Topf nicht.
-        if (MapVanillaMethod(CookingMethodType.BOILING)
-            != ChefZ_SymbolTable.Intern(METHOD_BOILING))    return false;
-        if (MapVanillaMethod(CookingMethodType.BAKING)
-            != ChefZ_SymbolTable.Intern(METHOD_BAKING))     return false;
-        if (MapVanillaMethod(CookingMethodType.DRYING)
-            != ChefZ_SymbolTable.Intern(METHOD_DRYING))     return false;
-        if (MapVanillaMethod(CookingMethodType.TIME)
-            != ChefZ_SymbolTable.Intern(METHOD_TIME))       return false;
-        if (MapVanillaMethod(CookingMethodType.NONE)
-            != ChefZ_SymbolTable.Intern(METHOD_NONE))       return false;
+        if (MapVanillaMethod(CookingMethodType.BOILING) != ChefZ_SymbolTable.Intern(METHOD_BOILING))    return false;
+        if (MapVanillaMethod(CookingMethodType.BAKING) != ChefZ_SymbolTable.Intern(METHOD_BAKING))     return false;
+        if (MapVanillaMethod(CookingMethodType.DRYING) != ChefZ_SymbolTable.Intern(METHOD_DRYING))     return false;
+        if (MapVanillaMethod(CookingMethodType.TIME) != ChefZ_SymbolTable.Intern(METHOD_TIME))       return false;
+        if (MapVanillaMethod(CookingMethodType.NONE) != ChefZ_SymbolTable.Intern(METHOD_NONE))       return false;
 
         // Ausserhalb des Wertebereichs -> NONE, keine Ausnahme.
-        if (MapVanillaMethod(-1)
-            != ChefZ_SymbolTable.Intern(METHOD_NONE))       return false;
-        if (MapVanillaMethod(9999)
-            != ChefZ_SymbolTable.Intern(METHOD_NONE))       return false;
+        if (MapVanillaMethod(-1) != ChefZ_SymbolTable.Intern(METHOD_NONE))       return false;
+        if (MapVanillaMethod(9999) != ChefZ_SymbolTable.Intern(METHOD_NONE))       return false;
 
         return true;
     }

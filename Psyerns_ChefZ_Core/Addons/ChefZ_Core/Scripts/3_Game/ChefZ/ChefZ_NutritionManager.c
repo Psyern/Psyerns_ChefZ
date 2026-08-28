@@ -178,9 +178,7 @@ class ChefZ_NutritionManager
      * KEIN Stueck weniger aussagekraeftig fuer den einen Befund, auf den es
      * ankommt: die fehlende Registrierung beim Magen.
      */
-    void Build(ChefZ_Registry<ChefZ_NutritionDef> defs,
-               ChefZ_LoadReport report,
-               ChefZ_CoreSettingsDef settings = null)
+    void Build(ChefZ_Registry<ChefZ_NutritionDef> defs, ChefZ_LoadReport report, ChefZ_CoreSettingsDef settings = null)
     {
         ResetState();
         ApplySettings(settings);
@@ -192,10 +190,7 @@ class ChefZ_NutritionManager
             // Die Sollrechnung faellt dann fuer JEDE Zutat auf CfgVehicles
             // zurueck, und das ist die genauere Quelle, nicht die schlechtere.
             if (report)
-                report.AddInfo("Keine Naehrwert-Records definiert - die Sollrechnung des "
-                    + "Startaudits liest ausschliesslich CfgVehicles (13 E4). Das Kochen und "
-                    + "das Essen sind davon unberuehrt: der Core wendet Naehrwerte NIE an "
-                    + "(13 E1).");
+                report.AddInfo("Keine Naehrwert-Records definiert - die Sollrechnung des " + "Startaudits liest ausschliesslich CfgVehicles (13 E4). Das Kochen und " + "das Essen sind davon unberuehrt: der Core wendet Naehrwerte NIE an " + "(13 E1).");
             m_Ready = true;
             return;
         }
@@ -219,8 +214,7 @@ class ChefZ_NutritionManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Naehrwertangaben: " + GetRecordCount().ToString() + " geladen" + " (Klasse " + m_ByClass.Count().ToString() + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag " + m_ByTag.Count().ToString() + ")" + ", Audit " + AuditStateName()
-                + ", Toleranz " + m_TolerancePct.ToString() + "%.");
+            report.AddInfo("Naehrwertangaben: " + GetRecordCount().ToString() + " geladen" + " (Klasse " + m_ByClass.Count().ToString() + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag " + m_ByTag.Count().ToString() + ")" + ", Audit " + AuditStateName() + ", Toleranz " + m_TolerancePct.ToString() + "%.");
 
         LogIfDebug();
     }
@@ -290,8 +284,7 @@ class ChefZ_NutritionManager
     {
         if (!ChefZ_SymbolTable.IsValid(def.sym))
         {
-            Report(report, true, def, "Der Record hat kein gueltiges Symbol - er wurde nie "
-                + "kompiliert. Das ist ein Fehler im Ladeweg, nicht in den Daten.");
+            Report(report, true, def, "Der Record hat kein gueltiges Symbol - er wurde nie " + "kompiliert. Das ist ein Fehler im Ladeweg, nicht in den Daten.");
             return false;
         }
 
@@ -305,9 +298,7 @@ class ChefZ_NutritionManager
         // Unerreichbar: ChefZ_NutritionDef.Validate weist einen unbekannten
         // scope bereits ab. Die Zeile steht trotzdem, weil ein spaeter
         // ergaenzter scope sonst still in gar keine Tabelle fiele.
-        Report(report, true, def, "scope \"" + def.scope + "\" ist dem Nutrition Manager "
-            + "unbekannt - der Record wirkt nicht. Gueltig: "
-            + ChefZ_NutritionScope.ValidNames() + ".");
+        Report(report, true, def, "scope \"" + def.scope + "\" ist dem Nutrition Manager " + "unbekannt - der Record wirkt nicht. Gueltig: " + ChefZ_NutritionScope.ValidNames() + ".");
         return false;
     }
 
@@ -315,9 +306,7 @@ class ChefZ_NutritionManager
     {
         if (m_ByClass.Contains(def.sym))
         {
-            Report(report, true, def, "Zu dieser Klasse gibt es bereits eine Naehrwertangabe - "
-                + "der zweite Record wird abgewiesen. Ein Overlay soll den ersten PATCHEN "
-                + "(gleiche id), nicht danebenstehen (02 E3).");
+            Report(report, true, def, "Zu dieser Klasse gibt es bereits eine Naehrwertangabe - " + "der zweite Record wird abgewiesen. Ein Overlay soll den ersten PATCHEN " + "(gleiche id), nicht danebenstehen (02 E3).");
             return false;
         }
 
@@ -327,10 +316,7 @@ class ChefZ_NutritionManager
         // Record waere beim naechsten Serverstart mit dem Modul wieder da.
         if (g_Game && !ChefZ_VanillaNutrition.ClassExists(def.id))
         {
-            Report(report, false, def, "Die Klasse \"" + def.id + "\" steht nicht in "
-                + "CfgVehicles. Der Record bleibt geladen und wirkt, sobald es sie gibt - "
-                + "bis dahin taucht er in keiner Sollrechnung auf. Fehlt ein Content-Modul, "
-                + "oder ist der Name falsch geschrieben?");
+            Report(report, false, def, "Die Klasse \"" + def.id + "\" steht nicht in " + "CfgVehicles. Der Record bleibt geladen und wirkt, sobald es sie gibt - " + "bis dahin taucht er in keiner Sollrechnung auf. Fehlt ein Content-Modul, " + "oder ist der Name falsch geschrieben?");
         }
 
         m_ByClass.Set(def.sym, def);
@@ -342,18 +328,14 @@ class ChefZ_NutritionManager
         ChefZ_CategoryManager cats = Cats();
         if (!cats || !cats.IsReady())
         {
-            Report(report, true, def, "scope \"category\", aber der Kategoriebaum ist nicht "
-                + "gebaut - der Record wird abgewiesen. Das ist ein Fehler in der "
-                + "Baureihenfolge, nicht in den Daten.");
+            Report(report, true, def, "scope \"category\", aber der Kategoriebaum ist nicht " + "gebaut - der Record wird abgewiesen. Das ist ein Fehler in der " + "Baureihenfolge, nicht in den Daten.");
             return false;
         }
 
         int bit = cats.GetBitIndex(def.sym);
         if (bit < 0)
         {
-            Report(report, true, def, "scope \"category\", aber \"" + def.id + "\" ist keine "
-                + "bekannte Kategorie - der Record wird abgewiesen. Er wuerde sonst auf "
-                + "nichts passen und dabei aussehen wie eine gepflegte Angabe.");
+            Report(report, true, def, "scope \"category\", aber \"" + def.id + "\" ist keine " + "bekannte Kategorie - der Record wird abgewiesen. Er wuerde sonst auf " + "nichts passen und dabei aussehen wie eine gepflegte Angabe.");
             return false;
         }
 
@@ -368,16 +350,13 @@ class ChefZ_NutritionManager
         ChefZ_CategoryManager cats = Cats();
         if (cats && cats.IsReady() && !cats.TagExists(def.sym))
         {
-            Report(report, true, def, "scope \"tag\", aber \"" + def.id + "\" ist kein "
-                + "bekannter Tag - der Record wird abgewiesen. Er wuerde sonst auf nichts "
-                + "passen und dabei aussehen wie eine gepflegte Angabe.");
+            Report(report, true, def, "scope \"tag\", aber \"" + def.id + "\" ist kein " + "bekannter Tag - der Record wird abgewiesen. Er wuerde sonst auf nichts " + "passen und dabei aussehen wie eine gepflegte Angabe.");
             return false;
         }
 
         if (m_ByTag.Contains(def.sym))
         {
-            Report(report, true, def, "Zu diesem Tag gibt es bereits eine Naehrwertangabe - "
-                + "der zweite Record wird abgewiesen (02 E3).");
+            Report(report, true, def, "Zu diesem Tag gibt es bereits eine Naehrwertangabe - " + "der zweite Record wird abgewiesen (02 E3).");
             return false;
         }
 
@@ -559,11 +538,7 @@ class ChefZ_NutritionManager
      * @param trace Rechenweg, Zeile fuer Zeile. Darf null sein; wird sonst
      *              GELEERT und neu gefuellt. Nur fuer Diagnose (13 §7).
      */
-    void ComputeExpected(notnull ChefZ_CompiledRecipe recipe,
-                         notnull ChefZ_MatchResult match,
-                         notnull ChefZ_FactSnapshot snapshot,
-                         out ChefZ_NutritionVector outExpected,
-                         out array<string> trace)
+    void ComputeExpected(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult match, notnull ChefZ_FactSnapshot snapshot, out ChefZ_NutritionVector outExpected, out array<string> trace)
     {
         if (!outExpected)
             outExpected = new ChefZ_NutritionVector();
@@ -586,14 +561,11 @@ class ChefZ_NutritionManager
                 // aus derselben Auswertung); es waere ein Programmfehler und
                 // keine Datenlage. Er wird deshalb notiert und uebersprungen -
                 // eine halbe Sollrechnung ist immer noch eine Diagnose.
-                Trace(trace, "Handle #" + plan.handle.ToString()
-                    + " hat keine Fakten - uebersprungen");
+                Trace(trace, "Handle #" + plan.handle.ToString() + " hat keine Fakten - uebersprungen");
                 continue;
             }
 
-            AddIngredient(facts.classSym, ChefZ_NutritionScope.CLASS,
-                          facts.vanillaFoodStage, FactorFor(plan, facts),
-                          outExpected, trace);
+            AddIngredient(facts.classSym, ChefZ_NutritionScope.CLASS, facts.vanillaFoodStage, FactorFor(plan, facts), outExpected, trace);
         }
 
         ApplyModifier(recipe, outExpected, trace);
@@ -651,8 +623,7 @@ class ChefZ_NutritionManager
      * @return false, wenn die Zutat keine Daten hatte (der Aufrufer macht
      *         daraus im Audit einen ZERO_INGREDIENT-Befund).
      */
-    private bool AddIngredient(ChefZ_Sym sym, int scopeKind, int stage, float factor,
-                               notnull ChefZ_NutritionVector sum, array<string> trace)
+    private bool AddIngredient(ChefZ_Sym sym, int scopeKind, int stage, float factor, notnull ChefZ_NutritionVector sum, array<string> trace)
     {
         string name = ChefZ_SymbolTable.NameOrMark(sym);
 
@@ -670,9 +641,7 @@ class ChefZ_NutritionManager
         }
 
         sum.AddScaled(baseVec, factor);
-        Trace(trace, name + " x" + factor.ToString()
-            + ": energie " + baseVec.energy.ToString()
-            + " -> summe " + sum.energy.ToString());
+        Trace(trace, name + " x" + factor.ToString() + ": energie " + baseVec.energy.ToString() + " -> summe " + sum.energy.ToString());
         return true;
     }
 
@@ -690,8 +659,7 @@ class ChefZ_NutritionManager
      * nicht, und das Rezept saehe aus, als haetten seine Zutaten keine
      * Naehrwerte.
      */
-    private bool ReadBaseForScope(ChefZ_Sym sym, int scopeKind, int stage,
-                                  out ChefZ_NutritionVector outVec)
+    private bool ReadBaseForScope(ChefZ_Sym sym, int scopeKind, int stage, out ChefZ_NutritionVector outVec)
     {
         if (scopeKind == ChefZ_NutritionScope.CLASS)
             return ReadBase(sym, stage, outVec);
@@ -740,8 +708,7 @@ class ChefZ_NutritionManager
      *
      * @return true, wenn der Modifikator geklammert werden musste.
      */
-    private bool ApplyModifier(notnull ChefZ_CompiledRecipe recipe,
-                               notnull ChefZ_NutritionVector sum, array<string> trace)
+    private bool ApplyModifier(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_NutritionVector sum, array<string> trace)
     {
         float modifier = recipe.nutritionModifier;
         bool clamped   = false;
@@ -759,8 +726,7 @@ class ChefZ_NutritionManager
         if (modifier != 1.0)
         {
             sum.Scale(modifier);
-            Trace(trace, "x nutritionModifier " + modifier.ToString()
-                + " -> energie " + sum.energy.ToString());
+            Trace(trace, "x nutritionModifier " + modifier.ToString() + " -> energie " + sum.energy.ToString());
         }
 
         return clamped;
@@ -792,8 +758,7 @@ class ChefZ_NutritionManager
 
         if (sum.ClampTo(m_Caps, m_Floors))
         {
-            Trace(trace, "Sollwert in die Sondengrenze " + m_ExpectedCap.ToString()
-                + " geklemmt - siehe " + recipeId);
+            Trace(trace, "Sollwert in die Sondengrenze " + m_ExpectedCap.ToString() + " geklemmt - siehe " + recipeId);
             return FINISH_CLAMPED;
         }
 
@@ -841,17 +806,14 @@ class ChefZ_NutritionManager
             // Betreiber soll im Log sehen koennen, dass der Audit NICHT
             // gelaufen ist - sonst hielte er ein leeres Ergebnis fuer ein
             // gutes.
-            Banner("Naehrwertaudit ist abgeschaltet (enableNutritionAudit = false). "
-                + "Ein Gericht ohne \"class Nutrition\" faellt damit erst dem Spieler auf, "
-                + "der nicht satt wird (01 V7).");
+            Banner("Naehrwertaudit ist abgeschaltet (enableNutritionAudit = false). " + "Ein Gericht ohne \"class Nutrition\" faellt damit erst dem Spieler auf, " + "der nicht satt wird (01 V7).");
             return;
         }
 
         ChefZ_RecipeEngine engine = Engine();
         if (!engine || !engine.IsReady())
         {
-            Banner("Naehrwertaudit uebersprungen: die Rezept-Engine ist nicht gebaut. "
-                + "Kochen und Essen sind davon unberuehrt.");
+            Banner("Naehrwertaudit uebersprungen: die Rezept-Engine ist nicht gebaut. " + "Kochen und Essen sind davon unberuehrt.");
             return;
         }
 
@@ -874,9 +836,7 @@ class ChefZ_NutritionManager
     /**
      * Ein Rezept: Sollwert bilden, Ergebnisklassen pruefen, vergleichen.
      */
-    private void AuditRecipe(notnull ChefZ_CompiledRecipe recipe,
-                             notnull array<string> trace,
-                             notnull array<ChefZ_NutritionFinding> outFindings)
+    private void AuditRecipe(notnull ChefZ_CompiledRecipe recipe, notnull array<string> trace, notnull array<ChefZ_NutritionFinding> outFindings)
     {
         ChefZ_NutritionVector expected = new ChefZ_NutritionVector();
         trace.Clear();
@@ -888,32 +848,21 @@ class ChefZ_NutritionManager
         for (int g = 0; g < gaps.Count(); g++)
         {
             ChefZ_NutritionFinding zero = new ChefZ_NutritionFinding();
-            zero.Init(ChefZ_NutritionFindingKind.ZERO_INGREDIENT, recipe.id, gaps.Get(g),
-                "Zutat \"" + gaps.Get(g) + "\" hat keine Naehrwertdaten und zaehlt mit 0 in "
-                + "die Sollrechnung. Das ist kein Laufzeitfehler - die Sollzahl dieses "
-                + "Rezepts ist dadurch aber zu niedrig und als Balancinghinweis nur "
-                + "eingeschraenkt brauchbar.");
+            zero.Init(ChefZ_NutritionFindingKind.ZERO_INGREDIENT, recipe.id, gaps.Get(g), "Zutat \"" + gaps.Get(g) + "\" hat keine Naehrwertdaten und zaehlt mit 0 in " + "die Sollrechnung. Das ist kein Laufzeitfehler - die Sollzahl dieses " + "Rezepts ist dadurch aber zu niedrig und als Balancinghinweis nur " + "eingeschraenkt brauchbar.");
             Emit(zero, outFindings);
         }
 
         if (ApplyModifierWasClamped(recipe))
         {
             ChefZ_NutritionFinding bad = new ChefZ_NutritionFinding();
-            bad.Init(ChefZ_NutritionFindingKind.BAD_MODIFIER, recipe.id, "",
-                "nutritionModifier ist " + recipe.nutritionModifier.ToString()
-                + " und damit nicht positiv. Fuer die Sollrechnung gilt 1.0. Ein Wert von 0 "
-                + "hiesse \"das Gericht hat keinen Naehrwert\", und das schreibt niemand "
-                + "absichtlich.");
+            bad.Init(ChefZ_NutritionFindingKind.BAD_MODIFIER, recipe.id, "", "nutritionModifier ist " + recipe.nutritionModifier.ToString() + " und damit nicht positiv. Fuer die Sollrechnung gilt 1.0. Ein Wert von 0 " + "hiesse \"das Gericht hat keinen Naehrwert\", und das schreibt niemand " + "absichtlich.");
             Emit(bad, outFindings);
         }
 
         if (status == FINISH_BROKEN)
         {
             ChefZ_NutritionFinding broken = new ChefZ_NutritionFinding();
-            broken.Init(ChefZ_NutritionFindingKind.NOT_COMPUTABLE, recipe.id, "",
-                "Die Sollrechnung ist nicht berechenbar (Ueberlauf oder NaN). Es wird "
-                + "bewusst KEINE Zahl gemeldet - eine Fantasiezahl im Startlog waere "
-                + "schlimmer als keine.");
+            broken.Init(ChefZ_NutritionFindingKind.NOT_COMPUTABLE, recipe.id, "", "Die Sollrechnung ist nicht berechenbar (Ueberlauf oder NaN). Es wird " + "bewusst KEINE Zahl gemeldet - eine Fantasiezahl im Startlog waere " + "schlimmer als keine.");
             Emit(broken, outFindings);
 
             // KEIN return. Die Pruefung der Ergebnisklassen laeuft weiter, und
@@ -934,11 +883,7 @@ class ChefZ_NutritionManager
             // Balancinghinweis fuer den Reviewer - und ein Hinweis darauf,
             // dass die Sollrechnung dieses Rezepts mit Vorsicht zu lesen ist.
             ChefZ_NutritionFinding cl = new ChefZ_NutritionFinding();
-            cl.Init(ChefZ_NutritionFindingKind.CLAMPED, recipe.id, "",
-                "Der Sollwert lief in die Sondengrenze (" + Rounded(m_ExpectedCap)
-                + ") und wurde geklemmt. Das ist KEIN Balancingdeckel (13 E6) - die "
-                + "tatsaechlichen Werte in CfgVehicles sind unberuehrt. Der Sollwert "
-                + "dieses Rezepts ist als Vergleichszahl nur eingeschraenkt brauchbar.");
+            cl.Init(ChefZ_NutritionFindingKind.CLAMPED, recipe.id, "", "Der Sollwert lief in die Sondengrenze (" + Rounded(m_ExpectedCap) + ") und wurde geklemmt. Das ist KEIN Balancingdeckel (13 E6) - die " + "tatsaechlichen Werte in CfgVehicles sind unberuehrt. Der Sollwert " + "dieses Rezepts ist als Vergleichszahl nur eingeschraenkt brauchbar.");
             cl.expectedEnergy = expected.energy;
             Emit(cl, outFindings);
         }
@@ -976,9 +921,7 @@ class ChefZ_NutritionManager
         }
     }
 
-    private void AuditOutputClass(notnull ChefZ_CompiledRecipe recipe, string cls, int stage,
-                                  notnull ChefZ_NutritionVector expected,
-                                  notnull array<ChefZ_NutritionFinding> outFindings)
+    private void AuditOutputClass(notnull ChefZ_CompiledRecipe recipe, string cls, int stage, notnull ChefZ_NutritionVector expected, notnull array<ChefZ_NutritionFinding> outFindings)
     {
         if (!CheckStomachRegistration(recipe.id, cls, outFindings))
             return;
@@ -1003,9 +946,7 @@ class ChefZ_NutritionManager
             return;
 
         ChefZ_NutritionFinding f = new ChefZ_NutritionFinding();
-        f.Init(ChefZ_NutritionFindingKind.DEVIATION, recipe.id, cls,
-            "erwartet " + Rounded(expected.energy) + " energy aus den Zutaten, " + "CfgVehicles sagt " + Rounded(actual) + " (" + Signed(deviation) + "%). "
-            + "KEINE Korrektur - der Core aendert nie einen Balancingwert (13 E1).");
+        f.Init(ChefZ_NutritionFindingKind.DEVIATION, recipe.id, cls, "erwartet " + Rounded(expected.energy) + " energy aus den Zutaten, " + "CfgVehicles sagt " + Rounded(actual) + " (" + Signed(deviation) + "%). " + "KEINE Korrektur - der Core aendert nie einen Balancingwert (13 E1).");
         f.expectedEnergy = expected.energy;
         f.actualEnergy   = actual;
         f.deviationPct   = deviation;
@@ -1028,8 +969,7 @@ class ChefZ_NutritionManager
      * @return true, wenn die Klasse als Nahrung taugt (oder gar keine sein
      *         will). false heisst: ein Befund steht in der Liste.
      */
-    private bool CheckStomachRegistration(string recipeId, string cls,
-                                          notnull array<ChefZ_NutritionFinding> outFindings)
+    private bool CheckStomachRegistration(string recipeId, string cls, notnull array<ChefZ_NutritionFinding> outFindings)
     {
         if (!g_Game)
             return false;
@@ -1051,11 +991,7 @@ class ChefZ_NutritionManager
         }
 
         ChefZ_NutritionFinding f = new ChefZ_NutritionFinding();
-        f.Init(kind, recipeId, cls,
-            "Ergebnisklasse \"" + cls + "\" " + what
-            + " -> PlayerStomach.InitData registriert sie nicht, AddToStomach bricht ohne "
-            + "Meldung ab. Das Gericht wird gegessen, verschwindet und SAETTIGT NICHT "
-            + "(01 V7). Das Rezept wird beim Build abgewiesen (08 §8).");
+        f.Init(kind, recipeId, cls, "Ergebnisklasse \"" + cls + "\" " + what + " -> PlayerStomach.InitData registriert sie nicht, AddToStomach bricht ohne " + "Meldung ab. Das Gericht wird gegessen, verschwindet und SAETTIGT NICHT " + "(01 V7). Das Rezept wird beim Build abgewiesen (08 §8).");
         Emit(f, outFindings);
         return false;
     }
@@ -1078,10 +1014,7 @@ class ChefZ_NutritionManager
      *
      * @param outGaps Namen der Zutaten ohne Daten, fuer ZERO_INGREDIENT.
      */
-    private int BuildTypicalExpected(notnull ChefZ_CompiledRecipe recipe,
-                                     notnull ChefZ_NutritionVector outExpected,
-                                     notnull array<string> trace,
-                                     notnull array<string> outGaps)
+    private int BuildTypicalExpected(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_NutritionVector outExpected, notnull array<string> trace, notnull array<string> outGaps)
     {
         outExpected.Reset();
 
@@ -1121,8 +1054,7 @@ class ChefZ_NutritionManager
             }
 
             float factor = TypicalFactor(slot, rep, scopeKind);
-            if (!AddIngredient(rep, scopeKind, ChefZ_VanillaStage.RAW, factor,
-                               outExpected, trace))
+            if (!AddIngredient(rep, scopeKind, ChefZ_VanillaStage.RAW, factor, outExpected, trace))
             {
                 string name = ChefZ_SymbolTable.NameOrMark(rep);
                 if (outGaps.Find(name) < 0)
@@ -1235,8 +1167,7 @@ class ChefZ_NutritionManager
     // Befunde ausgeben (13 §5, Beispielblock)
     //==========================================================================
 
-    private void Emit(notnull ChefZ_NutritionFinding f,
-                      notnull array<ChefZ_NutritionFinding> outFindings)
+    private void Emit(notnull ChefZ_NutritionFinding f, notnull array<ChefZ_NutritionFinding> outFindings)
     {
         outFindings.Insert(f);
         m_LastFindings.Insert(f);
@@ -1259,14 +1190,11 @@ class ChefZ_NutritionManager
 
         if (findings.Count() == 0)
         {
-            Banner("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString()
-                + " Rezepte: keine Befunde.");
+            Banner("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString() + " Rezepte: keine Befunde.");
             return;
         }
 
-        Banner("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString()
-            + " Rezepte, " + findings.Count().ToString() + " Befunde ("
-            + m_LastErrorCount.ToString() + " davon FEHLER).");
+        Banner("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString() + " Rezepte, " + findings.Count().ToString() + " Befunde (" + m_LastErrorCount.ToString() + " davon FEHLER).");
 
         int shown = 0;
         for (int i = 0; i < findings.Count(); i++)
@@ -1281,16 +1209,12 @@ class ChefZ_NutritionManager
             // ausreichender Stufe. Ein lautlos nicht saettigendes Gericht
             // darf nicht davon abhaengen, ob jemand den Kanal NUTRI
             // eingeschaltet hat (01 V7).
-            if (severity != ChefZ_LogLevel.ERR
-                && !ChefZ_Log.Enabled(ChefZ_LogChannel.NUTRI, severity))
+            if (severity != ChefZ_LogLevel.ERR && !ChefZ_Log.Enabled(ChefZ_LogChannel.NUTRI, severity))
                 continue;
 
             if (shown >= m_MaxFindings)
             {
-                ChefZ_Log.Info(ChefZ_LogChannel.NUTRI,
-                    "... weitere Befunde unterdrueckt (nutritionAuditMaxFindings = "
-                    + m_MaxFindings.ToString() + "). Insgesamt "
-                    + findings.Count().ToString() + ".");
+                ChefZ_Log.Info(ChefZ_LogChannel.NUTRI, "... weitere Befunde unterdrueckt (nutritionAuditMaxFindings = " + m_MaxFindings.ToString() + "). Insgesamt " + findings.Count().ToString() + ".");
                 break;
             }
 
@@ -1468,8 +1392,7 @@ class ChefZ_NutritionManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Naehrwertangaben: " + GetRecordCount().ToString()
-            + " (abgewiesen: " + m_RejectedCount.ToString() + ")");
+        outLines.Insert("Naehrwertangaben: " + GetRecordCount().ToString() + " (abgewiesen: " + m_RejectedCount.ToString() + ")");
 
         for (int i = 0; i < m_Order.Count(); i++)
         {
@@ -1498,10 +1421,7 @@ class ChefZ_NutritionManager
             return;
         }
 
-        outLines.Insert("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString()
-            + " Rezepte: " + m_LastFindings.Count().ToString() + " Befunde, davon "
-            + m_LastErrorCount.ToString() + " FEHLER. Toleranz "
-            + m_TolerancePct.ToString() + "%.");
+        outLines.Insert("Naehrwertaudit ueber " + m_LastAuditedRecipes.ToString() + " Rezepte: " + m_LastFindings.Count().ToString() + " Befunde, davon " + m_LastErrorCount.ToString() + " FEHLER. Toleranz " + m_TolerancePct.ToString() + "%.");
 
         for (int i = 0; i < m_LastFindings.Count(); i++)
         {
@@ -1580,8 +1500,7 @@ class ChefZ_NutritionManager
         return ChefZ_RecipeEngine.Get();
     }
 
-    private void Report(ChefZ_LoadReport report, bool isError,
-                        notnull ChefZ_NutritionDef def, string msg)
+    private void Report(ChefZ_LoadReport report, bool isError, notnull ChefZ_NutritionDef def, string msg)
     {
         if (!report)
             return;
@@ -1628,8 +1547,7 @@ class ChefZ_NutritionManager
         m_QuietForTest = quiet;
     }
 
-    void SetManagersForTest(ChefZ_CategoryManager cats, ChefZ_IngredientManager ing,
-                            ChefZ_RecipeEngine engine)
+    void SetManagersForTest(ChefZ_CategoryManager cats, ChefZ_IngredientManager ing, ChefZ_RecipeEngine engine)
     {
         m_CategoriesForTest  = cats;
         m_IngredientsForTest = ing;

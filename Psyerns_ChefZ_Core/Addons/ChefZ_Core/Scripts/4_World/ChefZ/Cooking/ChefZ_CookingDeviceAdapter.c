@@ -176,11 +176,7 @@ class ChefZ_CookingDeviceAdapter
             if ((now - m_ExecutingSince) < EXECUTING_STALE_MS)
                 return;
 
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.COOK, "cook.reentrancy.stale",
-                "Der Reentranzschutz des Kochadapters war laenger als "
-                + EXECUTING_STALE_MS.ToString() + " ms gesetzt und wird zurueckgesetzt. "
-                + "Ursache ist ein Abbruch mitten in der Auswertung. Vanilla-Kochen ist "
-                + "davon unberuehrt.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.COOK, "cook.reentrancy.stale", "Der Reentranzschutz des Kochadapters war laenger als " + EXECUTING_STALE_MS.ToString() + " ms gesetzt und wird zurueckgesetzt. " + "Ursache ist ein Abbruch mitten in der Auswertung. Vanilla-Kochen ist " + "davon unberuehrt.");
         }
 
         m_Executing      = true;
@@ -253,8 +249,7 @@ class ChefZ_CookingDeviceAdapter
 
     //==========================================================================
 
-    private void ObserveInner(ItemBase device, float timeCoef, float updateTime,
-                              int method, int now)
+    private void ObserveInner(ItemBase device, float timeCoef, float updateTime, int method, int now)
     {
         ChefZ_DeviceDescriptor desc;
         int cargoCount;
@@ -377,9 +372,7 @@ class ChefZ_CookingDeviceAdapter
      * in die Sitzung geschrieben und von dort in ChefZ_CookContext. Bleibt er
      * 0, verhaelt sich der Core exakt so wie vor dieser Aenderung.
      */
-    private void UpdateActorClaim(notnull ItemBase device,
-                                  notnull ChefZ_CookSession session,
-                                  ChefZ_CoreSettingsDef settings)
+    private void UpdateActorClaim(notnull ItemBase device, notnull ChefZ_CookSession session, ChefZ_CoreSettingsDef settings)
     {
         if (!session.ObserveItemCount(m_Scratch.itemCount))
             return;
@@ -406,10 +399,7 @@ class ChefZ_CookingDeviceAdapter
         if (!ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
             return;
 
-        ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-            "Zuschreibung in Gefaess " + session.vesselId.ToString() + ": "
-            + before.ToString() + " -> " + after.ToString()
-            + "  (Bestand auf " + m_Scratch.itemCount.ToString() + " gewachsen)");
+        ChefZ_Log.Debug(ChefZ_LogChannel.COOK, "Zuschreibung in Gefaess " + session.vesselId.ToString() + ": " + before.ToString() + " -> " + after.ToString() + "  (Bestand auf " + m_Scratch.itemCount.ToString() + " gewachsen)");
     }
 
     //==========================================================================
@@ -424,9 +414,7 @@ class ChefZ_CookingDeviceAdapter
      *         ausdruecklich kein Fehler (08 §4): Vanilla hat in Schritt 1
      *         bereits gearbeitet, die Zutaten garen normal weiter.
      */
-    private bool RunFullMatch(notnull ItemBase device, notnull ChefZ_CookSession session,
-                              notnull ChefZ_DeviceDescriptor desc,
-                              float updateTime, int method)
+    private bool RunFullMatch(notnull ItemBase device, notnull ChefZ_CookSession session, notnull ChefZ_DeviceDescriptor desc, float updateTime, int method)
     {
         if (!BuildContextFrom(device, desc, session.actorIdentityId, updateTime, method))
         {
@@ -456,9 +444,7 @@ class ChefZ_CookingDeviceAdapter
 
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.MATCH, ChefZ_LogLevel.DEBUG))
             {
-                ChefZ_Log.Debug(ChefZ_LogChannel.MATCH,
-                    "Kein Treffer -> Vanilla-Kochen laeuft unveraendert weiter  ("
-                    + desc.ToDebugString() + ", " + result.ToDebugString() + ")");
+                ChefZ_Log.Debug(ChefZ_LogChannel.MATCH, "Kein Treffer -> Vanilla-Kochen laeuft unveraendert weiter  (" + desc.ToDebugString() + ", " + result.ToDebugString() + ")");
             }
             return true;
         }
@@ -494,9 +480,7 @@ class ChefZ_CookingDeviceAdapter
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.MATCH, ChefZ_LogLevel.INFO))
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.MATCH,
-                "Gebunden: " + result.recipeId + " in Gefaess " + session.vesselId.ToString()
-                + "  " + result.ToDebugString());
+            ChefZ_Log.Info(ChefZ_LogChannel.MATCH, "Gebunden: " + result.recipeId + " in Gefaess " + session.vesselId.ToString() + "  " + result.ToDebugString());
         }
         return true;
     }
@@ -529,8 +513,7 @@ class ChefZ_CookingDeviceAdapter
         // richtige Hoehe: ein Betreiber, der sich wundert, warum ein Rezept
         // nicht zuendet, muss den Abbrecher im Log finden koennen, ohne den
         // Debugkanal einzuschalten (17 §7).
-        ChefZ_Log.Info(ChefZ_LogChannel.MATCH,
-            "Rezept " + result.recipeId + " wurde von " + who + " storniert" + ReasonSuffix(reason) + " - Vanilla-Kochen laeuft unveraendert weiter.");
+        ChefZ_Log.Info(ChefZ_LogChannel.MATCH, "Rezept " + result.recipeId + " wurde von " + who + " storniert" + ReasonSuffix(reason) + " - Vanilla-Kochen laeuft unveraendert weiter.");
 
         return true;
     }
@@ -552,8 +535,7 @@ class ChefZ_CookingDeviceAdapter
      *
      * NUR Symbole und Netz-IDs (17 E4). Kein ItemBase verlaesst diese Methode.
      */
-    private void FillCookArgs(notnull ChefZ_EventArgs args, ItemBase device,
-                              notnull ChefZ_MatchResult result)
+    private void FillCookArgs(notnull ChefZ_EventArgs args, ItemBase device, notnull ChefZ_MatchResult result)
     {
         args.identityId        = m_Ctx.actorIdentityId;
         args.recipeOrTransform = result.recipeSym;
@@ -609,10 +591,7 @@ class ChefZ_CookingDeviceAdapter
      * gebunden - nicht der ganze Kandidatensatz. Das ist der Unterschied
      * zwischen Stufe C und Stufe B und der Grund, warum Stufe C "billig" heisst.
      */
-    private void CheckCompletion(notnull ItemBase device, notnull ChefZ_CookSession session,
-                                 notnull ChefZ_DeviceDescriptor desc,
-                                 float timeCoef, float updateTime, int method,
-                                 bool freshlyBuilt)
+    private void CheckCompletion(notnull ItemBase device, notnull ChefZ_CookSession session, notnull ChefZ_DeviceDescriptor desc, float timeCoef, float updateTime, int method, bool freshlyBuilt)
     {
         ChefZ_MatchResult bound = session.outcome;
         if (!bound || !bound.recipe)
@@ -666,9 +645,7 @@ class ChefZ_CookingDeviceAdapter
             // Rezept, auch nachdem Reset() das Feld im Ergebnis geleert hat:
             // Eigentuemer ist die Engine, nicht das Ergebnis.
             ChefZ_MatchResult fresh = bound;
-            if (!ChefZ_RecipeEvaluator.Evaluate(recipe, m_Ctx, m_Snapshot,
-                                                ChefZ_RecipeEngine.Get().GetNodeBudget(),
-                                                null, fresh))
+            if (!ChefZ_RecipeEvaluator.Evaluate(recipe, m_Ctx, m_Snapshot, ChefZ_RecipeEngine.Get().GetNodeBudget(), null, fresh))
             {
                 // Der Inhalt passt nicht mehr, ohne dass die Signatur es
                 // gezeigt haette. Zurueck auf IDLE, damit Stufe B - gedrosselt
@@ -679,9 +656,7 @@ class ChefZ_CookingDeviceAdapter
 
                 if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
                 {
-                    ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-                        "Bindung von " + recipe.id + " in Gefaess " + session.vesselId.ToString()
-                        + " ist entfallen: " + fresh.failReason);
+                    ChefZ_Log.Debug(ChefZ_LogChannel.COOK, "Bindung von " + recipe.id + " in Gefaess " + session.vesselId.ToString() + " ist entfallen: " + fresh.failReason);
                 }
                 return;
             }
@@ -735,9 +710,7 @@ class ChefZ_CookingDeviceAdapter
      * Sie setzt voraus, dass m_Ctx und m_Scratch fuer dieses Gefaess in
      * diesem Tick gefuellt wurden - der Aufrufer stellt das sicher.
      */
-    private void AdvanceTimedClock(notnull ChefZ_CookSession session,
-                                   notnull ChefZ_CompiledRecipe recipe,
-                                   float timeCoef, float updateTime)
+    private void AdvanceTimedClock(notnull ChefZ_CookSession session, notnull ChefZ_CompiledRecipe recipe, float timeCoef, float updateTime)
     {
         if (recipe.completion != ChefZ_Completion.TIMED)
             return;
@@ -768,16 +741,12 @@ class ChefZ_CookingDeviceAdapter
      * damit der Kanal COOK unbenutzbar, und das ist genau der Kanal, auf dem
      * man beim Kochen zusehen will.
      */
-    private void LogStillOpen(notnull ChefZ_CookSession session,
-                              notnull ChefZ_CompiledRecipe recipe, string reason)
+    private void LogStillOpen(notnull ChefZ_CookSession session, notnull ChefZ_CompiledRecipe recipe, string reason)
     {
         if (!ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.TRACE))
             return;
 
-        ChefZ_Log.Trace(ChefZ_LogChannel.COOK,
-            "Abschluss " + ChefZ_Completion.Name(recipe.completion) + " offen: "
-            + recipe.id + " in Gefaess " + session.vesselId.ToString()
-            + " - " + reason);
+        ChefZ_Log.Trace(ChefZ_LogChannel.COOK, "Abschluss " + ChefZ_Completion.Name(recipe.completion) + " offen: " + recipe.id + " in Gefaess " + session.vesselId.ToString() + " - " + reason);
     }
 
     /**
@@ -841,8 +810,7 @@ class ChefZ_CookingDeviceAdapter
         // Feld als out-Parameter ist in Enforce nicht zugesichert (dieselbe
         // Vorsicht wie bei Peek()).
         ChefZ_QualityEvaluation eval = m_Eval;
-        bound.qualityTier = quality.EvaluateResult(recipe, bound, m_Snapshot, m_Ctx,
-                                                   externalBonus, eval);
+        bound.qualityTier = quality.EvaluateResult(recipe, bound, m_Snapshot, m_Ctx, externalBonus, eval);
         m_Eval = eval;
 
         ApplyCapabilityDegrade(bound, recipe, quality);
@@ -873,9 +841,7 @@ class ChefZ_CookingDeviceAdapter
      * im Quality Manager bleibt bestehen und ist Absicht: sie deckt auch den
      * Fall ab, dass irgendwann jemand anders einen externen Bonus einreicht.
      */
-    private float QueryExternalBonus(notnull ItemBase device,
-                                     notnull ChefZ_MatchResult bound,
-                                     notnull ChefZ_QualityManager quality)
+    private float QueryExternalBonus(notnull ItemBase device, notnull ChefZ_MatchResult bound, notnull ChefZ_QualityManager quality)
     {
         ChefZ_EventBus bus = ChefZ_EventBus.Get();
         if (!bus.HasSubscribers(ChefZ_EventNames.QUALITY_BONUS_QUERY))
@@ -901,9 +867,7 @@ class ChefZ_CookingDeviceAdapter
      * und genau das ist gemeint: ohne Skillmodul kann niemand die Uebung
      * haben. Wer das nicht will, setzt capabilityMode auf "ignore".
      */
-    private void ApplyCapabilityDegrade(notnull ChefZ_MatchResult bound,
-                                        notnull ChefZ_CompiledRecipe recipe,
-                                        notnull ChefZ_QualityManager quality)
+    private void ApplyCapabilityDegrade(notnull ChefZ_MatchResult bound, notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_QualityManager quality)
     {
         if (recipe.requires.Count() == 0)
             return;
@@ -911,8 +875,7 @@ class ChefZ_CookingDeviceAdapter
             return;
 
         string why;
-        int steps = ChefZ_CapabilityRegistry.Get().DegradeStepsFor(recipe.requires,
-                                                                   m_Ctx.actorIdentityId, why);
+        int steps = ChefZ_CapabilityRegistry.Get().DegradeStepsFor(recipe.requires, m_Ctx.actorIdentityId, why);
         if (steps <= 0)
             return;
 
@@ -921,10 +884,7 @@ class ChefZ_CookingDeviceAdapter
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.QUALITY, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.QUALITY,
-                "Faehigkeitsabwertung " + steps.ToString() + " Stufe(n): "
-                + ChefZ_SymbolTable.NameOrMark(before) + " -> "
-                + ChefZ_SymbolTable.NameOrMark(bound.qualityTier) + "  (" + why + ")");
+            ChefZ_Log.Debug(ChefZ_LogChannel.QUALITY, "Faehigkeitsabwertung " + steps.ToString() + " Stufe(n): " + ChefZ_SymbolTable.NameOrMark(before) + " -> " + ChefZ_SymbolTable.NameOrMark(bound.qualityTier) + "  (" + why + ")");
         }
     }
 
@@ -942,8 +902,7 @@ class ChefZ_CookingDeviceAdapter
      * Produktivserver kostet sie damit genau einen Bool-Test je fertigem
      * Gericht.
      */
-    private void TraceNutrition(notnull ChefZ_MatchResult bound,
-                                notnull ChefZ_CompiledRecipe recipe)
+    private void TraceNutrition(notnull ChefZ_MatchResult bound, notnull ChefZ_CompiledRecipe recipe)
     {
         if (!ChefZ_Log.Enabled(ChefZ_LogChannel.NUTRI, ChefZ_LogLevel.TRACE))
             return;
@@ -959,13 +918,11 @@ class ChefZ_CookingDeviceAdapter
         string summary;
         nutrition.DescribeForUI(expected, summary);
 
-        lines.InsertAt("Naehrwert-Soll fuer " + recipe.id + ": " + summary
-            + "  (Diagnose - NICHT angewandt, 13 E1)", 0);
+        lines.InsertAt("Naehrwert-Soll fuer " + recipe.id + ": " + summary + "  (Diagnose - NICHT angewandt, 13 E1)", 0);
         ChefZ_Log.Block(ChefZ_LogLevel.TRACE, ChefZ_LogChannel.NUTRI, lines);
     }
 
-    private void Complete(notnull ItemBase device, notnull ChefZ_CookSession session,
-                          notnull ChefZ_CompiledRecipe recipe, string modeName)
+    private void Complete(notnull ItemBase device, notnull ChefZ_CookSession session, notnull ChefZ_CompiledRecipe recipe, string modeName)
     {
         session.state = ChefZ_ESessionState.COMPLETING;
 
@@ -977,8 +934,7 @@ class ChefZ_CookingDeviceAdapter
             // notnull entgegennimmt und ein Null-Ergebnis dort ein Absturz
             // waere statt eines Abbruchs.
             session.state = ChefZ_ESessionState.IDLE;
-            FailSession(session, "das gebundene Ergebnis ist zwischen Pruefung und "
-                + "Anwendung verschwunden");
+            FailSession(session, "das gebundene Ergebnis ist zwischen Pruefung und " + "Anwendung verschwunden");
             return;
         }
 
@@ -1016,8 +972,7 @@ class ChefZ_CookingDeviceAdapter
         if (!ok)
         {
             session.state = ChefZ_ESessionState.MATCHED;
-            FailSession(session, "Anwendung von " + recipe.id + " abgebrochen: " + err
-                + " (nichts verbraucht, nichts erzeugt)");
+            FailSession(session, "Anwendung von " + recipe.id + " abgebrochen: " + err + " (nichts verbraucht, nichts erzeugt)");
 
             // S13 (17 §4): ChefZ_OnRecipeFailed. Reine Benachrichtigung, nicht
             // stornierbar und nicht XP-tauglich - die Transaktion ist bereits
@@ -1064,10 +1019,7 @@ class ChefZ_CookingDeviceAdapter
         // Gericht einmal auf, aber auf einem vollen Server oft genug. INFO ist
         // die richtige Hoehe: ein fertiges Gericht ist das Ereignis, wegen
         // dessen es diesen Mod gibt.
-        ChefZ_Log.Info(ChefZ_LogChannel.COOK,
-            "Abschluss erfuellt (" + modeName + "): " + recipe.id
-            + " in Gefaess " + session.vesselId.ToString()
-            + " - " + created.Count().ToString() + " Ergebnis(se) erzeugt.");
+        ChefZ_Log.Info(ChefZ_LogChannel.COOK, "Abschluss erfuellt (" + modeName + "): " + recipe.id + " in Gefaess " + session.vesselId.ToString() + " - " + created.Count().ToString() + " Ergebnis(se) erzeugt.");
     }
 
     /**
@@ -1088,9 +1040,7 @@ class ChefZ_CookingDeviceAdapter
      * weiter). Damit kann ein Content-Modul "ChefZFremd_OnEtwasPassiert"
      * ausloesen, ohne dass im Core eine Zeile dafuer steht (17 E1).
      */
-    private void RaiseRecipeCompleted(notnull ItemBase device,
-                                      notnull ChefZ_MatchResult bound,
-                                      array<ItemBase> created)
+    private void RaiseRecipeCompleted(notnull ItemBase device, notnull ChefZ_MatchResult bound, array<ItemBase> created)
     {
         ChefZ_CompiledRecipe recipe = bound.recipe;
 
@@ -1163,8 +1113,7 @@ class ChefZ_CookingDeviceAdapter
     }
 
     //! ChefZ_OnRecipeFailed (17 §4). Erst HasSubscribers, dann die Nutzlast.
-    private void RaiseRecipeFailed(notnull ItemBase device,
-                                   notnull ChefZ_MatchResult bound, string err)
+    private void RaiseRecipeFailed(notnull ItemBase device, notnull ChefZ_MatchResult bound, string err)
     {
         ChefZ_EventBus bus = ChefZ_EventBus.Get();
         if (!bus.HasSubscribers(ChefZ_EventNames.RECIPE_FAILED))
@@ -1194,10 +1143,7 @@ class ChefZ_CookingDeviceAdapter
     {
         if (!session.Fail(FAIL_LIMIT))
         {
-            ChefZ_Log.Warn(ChefZ_LogChannel.COOK,
-                "Kochauswertung fehlgeschlagen (" + session.failCount.ToString() + "/"
-                + FAIL_LIMIT.ToString() + ") an Gefaess " + session.vesselId.ToString()
-                + ": " + why);
+            ChefZ_Log.Warn(ChefZ_LogChannel.COOK, "Kochauswertung fehlgeschlagen (" + session.failCount.ToString() + "/" + FAIL_LIMIT.ToString() + ") an Gefaess " + session.vesselId.ToString() + ": " + why);
             return;
         }
 
@@ -1205,11 +1151,7 @@ class ChefZ_CookingDeviceAdapter
         if (session.outcome)
             recipeId = session.outcome.recipeId;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.COOK,
-            "Gefaess " + session.vesselId.ToString() + " wird nach " + FAIL_LIMIT.ToString()
-            + " Fehlversuchen bis zur naechsten Inhaltsaenderung uebergangen. "
-            + "Rezept " + recipeId + ", Grund: " + why + ". "
-            + "Vanilla-Kochen ist davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.COOK, "Gefaess " + session.vesselId.ToString() + " wird nach " + FAIL_LIMIT.ToString() + " Fehlversuchen bis zur naechsten Inhaltsaenderung uebergangen. " + "Rezept " + recipeId + ", Grund: " + why + ". " + "Vanilla-Kochen ist davon unberuehrt.");
     }
 
     //==========================================================================
@@ -1343,9 +1285,7 @@ class ChefZ_CookingDeviceAdapter
 
         if (stale.Count() > 0 && ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-                "Sitzungen gealtert: " + stale.Count().ToString() + " verworfen, "
-                + m_Sessions.Count().ToString() + " aktiv.");
+            ChefZ_Log.Debug(ChefZ_LogChannel.COOK, "Sitzungen gealtert: " + stale.Count().ToString() + " verworfen, " + m_Sessions.Count().ToString() + " aktiv.");
         }
     }
 
@@ -1366,8 +1306,7 @@ class ChefZ_CookingDeviceAdapter
      * mitzaehlen). Seine Fluessigkeit und seine Menge sehr wohl - die sind
      * Eigenschaften des Gefaesses und nicht des Inhalts.
      */
-    bool BuildSignature(notnull ItemBase vessel, int cookingMethod,
-                        out ChefZ_VesselSignature sig)
+    bool BuildSignature(notnull ItemBase vessel, int cookingMethod, out ChefZ_VesselSignature sig)
     {
         ChefZ_VesselSignature target = sig;
         if (!target)
@@ -1380,8 +1319,7 @@ class ChefZ_CookingDeviceAdapter
 
     //! Dieselbe Messung, aber in eine mitgebrachte Signatur - der Weg, den der
     //! Adapter selbst geht, weil sein Puffer ein Feld ist.
-    bool MeasureSignature(notnull ItemBase vessel, int cookingMethod,
-                          notnull ChefZ_VesselSignature sig)
+    bool MeasureSignature(notnull ItemBase vessel, int cookingMethod, notnull ChefZ_VesselSignature sig)
     {
         int liquidType = LIQUID_NONE;
         if (vessel.IsLiquidContainer())
@@ -1548,8 +1486,7 @@ class ChefZ_CookingDeviceAdapter
             guard++;
 
             string parent;
-            if (!g_Game || !g_Game.ConfigGetBaseName(ChefZ_IngredientManager.CFG_VEHICLES
-                                                     + " " + current, parent))
+            if (!g_Game || !g_Game.ConfigGetBaseName(ChefZ_IngredientManager.CFG_VEHICLES + " " + current, parent))
                 break;
             if (parent == "" || parent == current)
                 break;
@@ -1579,8 +1516,7 @@ class ChefZ_CookingDeviceAdapter
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-                "Kochgeraet erkannt: " + desc.ToDebugString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.COOK, "Kochgeraet erkannt: " + desc.ToDebugString());
         }
 
         return desc;
@@ -1625,9 +1561,7 @@ class ChefZ_CookingDeviceAdapter
      * Sitzung fuehrt sie (10 §6), und Stufe C setzt sie unmittelbar vor der
      * Abschlusspruefung.
      */
-    bool BuildContext(notnull ItemBase vessel, float updateTime, int method,
-                      out ChefZ_CookContext ctx, out array<ItemBase> outEntities,
-                      out ChefZ_FactSnapshot snapshot)
+    bool BuildContext(notnull ItemBase vessel, float updateTime, int method, out ChefZ_CookContext ctx, out array<ItemBase> outEntities, out ChefZ_FactSnapshot snapshot)
     {
         ChefZ_DeviceDescriptor desc;
         if (!ResolveDevice(vessel, desc))
@@ -1651,9 +1585,7 @@ class ChefZ_CookingDeviceAdapter
         return true;
     }
 
-    private bool BuildContextFrom(notnull ItemBase vessel, notnull ChefZ_DeviceDescriptor desc,
-                                  int actorIdentityId,
-                                  float updateTime, int method)
+    private bool BuildContextFrom(notnull ItemBase vessel, notnull ChefZ_DeviceDescriptor desc, int actorIdentityId, float updateTime, int method)
     {
         if (!ChefZ_FactCollector.CollectContext(vessel, desc, method, m_Ctx))
             return false;

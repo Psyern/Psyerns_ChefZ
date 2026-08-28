@@ -111,10 +111,7 @@ class ChefZ_HandcraftSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-            "Selbsttest S15 " + name + " FEHLGESCHLAGEN. Handwerksrezepte verhalten sich "
-            + "nicht wie entworfen - ein registriertes Rezept kann damit ein ruiniertes "
-            + "oder leeres Ergebnis liefern, ohne dass irgendwo eine Zeile im Log steht.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS, "Selbsttest S15 " + name + " FEHLGESCHLAGEN. Handwerksrezepte verhalten sich " + "nicht wie entworfen - ein registriertes Rezept kann damit ein ruiniertes " + "oder leeres Ergebnis liefern, ohne dass irgendwo eine Zeile im Log steht.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -191,8 +188,7 @@ class ChefZ_HandcraftSelfTest
         return def;
     }
 
-    private static ChefZ_CompiledTransform MakeTransform(int inputCount, int consumeMode,
-                                                         bool pureState)
+    private static ChefZ_CompiledTransform MakeTransform(int inputCount, int consumeMode, bool pureState)
     {
         ChefZ_CompiledTransform tr = new ChefZ_CompiledTransform();
         tr.id           = TRANSFORM;
@@ -280,8 +276,7 @@ class ChefZ_HandcraftSelfTest
         ChefZ_GenericCraftRecipe recipe = new ChefZ_GenericCraftRecipe();
 
         string err;
-        if (!recipe.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false),
-                                MakeInputClasses(1), MakeToolClasses(true), err))
+        if (!recipe.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false), MakeInputClasses(1), MakeToolClasses(true), err))
         {
             return false;
         }
@@ -297,8 +292,7 @@ class ChefZ_HandcraftSelfTest
             if (recipe.m_MinDamageIngredient[i]   != -1) return false;
 
             // Ruinierte Zutaten sind ausgeschlossen - Vanillas Konvention.
-            if (recipe.m_MaxDamageIngredient[i]
-                != ChefZ_GenericCraftRecipe.MAX_HEALTH_LEVEL) return false;
+            if (recipe.m_MaxDamageIngredient[i] != ChefZ_GenericCraftRecipe.MAX_HEALTH_LEVEL) return false;
         }
 
         for (i = 0; i < MAXIMUM_RESULTS; i++)
@@ -347,8 +341,7 @@ class ChefZ_HandcraftSelfTest
         ChefZ_GenericCraftRecipe recipe = new ChefZ_GenericCraftRecipe();
 
         string err;
-        if (!recipe.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false),
-                                MakeInputClasses(1), MakeToolClasses(true), err))
+        if (!recipe.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false), MakeInputClasses(1), MakeToolClasses(true), err))
         {
             return false;
         }
@@ -379,8 +372,7 @@ class ChefZ_HandcraftSelfTest
         ChefZ_GenericCraftRecipe recipe = new ChefZ_GenericCraftRecipe();
 
         string err;
-        if (!recipe.InitFromDef(MakeProcess(false), MakeTransform(2, ChefZ_ConsumeMode.WHOLE, false),
-                                MakeInputClasses(2), MakeToolClasses(false), err))
+        if (!recipe.InitFromDef(MakeProcess(false), MakeTransform(2, ChefZ_ConsumeMode.WHOLE, false), MakeInputClasses(2), MakeToolClasses(false), err))
         {
             return false;
         }
@@ -406,8 +398,7 @@ class ChefZ_HandcraftSelfTest
 
         // a) 1 Eingang, KEINE Werkzeuggruppe -> es gaebe keinen zweiten Platz
         ChefZ_GenericCraftRecipe a = new ChefZ_GenericCraftRecipe();
-        if (a.InitFromDef(MakeProcess(false), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false),
-                          MakeInputClasses(1), MakeToolClasses(false), err))
+        if (a.InitFromDef(MakeProcess(false), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false), MakeInputClasses(1), MakeToolClasses(false), err))
         {
             return false;
         }
@@ -417,8 +408,7 @@ class ChefZ_HandcraftSelfTest
         // b) 2 Eingaenge MIT Werkzeuggruppe -> das Werkzeug waere der dritte
         //    Platz (01 V12)
         ChefZ_GenericCraftRecipe b = new ChefZ_GenericCraftRecipe();
-        if (b.InitFromDef(MakeProcess(true), MakeTransform(2, ChefZ_ConsumeMode.WHOLE, false),
-                          MakeInputClasses(2), MakeToolClasses(true), err))
+        if (b.InitFromDef(MakeProcess(true), MakeTransform(2, ChefZ_ConsumeMode.WHOLE, false), MakeInputClasses(2), MakeToolClasses(true), err))
         {
             return false;
         }
@@ -426,8 +416,7 @@ class ChefZ_HandcraftSelfTest
 
         // c) Werkzeuggruppe gefordert, aber keine Klasse dazu bekannt
         ChefZ_GenericCraftRecipe c = new ChefZ_GenericCraftRecipe();
-        if (c.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false),
-                          MakeInputClasses(1), MakeToolClasses(false), err))
+        if (c.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false), MakeInputClasses(1), MakeToolClasses(false), err))
         {
             return false;
         }
@@ -438,8 +427,7 @@ class ChefZ_HandcraftSelfTest
         leer.Insert(new array<string>());
 
         ChefZ_GenericCraftRecipe d = new ChefZ_GenericCraftRecipe();
-        if (d.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false),
-                          leer, MakeToolClasses(true), err))
+        if (d.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false), leer, MakeToolClasses(true), err))
         {
             return false;
         }
@@ -466,8 +454,7 @@ class ChefZ_HandcraftSelfTest
         ohne.outputs.Clear();
 
         ChefZ_GenericCraftRecipe f = new ChefZ_GenericCraftRecipe();
-        if (f.InitFromDef(MakeProcess(true), ohne, MakeInputClasses(1),
-                          MakeToolClasses(true), err))
+        if (f.InitFromDef(MakeProcess(true), ohne, MakeInputClasses(1), MakeToolClasses(true), err))
         {
             return false;
         }
@@ -485,8 +472,7 @@ class ChefZ_HandcraftSelfTest
         ChefZ_GenericCraftRecipe recipe = new ChefZ_GenericCraftRecipe();
 
         string err;
-        if (!recipe.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.NONE, true),
-                                MakeInputClasses(1), MakeToolClasses(true), err))
+        if (!recipe.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.NONE, true), MakeInputClasses(1), MakeToolClasses(true), err))
         {
             return false;
         }
@@ -512,18 +498,14 @@ class ChefZ_HandcraftSelfTest
         string err;
 
         ChefZ_GenericCraftRecipe whole = new ChefZ_GenericCraftRecipe();
-        if (!whole.InitFromDef(MakeProcess(true),
-                               MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false),
-                               MakeInputClasses(1), MakeToolClasses(true), err))
+        if (!whole.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.WHOLE, false), MakeInputClasses(1), MakeToolClasses(true), err))
         {
             return false;
         }
         if (whole.IsRepeatable()) return false;      // ganz verbraucht -> einmal
 
         ChefZ_GenericCraftRecipe part = new ChefZ_GenericCraftRecipe();
-        if (!part.InitFromDef(MakeProcess(true),
-                              MakeTransform(1, ChefZ_ConsumeMode.AMOUNT, false),
-                              MakeInputClasses(1), MakeToolClasses(true), err))
+        if (!part.InitFromDef(MakeProcess(true), MakeTransform(1, ChefZ_ConsumeMode.AMOUNT, false), MakeInputClasses(1), MakeToolClasses(true), err))
         {
             return false;
         }

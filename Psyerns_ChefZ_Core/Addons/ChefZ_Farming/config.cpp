@@ -65,12 +65,12 @@ class CfgPatches
             "ChefZ_HerbPlantBase", "ChefZ_HerbSeedsBase", "ChefZ_FreshHerbBase",
             "ChefZ_ParsleyPlant", "ChefZ_DillPlant", "ChefZ_ThymePlant",
             "ChefZ_RosemaryPlant", "ChefZ_WildGarlicPlant",
-            "ChefZ_PepperPlant", "ChefZ_PaprikaPlant",
+            "ChefZ_PepperPlant",
             "ChefZ_ParsleySeeds", "ChefZ_DillSeeds", "ChefZ_ThymeSeeds",
             "ChefZ_RosemarySeeds", "ChefZ_WildGarlicSeeds",
-            "ChefZ_PepperSeeds", "ChefZ_PaprikaSeeds",
+            "ChefZ_PeppercornSeeds",
             "ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
-            "ChefZ_WildGarlic", "ChefZ_PepperBerries", "ChefZ_Paprika"
+            "ChefZ_WildGarlic", "ChefZ_PepperBerries"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -632,8 +632,9 @@ class CfgVehicles
     //==========================================================================
     // ### SLICE herbs ###   Production Map §21-§24, §15, §16
     //
-    // Fuenf Kraeuter, dazu Pfeffer und Paprika: Pflanze -> Ernte -> (spaeter,
-    // in ChefZ_Processing) Trockenrahmen und Moerser.
+    // Fuenf Kraeuter, dazu Pfeffer: Pflanze -> Ernte -> (spaeter,
+    // in ChefZ_Processing) Trockenrahmen und Moerser. Paprika steht hier nicht
+    // mehr - sie ist vollstaendig Vanilla (Vanilla-Audit §2).
     //
     // KEIN NEUES CORE-SYSTEM: Anbau und Ernte laufen vollstaendig ueber
     // Vanillas Gartenkette. GardenBase.c:386/425 liest "CfgVehicles <samen>
@@ -742,18 +743,14 @@ class CfgVehicles
         };
     };
 
-    class ChefZ_PaprikaPlant : ChefZ_HerbPlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_PAPRIKA";
-        descriptionShort = "#STR_CHEFZ_PLANT_PAPRIKA_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 3;
-            CropsType = "ChefZ_Paprika";
-        };
-    };
+    // KEINE eigene Paprikapflanze (Vanilla-Audit §2). Vanilla schliesst den
+    // Kreis bereits vollstaendig: PepperSeedsPack -> PepperSeeds -> Plant_Pepper
+    // -> GreenBellPepper -> CutOutPepperSeeds -> PepperSeeds. Die frueheren
+    // ChefZ_PaprikaPlant / ChefZ_PaprikaSeeds bauten dieselbe Kette nach, waren
+    // aber unerreichbar: kein Datensatz im Projekt erzeugte je ChefZ_PaprikaSeeds.
+    // ChefZ setzt jetzt an der Frucht an - GreenBellPepper traegt den
+    // Zutaten-Datensatz (ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json)
+    // und ist Eingang von TR_ChopBellPepper und TR_PaprikaToDried.
 
     //--------------------------------------------------------------------------
     // Samen. SeedBase bringt ActionPlantSeed und ActionAttachSeeds mit; mehr
@@ -828,27 +825,19 @@ class CfgVehicles
         };
     };
 
-    class ChefZ_PepperSeeds : ChefZ_HerbSeedsBase
+    // Nicht "ChefZ_PepperSeeds": Vanillas PepperSeeds ist PAPRIKA-Saatgut
+    // (PlantType Plant_Pepper -> GreenBellPepper). Hier waechst Piper nigrum.
+    // Zwei verschiedene Pflanzen duerfen nicht denselben Namen im Inventar
+    // tragen (Vanilla-Audit §2).
+    class ChefZ_PeppercornSeeds : ChefZ_HerbSeedsBase
     {
         scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_PEPPER";
-        descriptionShort = "#STR_CHEFZ_SEEDS_PEPPER_DESC";
+        displayName = "#STR_CHEFZ_SEEDS_PEPPERCORN";
+        descriptionShort = "#STR_CHEFZ_SEEDS_PEPPERCORN_DESC";
         model = "\dz\gear\cultivation\pepper_seeds.p3d";
         class Horticulture
         {
             PlantType = "ChefZ_PepperPlant";
-        };
-    };
-
-    class ChefZ_PaprikaSeeds : ChefZ_HerbSeedsBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_PAPRIKA";
-        descriptionShort = "#STR_CHEFZ_SEEDS_PAPRIKA_DESC";
-        model = "\dz\gear\cultivation\pepper_seeds.p3d";
-        class Horticulture
-        {
-            PlantType = "ChefZ_PaprikaPlant";
         };
     };
 
@@ -933,93 +922,15 @@ class CfgVehicles
         };
     };
 
-    // Frische Paprika ist Gemuese UND Ausgangsstoff des Paprikapulvers
-    // (Production Map §15).
-    class ChefZ_Paprika : ChefZ_FreshHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_PAPRIKA";
-        descriptionShort = "#STR_CHEFZ_ITEM_PAPRIKA_DESC";
-        model = "\dz\gear\food\pepper_green.p3d";
-        weight = 120;
-        itemSize[] = {2, 1};
-        class Nutrition
-        {
-            fullnessIndex = 20;
-            energy = 60;
-            water = 45;
-            nutritionalIndex = 35;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Der Block steht an DIESER Klasse und nicht an ChefZ_FreshHerbBase.
-        // Paprika ist das einzige Erntestueck des Kraeuterabschnitts, das ein
-        // GEMUESE ist und in einem Kochgeraet liegt: RCP_ChefZ_ChernarusChili
-        // fuehrt ChefZ_Paprika in einem Pflicht-Slot. Petersilie, Dill,
-        // Thymian, Rosmarin, Baerlauch und Pfefferbeeren bleiben ohne Stufen -
-        // sie sind Wuerze und stehen ausschliesslich in optionalen Slots.
-        //
-        // Vorbild ist Vanillas GreenBellPepper: kochbar, mit Stufen, mit
-        // Uebergaengen aus "Raw". Die Werte spiegeln die eigene
-        // class Nutrition, weil FoodStage-Werte sie schlagen
-        // (Edible_Base.c:394-503).
-        //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
-        //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {20, 60, 45, 35, 0, 0, 1};
-                };
-                class Baked
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {100, 50, 200};
-                    nutrition_properties[] = {18, 70, 20, 37, 0, 0, 1};
-                };
-                class Boiled
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {100, 60, 150};
-                    nutrition_properties[] = {19, 63, 52, 30, 0, 0, 1};
-                };
-                class Burned
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {200, 20, 0};
-                    nutrition_properties[] = {5, 9, 0, 0, 0, 0, 1};
-                };
-                class Rotten
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {5, 9, 9, 0, 15, 0, 1};
-                };
-            };
-
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class Baking
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class Boiling
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
+    // KEINE eigene Paprikaklasse (Vanilla-Audit §2). Frische Paprika ist
+    // Vanillas GreenBellPepper. Das fruehere ChefZ_Paprika trug bereits
+    // dz/gear/food/pepper_green.p3d, dieselbe einzige Kategorie VEGETABLE,
+    // denselben defaultState RAW und stand mit GreenBellPepper im selben
+    // anyOf-Slot beider Chili-Rezepte; erreichbar war es nie (siehe Kommentar
+    // bei den Samen weiter oben). Die Trockenkette §15 haengt jetzt an
+    // GreenBellPepper: TR_PaprikaToDried (ChefZ_Processing) -> ChefZ_DriedPaprika
+    // -> ChefZ_PaprikaPowder. Der Food-Block mit den Garstufen entfaellt
+    // ersatzlos - GreenBellPepper bringt ihn aus Vanilla mit.
 };
 
 //------------------------------------------------------------------------------

@@ -141,8 +141,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
         m_ChefZ_ActiveProcessOrdinal = 0;
         m_ChefZ_Progress01           = 0.0;
 
-        RegisterNetSyncVariableInt("m_ChefZ_ActiveProcessOrdinal",
-                                   0, ChefZ_ProcessingLimits.PROCESS_ORDINAL_MAX + 1);
+        RegisterNetSyncVariableInt("m_ChefZ_ActiveProcessOrdinal", 0, ChefZ_ProcessingLimits.PROCESS_ORDINAL_MAX + 1);
         RegisterNetSyncVariableFloat("m_ChefZ_Progress01", 0.0, 1.0, 2);
     }
 
@@ -500,9 +499,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.INFO))
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS,
-                "Job gestartet: " + match.transformId + " an " + GetType()
-                + " Slot " + slot.ToString() + ", " + job.durationSec.ToString() + "s.");
+            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS, "Job gestartet: " + match.transformId + " an " + GetType() + " Slot " + slot.ToString() + ", " + job.durationSec.ToString() + "s.");
         }
 
         return true;
@@ -644,20 +641,15 @@ class ChefZ_ProcessingStation_Base extends ItemBase
         // jemand hat waehrenddessen etwas Passenderes hineingelegt. Das ist
         // kein Fehler, aber es soll im Log stehen - sonst wundert sich ein
         // Betreiber ueber ein Ergebnis, das er nicht bestellt hat.
-        if (match.transformSym != job.transformSym
-            && ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
+        if (match.transformSym != job.transformSym && ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.PROCESS,
-                "Job an " + GetType() + " Slot " + slotIndex.ToString() + " startete als \""
-                + ChefZ_SymbolTable.NameOrMark(job.transformSym) + "\" und bindet beim "
-                + "Abschluss \"" + match.transformId + "\" - der Inhalt hat sich geaendert.");
+            ChefZ_Log.Debug(ChefZ_LogChannel.PROCESS, "Job an " + GetType() + " Slot " + slotIndex.ToString() + " startete als \"" + ChefZ_SymbolTable.NameOrMark(job.transformSym) + "\" und bindet beim " + "Abschluss \"" + match.transformId + "\" - der Inhalt hat sich geaendert.");
         }
 
         array<ItemBase> created;
         string err;
 
-        bool ok = ChefZ_ProcessRunner.Run(this, match, entities, snapshot,
-                                          job.actorIdentityId, created, err);
+        bool ok = ChefZ_ProcessRunner.Run(this, match, entities, snapshot, job.actorIdentityId, created, err);
 
         // Der Slot wird in JEDEM Fall frei. Ein Job, der nach einem
         // gescheiterten Abschluss weiterlaeuft, wuerde es beim naechsten Tick
@@ -671,11 +663,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         if (!ok)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                "station.complete." + GetType(),
-                "Der Job an \"" + GetType() + "\" konnte nicht abgeschlossen werden: " + err
-                + ". Nichts verbraucht, nichts erzeugt - die Eingaenge liegen unveraendert in "
-                + "der Station.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "station.complete." + GetType(), "Der Job an \"" + GetType() + "\" konnte nicht abgeschlossen werden: " + err + ". Nichts verbraucht, nichts erzeugt - die Eingaenge liegen unveraendert in " + "der Station.");
             return false;
         }
 
@@ -714,10 +702,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         RaiseJobCancelled(transformSym, actorId, reasonTag);
 
-        ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-            "station.cancel." + reasonTag,
-            "Ein Job an \"" + GetType() + "\" wurde abgebrochen (" + reasonTag + "). Die "
-            + "Eingaenge bleiben unveraendert liegen - es geht nichts verloren.");
+        ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "station.cancel." + reasonTag, "Ein Job an \"" + GetType() + "\" wurde abgebrochen (" + reasonTag + "). Die " + "Eingaenge bleiben unveraendert liegen - es geht nichts verloren.");
     }
 
     //! Alle Jobs abbrechen. Fuer Adminkommandos und fuer Content-Module, die
@@ -935,12 +920,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
             // Kontext NICHT weiterlesen. MAGIC richtet den Strom nicht aus -
             // es verhindert nur, dass ChefZ fremde Bytes als eigene deutet
             // (V-B §2 Folge 3).
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                "station.magic." + GetType(),
-                "\"" + GetType() + "\": im Spielstand steht an der Stelle des ChefZ-Jobblocks "
-                + "kein ChefZ-Jobblock. Laufende Jobs gehen verloren, die Station bleibt "
-                + "vollstaendig spielbar. Ursache ist fast immer ein anderer Mod, der von "
-                + "dieser Klasse ableitet und vor ChefZ schreibt.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "station.magic." + GetType(), "\"" + GetType() + "\": im Spielstand steht an der Stelle des ChefZ-Jobblocks " + "kein ChefZ-Jobblock. Laufende Jobs gehen verloren, die Station bleibt " + "vollstaendig spielbar. Ursache ist fast immer ein anderer Mod, der von " + "dieser Klasse ableitet und vor ChefZ schreibt.");
             return true;
         }
 
@@ -950,12 +930,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         if (blockVersion > VERSION)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                "station.version." + blockVersion.ToString(),
-                "Der gespeicherte ChefZ-Jobblock hat Version " + blockVersion.ToString()
-                + ", dieser Core kennt " + VERSION.ToString() + ". Der Rest des Blocks wird "
-                + "uebersprungen; die Station startet ohne Jobs. Das passiert nach einem "
-                + "Downgrade des Mods.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "station.version." + blockVersion.ToString(), "Der gespeicherte ChefZ-Jobblock hat Version " + blockVersion.ToString() + ", dieser Core kennt " + VERSION.ToString() + ". Der Rest des Blocks wird " + "uebersprungen; die Station startet ohne Jobs. Das passiert nach einem " + "Downgrade des Mods.");
             return true;
         }
 
@@ -965,12 +940,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         if (count < 0 || count > ChefZ_ProcessingLimits.MAX_PARALLEL_SLOTS)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS,
-                "station.slotcount." + GetType(),
-                "Der ChefZ-Jobblock von \"" + GetType() + "\" nennt " + count.ToString()
-                + " Slots; erlaubt sind 0 bis "
-                + ChefZ_ProcessingLimits.MAX_PARALLEL_SLOTS.ToString()
-                + ". Der Block gilt als leer, die Station bleibt erhalten.");
+            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS, "station.slotcount." + GetType(), "Der ChefZ-Jobblock von \"" + GetType() + "\" nennt " + count.ToString() + " Slots; erlaubt sind 0 bis " + ChefZ_ProcessingLimits.MAX_PARALLEL_SLOTS.ToString() + ". Der Block gilt als leer, die Station bleibt erhalten.");
             return true;
         }
 
@@ -1004,11 +974,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
     protected bool ReadFailed(string field)
     {
         ClearJobs();
-        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS,
-            "station.readfail." + field,
-            "Der ChefZ-Jobblock von \"" + GetType() + "\" bricht beim Feld \"" + field
-            + "\" ab. Der Block gilt als leer, die Station bleibt erhalten. Das ist ein "
-            + "Formatfehler im Spielstand, kein Datenfehler in der Konfiguration.");
+        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS, "station.readfail." + field, "Der ChefZ-Jobblock von \"" + GetType() + "\" bricht beim Feld \"" + field + "\" ab. Der Block gilt als leer, die Station bleibt erhalten. Das ist ein " + "Formatfehler im Spielstand, kein Datenfehler in der Konfiguration.");
         return true;
     }
 
@@ -1143,8 +1109,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
      *         veraendert. Genau deshalb darf dieses Ereignis stornierbar sein
      *         und "Completed" nicht (17 E5).
      */
-    protected bool RaiseJobStarted(notnull ChefZ_TransformMatch match, int actorId,
-                                   out string cancelReason)
+    protected bool RaiseJobStarted(notnull ChefZ_TransformMatch match, int actorId, out string cancelReason)
     {
         cancelReason = "";
 

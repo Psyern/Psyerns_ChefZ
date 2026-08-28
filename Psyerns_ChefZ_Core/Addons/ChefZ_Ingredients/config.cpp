@@ -306,7 +306,8 @@ class CfgVehicles
         };
     };
 
-    // §15: ChefZ_Paprika (Slice herbs) oder GreenBellPepper + Knife
+    // §15: GreenBellPepper + Knife (TR_ChopBellPepper). Eine eigene frische
+    // Paprikaklasse gibt es nicht mehr - Vanilla-Audit §2.
     class ChefZ_ChoppedPaprika : ChefZ_ChoppedVegetableBase
     {
         scope = 2;
@@ -950,7 +951,8 @@ class CfgVehicles
     //
     // Das ENDE der Kraeuter-, Pfeffer- und Paprikakette: was den Trockenrahmen
     // und den Moerser verlaesst. Die frischen Vorstufen (ChefZ_Parsley,
-    // ChefZ_Paprika, ChefZ_PepperBerries) stehen in ChefZ_Farming, die
+    // ChefZ_PepperBerries) stehen in ChefZ_Farming, die frische Paprika ist
+    // Vanillas GreenBellPepper; die
     // Stationen und Transforms in ChefZ_Processing.
     //
     // class Nutrition ist PFLICHT: PlayerStomach.InitData registriert nur
@@ -1275,10 +1277,14 @@ class CfgChefZProcesses
 //
 // handcraftRecipeSlots ist eine RESERVIERUNG in Vanillas Rezeptliste und muss
 // vor dem ersten Laden feststehen (Kopf von ChefZ_HandcraftBridge):
-//    8 Schnitt-Transforms (Potato, Tomato, ChefZ_Paprika, GreenBellPepper,
+//    7 Schnitt-Transforms (Potato, Tomato, GreenBellPepper,
 //                          Onion, Garlic, Carrot, Cabbage)
 //  + 4 Samen-Transforms   (Onion, Garlic, Carrot, Cabbage)
-//  = 12 Plaetze.
+//  = 11 Plaetze.
+//
+// Frueher 12: TR_ChopPaprika (Eingang ChefZ_Paprika) ist mit der Eigenklasse
+// entfallen. Er war eine reine Doppelung von TR_ChopBellPepper - beide lieferten
+// ChefZ_ChoppedPaprika (Vanilla-Audit §2).
 //==============================================================================
 class CfgChefZ
 {
@@ -1287,7 +1293,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 220;
-        handcraftRecipeSlots = 12;
+        handcraftRecipeSlots = 11;
         dataFiles[] =
         {
             "ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json",

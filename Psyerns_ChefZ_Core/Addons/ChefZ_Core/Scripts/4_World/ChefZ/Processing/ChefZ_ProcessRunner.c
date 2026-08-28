@@ -93,13 +93,7 @@ class ChefZ_ProcessRunner
      * @return true nur, wenn die Transaktion vollstaendig durch ist. Bei false
      *         ist die Welt unveraendert.
      */
-    static bool Run(notnull ItemBase station,
-                    notnull ChefZ_TransformMatch match,
-                    notnull array<ItemBase> entities,
-                    ChefZ_FactSnapshot inputs,
-                    int actorId,
-                    out array<ItemBase> outCreated,
-                    out string err)
+    static bool Run(notnull ItemBase station, notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities, ChefZ_FactSnapshot inputs, int actorId, out array<ItemBase> outCreated, out string err)
     {
         err = "";
 
@@ -125,8 +119,7 @@ class ChefZ_ProcessRunner
         ChefZ_CompiledTransform tr  = mgr.GetTransform(match.transformSym);
         if (!tr)
         {
-            return Failure("der Transform \"" + match.transformId + "\" ist nicht mehr geladen",
-                           err);
+            return Failure("der Transform \"" + match.transformId + "\" ist nicht mehr geladen", err);
         }
 
         if (station.IsSetForDeletion())
@@ -197,14 +190,7 @@ class ChefZ_ProcessRunner
      *         false ist NICHTS verbraucht - der Aufrufer entscheidet dann,
      *         was mit den bereits erzeugten Ergebnissen geschieht.
      */
-    static bool RunHandcraft(ItemBase tool,
-                             notnull ChefZ_TransformMatch match,
-                             notnull array<ItemBase> entities,
-                             ChefZ_FactSnapshot inputs,
-                             int actorId,
-                             array<ItemBase> results,
-                             array<ref ChefZ_OutputDef> resultDefs,
-                             out string err)
+    static bool RunHandcraft(ItemBase tool, notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities, ChefZ_FactSnapshot inputs, int actorId, array<ItemBase> results, array<ref ChefZ_OutputDef> resultDefs, out string err)
     {
         err = "";
 
@@ -219,8 +205,7 @@ class ChefZ_ProcessRunner
         ChefZ_CompiledTransform tr  = mgr.GetTransform(match.transformSym);
         if (!tr)
         {
-            return Failure("der Transform \"" + match.transformId + "\" ist nicht mehr geladen",
-                           err);
+            return Failure("der Transform \"" + match.transformId + "\" ist nicht mehr geladen", err);
         }
 
         //--- Faehigkeiten (17 §3.3) -------------------------------------------
@@ -243,8 +228,7 @@ class ChefZ_ProcessRunner
 
         // S16 (15 §5.2): der Mengendeckel misst REZEPTEINHEITEN aus den
         // Pflichteingaengen, nicht Vanilla-Quantity.
-        float     units       = ChefZ_PortionManager.ConsumedRequiredUnitsOf(match.consumePlan,
-                                                                            tr.inputs);
+        float     units       = ChefZ_PortionManager.ConsumedRequiredUnitsOf(match.consumePlan, tr.inputs);
 
         int applied = 0;
         if (results && resultDefs)
@@ -317,10 +301,7 @@ class ChefZ_ProcessRunner
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.INFO))
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS,
-                "Handwerk: " + tr.id + " -> " + applied.ToString()
-                + " Ergebnis(se) mit ChefZ-Schicht, verbraucht "
-                + consume.consumePlan.Count().ToString() + " Eintraege.");
+            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS, "Handwerk: " + tr.id + " -> " + applied.ToString() + " Ergebnis(se) mit ChefZ-Schicht, verbraucht " + consume.consumePlan.Count().ToString() + " Eintraege.");
         }
 
         return true;
@@ -338,13 +319,7 @@ class ChefZ_ProcessRunner
      * Was hier NICHT steht, steht dort auch nicht: die Behaelterbindung (S17)
      * braucht eine Bewertung, die es noch nicht gibt.
      */
-    private static void ApplyHandcraftLayer(notnull ItemBase item,
-                                            notnull ChefZ_OutputDef def,
-                                            ChefZ_Sym tier,
-                                            float freshness,
-                                            float temperature,
-                                            float consumedQuantity,
-                                            float consumedUnits)
+    private static void ApplyHandcraftLayer(notnull ItemBase item, notnull ChefZ_OutputDef def, ChefZ_Sym tier, float freshness, float temperature, float consumedQuantity, float consumedUnits)
     {
         //--- Menge (08 §2, quantityMode) --------------------------------------
         //
@@ -382,10 +357,7 @@ class ChefZ_ProcessRunner
                 ChefZ_Sym state = ChefZ_SymbolTable.Lookup(def.setState);
                 if (!ChefZ_SymbolTable.IsValid(state))
                 {
-                    Note(ChefZ_LogLevel.WARN, "process.setstate." + def.setState,
-                        "setState \"" + def.setState + "\" ist kein bekannter Zustand. Das "
-                        + "Ergebnis entsteht trotzdem; sein Zustand ergibt sich dann aus "
-                        + "seiner Klasse (06 §3, Schritt 2).");
+                    Note(ChefZ_LogLevel.WARN, "process.setstate." + def.setState, "setState \"" + def.setState + "\" ist kein bekannter Zustand. Das " + "Ergebnis entsteht trotzdem; sein Zustand ergibt sich dann aus " + "seiner Klasse (06 §3, Schritt 2).");
                 }
                 else
                 {
@@ -430,10 +402,7 @@ class ChefZ_ProcessRunner
      * Die RECHNUNG selbst steht an genau einer Stelle, im
      * ChefZ_PortionManager. Hier steht nur, wo sie ankommt.
      */
-    private static void ApplyHandcraftPortions(notnull ItemBase item,
-                                               notnull ChefZ_OutputDef def,
-                                               ChefZ_Sym tier,
-                                               float consumedUnits)
+    private static void ApplyHandcraftPortions(notnull ItemBase item, notnull ChefZ_OutputDef def, ChefZ_Sym tier, float consumedUnits)
     {
         if (!def.IsPortioned())
             return;
@@ -441,11 +410,7 @@ class ChefZ_ProcessRunner
         ChefZ_PortionedFood_Base bulk = ChefZ_PortionedFood_Base.Cast(item);
         if (!bulk)
         {
-            Note(ChefZ_LogLevel.WARN, "process.portions.noclass." + item.GetType(),
-                "\"" + item.GetType() + "\" ist als Portionsgericht deklariert, seine "
-                + "Skriptklasse erbt aber nicht von ChefZ_PortionedFood_Base. Ohne diese "
-                + "Ableitung gibt es keinen Zaehler und keine Entnahmeaktion (15 §3). Das "
-                + "Ergebnis entsteht als gewoehnliches Item.");
+            Note(ChefZ_LogLevel.WARN, "process.portions.noclass." + item.GetType(), "\"" + item.GetType() + "\" ist als Portionsgericht deklariert, seine " + "Skriptklasse erbt aber nicht von ChefZ_PortionedFood_Base. Ohne diese " + "Ableitung gibt es keinen Zaehler und keine Entnahmeaktion (15 §3). Das " + "Ergebnis entsteht als gewoehnliches Item.");
             return;
         }
 
@@ -473,8 +438,7 @@ class ChefZ_ProcessRunner
      * Ueber boundHandles und nicht ueber den Verbrauchsplan: bei einem reinen
      * Zustandswechsel ist der Plan leer, die Eingaenge aber gebunden.
      */
-    private static float BoundFreshness(notnull ChefZ_TransformMatch match,
-                                        notnull array<ItemBase> entities)
+    private static float BoundFreshness(notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities)
     {
         float worst = -1.0;
 
@@ -500,8 +464,7 @@ class ChefZ_ProcessRunner
     //! Die hoechste und nicht der Durchschnitt - dieselbe Regel und dieselbe
     //! Begruendung wie in ChefZ_Applicator.InputTemperature(). Ein Gefaess,
     //! das ersatzweise einspraenge, gibt es bei HANDCRAFT nicht.
-    private static float BoundTemperature(notnull ChefZ_TransformMatch match,
-                                          notnull array<ItemBase> entities)
+    private static float BoundTemperature(notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities)
     {
         float best = 0.0;
 
@@ -522,8 +485,7 @@ class ChefZ_ProcessRunner
     //! Wie viel Vanilla-Menge der Plan insgesamt abziehen wird - die Grundlage
     //! fuer quantityMode "fromInput" und "ratio". VOR dem Verbrauch gerechnet,
     //! weil danach nichts mehr abzulesen waere.
-    private static float BoundConsumedQuantity(notnull ChefZ_TransformMatch match,
-                                               notnull array<ItemBase> entities)
+    private static float BoundConsumedQuantity(notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities)
     {
         float sum = 0.0;
 
@@ -553,14 +515,7 @@ class ChefZ_ProcessRunner
     // Normalfall: ueber den Applicator (11 E4, 08 §6)
     //==========================================================================
 
-    private static bool RunApplicator(notnull ItemBase station,
-                                      notnull ChefZ_TransformMatch match,
-                                      notnull ChefZ_CompiledTransform tr,
-                                      notnull array<ItemBase> entities,
-                                      ChefZ_FactSnapshot inputs,
-                                      int actorId,
-                                      notnull array<ItemBase> created,
-                                      out string err)
+    private static bool RunApplicator(notnull ItemBase station, notnull ChefZ_TransformMatch match, notnull ChefZ_CompiledTransform tr, notnull array<ItemBase> entities, ChefZ_FactSnapshot inputs, int actorId, notnull array<ItemBase> created, out string err)
     {
         ChefZ_MatchResult result = BuildResult(match, tr);
 
@@ -597,10 +552,7 @@ class ChefZ_ProcessRunner
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.INFO))
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS,
-                "Verarbeitet: " + tr.id + " an " + station.GetType() + " -> "
-                + created.Count().ToString() + " Ergebnis(se), verbraucht "
-                + result.consumePlan.Count().ToString() + " Eintraege.");
+            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS, "Verarbeitet: " + tr.id + " an " + station.GetType() + " -> " + created.Count().ToString() + " Ergebnis(se), verbraucht " + result.consumePlan.Count().ToString() + " Eintraege.");
         }
 
         return true;
@@ -616,8 +568,7 @@ class ChefZ_ProcessRunner
      * in die Engine eintraegt, bekommt ein Rezept ohne Slots, und das weist
      * die Engine ab (08 §8).
      */
-    private static ChefZ_MatchResult BuildResult(notnull ChefZ_TransformMatch match,
-                                                 notnull ChefZ_CompiledTransform tr)
+    private static ChefZ_MatchResult BuildResult(notnull ChefZ_TransformMatch match, notnull ChefZ_CompiledTransform tr)
     {
         ChefZ_CompiledRecipe recipe = new ChefZ_CompiledRecipe();
         recipe.recipeSym = tr.transformSym;
@@ -663,9 +614,7 @@ class ChefZ_ProcessRunner
      * geraten: ein Ergebnis ohne Stufe ist ehrlich, ein Ergebnis mit erfundener
      * Stufe sieht richtig aus.
      */
-    private static ChefZ_Sym ResolveQuality(notnull ChefZ_CompiledTransform tr,
-                                            notnull ChefZ_TransformMatch match,
-                                            ChefZ_FactSnapshot inputs)
+    private static ChefZ_Sym ResolveQuality(notnull ChefZ_CompiledTransform tr, notnull ChefZ_TransformMatch match, ChefZ_FactSnapshot inputs)
     {
         if (!inputs)
             return ChefZ_SymbolTable.INVALID;
@@ -679,8 +628,7 @@ class ChefZ_ProcessRunner
         if (bound.Count() == 0)
             return ChefZ_SymbolTable.INVALID;
 
-        ChefZ_Sym tier = quality.CombineRanks(bound, tr.qualityRule,
-                                              quality.GetDefaultTierSet());
+        ChefZ_Sym tier = quality.CombineRanks(bound, tr.qualityRule, quality.GetDefaultTierSet());
         if (!ChefZ_SymbolTable.IsValid(tier))
             return ChefZ_SymbolTable.INVALID;
 
@@ -691,9 +639,7 @@ class ChefZ_ProcessRunner
     }
 
     //! Die Fakten der GEBUNDENEN Eingaenge, in Bindungsreihenfolge.
-    private static void CollectBoundFacts(notnull ChefZ_TransformMatch match,
-                                          notnull ChefZ_FactSnapshot inputs,
-                                          notnull array<ref ChefZ_ItemFacts> outFacts)
+    private static void CollectBoundFacts(notnull ChefZ_TransformMatch match, notnull ChefZ_FactSnapshot inputs, notnull array<ref ChefZ_ItemFacts> outFacts)
     {
         outFacts.Clear();
         for (int i = 0; i < match.boundHandles.Count(); i++)
@@ -726,11 +672,7 @@ class ChefZ_ProcessRunner
      * geloescht. Der schlimmste denkbare Ausgang ist ein Item, dessen Zustand
      * sich nicht geaendert hat.
      */
-    private static bool RunStateChange(notnull ItemBase station,
-                                       notnull ChefZ_TransformMatch match,
-                                       notnull ChefZ_CompiledTransform tr,
-                                       notnull array<ItemBase> entities,
-                                       out string err)
+    private static bool RunStateChange(notnull ItemBase station, notnull ChefZ_TransformMatch match, notnull ChefZ_CompiledTransform tr, notnull array<ItemBase> entities, out string err)
     {
         ChefZ_MatchResult probe = new ChefZ_MatchResult();
         probe.matched = true;
@@ -762,9 +704,7 @@ class ChefZ_ProcessRunner
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.INFO))
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS,
-                "Zustandswechsel: " + tr.id + " an " + station.GetType() + " -> "
-                + changed.ToString() + " Item(s), nichts verbraucht.");
+            ChefZ_Log.Info(ChefZ_LogChannel.PROCESS, "Zustandswechsel: " + tr.id + " an " + station.GetType() + " -> " + changed.ToString() + " Item(s), nichts verbraucht.");
         }
 
         return true;
@@ -784,9 +724,7 @@ class ChefZ_ProcessRunner
      *         heisst: keines der gebundenen Items fuehrt einen
      *         ChefZ-Zustandsblock (06 §4.3).
      */
-    private static int ApplyStateOutputs(notnull ChefZ_CompiledTransform tr,
-                                         notnull ChefZ_TransformMatch match,
-                                         notnull array<ItemBase> entities)
+    private static int ApplyStateOutputs(notnull ChefZ_CompiledTransform tr, notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities)
     {
         int changed = 0;
 
@@ -803,9 +741,7 @@ class ChefZ_ProcessRunner
                 // Zustand beim Build gefehlt haette. Hier ist es ein Hinweis
                 // auf einen Zustand, der zur Laufzeit verschwunden ist - und
                 // das Item bleibt unangetastet.
-                Note(ChefZ_LogLevel.WARN, "process.setstate." + def.setState,
-                    "setState \"" + def.setState + "\" in " + tr.id + " ist kein bekannter "
-                    + "Zustand. Die Eingaenge bleiben unveraendert.");
+                Note(ChefZ_LogLevel.WARN, "process.setstate." + def.setState, "setState \"" + def.setState + "\" in " + tr.id + " ist kein bekannter " + "Zustand. Die Eingaenge bleiben unveraendert.");
                 continue;
             }
 
@@ -863,12 +799,7 @@ class ChefZ_ProcessRunner
      * STATION_TIMED. Das ist der Grund, warum die Handcraft-Bruecke (S15)
      * ebenfalls durch DIESE Datei laeuft und sich kein eigenes Ereignis baut.
      */
-    private static void RaiseProcessed(ItemBase station,
-                                       notnull ChefZ_CompiledTransform tr,
-                                       notnull ChefZ_TransformMatch match,
-                                       notnull array<ItemBase> entities,
-                                       array<ItemBase> created,
-                                       int actorId)
+    private static void RaiseProcessed(ItemBase station, notnull ChefZ_CompiledTransform tr, notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities, array<ItemBase> created, int actorId)
     {
         ChefZ_EventBus bus = ChefZ_EventBus.Get();
         ChefZ_CompiledProcess proc = ChefZ_ProcessingManager.Get().GetProcess(tr.processSym);
@@ -1028,8 +959,6 @@ class ChefZ_ProcessRunner
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Process Runner  ausgefuehrt=" + s_CountRun.ToString()
-            + "  davon nur Zustand=" + s_CountStateOnly.ToString()
-            + "  abgebrochen=" + s_CountFailed.ToString());
+        outLines.Insert("ChefZ Process Runner  ausgefuehrt=" + s_CountRun.ToString() + "  davon nur Zustand=" + s_CountStateOnly.ToString() + "  abgebrochen=" + s_CountFailed.ToString());
     }
 }

@@ -210,9 +210,7 @@ class ChefZ_ActionTakePortion extends ActionContinuousBase
         // laeuft bei jedem Zielwechsel.
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PORTION, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PORTION,
-                "action.cond." + bulk.GetType(),
-                "Die Entnahme an \"" + bulk.GetType() + "\" erscheint nicht: " + why + ".");
+            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PORTION, "action.cond." + bulk.GetType(), "Die Entnahme an \"" + bulk.GetType() + "\" erscheint nicht: " + why + ".");
         }
 
         return false;
@@ -299,9 +297,7 @@ class ChefZ_ActionTakePortion extends ActionContinuousBase
         // und mit mehr Zusammenhang.
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PORTION, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.PORTION,
-                "Entnahme an \"" + bulk.GetType() + "\" ohne Wirkung beendet: " + err
-                + ". Es wurde nichts veraendert.");
+            ChefZ_Log.Debug(ChefZ_LogChannel.PORTION, "Entnahme an \"" + bulk.GetType() + "\" ohne Wirkung beendet: " + err + ". Es wurde nichts veraendert.");
         }
     }
 

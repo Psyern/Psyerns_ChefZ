@@ -364,9 +364,7 @@ class ChefZ_PartialMatchReport
 
         if (AllSlotsSatisfied() && toolsOk)
         {
-            outLines.Insert("    Jeder Slot hat fuer sich genug Kandidaten. Bleibt das "
-                + "Rezept trotzdem aus, teilen sich zwei Slots dieselben Items - ein Item "
-                + "bedient hoechstens einen Slot (07 §4).");
+            outLines.Insert("    Jeder Slot hat fuer sich genug Kandidaten. Bleibt das " + "Rezept trotzdem aus, teilen sich zwei Slots dieselben Items - ein Item " + "bedient hoechstens einen Slot (07 §4).");
         }
     }
 }

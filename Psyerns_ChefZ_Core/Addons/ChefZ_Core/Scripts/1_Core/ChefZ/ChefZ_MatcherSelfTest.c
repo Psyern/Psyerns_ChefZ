@@ -77,9 +77,7 @@ class ChefZ_MatcherSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.MATCH,
-            "Selbsttest S5 " + name + " FEHLGESCHLAGEN. Der Matcher verhaelt sich nicht "
-            + "wie entworfen - jede Rezeptentscheidung darueber ist unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.MATCH, "Selbsttest S5 " + name + " FEHLGESCHLAGEN. Der Matcher verhaelt sich nicht " + "wie entworfen - jede Rezeptentscheidung darueber ist unzuverlaessig.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -154,8 +152,7 @@ class ChefZ_MatcherSelfTest
         return sel;
     }
 
-    private static ChefZ_ItemFacts AddItem(notnull ChefZ_FactSnapshot snap,
-                                           int handle, string className)
+    private static ChefZ_ItemFacts AddItem(notnull ChefZ_FactSnapshot snap, int handle, string className)
     {
         ChefZ_ItemFacts facts = snap.Acquire();
         facts.handle      = handle;
@@ -168,11 +165,7 @@ class ChefZ_MatcherSelfTest
         return facts;
     }
 
-    private static ChefZ_CompiledSlot MakeSlot(notnull ChefZ_CompileContext ctx,
-                                               string slotId,
-                                               ChefZ_Selector match,
-                                               int minCount, int maxCount,
-                                               int declIndex)
+    private static ChefZ_CompiledSlot MakeSlot(notnull ChefZ_CompileContext ctx, string slotId, ChefZ_Selector match, int minCount, int maxCount, int declIndex)
     {
         ChefZ_SlotDef def = new ChefZ_SlotDef();
         def.slotId   = slotId;

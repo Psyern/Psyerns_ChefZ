@@ -116,11 +116,7 @@ class ChefZ_ProgressRegistry
         {
             if (!s_QuietForTest)
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.EVENT,
-                    "progress.dup." + sink.GetSinkName(),
-                    "Fortschrittsempfaenger \"" + sink.GetSinkName()
-                    + "\" ist bereits registriert. Die zweite Anmeldung wird verworfen - "
-                    + "sonst bekaeme er jeden Abschluss doppelt.");
+                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.EVENT, "progress.dup." + sink.GetSinkName(), "Fortschrittsempfaenger \"" + sink.GetSinkName() + "\" ist bereits registriert. Die zweite Anmeldung wird verworfen - " + "sonst bekaeme er jeden Abschluss doppelt.");
             }
             return;
         }
@@ -130,11 +126,7 @@ class ChefZ_ProgressRegistry
         {
             if (!s_QuietForTest)
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.EVENT,
-                    "progress.nocall." + sink.GetSinkName(),
-                    "Fortschrittsempfaenger \"" + sink.GetSinkName()
-                    + "\" ist nicht aufrufbar - die Anmeldung wird abgelehnt. Ursache ist "
-                    + "fast immer eine Ableitung, die OnChefZProgress nicht ueberschreibt.");
+                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.EVENT, "progress.nocall." + sink.GetSinkName(), "Fortschrittsempfaenger \"" + sink.GetSinkName() + "\" ist nicht aufrufbar - die Anmeldung wird abgelehnt. Ursache ist " + "fast immer eine Ableitung, die OnChefZProgress nicht ueberschreibt.");
             }
             return;
         }
@@ -144,9 +136,7 @@ class ChefZ_ProgressRegistry
 
         if (!s_QuietForTest)
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.EVENT,
-                "Fortschrittsempfaenger \"" + sink.GetSinkName() + "\" registriert (jetzt "
-                + s_Sinks.Count().ToString() + ").");
+            ChefZ_Log.Info(ChefZ_LogChannel.EVENT, "Fortschrittsempfaenger \"" + sink.GetSinkName() + "\" registriert (jetzt " + s_Sinks.Count().ToString() + ").");
         }
     }
 
@@ -229,9 +219,7 @@ class ChefZ_ProgressRegistry
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.EVENT,
-                "Fortschritt \"" + progressKind + "\" an " + snapshot.Count().ToString()
-                + " Empfaenger: " + args.ToDebugString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.EVENT, "Fortschritt \"" + progressKind + "\" an " + snapshot.Count().ToString() + " Empfaenger: " + args.ToDebugString());
         }
     }
 
@@ -265,9 +253,7 @@ class ChefZ_ProgressRegistry
             outLines = new array<string>();
         EnsureInit();
 
-        outLines.Insert("Fortschritt: " + s_Sinks.Count().ToString() + " Empfaenger, "
-            + "gemeldet=" + s_CountReported.ToString()
-            + "  zugestellt=" + s_CountDelivered.ToString());
+        outLines.Insert("Fortschritt: " + s_Sinks.Count().ToString() + " Empfaenger, " + "gemeldet=" + s_CountReported.ToString() + "  zugestellt=" + s_CountDelivered.ToString());
 
         for (int i = 0; i < s_Sinks.Count(); i++)
         {

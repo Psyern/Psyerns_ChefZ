@@ -107,10 +107,7 @@ class ChefZ_ToolGroupDef extends ChefZ_Record
         if (!classes && !toolCategories)
         {
             if (ctx)
-                ctx.Error(this, "Werkzeugeintrag nennt weder \"classes\" (gruppenweise, "
-                    + "02 §5.1) noch \"toolCategories\" (klassenweise, 02 §4) - abgewiesen. "
-                    + "Er waere eine Gruppe ohne Mitglieder, und jeder Prozess, der sie "
-                    + "verlangt, waere unausloesbar.");
+                ctx.Error(this, "Werkzeugeintrag nennt weder \"classes\" (gruppenweise, " + "02 §5.1) noch \"toolCategories\" (klassenweise, 02 §4) - abgewiesen. " + "Er waere eine Gruppe ohne Mitglieder, und jeder Prozess, der sie " + "verlangt, waere unausloesbar.");
             return false;
         }
 

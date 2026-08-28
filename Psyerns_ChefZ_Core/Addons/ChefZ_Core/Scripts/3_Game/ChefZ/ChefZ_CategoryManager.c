@@ -145,9 +145,7 @@ class ChefZ_CategoryManager
      * Nullzugriff. Der Aufbau selbst laeuft in jedem Fall durch: 04 §6 kennt
      * keinen Fall, in dem der Manager aufgibt.
      */
-    void Build(ChefZ_Registry<ChefZ_CategoryDef> cats,
-               ChefZ_Registry<ChefZ_TagDef> tags,
-               ChefZ_LoadReport report)
+    void Build(ChefZ_Registry<ChefZ_CategoryDef> cats, ChefZ_Registry<ChefZ_TagDef> tags, ChefZ_LoadReport report)
     {
         int startTick = TickCount(0);
         ResetState();
@@ -161,9 +159,7 @@ class ChefZ_CategoryManager
             // auf Vanilla zurueck; Rezepte mit reinen class-Slots laufen
             // weiter.
             if (report)
-                report.AddInfo("Keine Kategorien definiert - der Kategoriebaum bleibt leer. "
-                    + "Kategorie-Selektoren matchen dadurch nie; Rezepte mit reinen "
-                    + "Klassen-Selektoren sind unberuehrt.");
+                report.AddInfo("Keine Kategorien definiert - der Kategoriebaum bleibt leer. " + "Kategorie-Selektoren matchen dadurch nie; Rezepte mit reinen " + "Klassen-Selektoren sind unberuehrt.");
             m_Ready = true;
             return;
         }
@@ -198,8 +194,7 @@ class ChefZ_CategoryManager
      * und der Config Manager meldet sie (04 §6, "Erste gewinnt"). Ein zweiter
      * Mechanismus dafuer waere eine zweite Wahrheit.
      */
-    private array<ChefZ_CategoryDef> AdmitCategories(ChefZ_Registry<ChefZ_CategoryDef> cats,
-                                                     ChefZ_LoadReport report)
+    private array<ChefZ_CategoryDef> AdmitCategories(ChefZ_Registry<ChefZ_CategoryDef> cats, ChefZ_LoadReport report)
     {
         // Kein "ref": die Registry ist Eigentuemerin der Records, diese Liste
         // ist eine kurzlebige Arbeitssicht.
@@ -218,11 +213,7 @@ class ChefZ_CategoryManager
             {
                 m_RejectedCount++;
                 if (report)
-                    report.AddError(def.sourceRef, def.id,
-                        "Kategoriedeckel maxCategories=" + limit.ToString() + " erreicht - "
-                        + "die Kategorie wurde NICHT aufgenommen. Rezepte, die sie fordern, "
-                        + "matchen nie. Deckel in Core.json anheben oder Kategorien "
-                        + "zusammenlegen.");
+                    report.AddError(def.sourceRef, def.id, "Kategoriedeckel maxCategories=" + limit.ToString() + " erreicht - " + "die Kategorie wurde NICHT aufgenommen. Rezepte, die sie fordern, " + "matchen nie. Deckel in Core.json anheben oder Kategorien " + "zusammenlegen.");
                 continue;
             }
 
@@ -246,10 +237,7 @@ class ChefZ_CategoryManager
                 // Kann nur passieren, wenn ein Record die COMPILE-Stufe nicht
                 // gesehen hat. Der Baumplatz bleibt bestehen, nachschlagbar
                 // ist die Kategorie aber nicht.
-                report.AddError(def.sourceRef, def.id,
-                    "Kategorie hat kein gueltiges Symbol - sie ist im Baum enthalten, aber "
-                    + "ueber IsInCategory() nicht abfragbar. Das deutet auf einen Record hin, "
-                    + "der die COMPILE-Stufe nicht durchlaufen hat.");
+                report.AddError(def.sourceRef, def.id, "Kategorie hat kein gueltiges Symbol - sie ist im Baum enthalten, aber " + "ueber IsInCategory() nicht abfragbar. Das deutet auf einen Record hin, " + "der die COMPILE-Stufe nicht durchlaufen hat.");
             }
         }
 
@@ -289,11 +277,7 @@ class ChefZ_CategoryManager
             {
                 parentOf.Insert(NO_INDEX);
                 if (report)
-                    report.AddWarn(def.sourceRef, def.id,
-                        "parent \"" + parentId + "\" ist keine bekannte Kategorie - \""
-                        + def.id + "\" wird zur Wurzel. Die Kategorie bleibt nutzbar, erbt "
-                        + "aber nichts. Haeufigste Ursache: Tippfehler oder ein Modul, das "
-                        + "die Elternkategorie liefern sollte, ist nicht geladen.");
+                    report.AddWarn(def.sourceRef, def.id, "parent \"" + parentId + "\" ist keine bekannte Kategorie - \"" + def.id + "\" wird zur Wurzel. Die Kategorie bleibt nutzbar, erbt " + "aber nichts. Haeufigste Ursache: Tippfehler oder ein Modul, das " + "die Elternkategorie liefern sollte, ist nicht geladen.");
                 continue;
             }
 
@@ -321,8 +305,7 @@ class ChefZ_CategoryManager
      * Der Grund fuer die Haerte steht in 04 §6: "IsInCategory darf unter
      * keinen Umstaenden endlos laufen."
      */
-    private void DetectCycles(notnull array<ChefZ_CategoryDef> defs, notnull array<int> parentOf,
-                              ChefZ_LoadReport report)
+    private void DetectCycles(notnull array<ChefZ_CategoryDef> defs, notnull array<int> parentOf, ChefZ_LoadReport report)
     {
         int count = parentOf.Count();
 
@@ -367,8 +350,7 @@ class ChefZ_CategoryManager
      * Kategorie; ComputeDepths() macht sie zu Wurzeln - dieselbe Behandlung
      * wie ein unbekanntes parent, aus demselben Grund.
      */
-    private void DropCycle(notnull array<ChefZ_CategoryDef> defs, notnull array<int> parentOf,
-                           notnull array<int> path, int entry, ChefZ_LoadReport report)
+    private void DropCycle(notnull array<ChefZ_CategoryDef> defs, notnull array<int> parentOf, notnull array<int> path, int entry, ChefZ_LoadReport report)
     {
         int from = path.Find(entry);
         if (from < 0)
@@ -393,11 +375,7 @@ class ChefZ_CategoryManager
             m_RejectedCount++;
 
             if (report)
-                report.AddError(def.sourceRef, def.id,
-                    "Zyklus im Kategoriebaum: " + chain + ". ALLE Kategorien des Zyklus werden "
-                    + "verworfen; Kategorien ausserhalb bleiben gueltig. Eine zyklische "
-                    + "Vererbung ist nicht aufloesbar - genau eine Kante zu kappen waere eine "
-                    + "Erfindung, und die Vorfahrenmenge haenge daran, wo die Suche begann.");
+                report.AddError(def.sourceRef, def.id, "Zyklus im Kategoriebaum: " + chain + ". ALLE Kategorien des Zyklus werden " + "verworfen; Kategorien ausserhalb bleiben gueltig. Eine zyklische " + "Vererbung ist nicht aufloesbar - genau eine Kante zu kappen waere eine " + "Erfindung, und die Vorfahrenmenge haenge daran, wo die Suche begann.");
         }
     }
 
@@ -455,9 +433,7 @@ class ChefZ_CategoryManager
                 // Elternteil lag in einem Zyklus. Gleiche Behandlung wie ein
                 // unbekanntes parent (04 §6): Wurzel, WARN, weiterleben.
                 if (report)
-                    report.AddWarn("", m_Id.Get(i),
-                        "parent \"" + m_Id.Get(parent) + "\" wurde als Teil eines Zyklus "
-                        + "verworfen - \"" + m_Id.Get(i) + "\" wird zur Wurzel und erbt nichts.");
+                    report.AddWarn("", m_Id.Get(i), "parent \"" + m_Id.Get(parent) + "\" wurde als Teil eines Zyklus " + "verworfen - \"" + m_Id.Get(i) + "\" wird zur Wurzel und erbt nichts.");
                 parent = NO_INDEX;
                 parentOf.Set(i, NO_INDEX);
             }
@@ -486,10 +462,7 @@ class ChefZ_CategoryManager
                 // Unerreichbar, solange DetectCycles korrekt ist. Wenn doch:
                 // laut melden, Kategorie zur Wurzel machen, weiterlaufen.
                 if (report)
-                    report.AddError("", m_Id.Get(k),
-                        "Elternkette laeuft nach " + guard.ToString() + " Schritten nicht aus - "
-                        + "die Kategorie wird zur Wurzel gemacht. Das ist ein Fehler in der "
-                        + "Zyklenerkennung des Core und gehoert gemeldet.");
+                    report.AddError("", m_Id.Get(k), "Elternkette laeuft nach " + guard.ToString() + " Schritten nicht aus - " + "die Kategorie wird zur Wurzel gemacht. Das ist ein Fehler in der " + "Zyklenerkennung des Core und gehoert gemeldet.");
                 depth = 0;
                 m_Parent.Set(k, NO_INDEX);
                 parentOf.Set(k, NO_INDEX);
@@ -576,9 +549,7 @@ class ChefZ_CategoryManager
             if (!ChefZ_SymbolTable.IsValid(def.sym))
             {
                 if (report)
-                    report.AddError(def.sourceRef, def.id,
-                        "Tag hat kein gueltiges Symbol und ist nicht abfragbar. Das deutet auf "
-                        + "einen Record hin, der die COMPILE-Stufe nicht durchlaufen hat.");
+                    report.AddError(def.sourceRef, def.id, "Tag hat kein gueltiges Symbol und ist nicht abfragbar. Das deutet auf " + "einen Record hin, der die COMPILE-Stufe nicht durchlaufen hat.");
                 continue;
             }
 
@@ -605,10 +576,7 @@ class ChefZ_CategoryManager
         if (def.displayName != "")
             return def.displayName;
 
-        QuietOnce(ChefZ_LogLevel.INFO, "category.displayname.missing",
-            "Mindestens eine Kategorie hat keinen \"displayName\" (zuerst \"" + def.id
-            + "\") - im UI erscheint die ID. Das ist zulaessig; der Stringtable-Validator "
-            + "listet die betroffenen Schluessel vollstaendig auf.");
+        QuietOnce(ChefZ_LogLevel.INFO, "category.displayname.missing", "Mindestens eine Kategorie hat keinen \"displayName\" (zuerst \"" + def.id + "\") - im UI erscheint die ID. Das ist zulaessig; der Stringtable-Validator " + "listet die betroffenen Schluessel vollstaendig auf.");
         return def.id;
     }
 
@@ -720,10 +688,7 @@ class ChefZ_CategoryManager
         if (m_QuietForTest)
             return;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG,
-            "ChefZ_CategoryManager." + what + "() wurde vor Build() aufgerufen - die Antwort ist "
-            + "\"unbekannt\". Jede Kategorieabfrage liefert bis zum Aufbau false; Rezepte mit "
-            + "Kategorie-Slots matchen solange nicht. Diese Meldung erscheint genau einmal.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "ChefZ_CategoryManager." + what + "() wurde vor Build() aufgerufen - die Antwort ist " + "\"unbekannt\". Jede Kategorieabfrage liefert bis zum Aufbau false; Rezepte mit " + "Kategorie-Slots matchen solange nicht. Diese Meldung erscheint genau einmal.");
     }
 
     //==========================================================================
@@ -828,8 +793,7 @@ class ChefZ_CategoryManager
      * Quelle kennt. Zweimal zu melden hiesse, denselben Tippfehler zweimal im
      * Bericht zu haben.
      */
-    void BuildClosure(notnull array<ChefZ_Sym> directCategories,
-                      out ChefZ_CategoryClosure outClosure)
+    void BuildClosure(notnull array<ChefZ_Sym> directCategories, out ChefZ_CategoryClosure outClosure)
     {
         if (!outClosure)
             outClosure = new ChefZ_CategoryClosure();
@@ -885,11 +849,7 @@ class ChefZ_CategoryManager
     {
         if (weightBase < 0.0 || weightPerDepth < 0.0)
         {
-            QuietOnce(ChefZ_LogLevel.WARN, "category.weights.negative",
-                "Negative Spezifitaetsgewichte (" + weightBase.ToString() + " / " + weightPerDepth.ToString()
-                + ") abgelehnt - die Rangfolge waere umgekehrt und eine Unterkategorie "
-                + "unspezifischer als ihre Elternkategorie. Es gelten weiterhin "
-                + m_WeightBase.ToString() + " / " + m_WeightPerDepth.ToString() + ".");
+            QuietOnce(ChefZ_LogLevel.WARN, "category.weights.negative", "Negative Spezifitaetsgewichte (" + weightBase.ToString() + " / " + weightPerDepth.ToString() + ") abgelehnt - die Rangfolge waere umgekehrt und eine Unterkategorie " + "unspezifischer als ihre Elternkategorie. Es gelten weiterhin " + m_WeightBase.ToString() + " / " + m_WeightPerDepth.ToString() + ".");
             return;
         }
         m_WeightBase     = weightBase;
@@ -953,8 +913,7 @@ class ChefZ_CategoryManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien" + ", Tiefe " + m_MaxDepth.ToString() + ", verworfen " + m_RejectedCount.ToString() + ", Tags " + GetTagCount().ToString()
-            + ", ready=" + m_Ready.ToString());
+        outLines.Insert("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien" + ", Tiefe " + m_MaxDepth.ToString() + ", verworfen " + m_RejectedCount.ToString() + ", Tags " + GetTagCount().ToString() + ", ready=" + m_Ready.ToString());
 
         for (int i = 0; i < m_Parent.Count(); i++)
         {
@@ -982,11 +941,7 @@ class ChefZ_CategoryManager
         int depth = m_Depth.Get(bit);
         float weight = m_WeightBase + m_WeightPerDepth * depth;
 
-        outLines.Insert(indent + m_Id.Get(bit)
-            + "  bit=" + bit.ToString()
-            + " tiefe=" + depth.ToString()
-            + " gewicht=" + weight.ToString()
-            + " closure=" + m_Closures.Get(bit).ToDebugString());
+        outLines.Insert(indent + m_Id.Get(bit) + "  bit=" + bit.ToString() + " tiefe=" + depth.ToString() + " gewicht=" + weight.ToString() + " closure=" + m_Closures.Get(bit).ToDebugString());
 
         array<int> children = m_Children.Get(bit);
         for (int i = 0; i < children.Count(); i++)

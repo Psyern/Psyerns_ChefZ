@@ -308,8 +308,7 @@ class ChefZ_JsonRecordReader
      * @param outRecords wird befuellt, nie null
      * @param errorOut   Parsermeldung, wenn false
      */
-    static bool Read(string kind, string text, string sourceRef, int rank,
-                     out array<ref ChefZ_Record> outRecords, out string errorOut)
+    static bool Read(string kind, string text, string sourceRef, int rank, out array<ref ChefZ_Record> outRecords, out string errorOut)
     {
         if (!outRecords)
             outRecords = new array<ref ChefZ_Record>();

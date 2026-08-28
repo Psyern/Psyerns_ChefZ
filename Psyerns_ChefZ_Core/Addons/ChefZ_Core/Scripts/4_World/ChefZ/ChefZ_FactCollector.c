@@ -126,10 +126,7 @@ class ChefZ_FactCollector
      * ermitteln, muesste sie die Welt absuchen - und die Zusage "der Sammler
      * liest ausschliesslich das uebergebene Item" waere dahin.
      */
-    static bool CollectContext(notnull ItemBase device,
-                               notnull ChefZ_DeviceDescriptor desc,
-                               int cookingMethod,
-                               notnull ChefZ_CookContext ctx)
+    static bool CollectContext(notnull ItemBase device, notnull ChefZ_DeviceDescriptor desc, int cookingMethod, notnull ChefZ_CookContext ctx)
     {
         ctx.Reset();
 
@@ -181,9 +178,7 @@ class ChefZ_FactCollector
      * (05 §4). Wer denselben Snapshot wiederverwendet, spart ab dem zweiten
      * Durchlauf jede Allokation.
      */
-    static void CollectFromCargo(notnull ItemBase container,
-                                 out ChefZ_FactSnapshot snapshot,
-                                 out array<ItemBase> outEntities)
+    static void CollectFromCargo(notnull ItemBase container, out ChefZ_FactSnapshot snapshot, out array<ItemBase> outEntities)
     {
         if (!snapshot)
             snapshot = new ChefZ_FactSnapshot();
@@ -260,10 +255,7 @@ class ChefZ_FactCollector
         {
             // 05 §7: leerer Typ -> uebersprungen, WARN. Einmalig, weil eine
             // kaputte Klasse sonst je Kochtick eine Zeile schriebe.
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.COOK, "facts.type.empty",
-                "Ein Item im Cargo liefert einen leeren Klassennamen und wird uebersprungen. "
-                + "Das deutet auf ein Item hin, das gerade zerstoert wird, oder auf eine "
-                + "kaputte Klassendefinition.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.COOK, "facts.type.empty", "Ein Item im Cargo liefert einen leeren Klassennamen und wird uebersprungen. " + "Das deutet auf ein Item hin, das gerade zerstoert wird, oder auf eine " + "kaputte Klassendefinition.");
             return false;
         }
 
@@ -489,9 +481,7 @@ class ChefZ_FactCollector
         if (item.IsDamageDestroyed() || item.IsSetForDeletion())
         {
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
-                ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-                    "Item uebersprungen (zerstoert oder zur Loeschung vorgemerkt): "
-                    + item.GetType());
+                ChefZ_Log.Debug(ChefZ_LogChannel.COOK, "Item uebersprungen (zerstoert oder zur Loeschung vorgemerkt): " + item.GetType());
             return false;
         }
 
@@ -589,8 +579,7 @@ class ChefZ_FactCollector
      * Rein lesend, wie alles in dieser Datei. Der Rueckgabewert ist die Zahl
      * der eingetragenen Gruppen, damit ein Aufrufer ohne Liste auskommt.
      */
-    static int CollectToolGroups(ItemBase inHands, ItemBase station,
-                                 notnull ChefZ_ProcessContext ctx)
+    static int CollectToolGroups(ItemBase inHands, ItemBase station, notnull ChefZ_ProcessContext ctx)
     {
         int before = ctx.availableToolGroups.Count();
 
@@ -640,8 +629,7 @@ class ChefZ_FactCollector
             return;
 
         array<string> lines = new array<string>();
-        lines.Insert("Faktenerhebung  geraet=" + container.GetType()
-            + "  cargo=" + snapshot.Count().ToString());
+        lines.Insert("Faktenerhebung  geraet=" + container.GetType() + "  cargo=" + snapshot.Count().ToString());
         snapshot.DebugDump(lines);
         ChefZ_Log.Block(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.COOK, lines);
     }

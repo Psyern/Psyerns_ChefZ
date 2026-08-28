@@ -196,11 +196,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
      *         abbilden laesst. Das Rezept ist dann unbrauchbar und darf nicht
      *         registriert werden.
      */
-    bool InitFromDef(notnull ChefZ_CompiledProcess proc,
-                     notnull ChefZ_CompiledTransform tr,
-                     notnull array<ref array<string>> inputClasses,
-                     notnull array<string> toolClasses,
-                     out string err)
+    bool InitFromDef(notnull ChefZ_CompiledProcess proc, notnull ChefZ_CompiledTransform tr, notnull array<ref array<string>> inputClasses, notnull array<string> toolClasses, out string err)
     {
         err = "";
 
@@ -247,18 +243,14 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         if (!m_ChefZ_PendingInputs || !m_ChefZ_PendingTools)
             return;
 
-        BuildFromDef(m_ChefZ_PendingProc, m_ChefZ_PendingTr,
-                     m_ChefZ_PendingInputs, m_ChefZ_PendingTools);
+        BuildFromDef(m_ChefZ_PendingProc, m_ChefZ_PendingTr, m_ChefZ_PendingInputs, m_ChefZ_PendingTools);
     }
 
     //==========================================================================
     // Der Aufbau
     //==========================================================================
 
-    protected void BuildFromDef(notnull ChefZ_CompiledProcess proc,
-                                notnull ChefZ_CompiledTransform tr,
-                                notnull array<ref array<string>> inputClasses,
-                                notnull array<string> toolClasses)
+    protected void BuildFromDef(notnull ChefZ_CompiledProcess proc, notnull ChefZ_CompiledTransform tr, notnull array<ref array<string>> inputClasses, notnull array<string> toolClasses)
     {
         m_ChefZ_ProcessSym   = proc.processSym;
         m_ChefZ_ProcessId    = proc.id;
@@ -279,38 +271,25 @@ class ChefZ_GenericCraftRecipe : RecipeBase
 
         if (inputs > ChefZ_ProcessingLimits.HANDCRAFT_MAX_INPUTS)
         {
-            Reject("der Transform hat " + inputs.ToString() + " Eingaenge, Vanillas "
-                + "Craftsystem kennt hoechstens "
-                + ChefZ_ProcessingLimits.HANDCRAFT_MAX_INPUTS.ToString() + " (01 V12). "
-                + "Fuer mehr Eingaenge ist STATION_ACTION oder STATION_TIMED die "
-                + "richtige Ausfuehrungsform");
+            Reject("der Transform hat " + inputs.ToString() + " Eingaenge, Vanillas " + "Craftsystem kennt hoechstens " + ChefZ_ProcessingLimits.HANDCRAFT_MAX_INPUTS.ToString() + " (01 V12). " + "Fuer mehr Eingaenge ist STATION_ACTION oder STATION_TIMED die " + "richtige Ausfuehrungsform");
             return;
         }
 
         if (inputs == 1 && !hasTools)
         {
-            Reject("der Transform hat einen Eingang und der Prozess nennt keine "
-                + "Werkzeuggruppe. Vanillas Craftsystem braucht ZWEI Zutaten - es gaebe "
-                + "nichts, womit der Spieler den Eingang kombinieren koennte. Entweder "
-                + "eine Werkzeuggruppe am Prozess nennen oder auf STATION_ACTION "
-                + "umstellen");
+            Reject("der Transform hat einen Eingang und der Prozess nennt keine " + "Werkzeuggruppe. Vanillas Craftsystem braucht ZWEI Zutaten - es gaebe " + "nichts, womit der Spieler den Eingang kombinieren koennte. Entweder " + "eine Werkzeuggruppe am Prozess nennen oder auf STATION_ACTION " + "umstellen");
             return;
         }
 
         if (inputs == ChefZ_ProcessingLimits.HANDCRAFT_MAX_INPUTS && hasTools)
         {
-            Reject("der Transform hat zwei Eingaenge UND der Prozess nennt eine "
-                + "Werkzeuggruppe. Das Werkzeug waere ein dritter Zutatenplatz, und "
-                + "Vanilla kennt genau zwei (01 V12). Entweder die Werkzeuggruppe "
-                + "streichen oder auf STATION_ACTION umstellen");
+            Reject("der Transform hat zwei Eingaenge UND der Prozess nennt eine " + "Werkzeuggruppe. Das Werkzeug waere ein dritter Zutatenplatz, und " + "Vanilla kennt genau zwei (01 V12). Entweder die Werkzeuggruppe " + "streichen oder auf STATION_ACTION umstellen");
             return;
         }
 
         if (inputClasses.Count() < inputs)
         {
-            Reject("zu " + inputClasses.Count().ToString() + " von " + inputs.ToString()
-                + " Eingaengen wurden Klassen erhoben - das ist ein Fehler der Bruecke, "
-                + "nicht der Daten");
+            Reject("zu " + inputClasses.Count().ToString() + " von " + inputs.ToString() + " Eingaengen wurden Klassen erhoben - das ist ein Fehler der Bruecke, " + "nicht der Daten");
             return;
         }
 
@@ -332,9 +311,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
             array<string> classes = inputClasses.Get(s);
             if (!classes || classes.Count() == 0)
             {
-                Reject("auf den Eingang \"" + slot.slotId + "\" passt keine einzige "
-                    + "bekannte Klasse. Das Rezept koennte nie ausloesen und wird nicht "
-                    + "registriert");
+                Reject("auf den Eingang \"" + slot.slotId + "\" passt keine einzige " + "bekannte Klasse. Das Rezept koennte nie ausloesen und wird nicht " + "registriert");
                 return;
             }
 
@@ -348,9 +325,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         {
             if (toolClasses.Count() == 0)
             {
-                Reject("der Prozess fordert eine Werkzeuggruppe, aber zu keiner der "
-                    + "Gruppen ist eine Klasse bekannt. Ohne Werkzeugklasse haette das "
-                    + "Rezept keinen zweiten Zutatenplatz");
+                Reject("der Prozess fordert eine Werkzeuggruppe, aber zu keiner der " + "Gruppen ist eine Klasse bekannt. Ohne Werkzeugklasse haette das " + "Rezept keinen zweiten Zutatenplatz");
                 return;
             }
 
@@ -544,8 +519,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
 
         if (m_NumberOfResults == 0)
         {
-            Reject("der Transform erzeugt nichts und wechselt auch keinen Zustand - er "
-                + "waere eine Zutatenvernichtungsmaschine (11 §7)");
+            Reject("der Transform erzeugt nichts und wechselt auch keinen Zustand - er " + "waere eine Zutatenvernichtungsmaschine (11 §7)");
             return false;
         }
 
@@ -578,13 +552,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
              */
             if (def.chance < 1.0)
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                    "handcraft.chance." + m_ChefZ_TransformId + "." + def.cls,
-                    "HANDCRAFT " + m_ChefZ_TransformId + ": " + kind + "-Eintrag \"" + def.cls
-                    + "\" hat chance=" + def.chance.ToString() + ". Vanillas Craftsystem "
-                    + "erzeugt seine Ergebnisliste immer vollstaendig; ein Zufallsergebnis "
-                    + "ist dort nicht abbildbar und wird ausgelassen. Fuer Zufall ist "
-                    + "STATION_ACTION oder STATION_TIMED die richtige Ausfuehrungsform.");
+                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "handcraft.chance." + m_ChefZ_TransformId + "." + def.cls, "HANDCRAFT " + m_ChefZ_TransformId + ": " + kind + "-Eintrag \"" + def.cls + "\" hat chance=" + def.chance.ToString() + ". Vanillas Craftsystem " + "erzeugt seine Ergebnisliste immer vollstaendig; ein Zufallsergebnis " + "ist dort nicht abbildbar und wird ausgelassen. Fuer Zufall ist " + "STATION_ACTION oder STATION_TIMED die richtige Ausfuehrungsform.");
                 continue;
             }
 
@@ -599,21 +567,12 @@ class ChefZ_GenericCraftRecipe : RecipeBase
              */
             if (def.variants && def.variants.Count() > 0)
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                    "handcraft.variants." + m_ChefZ_TransformId + "." + def.cls,
-                    "HANDCRAFT " + m_ChefZ_TransformId + ": " + kind + "-Eintrag \"" + def.cls
-                    + "\" nennt Qualitaetsvarianten. Vanillas Craftsystem legt die "
-                    + "Ergebnisklasse bei der Registrierung fest, lange bevor eine Stufe "
-                    + "berechnet werden kann - es entsteht immer die Basisklasse. Fuer "
-                    + "stufenabhaengige Ergebnisse ist STATION_ACTION die richtige "
-                    + "Ausfuehrungsform.");
+                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "handcraft.variants." + m_ChefZ_TransformId + "." + def.cls, "HANDCRAFT " + m_ChefZ_TransformId + ": " + kind + "-Eintrag \"" + def.cls + "\" nennt Qualitaetsvarianten. Vanillas Craftsystem legt die " + "Ergebnisklasse bei der Registrierung fest, lange bevor eine Stufe " + "berechnet werden kann - es entsteht immer die Basisklasse. Fuer " + "stufenabhaengige Ergebnisse ist STATION_ACTION die richtige " + "Ausfuehrungsform.");
             }
 
             if (m_NumberOfResults >= MAXIMUM_RESULTS)
             {
-                Reject("der Transform nennt mehr als " + MAXIMUM_RESULTS.ToString()
-                    + " Ergebnisse. Vanillas RecipeBase fuehrt genau so viele Plaetze; "
-                    + "der Rest wuerde stillschweigend fehlen");
+                Reject("der Transform nennt mehr als " + MAXIMUM_RESULTS.ToString() + " Ergebnisse. Vanillas RecipeBase fuehrt genau so viele Plaetze; " + "der Rest wuerde stillschweigend fehlen");
                 return false;
             }
 
@@ -717,8 +676,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
      * ueber PluginRecipesManager.PerformRecipeServer(); der Torwaechter steht
      * trotzdem hier, weil 00 §5 keine Ausnahme kennt.
      */
-    override void Do(ItemBase ingredients[], PlayerBase player,
-                     array<ItemBase> results, float specialty_weight)
+    override void Do(ItemBase ingredients[], PlayerBase player, array<ItemBase> results, float specialty_weight)
     {
         if (!m_ChefZ_Ready)
             return;
@@ -741,34 +699,18 @@ class ChefZ_GenericCraftRecipe : RecipeBase
              */
             RollbackResults(results);
 
-            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS,
-                "handcraft.rebind." + m_ChefZ_TransformId,
-                "HANDCRAFT " + m_ChefZ_TransformId + ": zwischen Pruefung und Ausfuehrung "
-                + "passt der Transform nicht mehr (" + m_ChefZ_Match.failReason + "). Die "
-                + "bereits erzeugten Ergebnisse wurden entfernt, die Zutaten sind "
-                + "unveraendert.");
+            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS, "handcraft.rebind." + m_ChefZ_TransformId, "HANDCRAFT " + m_ChefZ_TransformId + ": zwischen Pruefung und Ausfuehrung " + "passt der Transform nicht mehr (" + m_ChefZ_Match.failReason + "). Die " + "bereits erzeugten Ergebnisse wurden entfernt, die Zutaten sind " + "unveraendert.");
             return;
         }
 
         string err;
-        if (!ChefZ_ProcessRunner.RunHandcraft(ToolOf(ingredients),
-                                              m_ChefZ_Match,
-                                              m_ChefZ_Entities,
-                                              m_ChefZ_Snapshot,
-                                              ActorIdOf(player),
-                                              results,
-                                              m_ChefZ_ResultDefs,
-                                              err))
+        if (!ChefZ_ProcessRunner.RunHandcraft(ToolOf(ingredients), m_ChefZ_Match, m_ChefZ_Entities, m_ChefZ_Snapshot, ActorIdOf(player), results, m_ChefZ_ResultDefs, err))
         {
             // RunHandcraft verbraucht ZULETZT und bricht davor ab. Bei false
             // ist also nichts verbraucht - dieselbe Lage wie oben.
             RollbackResults(results);
 
-            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS,
-                "handcraft.run." + m_ChefZ_TransformId,
-                "HANDCRAFT " + m_ChefZ_TransformId + " nicht ausgefuehrt: " + err
-                + ". Die bereits erzeugten Ergebnisse wurden entfernt, die Zutaten sind "
-                + "unveraendert.");
+            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS, "handcraft.run." + m_ChefZ_TransformId, "HANDCRAFT " + m_ChefZ_TransformId + " nicht ausgefuehrt: " + err + ". Die bereits erzeugten Ergebnisse wurden entfernt, die Zutaten sind " + "unveraendert.");
         }
     }
 
@@ -843,8 +785,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         AddToolGroups(ToolOf(ingredients), m_ChefZ_Context);
 
         ChefZ_ProcessingManager mgr = ChefZ_ProcessingManager.Get();
-        if (!mgr.FindTransform(m_ChefZ_ProcessSym, m_ChefZ_Context, m_ChefZ_Snapshot,
-                               null, m_ChefZ_Match))
+        if (!mgr.FindTransform(m_ChefZ_ProcessSym, m_ChefZ_Context, m_ChefZ_Snapshot, null, m_ChefZ_Match))
             return false;
 
         /**

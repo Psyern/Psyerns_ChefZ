@@ -112,12 +112,7 @@ class ChefZ_Applicator
      * @return true nur dann, wenn Ergebnisse entstanden UND Zutaten verbraucht
      *         wurden. Bei false ist die Welt unveraendert.
      */
-    static bool Apply(notnull ChefZ_MatchResult result,
-                      notnull array<ItemBase> entities,
-                      notnull ItemBase device,
-                      notnull ChefZ_CookContext ctx,
-                      out array<ItemBase> outCreated,
-                      out string err)
+    static bool Apply(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities, notnull ItemBase device, notnull ChefZ_CookContext ctx, out array<ItemBase> outCreated, out string err)
     {
         err = "";
 
@@ -264,9 +259,7 @@ class ChefZ_Applicator
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.INFO))
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.COOK,
-                "Angewandt: " + recipe.id + " -> " + DescribeCreated(planned)
-                + ", verbraucht " + result.consumePlan.Count().ToString() + " Eintraege.");
+            ChefZ_Log.Info(ChefZ_LogChannel.COOK, "Angewandt: " + recipe.id + " -> " + DescribeCreated(planned) + ", verbraucht " + result.consumePlan.Count().ToString() + " Eintraege.");
         }
 
         return true;
@@ -284,8 +277,7 @@ class ChefZ_Applicator
      * selben Gefaess" braucht das Gefaess und steht deshalb in
      * ValidateHandlesEx - die Apply() benutzt.
      */
-    static bool ValidateHandles(notnull ChefZ_MatchResult result,
-                                notnull array<ItemBase> entities)
+    static bool ValidateHandles(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities)
     {
         string why;
         return ValidateHandlesEx(result, entities, null, why);
@@ -308,10 +300,7 @@ class ChefZ_Applicator
      * durch Vanillas eigenen Kochtick verschwinden (Cooking.c zieht bei jedem
      * Stufenwechsel Menge ab).
      */
-    static bool ValidateHandlesEx(notnull ChefZ_MatchResult result,
-                                  notnull array<ItemBase> entities,
-                                  ItemBase device,
-                                  out string why)
+    static bool ValidateHandlesEx(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities, ItemBase device, out string why)
     {
         why = "";
 
@@ -466,10 +455,7 @@ class ChefZ_Applicator
      *
      * @return false bei Abbruch. Dann ist nichts erzeugt und nichts geplant.
      */
-    static bool PlanOutputs(notnull ChefZ_CompiledRecipe recipe,
-                            notnull ChefZ_MatchResult result,
-                            notnull array<ref ChefZ_PlannedOutput> planned,
-                            out string why)
+    static bool PlanOutputs(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult result, notnull array<ref ChefZ_PlannedOutput> planned, out string why)
     {
         why = "";
         planned.Clear();
@@ -492,12 +478,7 @@ class ChefZ_Applicator
         return true;
     }
 
-    private static bool CollectPlanned(notnull ChefZ_CompiledRecipe recipe,
-                                       array<ref ChefZ_OutputDef> list,
-                                       bool byproduct,
-                                       ChefZ_Sym tier,
-                                       notnull array<ref ChefZ_PlannedOutput> planned,
-                                       out string why)
+    private static bool CollectPlanned(notnull ChefZ_CompiledRecipe recipe, array<ref ChefZ_OutputDef> list, bool byproduct, ChefZ_Sym tier, notnull array<ref ChefZ_PlannedOutput> planned, out string why)
     {
         why = "";
         if (!list)
@@ -526,14 +507,7 @@ class ChefZ_Applicator
                 // N3. Ausdruecklich VOR jedem Verbrauch und vor jeder
                 // Erzeugung: ein Rezept mit einer Klasse, die es nicht gibt,
                 // darf keine einzige Zutat kosten.
-                Note(ChefZ_LogLevel.ERR, ChefZ_LogChannel.COOK,
-                    "apply.class.missing." + recipe.id + "." + p.cls,
-                    "Rezept " + recipe.id + ": " + p.Where() + " nennt die Klasse \""
-                    + p.cls + "\", die es in CfgVehicles nicht gibt. Das Rezept wird nicht "
-                    + "angewandt, es wird NICHTS verbraucht und NICHTS erzeugt. Der "
-                    + "Rezeptbau weist solche Klassen normalerweise bereits beim Laden ab - "
-                    + "steht diese Zeile im Log, fehlt dort eine Pruefung oder das Modul mit "
-                    + "der Klasse ist nicht geladen.");
+                Note(ChefZ_LogLevel.ERR, ChefZ_LogChannel.COOK, "apply.class.missing." + recipe.id + "." + p.cls, "Rezept " + recipe.id + ": " + p.Where() + " nennt die Klasse \"" + p.cls + "\", die es in CfgVehicles nicht gibt. Das Rezept wird nicht " + "angewandt, es wird NICHTS verbraucht und NICHTS erzeugt. Der " + "Rezeptbau weist solche Klassen normalerweise bereits beim Laden ab - " + "steht diese Zeile im Log, fehlt dort eine Pruefung oder das Modul mit " + "der Klasse ist nicht geladen.");
 
                 why = p.Where() + ": Klasse \"" + p.cls + "\" existiert nicht";
                 return false;
@@ -562,12 +536,7 @@ class ChefZ_Applicator
              */
             if (def.containerCategory != "" && !def.IsPortioned())
             {
-                Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN,
-                    "apply.container.pending." + recipe.id,
-                    "Rezept " + recipe.id + ": " + p.Where() + " verlangt einen Behaelter. "
-                    + "Das Behaeltersystem entsteht in einem spaeteren Schritt (16); bis "
-                    + "dahin wird dieses Rezept nicht angewandt. Es wird NICHTS verbraucht "
-                    + "und NICHTS erzeugt, Vanilla-Kochen laeuft unveraendert weiter.");
+                Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN, "apply.container.pending." + recipe.id, "Rezept " + recipe.id + ": " + p.Where() + " verlangt einen Behaelter. " + "Das Behaeltersystem entsteht in einem spaeteren Schritt (16); bis " + "dahin wird dieses Rezept nicht angewandt. Es wird NICHTS verbraucht " + "und NICHTS erzeugt, Vanilla-Kochen laeuft unveraendert weiter.");
 
                 why = p.Where() + " verlangt einen Behaelter, den es noch nicht gibt";
                 return false;
@@ -652,9 +621,7 @@ class ChefZ_Applicator
      * erzeugtes Gericht, aber keine einzige Zutat. Die Vorpruefung faengt den
      * haeufigen Fall billig ab, der Rollback deckt den seltenen sicher.
      */
-    static bool HasRoomForAll(notnull ItemBase device,
-                              notnull array<ref ChefZ_PlannedOutput> planned,
-                              out string why)
+    static bool HasRoomForAll(notnull ItemBase device, notnull array<ref ChefZ_PlannedOutput> planned, out string why)
     {
         why = "";
 
@@ -703,8 +670,7 @@ class ChefZ_Applicator
      * jedes bereits erzeugte Ergebnis hat den Platz veraendert, und eine
      * gemerkte InventoryLocation waere dann veraltet.
      */
-    static ItemBase SpawnOutput(notnull ChefZ_OutputDef outDef, ChefZ_Sym tier,
-                                notnull ItemBase device, out string err)
+    static ItemBase SpawnOutput(notnull ChefZ_OutputDef outDef, ChefZ_Sym tier, notnull ItemBase device, out string err)
     {
         err = "";
 
@@ -736,8 +702,7 @@ class ChefZ_Applicator
             return null;
         }
 
-        EntityAI spawned = parent.GetInventory().CreateEntityInCargoEx(
-            cls, loc.GetIdx(), loc.GetRow(), loc.GetCol(), loc.GetFlip());
+        EntityAI spawned = parent.GetInventory().CreateEntityInCargoEx( cls, loc.GetIdx(), loc.GetRow(), loc.GetCol(), loc.GetFlip());
 
         if (!spawned)
         {
@@ -791,12 +756,7 @@ class ChefZ_Applicator
      * @return false nur bei einem echten Fehler. Dann rollt der Aufrufer
      *         zurueck, und es ist weiterhin nichts verbraucht.
      */
-    private static bool ApplyProperties(notnull array<ref ChefZ_PlannedOutput> planned,
-                                        notnull ChefZ_MatchResult result,
-                                        notnull array<ItemBase> entities,
-                                        notnull ItemBase device,
-                                        notnull ChefZ_CookContext ctx,
-                                        out string why)
+    private static bool ApplyProperties(notnull array<ref ChefZ_PlannedOutput> planned, notnull ChefZ_MatchResult result, notnull array<ItemBase> entities, notnull ItemBase device, notnull ChefZ_CookContext ctx, out string why)
     {
         why = "";
 
@@ -896,8 +856,7 @@ class ChefZ_Applicator
      * niemanden ein Gericht, und ein Abbruch laege HINTER der Erzeugung - er
      * wuerde das eben entstandene Gericht wieder wegwerfen.
      */
-    private static void ApplyReturnContainer(notnull ItemBase item,
-                                             notnull ChefZ_PlannedOutput p)
+    private static void ApplyReturnContainer(notnull ItemBase item, notnull ChefZ_PlannedOutput p)
     {
         if (p.def.IsPortioned())
             return;
@@ -909,15 +868,7 @@ class ChefZ_Applicator
         // portions = 1, und dann laeuft es ueber die Entnahme.
         if (p.def.containerCategory != "")
         {
-            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN,
-                "apply.container.atcook." + p.cls,
-                "\"" + p.cls + "\" verlangt einen Behaelter der Kategorie \""
-                + p.def.containerCategory + "\", ist aber kein Portionsgericht. Ein "
-                + "Behaelter wird NIE beim Kochen verlangt (16 §2) - im Topf ginge er "
-                + "kaputt. Wer ein Tellergericht will, gibt dem Ergebnis portions = 1 "
-                + "und eine portionClass (15 E7); dann wird der Behaelter beim "
-                + "Entnehmen verbraucht. Das Gericht entsteht trotzdem, nur ohne "
-                + "Behaelter.");
+            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN, "apply.container.atcook." + p.cls, "\"" + p.cls + "\" verlangt einen Behaelter der Kategorie \"" + p.def.containerCategory + "\", ist aber kein Portionsgericht. Ein " + "Behaelter wird NIE beim Kochen verlangt (16 §2) - im Topf ginge er " + "kaputt. Wer ein Tellergericht will, gibt dem Ergebnis portions = 1 " + "und eine portionClass (15 E7); dann wird der Behaelter beim " + "Entnehmen verbraucht. Das Gericht entsteht trotzdem, nur ohne " + "Behaelter.");
         }
 
         string ret = p.def.returnContainer;
@@ -926,13 +877,7 @@ class ChefZ_Applicator
 
         if (ret == ChefZ_ContainerDef.AUTO)
         {
-            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN,
-                "apply.container.auto." + p.cls,
-                "\"" + p.cls + "\" nennt returnContainer \"" + ChefZ_ContainerDef.AUTO
-                + "\", ist aber kein Portionsgericht. \"" + ChefZ_ContainerDef.AUTO
-                + "\" bedeutet \"der Behaelter, der benutzt wurde\" (16 §4) - beim Kochen "
-                + "wird keiner benutzt, also gibt es nichts aufzuloesen. Es kommt "
-                + "nichts zurueck. Wer eine feste Rueckgabe will, nennt die Klasse.");
+            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN, "apply.container.auto." + p.cls, "\"" + p.cls + "\" nennt returnContainer \"" + ChefZ_ContainerDef.AUTO + "\", ist aber kein Portionsgericht. \"" + ChefZ_ContainerDef.AUTO + "\" bedeutet \"der Behaelter, der benutzt wurde\" (16 §4) - beim Kochen " + "wird keiner benutzt, also gibt es nichts aufzuloesen. Es kommt " + "nichts zurueck. Wer eine feste Rueckgabe will, nennt die Klasse.");
             return;
         }
 
@@ -956,11 +901,7 @@ class ChefZ_Applicator
      * kostet niemanden etwas, und ein Abbruch an dieser Stelle laege HINTER
      * der Erzeugung - er wuerde das eben entstandene Gericht wieder wegwerfen.
      */
-    private static void ApplyPortions(notnull ItemBase item,
-                                      notnull ChefZ_PlannedOutput p,
-                                      notnull ChefZ_CookContext ctx,
-                                      ChefZ_Sym tier,
-                                      float consumedUnits)
+    private static void ApplyPortions(notnull ItemBase item, notnull ChefZ_PlannedOutput p, notnull ChefZ_CookContext ctx, ChefZ_Sym tier, float consumedUnits)
     {
         if (!p.def.IsPortioned())
             return;
@@ -973,23 +914,14 @@ class ChefZ_Applicator
             // Die Registry entsteht aus genau diesen Ergebnisdefinitionen -
             // hier nichts zu finden heisst, dass der Manager vor der Engine
             // gebaut wurde oder gar nicht.
-            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION,
-                "apply.portions.nospec." + item.GetType(),
-                "\"" + item.GetType() + "\"" + " ist im Rezept als Portionsgericht deklariert, "
-                + "steht aber nicht in der Portionsregistry. Das Gericht entsteht ohne "
-                + "Zaehler und bleibt essbar; entnehmen laesst sich daraus nichts.");
+            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION, "apply.portions.nospec." + item.GetType(), "\"" + item.GetType() + "\"" + " ist im Rezept als Portionsgericht deklariert, " + "steht aber nicht in der Portionsregistry. Das Gericht entsteht ohne " + "Zaehler und bleibt essbar; entnehmen laesst sich daraus nichts.");
             return;
         }
 
         ChefZ_PortionedFood_Base bulk = ChefZ_PortionedFood_Base.Cast(item);
         if (!bulk)
         {
-            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION,
-                "apply.portions.noclass." + item.GetType(),
-                "\"" + item.GetType() + "\"" + " ist als Portionsgericht deklariert, seine "
-                + "Skriptklasse erbt aber nicht von ChefZ_PortionedFood_Base. Ohne diese "
-                + "Ableitung gibt es keinen Zaehler und keine Entnahmeaktion (15 §3). Das "
-                + "Gericht entsteht als gewoehnliches Item.");
+            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION, "apply.portions.noclass." + item.GetType(), "\"" + item.GetType() + "\"" + " ist als Portionsgericht deklariert, seine " + "Skriptklasse erbt aber nicht von ChefZ_PortionedFood_Base. Ohne diese " + "Ableitung gibt es keinen Zaehler und keine Entnahmeaktion (15 §3). Das " + "Gericht entsteht als gewoehnliches Item.");
             return;
         }
 
@@ -1002,8 +934,7 @@ class ChefZ_Applicator
 
         if (trace)
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.PORTION,
-                item.GetType() + ": " + n.ToString() + " Portionen");
+            ChefZ_Log.Debug(ChefZ_LogChannel.PORTION, item.GetType() + ": " + n.ToString() + " Portionen");
             for (int i = 0; i < trace.Count(); i++)
                 ChefZ_Log.Debug(ChefZ_LogChannel.PORTION, "    " + trace.Get(i));
         }
@@ -1028,9 +959,7 @@ class ChefZ_Applicator
      * @return false, wenn das Item beim Setzen geloescht wurde. Der Aufrufer
      *         bricht dann ab und rollt zurueck - noch ist nichts verbraucht.
      */
-    private static bool ApplyQuantity(notnull ItemBase item,
-                                      notnull ChefZ_PlannedOutput p,
-                                      float consumedQuantity)
+    private static bool ApplyQuantity(notnull ItemBase item, notnull ChefZ_PlannedOutput p, float consumedQuantity)
     {
         if (!item.HasQuantity())
             return true;
@@ -1048,13 +977,9 @@ class ChefZ_Applicator
         // Unbekannter Modus: wie "fixed" behandeln, aber einmal melden. Der
         // Compiler laesst den Wert durch (08 §2 kennt drei Namen, mehr nicht),
         // und stillschweigend zu raten waere hier das Falsche.
-        if (def.quantityMode != "fixed" && def.quantityMode != "fromInput"
-            && def.quantityMode != "ratio")
+        if (def.quantityMode != "fixed" && def.quantityMode != "fromInput" && def.quantityMode != "ratio")
         {
-            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.COOK,
-                "apply.quantityMode." + def.quantityMode,
-                "Unbekannter quantityMode \"" + def.quantityMode + "\" in " + p.Where()
-                + ". Erlaubt sind fixed, fromInput und ratio. Es gilt fixed.");
+            Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.COOK, "apply.quantityMode." + def.quantityMode, "Unbekannter quantityMode \"" + def.quantityMode + "\" in " + p.Where() + ". Erlaubt sind fixed, fromInput und ratio. Es gilt fixed.");
 
             value = -1.0;
             if (def.HasQuantity())
@@ -1080,9 +1005,7 @@ class ChefZ_Applicator
      * gesetzt, einmal, im Moment der Entstehung - und der Wert soll genau der
      * sein, der uebergeben wird.
      */
-    private static void ApplyTemperature(notnull ItemBase item,
-                                         notnull ChefZ_PlannedOutput p,
-                                         float inputTemperature)
+    private static void ApplyTemperature(notnull ItemBase item, notnull ChefZ_PlannedOutput p, float inputTemperature)
     {
         if (!p.def.inheritTemperature)
             return;
@@ -1098,9 +1021,7 @@ class ChefZ_Applicator
     //! des Geraets. Die hoechste und nicht der Durchschnitt: ein Gericht ist
     //! so heiss wie das, was gerade aus dem Topf kommt, und eine kalte Prise
     //! Beigabe soll es nicht abkuehlen.
-    private static float InputTemperature(notnull ChefZ_MatchResult result,
-                                          notnull array<ItemBase> entities,
-                                          notnull ChefZ_CookContext ctx)
+    private static float InputTemperature(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities, notnull ChefZ_CookContext ctx)
     {
         float best = 0.0;
 
@@ -1126,8 +1047,7 @@ class ChefZ_Applicator
     }
 
     //! Die Agenten aller verbrauchten Zutaten, ODER-verknuepft.
-    private static int InputAgents(notnull ChefZ_MatchResult result,
-                                   notnull array<ItemBase> entities)
+    private static int InputAgents(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities)
     {
         int agents = 0;
 
@@ -1190,8 +1110,7 @@ class ChefZ_Applicator
      * Stufe. Eine Zutat ist zu diesem Zeitpunkt noch nicht verbraucht, aber
      * das Gericht ohne Stufe ist trotzdem das bessere Ergebnis als gar keins.
      */
-    private static void ApplyChefZQuality(notnull ItemBase item,
-                                          notnull ChefZ_MatchResult result)
+    private static void ApplyChefZQuality(notnull ItemBase item, notnull ChefZ_MatchResult result)
     {
         if (!ChefZ_SymbolTable.IsValid(result.qualityTier))
             return;
@@ -1201,9 +1120,7 @@ class ChefZ_Applicator
         ChefZ_ItemStateComponent.SetQuality(item, result.qualityTier);
     }
 
-    private static void ApplyChefZState(notnull ItemBase item,
-                                        notnull ChefZ_PlannedOutput p,
-                                        float inputFreshness)
+    private static void ApplyChefZState(notnull ItemBase item, notnull ChefZ_PlannedOutput p, float inputFreshness)
     {
         if (!ChefZ_ItemStateComponent.IsManaged(item))
             return;
@@ -1215,11 +1132,7 @@ class ChefZ_Applicator
             ChefZ_Sym state = ChefZ_SymbolTable.Lookup(def.setState);
             if (!ChefZ_SymbolTable.IsValid(state))
             {
-                Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.STATE,
-                    "apply.setstate." + def.setState,
-                    "setState \"" + def.setState + "\" in " + p.Where() + " ist kein bekannter "
-                    + "Zustand. Das Gericht entsteht trotzdem; sein Zustand ergibt sich dann aus "
-                    + "seiner Klasse (06 §3, Schritt 2).");
+                Note(ChefZ_LogLevel.WARN, ChefZ_LogChannel.STATE, "apply.setstate." + def.setState, "setState \"" + def.setState + "\" in " + p.Where() + " ist kein bekannter " + "Zustand. Das Gericht entsteht trotzdem; sein Zustand ergibt sich dann aus " + "seiner Klasse (06 §3, Schritt 2).");
             }
             else
             {
@@ -1245,8 +1158,7 @@ class ChefZ_Applicator
      * "alle sind frisch". Im ersten Fall soll das Ergebnis seine eigene
      * Vorgabe behalten, im zweiten den Wert 1.0 bekommen.
      */
-    private static float InputFreshness(notnull ChefZ_MatchResult result,
-                                        notnull array<ItemBase> entities)
+    private static float InputFreshness(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities)
     {
         float worst = -1.0;
 
@@ -1274,8 +1186,7 @@ class ChefZ_Applicator
 
     //! Wie viel Vanilla-Menge der Plan insgesamt abzieht - die Grundlage fuer
     //! quantityMode "fromInput" und "ratio".
-    private static float ConsumedQuantity(notnull ChefZ_MatchResult result,
-                                          notnull array<ItemBase> entities)
+    private static float ConsumedQuantity(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities)
     {
         float sum = 0.0;
 
@@ -1322,8 +1233,7 @@ class ChefZ_Applicator
      * (ChefZ_SlotEvaluator.PlanAmountDraw) - eine Leerhuelle im Topf waere
      * fuer den Spieler nur verwirrend.
      */
-    static void ConsumeInputs(notnull ChefZ_MatchResult result,
-                              notnull array<ItemBase> entities)
+    static void ConsumeInputs(notnull ChefZ_MatchResult result, notnull array<ItemBase> entities)
     {
         for (int i = 0; i < result.consumePlan.Count(); i++)
         {
@@ -1456,10 +1366,7 @@ class ChefZ_Applicator
         if (s_QuietForTest)
             return;
 
-        ChefZ_Log.Warn(ChefZ_LogChannel.COOK,
-            "Rollback: " + deleted.ToString() + " bereits erzeugte(s) Ergebnis(se) wurden "
-            + "wieder geloescht. Es wurde KEINE Zutat verbraucht - der naechste Tick "
-            + "versucht es erneut.");
+        ChefZ_Log.Warn(ChefZ_LogChannel.COOK, "Rollback: " + deleted.ToString() + " bereits erzeugte(s) Ergebnis(se) wurden " + "wieder geloescht. Es wurde KEINE Zutat verbraucht - der naechste Tick " + "versucht es erneut.");
     }
 
     //==========================================================================
@@ -1489,8 +1396,7 @@ class ChefZ_Applicator
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.COOK,
-                "Anwendung abgebrochen, nichts veraendert: " + why);
+            ChefZ_Log.Debug(ChefZ_LogChannel.COOK, "Anwendung abgebrochen, nichts veraendert: " + why);
         }
 
         return false;

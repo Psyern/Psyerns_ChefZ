@@ -125,19 +125,14 @@ class ChefZ_ProfileOverlaySource extends ChefZ_IRecordSource
         MakeDirectory(ChefZ_ProfilePaths.Logs());
         MakeDirectory(ChefZ_ProfilePaths.OverlayDir());
 
-        EnsureFile(ChefZ_ProfilePaths.CoreSettingsFile(),
-                   ChefZ_ProfilePaths.CoreSettingsTemplateInPbo(), report);
+        EnsureFile(ChefZ_ProfilePaths.CoreSettingsFile(), ChefZ_ProfilePaths.CoreSettingsTemplateInPbo(), report);
         EnsureReadme(report);
 
         if (!m_Writable && report)
         {
             // 02 §8: Dateisystem nicht beschreibbar -> Overlay entfaellt,
             // Rang 1+2 gelten, ChefZ laeuft, ist aber nicht tunebar.
-            report.AddWarn(ChefZ_ProfilePaths.Root(), "",
-                "Unter " + ChefZ_ProfilePaths.Root() + " kann nicht geschrieben werden - "
-                + "das Overlay entfaellt. ChefZ laeuft mit Rang 1 und 2 weiter, ist aber "
-                + "nicht ohne PBO-Neubau einstellbar. Ursache ist meist ein fehlendes "
-                + "-profiles= am Serverstart oder ein schreibgeschuetztes Verzeichnis.");
+            report.AddWarn(ChefZ_ProfilePaths.Root(), "", "Unter " + ChefZ_ProfilePaths.Root() + " kann nicht geschrieben werden - " + "das Overlay entfaellt. ChefZ laeuft mit Rang 1 und 2 weiter, ist aber " + "nicht ohne PBO-Neubau einstellbar. Ursache ist meist ein fehlendes " + "-profiles= am Serverstart oder ein schreibgeschuetztes Verzeichnis.");
         }
         return m_Writable;
     }
@@ -266,8 +261,7 @@ class ChefZ_ProfileOverlaySource extends ChefZ_IRecordSource
         int total = 0;
 
         // 1. die feste Einstellungsdatei
-        int fromCore = ChefZ_JsonSourceHelper.ReadInto(ChefZ_ProfilePaths.CoreSettingsFile(),
-            GetRank(), sink, report, "Overlay");
+        int fromCore = ChefZ_JsonSourceHelper.ReadInto(ChefZ_ProfilePaths.CoreSettingsFile(), GetRank(), sink, report, "Overlay");
         if (fromCore >= 0)
         {
             m_FileCount++;
@@ -304,8 +298,7 @@ class ChefZ_ProfileOverlaySource extends ChefZ_IRecordSource
 
         string   fileName;
         FileAttr fileAttr;
-        FindFileHandle handle = FindFile(ChefZ_ProfilePaths.OverlayPattern(), fileName, fileAttr,
-            FindFileFlags.DIRECTORIES);
+        FindFileHandle handle = FindFile(ChefZ_ProfilePaths.OverlayPattern(), fileName, fileAttr, FindFileFlags.DIRECTORIES);
 
         if (fileName != "")
             found.Insert(ChefZ_ProfilePaths.OverlayDir() + "\\" + fileName);

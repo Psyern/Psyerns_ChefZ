@@ -97,8 +97,7 @@ class ChefZ_RecipeCompiler
             // Ohne Kontext gibt es keinen Nachschlager, und ohne Nachschlager
             // waere jede Kategorie unbekannt. Programmierfehler, kein
             // Datenfehler.
-            Fail(def, "kein Selektorkontext vorhanden - der Config Manager hat die "
-                + "Registries noch nicht gebaut. Das Rezept wird uebersprungen.");
+            Fail(def, "kein Selektorkontext vorhanden - der Config Manager hat die " + "Registries noch nicht gebaut. Das Rezept wird uebersprungen.");
             return null;
         }
 
@@ -139,9 +138,7 @@ class ChefZ_RecipeCompiler
             // Die Einzelmeldung steht bereits im Bericht (der Slotcompiler hat
             // sie gesetzt). Diese Zeile sagt, was daraus FOLGT - und das ist
             // die Information, die ein Betreiber braucht.
-            Fail(def, "Rezept abgewiesen, weil ein Slot nicht uebersetzt werden konnte: "
-                + error + ". Ein Rezept mit weggefallenem Pflichtslot waere viel zu leicht "
-                + "ausloesbar (07 §7).");
+            Fail(def, "Rezept abgewiesen, weil ein Slot nicht uebersetzt werden konnte: " + error + ". Ein Rezept mit weggefallenem Pflichtslot waere viel zu leicht " + "ausloesbar (07 §7).");
             return false;
         }
 
@@ -158,9 +155,7 @@ class ChefZ_RecipeCompiler
 
         if (required == 0)
         {
-            Fail(def, "Rezept hat keinen einzigen Pflichtslot - alle " + rec.slots.Count().ToString()
-                + " Slots sind optional oder verlangen 0 Items. Es wuerde bei jedem "
-                + "Gefaessinhalt zuenden, auch bei einem leeren.");
+            Fail(def, "Rezept hat keinen einzigen Pflichtslot - alle " + rec.slots.Count().ToString() + " Slots sind optional oder verlangen 0 Items. Es wuerde bei jedem " + "Gefaessinhalt zuenden, auch bei einem leeren.");
             return false;
         }
 
@@ -181,8 +176,7 @@ class ChefZ_RecipeCompiler
         // dort ist die Validierungsstufe nicht garantiert durchlaufen.
         if (!def.contexts)
         {
-            Fail(def, "Rezept ohne \"contexts\" - abgewiesen. Es zuendete sonst in jedem "
-                + "Topf, jeder Pfanne, jedem Kessel.");
+            Fail(def, "Rezept ohne \"contexts\" - abgewiesen. Es zuendete sonst in jedem " + "Topf, jeder Pfanne, jedem Kessel.");
             return false;
         }
 
@@ -203,9 +197,7 @@ class ChefZ_RecipeCompiler
 
             if (ctx.deviceClasses.Count() == 0 && ctx.deviceCategories.Count() == 0)
             {
-                Warn(def, "Kontextregel " + i.ToString() + " nennt weder deviceClasses noch "
-                    + "deviceCategories - sie gilt damit an JEDEM Kochgeraet. Ist das "
-                    + "beabsichtigt? Ueblich ist eine Geraetekategorie (08 E4).");
+                Warn(def, "Kontextregel " + i.ToString() + " nennt weder deviceClasses noch " + "deviceCategories - sie gilt damit an JEDEM Kochgeraet. Ist das " + "beabsichtigt? Ueblich ist eine Geraetekategorie (08 E4).");
             }
 
             rec.contexts.Insert(ctx);
@@ -213,8 +205,7 @@ class ChefZ_RecipeCompiler
 
         if (rec.contexts.Count() == 0)
         {
-            Fail(def, "Rezept hat nach dem Uebersetzen keine brauchbare Kontextregel mehr - "
-                + "abgewiesen. Es zuendete sonst in jedem Topf, jeder Pfanne, jedem Kessel.");
+            Fail(def, "Rezept hat nach dem Uebersetzen keine brauchbare Kontextregel mehr - " + "abgewiesen. Es zuendete sonst in jedem Topf, jeder Pfanne, jedem Kessel.");
             return false;
         }
 
@@ -245,8 +236,7 @@ class ChefZ_RecipeCompiler
         policy.extraItemsMode = ChefZ_ExtraItemsMode.FromName(mode);
         if (policy.extraItemsMode < 0)
         {
-            Warn(def, "policy.extraItems = \"" + mode + "\" ist unbekannt - benutzt wird "
-                + "\"forbid\". Gueltig: " + ChefZ_ExtraItemsMode.ValidNames() + ".");
+            Warn(def, "policy.extraItems = \"" + mode + "\" ist unbekannt - benutzt wird " + "\"forbid\". Gueltig: " + ChefZ_ExtraItemsMode.ValidNames() + ".");
             policy.extraItemsMode = ChefZ_ExtraItemsMode.FORBID;
         }
 
@@ -260,10 +250,7 @@ class ChefZ_RecipeCompiler
 
                 if (!policy.extraItemsAllowedIf)
                 {
-                    Fail(def, "policy.extraItemsAllowedIf ist unbrauchbar: " + selError
-                        + ". Das Rezept wird abgewiesen - ein Ventil, das nicht uebersetzt, "
-                        + "waere schlimmer als keines: es duldete stillschweigend nichts oder "
-                        + "alles, je nachdem, wie man den Fehler behandelt.");
+                    Fail(def, "policy.extraItemsAllowedIf ist unbrauchbar: " + selError + ". Das Rezept wird abgewiesen - ein Ventil, das nicht uebersetzt, " + "waere schlimmer als keines: es duldete stillschweigend nichts oder " + "alles, je nachdem, wie man den Fehler behandelt.");
                     return false;
                 }
             }
@@ -302,9 +289,7 @@ class ChefZ_RecipeCompiler
             mode = ChefZ_Completion.FromName(def.completion);
             if (mode < 0)
             {
-                Warn(def, "completion = \"" + def.completion + "\" ist unbekannt - benutzt wird "
-                    + ChefZ_Completion.ON_STAGE_NAME + ". Gueltig: "
-                    + ChefZ_Completion.ValidNames() + ".");
+                Warn(def, "completion = \"" + def.completion + "\" ist unbekannt - benutzt wird " + ChefZ_Completion.ON_STAGE_NAME + ". Gueltig: " + ChefZ_Completion.ValidNames() + ".");
                 mode = ChefZ_Completion.ON_STAGE;
             }
         }
@@ -313,9 +298,7 @@ class ChefZ_RecipeCompiler
         {
             if (def.cookSeconds <= 0.0)
             {
-                Fail(def, "completion \"TIMED\" ohne brauchbares cookSeconds - abgewiesen. "
-                    + "Ein Rezept mit eigener Uhr, die nie ablaeuft, ist ein Rezept, das nie "
-                    + "fertig wird (08 §8).");
+                Fail(def, "completion \"TIMED\" ohne brauchbares cookSeconds - abgewiesen. " + "Ein Rezept mit eigener Uhr, die nie ablaeuft, ist ein Rezept, das nie " + "fertig wird (08 §8).");
                 return false;
             }
 
@@ -324,9 +307,7 @@ class ChefZ_RecipeCompiler
                 // Betreiber-Notbremse (08 §8). Heruntergestuft statt
                 // abgewiesen: der Betreiber wollte die eigene Uhr abschalten,
                 // nicht das Gericht.
-                Warn(def, "completion \"TIMED\" ist per Einstellung abgeschaltet "
-                    + "(allowTimedRecipes = false) - das Rezept laeuft als \"ON_STAGE\" und "
-                    + "wartet damit auf Vanillas FoodStages statt auf die eigene Uhr.");
+                Warn(def, "completion \"TIMED\" ist per Einstellung abgeschaltet " + "(allowTimedRecipes = false) - das Rezept laeuft als \"ON_STAGE\" und " + "wartet damit auf Vanillas FoodStages statt auf die eigene Uhr.");
                 mode = ChefZ_Completion.ON_STAGE;
             }
         }
@@ -347,9 +328,7 @@ class ChefZ_RecipeCompiler
 
         if (ChefZ_TextList.Count(def.doneStages) == 0)
         {
-            Warn(def, "completion \"ON_STAGE\" ohne \"doneStages\" - benutzt wird der Default "
-                + "{" + DEFAULT_STAGE_A + ", " + DEFAULT_STAGE_B + ", " + DEFAULT_STAGE_C + "} "
-                + "(08 §8).");
+            Warn(def, "completion \"ON_STAGE\" ohne \"doneStages\" - benutzt wird der Default " + "{" + DEFAULT_STAGE_A + ", " + DEFAULT_STAGE_B + ", " + DEFAULT_STAGE_C + "} " + "(08 §8).");
             rec.doneStages.Insert(ChefZ_VanillaStage.FromName(DEFAULT_STAGE_A));
             rec.doneStages.Insert(ChefZ_VanillaStage.FromName(DEFAULT_STAGE_B));
             rec.doneStages.Insert(ChefZ_VanillaStage.FromName(DEFAULT_STAGE_C));
@@ -362,9 +341,7 @@ class ChefZ_RecipeCompiler
             int stage = ChefZ_VanillaStage.FromName(name);
             if (stage < 0)
             {
-                Fail(def, "doneStages nennt die unbekannte Vanilla-Stufe \"" + name
-                    + "\" - abgewiesen. Gueltig: " + ChefZ_VanillaStage.ValidNames()
-                    + ". Ein Tippfehler wuerde das Rezept lautlos nie fertig werden lassen.");
+                Fail(def, "doneStages nennt die unbekannte Vanilla-Stufe \"" + name + "\" - abgewiesen. Gueltig: " + ChefZ_VanillaStage.ValidNames() + ". Ein Tippfehler wuerde das Rezept lautlos nie fertig werden lassen.");
                 return false;
             }
             if (rec.doneStages.Find(stage) < 0)
@@ -390,18 +367,14 @@ class ChefZ_RecipeCompiler
 
         if (rec.outputs.Count() == 0)
         {
-            Fail(def, "Rezept hat nach dem Pruefen kein einziges brauchbares Ergebnis mehr - "
-                + "abgewiesen. Es wuerde die Zutaten verbrauchen und nichts erzeugen.");
+            Fail(def, "Rezept hat nach dem Pruefen kein einziges brauchbares Ergebnis mehr - " + "abgewiesen. Es wuerde die Zutaten verbrauchen und nichts erzeugen.");
             return false;
         }
 
         return true;
     }
 
-    private bool CopyOutputs(notnull ChefZ_RecipeDef def,
-                             array<ref ChefZ_OutputDef> src,
-                             notnull array<ref ChefZ_OutputDef> dst,
-                             string field)
+    private bool CopyOutputs(notnull ChefZ_RecipeDef def, array<ref ChefZ_OutputDef> src, notnull array<ref ChefZ_OutputDef> dst, string field)
     {
         if (!src)
             return true;
@@ -414,8 +387,7 @@ class ChefZ_RecipeCompiler
 
             if (o.cls == "")
             {
-                Fail(def, field + "[" + i.ToString() + "] hat kein \"cls\" - abgewiesen. "
-                    + "Ein Ergebnis ohne Klasse ist kein Ergebnis.");
+                Fail(def, field + "[" + i.ToString() + "] hat kein \"cls\" - abgewiesen. " + "Ein Ergebnis ohne Klasse ist kein Ergebnis.");
                 return false;
             }
 
@@ -439,8 +411,7 @@ class ChefZ_RecipeCompiler
                     ChefZ_OutputVariant variant = o.variants.Get(v);
                     if (!variant || variant.cls == "")
                         continue;
-                    if (!CheckOutputClass(def, variant.cls,
-                            field + "[" + i.ToString() + "].variants[" + v.ToString() + "]"))
+                    if (!CheckOutputClass(def, variant.cls, field + "[" + i.ToString() + "].variants[" + v.ToString() + "]"))
                         return false;
                 }
             }
@@ -463,9 +434,7 @@ class ChefZ_RecipeCompiler
      * ein Topf, aus dem man nichts entnehmen kann." Der Spieler haette sein
      * Essen gekocht und kaeme nicht daran - ein Zutatenverlust mit Verzoegerung.
      */
-    private bool CheckPortionFields(notnull ChefZ_RecipeDef def,
-                                    notnull ChefZ_OutputDef o,
-                                    string where)
+    private bool CheckPortionFields(notnull ChefZ_RecipeDef def, notnull ChefZ_OutputDef o, string where)
     {
         array<string> warnings = new array<string>();
         string portionClass;
@@ -526,9 +495,7 @@ class ChefZ_RecipeCompiler
 
         if (!ChefZ_VanillaNutrition.ClassExists(cls))
         {
-            Fail(def, where + " nennt die Klasse \"" + cls + "\", die es in CfgVehicles nicht "
-                + "gibt - Rezept abgewiesen. Fehlt das Content-Modul, oder ist der Name "
-                + "falsch geschrieben?");
+            Fail(def, where + " nennt die Klasse \"" + cls + "\", die es in CfgVehicles nicht " + "gibt - Rezept abgewiesen. Fehlt das Content-Modul, oder ist der Name " + "falsch geschrieben?");
             return false;
         }
 
@@ -539,11 +506,7 @@ class ChefZ_RecipeCompiler
         if (ChefZ_VanillaNutrition.WouldRegisterAtStomach(cls, reason))
             return true;
 
-        Fail(def, where + ": die essbare Klasse \"" + cls + "\" " + reason
-            + " - Rezept abgewiesen. PlayerStomach.InitData registriert sie damit nicht, und "
-            + "AddToStomach bricht beim Verzehr OHNE MELDUNG ab: das Gericht verschwaende, "
-            + "ohne zu saettigen (01 V7). Der Startaudit meldet denselben Fall ein zweites "
-            + "Mal, mit Klassenname (13 §3).");
+        Fail(def, where + ": die essbare Klasse \"" + cls + "\" " + reason + " - Rezept abgewiesen. PlayerStomach.InitData registriert sie damit nicht, und " + "AddToStomach bricht beim Verzehr OHNE MELDUNG ab: das Gericht verschwaende, " + "ohne zu saettigen (01 V7). Der Startaudit meldet denselben Fall ein zweites " + "Mal, mit Klassenname (13 §3).");
         return false;
     }
 
@@ -587,8 +550,7 @@ class ChefZ_RecipeCompiler
                 continue;
             if (req.capability == "")
             {
-                Warn(def, "requires[" + i.ToString() + "] nennt keine \"capability\" - der "
-                    + "Eintrag wird ausgelassen.");
+                Warn(def, "requires[" + i.ToString() + "] nennt keine \"capability\" - der " + "Eintrag wird ausgelassen.");
                 continue;
             }
             rec.requires.Insert(req);
@@ -788,15 +750,12 @@ class ChefZ_RecipeCompiler
 
         if (p > 1000)
         {
-            Warn(def, "priority = " + p.ToString() + " liegt ausserhalb von [-1000, 1000] und "
-                + "wird auf 1000 geklemmt. Eine so grosse Zahl haette die berechnete "
-                + "Spezifitaet faktisch abgeschaltet (09 §7).");
+            Warn(def, "priority = " + p.ToString() + " liegt ausserhalb von [-1000, 1000] und " + "wird auf 1000 geklemmt. Eine so grosse Zahl haette die berechnete " + "Spezifitaet faktisch abgeschaltet (09 §7).");
             return 1000;
         }
         if (p < -1000)
         {
-            Warn(def, "priority = " + p.ToString() + " liegt ausserhalb von [-1000, 1000] und "
-                + "wird auf -1000 geklemmt (09 §7).");
+            Warn(def, "priority = " + p.ToString() + " liegt ausserhalb von [-1000, 1000] und " + "wird auf -1000 geklemmt (09 §7).");
             return -1000;
         }
         return p;
@@ -811,8 +770,7 @@ class ChefZ_RecipeCompiler
         if (range.IsValid())
             return range;
 
-        Warn(def, field + ": min (" + range.min.ToString() + ") ist groesser als max ("
-            + range.max.ToString() + ") - die Grenzen werden getauscht.");
+        Warn(def, field + ": min (" + range.min.ToString() + ") ist groesser als max (" + range.max.ToString() + ") - die Grenzen werden getauscht.");
 
         ChefZ_Range fixedRange = new ChefZ_Range();
         fixedRange.Init(range.max, range.min);

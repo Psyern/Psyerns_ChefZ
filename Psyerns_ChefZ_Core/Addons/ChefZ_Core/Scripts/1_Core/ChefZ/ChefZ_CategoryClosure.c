@@ -61,12 +61,7 @@ class ChefZ_CategoryClosure
 
         if (categoryIndex >= MAX_BITS)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONFIG,
-                "closure.bit.outofrange",
-                "ChefZ_CategoryClosure.SetBit(" + categoryIndex.ToString() + ") liegt oberhalb "
-                + "der Obergrenze " + MAX_BITS.ToString() + " und wurde ignoriert. Das ist ein "
-                + "Programmierfehler im Kategorieaufbau, kein Datenfehler - die betroffene "
-                + "Kategorie matcht ab jetzt nie.");
+            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONFIG, "closure.bit.outofrange", "ChefZ_CategoryClosure.SetBit(" + categoryIndex.ToString() + ") liegt oberhalb " + "der Obergrenze " + MAX_BITS.ToString() + " und wurde ignoriert. Das ist ein " + "Programmierfehler im Kategorieaufbau, kein Datenfehler - die betroffene " + "Kategorie matcht ab jetzt nie.");
             return;
         }
 

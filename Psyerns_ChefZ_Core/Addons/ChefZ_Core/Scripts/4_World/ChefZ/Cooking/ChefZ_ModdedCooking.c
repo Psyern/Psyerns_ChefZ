@@ -84,10 +84,7 @@ modded class Cooking
         // eigenen Ablauf.
         if (ChefZ_CookingHook.ShouldObserve(cooking_equipment))
         {
-            ChefZ_CookingHook.AfterVanillaCook(cooking_equipment,
-                                               cooking_time_coef,
-                                               m_UpdateTime,
-                                               GetCookingMethodWithTimeOverride(cooking_equipment));
+            ChefZ_CookingHook.AfterVanillaCook(cooking_equipment, cooking_time_coef, m_UpdateTime, GetCookingMethodWithTimeOverride(cooking_equipment));
         }
 
         // ---- 3) Vanilla-Rueckgabewert unveraendert weiterreichen -----------

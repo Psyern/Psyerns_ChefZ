@@ -172,14 +172,11 @@ class ChefZ_QualityEvaluation
             outLines = new array<string>();
 
         outLines.Insert("Qualitaet: " + ToLine());
-        outLines.Insert("    Summe der additiven Terme = " + AdditiveSum().ToString()
-            + ", mal Geraetefaktor " + DeviceModifier.ToString()
-            + " = " + TotalScore.ToString());
+        outLines.Insert("    Summe der additiven Terme = " + AdditiveSum().ToString() + ", mal Geraetefaktor " + DeviceModifier.ToString() + " = " + TotalScore.ToString());
 
         if (ConsideredItems > 0)
         {
-            outLines.Insert("    betrachtete Zutaten = " + ConsideredItems.ToString()
-                + ", geringste Frische = " + MinFreshness.ToString());
+            outLines.Insert("    betrachtete Zutaten = " + ConsideredItems.ToString() + ", geringste Frische = " + MinFreshness.ToString());
         }
 
         for (int i = 0; i < Notes.Count(); i++)

@@ -49,10 +49,9 @@
             ],
             "byproducts": [
                 {
-                    "cls": "ChefZ_AnimalFat",
+                    "cls": "Lard",
                     "quantity": 1,
                     "quantityMode": "fixed",
-                    "setState": "PREPARED",
                     "chance": 0.35
                 }
             ],
@@ -75,7 +74,7 @@
                 { "cls": "ChefZ_MincedPork", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "byproducts": [
-                { "cls": "ChefZ_AnimalFat", "quantity": 1, "quantityMode": "fixed", "setState": "PREPARED", "chance": 0.5 }
+                { "cls": "Lard", "quantity": 1, "quantityMode": "fixed", "chance": 0.5 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -114,7 +113,7 @@
                 { "cls": "ChefZ_MincedBoar", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "byproducts": [
-                { "cls": "ChefZ_AnimalFat", "quantity": 1, "quantityMode": "fixed", "setState": "PREPARED", "chance": 0.35 }
+                { "cls": "Lard", "quantity": 1, "quantityMode": "fixed", "chance": 0.35 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -153,7 +152,7 @@
                 { "cls": "ChefZ_MincedBear", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "byproducts": [
-                { "cls": "ChefZ_AnimalFat", "quantity": 1, "quantityMode": "fixed", "setState": "PREPARED", "chance": 0.6 }
+                { "cls": "Lard", "quantity": 1, "quantityMode": "fixed", "chance": 0.6 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -162,7 +161,6 @@
         {
             "id": "TR_SausageCasing",
             "process": "PROCESS_CLEAN_CASING",
-            "stationsAllowed": ["ChefZ_CuttingBoard"],
             "inputs": [
                 {
                     "slotId": "guts",

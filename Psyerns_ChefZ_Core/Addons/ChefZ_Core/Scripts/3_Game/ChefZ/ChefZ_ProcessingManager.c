@@ -162,13 +162,7 @@ class ChefZ_ProcessingManager
      * Voraussetzung fuer die Prozesspruefung (11 §7), und sie gehoert dem
      * Config Manager, der ihre Records haelt.
      */
-    void Build(ChefZ_Registry<ChefZ_ProcessDef> processes,
-               ChefZ_Registry<ChefZ_StationDef> stations,
-               ChefZ_Registry<ChefZ_TransformDef> transforms,
-               ChefZ_ToolRegistry tools,
-               ChefZ_CompileContext ctx,
-               ChefZ_CoreSettingsDef settings,
-               ChefZ_LoadReport report)
+    void Build(ChefZ_Registry<ChefZ_ProcessDef> processes, ChefZ_Registry<ChefZ_StationDef> stations, ChefZ_Registry<ChefZ_TransformDef> transforms, ChefZ_ToolRegistry tools, ChefZ_CompileContext ctx, ChefZ_CoreSettingsDef settings, ChefZ_LoadReport report)
     {
         ClearAll();
 
@@ -227,10 +221,7 @@ class ChefZ_ProcessingManager
      * (03 §4), und damit ist die Reihenfolge der Meldungen im Ladebericht auf
      * jedem Server dieselbe.
      */
-    private void CompileProcesses(ChefZ_Registry<ChefZ_ProcessDef> defs,
-                                  ChefZ_ToolRegistry tools,
-                                  notnull ChefZ_ProcessCompiler compiler,
-                                  ChefZ_LoadReport report)
+    private void CompileProcesses(ChefZ_Registry<ChefZ_ProcessDef> defs, ChefZ_ToolRegistry tools, notnull ChefZ_ProcessCompiler compiler, ChefZ_LoadReport report)
     {
         if (!defs || defs.Count() == 0)
             return;
@@ -255,9 +246,7 @@ class ChefZ_ProcessingManager
         }
     }
 
-    private void CompileStations(ChefZ_Registry<ChefZ_StationDef> defs,
-                                 notnull ChefZ_ProcessCompiler compiler,
-                                 ChefZ_LoadReport report)
+    private void CompileStations(ChefZ_Registry<ChefZ_StationDef> defs, notnull ChefZ_ProcessCompiler compiler, ChefZ_LoadReport report)
     {
         if (!defs || defs.Count() == 0)
             return;
@@ -284,9 +273,7 @@ class ChefZ_ProcessingManager
         }
     }
 
-    private void CompileTransforms(ChefZ_Registry<ChefZ_TransformDef> defs,
-                                   notnull ChefZ_ProcessCompiler compiler,
-                                   ChefZ_LoadReport report)
+    private void CompileTransforms(ChefZ_Registry<ChefZ_TransformDef> defs, notnull ChefZ_ProcessCompiler compiler, ChefZ_LoadReport report)
     {
         if (!defs || defs.Count() == 0)
             return;
@@ -302,8 +289,7 @@ class ChefZ_ProcessingManager
             if (!def)
                 continue;
 
-            ChefZ_CompiledTransform tr = compiler.CompileTransform(def, m_ProcessBySym,
-                                                                   stationSyms);
+            ChefZ_CompiledTransform tr = compiler.CompileTransform(def, m_ProcessBySym, stationSyms);
             if (!tr)
             {
                 m_RejectedTransforms++;
@@ -331,8 +317,7 @@ class ChefZ_ProcessingManager
      * Zerstoerung - "erste gewinnt" verschoebe den Datenfehler in die Zukunft,
      * wo er als "mein Raeuchervorgang hat das Falsche erzeugt" auftaucht.
      */
-    private void RegisterHash(notnull map<int, int> table, string id, ChefZ_Sym sym,
-                              notnull ChefZ_Record rec, ChefZ_LoadReport report, string what)
+    private void RegisterHash(notnull map<int, int> table, string id, ChefZ_Sym sym, notnull ChefZ_Record rec, ChefZ_LoadReport report, string what)
     {
         string key = id;
         int hash = key.Hash();
@@ -343,12 +328,7 @@ class ChefZ_ProcessingManager
             table.Remove(hash);
             if (report)
             {
-                report.AddError(rec.sourceRef, rec.id,
-                    what + ": Hash-Kollision mit \"" + ChefZ_SymbolTable.NameOrMark(existing)
-                    + "\" (beide Hash " + hash.ToString() + "). BEIDE sind ab sofort nicht mehr "
-                    + "aus einem Spielstand ruecklesbar; laufende Jobs, die einen von beiden "
-                    + "nennen, brechen nach einem Neustart OHNE VERLUST ab. Abhilfe: eine der "
-                    + "beiden IDs umbenennen.");
+                report.AddError(rec.sourceRef, rec.id, what + ": Hash-Kollision mit \"" + ChefZ_SymbolTable.NameOrMark(existing) + "\" (beide Hash " + hash.ToString() + "). BEIDE sind ab sofort nicht mehr " + "aus einem Spielstand ruecklesbar; laufende Jobs, die einen von beiden " + "nennen, brechen nach einem Neustart OHNE VERLUST ab. Abhilfe: eine der " + "beiden IDs umbenennen.");
             }
             return;
         }
@@ -479,12 +459,7 @@ class ChefZ_ProcessingManager
                 if (ta.priority != tb.priority)
                     continue;
 
-                report.AddWarn(tb.sourceRef, tb.id,
-                    "hat dieselbe Spezifitaet (" + ta.specificity.ToString()
-                    + ") und dieselbe priority wie \"" + ta.id + "\" am selben Prozess \""
-                    + ChefZ_SymbolTable.NameOrMark(ta.processSym) + "\". Passen beide auf "
-                    + "dieselben Eingaben, entscheidet allein die ID - \"" + ta.id
-                    + "\" gewinnt. Wenn das nicht gewollt ist, hilft \"priority\".");
+                report.AddWarn(tb.sourceRef, tb.id, "hat dieselbe Spezifitaet (" + ta.specificity.ToString() + ") und dieselbe priority wie \"" + ta.id + "\" am selben Prozess \"" + ChefZ_SymbolTable.NameOrMark(ta.processSym) + "\". Passen beide auf " + "dieselben Eingaben, entscheidet allein die ID - \"" + ta.id + "\" gewinnt. Wenn das nicht gewollt ist, hilft \"priority\".");
             }
         }
     }
@@ -494,14 +469,7 @@ class ChefZ_ProcessingManager
         if (!report)
             return;
 
-        report.AddInfo("Processing Manager: " + m_Processes.Count().ToString() + " Prozesse, "
-            + m_Stations.Count().ToString() + " Stationen, "
-            + m_Transforms.Count().ToString() + " Transforms ("
-            + m_ByProcessAnyStation.Count().ToString() + " Prozesse mit stationsfreien "
-            + "Transforms, " + m_ByProcessAndStation.Count().ToString() + " exklusive "
-            + "Zuordnungen). Abgewiesen: " + m_RejectedProcesses.ToString() + " Prozesse, "
-            + m_RejectedTransforms.ToString() + " Transforms. Knotenbudget "
-            + m_NodeBudget.ToString() + ".");
+        report.AddInfo("Processing Manager: " + m_Processes.Count().ToString() + " Prozesse, " + m_Stations.Count().ToString() + " Stationen, " + m_Transforms.Count().ToString() + " Transforms (" + m_ByProcessAnyStation.Count().ToString() + " Prozesse mit stationsfreien " + "Transforms, " + m_ByProcessAndStation.Count().ToString() + " exklusive " + "Zuordnungen). Abgewiesen: " + m_RejectedProcesses.ToString() + " Prozesse, " + m_RejectedTransforms.ToString() + " Transforms. Knotenbudget " + m_NodeBudget.ToString() + ".");
     }
 
     //==========================================================================
@@ -739,11 +707,7 @@ class ChefZ_ProcessingManager
      *         Treffer ist der HAEUFIGSTE Ausgang und ausdruecklich kein
      *         Fehler - die Aktion erscheint dann schlicht nicht (11 §7).
      */
-    bool FindTransform(ChefZ_Sym process,
-                       notnull ChefZ_ProcessContext ctx,
-                       notnull ChefZ_FactSnapshot inputs,
-                       ChefZ_MatchTrace trace,
-                       out ChefZ_TransformMatch match)
+    bool FindTransform(ChefZ_Sym process, notnull ChefZ_ProcessContext ctx, notnull ChefZ_FactSnapshot inputs, ChefZ_MatchTrace trace, out ChefZ_TransformMatch match)
     {
         if (!match)
             match = new ChefZ_TransformMatch();
@@ -855,8 +819,7 @@ class ChefZ_ProcessingManager
      * Index die Rangreihenfolge IST, ist ihre Mischung in Rangreihenfolge. Es
      * wird NICHT sortiert.
      */
-    private void CollectCandidates(ChefZ_Sym process, ChefZ_Sym stationClass,
-                                   notnull array<int> outIdx)
+    private void CollectCandidates(ChefZ_Sym process, ChefZ_Sym stationClass, notnull array<int> outIdx)
     {
         outIdx.Clear();
 
@@ -905,9 +868,7 @@ class ChefZ_ProcessingManager
     }
 
     //! Das Bindungsergebnis in die Ansage uebertragen.
-    private void Fill(notnull ChefZ_CompiledTransform tr,
-                      notnull ChefZ_CompiledProcess proc,
-                      notnull ChefZ_TransformMatch match)
+    private void Fill(notnull ChefZ_CompiledTransform tr, notnull ChefZ_CompiledProcess proc, notnull ChefZ_TransformMatch match)
     {
         match.matched      = true;
         match.transformSym = tr.transformSym;
@@ -973,8 +934,7 @@ class ChefZ_ProcessingManager
         return seconds;
     }
 
-    private float BaseDuration(notnull ChefZ_CompiledTransform tr,
-                               notnull ChefZ_CompiledProcess proc)
+    private float BaseDuration(notnull ChefZ_CompiledTransform tr, notnull ChefZ_CompiledProcess proc)
     {
         if (tr.HasDurationOverride())
             return tr.durationOverrideSec;
@@ -990,11 +950,7 @@ class ChefZ_ProcessingManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Processing Manager  bereit=" + m_Ready.ToString()
-            + "  prozesse=" + m_Processes.Count().ToString()
-            + "  stationen=" + m_Stations.Count().ToString()
-            + "  transforms=" + m_Transforms.Count().ToString()
-            + "  budget=" + m_NodeBudget.ToString());
+        outLines.Insert("ChefZ Processing Manager  bereit=" + m_Ready.ToString() + "  prozesse=" + m_Processes.Count().ToString() + "  stationen=" + m_Stations.Count().ToString() + "  transforms=" + m_Transforms.Count().ToString() + "  budget=" + m_NodeBudget.ToString());
 
         int i;
         for (i = 0; i < m_Processes.Count(); i++)
@@ -1002,8 +958,7 @@ class ChefZ_ProcessingManager
         for (i = 0; i < m_Stations.Count(); i++)
             outLines.Insert("  S " + m_Stations.Get(i).ToDebugString());
         for (i = 0; i < m_Transforms.Count(); i++)
-            outLines.Insert("  T " + (i + 1).ToString() + ". "
-                + m_Transforms.Get(i).ToDebugString());
+            outLines.Insert("  T " + (i + 1).ToString() + ". " + m_Transforms.Get(i).ToDebugString());
     }
 
     private void LogIfDebug()

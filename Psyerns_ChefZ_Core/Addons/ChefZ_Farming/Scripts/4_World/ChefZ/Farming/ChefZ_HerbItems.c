@@ -39,7 +39,7 @@ class ChefZ_FreshHerbBase extends ChefZ_Edible_Base
     }
 
     /**
-     * Die Essaktion der sieben frischen Kraeuter samt frischer Paprika.
+     * Die Essaktion der sechs frischen Kraeuter.
      *
      * Vanilla registriert sie auf jeder Nahrungsklasse einzeln; ohne sie wird
      * das Buendel im Spiel nicht zum Essen angeboten, ohne dass irgendwo etwas
@@ -53,10 +53,11 @@ class ChefZ_FreshHerbBase extends ChefZ_Edible_Base
      * keins von beidem. Der Unterschied ist die Bissgroesse: EAT_NORMAL (15)
      * statt EAT_BIG (25).
      *
-     * Frische Paprika bleibt bewusst in dieser Familie und bekommt dieselbe
-     * Aktion. Vanillas eigene Paprika - GreenBellPepper.c - registriert
-     * ebenfalls ActionEat, nicht ActionEatFruit; die Familie ist an dieser
-     * Stelle also NICHT uneinheitlich und muss nicht geteilt werden.
+     * Frische Paprika war frueher Teil dieser Familie. Sie ist jetzt Vanillas
+     * GreenBellPepper (Vanilla-Audit §2) und bringt ihre Essaktion selbst mit -
+     * GreenBellPepper.c registriert ebenfalls ActionEat und nicht
+     * ActionEatFruit. Die Familie bleibt dadurch einheitlich; es geht keine
+     * Aktion verloren.
      */
     override void SetActions()
     {
@@ -76,6 +77,8 @@ class ChefZ_WildGarlic extends ChefZ_FreshHerbBase {}
 //! Pfefferbeeren sind der Rohstoff der Pfefferkette (Production Map §16).
 class ChefZ_PepperBerries extends ChefZ_FreshHerbBase {}
 
-//! Frische Paprika ist Gemuese UND Ausgangsstoff des Paprikapulvers
-//! (Production Map §15).
-class ChefZ_Paprika extends ChefZ_FreshHerbBase {}
+//! Frische Paprika hat KEINE eigene Klasse: das ist Vanillas GreenBellPepper
+//! (Vanilla-Audit §2). Eingang der Trockenkette §15 ist deshalb ein
+//! Vanilla-Item; einen ChefZ-Zustand kann es nicht tragen, es braucht ihn hier
+//! auch nicht - TR_PaprikaToDried setzt den Zustand DRIED am AUSGANG
+//! ChefZ_DriedPaprika, und der ist eine ChefZ-Klasse.

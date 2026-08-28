@@ -78,8 +78,7 @@ class ChefZ_StationDef extends ChefZ_Record
         if (!ChefZ_Undefined.IsIntUndefined(parallelSlots) && parallelSlots < 0)
         {
             if (ctx)
-                ctx.Error(this, "parallelSlots ist negativ (" + parallelSlots.ToString()
-                    + ") - abgewiesen.");
+                ctx.Error(this, "parallelSlots ist negativ (" + parallelSlots.ToString() + ") - abgewiesen.");
             return false;
         }
 

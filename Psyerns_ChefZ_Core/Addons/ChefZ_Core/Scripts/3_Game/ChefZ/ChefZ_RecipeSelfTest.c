@@ -109,10 +109,7 @@ class ChefZ_RecipeSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.MATCH,
-            "Selbsttest S6 " + name + " FEHLGESCHLAGEN. Die Recipe Engine verhaelt sich "
-            + "nicht wie entworfen - welches Gericht ein Kessel ergibt, ist damit "
-            + "unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.MATCH, "Selbsttest S6 " + name + " FEHLGESCHLAGEN. Die Recipe Engine verhaelt sich " + "nicht wie entworfen - welches Gericht ein Kessel ergibt, ist damit " + "unzuverlaessig.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -178,8 +175,7 @@ class ChefZ_RecipeSelfTest
         return ctx;
     }
 
-    private static ChefZ_RecipeCompiler MakeCompiler(ChefZ_CompileContext ctx,
-                                                     ChefZ_LoadReport report)
+    private static ChefZ_RecipeCompiler MakeCompiler(ChefZ_CompileContext ctx, ChefZ_LoadReport report)
     {
         ChefZ_RecipeCompiler compiler = new ChefZ_RecipeCompiler();
         compiler.Init(ctx, report, null);
@@ -254,8 +250,7 @@ class ChefZ_RecipeSelfTest
         def.slots.Insert(Slot(slotId, CategorySelector(category)));
     }
 
-    private static ChefZ_CompiledRecipe CompileOne(notnull ChefZ_RecipeCompiler compiler,
-                                                  notnull ChefZ_RecipeDef def)
+    private static ChefZ_CompiledRecipe CompileOne(notnull ChefZ_RecipeCompiler compiler, notnull ChefZ_RecipeDef def)
     {
         def.Normalize();
         def.ResolveDefaults();
@@ -314,8 +309,7 @@ class ChefZ_RecipeSelfTest
     // Faktenlisten
     //--------------------------------------------------------------------------
 
-    private static ChefZ_ItemFacts AddItem(notnull ChefZ_FactSnapshot snap, int handle,
-                                           string className, int bitA, int bitB)
+    private static ChefZ_ItemFacts AddItem(notnull ChefZ_FactSnapshot snap, int handle, string className, int bitA, int bitB)
     {
         ChefZ_ItemFacts facts = snap.Acquire();
         facts.handle      = handle;
@@ -383,8 +377,7 @@ class ChefZ_RecipeSelfTest
         return devices;
     }
 
-    private static void AddToRegistry(notnull ChefZ_Registry<ChefZ_RecipeDef> reg,
-                                      notnull ChefZ_RecipeDef def)
+    private static void AddToRegistry(notnull ChefZ_Registry<ChefZ_RecipeDef> reg, notnull ChefZ_RecipeDef def)
     {
         def.Normalize();
         def.ResolveDefaults();
@@ -662,8 +655,7 @@ class ChefZ_RecipeSelfTest
 
         // Teilbericht: was fehlt R4 noch?
         ChefZ_PartialMatchReport partial;
-        if (!engine.EvaluatePartial(cook, snap,
-                ChefZ_SymbolTable.Intern("CHEFZ_RT_R4"), partial))  return false;
+        if (!engine.EvaluatePartial(cook, snap, ChefZ_SymbolTable.Intern("CHEFZ_RT_R4"), partial))  return false;
         if (!partial.contextOk)                                     return false;
         if (partial.AllSlotsSatisfied())                            return false;   // s5 fehlt
 
@@ -822,8 +814,7 @@ class ChefZ_RecipeSelfTest
 
         ChefZ_RecipeEngine shadowEngine = new ChefZ_RecipeEngine();
         shadowEngine.SetVerifyOutputClasses(false);
-        shadowEngine.Build(shadowReg, MakeDeviceRegistry(),
-                           MakeShadowContext(shadowReport), null, shadowReport);
+        shadowEngine.Build(shadowReg, MakeDeviceRegistry(), MakeShadowContext(shadowReport), null, shadowReport);
 
         if (shadowReport.WarnCount() < 1)                           return false;
         if (shadowReport.ErrorCount() != 0)                         return false;

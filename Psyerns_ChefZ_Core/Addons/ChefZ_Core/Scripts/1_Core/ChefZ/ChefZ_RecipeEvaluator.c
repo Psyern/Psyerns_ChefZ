@@ -54,12 +54,7 @@ class ChefZ_RecipeEvaluator
      * mehr. Es gibt keinen Rueckgabewert fuer "Fehler" - ein Fehler waere ein
      * Grund, es NICHT anzuwenden, und genau das ist false.
      */
-    static bool Evaluate(notnull ChefZ_CompiledRecipe recipe,
-                         notnull ChefZ_CookContext ctx,
-                         notnull ChefZ_FactSnapshot snapshot,
-                         int nodeBudget,
-                         ChefZ_MatchTrace trace,
-                         notnull ChefZ_MatchResult result)
+    static bool Evaluate(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_CookContext ctx, notnull ChefZ_FactSnapshot snapshot, int nodeBudget, ChefZ_MatchTrace trace, notnull ChefZ_MatchResult result)
     {
         result.Reset();
         result.failedRecipe  = recipe.recipeSym;
@@ -149,10 +144,7 @@ class ChefZ_RecipeEvaluator
     // 2e - Policy
     //==========================================================================
 
-    private static bool CheckPolicy(notnull ChefZ_CompiledRecipe recipe,
-                                    notnull ChefZ_FactSnapshot snapshot,
-                                    notnull ChefZ_BindResult bind,
-                                    out string reason)
+    private static bool CheckPolicy(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_BindResult bind, out string reason)
     {
         reason = "";
         ChefZ_CompiledPolicy policy = recipe.policy;
@@ -226,10 +218,7 @@ class ChefZ_RecipeEvaluator
     // 2f - Ergebnis
     //==========================================================================
 
-    private static void Fill(notnull ChefZ_CompiledRecipe recipe,
-                             notnull ChefZ_FactSnapshot snapshot,
-                             notnull ChefZ_BindResult bind,
-                             notnull ChefZ_MatchResult result)
+    private static void Fill(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_BindResult bind, notnull ChefZ_MatchResult result)
     {
         result.recipe        = recipe;
         result.priority      = recipe.priority;
@@ -300,11 +289,7 @@ class ChefZ_RecipeEvaluator
      * Fortschrittsanzeige (08 E5). Verbranntes Essen wird damit zur
      * natuerlichen Fehlerbedingung, statt nachgebaut zu werden.
      */
-    static bool CheckReady(notnull ChefZ_CompiledRecipe recipe,
-                           notnull ChefZ_MatchResult result,
-                           notnull ChefZ_FactSnapshot snapshot,
-                           notnull ChefZ_CookContext ctx,
-                           out string reason)
+    static bool CheckReady(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult result, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_CookContext ctx, out string reason)
     {
         reason = "";
 
@@ -342,10 +327,7 @@ class ChefZ_RecipeEvaluator
      * Salz nicht "gekocht" ist, waere ein Fehler, den niemand als solchen
      * erkennt - das Gericht kaeme einfach nie.
      */
-    private static bool CheckStages(notnull ChefZ_CompiledRecipe recipe,
-                                    notnull ChefZ_MatchResult result,
-                                    notnull ChefZ_FactSnapshot snapshot,
-                                    out string reason)
+    private static bool CheckStages(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult result, notnull ChefZ_FactSnapshot snapshot, out string reason)
     {
         reason = "";
 
@@ -419,10 +401,7 @@ class ChefZ_RecipeEvaluator
      * "was fehlt mir noch", und darauf ist "dir fehlt ein Pilz" die richtige
      * Antwort - nicht "es gibt keine gueltige Gesamtzuordnung".
      */
-    static void BuildPartial(notnull ChefZ_CompiledRecipe recipe,
-                             notnull ChefZ_CookContext ctx,
-                             notnull ChefZ_FactSnapshot snapshot,
-                             notnull ChefZ_PartialMatchReport report)
+    static void BuildPartial(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_CookContext ctx, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_PartialMatchReport report)
     {
         report.Reset();
         report.recipeSym = recipe.recipeSym;
@@ -464,8 +443,7 @@ class ChefZ_RecipeEvaluator
 
     //! Warum hat das erste Item des Gefaesses diesen Slot nicht bedient?
     //! Dieselbe Auskunft wie im Matcher-Trace (07 E6), nur auf Anforderung.
-    private static string FirstMissReason(notnull ChefZ_CompiledSlot slot,
-                                          notnull ChefZ_FactSnapshot snapshot)
+    private static string FirstMissReason(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot)
     {
         for (int i = 0; i < snapshot.Count(); i++)
         {

@@ -106,10 +106,7 @@ class ChefZ_ProcessingSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-            "Selbsttest S14 " + name + " FEHLGESCHLAGEN. Der Processing Manager verhaelt sich "
-            + "nicht wie entworfen - was eine Station aus einer Zutat macht, ist damit "
-            + "unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS, "Selbsttest S14 " + name + " FEHLGESCHLAGEN. Der Processing Manager verhaelt sich " + "nicht wie entworfen - was eine Station aus einer Zutat macht, ist damit " + "unzuverlaessig.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -228,8 +225,7 @@ class ChefZ_ProcessingSelfTest
         return def;
     }
 
-    private static ChefZ_ItemFacts AddItem(notnull ChefZ_FactSnapshot snap, int handle,
-                                           string className, int bit)
+    private static ChefZ_ItemFacts AddItem(notnull ChefZ_FactSnapshot snap, int handle, string className, int bit)
     {
         ChefZ_ItemFacts facts = snap.Acquire();
         facts.handle      = handle;
@@ -353,30 +349,24 @@ class ChefZ_ProcessingSelfTest
         ChefZ_ToolRegistry tools = ChefZ_ToolRegistry.Get();
 
         //--- Prozess mit UNBEKANNTER Werkzeuggruppe -> ABGEWIESEN -------------
-        ChefZ_ProcessDef badTool = Process("CHEFZ_PT_P_BADTOOL",
-                                           ChefZ_ProcessExec.STATION_ACTION_NAME,
-                                           "CHEFZ_PT_GIBTSNICHT");
+        ChefZ_ProcessDef badTool = Process("CHEFZ_PT_P_BADTOOL", ChefZ_ProcessExec.STATION_ACTION_NAME, "CHEFZ_PT_GIBTSNICHT");
         if (compiler.CompileProcess(badTool, tools))                            return false;
 
         //--- Prozess ohne Werkzeug -> zulaessig -------------------------------
-        ChefZ_ProcessDef noTool = Process(PROZ_ACTION,
-                                          ChefZ_ProcessExec.STATION_ACTION_NAME, "");
+        ChefZ_ProcessDef noTool = Process(PROZ_ACTION, ChefZ_ProcessExec.STATION_ACTION_NAME, "");
         ChefZ_CompiledProcess proc = compiler.CompileProcess(noTool, tools);
         if (!proc)                                                              return false;
         if (proc.exec != ChefZ_ProcessExec.STATION_ACTION)                      return false;
         if (proc.toolGroups.Count() != 0)                                       return false;
 
         //--- Prozess MIT bekannter Gruppe -------------------------------------
-        ChefZ_ProcessDef withTool = Process(PROZ_TIMED,
-                                            ChefZ_ProcessExec.STATION_TIMED_NAME,
-                                            GRUPPE_SCHNEID);
+        ChefZ_ProcessDef withTool = Process(PROZ_TIMED, ChefZ_ProcessExec.STATION_TIMED_NAME, GRUPPE_SCHNEID);
         ChefZ_CompiledProcess timed = compiler.CompileProcess(withTool, tools);
         if (!timed)                                                             return false;
         if (timed.toolGroups.Count() != 1)                                      return false;
 
         //--- Stationsdauer wird geklemmt --------------------------------------
-        ChefZ_ProcessDef instant = Process("CHEFZ_PT_P_INSTANT",
-                                           ChefZ_ProcessExec.STATION_TIMED_NAME, "");
+        ChefZ_ProcessDef instant = Process("CHEFZ_PT_P_INSTANT", ChefZ_ProcessExec.STATION_TIMED_NAME, "");
         instant.baseDurationSec = 0.0;
         ChefZ_CompiledProcess clamped = compiler.CompileProcess(instant, tools);
         if (!clamped)                                                           return false;
@@ -409,8 +399,7 @@ class ChefZ_ProcessingSelfTest
         if (!compiler.CompileTransform(two, procs, stations))                   return false;
 
         //--- Transform mit UNBEKANNTEM Prozess -> ABGEWIESEN -------------------
-        ChefZ_TransformDef orphan = Transform("CHEFZ_PT_T_ORPHAN",
-                                              "CHEFZ_PT_GIBTSNICHT", KAT_A);
+        ChefZ_TransformDef orphan = Transform("CHEFZ_PT_T_ORPHAN", "CHEFZ_PT_GIBTSNICHT", KAT_A);
         if (compiler.CompileTransform(orphan, procs, stations))                 return false;
 
         //--- Output ohne cls UND ohne setState -> ABGEWIESEN -------------------
@@ -496,8 +485,7 @@ class ChefZ_ProcessingSelfTest
         if (ChefZ_SymbolTable.IsValid(defA.ProcessAt(9)))                       return false;
 
         // Eine unbekannte Station bietet nichts an.
-        if (mgr.GetOfferedProcesses(ChefZ_SymbolTable.Intern("CHEFZ_PT_NIX"),
-                                    offered) != 0)                              return false;
+        if (mgr.GetOfferedProcesses(ChefZ_SymbolTable.Intern("CHEFZ_PT_NIX"), offered) != 0)                              return false;
 
         // Ausfuehrungsformen sind trennbar (die Handcraft-Bruecke, S15,
         // braucht genau das).
@@ -607,8 +595,7 @@ class ChefZ_ProcessingSelfTest
 
         //--- Unbekannter Prozess ----------------------------------------------
         ChefZ_TransformMatch nope;
-        if (mgr.FindTransform(ChefZ_SymbolTable.Intern("CHEFZ_PT_NIXPROZ"),
-                              ctx, snap, null, nope))                           return false;
+        if (mgr.FindTransform(ChefZ_SymbolTable.Intern("CHEFZ_PT_NIXPROZ"), ctx, snap, null, nope))                           return false;
 
         return true;
     }
@@ -706,8 +693,7 @@ class ChefZ_ProcessingSelfTest
         // Ein unbekannter Hash loest sich NICHT auf - der Job bricht dann ab,
         // ohne etwas zu verbrauchen (11 §6).
         if (ChefZ_SymbolTable.IsValid(mgr.TransformFromPersistHash(123456789))) return false;
-        if (ChefZ_SymbolTable.IsValid(
-                mgr.TransformFromPersistHash(ChefZ_ProcessJob.NO_HASH)))        return false;
+        if (ChefZ_SymbolTable.IsValid( mgr.TransformFromPersistHash(ChefZ_ProcessJob.NO_HASH)))        return false;
 
         return true;
     }
@@ -770,8 +756,7 @@ class ChefZ_ProcessingSelfTest
         ChefZ_Registry<ChefZ_ProcessDef> procs = new ChefZ_Registry<ChefZ_ProcessDef>();
         procs.Init(ChefZ_RecordKind.PROCESS);
         AddRecord(procs, Process(PROZ_ACTION, ChefZ_ProcessExec.STATION_ACTION_NAME, ""));
-        AddRecord(procs, Process(PROZ_TIMED, ChefZ_ProcessExec.STATION_TIMED_NAME,
-                                 GRUPPE_SCHNEID));
+        AddRecord(procs, Process(PROZ_TIMED, ChefZ_ProcessExec.STATION_TIMED_NAME, GRUPPE_SCHNEID));
 
         ChefZ_Registry<ChefZ_StationDef> stations = new ChefZ_Registry<ChefZ_StationDef>();
         stations.Init(ChefZ_RecordKind.STATION);
@@ -803,8 +788,7 @@ class ChefZ_ProcessingSelfTest
 
         ChefZ_ProcessingManager mgr = new ChefZ_ProcessingManager();
         mgr.SetVerifyClasses(false);
-        mgr.Build(procs, stations, transforms, ChefZ_ToolRegistry.Get(),
-                  MakeContext(rep), null, rep);
+        mgr.Build(procs, stations, transforms, ChefZ_ToolRegistry.Get(), MakeContext(rep), null, rep);
         return mgr;
     }
 

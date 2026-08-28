@@ -164,28 +164,21 @@ class ChefZ_QualityTierDef extends ChefZ_Record
         if (yieldMultiplier <= 0.0)
         {
             if (ctx)
-                ctx.Warn(this, "yieldMultiplier ist " + yieldMultiplier.ToString()
-                    + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"das Rezept "
-                    + "verbraucht die Zutaten und erzeugt nichts\"; gemeint ist das nie. "
-                    + "Es gilt " + MIN_YIELD_MULTIPLIER.ToString() + ".");
+                ctx.Warn(this, "yieldMultiplier ist " + yieldMultiplier.ToString() + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"das Rezept " + "verbraucht die Zutaten und erzeugt nichts\"; gemeint ist das nie. " + "Es gilt " + MIN_YIELD_MULTIPLIER.ToString() + ".");
             yieldMultiplier = MIN_YIELD_MULTIPLIER;
         }
 
         if (spoilageMultiplier <= 0.0)
         {
             if (ctx)
-                ctx.Warn(this, "spoilageMultiplier ist " + spoilageMultiplier.ToString()
-                    + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"verdirbt nie\" oder "
-                    + "\"verdirbt rueckwaerts\"; gemeint ist das nie. Es gilt 1.0 (neutral).");
+                ctx.Warn(this, "spoilageMultiplier ist " + spoilageMultiplier.ToString() + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"verdirbt nie\" oder " + "\"verdirbt rueckwaerts\"; gemeint ist das nie. Es gilt 1.0 (neutral).");
             spoilageMultiplier = 1.0;
         }
 
         if (rank < 0)
         {
             if (ctx)
-                ctx.Warn(this, "rank ist " + rank.ToString() + " und damit negativ. Raenge "
-                    + "zaehlen ab 0 aufwaerts; ein negativer Rang haette in DegradeTier und "
-                    + "ShiftRank keine Entsprechung. Es gilt 0.");
+                ctx.Warn(this, "rank ist " + rank.ToString() + " und damit negativ. Raenge " + "zaehlen ab 0 aufwaerts; ein negativer Rang haette in DegradeTier und " + "ShiftRank keine Entsprechung. Es gilt 0.");
             rank = 0;
         }
 

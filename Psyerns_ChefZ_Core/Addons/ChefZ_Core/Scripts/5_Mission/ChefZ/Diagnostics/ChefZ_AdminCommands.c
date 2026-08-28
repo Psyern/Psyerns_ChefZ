@@ -102,8 +102,7 @@ class ChefZ_AdminCommands
 
     //==========================================================================
 
-    private static bool Dispatch(string verb, notnull array<string> tok,
-                                 notnull array<string> lines)
+    private static bool Dispatch(string verb, notnull array<string> tok, notnull array<string> lines)
     {
         if (verb == "help" || verb == "?")
         {
@@ -202,8 +201,7 @@ class ChefZ_AdminCommands
         {
             if (tok.Count() < 3)
             {
-                lines.Insert("chefz log level <0..5>   gueltig: "
-                    + ChefZ_LogLevel.ValidNames());
+                lines.Insert("chefz log level <0..5>   gueltig: " + ChefZ_LogLevel.ValidNames());
                 return false;
             }
 
@@ -216,8 +214,7 @@ class ChefZ_AdminCommands
                 int asNumber = raw.ToInt();
                 if (asNumber == 0 && raw != "0")
                 {
-                    lines.Insert("\"" + raw + "\" ist keine Logstufe. Gueltig: "
-                        + ChefZ_LogLevel.ValidNames() + " oder 0..5.");
+                    lines.Insert("\"" + raw + "\" ist keine Logstufe. Gueltig: " + ChefZ_LogLevel.ValidNames() + " oder 0..5.");
                     return false;
                 }
                 level = asNumber;
@@ -236,8 +233,7 @@ class ChefZ_AdminCommands
                 // 18 §6: TRACE funktioniert, ist aber teuer. Dieselbe Warnung
                 // wie in Configure() - hier ist sie sogar wichtiger, denn wer
                 // sie zur Laufzeit setzt, setzt sie meist am laufenden Server.
-                lines.Insert("ACHTUNG: TRACE ist auf einem Produktivserver teuer. "
-                    + "Nach der Fehlersuche wieder zuruecksetzen.");
+                lines.Insert("ACHTUNG: TRACE ist auf einem Produktivserver teuer. " + "Nach der Fehlersuche wieder zuruecksetzen.");
             }
 
             LogStatus(lines);
@@ -248,8 +244,7 @@ class ChefZ_AdminCommands
         {
             if (tok.Count() < 4)
             {
-                lines.Insert("chefz log channel <name> on|off   gueltig: "
-                    + ChefZ_LogChannel.ValidNames());
+                lines.Insert("chefz log channel <name> on|off   gueltig: " + ChefZ_LogChannel.ValidNames());
                 return false;
             }
 
@@ -260,8 +255,7 @@ class ChefZ_AdminCommands
                 // 18 §6: "Adminkommando mit ungueltigem Kanalnamen ->
                 // Fehlermeldung mit Liste der gueltigen Namen, KEINE
                 // Aenderung."
-                lines.Insert("Unbekannter Kanal \"" + channelName + "\". Gueltig: "
-                    + ChefZ_LogChannel.ValidNames() + ". Nichts geaendert.");
+                lines.Insert("Unbekannter Kanal \"" + channelName + "\". Gueltig: " + ChefZ_LogChannel.ValidNames() + ". Nichts geaendert.");
                 return false;
             }
 
@@ -290,11 +284,7 @@ class ChefZ_AdminCommands
     {
         int mask = ChefZ_Log.GetChannelMask();
 
-        lines.Insert("Log: Stufe " + ChefZ_LogLevel.Name(ChefZ_Log.GetLevel())
-            + "   Datei " + ChefZ_Log.IsFileOutputActive().ToString()
-            + " (" + ChefZ_Log.GetLogFilePath() + ")"
-            + "   Fehler " + ChefZ_Log.GetErrorCount().ToString()
-            + "   Warnungen " + ChefZ_Log.GetWarnCount().ToString());
+        lines.Insert("Log: Stufe " + ChefZ_LogLevel.Name(ChefZ_Log.GetLevel()) + "   Datei " + ChefZ_Log.IsFileOutputActive().ToString() + " (" + ChefZ_Log.GetLogFilePath() + ")" + "   Fehler " + ChefZ_Log.GetErrorCount().ToString() + "   Warnungen " + ChefZ_Log.GetWarnCount().ToString());
 
         string active = "";
         string inactive = "";
@@ -329,8 +319,7 @@ class ChefZ_AdminCommands
     {
         if (tok.Count() < 2)
         {
-            lines.Insert("chefz match <entityId>   Netz-ID des Gefaesses, "
-                + "als <low> oder <low>:<high>.");
+            lines.Insert("chefz match <entityId>   Netz-ID des Gefaesses, " + "als <low> oder <low>:<high>.");
             return false;
         }
 
@@ -350,8 +339,7 @@ class ChefZ_AdminCommands
     {
         if (tok.Count() < 3)
         {
-            lines.Insert("chefz why <entityId> <recipeId>   gezielte "
-                + "Ablehnungsbegruendung fuer EIN Rezept an EINEM Gefaess.");
+            lines.Insert("chefz why <entityId> <recipeId>   gezielte " + "Ablehnungsbegruendung fuer EIN Rezept an EINEM Gefaess.");
             return false;
         }
 
@@ -410,8 +398,7 @@ class ChefZ_AdminCommands
         lines.Insert("  chefz categories                  Kategoriebaum");
         lines.Insert("  chefz symbols                     Symboltabelle");
         lines.Insert("  chefz stats                       Sitzungen, Matchzaehler, PERF-Mittel");
-        lines.Insert("Kein Kommando veraendert den Spielzustand. \"match\" und \"why\" "
-            + "werten aus und wenden nie an (18 E6).");
+        lines.Insert("Kein Kommando veraendert den Spielzustand. \"match\" und \"why\" " + "werten aus und wenden nie an (18 E6).");
     }
 
     //==========================================================================

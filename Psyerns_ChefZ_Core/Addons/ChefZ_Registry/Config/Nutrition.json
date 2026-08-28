@@ -255,13 +255,6 @@
             "fullness": 2
         },
         {
-            "id": "ChefZ_Paprika",
-            "scope": "class",
-            "energy": 60,
-            "water": 45,
-            "fullness": 20
-        },
-        {
             "id": "ChefZ_PaprikaPowder",
             "scope": "class",
             "energy": 20,
@@ -302,13 +295,6 @@
             "energy": 15,
             "water": 12,
             "fullness": 5
-        },
-        {
-            "id": "ChefZ_AnimalFat",
-            "scope": "class",
-            "energy": 300,
-            "water": 5,
-            "fullness": 40
         },
         {
             "id": "ChefZ_BoarSausage",

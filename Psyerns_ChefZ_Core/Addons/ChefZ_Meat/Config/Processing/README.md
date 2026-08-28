@@ -26,9 +26,13 @@ von jeder ChefZ-Registry entscheidbar ist.
 §30/§57: Meat -> Minced Meat am Fleischwolf. Der gattungsneutrale Fall mit
 `priority 0` — jede Sortenregel unten schlaegt ihn.
 
-**Zum Nebenausgang `ChefZ_AnimalFat` in `outputs[]`:** §31: Tierfett faellt beim
+**Zum Nebenausgang `Lard` in `byproducts[]`:** §31: Tierfett faellt beim
 Wolfen an. Nicht bei jedem Durchgang — `chance 0.35` — sonst waere Fett kein Fund,
-sondern eine Selbstverstaendlichkeit.
+sondern eine Selbstverstaendlichkeit. Ausgegeben wird Vanillas `Lard` und keine
+eigene Fettklasse (Vanilla-Audit §2): alle Fett-Slots matchen ueber die Kategorie
+`FAT`, und `Lard` traegt sie bereits. `setState` fehlt hier bewusst — ein
+Vanilla-Item kann keinen ChefZ-Zustand tragen (`ChefZ_ItemStateComponent.Of()`
+liefert `null`), der Eintrag waere wirkungslose Daten.
 
 ### `TR_PorkToMinced`, `TR_VenisonToMinced`, `TR_BoarToMinced`, `TR_ChickenToMinced`, `TR_BearToMinced`
 

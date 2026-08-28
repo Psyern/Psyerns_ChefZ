@@ -166,28 +166,21 @@ class ChefZ_TransformDef extends ChefZ_Record
         if (ChefZ_Undefined.IsTextUndefined(process))
         {
             if (ctx)
-                ctx.Error(this, "Transform ohne \"process\" - abgewiesen. Ohne Prozess gibt es "
-                    + "keine Station, die ihn anbieten koennte, und keine Aktion, die ihn "
-                    + "ausloesen wuerde.");
+                ctx.Error(this, "Transform ohne \"process\" - abgewiesen. Ohne Prozess gibt es " + "keine Station, die ihn anbieten koennte, und keine Aktion, die ihn " + "ausloesen wuerde.");
             return false;
         }
 
         if (!inputs || inputs.Count() == 0)
         {
             if (ctx)
-                ctx.Error(this, "Transform ohne \"inputs\" - abgewiesen. Er haette keine "
-                    + "Bedingung und wuerde damit auf jeden Stationsinhalt passen, auch auf "
-                    + "einen leeren.");
+                ctx.Error(this, "Transform ohne \"inputs\" - abgewiesen. Er haette keine " + "Bedingung und wuerde damit auf jeden Stationsinhalt passen, auch auf " + "einen leeren.");
             return false;
         }
 
         if (!outputs || outputs.Count() == 0)
         {
             if (ctx)
-                ctx.Error(this, "Transform ohne \"outputs\" - abgewiesen. Er wuerde die "
-                    + "Eingaenge verbrauchen und nichts erzeugen (11 §7: eine "
-                    + "Zutatenvernichtungsmaschine). Ein reiner Zustandswechsel ist ebenfalls "
-                    + "ein Output: ein Eintrag mit leerem \"cls\" und gesetztem \"setState\".");
+                ctx.Error(this, "Transform ohne \"outputs\" - abgewiesen. Er wuerde die " + "Eingaenge verbrauchen und nichts erzeugen (11 §7: eine " + "Zutatenvernichtungsmaschine). Ein reiner Zustandswechsel ist ebenfalls " + "ein Output: ein Eintrag mit leerem \"cls\" und gesetztem \"setState\".");
             return false;
         }
 
@@ -219,8 +212,7 @@ class ChefZ_TransformDef extends ChefZ_Record
         process             = PatchText(process, s.process, s, "process");
         qualityRule         = PatchText(qualityRule, s.qualityRule, s, "qualityRule");
 
-        durationOverrideSec = PatchFloat(durationOverrideSec, s.durationOverrideSec,
-                                         s, "durationOverrideSec");
+        durationOverrideSec = PatchFloat(durationOverrideSec, s.durationOverrideSec, s, "durationOverrideSec");
         freshnessCarry      = PatchFloat(freshnessCarry, s.freshnessCarry, s, "freshnessCarry");
         qualityDelta        = PatchFloat(qualityDelta, s.qualityDelta, s, "qualityDelta");
         priority            = PatchInt(priority, s.priority, s, "priority");
@@ -251,8 +243,7 @@ class ChefZ_TransformDef extends ChefZ_Record
         CaptureOutputBools(byproducts, o.byproducts);
     }
 
-    private void CaptureOutputBools(array<ref ChefZ_OutputDef> mine,
-                                    array<ref ChefZ_OutputDef> probe)
+    private void CaptureOutputBools(array<ref ChefZ_OutputDef> mine, array<ref ChefZ_OutputDef> probe)
     {
         if (!mine || !probe)
             return;

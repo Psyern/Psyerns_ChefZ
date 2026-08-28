@@ -80,11 +80,7 @@ class ChefZ_NutritionSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.NUTRI,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Die Sollrechnung des Naehrwertaudits "
-            + "verhaelt sich nicht wie entworfen - jede Zahl im Startaudit ist ab hier "
-            + "unzuverlaessig. Kochen, Essen und Vanilla sind davon unberuehrt: der "
-            + "Nutrition Manager schreibt zur Laufzeit nichts (13 E1).");
+        ChefZ_Log.Error(ChefZ_LogChannel.NUTRI, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Sollrechnung des Naehrwertaudits " + "verhaelt sich nicht wie entworfen - jede Zahl im Startaudit ist ab hier " + "unzuverlaessig. Kochen, Essen und Vanilla sind davon unberuehrt: der " + "Nutrition Manager schreibt zur Laufzeit nichts (13 E1).");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -155,9 +151,7 @@ class ChefZ_NutritionSelfTest
         return reg;
     }
 
-    private static ChefZ_NutritionDef AddDef(notnull ChefZ_Registry<ChefZ_NutritionDef> reg,
-                                             string id, string scope, float energy,
-                                             bool perUnit = false)
+    private static ChefZ_NutritionDef AddDef(notnull ChefZ_Registry<ChefZ_NutritionDef> reg, string id, string scope, float energy, bool perUnit = false)
     {
         // Die Bool-Sonde steht sonst womoeglich noch auf "hoch" und wuerde
         // "perUnit" als gesetzt erscheinen lassen (02 E3).

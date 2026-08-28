@@ -162,10 +162,7 @@ class ChefZ_QualityManager
      * antwortete er auf jede Abfrage mit dem Fehler "vor Build aufgerufen",
      * obwohl schlicht keine Stufen konfiguriert sind.
      */
-    void Build(ChefZ_Registry<ChefZ_QualityTierDef> defs,
-               ChefZ_LoadReport report,
-               ChefZ_CoreSettingsDef settings = null,
-               ChefZ_IdentityMap identities = null)
+    void Build(ChefZ_Registry<ChefZ_QualityTierDef> defs, ChefZ_LoadReport report, ChefZ_CoreSettingsDef settings = null, ChefZ_IdentityMap identities = null)
     {
         ResetState();
         m_Identities = identities;
@@ -192,9 +189,7 @@ class ChefZ_QualityManager
             // alle Multiplikatoren gelten als 1.0, Gerichte entstehen
             // weiterhin - nur ohne Qualitaet. Vanilla unberuehrt.
             if (report)
-                report.AddInfo("Keine Qualitaetsstufen definiert - Gerichte entstehen ohne "
-                    + "Stufe. Ausbeute, Haltbarkeit und Anzeige bleiben neutral; "
-                    + "Vanilla-Kochen ist davon unberuehrt.");
+                report.AddInfo("Keine Qualitaetsstufen definiert - Gerichte entstehen ohne " + "Stufe. Ausbeute, Haltbarkeit und Anzeige bleiben neutral; " + "Vanilla-Kochen ist davon unberuehrt.");
             m_Ready = true;
             return;
         }
@@ -222,9 +217,7 @@ class ChefZ_QualityManager
 
         if (report)
         {
-            report.AddInfo("Qualitaetsstufen: " + GetTierCount().ToString() + " in "
-                + m_SetOrder.Count().ToString() + " Stufensatz/-saetzen, Vorgabesatz \""
-                + m_Scoring.defaultTierSet + "\".");
+            report.AddInfo("Qualitaetsstufen: " + GetTierCount().ToString() + " in " + m_SetOrder.Count().ToString() + " Stufensatz/-saetzen, Vorgabesatz \"" + m_Scoring.defaultTierSet + "\".");
         }
 
         LogIfDebug();
@@ -278,10 +271,7 @@ class ChefZ_QualityManager
             ChefZ_Sym tag = ChefZ_SymbolTable.Lookup(name);
             if (!cats.TagExists(tag))
             {
-                Report(report, false, def,
-                    "grantsTags nennt \"" + name + "\" - dieser Tag ist unbekannt und wird "
-                    + "fuer diese Stufe ausgelassen; die uebrigen bleiben gueltig. Tags "
-                    + "werden nie implizit angelegt (04 §6).");
+                Report(report, false, def, "grantsTags nennt \"" + name + "\" - dieser Tag ist unbekannt und wird " + "fuer diese Stufe ausgelassen; die uebrigen bleiben gueltig. Tags " + "werden nie implizit angelegt (04 §6).");
                 continue;
             }
 
@@ -349,11 +339,7 @@ class ChefZ_QualityManager
 
         if (reordered)
         {
-            ReportSet(report, setSym,
-                "Die geschriebenen \"rank\"-Werte stimmen nicht mit der Reihenfolge der "
-                + "\"minScore\"-Schwellen ueberein. Es gilt die Reihenfolge der Schwellen; "
-                + "die Raenge werden neu durchnummeriert. Vorher: " + before
-                + ". Nachher: " + after + ".");
+            ReportSet(report, setSym, "Die geschriebenen \"rank\"-Werte stimmen nicht mit der Reihenfolge der " + "\"minScore\"-Schwellen ueberein. Es gilt die Reihenfolge der Schwellen; " + "die Raenge werden neu durchnummeriert. Vorher: " + before + ". Nachher: " + after + ".");
         }
 
         WarnOnDuplicateScores(tiers, setSym, report);
@@ -400,8 +386,7 @@ class ChefZ_QualityManager
         return ChefZ_StringOrder.Less(da.id, db.id);
     }
 
-    private void WarnOnDuplicateScores(notnull array<ChefZ_Sym> tiers, ChefZ_Sym setSym,
-                                       ChefZ_LoadReport report)
+    private void WarnOnDuplicateScores(notnull array<ChefZ_Sym> tiers, ChefZ_Sym setSym, ChefZ_LoadReport report)
     {
         for (int i = 1; i < tiers.Count(); i++)
         {
@@ -412,10 +397,7 @@ class ChefZ_QualityManager
             if (prev.minScore != cur.minScore)
                 continue;
 
-            ReportSet(report, setSym,
-                "Die Stufen \"" + prev.id + "\" und \"" + cur.id + "\" haben denselben "
-                + "minScore (" + cur.minScore.ToString() + "). Die mit dem hoeheren Rang "
-                + "gewinnt (\"" + cur.id + "\"); die andere ist damit unerreichbar.");
+            ReportSet(report, setSym, "Die Stufen \"" + prev.id + "\" und \"" + cur.id + "\" haben denselben " + "minScore (" + cur.minScore.ToString() + "). Die mit dem hoeheren Rang " + "gewinnt (\"" + cur.id + "\"); die andere ist damit unerreichbar.");
         }
     }
 
@@ -434,18 +416,13 @@ class ChefZ_QualityManager
      * Das Ergebnis ist dasselbe: kein Gericht faellt durch das Raster. Der
      * Unterschied ist, dass keine Stufe entsteht, die niemand geschrieben hat.
      */
-    private void WarnOnMissingZero(notnull array<ChefZ_Sym> tiers, ChefZ_Sym setSym,
-                                   ChefZ_LoadReport report)
+    private void WarnOnMissingZero(notnull array<ChefZ_Sym> tiers, ChefZ_Sym setSym, ChefZ_LoadReport report)
     {
         ChefZ_QualityTierDef lowest = m_BySym.Get(tiers.Get(0));
         if (!lowest || lowest.minScore <= 0.0)
             return;
 
-        ReportSet(report, setSym,
-            "Die unterste Stufe \"" + lowest.id + "\" beginnt erst bei "
-            + lowest.minScore.ToString() + " Punkten. Ein Gericht mit weniger Punkten haette "
-            + "damit gar keine Stufe. \"" + lowest.id + "\" faengt deshalb auch alles "
-            + "darunter ab. Abhilfe: eine unterste Stufe mit minScore <= 0 anlegen.");
+        ReportSet(report, setSym, "Die unterste Stufe \"" + lowest.id + "\" beginnt erst bei " + lowest.minScore.ToString() + " Punkten. Ein Gericht mit weniger Punkten haette " + "damit gar keine Stufe. \"" + lowest.id + "\" faengt deshalb auch alles " + "darunter ab. Abhilfe: eine unterste Stufe mit minScore <= 0 anlegen.");
     }
 
     //==========================================================================
@@ -464,9 +441,7 @@ class ChefZ_QualityManager
      * Slotpunkten, Frische, Zutatenqualitaet und Zustandsstrafen. Das ist
      * "weniger ChefZ", nicht "falsches ChefZ".
      */
-    void BuildRecipeRules(ChefZ_RecipeEngine engine,
-                          ChefZ_CompileContext ctx,
-                          ChefZ_LoadReport report)
+    void BuildRecipeRules(ChefZ_RecipeEngine engine, ChefZ_CompileContext ctx, ChefZ_LoadReport report)
     {
         m_RulesByRecipe.Clear();
         m_RuleCount     = 0;
@@ -487,8 +462,7 @@ class ChefZ_QualityManager
 
         if (report && m_RuleCount > 0)
         {
-            report.AddInfo("Qualitaetsregeln: " + m_RuleCount.ToString() + " uebersetzt, "
-                + m_RejectedRules.ToString() + " verworfen.");
+            report.AddInfo("Qualitaetsregeln: " + m_RuleCount.ToString() + " uebersetzt, " + m_RejectedRules.ToString() + " verworfen.");
         }
     }
 
@@ -500,9 +474,7 @@ class ChefZ_QualityManager
      * ganze Recipe Engine aufzusetzen. Sie setzt die Zaehler NICHT zurueck -
      * das tut BuildRecipeRules bzw. Build.
      */
-    void BuildRulesForRecipe(notnull ChefZ_CompiledRecipe recipe,
-                             ChefZ_CompileContext ctx,
-                             ChefZ_LoadReport report)
+    void BuildRulesForRecipe(notnull ChefZ_CompiledRecipe recipe, ChefZ_CompileContext ctx, ChefZ_LoadReport report)
     {
         CheckTierSet(recipe, report);
         CompileRulesOf(recipe, ctx, report);
@@ -525,16 +497,11 @@ class ChefZ_QualityManager
 
         if (report)
         {
-            report.AddError(recipe.sourceRef, recipe.id,
-                "qualityTierSet \"" + ChefZ_SymbolTable.NameOrMark(recipe.qualityTierSet) + "\" ist kein bekannter Stufensatz. Das Rezept bleibt gueltig und benutzt " + "den Vorgabesatz \"" + Scoring().defaultTierSet + "\" - die Qualitaet ist "
-                + "eine Verfeinerung, und ein Rezept deswegen ganz auszuschalten waere "
-                + "unverhaeltnismaessig.");
+            report.AddError(recipe.sourceRef, recipe.id, "qualityTierSet \"" + ChefZ_SymbolTable.NameOrMark(recipe.qualityTierSet) + "\" ist kein bekannter Stufensatz. Das Rezept bleibt gueltig und benutzt " + "den Vorgabesatz \"" + Scoring().defaultTierSet + "\" - die Qualitaet ist " + "eine Verfeinerung, und ein Rezept deswegen ganz auszuschalten waere " + "unverhaeltnismaessig.");
         }
     }
 
-    private void CompileRulesOf(notnull ChefZ_CompiledRecipe recipe,
-                                ChefZ_CompileContext ctx,
-                                ChefZ_LoadReport report)
+    private void CompileRulesOf(notnull ChefZ_CompiledRecipe recipe, ChefZ_CompileContext ctx, ChefZ_LoadReport report)
     {
         if (!recipe.gradeRules || recipe.gradeRules.Count() == 0)
             return;
@@ -554,9 +521,7 @@ class ChefZ_QualityManager
                 m_RejectedRules++;
                 if (report)
                 {
-                    report.AddError(recipe.sourceRef, recipe.id,
-                        "gradeRules[" + i.ToString() + "]" + RuleIdSuffix(raw) + ": " + why
-                        + " Die Regel wird verworfen; die uebrigen Regeln zaehlen weiter.");
+                    report.AddError(recipe.sourceRef, recipe.id, "gradeRules[" + i.ToString() + "]" + RuleIdSuffix(raw) + ": " + why + " Die Regel wird verworfen; die uebrigen Regeln zaehlen weiter.");
                 }
                 continue;
             }
@@ -585,11 +550,7 @@ class ChefZ_QualityManager
      * Kompilierkontext, die Kontextkennung gegen die zulaessige Liste. Was
      * hier durchkommt, rechnet zur Laufzeit ohne weitere Pruefung.
      */
-    private ChefZ_CompiledGradeRule CompileRule(notnull ChefZ_CompiledRecipe recipe,
-                                                notnull ChefZ_GradeRule raw,
-                                                int index,
-                                                ChefZ_CompileContext ctx,
-                                                out string why)
+    private ChefZ_CompiledGradeRule CompileRule(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_GradeRule raw, int index, ChefZ_CompileContext ctx, out string why)
     {
         why = "";
 
@@ -651,18 +612,13 @@ class ChefZ_QualityManager
             // Platzhalter gemeint sein). Aber sie ist fast immer ein
             // vergessenes Feld, und stillschweigend nichts zu tun ist die
             // schlechteste Eigenschaft einer Regel.
-            QuietOnce(ChefZ_LogLevel.WARN, "quality.rule.zero." + recipe.id + "." + rule.ruleId,
-                "Rezept " + recipe.id + ", Regel " + rule.ruleId + " vergibt weder \"points\" "
-                + "noch \"pointsPerItem\" - sie bleibt wirkungslos.");
+            QuietOnce(ChefZ_LogLevel.WARN, "quality.rule.zero." + recipe.id + "." + rule.ruleId, "Rezept " + recipe.id + ", Regel " + rule.ruleId + " vergibt weder \"points\" " + "noch \"pointsPerItem\" - sie bleibt wirkungslos.");
         }
 
         return rule;
     }
 
-    private bool ResolveRuleSlot(notnull ChefZ_CompiledRecipe recipe,
-                                 notnull ChefZ_GradeRule raw,
-                                 notnull ChefZ_CompiledGradeRule rule,
-                                 out string why)
+    private bool ResolveRuleSlot(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_GradeRule raw, notnull ChefZ_CompiledGradeRule rule, out string why)
     {
         why = "";
 
@@ -687,10 +643,7 @@ class ChefZ_QualityManager
         return false;
     }
 
-    private bool ResolveRuleSelector(notnull ChefZ_GradeRule raw,
-                                     notnull ChefZ_CompiledGradeRule rule,
-                                     ChefZ_CompileContext ctx,
-                                     out string why)
+    private bool ResolveRuleSelector(notnull ChefZ_GradeRule raw, notnull ChefZ_CompiledGradeRule rule, ChefZ_CompileContext ctx, out string why)
     {
         why = "";
 
@@ -720,9 +673,7 @@ class ChefZ_QualityManager
         return true;
     }
 
-    private bool ResolveRuleContext(notnull ChefZ_GradeRule raw,
-                                    notnull ChefZ_CompiledGradeRule rule,
-                                    out string why)
+    private bool ResolveRuleContext(notnull ChefZ_GradeRule raw, notnull ChefZ_CompiledGradeRule rule, out string why)
     {
         why = "";
 
@@ -775,12 +726,7 @@ class ChefZ_QualityManager
      * eval darf null sein; dann wird eines angelegt. Der Aufrufer bringt
      * ueblicherweise seinen wiederverwendeten Puffer mit.
      */
-    void ComputeScore(notnull ChefZ_CompiledRecipe recipe,
-                      notnull ChefZ_MatchResult match,
-                      notnull ChefZ_FactSnapshot snapshot,
-                      notnull ChefZ_CookContext ctx,
-                      float externalBonus,
-                      out ChefZ_QualityEvaluation eval)
+    void ComputeScore(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult match, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_CookContext ctx, float externalBonus, out ChefZ_QualityEvaluation eval)
     {
         // Ueber eine lokale Zwischenvariable: ein Feld als out-Parameter ist
         // in Enforce nicht zugesichert (siehe ChefZ_TextList.SymbolsOf).
@@ -810,9 +756,7 @@ class ChefZ_QualityManager
             // 12 §8: "Score ist NaN (kaputte Regeldaten) -> auf 0 gesetzt,
             // ERROR." Ein NaN wuerde jeden Schwellenvergleich false ergeben
             // lassen, und das Gericht bekaeme lautlos gar keine Stufe.
-            QuietOnce(ChefZ_LogLevel.ERR, "quality.nan." + recipe.id,
-                "Rezept " + recipe.id + ": die Qualitaetspunktzahl ist keine Zahl. Ursache "
-                + "sind immer kaputte Regel- oder Gewichtsdaten. Es gilt 0 Punkte.");
+            QuietOnce(ChefZ_LogLevel.ERR, "quality.nan." + recipe.id, "Rezept " + recipe.id + ": die Qualitaetspunktzahl ist keine Zahl. Ursache " + "sind immer kaputte Regel- oder Gewichtsdaten. Es gilt 0 Punkte.");
             e.AddNote("Punktzahl war keine Zahl - auf 0 gesetzt");
             total = 0.0;
         }
@@ -821,8 +765,7 @@ class ChefZ_QualityManager
 
         if (e.DeviceModifier != 1.0)
         {
-            e.AddNote("Geraetefaktor " + e.DeviceModifier.ToString() + ": "
-                + e.AdditiveSum().ToString() + " -> " + e.TotalScore.ToString() + " Punkte");
+            e.AddNote("Geraetefaktor " + e.DeviceModifier.ToString() + ": " + e.AdditiveSum().ToString() + " -> " + e.TotalScore.ToString() + " Punkte");
         }
     }
 
@@ -834,12 +777,7 @@ class ChefZ_QualityManager
      * Aufloesung eine zweite, eigenstaendige Frage ist. Wer nur wissen will,
      * wie viele Punkte etwas gibt (Cookbook, "chefz why"), ruft die erste.
      */
-    ChefZ_Sym EvaluateResult(notnull ChefZ_CompiledRecipe recipe,
-                             notnull ChefZ_MatchResult match,
-                             notnull ChefZ_FactSnapshot snapshot,
-                             notnull ChefZ_CookContext ctx,
-                             float externalBonus,
-                             out ChefZ_QualityEvaluation eval)
+    ChefZ_Sym EvaluateResult(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult match, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_CookContext ctx, float externalBonus, out ChefZ_QualityEvaluation eval)
     {
         // Ueber eine lokale Zwischenvariable und nicht direkt durchgereicht:
         // einen out-Parameter als out-Argument weiterzugeben ist in Enforce
@@ -853,9 +791,7 @@ class ChefZ_QualityManager
     }
 
     //! SUM ueber belegte Slots: slot.gradePoints (12 §4, erste Zeile).
-    private void AddSlotPoints(notnull ChefZ_CompiledRecipe recipe,
-                               notnull ChefZ_MatchResult match,
-                               notnull ChefZ_QualityEvaluation eval)
+    private void AddSlotPoints(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult match, notnull ChefZ_QualityEvaluation eval)
     {
         float sum = 0.0;
 
@@ -869,19 +805,14 @@ class ChefZ_QualityManager
 
             float points = slot.gradePoints;
             sum = sum + points;
-            eval.AddNote("Slot \"" + slot.slotId + "\" belegt: " + points.ToString()
-                + " Punkte");
+            eval.AddNote("Slot \"" + slot.slotId + "\" belegt: " + points.ToString() + " Punkte");
         }
 
         eval.SlotPoints = sum;
     }
 
     //! SUM ueber die ausgewerteten gradeRules (12 §4, zweite Zeile).
-    private void AddRulePoints(notnull ChefZ_CompiledRecipe recipe,
-                               notnull ChefZ_MatchResult match,
-                               notnull ChefZ_FactSnapshot snapshot,
-                               notnull ChefZ_CookContext ctx,
-                               notnull ChefZ_QualityEvaluation eval)
+    private void AddRulePoints(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult match, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_CookContext ctx, notnull ChefZ_QualityEvaluation eval)
     {
         array<ref ChefZ_CompiledGradeRule> rules;
         if (!m_RulesByRecipe.Find(recipe.recipeSym, rules))
@@ -917,10 +848,7 @@ class ChefZ_QualityManager
      * Zutat drueckt das Gericht. Sonst waere "altes Fleisch in einen
      * Premium-Eintopf waschen" ein Standardexploit.
      */
-    private void AddItemTerms(notnull ChefZ_MatchResult match,
-                              notnull ChefZ_FactSnapshot snapshot,
-                              notnull ChefZ_QualityScoring sc,
-                              notnull ChefZ_QualityEvaluation eval)
+    private void AddItemTerms(notnull ChefZ_MatchResult match, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_QualityScoring sc, notnull ChefZ_QualityEvaluation eval)
     {
         float minFreshness = 1.0;
         int   considered   = 0;
@@ -956,13 +884,7 @@ class ChefZ_QualityManager
                     // WARN einmal je Klasse." Die Zutat zaehlt fuer den
                     // Mittelwert dann gar nicht - sie mit Rang 0 zu werten
                     // waere eine Behauptung, die niemand geschrieben hat.
-                    QuietOnce(ChefZ_LogLevel.WARN,
-                        "quality.unknowntier." + facts.classSym.ToString(),
-                        "Zutat \"" + ChefZ_SymbolTable.NameOrMark(facts.classSym)
-                        + "\" traegt die unbekannte Qualitaetsstufe \""
-                        + ChefZ_SymbolTable.NameOrMark(facts.chefzQuality)
-                        + "\". Sie zaehlt fuer den Zutatenqualitaetsterm nicht mit. "
-                        + "Haeufigste Ursache: das Modul mit dieser Stufe ist nicht geladen.");
+                    QuietOnce(ChefZ_LogLevel.WARN, "quality.unknowntier." + facts.classSym.ToString(), "Zutat \"" + ChefZ_SymbolTable.NameOrMark(facts.classSym) + "\" traegt die unbekannte Qualitaetsstufe \"" + ChefZ_SymbolTable.NameOrMark(facts.chefzQuality) + "\". Sie zaehlt fuer den Zutatenqualitaetsterm nicht mit. " + "Haeufigste Ursache: das Modul mit dieser Stufe ist nicht geladen.");
                 }
             }
 
@@ -970,10 +892,7 @@ class ChefZ_QualityManager
             if (p != 0.0)
             {
                 penalty = penalty + p;
-                eval.AddNote("Zustandsstrafe fuer \""
-                    + ChefZ_SymbolTable.NameOrMark(facts.chefzState) + "\" an \""
-                    + ChefZ_SymbolTable.NameOrMark(facts.classSym) + "\": "
-                    + p.ToString() + " Punkte");
+                eval.AddNote("Zustandsstrafe fuer \"" + ChefZ_SymbolTable.NameOrMark(facts.chefzState) + "\" an \"" + ChefZ_SymbolTable.NameOrMark(facts.classSym) + "\": " + p.ToString() + " Punkte");
             }
         }
 
@@ -992,23 +911,18 @@ class ChefZ_QualityManager
 
         eval.MinFreshness  = minFreshness;
         eval.FreshnessTerm = (minFreshness - 0.5) * 2.0 * sc.freshnessWeight;
-        eval.AddNote("geringste Frische " + minFreshness.ToString() + " (Minimum ueber "
-            + considered.ToString() + " Zutaten, nicht Mittelwert): "
-            + eval.FreshnessTerm.ToString() + " Punkte");
+        eval.AddNote("geringste Frische " + minFreshness.ToString() + " (Minimum ueber " + considered.ToString() + " Zutaten, nicht Mittelwert): " + eval.FreshnessTerm.ToString() + " Punkte");
 
         if (rankCount == 0)
         {
-            eval.AddNote("keine Zutat traegt eine bekannte Qualitaetsstufe - "
-                + "Zutatenqualitaetsterm ist 0");
+            eval.AddNote("keine Zutat traegt eine bekannte Qualitaetsstufe - " + "Zutatenqualitaetsterm ist 0");
             return;
         }
 
         float count = rankCount;
         float meanRank = rankSum / count;
         eval.IngredientQualityTerm = (meanRank - sc.baseRank) * sc.ingredientQualityWeight;
-        eval.AddNote("mittlerer Zutatenrang " + meanRank.ToString() + " gegen Bezugsrang "
-            + sc.baseRank.ToString() + ": " + eval.IngredientQualityTerm.ToString()
-            + " Punkte");
+        eval.AddNote("mittlerer Zutatenrang " + meanRank.ToString() + " gegen Bezugsrang " + sc.baseRank.ToString() + ": " + eval.IngredientQualityTerm.ToString() + " Punkte");
     }
 
     /**
@@ -1031,24 +945,16 @@ class ChefZ_QualityManager
 
         if (bonus > m_MaxExternalBonus)
         {
-            QuietOnce(ChefZ_LogLevel.WARN, "quality.external.high",
-                "Ein externer Qualitaetsbonus von " + bonus.ToString() + " wurde auf "
-                + m_MaxExternalBonus.ToString() + " geklemmt (CoreSettings."
-                + "maxExternalQualityBonus). Diese Meldung erscheint genau einmal.");
-            eval.AddNote("externer Bonus " + bonus.ToString() + " auf "
-                + m_MaxExternalBonus.ToString() + " geklemmt");
+            QuietOnce(ChefZ_LogLevel.WARN, "quality.external.high", "Ein externer Qualitaetsbonus von " + bonus.ToString() + " wurde auf " + m_MaxExternalBonus.ToString() + " geklemmt (CoreSettings." + "maxExternalQualityBonus). Diese Meldung erscheint genau einmal.");
+            eval.AddNote("externer Bonus " + bonus.ToString() + " auf " + m_MaxExternalBonus.ToString() + " geklemmt");
             return m_MaxExternalBonus;
         }
 
         float lower = -m_MaxExternalBonus;
         if (bonus < lower)
         {
-            QuietOnce(ChefZ_LogLevel.WARN, "quality.external.low",
-                "Ein externer Qualitaetsabzug von " + bonus.ToString() + " wurde auf "
-                + lower.ToString() + " geklemmt (CoreSettings.maxExternalQualityBonus). "
-                + "Diese Meldung erscheint genau einmal.");
-            eval.AddNote("externer Abzug " + bonus.ToString() + " auf " + lower.ToString()
-                + " geklemmt");
+            QuietOnce(ChefZ_LogLevel.WARN, "quality.external.low", "Ein externer Qualitaetsabzug von " + bonus.ToString() + " wurde auf " + lower.ToString() + " geklemmt (CoreSettings.maxExternalQualityBonus). " + "Diese Meldung erscheint genau einmal.");
+            eval.AddNote("externer Abzug " + bonus.ToString() + " auf " + lower.ToString() + " geklemmt");
             return lower;
         }
 
@@ -1184,9 +1090,7 @@ class ChefZ_QualityManager
      * Gewichtet wird mit ChefZ_ItemFacts.units, also in Rezepteinheiten
      * (05 §6). Eine Zutat ohne Mengenangabe zaehlt einfach.
      */
-    ChefZ_Sym CombineRanks(notnull array<ref ChefZ_ItemFacts> inputs,
-                           string rule,
-                           ChefZ_Sym tierSet)
+    ChefZ_Sym CombineRanks(notnull array<ref ChefZ_ItemFacts> inputs, string rule, ChefZ_Sym tierSet)
     {
         if (!GuardReady("CombineRanks"))
             return ChefZ_SymbolTable.INVALID;
@@ -1263,9 +1167,7 @@ class ChefZ_QualityManager
         }
         else if (rule != "MIN" && rule != "")
         {
-            QuietOnce(ChefZ_LogLevel.WARN, "quality.combine." + rule,
-                "Unbekannte Zusammenfassungsregel \"" + rule + "\" - es gilt MIN. Gueltig: "
-                + "MIN, MEAN, WEIGHTED_MEAN, MAX.");
+            QuietOnce(ChefZ_LogLevel.WARN, "quality.combine." + rule, "Unbekannte Zusammenfassungsregel \"" + rule + "\" - es gilt MIN. Gueltig: " + "MIN, MEAN, WEIGHTED_MEAN, MAX.");
         }
 
         if (target < 0)
@@ -1297,11 +1199,7 @@ class ChefZ_QualityManager
 
         if (setA != setB)
         {
-            QuietOnce(ChefZ_LogLevel.WARN, "quality.compare.cross",
-                "Vergleich zweier Qualitaetsstufen aus verschiedenen Stufensaetzen ("
-                + ChefZ_SymbolTable.NameOrMark(a) + " gegen " + ChefZ_SymbolTable.NameOrMark(b)
-                + "). Zwischen ihnen gibt es keine Ordnung (12 E4); die Antwort ist "
-                + "\"gleich\".");
+            QuietOnce(ChefZ_LogLevel.WARN, "quality.compare.cross", "Vergleich zweier Qualitaetsstufen aus verschiedenen Stufensaetzen (" + ChefZ_SymbolTable.NameOrMark(a) + " gegen " + ChefZ_SymbolTable.NameOrMark(b) + "). Zwischen ihnen gibt es keine Ordnung (12 E4); die Antwort ist " + "\"gleich\".");
             return 0;
         }
 
@@ -1596,9 +1494,7 @@ class ChefZ_QualityManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Qualitaetsstufen: " + GetTierCount().ToString() + "  saetze=" + GetTierSetCount().ToString()
-            + "  regeln=" + m_RuleCount.ToString()
-            + "  bereit=" + m_Ready.ToString());
+        outLines.Insert("Qualitaetsstufen: " + GetTierCount().ToString() + "  saetze=" + GetTierSetCount().ToString() + "  regeln=" + m_RuleCount.ToString() + "  bereit=" + m_Ready.ToString());
         outLines.Insert("    " + Scoring().ToDebugString());
 
         for (int s = 0; s < m_SetOrder.Count(); s++)
@@ -1709,10 +1605,7 @@ class ChefZ_QualityManager
         if (m_QuietForTest)
             return false;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.QUALITY,
-            "ChefZ_QualityManager." + what + "() wurde vor Build() aufgerufen - die Antwort "
-            + "ist \"keine Stufe\". Gerichte entstehen solange ohne Qualitaet; "
-            + "Vanilla-Kochen ist davon unberuehrt. Diese Meldung erscheint genau einmal.");
+        ChefZ_Log.Error(ChefZ_LogChannel.QUALITY, "ChefZ_QualityManager." + what + "() wurde vor Build() aufgerufen - die Antwort " + "ist \"keine Stufe\". Gerichte entstehen solange ohne Qualitaet; " + "Vanilla-Kochen ist davon unberuehrt. Diese Meldung erscheint genau einmal.");
         return false;
     }
 
@@ -1723,8 +1616,7 @@ class ChefZ_QualityManager
         ChefZ_Log.Once(level, ChefZ_LogChannel.QUALITY, key, message);
     }
 
-    private void Report(ChefZ_LoadReport report, bool isError,
-                        notnull ChefZ_QualityTierDef def, string msg)
+    private void Report(ChefZ_LoadReport report, bool isError, notnull ChefZ_QualityTierDef def, string msg)
     {
         if (report)
         {

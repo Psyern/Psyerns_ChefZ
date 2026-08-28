@@ -78,8 +78,7 @@ class ChefZ_ItemTransform
      *
      * @return das neue Item, oder null. Bei null ist NICHTS geschehen.
      */
-    static ItemBase Swap(notnull ItemBase source, string newClass,
-                         float freshnessCarry, out string err)
+    static ItemBase Swap(notnull ItemBase source, string newClass, float freshnessCarry, out string err)
     {
         err = "";
 
@@ -133,10 +132,7 @@ class ChefZ_ItemTransform
         s_CountSwapped++;
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.STATE, ChefZ_LogLevel.DEBUG))
-            ChefZ_Log.Debug(ChefZ_LogChannel.STATE,
-                "Klassentausch: " + source.GetType() + " -> " + newClass
-                + "  mengenanteil=" + quantityRatio.ToString()
-                + "  frischefaktor=" + freshnessCarry.ToString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.STATE, "Klassentausch: " + source.GetType() + " -> " + newClass + "  mengenanteil=" + quantityRatio.ToString() + "  frischefaktor=" + freshnessCarry.ToString());
 
         return created;
     }
@@ -169,11 +165,9 @@ class ChefZ_ItemTransform
         if (parent && parent.GetInventory())
         {
             InventoryLocation loc = new InventoryLocation();
-            if (parent.GetInventory().FindFirstFreeLocationForNewEntity(
-                    newClass, FindInventoryLocationType.CARGO, loc))
+            if (parent.GetInventory().FindFirstFreeLocationForNewEntity( newClass, FindInventoryLocationType.CARGO, loc))
             {
-                EntityAI spawned = parent.GetInventory().CreateEntityInCargoEx(
-                    newClass, loc.GetIdx(), loc.GetRow(), loc.GetCol(), loc.GetFlip());
+                EntityAI spawned = parent.GetInventory().CreateEntityInCargoEx( newClass, loc.GetIdx(), loc.GetRow(), loc.GetCol(), loc.GetFlip());
 
                 ItemBase item = ItemBase.Cast(spawned);
                 if (item)
@@ -214,8 +208,7 @@ class ChefZ_ItemTransform
      * @return false, wenn das Ziel dabei geloescht wurde oder verschwunden
      *         ist. Dann rollt der Aufrufer zurueck - die Quelle lebt noch.
      */
-    private static bool Carry(notnull ItemBase source, notnull ItemBase target,
-                              float freshnessCarry, float quantityRatio, out string err)
+    private static bool Carry(notnull ItemBase source, notnull ItemBase target, float freshnessCarry, float quantityRatio, out string err)
     {
         err = "";
 
@@ -305,10 +298,7 @@ class ChefZ_ItemTransform
         if (s_QuietForTest)
             return;
 
-        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.STATE,
-            "transform.swap." + newClass + "." + reason,
-            "Klassentausch nach \"" + newClass + "\" abgebrochen: " + reason
-            + ". Das Ausgangsitem bleibt unveraendert - es geht nichts verloren.");
+        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.STATE, "transform.swap." + newClass + "." + reason, "Klassentausch nach \"" + newClass + "\" abgebrochen: " + reason + ". Das Ausgangsitem bleibt unveraendert - es geht nichts verloren.");
     }
 
     //--------------------------------------------------------------------------

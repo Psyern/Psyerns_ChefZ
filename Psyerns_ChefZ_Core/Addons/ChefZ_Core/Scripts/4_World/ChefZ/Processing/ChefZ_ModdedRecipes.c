@@ -152,11 +152,7 @@ modded class PluginRecipesManagerBase
 
         if (slot.ChefZ_IsReady())
         {
-            ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-                "Ein bereits parametriertes Handwerksrezept sollte als Platzhalter "
-                + "eingetragen werden und wurde abgewiesen. Rezeptplaetze entstehen "
-                + "ausschliesslich leer und im Missionskonstruktor. Vanillas "
-                + "Rezeptliste bleibt unveraendert.");
+            ChefZ_Log.Error(ChefZ_LogChannel.PROCESS, "Ein bereits parametriertes Handwerksrezept sollte als Platzhalter " + "eingetragen werden und wurde abgewiesen. Rezeptplaetze entstehen " + "ausschliesslich leer und im Missionskonstruktor. Vanillas " + "Rezeptliste bleibt unveraendert.");
             return false;
         }
 

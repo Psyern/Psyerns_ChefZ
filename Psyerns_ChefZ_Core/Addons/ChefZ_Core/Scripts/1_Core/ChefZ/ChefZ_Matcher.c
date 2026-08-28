@@ -260,12 +260,7 @@ class ChefZ_Matcher
      * Rueckgabe false heisst "kein Treffer" und niemals mehr. Kein Fehlerfall
      * dieser Funktion veraendert irgendetwas.
      */
-    static bool Bind(array<ref ChefZ_CompiledSlot> slots,
-                     ChefZ_FactSnapshot snapshot,
-                     int nodeBudget,
-                     string subject,
-                     ChefZ_MatchTrace trace,
-                     out ChefZ_BindResult result)
+    static bool Bind(array<ref ChefZ_CompiledSlot> slots, ChefZ_FactSnapshot snapshot, int nodeBudget, string subject, ChefZ_MatchTrace trace, out ChefZ_BindResult result)
     {
         if (!result)
             result = new ChefZ_BindResult();
@@ -325,12 +320,7 @@ class ChefZ_Matcher
      * Die Signatur steht trotzdem hier, weil 08 §3 sie hier nennt und weil ein
      * Aufrufer, der "den Matcher" sucht, ihn an dieser Stelle vermutet.
      */
-    static bool MatchOne(notnull ChefZ_CompiledRecipe recipe,
-                         notnull ChefZ_CookContext ctx,
-                         notnull ChefZ_FactSnapshot snapshot,
-                         int nodeBudget,
-                         ChefZ_MatchTrace trace,
-                         out ChefZ_MatchResult result)
+    static bool MatchOne(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_CookContext ctx, notnull ChefZ_FactSnapshot snapshot, int nodeBudget, ChefZ_MatchTrace trace, out ChefZ_MatchResult result)
     {
         if (!result)
             result = new ChefZ_MatchResult();
@@ -366,13 +356,7 @@ class ChefZ_Matcher
                 work.result.failReason = "Knotenbudget erschoepft";
                 if (!s_QuietForTest)
                 {
-                    ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.MATCH,
-                        "match.budget." + subject,
-                        "Knotenbudget (" + work.budget.ToString() + ") beim Binden von \""
-                        + subject + "\" erschoepft - " + work.slots.Count().ToString()
-                        + " Slots, " + work.snapshot.Count().ToString() + " Items. Der "
-                        + "Kandidat gilt als kein Treffer; gekocht wird Vanilla. Entweder "
-                        + "ist das Rezept zu unspezifisch oder matcherNodeBudget zu klein.");
+                    ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.MATCH, "match.budget." + subject, "Knotenbudget (" + work.budget.ToString() + ") beim Binden von \"" + subject + "\" erschoepft - " + work.slots.Count().ToString() + " Slots, " + work.snapshot.Count().ToString() + " Items. Der " + "Kandidat gilt als kein Treffer; gekocht wird Vanilla. Entweder " + "ist das Rezept zu unspezifisch oder matcherNodeBudget zu klein.");
                 }
             }
             return false;
@@ -407,8 +391,7 @@ class ChefZ_Matcher
                 work.result.failReason = "nur " + cand.Count().ToString()
                                        + " passende Items, gebraucht werden " + slot.minCount.ToString();
                 if (work.trace)
-                    work.trace.SlotResult(ChefZ_SymbolTable.INVALID, slot.slotId, false,
-                        work.result.failReason + " - " + ExplainFirstMiss(slot, work.snapshot));
+                    work.trace.SlotResult(ChefZ_SymbolTable.INVALID, slot.slotId, false, work.result.failReason + " - " + ExplainFirstMiss(slot, work.snapshot));
                 return false;
             }
 
@@ -453,8 +436,7 @@ class ChefZ_Matcher
             array<int> keyCand = work.candidates.Get(i);
             int j = i - 1;
 
-            while (j >= 0 && PrecedesSlot(work, keySlot, keyCand.Count(),
-                                          work.order.Get(j), work.candidates.Get(j).Count()))
+            while (j >= 0 && PrecedesSlot(work, keySlot, keyCand.Count(), work.order.Get(j), work.candidates.Get(j).Count()))
             {
                 work.order.Set(j + 1, work.order.Get(j));
                 work.candidates.Set(j + 1, work.candidates.Get(j));
@@ -466,9 +448,7 @@ class ChefZ_Matcher
         }
     }
 
-    private static bool PrecedesSlot(notnull ChefZ_MatchWork work,
-                                     int slotA, int countA,
-                                     int slotB, int countB)
+    private static bool PrecedesSlot(notnull ChefZ_MatchWork work, int slotA, int countA, int slotB, int countB)
     {
         if (countA != countB)
             return countA < countB;
@@ -537,8 +517,7 @@ class ChefZ_Matcher
 
         // Frueherkennung (07 §4, Schritt 3): liegt die Menge bereits ueber der
         // Obergrenze, macht jedes weitere Item es nur schlimmer.
-        if (ChefZ_SlotEvaluator.ExceedsMaxAmount(slot,
-                ChefZ_SlotEvaluator.SumUnits(work.snapshot, chosen)))
+        if (ChefZ_SlotEvaluator.ExceedsMaxAmount(slot, ChefZ_SlotEvaluator.SumUnits(work.snapshot, chosen)))
             return false;
 
         for (int p = fromCandidate; p < cand.Count(); p++)
@@ -602,8 +581,7 @@ class ChefZ_Matcher
                 // Ein Item, das die Obergrenze reissen wuerde, wird wieder
                 // zurueckgelegt - sonst macht ein optionaler Slot die
                 // Mengenbedingung kaputt, die er erfuellen sollte.
-                if (ChefZ_SlotEvaluator.ExceedsMaxAmount(slot,
-                        ChefZ_SlotEvaluator.SumUnits(work.snapshot, take)))
+                if (ChefZ_SlotEvaluator.ExceedsMaxAmount(slot, ChefZ_SlotEvaluator.SumUnits(work.snapshot, take)))
                 {
                     take.Remove(take.Count() - 1);
                     continue;
@@ -667,8 +645,7 @@ class ChefZ_Matcher
                     binding.gradePoints = slot.gradePoints;
                     result.gradePoints  = result.gradePoints + slot.gradePoints;
 
-                    ChefZ_SlotEvaluator.BuildConsumePlanIdx(slot, work.snapshot, chosen,
-                                                            result.consumePlan);
+                    ChefZ_SlotEvaluator.BuildConsumePlanIdx(slot, work.snapshot, chosen, result.consumePlan);
 
                     for (int h = 0; h < binding.handles.Count(); h++)
                         result.boundHandles.Insert(binding.handles.Get(h));
@@ -679,8 +656,7 @@ class ChefZ_Matcher
                         ChefZ_Sym firstClass = ChefZ_SymbolTable.INVALID;
                         if (first)
                             firstClass = first.classSym;
-                        work.trace.SlotAssigned(slot.slotId, firstClass,
-                            binding.handles.Count(), binding.totalUnits);
+                        work.trace.SlotAssigned(slot.slotId, firstClass, binding.handles.Count(), binding.totalUnits);
                     }
                 }
             }
@@ -708,8 +684,7 @@ class ChefZ_Matcher
      * Nur fuer den Trace. Die Zeichenketten entstehen ausschliesslich hier,
      * und diese Funktion wird nur hinter "if (trace)" gerufen (07 E6).
      */
-    private static string ExplainFirstMiss(notnull ChefZ_CompiledSlot slot,
-                                           notnull ChefZ_FactSnapshot snapshot)
+    private static string ExplainFirstMiss(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot)
     {
         for (int i = 0; i < snapshot.Count(); i++)
         {

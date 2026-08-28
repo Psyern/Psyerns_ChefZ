@@ -44,8 +44,7 @@ class ChefZ_JsonSourceHelper
      * @return Anzahl eingereichter Records. -1, wenn die Datei nicht gelesen
      *         werden konnte (der Aufrufer entscheidet, ob das ein Fehler ist).
      */
-    static int ReadInto(string declaredPath, int rank, ChefZ_RecordSink sink,
-                        ChefZ_LoadReport report, string sliceName)
+    static int ReadInto(string declaredPath, int rank, ChefZ_RecordSink sink, ChefZ_LoadReport report, string sliceName)
     {
         string resolved = ChefZ_PathTools.Resolve(declaredPath);
         if (resolved == "")
@@ -58,24 +57,19 @@ class ChefZ_JsonSourceHelper
         {
             // Existiert, ist aber nicht lesbar oder leer. Beides ist ein
             // Datenfehler, kein Grund abzubrechen (02 §8).
-            AddError(report, resolved, "",
-                "Datei existiert, liefert aber keinen Inhalt - uebersprungen.");
+            AddError(report, resolved, "", "Datei existiert, liefert aber keinen Inhalt - uebersprungen.");
             return 0;
         }
 
         string kind = ChefZ_JsonText.ExtractString(text, "kind");
         if (kind == "")
         {
-            AddError(report, resolved, "",
-                "Feld \"kind\" fehlt im Dokumentkopf - die Art der Datensaetze ist damit "
-                + "unbestimmt und die Datei wird verworfen. Gueltig: " + ChefZ_RecordKind.ValidNames());
+            AddError(report, resolved, "", "Feld \"kind\" fehlt im Dokumentkopf - die Art der Datensaetze ist damit " + "unbestimmt und die Datei wird verworfen. Gueltig: " + ChefZ_RecordKind.ValidNames());
             return 0;
         }
         if (!ChefZ_RecordKind.IsKnown(kind))
         {
-            AddError(report, resolved, "",
-                "Unbekannte Art \"" + kind + "\" - Datei verworfen. Gueltig: "
-                + ChefZ_RecordKind.ValidNames());
+            AddError(report, resolved, "", "Unbekannte Art \"" + kind + "\" - Datei verworfen. Gueltig: " + ChefZ_RecordKind.ValidNames());
             return 0;
         }
 
@@ -84,10 +78,7 @@ class ChefZ_JsonSourceHelper
         {
             // 02 §8: laden, warnen, unbekannte Felder ignorieren. Ein harter
             // Abbruch hiesse, dass ein Core-Update den Content blockiert.
-            AddWarn(report, resolved, "",
-                "schemaVersion " + schema.ToString() + " ist neuer als dieser Core ("
-                + SCHEMA_VERSION.ToString() + "). Die Datei wird geladen, unbekannte Felder "
-                + "werden ignoriert.");
+            AddWarn(report, resolved, "", "schemaVersion " + schema.ToString() + " ist neuer als dieser Core (" + SCHEMA_VERSION.ToString() + "). Die Datei wird geladen, unbekannte Felder " + "werden ignoriert.");
         }
 
         array<ref ChefZ_Record> records = new array<ref ChefZ_Record>();
@@ -96,9 +87,7 @@ class ChefZ_JsonSourceHelper
         {
             // 02 §8: GANZE Datei verworfen, nichts halb angewandt, rangniedrigere
             // Quelle bleibt gueltig, Datei wird nicht angefasst.
-            AddError(report, resolved, "",
-                "JSON nicht lesbar - die gesamte Datei wird verworfen, alles bereits "
-                + "Geladene bleibt gueltig. Parsermeldung: " + parseError);
+            AddError(report, resolved, "", "JSON nicht lesbar - die gesamte Datei wird verworfen, alles bereits " + "Geladene bleibt gueltig. Parsermeldung: " + parseError);
             return 0;
         }
 
@@ -125,9 +114,7 @@ class ChefZ_JsonSourceHelper
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.CONFIG, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG,
-                sliceName + ": " + ChefZ_PathTools.FileName(resolved) + " -> "
-                + submitted.ToString() + " Records der Art \"" + kind + "\"");
+            ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG, sliceName + ": " + ChefZ_PathTools.FileName(resolved) + " -> " + submitted.ToString() + " Records der Art \"" + kind + "\"");
         }
         return submitted;
     }
@@ -145,9 +132,7 @@ class ChefZ_JsonSourceHelper
             return;
         s_PathFormReported = true;
 
-        ChefZ_Log.Once(ChefZ_LogLevel.INFO, ChefZ_LogChannel.CONFIG, "config.pathform",
-            "Erste gelesene Datendatei: deklariert \"" + declared + "\", gelesen als \""
-            + resolved + "\". Damit ist die tragende Pfadform belegt (V-A / 02 E7).");
+        ChefZ_Log.Once(ChefZ_LogLevel.INFO, ChefZ_LogChannel.CONFIG, "config.pathform", "Erste gelesene Datendatei: deklariert \"" + declared + "\", gelesen als \"" + resolved + "\". Damit ist die tragende Pfadform belegt (V-A / 02 E7).");
     }
 
     static void ResetPathFormReport()
@@ -272,15 +257,10 @@ class ChefZ_AddonJsonSource extends ChefZ_IRecordSource
 
         if (m_MissingIsWarnOnly)
         {
-            report.AddWarn(where, "",
-                what + " Der Core hat fuer diesen Inhalt vollstaendige Code-Defaults und "
-                + "laeuft ohne Einschraenkung weiter.");
+            report.AddWarn(where, "", what + " Der Core hat fuer diesen Inhalt vollstaendige Code-Defaults und " + "laeuft ohne Einschraenkung weiter.");
             return;
         }
 
-        report.AddError(where, "",
-            what + " Der Rest des Slice wird geladen; die Datensaetze dieser Datei fehlen. "
-            + "Faellt das fuer JEDE Datei an, ist die Ursache fast immer die Pfadform "
-            + "(die Wurzel eines Laufzeitpfades ist das PBO-Praefix, siehe 02 E7).");
+        report.AddError(where, "", what + " Der Rest des Slice wird geladen; die Datensaetze dieser Datei fehlen. " + "Faellt das fuer JEDE Datei an, ist die Ursache fast immer die Pfadform " + "(die Wurzel eines Laufzeitpfades ist das PBO-Praefix, siehe 02 E7).");
     }
 }

@@ -69,9 +69,7 @@ class ChefZ_SlotEvaluator
      * statt Getrocknetes in den Topf legt, soll "state RAW nicht zulaessig,
      * gebraucht wird DRIED" lesen - nicht "kein Rezept passt".
      */
-    static bool AcceptsExplain(notnull ChefZ_CompiledSlot slot,
-                               notnull ChefZ_ItemFacts facts,
-                               out string reason)
+    static bool AcceptsExplain(notnull ChefZ_CompiledSlot slot, notnull ChefZ_ItemFacts facts, out string reason)
     {
         reason = "";
 
@@ -136,9 +134,7 @@ class ChefZ_SlotEvaluator
      * gleichzeitig erfuellen und ein Rezept mit zwei Fleischslots mit EINER
      * Zutat ausloesen (07 §4, letzter Abschnitt).
      */
-    static int CollectCandidateIndices(notnull ChefZ_CompiledSlot slot,
-                                       notnull ChefZ_FactSnapshot snapshot,
-                                       out array<int> outIndices)
+    static int CollectCandidateIndices(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot, out array<int> outIndices)
     {
         if (!outIndices)
             outIndices = new array<int>();
@@ -167,10 +163,7 @@ class ChefZ_SlotEvaluator
      * noch?"). Der Matcher braucht den Parameter nicht; er fuehrt die Belegung
      * im Snapshot.
      */
-    static int CollectCandidates(notnull ChefZ_CompiledSlot slot,
-                                 notnull ChefZ_FactSnapshot snapshot,
-                                 array<int> alreadyBound,
-                                 out array<int> outHandles)
+    static int CollectCandidates(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot, array<int> alreadyBound, out array<int> outHandles)
     {
         if (!outHandles)
             outHandles = new array<int>();
@@ -219,10 +212,7 @@ class ChefZ_SlotEvaluator
      * Untergrenze fuer sich allein tragen - das ist die Formulierung fuer "ein
      * ganzes Stueck" (07 E3, letzter Satz).
      */
-    static bool CheckAmountIdx(notnull ChefZ_CompiledSlot slot,
-                               notnull ChefZ_FactSnapshot snapshot,
-                               notnull array<int> assignedIndices,
-                               out float totalUnits)
+    static bool CheckAmountIdx(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot, notnull array<int> assignedIndices, out float totalUnits)
     {
         totalUnits = 0.0;
 
@@ -253,10 +243,7 @@ class ChefZ_SlotEvaluator
     }
 
     //! Fassung aus 07 §2.3: Zuweisung als HANDLES.
-    static bool CheckAmount(notnull ChefZ_CompiledSlot slot,
-                            notnull ChefZ_FactSnapshot snapshot,
-                            notnull array<int> assignedHandles,
-                            out float totalUnits)
+    static bool CheckAmount(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot, notnull array<int> assignedHandles, out float totalUnits)
     {
         array<int> indices = new array<int>();
         HandlesToIndices(snapshot, assignedHandles, indices);
@@ -313,10 +300,7 @@ class ChefZ_SlotEvaluator
      * ein Item, das zwischen Match und Anwendung verschwindet, darf nicht dazu
      * fuehren, dass irgendetwas anderes verbraucht wird.
      */
-    static void BuildConsumePlanIdx(notnull ChefZ_CompiledSlot slot,
-                                    notnull ChefZ_FactSnapshot snapshot,
-                                    notnull array<int> assignedIndices,
-                                    out array<ref ChefZ_ConsumePlan> outPlan)
+    static void BuildConsumePlanIdx(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot, notnull array<int> assignedIndices, out array<ref ChefZ_ConsumePlan> outPlan)
     {
         if (!outPlan)
             outPlan = new array<ref ChefZ_ConsumePlan>();
@@ -364,10 +348,7 @@ class ChefZ_SlotEvaluator
      * gibt es nichts abzuziehen - so ein Item haette den Mengentest ohnehin
      * nicht bestanden.
      */
-    private static float PlanAmountDraw(notnull ChefZ_CompiledSlot slot,
-                                        notnull ChefZ_ItemFacts facts,
-                                        notnull ChefZ_ConsumePlan entry,
-                                        float remaining)
+    private static float PlanAmountDraw(notnull ChefZ_CompiledSlot slot, notnull ChefZ_ItemFacts facts, notnull ChefZ_ConsumePlan entry, float remaining)
     {
         if (facts.units <= 0.0)
             return remaining;
@@ -399,10 +380,7 @@ class ChefZ_SlotEvaluator
     }
 
     //! Fassung aus 07 §2.3: Zuweisung als HANDLES.
-    static void BuildConsumePlan(notnull ChefZ_CompiledSlot slot,
-                                 notnull ChefZ_FactSnapshot snapshot,
-                                 notnull array<int> assignedHandles,
-                                 out array<ref ChefZ_ConsumePlan> outPlan)
+    static void BuildConsumePlan(notnull ChefZ_CompiledSlot slot, notnull ChefZ_FactSnapshot snapshot, notnull array<int> assignedHandles, out array<ref ChefZ_ConsumePlan> outPlan)
     {
         array<int> indices = new array<int>();
         HandlesToIndices(snapshot, assignedHandles, indices);
@@ -411,9 +389,7 @@ class ChefZ_SlotEvaluator
 
     //==========================================================================
 
-    static void HandlesToIndices(notnull ChefZ_FactSnapshot snapshot,
-                                 notnull array<int> handles,
-                                 notnull array<int> outIndices)
+    static void HandlesToIndices(notnull ChefZ_FactSnapshot snapshot, notnull array<int> handles, notnull array<int> outIndices)
     {
         outIndices.Clear();
         for (int h = 0; h < handles.Count(); h++)
@@ -430,9 +406,7 @@ class ChefZ_SlotEvaluator
         }
     }
 
-    static void IndicesToHandles(notnull ChefZ_FactSnapshot snapshot,
-                                 notnull array<int> indices,
-                                 notnull array<int> outHandles)
+    static void IndicesToHandles(notnull ChefZ_FactSnapshot snapshot, notnull array<int> indices, notnull array<int> outHandles)
     {
         outHandles.Clear();
         for (int i = 0; i < indices.Count(); i++)

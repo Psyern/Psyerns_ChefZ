@@ -1,4 +1,4 @@
-// ChefZ_Processing - Getreidemuehle, Nudelholz, Mehl (Slice "grain").
+// ChefZ_Processing - Getreidemuehle, Pastamaschine, Mehl (Slice "grain").
 //
 // Quelle: Production Map §7 (Wheat + GrainMill -> Flour), §8 (Mehl), §57
 // (ChefZ_GrainMill), §58 (V1 Tools), §76 (Produktionsabhaengigkeiten nach
@@ -33,16 +33,16 @@
 // ---------------------------------------------------------------------------
 // 3D
 // ---------------------------------------------------------------------------
-// Muehle und Nudelholz tragen Vanilla-Proxy-Modelle und sind im Slice-Bericht
-// als Asset-Bedarf gemeldet (Production Map §70: beide brauchen eigene
-// Geometrie). Auf ein Modell wartet hier nichts.
+// Muehle und Pastamaschine tragen Vanilla-Proxy-Modelle und sind im
+// Slice-Bericht als Asset-Bedarf gemeldet (Production Map §70: beide brauchen
+// eigene Geometrie). Auf ein Modell wartet hier nichts.
 
 class CfgPatches
 {
     class ChefZ_Processing
     {
         units[] = {
-            "ChefZ_GrainMill", "ChefZ_RollingPin", "ChefZ_Flour",
+            "ChefZ_GrainMill", "ChefZ_PastaMachine", "ChefZ_Flour",
             // Slice "herbs" (DME-Plan §6.3 und §6.7, Production Map §57)
             "ChefZ_HerbStationBase", "ChefZ_Mortar", "ChefZ_DryingRack",
             // ### SLICE dairy ###
@@ -50,6 +50,9 @@ class CfgPatches
             // ### SLICE salt ###
             "ChefZ_SaltPan",
             // ### SLICE meat ### (Production Map §57: Schneidebrett, Fleischwolf)
+            // ChefZ_CuttingBoard steht weiter hier, ist aber seit der
+            // Umstellung von PROCESS_CLEAN_CASING auf HANDCRAFT KEINE Station
+            // mehr - Begruendung an der Klasse selbst.
             "ChefZ_CuttingBoard", "ChefZ_MeatGrinder",
             // ### SLICE preservation ### (Production Map §57: Raeucherschrank.
             // Der Trockenrahmen steht schon oben beim Slice "herbs" - er ist
@@ -137,23 +140,60 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
-    // Das Nudelholz (Production Map §58, §11).
+    // Die Pastamaschine (Production Map §58, §11; frueher ChefZ_RollingPin).
     //
-    // Es ist WERKZEUG, kein Eingang: der Prozess PROCESS_ROLL nennt die
-    // Werkzeuggruppe ROLLING_PIN, und ChefZ_ToolRegistry loest sie ueber den
-    // CfgChefZTools-Knoten unten auf.
+    // WARUM WERKZEUG UND NICHT STATION
+    // --------------------------------
+    // Eine Nudelmaschine sieht nach Station aus, und die Muehle daneben ist
+    // eine. Der Unterschied liegt nicht im Objekt, sondern in dem, was an ihm
+    // passiert:
     //
-    // PROXY: Meat_Tenderizer.p3d - ein Holzgriff-Kuechenwerkzeug. Eigenes
-    // Nudelholzmesh ist gemeldet (U, P2).
+    //  - Die beiden Vorgaenge, die sie ueberhaupt bedient, haben GENAU EINEN
+    //    Eingang: TR_SimpleDoughToPastaDough und TR_PastaDoughToRawPasta
+    //    (ChefZ_Baking/Config/GrainTransforms.json). Der Vorteil einer Station
+    //    ist, dass sie mehr als zwei Eingaenge traegt (11 E1) - hier gibt es
+    //    nichts, was diesen Vorteil abrufen wuerde.
+    //  - Ein Eingang plus Werkzeuggruppe ist genau die Form, die Vanillas
+    //    RecipeBase traegt (01 V12): das Werkzeug belegt den zweiten
+    //    Zutatenplatz. Ohne Werkzeug waere ein Ein-Eingang-Transform als
+    //    Handwerksrezept gar nicht registrierbar - es gaebe nichts zum
+    //    Kombinieren. Die Maschine IST dieser zweite Platz.
+    //  - Ein Wechsel auf STATION_ACTION waere kein Eintrag hier, sondern vier
+    //    Aenderungen in ChefZ_Baking (exec von PROCESS_ROLL, stationsAllowed
+    //    an beiden Transforms, handcraftRecipeSlots). Bis die durch waeren,
+    //    stuenden beide Transforms ohne Station da und die Backkette waere
+    //    genau so tot wie vorher.
+    //
+    // WIE DER SPIELER SIE BEKOMMT - der eigentliche Punkt dieser Aenderung
+    // --------------------------------------------------------------------
+    // Der Vorgaenger ChefZ_RollingPin war das einzige Mitglied der Gruppe
+    // ROLLING_PIN und hatte KEINE Quelle: kein Loot-Eintrag (ChefZ liefert
+    // projektweit keine types.xml, G4-B8), kein erzeugender Transform. Damit
+    // war PROCESS_ROLL unerreichbar und die Backkette hinter dem Teig tot -
+    // ohne eine einzige Fehlermeldung.
+    //
+    // Zwei Quellen, beide ohne Zutun des Serverbetreibers:
+    //   1. LOOT, sofort: die Vanillaklasse MeatTenderizer steht jetzt
+    //      zusaetzlich in ROLLING_PIN.classes[] (Vanilla-Audit §4.2 D). Sie
+    //      hat nominal 140 in Town/Village - die Backkette laeuft damit ab
+    //      dem Moment, in dem der Mod geladen ist.
+    //   2. CRAFT, gezielt: TR_AssemblePastaMachine (Config/GrainTransforms.json)
+    //      baut die Maschine aus einem MetalPlate mit METALWORK_TOOL. Wer sie
+    //      will, kann sie herstellen, statt auf ein Loot-Roll zu hoffen.
+    //
+    // PROXY: Meat_Tenderizer.p3d - dasselbe Modell, das die Vanillaklasse
+    // MeatTenderizer traegt und damit ein im Projekt belegter Pfad
+    // (ChefZ_Asset_Backlog §10.1 nennt ihn als den korrekten). Ein metallenes
+    // Kuechengeraet mit Griff. Eigenes Pastamaschinenmesh ist gemeldet (U, P2).
     //--------------------------------------------------------------------------
-    class ChefZ_RollingPin : Inventory_Base
+    class ChefZ_PastaMachine : Inventory_Base
     {
         scope = 2;
-        displayName = "#STR_CHEFZ_ROLLINGPIN";
-        descriptionShort = "#STR_CHEFZ_ROLLINGPIN_DESC";
+        displayName = "#STR_CHEFZ_PASTAMACHINE";
+        descriptionShort = "#STR_CHEFZ_PASTAMACHINE_DESC";
         model = "\dz\gear\tools\Meat_Tenderizer.p3d";
-        weight = 600;
-        itemSize[] = {3, 1};
+        weight = 2200;
+        itemSize[] = {3, 2};
         repairableWithKits[] = {};
         lifetime = 43200;
     };
@@ -437,7 +477,8 @@ class CfgVehicles
     //==========================================================================
     // ### SLICE meat ###
     //
-    // Die beiden Stationen der Fleischkette (Production Map §57).
+    // Die EINE Station der Fleischkette (Production Map §57) - und daneben das
+    // Schneidebrett, das keine mehr ist.
     //
     // Andockregel woertlich aus dem Kopf von ChefZ_ProcessingStation_Base.c:
     // Configbasis ist eine VANILLA-Klasse, Skriptbasis ist
@@ -454,12 +495,53 @@ class CfgVehicles
     // ein gusseiserner Wolf mit Kurbel - eigene Geometrie, siehe Asset-Bedarf
     // des Slice.
     //==========================================================================
+
+    //--------------------------------------------------------------------------
+    // Das Schneidebrett - ab jetzt AUSSTATTUNG, keine Station mehr.
+    //
+    // WAS SICH GEAENDERT HAT
+    // ----------------------
+    // Es war die Station von PROCESS_CLEAN_CASING. Das hat nie funktioniert,
+    // und der Grund stand die ganze Zeit sichtbar in dieser Datei: die Klasse
+    // deklariert KEINEN Cargo-Bereich. ChefZ_ProcessingStation_Base liest
+    // seine Zutaten ueber ChefZ_FactCollector.CollectFromCargo aus genau
+    // diesem Bereich - ohne ihn findet ein Job nie eine Zutat, und die
+    // Wurstkette endete still beim Darm. Jede andere Station in dieser Datei
+    // (Moerser, Trockenrahmen, Butterfass, Kaesepresse, Salzpfanne,
+    // Raeucherschrank) traegt ihn; das Brett war der Ausreisser.
+    //
+    // Behoben wird das nicht durch einen nachgereichten Cargo-Block, sondern
+    // dadurch, dass der Vorgang gar keine Station mehr braucht:
+    // PROCESS_CLEAN_CASING ist jetzt HANDCRAFT mit der Werkzeuggruppe
+    // CUTTING_TOOL - Darm plus Messer, kombiniert wie jedes Handwerksrezept.
+    // Das ist dieselbe Form, die PROCESS_CUT_MEAT und PROCESS_CHOP_VEGETABLE
+    // schon tragen, und sie passt zur Sache: der Darm wird aufgeschnitten und
+    // ausgestreift, nicht an einem Ort verarbeitet.
+    //
+    // WARUM DIE KLASSE BLEIBT
+    // -----------------------
+    // Sie zu loeschen waere billiger und an drei Stellen teuer:
+    //   - Psyerns_ChefZ_COT_Comp fuehrt sie in seiner Spawnerliste
+    //     (ChefZ_CotCategories.c). Ein Eintrag auf eine geloeschte Klasse ist
+    //     ein Admin-Werkzeug, das ins Leere greift.
+    //   - _deltas/meat.json kuendigt sie in classes[] an.
+    //   - Auf jedem laufenden Server, der sie schon platziert hat, wuerden
+    //     abgelegte Objekte zu Waisen.
+    // Sie bleibt deshalb als das, was sie ohne Station ist: ein platzierbares
+    // Ausstattungsstueck. Es traegt bewusst KEINEN Cargo - ein Behaelter waere
+    // eine neue Zusage, und ChefZ verspricht hier nichts mehr.
+    //
+    // MODELL: Meat_Tenderizer.p3d. Der bisherige Pfad
+    // \dz\gear\cooking\MeatTenderizer.p3d ist unbelegt (ChefZ_Asset_Backlog
+    // §10.1 fuehrt ihn als Tippfehler und nennt genau diesen als den
+    // korrekten). Ein Holzbrett ist es nicht - eigene Geometrie ist gemeldet.
+    //--------------------------------------------------------------------------
     class ChefZ_CuttingBoard : Inventory_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CUTTINGBOARD0";
         descriptionShort = "#STR_CHEFZ_ITEM_CUTTINGBOARD1";
-        model = "\dz\gear\cooking\MeatTenderizer.p3d";
+        model = "\dz\gear\tools\Meat_Tenderizer.p3d";
         rotationFlags = 17;
         itemSize[] = {4, 2};
         weight = 900;
@@ -542,19 +624,35 @@ class CfgVehicles
 //------------------------------------------------------------------------------
 // Modulanmeldung am Config Manager (Entwurf 02 §4).
 //
-// handcraftRecipeSlots fehlt bewusst: dieses Modul bringt keinen HANDCRAFT-
-// Transform mit - Mahlen laeuft ueber die Station - und reserviert deshalb
-// null Plaetze in Vanillas Rezeptliste (02 §4.2).
+// handcraftRecipeSlots: dieses Modul reserviert ZWEI Plaetze, einen je Knoten,
+// und beide sind neu (02 §4.2):
+//
+//   ChefZ_GrainProcessing  1   TR_AssemblePastaMachine ueber PROCESS_ASSEMBLE
+//   ChefZ_MeatProcessing   1   TR_SausageCasing ueber PROCESS_CLEAN_CASING
+//
+// Die uebrigen vier Knoten bleiben bei 0 - ihre Ketten laufen an Stationen.
+// Projektweite Summe damit 23 (vorher 21) bei 22 HANDCRAFT-Transforms; der
+// eine ueberzaehlige Platz gehoert ChefZ_Ingredients (12 reserviert, 11
+// belegt) und ist nicht Teil dieser Aenderung. Ein unbelegter Platz ist
+// folgenlos: das Rezeptobjekt bleibt unparametriert, ChefZ_GenericCraftRecipe.
+// CanDo liefert false, es erscheint nie.
 //------------------------------------------------------------------------------
 class CfgChefZ
 {
     // ### SLICE grain ### Ein Knoten je SLICE (02 §4), nicht je Modul - er
     // heisst deshalb nicht wie das Addon.
+    // handcraftRecipeSlots = 1 (war 0): dieser Slice bringt seit der
+    // Pastamaschine GENAU EINEN Transform mit, dessen Prozess exec =
+    // "HANDCRAFT" hat - TR_AssemblePastaMachine ueber PROCESS_ASSEMBLE, beide
+    // in diesem Modul. Die Zahl ist eine RESERVIERUNG in Vanillas Rezeptliste
+    // und muss vor dem Laden feststehen; wird sie vergessen, erscheint das
+    // Rezept nicht, und zwar OHNE Fehlermeldung an der Stelle, an der man
+    // sucht (Begruendung im Kopf von ChefZ_HandcraftBridge.c).
     class ChefZ_GrainProcessing
     {
         chefzApiVersion = 1;
         loadOrder = 220;
-        handcraftRecipeSlots = 0;
+        handcraftRecipeSlots = 1;
         dataFiles[] =
         {
             "ChefZ_Processing/Config/GrainProcesses.json",
@@ -630,15 +728,30 @@ class CfgChefZ
     // liegen in ChefZ_Meat und melden sich dort an - hier stuende sonst
     // Content eines anderen Moduls.
     //
-    // handcraftRecipeSlots = 0: der einzige HANDCRAFT-Transform des Slice
-    // (TR_DicedMeat ueber PROCESS_CUT_MEAT) gehoert ChefZ_Meat, und dort ist
-    // der Platz auch reserviert. Zweimal reservieren hiesse zwei Plaetze
-    // belegen und einen davon leer lassen.
+    // handcraftRecipeSlots = 1 (war 0). Der Fleischslice hat seit dieser
+    // Aenderung ZWEI HANDCRAFT-Transforms:
+    //
+    //   TR_DicedMeat     ueber PROCESS_CUT_MEAT       - Platz reserviert in
+    //                                                   ChefZ_Meat (dort 1)
+    //   TR_SausageCasing ueber PROCESS_CLEAN_CASING   - dieser Platz hier
+    //
+    // Warum der zweite Platz HIER steht und nicht in ChefZ_Meat: Vanillas
+    // Rezeptliste kennt keine Slices. ChefZ_HandcraftBridge.Reserve() liest
+    // ueber ChefZ_ManifestReader.ReadHandcraftSlotTotal() die SUMME aller
+    // handcraftRecipeSlots und reserviert so viele Plaetze - welcher Knoten
+    // sie beisteuert, ist der Bruecke gleichgueltig. Massgeblich ist, dass die
+    // Summe stimmt und auf Client und Server dieselbe ist; beides gilt hier.
+    //
+    // Und der Ort ist auch sachlich richtig: PROCESS_CLEAN_CASING wird in
+    // GENAU DIESER Datei deklariert (CfgChefZProcesses weiter unten), und
+    // seine Umstellung von STATION_ACTION auf HANDCRAFT ist es, die den Platz
+    // ueberhaupt noetig macht. Wer die Umstellung zurueckdreht, findet die
+    // Reservierung daneben.
     class ChefZ_MeatProcessing
     {
         chefzApiVersion = 1;
         loadOrder = 190;
-        handcraftRecipeSlots = 0;
+        handcraftRecipeSlots = 1;
         dataFiles[] =
         {
             "ChefZ_Processing/Config/Processing/Stations.json"
@@ -843,15 +956,32 @@ class CfgChefZProcesses
         baseDurationSec = 15.0;
     };
 
-    // §33: Intestines -> ChefZ_SausageCasing am Schneidebrett.
-    // Werkzeuggruppe trotz Station: der Darm wird aufgeschnitten, nicht
-    // gepresst.
+    // §33: Intestines -> ChefZ_SausageCasing. HANDCRAFT, seit das Schneidebrett
+    // keine Station mehr ist.
+    //
+    // Er war STATION_ACTION am Schneidebrett, und das war ein stiller Ausfall:
+    // die Brettklasse deklarierte nie einen Cargo-Bereich, aus dem
+    // ChefZ_ProcessingStation_Base seine Zutaten liest. Die Wurstkette endete
+    // damit beim Darm, ohne dass irgendwo etwas gemeldet wurde.
+    //
+    // HANDCRAFT statt Cargo nachreichen, aus demselben Grund, der schon bei
+    // PROCESS_CUT_MEAT steht: es ist der frueheste Schritt der Wurstkette, und
+    // wer gerade ein Tier ausgenommen hat, soll den Darm reinigen koennen,
+    // ohne erst eine Station zu bauen. Die Form passt: EIN Eingang (Guts) plus
+    // Werkzeuggruppe ist genau das, was Vanillas RecipeBase traegt - das
+    // Messer belegt den zweiten der zwei Zutatenplaetze (01 V12).
+    //
+    // baseDurationSec bleibt bei 12 - der Vorgang ist derselbe, nur der Ort
+    // faellt weg. animationLength/specialty kommen dazu, weil ein
+    // Handwerksrezept beides braucht (dieselben Werte wie PROCESS_CUT_MEAT).
     class PROCESS_CLEAN_CASING
     {
-        exec = "STATION_ACTION";
+        exec = "HANDCRAFT";
         displayName = "#STR_CHEFZ_PROC_CLEAN_CASING";
         toolGroups[] = {"CUTTING_TOOL"};
         baseDurationSec = 12.0;
+        animationLength = 1.0;
+        specialty = 0.02;
         toolDamage = 1;
     };
 
@@ -911,10 +1041,45 @@ class CfgChefZProcesses
         specialty = 0.02;
         toolDamage = 0;
     };
+
+    //--------------------------------------------------------------------------
+    // ### SLICE grain ### Zusammenbauen.
+    //
+    // Das Verb, mit dem aus Metall ein Kuechengeraet wird. Heute haengt genau
+    // ein Transform daran (TR_AssemblePastaMachine, Config/GrainTransforms.json)
+    // - und der ist der Grund, warum es diesen Prozess gibt: die Pastamaschine
+    // hatte als ChefZ_RollingPin ueberhaupt keine Quelle, weder Loot noch
+    // Transform, und die Backkette stand deshalb still.
+    //
+    // Der Name traegt bewusst KEIN Objekt. Ein Prozess sagt, WIE gearbeitet
+    // wird, nie WORAUS was wird - das steht im Transform. "PROCESS_BUILD_
+    // PASTAMACHINE" waere ein Verb mit angewachsenem Objekt und muesste fuer
+    // jedes weitere Geraet neu erfunden werden; PROCESS_ASSEMBLE traegt die
+    // Muehle, den Fleischwolf und den Raeucherschrank gleich mit, sobald
+    // jemand ihnen einen Transform gibt.
+    //
+    // HANDCRAFT und nicht STATION_*: ein Geraet baut man, BEVOR man eine
+    // Station hat. Ein Zusammenbau, der eine Station verlangt, waere ein
+    // Henne-Ei-Problem.
+    //
+    // EIN Eingang plus Werkzeuggruppe - die Form, die Vanillas RecipeBase
+    // traegt (01 V12). toolDamage = 5: Metall biegen kostet das Werkzeug mehr
+    // als Fleisch schneiden.
+    //--------------------------------------------------------------------------
+    class PROCESS_ASSEMBLE
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_ASSEMBLE";
+        toolGroups[] = {"METALWORK_TOOL"};
+        baseDurationSec = 25.0;
+        animationLength = 4.0;
+        specialty = 0.03;
+        toolDamage = 5;
+    };
 };
 
 //------------------------------------------------------------------------------
-// ### SLICE grain ### Werkzeuggruppe des Nudelholzes.
+// ### SLICE grain ### Werkzeuggruppe der Pastamaschine.
 //
 // Sie steht in Rang 1 und nicht in JSON, weil ActionCondition clientseitig
 // laeuft (02 §2): der Spieler muss sehen, ob er den Teig ausrollen kann, bevor
@@ -934,10 +1099,58 @@ class CfgChefZProcesses
 //------------------------------------------------------------------------------
 class CfgChefZTools
 {
+    // Die Gruppe HEISST weiter ROLLING_PIN, obwohl kein Nudelholz mehr darin
+    // steht. Das ist kein Versehen und keine Bequemlichkeit: PROCESS_ROLL in
+    // ChefZ_Baking/Config/GrainProcesses.json nennt genau diesen Namen. Ihn
+    // hier umzubenennen hiesse, dort mitzuschreiben - und bis das geschehen
+    // waere, zeigte PROCESS_ROLL auf eine Gruppe, die es nicht mehr gibt.
+    // Ein Symbol ist ein Name in einem offenen Namensraum, kein Klassenname;
+    // was die Gruppe bedeutet, sagen ihre Mitglieder.
+    //
+    // ZWEI Mitglieder, und beide sind der Punkt dieser Aenderung:
+    //
+    //   ChefZ_PastaMachine  das gemeinte Geraet. Es ist ueber
+    //                       TR_AssemblePastaMachine herstellbar - der
+    //                       Vorgaenger ChefZ_RollingPin war es nicht.
+    //   MeatTenderizer      Vanilla, nominal 140, Town/Village
+    //                       (ChefZ_Vanilla_Assets.md). Vanilla-Audit §4.2 D
+    //                       verlangt ihn ausdruecklich: solange die Gruppe nur
+    //                       eine Klasse enthaelt, die niemand bekommen kann,
+    //                       ist PROCESS_ROLL unerreichbar und die Backkette
+    //                       blockiert. Er kostet eine Zeile und macht die
+    //                       Kette OHNE types.xml und ohne Craft erreichbar.
+    //
+    // Die Reihenfolge ist die aus dem Audit (§6 F, "Beide, gestaffelt"):
+    // erst die Vanillaklasse, damit die Kette laeuft; ein eigener
+    // Klopf-/Zartmachprozess fuer den Fleischklopfer kann spaeter eine eigene
+    // Gruppe bekommen, ohne diese hier anzufassen.
     class ROLLING_PIN
     {
         toolCategories[] = {"ROLLING_TOOL"};
-        classes[] = {"ChefZ_RollingPin"};
+        classes[] = {"ChefZ_PastaMachine", "MeatTenderizer"};
+        allowSubclasses = 1;
+    };
+
+    // ### SLICE grain ### Werkzeug fuer PROCESS_ASSEMBLE.
+    //
+    // Metall biegen, nieten, schrauben - was man braucht, um aus einem
+    // MetalPlate eine Pastamaschine zu machen. Ausschliesslich Vanillaklassen:
+    // ChefZ fasst keine fremde config.cpp an, sondern nennt fremde Klassen in
+    // einer eigenen Gruppe (11 E8).
+    //
+    // Alle fuenf sind gewoehnliche Werkzeugloot - die Gruppe ist bewusst weit,
+    // damit der Zusammenbau nicht an einem einzelnen seltenen Werkzeug haengt.
+    // Genau daran ist die Backkette vorher gescheitert.
+    class METALWORK_TOOL
+    {
+        classes[] =
+        {
+            "Pliers",
+            "Hammer",
+            "Wrench",
+            "LugWrench",
+            "Screwdriver"
+        };
         allowSubclasses = 1;
     };
 

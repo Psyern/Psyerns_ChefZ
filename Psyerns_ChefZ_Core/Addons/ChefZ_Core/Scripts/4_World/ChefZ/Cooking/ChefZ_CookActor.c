@@ -133,8 +133,7 @@ class ChefZ_CookActor
      * @param firstPresentId    Identitaet des ersten Anwesenden. Nur bei
      *                          presentCount == 1 ausgewertet.
      */
-    static int Decide(int incumbentId, bool incumbentPresent,
-                      int presentCount, int firstPresentId)
+    static int Decide(int incumbentId, bool incumbentPresent, int presentCount, int firstPresentId)
     {
         // Der Koch behaelt seinen Topf, solange er dabeisteht. Diese Zeile ist
         // der Schutz gegen beides: gegen den, der einen Anspruch an sich

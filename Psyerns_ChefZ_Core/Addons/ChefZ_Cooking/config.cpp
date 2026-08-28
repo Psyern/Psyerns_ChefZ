@@ -1988,6 +1988,14 @@ class CfgVehicles
     //   ------------------------------------------------------------------
     //   Summe                                  1190 / 335 / 423
     //   x 1.10 / 4 Portionen                 ->  325 /  85 / 105
+    //
+    // Die Zeile "1x Paprika" trug die Werte des abgeloesten ChefZ_Paprika. Der
+    // Slot nimmt jetzt GreenBellPepper oder ChefZ_ChoppedPaprika
+    // (Vanilla-Audit §2); GreenBellPeppers Naehrwerte setzt Vanilla, sie stehen
+    // nicht in diesem Projekt. Die Rechnung bleibt als ENTWURFSZIEL stehen und
+    // wird nicht zur Laufzeit nachgerechnet - der Nutrition-Block unten ist der
+    // massgebliche Wert. Wer die Summe neu ziehen will, braucht zuerst
+    // GreenBellPeppers Vanilla-Werte; geraten wird hier nichts.
     //--------------------------------------------------------------------------
     class ChefZ_ChernarusChiliBulk : ChefZ_PortionedDish_Base
     {

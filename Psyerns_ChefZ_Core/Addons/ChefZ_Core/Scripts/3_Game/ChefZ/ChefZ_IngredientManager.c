@@ -132,9 +132,7 @@ class ChefZ_IngredientManager
      * gilt jede Kategorie als unbekannt - die Zutaten bleiben geladen, haben
      * aber leere Closures. Der Config Manager haelt die Reihenfolge ein.
      */
-    void Build(ChefZ_Registry<ChefZ_IngredientDef> defs,
-               ChefZ_LoadReport report,
-               ChefZ_Registry<ChefZ_StateDef> states = null)
+    void Build(ChefZ_Registry<ChefZ_IngredientDef> defs, ChefZ_LoadReport report, ChefZ_Registry<ChefZ_StateDef> states = null)
     {
         int startTick = TickCount(0);
         ResetState();
@@ -146,9 +144,7 @@ class ChefZ_IngredientManager
             // Closure, Kategorierezepte matchen nie - und das Kochen bleibt
             // vollstaendig Vanilla.
             if (report)
-                report.AddInfo("Keine Zutatenbindungen deklariert - der Ingredient Manager bleibt "
-                    + "leer. Kategorie- und Tag-Selektoren matchen dadurch nie; Rezepte mit "
-                    + "reinen Klassen-Selektoren sind unberuehrt.");
+                report.AddInfo("Keine Zutatenbindungen deklariert - der Ingredient Manager bleibt " + "leer. Kategorie- und Tag-Selektoren matchen dadurch nie; Rezepte mit " + "reinen Klassen-Selektoren sind unberuehrt.");
             m_Ready = true;
             return;
         }
@@ -181,16 +177,11 @@ class ChefZ_IngredientManager
      * wuerde eine abgeleitete Klasse fuer ein Feld gemeldet, das sie gar nicht
      * selbst nennt.
      */
-    private void AdmitOne(notnull ChefZ_IngredientDef def,
-                          notnull ChefZ_Registry<ChefZ_IngredientDef> defs,
-                          ChefZ_Registry<ChefZ_StateDef> states,
-                          ChefZ_LoadReport report)
+    private void AdmitOne(notnull ChefZ_IngredientDef def, notnull ChefZ_Registry<ChefZ_IngredientDef> defs, ChefZ_Registry<ChefZ_StateDef> states, ChefZ_LoadReport report)
     {
         if (!ChefZ_SymbolTable.IsValid(def.sym))
         {
-            Report(report, true, def,
-                "Zutat hat kein gueltiges Symbol und ist nicht nachschlagbar. Das deutet auf "
-                + "einen Record hin, der die COMPILE-Stufe nicht durchlaufen hat.");
+            Report(report, true, def, "Zutat hat kein gueltiges Symbol und ist nicht nachschlagbar. Das deutet auf " + "einen Record hin, der die COMPILE-Stufe nicht durchlaufen hat.");
             m_RejectedCount++;
             return;
         }
@@ -200,10 +191,7 @@ class ChefZ_IngredientManager
             // Kann die Registry eigentlich nicht liefern (sie weist Duplikate
             // ab). Wenn doch, gilt "erste gewinnt" (05 §7) - und es wird
             // gemeldet, statt still zu ueberschreiben.
-            Report(report, true, def,
-                "Zutatenbindung fuer diese Klasse ist bereits vorhanden - die zweite wird "
-                + "abgewiesen. Betroffene Quellen sind im Delta-Protokoll und im Ladebericht "
-                + "nachvollziehbar.");
+            Report(report, true, def, "Zutatenbindung fuer diese Klasse ist bereits vorhanden - die zweite wird " + "abgewiesen. Betroffene Quellen sind im Delta-Protokoll und im Ladebericht " + "nachvollziehbar.");
             m_RejectedCount++;
             return;
         }
@@ -240,19 +228,12 @@ class ChefZ_IngredientManager
                 // Der Wert steht im Nenner der Einheitenrechnung (05 §6).
                 // Eine Null dort waere eine Division durch Null im heissen
                 // Pfad - deshalb als einziger Zutatenfehler eine Abweisung.
-                Report(report, true, def,
-                    "unitsPerWholeItem = " + perWhole.ToString() + " bei quantityUnit \""
-                    + unitName + "\" - der Eintrag wird abgewiesen. Der Wert steht im Nenner "
-                    + "der Einheitenrechnung; ein Wert <= 0 waere eine Division durch Null. "
-                    + "Abhilfe: einen positiven Wert angeben oder quantityUnit weglassen.");
+                Report(report, true, def, "unitsPerWholeItem = " + perWhole.ToString() + " bei quantityUnit \"" + unitName + "\" - der Eintrag wird abgewiesen. Der Wert steht im Nenner " + "der Einheitenrechnung; ein Wert <= 0 waere eine Division durch Null. " + "Abhilfe: einen positiven Wert angeben oder quantityUnit weglassen.");
                 m_RejectedCount++;
                 return;
             }
 
-            Report(report, false, def,
-                "unitsPerWholeItem = " + perWhole.ToString() + " ist unbrauchbar und wird auf 1 "
-                + "geklemmt. Bei der Einheit \"" + ChefZ_IngredientDef.DEFAULT_QUANTITY_UNIT
-                + "\" ist ein volles Item ohnehin genau eine Einheit (05 §6).");
+            Report(report, false, def, "unitsPerWholeItem = " + perWhole.ToString() + " ist unbrauchbar und wird auf 1 " + "geklemmt. Bei der Einheit \"" + ChefZ_IngredientDef.DEFAULT_QUANTITY_UNIT + "\" ist ein volles Item ohnehin genau eine Einheit (05 §6).");
             perWhole = 1.0;
         }
 
@@ -310,9 +291,7 @@ class ChefZ_IngredientManager
      * Vorfahren geholt wird, der etwas dazu sagt, ist das Ergebnis dasselbe -
      * ohne Reihenfolgeabhaengigkeit und ohne Zwischenspeicher.
      */
-    private void CollectChain(notnull ChefZ_IngredientDef def,
-                              notnull ChefZ_Registry<ChefZ_IngredientDef> defs,
-                              notnull array<ChefZ_IngredientDef> outChain)
+    private void CollectChain(notnull ChefZ_IngredientDef def, notnull ChefZ_Registry<ChefZ_IngredientDef> defs, notnull array<ChefZ_IngredientDef> outChain)
     {
         outChain.Clear();
         outChain.Insert(def);
@@ -451,8 +430,7 @@ class ChefZ_IngredientManager
      * gueltig, WARN mit Klasse und Kategorie. Das Item wird dadurch enger
      * matchbar, nie falscher.
      */
-    private void ResolveCategories(notnull ChefZ_IngredientInfo info, array<string> names,
-                                   notnull ChefZ_IngredientDef def, ChefZ_LoadReport report)
+    private void ResolveCategories(notnull ChefZ_IngredientInfo info, array<string> names, notnull ChefZ_IngredientDef def, ChefZ_LoadReport report)
     {
         if (!names)
             return;
@@ -466,11 +444,7 @@ class ChefZ_IngredientManager
             ChefZ_Sym sym = ChefZ_SymbolTable.Lookup(name);
             if (!Cats().Exists(sym))
             {
-                Report(report, false, def,
-                    "Kategorie \"" + name + "\" ist unbekannt und wird fuer diese Zutat "
-                    + "ausgelassen; die uebrigen Kategorien bleiben gueltig. Haeufigste "
-                    + "Ursachen: Tippfehler, oder das Modul mit dieser Kategorie ist nicht "
-                    + "geladen.");
+                Report(report, false, def, "Kategorie \"" + name + "\" ist unbekannt und wird fuer diese Zutat " + "ausgelassen; die uebrigen Kategorien bleiben gueltig. Haeufigste " + "Ursachen: Tippfehler, oder das Modul mit dieser Kategorie ist nicht " + "geladen.");
                 continue;
             }
 
@@ -479,8 +453,7 @@ class ChefZ_IngredientManager
         }
     }
 
-    private void ResolveTags(notnull ChefZ_IngredientInfo info, array<string> names,
-                             notnull ChefZ_IngredientDef def, ChefZ_LoadReport report)
+    private void ResolveTags(notnull ChefZ_IngredientInfo info, array<string> names, notnull ChefZ_IngredientDef def, ChefZ_LoadReport report)
     {
         if (!names)
             return;
@@ -494,10 +467,7 @@ class ChefZ_IngredientManager
             ChefZ_Sym sym = ChefZ_SymbolTable.Lookup(name);
             if (!Cats().TagExists(sym))
             {
-                Report(report, false, def,
-                    "Tag \"" + name + "\" ist unbekannt und wird fuer diese Zutat ausgelassen. "
-                    + "Tags werden nie implizit angelegt (04 §6) - ein implizit angelegter Tag "
-                    + "matchte nie und waere stiller toter Code.");
+                Report(report, false, def, "Tag \"" + name + "\" ist unbekannt und wird fuer diese Zutat ausgelassen. " + "Tags werden nie implizit angelegt (04 §6) - ein implizit angelegter Tag " + "matchte nie und waere stiller toter Code.");
                 continue;
             }
 
@@ -514,19 +484,14 @@ class ChefZ_IngredientManager
      * waere schlimmer als ihn wegzulassen: das Item behauptete dann einen
      * Zustand, den kein Rezept, kein Prozess und keine Anzeige kennt.
      */
-    private void ResolveState(notnull ChefZ_IngredientInfo info, string name,
-                              ChefZ_Registry<ChefZ_StateDef> states,
-                              notnull ChefZ_IngredientDef def, ChefZ_LoadReport report)
+    private void ResolveState(notnull ChefZ_IngredientInfo info, string name, ChefZ_Registry<ChefZ_StateDef> states, notnull ChefZ_IngredientDef def, ChefZ_LoadReport report)
     {
         if (ChefZ_Undefined.IsTextUndefined(name))
             return;
 
         if (states && !states.ContainsName(name))
         {
-            Report(report, false, def,
-                "defaultState \"" + name + "\" ist kein bekannter Zustand und wird ausgelassen. "
-                + "Der Zustand des Items ergibt sich dann aus seiner Vanilla-FoodStage "
-                + "(06 §3, Schritt 3).");
+            Report(report, false, def, "defaultState \"" + name + "\" ist kein bekannter Zustand und wird ausgelassen. " + "Der Zustand des Items ergibt sich dann aus seiner Vanilla-FoodStage " + "(06 §3, Schritt 3).");
             return;
         }
 
@@ -550,11 +515,7 @@ class ChefZ_IngredientManager
         if (g_Game.ConfigIsExisting(CFG_WEAPONS   + " " + def.id))  return;
         if (g_Game.ConfigIsExisting(CFG_MAGAZINES + " " + def.id))  return;
 
-        Report(report, false, def,
-            "Die Klasse \"" + def.id + "\" existiert in keiner geladenen Config. Die Bindung "
-            + "bleibt geladen und wirkt, sobald das liefernde Addon dazukommt - so laufen "
-            + "Bindungen fuer optionale Fremdmods auf Servern ohne diesen Mod nicht auf "
-            + "einen Fehler.");
+        Report(report, false, def, "Die Klasse \"" + def.id + "\" existiert in keiner geladenen Config. Die Bindung " + "bleibt geladen und wirkt, sobald das liefernde Addon dazukommt - so laufen " + "Bindungen fuer optionale Fremdmods auf Servern ohne diesen Mod nicht auf " + "einen Fehler.");
     }
 
     //--------------------------------------------------------------------------
@@ -677,8 +638,7 @@ class ChefZ_IngredientManager
      * zurueckbekaeme, koennte sie sortieren oder leeren und damit den
      * selectivityHint aller Rezepte verschieben, die diese Kategorie nennen.
      */
-    private void CopyIndex(notnull map<int, ref array<ChefZ_Sym>> index, ChefZ_Sym key,
-                           out array<ChefZ_Sym> outClasses)
+    private void CopyIndex(notnull map<int, ref array<ChefZ_Sym>> index, ChefZ_Sym key, out array<ChefZ_Sym> outClasses)
     {
         if (!outClasses)
             outClasses = new array<ChefZ_Sym>();
@@ -802,11 +762,7 @@ class ChefZ_IngredientManager
         if (m_QuietForTest)
             return;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG,
-            "ChefZ_IngredientManager." + what + "() wurde vor Build() aufgerufen - die Antwort "
-            + "ist \"unbekannt\". Jedes Item gilt bis zum Aufbau als nicht deklariert; "
-            + "Kategorie- und Tag-Selektoren matchen solange nicht. Diese Meldung erscheint "
-            + "genau einmal.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "ChefZ_IngredientManager." + what + "() wurde vor Build() aufgerufen - die Antwort " + "ist \"unbekannt\". Jedes Item gilt bis zum Aufbau als nicht deklariert; " + "Kategorie- und Tag-Selektoren matchen solange nicht. Diese Meldung erscheint " + "genau einmal.");
     }
 
     private void Report(ChefZ_LoadReport report, bool isError, notnull ChefZ_IngredientDef def, string msg)
@@ -839,11 +795,7 @@ class ChefZ_IngredientManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen"
-            + ", abgewiesen " + m_RejectedCount.ToString()
-            + ", Kategorien indiziert " + m_ByCategory.Count().ToString()
-            + ", Tags indiziert " + m_ByTag.Count().ToString()
-            + ", ready=" + m_Ready.ToString());
+        outLines.Insert("Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen" + ", abgewiesen " + m_RejectedCount.ToString() + ", Kategorien indiziert " + m_ByCategory.Count().ToString() + ", Tags indiziert " + m_ByTag.Count().ToString() + ", ready=" + m_Ready.ToString());
 
         for (int i = 0; i < m_Infos.Count(); i++)
             outLines.Insert("  " + m_Infos.Get(i).ToLine());

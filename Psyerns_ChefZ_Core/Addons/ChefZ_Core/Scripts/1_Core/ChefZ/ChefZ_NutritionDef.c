@@ -238,10 +238,7 @@ class ChefZ_NutritionDef extends ChefZ_Record
         if (ChefZ_NutritionScope.FromName(scope) == ChefZ_NutritionScope.UNKNOWN)
         {
             if (ctx)
-                ctx.Error(this, "scope \"" + scope + "\" ist keine bekannte Dimension - der "
-                    + "Record wird abgewiesen. Ohne scope ist unbestimmt, ob \"" + id
-                    + "\" eine Klasse, eine Kategorie oder einen Tag bezeichnet. Gueltig: "
-                    + ChefZ_NutritionScope.ValidNames() + ".");
+                ctx.Error(this, "scope \"" + scope + "\" ist keine bekannte Dimension - der " + "Record wird abgewiesen. Ohne scope ist unbestimmt, ob \"" + id + "\" eine Klasse, eine Kategorie oder einen Tag bezeichnet. Gueltig: " + ChefZ_NutritionScope.ValidNames() + ".");
             return false;
         }
 

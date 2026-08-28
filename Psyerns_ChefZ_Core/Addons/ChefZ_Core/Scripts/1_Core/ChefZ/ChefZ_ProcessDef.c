@@ -186,17 +186,14 @@ class ChefZ_ProcessDef extends ChefZ_Record
         if (ChefZ_Undefined.IsTextUndefined(exec))
         {
             if (ctx)
-                ctx.Error(this, "Prozess ohne \"exec\" - abgewiesen. Ohne Ausfuehrungsform "
-                    + "ist nicht entscheidbar, ob er als Handgriff, als Stationsaktion oder "
-                    + "als Stationstimer laeuft. Gueltig: " + ChefZ_ProcessExec.ValidNames() + ".");
+                ctx.Error(this, "Prozess ohne \"exec\" - abgewiesen. Ohne Ausfuehrungsform " + "ist nicht entscheidbar, ob er als Handgriff, als Stationsaktion oder " + "als Stationstimer laeuft. Gueltig: " + ChefZ_ProcessExec.ValidNames() + ".");
             return false;
         }
 
         if (ChefZ_ProcessExec.FromName(exec) < 0)
         {
             if (ctx)
-                ctx.Error(this, "Prozess nennt die unbekannte Ausfuehrungsform \"" + exec
-                    + "\" - abgewiesen. Gueltig: " + ChefZ_ProcessExec.ValidNames() + ".");
+                ctx.Error(this, "Prozess nennt die unbekannte Ausfuehrungsform \"" + exec + "\" - abgewiesen. Gueltig: " + ChefZ_ProcessExec.ValidNames() + ".");
             return false;
         }
 

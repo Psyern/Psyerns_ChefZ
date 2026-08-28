@@ -54,10 +54,7 @@ class ChefZ_SymbolTable
             // 03 §7: leerer Name -> INVALID, einmal warnen. Der Schluessel
             // deckelt die Meldung; eine Logflut aus einer kaputten Datei mit
             // tausend leeren IDs hilft niemandem.
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONFIG,
-                "sym.intern.empty",
-                "ChefZ_SymbolTable.Intern() mit leerem Namen aufgerufen - liefert INVALID. "
-                + "Ursache ist fast immer ein Record ohne \"id\".");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONFIG, "sym.intern.empty", "ChefZ_SymbolTable.Intern() mit leerem Namen aufgerufen - liefert INVALID. " + "Ursache ist fast immer ein Record ohne \"id\".");
             return INVALID;
         }
 

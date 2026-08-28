@@ -158,10 +158,7 @@ class ChefZ_PortionManager
      * leer" sein (15 §7, erste Zeile) - sonst antwortete er auf jede Abfrage
      * mit einem Fehler ueber einen fehlenden Aufbau, den es nie geben wird.
      */
-    void Build(ChefZ_RecipeEngine engine,
-               ChefZ_ProcessingManager processing,
-               ChefZ_LoadReport report,
-               ChefZ_CoreSettingsDef settings = null)
+    void Build(ChefZ_RecipeEngine engine, ChefZ_ProcessingManager processing, ChefZ_LoadReport report, ChefZ_CoreSettingsDef settings = null)
     {
         ResetState();
 
@@ -179,16 +176,11 @@ class ChefZ_PortionManager
             {
                 // 15 §7, erste Zeile: kein Abbruch, keine Warnung. In einem
                 // Core ohne Content ist das der Normalzustand.
-                report.AddInfo("Keine Portionsgerichte deklariert - jedes Kochergebnis "
-                    + "entsteht als gewoehnliches Item. Vanilla-Kochen ist davon "
-                    + "unberuehrt.");
+                report.AddInfo("Keine Portionsgerichte deklariert - jedes Kochergebnis " + "entsteht als gewoehnliches Item. Vanilla-Kochen ist davon " + "unberuehrt.");
             }
             else
             {
-                report.AddInfo("Portionsgerichte: " + m_Order.Count().ToString()
-                    + " (aus Rezepten " + fromRecipes.ToString()
-                    + ", aus Transforms " + fromTransforms.ToString() + ")"
-                    + ", Namenskollisionen " + m_Collisions.ToString() + ".");
+                report.AddInfo("Portionsgerichte: " + m_Order.Count().ToString() + " (aus Rezepten " + fromRecipes.ToString() + ", aus Transforms " + fromTransforms.ToString() + ")" + ", Namenskollisionen " + m_Collisions.ToString() + ".");
             }
         }
 
@@ -276,10 +268,7 @@ class ChefZ_PortionManager
         // ein Zahlendreher einen 500-Portionen-Topf erzeugt.
         if (spec.portions > ChefZ_PortionLimits.MAX)
         {
-            Note(report, owner, "\"" + spec.bulkClass + "\" nennt " + spec.portions.ToString()
-                + " Portionen. Mehr als " + ChefZ_PortionLimits.MAX.ToString()
-                + " lassen sich nicht zum Client synchronisieren - geklemmt. Der Zaehler ist "
-                + "eine 5-Bit-Variable am Item (03 §4).");
+            Note(report, owner, "\"" + spec.bulkClass + "\" nennt " + spec.portions.ToString() + " Portionen. Mehr als " + ChefZ_PortionLimits.MAX.ToString() + " lassen sich nicht zum Client synchronisieren - geklemmt. Der Zaehler ist " + "eine 5-Bit-Variable am Item (03 §4).");
             spec.portions = ChefZ_PortionLimits.MAX;
         }
 
@@ -289,11 +278,7 @@ class ChefZ_PortionManager
         // gegen den offensichtlichsten Nahrungsexploit des ganzen Mods.
         if (spec.portions > 1 && !spec.HasAmountCap())
         {
-            Note(report, owner, "\"" + spec.bulkClass + "\" liefert bis zu "
-                + spec.portions.ToString() + " Portionen, nennt aber kein "
-                + "\"amountPerPortion\". Damit deckelt allein das Geraet: eine "
-                + "Minimalfuellung im groessten Topf ergibt die volle Portionszahl "
-                + "(15 §5.2). Beabsichtigt?");
+            Note(report, owner, "\"" + spec.bulkClass + "\" liefert bis zu " + spec.portions.ToString() + " Portionen, nennt aber kein " + "\"amountPerPortion\". Damit deckelt allein das Geraet: eine " + "Minimalfuellung im groessten Topf ergibt die volle Portionszahl " + "(15 §5.2). Beabsichtigt?");
         }
 
         ChefZ_PortionSpec existing;
@@ -302,11 +287,7 @@ class ChefZ_PortionManager
             if (!SameSpec(existing, spec))
             {
                 m_Collisions++;
-                Note(report, owner, "\"" + spec.bulkClass + "\" ist bereits mit anderen "
-                    + "Portionsdaten deklariert (aus " + existing.sourceRef + "). Es gilt die "
-                    + "zuerst gelesene Fassung; diese hier wird ignoriert. Ein Gericht kann "
-                    + "nur EINE Portionsregel haben - der Zaehler steht am Item, nicht am "
-                    + "Rezept (15 §6).");
+                Note(report, owner, "\"" + spec.bulkClass + "\" ist bereits mit anderen " + "Portionsdaten deklariert (aus " + existing.sourceRef + "). Es gilt die " + "zuerst gelesene Fassung; diese hier wird ignoriert. Ein Gericht kann " + "nur EINE Portionsregel haben - der Zaehler steht am Item, nicht am " + "Rezept (15 §6).");
             }
             return false;
         }
@@ -369,11 +350,7 @@ class ChefZ_PortionManager
      * @return immer >= 1. Ein Portionsgericht mit null Portionen waere ein
      *         Gericht, das man nie essen kann (15 §4, "clamp(n, 1, 31)").
      */
-    int ResolvePortionCount(notnull ChefZ_PortionSpec spec,
-                            notnull ChefZ_CookContext ctx,
-                            float consumedRequiredUnits,
-                            ChefZ_Sym qualityTier,
-                            out array<string> trace)
+    int ResolvePortionCount(notnull ChefZ_PortionSpec spec, notnull ChefZ_CookContext ctx, float consumedRequiredUnits, ChefZ_Sym qualityTier, out array<string> trace)
     {
         m_CountResolved++;
 
@@ -399,8 +376,7 @@ class ChefZ_PortionManager
         if (spec.scaleWithDevice && ctx.portionCapacity > 0 && ctx.portionCapacity < n)
         {
             n = ctx.portionCapacity;
-            Step(steps, "Geraetedeckel " + ChefZ_SymbolTable.NameOrMark(ctx.deviceClass)
-                + " -> " + n.ToString());
+            Step(steps, "Geraetedeckel " + ChefZ_SymbolTable.NameOrMark(ctx.deviceClass) + " -> " + n.ToString());
         }
 
         //--- Deckel 2: die Zutatenmenge (15 §5.2) -----------------------------
@@ -414,8 +390,7 @@ class ChefZ_PortionManager
             if (byAmount < n)
             {
                 n = byAmount;
-                Step(steps, "Mengendeckel " + consumedRequiredUnits.ToString() + " Einheiten / "
-                    + spec.amountPerPortion.ToString() + " je Portion -> " + n.ToString());
+                Step(steps, "Mengendeckel " + consumedRequiredUnits.ToString() + " Einheiten / " + spec.amountPerPortion.ToString() + " je Portion -> " + n.ToString());
             }
         }
 
@@ -448,9 +423,7 @@ class ChefZ_PortionManager
                 int floored = Math.Floor(scaled);
                 n = floored + bonus;
 
-                Step(steps, "Stufe " + ChefZ_SymbolTable.Name(qualityTier)
-                    + ": x" + yield.ToString() + " +" + bonus.ToString()
-                    + " -> " + n.ToString());
+                Step(steps, "Stufe " + ChefZ_SymbolTable.Name(qualityTier) + ": x" + yield.ToString() + " +" + bonus.ToString() + " -> " + n.ToString());
             }
         }
 
@@ -495,8 +468,7 @@ class ChefZ_PortionManager
      * duennen Eingaengen und nicht zwei Rechnungen: der Mengendeckel ist die
      * Exploitsperre aus 15 §5.2, und die darf es nur einmal geben.
      */
-    static float ConsumedRequiredUnitsOf(array<ref ChefZ_ConsumePlan> plans,
-                                         array<ref ChefZ_CompiledSlot> slots)
+    static float ConsumedRequiredUnitsOf(array<ref ChefZ_ConsumePlan> plans, array<ref ChefZ_CompiledSlot> slots)
     {
         if (!plans || !slots)
             return 0.0;
@@ -650,11 +622,7 @@ class ChefZ_PortionManager
         {
             // 15 §7, Zeile 4. EINMAL je Spec, nicht je Entnahme - sonst
             // Logflut, sobald jemand einen Kessel leert.
-            Once(ChefZ_LogLevel.WARN, "portion.container.missing." + spec.bulkClass,
-                "\"" + spec.bulkClass + "\" verlangt fuer die Entnahme einen Behaelter der "
-                + "Kategorie \"" + spec.containerCategory + "\". Das Behaeltersystem ist "
-                + "nicht geladen, deshalb entfaellt die Bedingung (15 §7): die Portion "
-                + "entsteht ohne Behaelter. Es geht dabei nichts verloren.");
+            Once(ChefZ_LogLevel.WARN, "portion.container.missing." + spec.bulkClass, "\"" + spec.bulkClass + "\" verlangt fuer die Entnahme einen Behaelter der " + "Kategorie \"" + spec.containerCategory + "\". Das Behaeltersystem ist " + "nicht geladen, deshalb entfaellt die Bedingung (15 §7): die Portion " + "entsteht ohne Behaelter. Es geht dabei nichts verloren.");
             return true;
         }
 
@@ -733,8 +701,7 @@ class ChefZ_PortionManager
         // hat die Liste bereits geordnet (16 E5: Gesundheit, dann
         // Klassenname). Deshalb der erste Eintrag und kein zweites
         // Auswahlkriterium: zwei Reihenfolgen ergaeben zwei Antworten.
-        if (spec.RequiresContainer() && spec.consumesContainer
-            && s_ContainerSystemReady && req.HasContainers())
+        if (spec.RequiresContainer() && spec.consumesContainer && s_ContainerSystemReady && req.HasContainers())
         {
             // Seit S17 ueber ChefZ_ContainerRegistry.ChooseContainer() statt
             // ueber Get(0): die Auswahlregel gehoert dem Behaeltersystem, und
@@ -744,9 +711,7 @@ class ChefZ_PortionManager
             // eine Liste uebergeben, die zu einer anderen Kategorie gehoert,
             // und der Plan verbrauchte den falschen Behaelter.
             ChefZ_Sym chosen;
-            if (ChefZ_ContainerRegistry.Get().ChooseContainer(spec.containerCategorySym,
-                                                              req.availableContainerClasses,
-                                                              chosen))
+            if (ChefZ_ContainerRegistry.Get().ChooseContainer(spec.containerCategorySym, req.availableContainerClasses, chosen))
             {
                 result.containerToConsume = chosen;
             }
@@ -803,9 +768,7 @@ class ChefZ_PortionManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Portionsgerichte: " + m_Order.Count().ToString()
-            + "  behaeltersystem=" + s_ContainerSystemReady.ToString()
-            + "  vorgabedauer=" + m_DefaultTakeSec.ToString() + "s");
+        outLines.Insert("Portionsgerichte: " + m_Order.Count().ToString() + "  behaeltersystem=" + s_ContainerSystemReady.ToString() + "  vorgabedauer=" + m_DefaultTakeSec.ToString() + "s");
 
         for (int i = 0; i < m_Order.Count(); i++)
         {
@@ -827,10 +790,7 @@ class ChefZ_PortionManager
         if (!m_NotReadyLogged && !m_QuietForTest)
         {
             m_NotReadyLogged = true;
-            ChefZ_Log.Error(ChefZ_LogChannel.PORTION,
-                "ChefZ_PortionManager." + who + " wurde vor dem Build gerufen. Die Antwort "
-                + "lautet \"kein Portionsgericht\"; Gerichte entstehen dann als gewoehnliche "
-                + "Items. Diese Meldung erscheint genau einmal.");
+            ChefZ_Log.Error(ChefZ_LogChannel.PORTION, "ChefZ_PortionManager." + who + " wurde vor dem Build gerufen. Die Antwort " + "lautet \"kein Portionsgericht\"; Gerichte entstehen dann als gewoehnliche " + "Items. Diese Meldung erscheint genau einmal.");
         }
 
         return false;
@@ -902,10 +862,7 @@ class ChefZ_PortionOutputAudit
      *
      * @return false = Rezept bzw. Transform ABWEISEN.
      */
-    static bool Audit(notnull ChefZ_OutputDef def, string where,
-                      notnull array<string> outWarnings,
-                      out string outPortionClass,
-                      out string rejectReason)
+    static bool Audit(notnull ChefZ_OutputDef def, string where, notnull array<string> outWarnings, out string outPortionClass, out string rejectReason)
     {
         outPortionClass = "";
         rejectReason    = "";
@@ -928,9 +885,7 @@ class ChefZ_PortionOutputAudit
         if (hasClass && !hasCount)
         {
             def.portions = 1;
-            outWarnings.Insert(where + " nennt \"portionClass\", aber kein \"portions\" - "
-                + "gelesen als 1 Portion (15 E7: ein Einzelgericht ist ein Portionsgericht "
-                + "mit portions = 1).");
+            outWarnings.Insert(where + " nennt \"portionClass\", aber kein \"portions\" - " + "gelesen als 1 Portion (15 E7: ein Einzelgericht ist ein Portionsgericht " + "mit portions = 1).");
             hasCount = true;
         }
 
@@ -944,10 +899,7 @@ class ChefZ_PortionOutputAudit
          */
         if (hasCount && !hasClass)
         {
-            outWarnings.Insert(where + " nennt " + def.portions.ToString()
-                + " Portionen, aber keine \"portionClass\" - der Zaehler entfaellt und das "
-                + "Ergebnis entsteht als gewoehnliches Item. Ein Zaehler ohne Entnahmeklasse "
-                + "waere ein Topf, aus dem man nichts herausbekommt (15 §7).");
+            outWarnings.Insert(where + " nennt " + def.portions.ToString() + " Portionen, aber keine \"portionClass\" - der Zaehler entfaellt und das " + "Ergebnis entsteht als gewoehnliches Item. Ein Zaehler ohne Entnahmeklasse " + "waere ein Topf, aus dem man nichts herausbekommt (15 §7).");
             def.portions = 0;
             return true;
         }
@@ -956,9 +908,7 @@ class ChefZ_PortionOutputAudit
         // ein Autor soll die Zahl in seiner Datei korrigieren koennen.
         if (def.portions > ChefZ_PortionLimits.MAX)
         {
-            outWarnings.Insert(where + ": " + def.portions.ToString() + " Portionen sind mehr "
-                + "als die " + ChefZ_PortionLimits.MAX.ToString() + ", die sich zum Client "
-                + "synchronisieren lassen - geklemmt (03 §4).");
+            outWarnings.Insert(where + ": " + def.portions.ToString() + " Portionen sind mehr " + "als die " + ChefZ_PortionLimits.MAX.ToString() + ", die sich zum Client " + "synchronisieren lassen - geklemmt (03 §4).");
             def.portions = ChefZ_PortionLimits.MAX;
         }
 
@@ -977,16 +927,13 @@ class ChefZ_PortionOutputAudit
         // sie gleich der Portionsklasse ist, und das waere widerspruechlich.
         if (def.emptyOnLastPortion != "" && def.emptyOnLastPortion == def.portionClass)
         {
-            outWarnings.Insert(where + ": \"emptyOnLastPortion\" ist dieselbe Klasse wie "
-                + "\"portionClass\". Die letzte Entnahme liesse damit eine weitere Portion "
-                + "zurueck - der Eintrag wird ignoriert und der Rest geloescht (15 §2).");
+            outWarnings.Insert(where + ": \"emptyOnLastPortion\" ist dieselbe Klasse wie " + "\"portionClass\". Die letzte Entnahme liesse damit eine weitere Portion " + "zurueck - der Eintrag wird ignoriert und der Rest geloescht (15 §2).");
             def.emptyOnLastPortion = "";
         }
 
         if (def.HasAmountPerPortion() && def.amountPerPortion < 0.0)
         {
-            outWarnings.Insert(where + ": \"amountPerPortion\" ist negativ - der Mengendeckel "
-                + "entfaellt. Damit deckelt allein das Geraet (15 §5.2).");
+            outWarnings.Insert(where + ": \"amountPerPortion\" ist negativ - der Mengendeckel " + "entfaellt. Damit deckelt allein das Geraet (15 §5.2).");
             def.amountPerPortion = 0.0;
         }
 

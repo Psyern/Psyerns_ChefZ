@@ -157,8 +157,7 @@ class ChefZ_PboProbe
 
         bool ok = fileExists && loaded && (markerSeen == expectedMarker) && (itemCount > 0);
 
-        PrintToRPT(string.Format("%1 %2 exists=%3 rawChars=%4 load=%5 marker=%6 items=%7 verdict=%8",
-            TAG, label, fileExists, rawBytes, loaded, markerSeen, itemCount, Verdict(ok)));
+        PrintToRPT(string.Format("%1 %2 exists=%3 rawChars=%4 load=%5 marker=%6 items=%7 verdict=%8", TAG, label, fileExists, rawBytes, loaded, markerSeen, itemCount, Verdict(ok)));
         PrintToRPT(string.Format("%1 %2   path=%3", TAG, label, path));
         if (!loaded && errorMessage != "")
             PrintToRPT(string.Format("%1 %2   loaderMsg=%3", TAG, label, errorMessage));
@@ -173,8 +172,7 @@ class ChefZ_PboProbe
         int  rawBytes   = RawRead(path);
         bool ok = fileExists && rawBytes > 0;
 
-        PrintToRPT(string.Format("%1 %2 exists=%3 rawChars=%4 verdict=%5",
-            TAG, label, fileExists, rawBytes, Verdict(ok)));
+        PrintToRPT(string.Format("%1 %2 exists=%3 rawChars=%4 verdict=%5", TAG, label, fileExists, rawBytes, Verdict(ok)));
         PrintToRPT(string.Format("%1 %2   path=%3", TAG, label, path));
     }
 
@@ -229,8 +227,7 @@ class ChefZ_PboProbe
 
         CloseFindFile(handle);
 
-        PrintToRPT(string.Format("%1 %2 flag=%3 hits=%4 first=%5 pattern=%6",
-            TAG, label, flagName, found, first, pattern));
+        PrintToRPT(string.Format("%1 %2 flag=%3 hits=%4 first=%5 pattern=%6", TAG, label, flagName, found, first, pattern));
     }
 
     //--------------------------------------------------------------------------

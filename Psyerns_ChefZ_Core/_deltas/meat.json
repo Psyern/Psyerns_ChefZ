@@ -30,7 +30,7 @@
         { "id": "PROCESS_CUT_MEAT", "tool": "CUTTING_TOOL", "durationSec": 4 },
         { "id": "PROCESS_GRIND_MEAT", "station": "ChefZ_MeatGrinder", "durationSec": 20 },
         { "id": "PROCESS_STUFF_SAUSAGE", "station": "ChefZ_MeatGrinder", "durationSec": 15 },
-        { "id": "PROCESS_CLEAN_CASING", "station": "ChefZ_CuttingBoard", "tool": "CUTTING_TOOL", "durationSec": 12 }
+        { "id": "PROCESS_CLEAN_CASING", "tool": "CUTTING_TOOL", "durationSec": 12 }
     ],
 
     "nutrition": [
@@ -41,7 +41,6 @@
         { "class": "ChefZ_MincedBoar", "energy": 165, "water": 40, "stomach": 112 },
         { "class": "ChefZ_MincedChicken", "energy": 120, "water": 46, "stomach": 95 },
         { "class": "ChefZ_MincedBear", "energy": 205, "water": 36, "stomach": 130 },
-        { "class": "ChefZ_AnimalFat", "energy": 300, "water": 5, "stomach": 40 },
         { "class": "ChefZ_SausageCasing", "energy": 20, "water": 12, "stomach": 15 },
         { "class": "ChefZ_RawSausage", "energy": 230, "water": 35, "stomach": 150 },
         { "class": "ChefZ_RawPorkSausage", "energy": 265, "water": 33, "stomach": 155 },
@@ -71,7 +70,6 @@
         "ChefZ_MincedBoar",
         "ChefZ_MincedChicken",
         "ChefZ_MincedBear",
-        "ChefZ_AnimalFat",
         "ChefZ_SausageCasing",
         "ChefZ_RawSausage",
         "ChefZ_RawPorkSausage",

@@ -195,8 +195,7 @@ class ChefZ_RegistryBase
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert(m_Kind + ": " + Count().ToString() + " Records"
-            + ", frozen=" + m_Frozen.ToString());
+        outLines.Insert(m_Kind + ": " + Count().ToString() + " Records" + ", frozen=" + m_Frozen.ToString());
 
         array<ChefZ_Sym> keys = Keys();
         for (int i = 0; i < keys.Count(); i++)

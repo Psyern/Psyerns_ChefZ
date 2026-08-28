@@ -155,6 +155,18 @@ export default function run() {
           f.error(file, 0, `"${id}" steht in einem Delta, fehlt aber in ${name} - der Merge ist unvollstaendig`);
         }
       }
+      // Und die Gegenrichtung. Ohne sie ueberlebt ein Record in der Registry,
+      // dessen Delta laengst geloescht wurde - etwa weil die Klasse durch eine
+      // Vanilla-Klasse ersetzt wurde. Er zeigt dann auf etwas, das es nicht mehr
+      // gibt, und niemand meldet es: der Merge prueft nur, was ankommen SOLL.
+      for (const id of have) {
+        if (!expected.has(id)) {
+          f.error(file, 0,
+            `"${id}" steht in ${name}, aber in keinem Delta - verwaister Record. `
+            + `Entweder das Delta des zustaendigen Slice wurde geloescht, oder jemand hat `
+            + `die Registry von Hand bearbeitet. Der Integrator muss neu mergen.`);
+        }
+      }
     }
   }
 

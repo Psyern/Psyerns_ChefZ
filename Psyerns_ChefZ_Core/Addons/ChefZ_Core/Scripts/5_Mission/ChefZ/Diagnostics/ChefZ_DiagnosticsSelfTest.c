@@ -95,10 +95,7 @@ class ChefZ_DiagnosticsSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.CORE,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Die Diagnose verhaelt sich nicht wie "
-            + "entworfen - ab hier sind ihre Auskuenfte unzuverlaessig. Kochen, Vanilla und "
-            + "der uebrige Core sind davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CORE, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Diagnose verhaelt sich nicht wie " + "entworfen - ab hier sind ihre Auskuenfte unzuverlaessig. Kochen, Vanilla und " + "der uebrige Core sind davon unberuehrt.");
     }
 
     static int PassedCount() { return s_Passed; }

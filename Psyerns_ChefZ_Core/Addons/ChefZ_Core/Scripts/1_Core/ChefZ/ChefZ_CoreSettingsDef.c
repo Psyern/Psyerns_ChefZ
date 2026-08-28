@@ -565,8 +565,7 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         nutritionExpectedCap      = ChefZ_Undefined.FloatOr(nutritionExpectedCap, 100000.0);
 
         // 15 §3. Die Begruendung der Zahl steht am Feld.
-        defaultTakePortionSec   = ChefZ_Undefined.FloatOr(defaultTakePortionSec,
-                                        ChefZ_PortionLimits.DEFAULT_TAKE_SEC);
+        defaultTakePortionSec   = ChefZ_Undefined.FloatOr(defaultTakePortionSec, ChefZ_PortionLimits.DEFAULT_TAKE_SEC);
 
         // 16 E5. Die Begruendung beider Zahlen steht am Feld.
         containerSearchRadius   = ChefZ_Undefined.FloatOr(containerSearchRadius, 3.0);
@@ -651,8 +650,7 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         if (!ChefZ_LogLevel.IsValid(logLevel))
         {
             int fixedLevel = ChefZ_LogLevel.Clamp(logLevel);
-            Note(report, "logLevel " + logLevel.ToString() + " liegt ausserhalb von 0..5 - benutzt wird "
-                + ChefZ_LogLevel.Name(fixedLevel) + ". Gueltig: " + ChefZ_LogLevel.ValidNames());
+            Note(report, "logLevel " + logLevel.ToString() + " liegt ausserhalb von 0..5 - benutzt wird " + ChefZ_LogLevel.Name(fixedLevel) + ". Gueltig: " + ChefZ_LogLevel.ValidNames());
             logLevel = fixedLevel;
         }
         if (logBufferLines < 1)
@@ -738,14 +736,12 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
 
         if (!IsKnownCapabilityMode(capabilityMode))
         {
-            Note(report, "capabilityMode \"" + capabilityMode + "\" ist unbekannt - benutzt wird \"asAuthored\". "
-                + "Gueltig: asAuthored, neverBlock, ignore.");
+            Note(report, "capabilityMode \"" + capabilityMode + "\" ist unbekannt - benutzt wird \"asAuthored\". " + "Gueltig: asAuthored, neverBlock, ignore.");
             capabilityMode = "asAuthored";
         }
         if (!IsKnownExtraItemsMode(defaultExtraItems))
         {
-            Note(report, "defaultExtraItems \"" + defaultExtraItems + "\" ist unbekannt - benutzt wird \"forbid\". "
-                + "Gueltig: forbid, ignore, consume.");
+            Note(report, "defaultExtraItems \"" + defaultExtraItems + "\" ist unbekannt - benutzt wird \"forbid\". " + "Gueltig: forbid, ignore, consume.");
             defaultExtraItems = "forbid";
         }
     }
@@ -814,24 +810,17 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
 
         if (w.priorityScale > 1.0)
         {
-            Note(report, "priorityScale = " + w.priorityScale.ToString() + " ist groesser als 1.0. "
-                + "Damit verschiebt priority 100 den Score um mehr als 100 Punkte und die "
-                + "handgepflegte Zahl ueberstimmt die berechnete Spezifitaet - die Grundregel "
-                + "\"das spezifischste gueltige Rezept gewinnt\" ist dann ausgehebelt (09 §7).");
+            Note(report, "priorityScale = " + w.priorityScale.ToString() + " ist groesser als 1.0. " + "Damit verschiebt priority 100 den Score um mehr als 100 Punkte und die " + "handgepflegte Zahl ueberstimmt die berechnete Spezifitaet - die Grundregel " + "\"das spezifischste gueltige Rezept gewinnt\" ist dann ausgehebelt (09 §7).");
         }
 
         if (w.IsSpecificityDisabled())
         {
-            Note(report, "Alle Spezifitaetsgewichte sind 0. Jedes Rezept hat damit denselben "
-                + "Score, und es entscheidet allein der Tiebreak ueber Itemzahl, Slotzahl, "
-                + "priority und ID. Das ist selten Absicht (09 §7).");
+            Note(report, "Alle Spezifitaetsgewichte sind 0. Jedes Rezept hat damit denselben " + "Score, und es entscheidet allein der Tiebreak ueber Itemzahl, Slotzahl, " + "priority und ID. Das ist selten Absicht (09 §7).");
         }
 
         if (taken > 0 && ChefZ_Log.Enabled(ChefZ_LogChannel.CONFIG, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG,
-                "Spezifitaetsgewichte: " + taken.ToString() + " Feld(er) aus Core.json - "
-                + w.ToDebugString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG, "Spezifitaetsgewichte: " + taken.ToString() + " Feld(er) aus Core.json - " + w.ToDebugString());
         }
 
         return w;
@@ -861,20 +850,14 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
 
         sc.ClampInPlace();
 
-        if (sc.freshnessWeight == 0.0 && sc.ingredientQualityWeight == 0.0
-            && sc.StatePenaltyCount() == 0)
+        if (sc.freshnessWeight == 0.0 && sc.ingredientQualityWeight == 0.0 && sc.StatePenaltyCount() == 0)
         {
-            Note(report, "Frischegewicht und Zutatenqualitaetsgewicht sind beide 0 und es "
-                + "gibt keine Zustandsstrafen. Der Zustand der Zutaten hat damit KEINEN "
-                + "Einfluss mehr auf die Qualitaet - altes Fleisch ergibt dasselbe Gericht "
-                + "wie frisches. Das ist selten Absicht (12 §4.1).");
+            Note(report, "Frischegewicht und Zutatenqualitaetsgewicht sind beide 0 und es " + "gibt keine Zustandsstrafen. Der Zustand der Zutaten hat damit KEINEN " + "Einfluss mehr auf die Qualitaet - altes Fleisch ergibt dasselbe Gericht " + "wie frisches. Das ist selten Absicht (12 §4.1).");
         }
 
         if (taken > 0 && ChefZ_Log.Enabled(ChefZ_LogChannel.CONFIG, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG,
-                "Qualitaetsrechnung: " + taken.ToString() + " Angabe(n) aus Core.json - "
-                + sc.ToDebugString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG, "Qualitaetsrechnung: " + taken.ToString() + " Angabe(n) aus Core.json - " + sc.ToDebugString());
         }
 
         return sc;

@@ -432,8 +432,7 @@ class ChefZ_Record
         if (id.IndexOf(" ") >= 0)
         {
             if (ctx)
-                ctx.Error(this, "ID \"" + id + "\" enthaelt ein Leerzeichen. IDs werden zu Symbolen interniert "
-                    + "und in Config-Pfaden verwendet - Leerzeichen sind dort mehrdeutig.");
+                ctx.Error(this, "ID \"" + id + "\" enthaelt ein Leerzeichen. IDs werden zu Symbolen interniert " + "und in Config-Pfaden verwendet - Leerzeichen sind dort mehrdeutig.");
             return false;
         }
         return true;

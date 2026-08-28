@@ -69,7 +69,6 @@ class CfgPatches
             "ChefZ_MincedBoar",
             "ChefZ_MincedChicken",
             "ChefZ_MincedBear",
-            "ChefZ_AnimalFat",
             "ChefZ_SausageCasing",
             "ChefZ_RawSausage",
             "ChefZ_RawPorkSausage",
@@ -494,39 +493,14 @@ class CfgVehicles
         };
     };
 
-    // §31: Kochfett. Faellt beim Wolfen als Beiprodukt an und ist Zutat fuer Wurst, Bratkartoffeln und Pfannengerichte.
-    class ChefZ_AnimalFat : ChefZ_MeatItemBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_ANIMALFAT0";
-        descriptionShort = "#STR_CHEFZ_ITEM_ANIMALFAT1";
-        model = "\dz\gear\food\lard.p3d";
-        itemSize[] = {1, 1};
-        weight = 180;
-
-        class Nutrition
-        {
-            fullnessIndex = 40;
-            energy = 300;
-            water = 5;
-            nutritionalIndex = 4;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { nutrition_properties[] = {40, 300, 5, 4, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {35, 340, 2, 4, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {38, 320, 8, 4, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {25, 120, 1, 2, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {34, 180, 4, 2, 25, 16, 1}; };
-            };
-        };
-    };
+    // §31: Kochfett. KEINE eigene Klasse - Vanillas "Lard" ist die
+    // Fettklasse des Mods (Vanilla-Audit §2). Das fruehere ChefZ_AnimalFat
+    // trug bereits dz/gear/food/lard.p3d, hatte dieselbe einzige Kategorie FAT
+    // und stand in keinem Rezept-Slot: alle sechs Fett-Slots matchen ueber die
+    // Kategorie, nie ueber die Klasse. Es faellt jetzt Lard als Beiprodukt des
+    // Wolfens an (Config/Processing/Meat.json). Nicht wieder anlegen: soll sich
+    // Wolfenfett vom Schlachtfett unterscheiden, gehoert das zuerst als
+    // Kategorie oder Tag in die Registry, nicht als zweite Klasse.
 
     // §33: gereinigter Darm. Essbar, aber sinnlos - er ist Huelle, keine Mahlzeit. Der Nutrition-Block steht trotzdem hier: ohne ihn saettigt ein Bissen lautlos nicht (01 V7).
     class ChefZ_SausageCasing : ChefZ_MeatItemBase

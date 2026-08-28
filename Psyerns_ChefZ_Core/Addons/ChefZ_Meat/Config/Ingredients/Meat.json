@@ -170,15 +170,6 @@
             "decays": true
         },
         {
-            "id": "ChefZ_AnimalFat",
-            "categories": ["FAT"],
-            "tags": [],
-            "defaultState": "PREPARED",
-            "quantityUnit": "PIECE",
-            "unitsPerWholeItem": 1,
-            "decays": true
-        },
-        {
             "id": "ChefZ_SausageCasing",
             "categories": ["CASING"],
             "tags": [],

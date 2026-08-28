@@ -186,10 +186,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
         if (!g_Game || !g_Game.IsServer())
         {
             err = "Entnahme ausserhalb des Servers angefordert";
-            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PORTION,
-                "portion.client." + GetType(),
-                "ChefZ_TakePortion wurde clientseitig gerufen (" + GetType() + "). Es "
-                + "passiert nichts. Nichts Autoritatives laeuft auf dem Client (00 §5).");
+            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PORTION, "portion.client." + GetType(), "ChefZ_TakePortion wurde clientseitig gerufen (" + GetType() + "). Es " + "passiert nichts. Nichts Autoritatives laeuft auf dem Client (00 §5).");
             return false;
         }
 
@@ -220,9 +217,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
             err = why;
 
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.PORTION, ChefZ_LogLevel.DEBUG))
-                ChefZ_Log.Debug(ChefZ_LogChannel.PORTION,
-                    GetType() + ": Entnahme abgelehnt - " + why
-                    + ". Es wurde nichts veraendert.");
+                ChefZ_Log.Debug(ChefZ_LogChannel.PORTION, GetType() + ": Entnahme abgelehnt - " + why + ". Es wurde nichts veraendert.");
             return false;
         }
 
@@ -244,8 +239,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
         {
             err = "storniert: " + cancelReason;
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.PORTION, ChefZ_LogLevel.DEBUG))
-                ChefZ_Log.Debug(ChefZ_LogChannel.PORTION,
-                    GetType() + ": Entnahme von aussen storniert - " + cancelReason);
+                ChefZ_Log.Debug(ChefZ_LogChannel.PORTION, GetType() + ": Entnahme von aussen storniert - " + cancelReason);
             return false;
         }
 
@@ -259,11 +253,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
             // Portion auf den Boden. Scheitert auch das: Zaehler NICHT
             // dekrementieren, WARN."
             err = "die Portion konnte nicht erzeugt werden: " + spawnErr;
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION,
-                "portion.spawn." + plan.portionClass,
-                "\"" + plan.portionClass + "\" konnte nicht erzeugt werden (" + spawnErr
-                + "). Der Portionszaehler bleibt unveraendert und es wurde nichts "
-                + "verbraucht - es geht keine Portion verloren.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION, "portion.spawn." + plan.portionClass, "\"" + plan.portionClass + "\" konnte nicht erzeugt werden (" + spawnErr + "). Der Portionszaehler bleibt unveraendert und es wurde nichts " + "verbraucht - es geht keine Portion verloren.");
             return false;
         }
 
@@ -294,17 +284,12 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
         if (plan.NeedsContainer())
         {
             string containerErr;
-            if (!ChefZ_ContainerService.ConsumeByClass(plan.containerToConsume, actor, this,
-                                                       usedContainer, containerErr))
+            if (!ChefZ_ContainerService.ConsumeByClass(plan.containerToConsume, actor, this, usedContainer, containerErr))
             {
                 portion.Delete();
 
                 err = "der Behaelter konnte nicht verbraucht werden: " + containerErr;
-                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN,
-                    "portion.container.consume." + GetType(),
-                    "Die Entnahme aus \"" + GetType() + "\" wurde abgebrochen: "
-                    + containerErr + ". Der Portionszaehler bleibt unveraendert und es "
-                    + "wurde nichts verbraucht - es geht keine Portion verloren.");
+                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.CONTAIN, "portion.container.consume." + GetType(), "Die Entnahme aus \"" + GetType() + "\" wurde abgebrochen: " + containerErr + ". Der Portionszaehler bleibt unveraendert und es " + "wurde nichts verbraucht - es geht keine Portion verloren.");
                 return false;
             }
         }
@@ -326,15 +311,13 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
             ChefZ_PortionSpec containerSpec;
             if (mgr.GetSpecForBulk(req.sourceClass, containerSpec))
             {
-                returnClass = ChefZ_ContainerRegistry.Get().ResolveReturnClass(
-                                    containerSpec.returnContainer, usedContainer);
+                returnClass = ChefZ_ContainerRegistry.Get().ResolveReturnClass( containerSpec.returnContainer, usedContainer);
             }
         }
 
         if (ChefZ_SymbolTable.IsValid(returnClass))
         {
-            ChefZ_ItemStateComponent.SetReturnContainer(portion,
-                ChefZ_SymbolTable.Name(returnClass));
+            ChefZ_ItemStateComponent.SetReturnContainer(portion, ChefZ_SymbolTable.Name(returnClass));
         }
 
         //--- 6. Dekrementieren - ERST JETZT -----------------------------------
@@ -350,8 +333,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PORTION, ChefZ_LogLevel.INFO))
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.PORTION,
-                "Portion entnommen: " + plan.ToDebugString());
+            ChefZ_Log.Info(ChefZ_LogChannel.PORTION, "Portion entnommen: " + plan.ToDebugString());
         }
 
         return true;
@@ -485,9 +467,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
      * @return false, wenn die Portion dabei geloescht wurde. Dann bricht der
      *         Aufrufer ab - der Zaehler steht noch.
      */
-    protected bool ChefZ_CarryToPortion(notnull ItemBase portion,
-                                        notnull ChefZ_PortionPlan plan,
-                                        out string err)
+    protected bool ChefZ_CarryToPortion(notnull ItemBase portion, notnull ChefZ_PortionPlan plan, out string err)
     {
         err = "";
 
@@ -578,11 +558,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
             if (empty)
                 return;
 
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION,
-                "portion.empty." + plan.emptyClass,
-                "Nach der letzten Portion sollte \"" + GetType() + "\" durch \""
-                + plan.emptyClass + "\" ersetzt werden, was nicht gelang (" + swapErr
-                + "). Das leere Gericht bleibt liegen und kann normal entsorgt werden.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION, "portion.empty." + plan.emptyClass, "Nach der letzten Portion sollte \"" + GetType() + "\" durch \"" + plan.emptyClass + "\" ersetzt werden, was nicht gelang (" + swapErr + "). Das leere Gericht bleibt liegen und kann normal entsorgt werden.");
 
             SetSynchDirty();
             return;
@@ -596,9 +572,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
     // Ereignis (17 §4, stornierbar - siehe ChefZ_TakePortion Schritt 2)
     //==========================================================================
 
-    protected bool ChefZ_RaisePortionVeto(notnull ChefZ_PortionRequest req,
-                                          notnull ChefZ_PortionPlan plan,
-                                          out string cancelReason)
+    protected bool ChefZ_RaisePortionVeto(notnull ChefZ_PortionRequest req, notnull ChefZ_PortionPlan plan, out string cancelReason)
     {
         cancelReason = "";
 
@@ -768,11 +742,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
 
         if (magic != PORTION_MAGIC)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION,
-                "portion.magic." + GetType(),
-                "\"" + GetType() + "\": an der Stelle des Portionsblocks steht kein "
-                + "Portionsblock. Die Hoechstzahl faellt auf den aktuellen Zaehler zurueck; "
-                + "das Item bleibt vollstaendig spielbar.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION, "portion.magic." + GetType(), "\"" + GetType() + "\": an der Stelle des Portionsblocks steht kein " + "Portionsblock. Die Hoechstzahl faellt auf den aktuellen Zaehler zurueck; " + "das Item bleibt vollstaendig spielbar.");
             return true;
         }
 
@@ -782,11 +752,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
 
         if (blockVersion > PORTION_VERSION)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION,
-                "portion.version." + blockVersion.ToString(),
-                "Der gespeicherte Portionsblock hat Version " + blockVersion.ToString()
-                + ", dieser Core kennt " + PORTION_VERSION.ToString() + ". Der Rest wird "
-                + "uebersprungen. Das passiert nach einem Downgrade des Mods.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION, "portion.version." + blockVersion.ToString(), "Der gespeicherte Portionsblock hat Version " + blockVersion.ToString() + ", dieser Core kennt " + PORTION_VERSION.ToString() + ". Der Rest wird " + "uebersprungen. Das passiert nach einem Downgrade des Mods.");
             return true;
         }
 
@@ -824,13 +790,7 @@ class ChefZ_PortionedFood_Base extends ChefZ_Edible_Base
         {
             if (m_ChefZ_PortionsMax > 0)
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION,
-                    "portion.maxmismatch." + GetType(),
-                    "\"" + GetType() + "\": der gespeicherte Zaehler (" + left.ToString()
-                    + ") liegt ueber der gespeicherten Hoechstzahl ("
-                    + m_ChefZ_PortionsMax.ToString() + "). Die Hoechstzahl wird angehoben; "
-                    + "der Spieler behaelt seine Portionen. Diese Meldung erscheint je "
-                    + "Klasse einmal.");
+                ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PORTION, "portion.maxmismatch." + GetType(), "\"" + GetType() + "\": der gespeicherte Zaehler (" + left.ToString() + ") liegt ueber der gespeicherten Hoechstzahl (" + m_ChefZ_PortionsMax.ToString() + "). Die Hoechstzahl wird angehoben; " + "der Spieler behaelt seine Portionen. Diese Meldung erscheint je " + "Klasse einmal.");
             }
             m_ChefZ_PortionsMax = left;
         }

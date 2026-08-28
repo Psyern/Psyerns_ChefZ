@@ -26,6 +26,27 @@
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 0
+        },
+        {
+            "id": "TR_AssemblePastaMachine",
+            "process": "PROCESS_ASSEMBLE",
+            "inputs": [
+                {
+                    "slotId": "metal",
+                    "match": { "cls": "MetalPlate" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_PastaMachine",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
+            ],
+            "priority": 0
         }
     ]
 }

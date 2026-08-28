@@ -84,10 +84,7 @@ class ChefZ_PortionSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.PORTION,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Die Portionsrechnung verhaelt sich nicht "
-            + "wie entworfen - Portionszahlen und damit die Nahrungsbilanz des Servers sind ab "
-            + "hier unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PORTION, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Portionsrechnung verhaelt sich nicht " + "wie entworfen - Portionszahlen und damit die Nahrungsbilanz des Servers sind ab " + "hier unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -118,8 +115,7 @@ class ChefZ_PortionSelfTest
 
     //! Ein Ergebnis mit Portionsdaten, wie es im Content-Beispiel aus 15 §3
     //! steht - nur mit Testnamen.
-    private static ChefZ_OutputDef MakeOutput(string cls, string portionCls,
-                                              int portions, float perPortion)
+    private static ChefZ_OutputDef MakeOutput(string cls, string portionCls, int portions, float perPortion)
     {
         ChefZ_OutputDef def = new ChefZ_OutputDef();
         def.cls              = cls;
@@ -239,12 +235,9 @@ class ChefZ_PortionSelfTest
         array<string> trace = null;
 
         // Grosszuegig Zutaten, damit allein das Geraet entscheidet.
-        int imGrossenGefaess = mgr.ResolvePortionCount(spec, MakeContext(12), 99.0,
-                                                 ChefZ_SymbolTable.INVALID, trace);
-        int inPot      = mgr.ResolvePortionCount(spec, MakeContext(4), 99.0,
-                                                 ChefZ_SymbolTable.INVALID, trace);
-        int undeclared = mgr.ResolvePortionCount(spec, MakeContext(0), 99.0,
-                                                 ChefZ_SymbolTable.INVALID, trace);
+        int imGrossenGefaess = mgr.ResolvePortionCount(spec, MakeContext(12), 99.0, ChefZ_SymbolTable.INVALID, trace);
+        int inPot      = mgr.ResolvePortionCount(spec, MakeContext(4), 99.0, ChefZ_SymbolTable.INVALID, trace);
+        int undeclared = mgr.ResolvePortionCount(spec, MakeContext(0), 99.0, ChefZ_SymbolTable.INVALID, trace);
 
         if (imGrossenGefaess != 12)                                     return false;
         if (inPot != 4)                                           return false;
@@ -253,8 +246,7 @@ class ChefZ_PortionSelfTest
 
         // scaleWithDevice = false haengt das Geraet vollstaendig aus.
         spec.scaleWithDevice = false;
-        int ignoring = mgr.ResolvePortionCount(spec, MakeContext(4), 99.0,
-                                               ChefZ_SymbolTable.INVALID, trace);
+        int ignoring = mgr.ResolvePortionCount(spec, MakeContext(4), 99.0, ChefZ_SymbolTable.INVALID, trace);
         if (ignoring != 12)                                       return false;
 
         return true;
@@ -320,20 +312,16 @@ class ChefZ_PortionSelfTest
         array<string> trace = null;
 
         // kleines Geraet, wenig Zutaten  -> wenig
-        if (mgr.ResolvePortionCount(spec, MakeContext(4), 4.0,
-                ChefZ_SymbolTable.INVALID, trace) != 2)            return false;
+        if (mgr.ResolvePortionCount(spec, MakeContext(4), 4.0, ChefZ_SymbolTable.INVALID, trace) != 2)            return false;
 
         // kleines Geraet, viele Zutaten  -> das Geraet begrenzt
-        if (mgr.ResolvePortionCount(spec, MakeContext(4), 40.0,
-                ChefZ_SymbolTable.INVALID, trace) != 4)            return false;
+        if (mgr.ResolvePortionCount(spec, MakeContext(4), 40.0, ChefZ_SymbolTable.INVALID, trace) != 4)            return false;
 
         // grosses Geraet, wenig Zutaten  -> die Menge begrenzt
-        if (mgr.ResolvePortionCount(spec, MakeContext(12), 4.0,
-                ChefZ_SymbolTable.INVALID, trace) != 2)            return false;
+        if (mgr.ResolvePortionCount(spec, MakeContext(12), 4.0, ChefZ_SymbolTable.INVALID, trace) != 2)            return false;
 
         // grosses Geraet, viele Zutaten  -> voll
-        if (mgr.ResolvePortionCount(spec, MakeContext(12), 40.0,
-                ChefZ_SymbolTable.INVALID, trace) != 12)           return false;
+        if (mgr.ResolvePortionCount(spec, MakeContext(12), 40.0, ChefZ_SymbolTable.INVALID, trace) != 12)           return false;
 
         return true;
     }
@@ -346,13 +334,11 @@ class ChefZ_PortionSelfTest
         array<string> trace = null;
 
         ChefZ_PortionSpec huge = MakeSpec("CHEFZ_PO_BULK_G", 500, 0.0);
-        int n = mgr.ResolvePortionCount(huge, MakeContext(0), 99.0,
-                                        ChefZ_SymbolTable.INVALID, trace);
+        int n = mgr.ResolvePortionCount(huge, MakeContext(0), 99.0, ChefZ_SymbolTable.INVALID, trace);
         if (n != ChefZ_SyncLimits.PORTIONS_MAX)                   return false;
 
         ChefZ_PortionSpec none = MakeSpec("CHEFZ_PO_BULK_H", 0, 0.0);
-        if (mgr.ResolvePortionCount(none, MakeContext(0), 99.0,
-                ChefZ_SymbolTable.INVALID, trace) != 1)            return false;
+        if (mgr.ResolvePortionCount(none, MakeContext(0), 99.0, ChefZ_SymbolTable.INVALID, trace) != 1)            return false;
 
         // Der Trace ist optional und darf nie zum Absturz fuehren - null ist
         // der Normalfall im Kochtakt.
@@ -377,8 +363,7 @@ class ChefZ_PortionSelfTest
         if (!spec.IsPortioned())                                  return false;
 
         array<string> trace = null;
-        if (mgr.ResolvePortionCount(spec, MakeContext(12), 99.0,
-                ChefZ_SymbolTable.INVALID, trace) != 1)            return false;
+        if (mgr.ResolvePortionCount(spec, MakeContext(12), 99.0, ChefZ_SymbolTable.INVALID, trace) != 1)            return false;
 
         // Auch der groesste Kessel macht aus einem Tellergericht kein
         // Gruppengericht: der Geraetedeckel ist ein MINIMUM, keine Vorgabe.
@@ -516,8 +501,7 @@ class ChefZ_PortionSelfTest
         counterOnly.cls      = "CHEFZ_PO_AUDIT_C";
         counterOnly.portions = 6;
         counterOnly.ResolveDefaults();
-        if (!ChefZ_PortionOutputAudit.Audit(counterOnly, "outputs[0]", warnings,
-                                            portionCls, reject))
+        if (!ChefZ_PortionOutputAudit.Audit(counterOnly, "outputs[0]", warnings, portionCls, reject))
             return false;
         if (counterOnly.portions != 0)                            return false;
         if (portionCls != "")                                     return false;

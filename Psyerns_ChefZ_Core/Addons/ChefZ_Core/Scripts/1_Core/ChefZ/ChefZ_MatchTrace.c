@@ -71,9 +71,7 @@ class ChefZ_MatchTrace
 
     void Begin(ChefZ_Sym device, int method, int itemCount)
     {
-        Add("=== Match " + ChefZ_SymbolTable.NameOrMark(device)
-            + "  Methode=" + method.ToString()
-            + "  Items=" + itemCount.ToString());
+        Add("=== Match " + ChefZ_SymbolTable.NameOrMark(device) + "  Methode=" + method.ToString() + "  Items=" + itemCount.ToString());
     }
 
     void Contents(notnull ChefZ_FactSnapshot snapshot)
@@ -93,8 +91,7 @@ class ChefZ_MatchTrace
 
     void RecipeConsidered(ChefZ_Sym recipe, float specificity)
     {
-        Add("  Rezept " + ChefZ_SymbolTable.NameOrMark(recipe)
-            + "  spez=" + specificity.ToString());
+        Add("  Rezept " + ChefZ_SymbolTable.NameOrMark(recipe) + "  spez=" + specificity.ToString());
     }
 
     void SlotResult(ChefZ_Sym recipe, string slotId, bool ok, string reason)
@@ -111,8 +108,7 @@ class ChefZ_MatchTrace
 
     void SlotAssigned(string slotId, ChefZ_Sym itemClass, int count, float units)
     {
-        Add("    Slot " + slotId + " <- " + ChefZ_SymbolTable.NameOrMark(itemClass)
-            + " x" + count.ToString() + "  Einheiten=" + units.ToString());
+        Add("    Slot " + slotId + " <- " + ChefZ_SymbolTable.NameOrMark(itemClass) + " x" + count.ToString() + "  Einheiten=" + units.ToString());
     }
 
     void RecipeRejected(ChefZ_Sym recipe, string reason, string slotId)
@@ -130,10 +126,7 @@ class ChefZ_MatchTrace
 
     void Winner(ChefZ_Sym recipe, float score, ChefZ_Sym tier, int nodes)
     {
-        Add("  GEWINNER " + ChefZ_SymbolTable.NameOrMark(recipe)
-            + "  score=" + score.ToString()
-            + "  stufe=" + ChefZ_SymbolTable.NameOrMark(tier)
-            + "  knoten=" + nodes.ToString());
+        Add("  GEWINNER " + ChefZ_SymbolTable.NameOrMark(recipe) + "  score=" + score.ToString() + "  stufe=" + ChefZ_SymbolTable.NameOrMark(tier) + "  knoten=" + nodes.ToString());
     }
 
     void Readiness(bool ready, string reason)
@@ -206,8 +199,7 @@ class ChefZ_MatchTrace
             if (!m_Truncated)
             {
                 m_Truncated = true;
-                m_Lines.Insert("  ... Trace bei " + MAX_LINES.ToString()
-                    + " Zeilen abgeschnitten.");
+                m_Lines.Insert("  ... Trace bei " + MAX_LINES.ToString() + " Zeilen abgeschnitten.");
             }
             return;
         }

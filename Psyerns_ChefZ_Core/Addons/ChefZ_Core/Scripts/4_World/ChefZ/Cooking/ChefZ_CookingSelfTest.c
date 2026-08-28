@@ -55,10 +55,7 @@ class ChefZ_CookingSelfTest
         }
 
         s_Failed++;
-        ChefZ_Log.Error(ChefZ_LogChannel.COOK,
-            "Selbsttest S7 fehlgeschlagen: " + name + ". Der Kochadapter ist damit "
-            + "nicht vertrauenswuerdig. Vanilla-Kochen ist davon unberuehrt - der Hook "
-            + "ruft super als erste Anweisung und gibt dessen Rueckgabewert zurueck.");
+        ChefZ_Log.Error(ChefZ_LogChannel.COOK, "Selbsttest S7 fehlgeschlagen: " + name + ". Der Kochadapter ist damit " + "nicht vertrauenswuerdig. Vanilla-Kochen ist davon unberuehrt - der Hook " + "ruft super als erste Anweisung und gibt dessen Rueckgabewert zurueck.");
     }
 
     static string Summary()

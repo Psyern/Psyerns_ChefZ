@@ -317,26 +317,20 @@ class ChefZ_EventBus
      * beide werden gerufen. Stille Magie waere hier schlimmer als eine
      * doppelte Zustellung - bei gleichem subscriberName gibt es ein WARN.
      */
-    int Subscribe(string eventId, Class owner, ScriptCaller cb,
-                  string subscriberName, int priority = 0)
+    int Subscribe(string eventId, Class owner, ScriptCaller cb, string subscriberName, int priority = 0)
     {
         string id = eventId;
         id.TrimInPlace();
 
         if (id == "")
         {
-            Warn("bus.sub.empty",
-                "Abonnement ohne Ereignisnamen abgelehnt (Abonnent \"" + subscriberName
-                + "\"). Ein leerer Name kann von nichts ausgeloest werden.");
+            Warn("bus.sub.empty", "Abonnement ohne Ereignisnamen abgelehnt (Abonnent \"" + subscriberName + "\"). Ein leerer Name kann von nichts ausgeloest werden.");
             return 0;
         }
 
         if (!cb || !cb.IsValid())
         {
-            Warn("bus.sub.nocb." + id + "." + subscriberName,
-                "Abonnement auf \"" + id + "\" von \"" + subscriberName
-                + "\" abgelehnt: der ScriptCaller ist leer oder ungueltig. "
-                + "Erwartet wird ScriptCaller.Create(MeineMethode).");
+            Warn("bus.sub.nocb." + id + "." + subscriberName, "Abonnement auf \"" + id + "\" von \"" + subscriberName + "\" abgelehnt: der ScriptCaller ist leer oder ungueltig. " + "Erwartet wird ScriptCaller.Create(MeineMethode).");
             return 0;
         }
 
@@ -344,11 +338,7 @@ class ChefZ_EventBus
         {
             // 17 §9: annehmen UND warnen. Ein Tippfehler soll sichtbar sein,
             // ein Content-Ereignis aus emitEvents trotzdem abonnierbar.
-            Warn("bus.sub.unknown." + id,
-                "\"" + subscriberName + "\" abonniert \"" + id + "\" - das ist kein "
-                + "Systemereignis des Core. Das ist in Ordnung, wenn es aus emitEvents "
-                + "eines Rezepts oder Prozesses kommt; sonst ist es ein Tippfehler. "
-                + "Systemereignisse: " + ChefZ_EventNames.CoreEventNames());
+            Warn("bus.sub.unknown." + id, "\"" + subscriberName + "\" abonniert \"" + id + "\" - das ist kein " + "Systemereignis des Core. Das ist in Ordnung, wenn es aus emitEvents " + "eines Rezepts oder Prozesses kommt; sonst ist es ein Tippfehler. " + "Systemereignisse: " + ChefZ_EventNames.CoreEventNames());
         }
 
         array<ref ChefZ_EventSubscription> list = EnsureList(id);
@@ -358,10 +348,7 @@ class ChefZ_EventBus
             ChefZ_EventSubscription other = list.Get(i);
             if (other && subscriberName != "" && other.subscriberName == subscriberName)
             {
-                Warn("bus.sub.dup." + id + "." + subscriberName,
-                    "\"" + subscriberName + "\" ist bereits fuer \"" + id
-                    + "\" angemeldet. Beide Anmeldungen bleiben und beide werden gerufen - "
-                    + "der Core dedupliziert nicht. Das ist selten Absicht.");
+                Warn("bus.sub.dup." + id + "." + subscriberName, "\"" + subscriberName + "\" ist bereits fuer \"" + id + "\" angemeldet. Beide Anmeldungen bleiben und beide werden gerufen - " + "der Core dedupliziert nicht. Das ist selten Absicht.");
                 break;
             }
         }
@@ -383,9 +370,7 @@ class ChefZ_EventBus
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.EVENT,
-                "Abonnent " + sub.Label() + " fuer \"" + id + "\" (prio "
-                + priority.ToString() + ", jetzt " + list.Count().ToString() + ")");
+            ChefZ_Log.Debug(ChefZ_LogChannel.EVENT, "Abonnent " + sub.Label() + " fuer \"" + id + "\" (prio " + priority.ToString() + ", jetzt " + list.Count().ToString() + ")");
         }
 
         return sub.id;
@@ -483,11 +468,7 @@ class ChefZ_EventBus
                 // eine zu viel. Aber es ist ein Befund: mehr gleichzeitig
                 // benutzte Nutzlasten als erlaubte Verschachtelungstiefe heisst
                 // fast immer, dass ein Aufrufer Acquire() ohne Release() ruft.
-                Warn("bus.pool.grow",
-                    "Der Ereignispool ist auf " + m_Owned.Count().ToString()
-                    + " Nutzlasten gewachsen (Grenze " + m_MaxPool.ToString()
-                    + "). Ursache ist fast immer ein Acquire() ohne passendes "
-                    + "Raise() oder Release().");
+                Warn("bus.pool.grow", "Der Ereignispool ist auf " + m_Owned.Count().ToString() + " Nutzlasten gewachsen (Grenze " + m_MaxPool.ToString() + "). Ursache ist fast immer ein Acquire() ohne passendes " + "Raise() oder Release().");
             }
         }
 
@@ -576,8 +557,7 @@ class ChefZ_EventBus
      * @return true = die Wirkung UNTERBLEIBT. Der Aufrufer faellt dann auf
      *         Vanilla zurueck und veraendert NICHTS.
      */
-    bool RaiseCancellable(notnull ChefZ_EventArgs args, out string cancelReason,
-                          out string cancelBy)
+    bool RaiseCancellable(notnull ChefZ_EventArgs args, out string cancelReason, out string cancelBy)
     {
         Dispatch(args);
 
@@ -614,21 +594,17 @@ class ChefZ_EventBus
 
         if (!ChefZ_EventArgs.IsFinite(bonus))
         {
-            Warn("bus.query.nan." + args.eventId,
-                "Die Abfrage \"" + args.eventId + "\" hat keine Zahl ergeben. "
-                + "Der externe Bonus gilt als 0.");
+            Warn("bus.query.nan." + args.eventId, "Die Abfrage \"" + args.eventId + "\" hat keine Zahl ergeben. " + "Der externe Bonus gilt als 0.");
             bonus = 0.0;
         }
         else if (bonus > limit)
         {
-            Warn("bus.query.high." + args.eventId,
-                "Externer Qualitaetsbonus " + bonus.ToString() + " ueberschreitet " + "maxExternalQualityBonus (" + limit.ToString() + ") und wird geklemmt. " + "Beitraege kamen von: " + SubscriberNames(args.eventId));
+            Warn("bus.query.high." + args.eventId, "Externer Qualitaetsbonus " + bonus.ToString() + " ueberschreitet " + "maxExternalQualityBonus (" + limit.ToString() + ") und wird geklemmt. " + "Beitraege kamen von: " + SubscriberNames(args.eventId));
             bonus = limit;
         }
         else if (bonus < -limit)
         {
-            Warn("bus.query.low." + args.eventId,
-                "Externer Qualitaetsabzug " + bonus.ToString() + " unterschreitet " + (-limit).ToString() + " und wird geklemmt. Beitraege kamen von: " + SubscriberNames(args.eventId));
+            Warn("bus.query.low." + args.eventId, "Externer Qualitaetsabzug " + bonus.ToString() + " unterschreitet " + (-limit).ToString() + " und wird geklemmt. Beitraege kamen von: " + SubscriberNames(args.eventId));
             bonus = -limit;
         }
 
@@ -659,17 +635,13 @@ class ChefZ_EventBus
 
         if (id == "")
         {
-            Warn("bus.raise.empty",
-                "Raise() mit leerem Ereignisnamen - es wird nichts zugestellt.");
+            Warn("bus.raise.empty", "Raise() mit leerem Ereignisnamen - es wird nichts zugestellt.");
             return;
         }
 
         if (!IsServerSide())
         {
-            Warn("bus.raise.client",
-                "Raise(\"" + id + "\") auf dem Client - wirkungslos. Der Core feuert "
-                + "clientseitig keine Ereignisse (17 §7). Wer etwas anzeigen will, "
-                + "schickt es selbst.");
+            Warn("bus.raise.client", "Raise(\"" + id + "\") auf dem Client - wirkungslos. Der Core feuert " + "clientseitig keine Ereignisse (17 §7). Wer etwas anzeigen will, " + "schickt es selbst.");
             return;
         }
 
@@ -682,11 +654,7 @@ class ChefZ_EventBus
         if (m_Depth >= m_MaxDepth)
         {
             m_CountDepthBlocked++;
-            Err("bus.depth." + id,
-                "Ereignistiefe " + m_MaxDepth.ToString() + " erreicht bei \"" + id
-                + "\" - die Zustellung wird abgebrochen. Ursache ist immer ein Abonnent, "
-                + "der im Rueckruf selbst Ereignisse ausloest, die wieder bei ihm landen. "
-                + "Das Kochen laeuft davon unbeeindruckt weiter.");
+            Err("bus.depth." + id, "Ereignistiefe " + m_MaxDepth.ToString() + " erreicht bei \"" + id + "\" - die Zustellung wird abgebrochen. Ursache ist immer ein Abonnent, " + "der im Rueckruf selbst Ereignisse ausloest, die wieder bei ihm landen. " + "Das Kochen laeuft davon unbeeindruckt weiter.");
             return;
         }
 
@@ -754,11 +722,7 @@ class ChefZ_EventBus
                 if (dt >= m_SlowMs)
                 {
                     sub.slowCount++;
-                    SlowWarn("bus.slow." + sub.Label(),
-                        "Abonnent " + sub.Label() + " hat fuer \"" + id + "\" "
-                        + dt.ToString() + " ms gebraucht (Grenze " + m_SlowMs.ToString()
-                        + " ms). Ereignisbehandlung muss kurz sein - eine Endlosschleife "
-                        + "im Rueckruf ist in Enforce nicht abfangbar.");
+                    SlowWarn("bus.slow." + sub.Label(), "Abonnent " + sub.Label() + " hat fuer \"" + id + "\" " + dt.ToString() + " ms gebraucht (Grenze " + m_SlowMs.ToString() + " ms). Ereignisbehandlung muss kurz sein - eine Endlosschleife " + "im Rueckruf ist in Enforce nicht abfangbar.");
                 }
             }
 
@@ -770,14 +734,7 @@ class ChefZ_EventBus
                 if (!sub.warnedCancel)
                 {
                     sub.warnedCancel = true;
-                    Warn("bus.cancel.notallowed." + sub.Label() + "." + id,
-                        "Abonnent " + sub.Label() + " storniert \"" + id
-                        + "\", aber dieses Ereignis ist nicht stornierbar - es meldet eine "
-                        + "bereits eingetretene Wirkung. Die Stornierung wird ignoriert. "
-                        + "Stornierbar sind nur Ereignisse VOR einer Wirkung: "
-                        + ChefZ_EventNames.RECIPE_MATCHED + ", "
-                        + ChefZ_EventNames.PROCESS_JOB_STARTED + ", "
-                        + ChefZ_EventNames.PORTION_TAKEN + ".");
+                    Warn("bus.cancel.notallowed." + sub.Label() + "." + id, "Abonnent " + sub.Label() + " storniert \"" + id + "\", aber dieses Ereignis ist nicht stornierbar - es meldet eine " + "bereits eingetretene Wirkung. Die Stornierung wird ignoriert. " + "Stornierbar sind nur Ereignisse VOR einer Wirkung: " + ChefZ_EventNames.RECIPE_MATCHED + ", " + ChefZ_EventNames.PROCESS_JOB_STARTED + ", " + ChefZ_EventNames.PORTION_TAKEN + ".");
                 }
                 args.cancelled    = hadCancel;
                 args.cancelReason = "";
@@ -790,11 +747,7 @@ class ChefZ_EventBus
                 if (!sub.warnedBonus)
                 {
                     sub.warnedBonus = true;
-                    Warn("bus.bonus.notallowed." + sub.Label() + "." + id,
-                        "Abonnent " + sub.Label() + " traegt Punkte zu \"" + id
-                        + "\" bei, aber das einzige Abfrage-Ereignis des Core ist "
-                        + ChefZ_EventNames.QUALITY_BONUS_QUERY + ". Der Beitrag "
-                        + "bleibt wirkungslos.");
+                    Warn("bus.bonus.notallowed." + sub.Label() + "." + id, "Abonnent " + sub.Label() + " traegt Punkte zu \"" + id + "\" bei, aber das einzige Abfrage-Ereignis des Core ist " + ChefZ_EventNames.QUALITY_BONUS_QUERY + ". Der Beitrag " + "bleibt wirkungslos.");
                 }
                 args.bonusPoints = hadBonus;
             }
@@ -806,8 +759,7 @@ class ChefZ_EventBus
 
                 if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))
                 {
-                    ChefZ_Log.Debug(ChefZ_LogChannel.EVENT,
-                        "Storniert von " + sub.Label() + ": " + args.ToDebugString());
+                    ChefZ_Log.Debug(ChefZ_LogChannel.EVENT, "Storniert von " + sub.Label() + ": " + args.ToDebugString());
                 }
 
                 // Zustellung beenden. Die Wirkung findet nicht statt, und ein
@@ -877,13 +829,7 @@ class ChefZ_EventBus
         EventNames(names);
         ChefZ_StringOrder.SortAscending(names);
 
-        outLines.Insert("Event Bus: " + names.Count().ToString() + " Ereignisse, "
-            + m_ById.Count().ToString() + " Anmeldungen"
-            + "  ausgeloest=" + m_CountRaised.ToString()
-            + "  zugestellt=" + m_CountDelivered.ToString()
-            + "  storniert=" + m_CountCancelled.ToString()
-            + "  tot entfernt=" + m_CountDeadPruned.ToString()
-            + "  tiefenabbruch=" + m_CountDepthBlocked.ToString());
+        outLines.Insert("Event Bus: " + names.Count().ToString() + " Ereignisse, " + m_ById.Count().ToString() + " Anmeldungen" + "  ausgeloest=" + m_CountRaised.ToString() + "  zugestellt=" + m_CountDelivered.ToString() + "  storniert=" + m_CountCancelled.ToString() + "  tot entfernt=" + m_CountDeadPruned.ToString() + "  tiefenabbruch=" + m_CountDepthBlocked.ToString());
 
         if (names.Count() == 0)
         {
@@ -960,8 +906,7 @@ class ChefZ_EventBus
 
     //! Absteigend nach Prioritaet, bei Gleichstand hinten anfuegen. Damit ist
     //! die Reihenfolge vollstaendig bestimmt: Prioritaet, dann Anmeldezeit.
-    private void InsertByPriority(notnull array<ref ChefZ_EventSubscription> list,
-                                  notnull ChefZ_EventSubscription sub)
+    private void InsertByPriority(notnull array<ref ChefZ_EventSubscription> list, notnull ChefZ_EventSubscription sub)
     {
         for (int i = 0; i < list.Count(); i++)
         {
@@ -1008,9 +953,7 @@ class ChefZ_EventBus
 
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))
             {
-                ChefZ_Log.Debug(ChefZ_LogChannel.EVENT,
-                    "Abonnent " + sub.Label() + " entfernt - Besitzer oder Rueckruf "
-                    + "existiert nicht mehr.");
+                ChefZ_Log.Debug(ChefZ_LogChannel.EVENT, "Abonnent " + sub.Label() + " entfernt - Besitzer oder Rueckruf " + "existiert nicht mehr.");
             }
 
             m_ById.Remove(sub.id);

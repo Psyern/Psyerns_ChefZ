@@ -138,11 +138,8 @@ class ChefZ_Diagnostics
 
         ChefZ_ConfigManager cfg = ChefZ_ConfigManager.Get();
 
-        lines.Insert("Zustand   " + ChefZ_ConfigManager.HealthName(cfg.GetHealth())
-            + "   aktiv=" + cfg.IsActive().ToString()
-            + "   records=" + cfg.TotalRecordCount().ToString());
-        lines.Insert("Logzaehler seit Start: " + ChefZ_Log.GetErrorCount().ToString()
-            + " Fehler, " + ChefZ_Log.GetWarnCount().ToString() + " Warnungen");
+        lines.Insert("Zustand   " + ChefZ_ConfigManager.HealthName(cfg.GetHealth()) + "   aktiv=" + cfg.IsActive().ToString() + "   records=" + cfg.TotalRecordCount().ToString());
+        lines.Insert("Logzaehler seit Start: " + ChefZ_Log.GetErrorCount().ToString() + " Fehler, " + ChefZ_Log.GetWarnCount().ToString() + " Warnungen");
         lines.Insert("Symbole   " + ChefZ_SymbolTable.Count().ToString());
         lines.Insert("");
 
@@ -203,10 +200,7 @@ class ChefZ_Diagnostics
         if (Guard(lines))
         {
             ChefZ_NutritionManager nut = ChefZ_NutritionManager.Get();
-            lines.Insert("Angaben " + nut.GetRecordCount().ToString()
-                + "   abgewiesen " + nut.GetRejectedCount().ToString()
-                + "   Audit " + nut.IsAuditEnabled().ToString()
-                + "   gelaufen " + nut.HasAudited().ToString());
+            lines.Insert("Angaben " + nut.GetRecordCount().ToString() + "   abgewiesen " + nut.GetRejectedCount().ToString() + "   Audit " + nut.IsAuditEnabled().ToString() + "   gelaufen " + nut.HasAudited().ToString());
             nut.DumpFindings(lines);
         }
         outLines = End(lines);
@@ -281,10 +275,7 @@ class ChefZ_Diagnostics
 
         lines.Insert(rec.ToDebugString());
         lines.Insert("Quelle        " + rec.sourceRef);
-        lines.Insert("Spezifitaet   " + rec.specificity.ToString()
-            + "   Prioritaet " + rec.priority.ToString()
-            + "   Pflichtslots " + rec.requiredSlots.ToString()
-            + "   Bedingungen " + rec.totalConstraints.ToString());
+        lines.Insert("Spezifitaet   " + rec.specificity.ToString() + "   Prioritaet " + rec.priority.ToString() + "   Pflichtslots " + rec.requiredSlots.ToString() + "   Bedingungen " + rec.totalConstraints.ToString());
         lines.Insert("Mindestitems  " + rec.minItemCount.ToString());
         lines.Insert("");
 
@@ -347,13 +338,10 @@ class ChefZ_Diagnostics
         ChefZ_RecipeEngine engine = ChefZ_RecipeEngine.Get();
 
         lines.Insert("Geraet        " + desc.ToDebugString());
-        lines.Insert("Methode       " + ChefZ_SymbolTable.NameOrMark(ctx.method)
-            + "   Temperatur " + ctx.deviceTemperature.ToString()
-            + "   Items " + snapshot.Count().ToString());
+        lines.Insert("Methode       " + ChefZ_SymbolTable.NameOrMark(ctx.method) + "   Temperatur " + ctx.deviceTemperature.ToString() + "   Items " + snapshot.Count().ToString());
         if (ctx.HasLiquid())
         {
-            lines.Insert("Fluessigkeit  " + ChefZ_SymbolTable.NameOrMark(ctx.liquidType)
-                + " " + ctx.liquidQuantity.ToString());
+            lines.Insert("Fluessigkeit  " + ChefZ_SymbolTable.NameOrMark(ctx.liquidType) + " " + ctx.liquidQuantity.ToString());
         }
         lines.Insert("Torstufen     " + GateSummary(device, desc, snapshot.Count()));
 
@@ -367,8 +355,7 @@ class ChefZ_Diagnostics
         {
             // 18 §6: "chefz match auf einem Gefaess ohne Cargo -> Trace mit
             // 'kein Cargo', keine Wirkung."
-            lines.Insert("Kein Cargo. ChefZ-Rezepte sind gefaessbasiert (10 §3); "
-                + "ohne Inhalt gibt es nichts zu binden.");
+            lines.Insert("Kein Cargo. ChefZ-Rezepte sind gefaessbasiert (10 §3); " + "ohne Inhalt gibt es nichts zu binden.");
             lines.Insert(VANILLA_UNTOUCHED);
             outLines = End(lines);
             return;
@@ -403,8 +390,7 @@ class ChefZ_Diagnostics
             // Die haeufigste und wichtigste Zeile des ganzen Teilsystems
             // (18 §3, letzter Block).
             lines.Insert("KEIN TREFFER");
-            lines.Insert("  Kandidaten geprueft " + result.candidatesTried.ToString()
-                + "   Knoten " + result.nodesExplored.ToString());
+            lines.Insert("  Kandidaten geprueft " + result.candidatesTried.ToString() + "   Knoten " + result.nodesExplored.ToString());
             if (result.failReason != "")
             {
                 lines.Insert("  Bestplatzierter Fehlschlag: " + ChefZ_SymbolTable.NameOrMark(result.failedRecipe) + " -> " + result.failReason + SlotSuffix(result.failSlotId));
@@ -489,8 +475,7 @@ class ChefZ_Diagnostics
         }
 
         lines.Insert("Geraet        " + desc.ToDebugString());
-        lines.Insert("Methode       " + ChefZ_SymbolTable.NameOrMark(ctx.method)
-            + "   Temperatur " + ctx.deviceTemperature.ToString());
+        lines.Insert("Methode       " + ChefZ_SymbolTable.NameOrMark(ctx.method) + "   Temperatur " + ctx.deviceTemperature.ToString());
         lines.Insert("Inhalt:");
         for (int i = 0; i < snapshot.Count(); i++)
         {
@@ -508,9 +493,7 @@ class ChefZ_Diagnostics
         ChefZ_MatchTrace  trace  = new ChefZ_MatchTrace();
         ChefZ_MatchResult result = new ChefZ_MatchResult();
 
-        bool bound = ChefZ_RecipeEvaluator.Evaluate(rec, ctx, snapshot,
-                                                    ChefZ_RecipeEngine.Get().GetNodeBudget(),
-                                                    trace, result);
+        bool bound = ChefZ_RecipeEvaluator.Evaluate(rec, ctx, snapshot, ChefZ_RecipeEngine.Get().GetNodeBudget(), trace, result);
 
         array<string> traceLines = new array<string>();
         trace.ToLines(traceLines);
@@ -528,9 +511,7 @@ class ChefZ_Diagnostics
             bool ready = ChefZ_RecipeEvaluator.CheckReady(rec, result, snapshot, ctx, readyReason);
             if (ready)
             {
-                lines.Insert("Es ist ausserdem abschlussbereit. Bleibt es trotzdem aus, "
-                    + "gewinnt ein hoeher rangierendes Rezept - siehe \"chefz match\" "
-                    + "und \"chefz ambiguities\".");
+                lines.Insert("Es ist ausserdem abschlussbereit. Bleibt es trotzdem aus, " + "gewinnt ein hoeher rangierendes Rezept - siehe \"chefz match\" " + "und \"chefz ambiguities\".");
             }
             else
             {
@@ -676,8 +657,7 @@ class ChefZ_Diagnostics
         {
             while (lines.Count() > MAX_ANSWER_LINES)
                 lines.Remove(lines.Count() - 1);
-            lines.Insert("... Antwort bei " + MAX_ANSWER_LINES.ToString()
-                + " Zeilen abgeschnitten. Ein engeres Kommando fragen.");
+            lines.Insert("... Antwort bei " + MAX_ANSWER_LINES.ToString() + " Zeilen abgeschnitten. Ein engeres Kommando fragen.");
         }
         lines.Insert(RULE);
         return lines;
@@ -718,9 +698,7 @@ class ChefZ_Diagnostics
     private static void NoSuchRecipe(string recipeId, notnull array<string> lines)
     {
         lines.Insert("Kein geladenes Rezept mit der ID \"" + recipeId + "\".");
-        lines.Insert("Der Bestand umfasst " + ChefZ_RecipeEngine.Get().GetRecipeCount().ToString()
-            + " Rezepte. \"chefz registries\" listet sie; \"chefz report\" nennt die, "
-            + "die beim Laden abgewiesen wurden.");
+        lines.Insert("Der Bestand umfasst " + ChefZ_RecipeEngine.Get().GetRecipeCount().ToString() + " Rezepte. \"chefz registries\" listet sie; \"chefz report\" nennt die, " + "die beim Laden abgewiesen wurden.");
     }
 
     /**
@@ -731,12 +709,7 @@ class ChefZ_Diagnostics
      * schuetzt einen laufenden Kochtick davor, seine Datengrundlage unter den
      * Fuessen wegzuverlieren.
      */
-    private static bool BuildView(notnull ItemBase device,
-                                  out ChefZ_DeviceDescriptor desc,
-                                  out ChefZ_CookContext ctx,
-                                  out ChefZ_FactSnapshot snapshot,
-                                  out array<ItemBase> entities,
-                                  out string reason)
+    private static bool BuildView(notnull ItemBase device, out ChefZ_DeviceDescriptor desc, out ChefZ_CookContext ctx, out ChefZ_FactSnapshot snapshot, out array<ItemBase> entities, out string reason)
     {
         reason = "";
 
@@ -793,9 +766,7 @@ class ChefZ_Diagnostics
      * Sie einzeln zu benennen ist der Unterschied zwischen "es passiert
      * nichts" und "der Rezeptindex kennt fuer diese Geraeteklasse nichts".
      */
-    private static string GateSummary(notnull ItemBase device,
-                                      notnull ChefZ_DeviceDescriptor desc,
-                                      int itemCount)
+    private static string GateSummary(notnull ItemBase device, notnull ChefZ_DeviceDescriptor desc, int itemCount)
     {
         if (!ChefZ_CookingHook.IsEnabled())
         {
@@ -826,9 +797,7 @@ class ChefZ_Diagnostics
         return "Stufe 0 passiert (Mindestitems " + minItems.ToString() + ").";
     }
 
-    private static void AppendPlan(notnull ChefZ_MatchResult result,
-                                   notnull ChefZ_FactSnapshot snapshot,
-                                   notnull array<string> lines)
+    private static void AppendPlan(notnull ChefZ_MatchResult result, notnull ChefZ_FactSnapshot snapshot, notnull array<string> lines)
     {
         if (result.consumePlan.Count() == 0)
             return;
@@ -849,10 +818,7 @@ class ChefZ_Diagnostics
         }
     }
 
-    private static void AppendAlternatives(notnull ChefZ_RecipeEngine engine,
-                                           notnull ChefZ_CookContext ctx,
-                                           notnull ChefZ_FactSnapshot snapshot,
-                                           notnull array<string> lines)
+    private static void AppendAlternatives(notnull ChefZ_RecipeEngine engine, notnull ChefZ_CookContext ctx, notnull ChefZ_FactSnapshot snapshot, notnull array<string> lines)
     {
         array<ref ChefZ_MatchResult> all = new array<ref ChefZ_MatchResult>();
         int count = engine.EvaluateAll(ctx, snapshot, all, MAX_ALTERNATIVES);
@@ -864,16 +830,13 @@ class ChefZ_Diagnostics
             return;
         }
 
-        lines.Insert("Bindbare Rezepte an diesem Gefaess, bestes zuerst ("
-            + count.ToString() + "):");
+        lines.Insert("Bindbare Rezepte an diesem Gefaess, bestes zuerst (" + count.ToString() + "):");
         for (int i = 0; i < all.Count(); i++)
         {
             ChefZ_MatchResult one = all.Get(i);
             if (!one)
                 continue;
-            lines.Insert("  " + (i + 1).ToString() + ". " + one.recipeId
-                + "  score=" + one.score.ToString()
-                + "  fertig=" + one.ready.ToString());
+            lines.Insert("  " + (i + 1).ToString() + ". " + one.recipeId + "  score=" + one.score.ToString() + "  fertig=" + one.ready.ToString());
         }
     }
 

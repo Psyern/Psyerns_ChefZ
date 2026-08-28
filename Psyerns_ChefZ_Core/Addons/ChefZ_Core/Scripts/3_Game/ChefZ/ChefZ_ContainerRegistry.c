@@ -135,9 +135,7 @@ class ChefZ_ContainerRegistry
         if (!defs || defs.Count() == 0)
         {
             if (report)
-                report.AddInfo("Behaelter: keine deklariert (CfgChefZContainers fehlt oder "
-                    + "ist leer). Rezepte ohne Behaelteranforderung laufen unveraendert; "
-                    + "in einem Core ohne Content ist das der Normalzustand (16 §7).");
+                report.AddInfo("Behaelter: keine deklariert (CfgChefZContainers fehlt oder " + "ist leer). Rezepte ohne Behaelteranforderung laufen unveraendert; " + "in einem Core ohne Content ist das der Normalzustand (16 §7).");
             return;
         }
 
@@ -154,11 +152,7 @@ class ChefZ_ContainerRegistry
 
         if (report)
         {
-            report.AddInfo("Behaelter: " + m_Classes.Count().ToString() + " Klassen in "
-                + m_Categories.Count().ToString() + " Kategorien"
-                + ", " + m_RejectedCount.ToString() + " verworfen"
-                + ", " + m_MissingEmptyClass.ToString() + " ohne auffindbare Leerklasse"
-                + ", " + m_ForeignClasses.ToString() + " Nicht-ChefZ-Klassen.");
+            report.AddInfo("Behaelter: " + m_Classes.Count().ToString() + " Klassen in " + m_Categories.Count().ToString() + " Kategorien" + ", " + m_RejectedCount.ToString() + " verworfen" + ", " + m_MissingEmptyClass.ToString() + " ohne auffindbare Leerklasse" + ", " + m_ForeignClasses.ToString() + " Nicht-ChefZ-Klassen.");
         }
 
         LogIfDebug();
@@ -197,9 +191,7 @@ class ChefZ_ContainerRegistry
             // verhindert, dass ein spaeterer Umbau still den ersten Eintrag
             // ueberschreibt.
             m_RejectedCount++;
-            Note(report, def, ChefZ_LogLevel.WARN, "container.dup." + def.id,
-                "Behaelter \"" + def.id + "\" ist doppelt deklariert. Der zweite Eintrag "
-                + "wird verworfen; der erste bleibt gueltig.");
+            Note(report, def, ChefZ_LogLevel.WARN, "container.dup." + def.id, "Behaelter \"" + def.id + "\" ist doppelt deklariert. Der zweite Eintrag " + "wird verworfen; der erste bleibt gueltig.");
             return;
         }
 
@@ -212,12 +204,7 @@ class ChefZ_ContainerRegistry
             float was = def.spoilageModifier;
             float min = ChefZ_ContainerDef.MIN_SPOILAGE;
 
-            Note(report, def, ChefZ_LogLevel.WARN, "container.spoilage." + def.id,
-                "Behaelter \"" + def.id + "\" hat spoilageModifier " + was.ToString()
-                + ". Ein Faktor <= 0 waere kein Faktor, sondern ein Totalstopp des "
-                + "Verfalls - er wird auf " + min.ToString() + " geklemmt. Wer den "
-                + "Verfall wirklich anhalten will, benutzt einen Preservation-Record "
-                + "mit stopsDecay (14 E7).");
+            Note(report, def, ChefZ_LogLevel.WARN, "container.spoilage." + def.id, "Behaelter \"" + def.id + "\" hat spoilageModifier " + was.ToString() + ". Ein Faktor <= 0 waere kein Faktor, sondern ein Totalstopp des " + "Verfalls - er wird auf " + min.ToString() + " geklemmt. Wer den " + "Verfall wirklich anhalten will, benutzt einen Preservation-Record " + "mit stopsDecay (14 E7).");
             def.spoilageModifier = min;
         }
 
@@ -228,30 +215,20 @@ class ChefZ_ContainerRegistry
         int unknownBits = ChefZ_ContainerScope.UnknownBits(def.searchScope);
         if (unknownBits != 0)
         {
-            Note(report, def, ChefZ_LogLevel.WARN, "container.scope." + def.id,
-                "Behaelter \"" + def.id + "\" hat searchScope " + def.searchScope.ToString()
-                + " mit unbekannten Bits (" + unknownBits.ToString() + "). Sie werden "
-                + "ignoriert. Gueltig: " + ChefZ_ContainerScope.ValidNames() + ".");
+            Note(report, def, ChefZ_LogLevel.WARN, "container.scope." + def.id, "Behaelter \"" + def.id + "\" hat searchScope " + def.searchScope.ToString() + " mit unbekannten Bits (" + unknownBits.ToString() + "). Sie werden " + "ignoriert. Gueltig: " + ChefZ_ContainerScope.ValidNames() + ".");
             def.searchScope = ChefZ_ContainerScope.Sanitize(def.searchScope);
         }
 
         if (def.searchScope == ChefZ_ContainerScope.NONE)
         {
-            Note(report, def, ChefZ_LogLevel.WARN, "container.scope.none." + def.id,
-                "Behaelter \"" + def.id + "\" hat searchScope 0 - er wuerde nirgends "
-                + "gesucht und damit nie gefunden. Er bleibt eingetragen (die Rueckgabe "
-                + "funktioniert weiterhin), ist als Suchziel aber wirkungslos.");
+            Note(report, def, ChefZ_LogLevel.WARN, "container.scope.none." + def.id, "Behaelter \"" + def.id + "\" hat searchScope 0 - er wuerde nirgends " + "gesucht und damit nie gefunden. Er bleibt eingetragen (die Rueckgabe " + "funktioniert weiterhin), ist als Suchziel aber wirkungslos.");
         }
 
         // 16 §7: fehlende Leerklasse -> Rueckgabe entfaellt, WARN BEIM LADEN.
         if (def.reusable && def.consumedOnServe && def.emptyClass != "" && !ClassExists(def.emptyClass))
         {
             m_MissingEmptyClass++;
-            Note(report, def, ChefZ_LogLevel.WARN, "container.empty." + def.emptyClass,
-                "Behaelter \"" + def.id + "\" nennt als emptyClass \"" + def.emptyClass
-                + "\", und diese Klasse gibt es auf diesem Server nicht. Beim "
-                + "vollstaendigen Verzehr kommt deshalb nichts zurueck. Das Gericht "
-                + "bleibt essbar - es fehlt nur der Teller danach.");
+            Note(report, def, ChefZ_LogLevel.WARN, "container.empty." + def.emptyClass, "Behaelter \"" + def.id + "\" nennt als emptyClass \"" + def.emptyClass + "\", und diese Klasse gibt es auf diesem Server nicht. Beim " + "vollstaendigen Verzehr kommt deshalb nichts zurueck. Das Gericht " + "bleibt essbar - es fehlt nur der Teller danach.");
         }
 
         // 16 §7: "Vanilla-Item als Behaelterklasse - zulaessig und gelegentlich
@@ -269,10 +246,7 @@ class ChefZ_ContainerRegistry
             // Ausdrueckliche leere Liste (siehe ChefZ_ContainerDef.Validate).
             // Kein Fehler, aber eine Sackgasse: der Behaelter ist eingetragen
             // und wird von keinem Rezept je gefordert.
-            Note(report, def, ChefZ_LogLevel.INFO, "container.nocat." + def.id,
-                "Behaelter \"" + def.id + "\" nennt eine ausdruecklich LEERE "
-                + "Kategorieliste. Er ist eingetragen, kann aber von keinem Rezept "
-                + "gefordert werden.");
+            Note(report, def, ChefZ_LogLevel.INFO, "container.nocat." + def.id, "Behaelter \"" + def.id + "\" nennt eine ausdruecklich LEERE " + "Kategorieliste. Er ist eingetragen, kann aber von keinem Rezept " + "gefordert werden.");
             return;
         }
 
@@ -558,8 +532,7 @@ class ChefZ_ContainerRegistry
      *
      * @return false, wenn nichts passt. chosen ist dann INVALID.
      */
-    bool ChooseContainer(ChefZ_Sym category, notnull array<ChefZ_Sym> availableClasses,
-                         out ChefZ_Sym chosen)
+    bool ChooseContainer(ChefZ_Sym category, notnull array<ChefZ_Sym> availableClasses, out ChefZ_Sym chosen)
     {
         chosen = ChefZ_SymbolTable.INVALID;
 
@@ -619,20 +592,13 @@ class ChefZ_ContainerRegistry
             unknown++;
             if (report)
             {
-                report.AddWarn(spec.sourceRef, spec.bulkClass,
-                    "verlangt fuer die Entnahme einen Behaelter der Kategorie \""
-                    + spec.containerCategory + "\", die kein einziger deklarierter "
-                    + "Behaelter fuehrt. Das Gericht ist damit nicht portionierbar "
-                    + "(16 §7). Kein Abbruch: die Kategorie kann aus einem optionalen "
-                    + "Modul stammen, das auf diesem Server fehlt.");
+                report.AddWarn(spec.sourceRef, spec.bulkClass, "verlangt fuer die Entnahme einen Behaelter der Kategorie \"" + spec.containerCategory + "\", die kein einziger deklarierter " + "Behaelter fuehrt. Das Gericht ist damit nicht portionierbar " + "(16 §7). Kein Abbruch: die Kategorie kann aus einem optionalen " + "Modul stammen, das auf diesem Server fehlt.");
             }
         }
 
         if (report && withContainer > 0)
         {
-            report.AddInfo("Behaelteraudit: " + withContainer.ToString()
-                + " Portionsgerichte mit Behaelteranforderung, " + unknown.ToString()
-                + " davon mit unbekannter Kategorie.");
+            report.AddInfo("Behaelteraudit: " + withContainer.ToString() + " Portionsgerichte mit Behaelteranforderung, " + unknown.ToString() + " davon mit unbekannter Kategorie.");
         }
     }
 
@@ -645,9 +611,7 @@ class ChefZ_ContainerRegistry
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Behaelter  bereit=" + m_Ready.ToString()
-            + "  klassen=" + m_Classes.Count().ToString()
-            + "  kategorien=" + m_Categories.Count().ToString());
+        outLines.Insert("ChefZ Behaelter  bereit=" + m_Ready.ToString() + "  klassen=" + m_Classes.Count().ToString() + "  kategorien=" + m_Categories.Count().ToString());
 
         for (int i = 0; i < m_Categories.Count(); i++)
         {
@@ -656,8 +620,7 @@ class ChefZ_ContainerRegistry
             if (!m_ClassesByCategory.Find(category, classes))
                 continue;
 
-            outLines.Insert("  " + ChefZ_SymbolTable.NameOrMark(category) + " [" + ChefZ_ContainerScope.Name(GetSearchScope(category)) + "]: "
-                + ChefZ_TextList.JoinSymbols(classes, ", "));
+            outLines.Insert("  " + ChefZ_SymbolTable.NameOrMark(category) + " [" + ChefZ_ContainerScope.Name(GetSearchScope(category)) + "]: " + ChefZ_TextList.JoinSymbols(classes, ", "));
         }
 
         for (int k = 0; k < m_Classes.Count(); k++)
@@ -683,8 +646,7 @@ class ChefZ_ContainerRegistry
     //! Eine Meldung geht in den LADEBERICHT, wenn es einen gibt, sonst ins
     //! Log - und dort genau einmal. Ohne den Ladebericht (Selbsttest,
     //! nachtraeglicher Build) waere sie sonst gar nicht sichtbar.
-    private void Note(ChefZ_LoadReport report, notnull ChefZ_ContainerDef def,
-                      int level, string onceKey, string message)
+    private void Note(ChefZ_LoadReport report, notnull ChefZ_ContainerDef def, int level, string onceKey, string message)
     {
         if (m_QuietForTest)
             return;

@@ -244,22 +244,13 @@ class ChefZ_HandcraftBridge
         {
             // Der Normalfall ohne Handwerks-Content - und der Normalfall des
             // Core allein. Es wird KEIN Platz belegt.
-            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS,
-                "handcraft.noslots",
-                "Kein Slice meldet handcraftRecipeSlots an. ChefZ traegt kein Rezept "
-                + "in Vanillas Liste ein; Vanilla-Crafting ist unveraendert.");
+            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS, "handcraft.noslots", "Kein Slice meldet handcraftRecipeSlots an. ChefZ traegt kein Rezept " + "in Vanillas Liste ein; Vanilla-Crafting ist unveraendert.");
             return;
         }
 
         if (want > MAX_SLOTS)
         {
-            ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-                "CfgChefZ meldet zusammen " + want.ToString() + " handcraftRecipeSlots. "
-                + "Das ist mehr als die Obergrenze " + MAX_SLOTS.ToString()
-                + " und mit hoher Wahrscheinlichkeit ein Zahlendreher in einer "
-                + "config.cpp. Reserviert werden " + MAX_SLOTS.ToString() + " Plaetze; "
-                + "die ueberzaehligen HANDCRAFT-Transforms werden abgewiesen. "
-                + "Vanilla-Crafting ist davon unberuehrt.");
+            ChefZ_Log.Error(ChefZ_LogChannel.PROCESS, "CfgChefZ meldet zusammen " + want.ToString() + " handcraftRecipeSlots. " + "Das ist mehr als die Obergrenze " + MAX_SLOTS.ToString() + " und mit hoher Wahrscheinlichkeit ein Zahlendreher in einer " + "config.cpp. Reserviert werden " + MAX_SLOTS.ToString() + " Plaetze; " + "die ueberzaehligen HANDCRAFT-Transforms werden abgewiesen. " + "Vanilla-Crafting ist davon unberuehrt.");
             want = MAX_SLOTS;
         }
 
@@ -280,9 +271,7 @@ class ChefZ_HandcraftBridge
         // An der Stufenpruefung vorbei: diese Zeile muss auf Client und Server
         // vergleichbar sein, und wer sie vergleicht, hat keine Debugstufe an
         // (18 §4).
-        ChefZ_Log.Banner("Handwerk Anker  plaetze=" + s_SlotCount.ToString()
-            + "  ab Rezept-ID " + s_BaseIndex.ToString()
-            + "  (Anker und Platzzahl muessen auf Client und Server gleich sein)");
+        ChefZ_Log.Banner("Handwerk Anker  plaetze=" + s_SlotCount.ToString() + "  ab Rezept-ID " + s_BaseIndex.ToString() + "  (Anker und Platzzahl muessen auf Client und Server gleich sein)");
     }
 
     private static void ResetState()
@@ -325,10 +314,7 @@ class ChefZ_HandcraftBridge
         PluginRecipesManager plugin;
         if (!Class.CastTo(plugin, GetPlugin(PluginRecipesManager)))
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                "handcraft.noplugin",
-                "PluginRecipesManager ist nicht erreichbar. Handwerksrezepte werden "
-                + "nicht angeboten; Vanilla-Crafting ist davon unberuehrt.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "handcraft.noplugin", "PluginRecipesManager ist nicht erreichbar. Handwerksrezepte werden " + "nicht angeboten; Vanilla-Crafting ist davon unberuehrt.");
             return;
         }
 
@@ -348,13 +334,7 @@ class ChefZ_HandcraftBridge
             // waere hier genau der Fehler, den der Anker beseitigt: der Platz
             // laege dann hinter allem, was inzwischen dazugekommen ist, und
             // auf den beiden Seiten verschieden.
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS,
-                "handcraft.noanchor",
-                "Es sind keine Rezeptplaetze verankert - RegisterRecipies() hat den "
-                + "ChefZ-Teil der Kette nicht erreicht. Handwerksrezepte werden NICHT "
-                + "nachtraeglich eingetragen: ihre IDs waeren auf Client und Server "
-                + "verschieden. Vanilla-Crafting ist vollstaendig, ChefZ-Kochen und "
-                + "ChefZ-Stationen sind unberuehrt.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PROCESS, "handcraft.noanchor", "Es sind keine Rezeptplaetze verankert - RegisterRecipies() hat den " + "ChefZ-Teil der Kette nicht erreicht. Handwerksrezepte werden NICHT " + "nachtraeglich eingetragen: ihre IDs waeren auf Client und Server " + "verschieden. Vanilla-Crafting ist vollstaendig, ChefZ-Kochen und " + "ChefZ-Stationen sind unberuehrt.");
             return;
         }
 
@@ -436,9 +416,7 @@ class ChefZ_HandcraftBridge
      * darauf verlassen muessen - eine Abweisung kostet ein Rezept, sie darf
      * nie eine Verschiebung kosten.
      */
-    private static void FillOne(ChefZ_GenericCraftRecipe slot,
-                                notnull ChefZ_CompiledProcess proc,
-                                notnull ChefZ_CompiledTransform tr)
+    private static void FillOne(ChefZ_GenericCraftRecipe slot, notnull ChefZ_CompiledProcess proc, notnull ChefZ_CompiledTransform tr)
     {
         // Die ID geht IMMER in die Kennsumme, auch bei einer Abweisung. Die
         // Kennsumme beantwortet "haben beide Seiten denselben Bestand in
@@ -449,8 +427,7 @@ class ChefZ_HandcraftBridge
 
         if (!slot)
         {
-            Reject(tr, "der verankerte Rezeptplatz fehlt - das ist ein interner Fehler "
-                + "und sollte nicht vorkommen");
+            Reject(tr, "der verankerte Rezeptplatz fehlt - das ist ein interner Fehler " + "und sollte nicht vorkommen");
             return;
         }
 
@@ -466,10 +443,7 @@ class ChefZ_HandcraftBridge
          */
         if (tr.stationsAllowed.Count() > 0)
         {
-            Reject(tr, "der Transform nennt stationsAllowed, sein Prozess ist aber "
-                + "HANDCRAFT. Ein Handwerksschritt laeuft ohne Station - der Transform "
-                + "koennte nie gebunden werden. Entweder stationsAllowed streichen oder "
-                + "den Prozess auf STATION_ACTION umstellen.");
+            Reject(tr, "der Transform nennt stationsAllowed, sein Prozess ist aber " + "HANDCRAFT. Ein Handwerksschritt laeuft ohne Station - der Transform " + "koennte nie gebunden werden. Entweder stationsAllowed streichen oder " + "den Prozess auf STATION_ACTION umstellen.");
             return;
         }
 
@@ -499,10 +473,7 @@ class ChefZ_HandcraftBridge
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
         {
-            ChefZ_Log.Debug(ChefZ_LogChannel.PROCESS,
-                "Handwerksrezept auf Platz " + (s_Order.Count() - 1).ToString()
-                + " (Rezept-ID " + slot.GetID().ToString() + "): "
-                + slot.ChefZ_ToDebugString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.PROCESS, "Handwerksrezept auf Platz " + (s_Order.Count() - 1).ToString() + " (Rezept-ID " + slot.GetID().ToString() + "): " + slot.ChefZ_ToDebugString());
         }
     }
 
@@ -518,10 +489,7 @@ class ChefZ_HandcraftBridge
     {
         s_Rejected++;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-            "HANDCRAFT " + tr.id + " (" + tr.sourceRef + ") wird nicht als Craftrezept "
-            + "angeboten: " + why + " Die uebrigen Transforms sind davon unberuehrt, "
-            + "Vanilla-Crafting ebenfalls.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS, "HANDCRAFT " + tr.id + " (" + tr.sourceRef + ") wird nicht als Craftrezept " + "angeboten: " + why + " Die uebrigen Transforms sind davon unberuehrt, " + "Vanilla-Crafting ebenfalls.");
     }
 
     //! Es gibt Transforms, aber keinen einzigen verankerten Platz.
@@ -529,20 +497,11 @@ class ChefZ_HandcraftBridge
     {
         s_Rejected = needed;
 
-        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-            "Es sind " + needed.ToString() + " HANDCRAFT-Transforms geladen, aber KEIN "
-            + "Rezeptplatz reserviert. Kein Handwerksrezept wird angeboten. Ursache: "
-            + "kein Slice nennt in seiner config.cpp \"handcraftRecipeSlots\". Der Platz "
-            + "muss VOR dem Laden feststehen - Vanilla vergibt Rezept-IDs als Position "
-            + "in seiner Liste, und diese Positionen entstehen im Missionskonstruktor. "
-            + "Abhilfe: im CfgChefZ-Knoten des Slice \"handcraftRecipeSlots = "
-            + needed.ToString() + ";\" eintragen. Vanilla-Crafting, ChefZ-Kochen und "
-            + "ChefZ-Stationen sind unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS, "Es sind " + needed.ToString() + " HANDCRAFT-Transforms geladen, aber KEIN " + "Rezeptplatz reserviert. Kein Handwerksrezept wird angeboten. Ursache: " + "kein Slice nennt in seiner config.cpp \"handcraftRecipeSlots\". Der Platz " + "muss VOR dem Laden feststehen - Vanilla vergibt Rezept-IDs als Position " + "in seiner Liste, und diese Positionen entstehen im Missionskonstruktor. " + "Abhilfe: im CfgChefZ-Knoten des Slice \"handcraftRecipeSlots = " + needed.ToString() + ";\" eintragen. Vanilla-Crafting, ChefZ-Kochen und " + "ChefZ-Stationen sind unberuehrt.");
     }
 
     //! Es gibt mehr Transforms als verankerte Plaetze.
-    private static void ReportSurplus(notnull array<ChefZ_CompiledTransform> pairs,
-                                      int firstSurplus)
+    private static void ReportSurplus(notnull array<ChefZ_CompiledTransform> pairs, int firstSurplus)
     {
         int surplus = pairs.Count() - firstSurplus;
         s_Rejected  = s_Rejected + surplus;
@@ -555,15 +514,7 @@ class ChefZ_HandcraftBridge
             names = names + pairs.Get(i).id;
         }
 
-        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS,
-            "Es sind " + pairs.Count().ToString() + " HANDCRAFT-Transforms geladen, aber "
-            + "nur " + s_SlotCount.ToString() + " Rezeptplaetze reserviert. Die "
-            + surplus.ToString() + " ueberzaehligen werden NICHT angeboten: " + names
-            + ". Nachtraeglich einzutragen ist keine Loesung - ihre Rezept-IDs waeren "
-            + "auf Client und Server verschieden, und der Spieler bekaeme das falsche "
-            + "Ergebnis. Abhilfe: \"handcraftRecipeSlots\" im CfgChefZ-Knoten des Slice "
-            + "auf die tatsaechliche Zahl erhoehen. Die ersten " + s_SlotCount.ToString()
-            + " Transforms funktionieren normal, Vanilla-Crafting ebenfalls.");
+        ChefZ_Log.Error(ChefZ_LogChannel.PROCESS, "Es sind " + pairs.Count().ToString() + " HANDCRAFT-Transforms geladen, aber " + "nur " + s_SlotCount.ToString() + " Rezeptplaetze reserviert. Die " + surplus.ToString() + " ueberzaehligen werden NICHT angeboten: " + names + ". Nachtraeglich einzutragen ist keine Loesung - ihre Rezept-IDs waeren " + "auf Client und Server verschieden, und der Spieler bekaeme das falsche " + "Ergebnis. Abhilfe: \"handcraftRecipeSlots\" im CfgChefZ-Knoten des Slice " + "auf die tatsaechliche Zahl erhoehen. Die ersten " + s_SlotCount.ToString() + " Transforms funktionieren normal, Vanilla-Crafting ebenfalls.");
     }
 
     //==========================================================================
@@ -629,18 +580,7 @@ class ChefZ_HandcraftBridge
         // Once mit festem Schluessel: eine Zeile je Missionsstart genuegt zur
         // Diagnose, und ein Spieler, der es wiederholt versucht, soll das RPT
         // nicht fluten. Die Gesamtzahl steht in "chefz registries".
-        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS,
-            "handcraft.intentdrift",
-            "Eine Craftaktion wurde VERWEIGERT: der Client meinte "
-            + ChefZ_CraftIntent.Describe(clientIntent) + ", an Rezept-ID "
-            + recipeId.ToString() + " steht auf dem Server aber "
-            + ChefZ_CraftIntent.Describe(serverIntent) + ". Die Rezeptlisten von Client "
-            + "und Server sind gegeneinander verschoben. Haeufigste Ursachen: die "
-            + "Modliste des Clients ist nicht die des Servers, oder ein "
-            + "$profile-Overlay bringt HANDCRAFT-Transforms mit, die es im PBO nicht "
-            + "gibt (Rang 3 ist serverseitig, 02 §6). Vergleiche die Zeile "
-            + "\"Handwerk Anker\" in beiden RPT-Dateien. Es wurde NICHTS erzeugt und "
-            + "NICHTS verbraucht.");
+        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.PROCESS, "handcraft.intentdrift", "Eine Craftaktion wurde VERWEIGERT: der Client meinte " + ChefZ_CraftIntent.Describe(clientIntent) + ", an Rezept-ID " + recipeId.ToString() + " steht auf dem Server aber " + ChefZ_CraftIntent.Describe(serverIntent) + ". Die Rezeptlisten von Client " + "und Server sind gegeneinander verschoben. Haeufigste Ursachen: die " + "Modliste des Clients ist nicht die des Servers, oder ein " + "$profile-Overlay bringt HANDCRAFT-Transforms mit, die es im PBO nicht " + "gibt (Rang 3 ist serverseitig, 02 §6). Vergleiche die Zeile " + "\"Handwerk Anker\" in beiden RPT-Dateien. Es wurde NICHTS erzeugt und " + "NICHTS verbraucht.");
 
         return false;
     }
@@ -666,8 +606,7 @@ class ChefZ_HandcraftBridge
      * duplikatfrei, weil derselbe Klassenname zweimal in m_Ingredients
      * Vanillas Cache zweimal denselben Eintrag kostet.
      */
-    static void CollectSelectorClasses(ChefZ_CompiledSelector selector,
-                                       notnull array<string> outClasses)
+    static void CollectSelectorClasses(ChefZ_CompiledSelector selector, notnull array<string> outClasses)
     {
         outClasses.Clear();
 
@@ -709,8 +648,7 @@ class ChefZ_HandcraftBridge
      * Vorgabewerte eines leeren ChefZ_ItemFacts. Das waere keine Naeherung,
      * sondern eine falsche Antwort.
      */
-    private static bool MayMatch(ChefZ_CompiledSelector sel,
-                                 notnull ChefZ_IngredientInfo info)
+    private static bool MayMatch(ChefZ_CompiledSelector sel, notnull ChefZ_IngredientInfo info)
     {
         if (!sel)
             return true;
@@ -816,8 +754,7 @@ class ChefZ_HandcraftBridge
      * das, was NICHT gemeint ist, und gehoerte in der Zutatenliste an die
      * falsche Stelle.
      */
-    private static void HarvestNamedClasses(ChefZ_CompiledSelector sel,
-                                            notnull array<string> outClasses)
+    private static void HarvestNamedClasses(ChefZ_CompiledSelector sel, notnull array<string> outClasses)
     {
         if (!sel)
             return;
@@ -848,8 +785,7 @@ class ChefZ_HandcraftBridge
      *
      * Aufsteigend sortiert, aus demselben Grund wie oben.
      */
-    static void CollectToolClasses(notnull ChefZ_CompiledProcess proc,
-                                   notnull array<string> outClasses)
+    static void CollectToolClasses(notnull ChefZ_CompiledProcess proc, notnull array<string> outClasses)
     {
         outClasses.Clear();
 
@@ -894,10 +830,7 @@ class ChefZ_HandcraftBridge
      * Zwei Transforms mit derselben ID kann es nicht geben; die Registry des
      * Config Managers ist nach ID eindeutig.
      */
-    private static void InsertByIdOrder(notnull array<ChefZ_CompiledProcess> procs,
-                                        notnull array<ChefZ_CompiledTransform> trs,
-                                        notnull ChefZ_CompiledProcess proc,
-                                        ChefZ_CompiledTransform tr)
+    private static void InsertByIdOrder(notnull array<ChefZ_CompiledProcess> procs, notnull array<ChefZ_CompiledTransform> trs, notnull ChefZ_CompiledProcess proc, ChefZ_CompiledTransform tr)
     {
         if (!tr)
             return;
@@ -931,12 +864,7 @@ class ChefZ_HandcraftBridge
      */
     private static void Report()
     {
-        ChefZ_Log.Banner("Handwerk  rezepte=" + s_Filled.ToString()
-            + "  abgewiesen=" + s_Rejected.ToString()
-            + "  plaetze=" + s_SlotCount.ToString()
-            + "  ab Rezept-ID " + s_BaseIndex.ToString()
-            + "  kennsumme=" + s_Fingerprint.ToString()
-            + "  (alle vier muessen auf Client und Server gleich sein)");
+        ChefZ_Log.Banner("Handwerk  rezepte=" + s_Filled.ToString() + "  abgewiesen=" + s_Rejected.ToString() + "  plaetze=" + s_SlotCount.ToString() + "  ab Rezept-ID " + s_BaseIndex.ToString() + "  kennsumme=" + s_Fingerprint.ToString() + "  (alle vier muessen auf Client und Server gleich sein)");
     }
 
     static int  GetRegisteredCount() { return s_Filled; }
@@ -953,12 +881,7 @@ class ChefZ_HandcraftBridge
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Handwerk  rezepte=" + s_Filled.ToString()
-            + "  abgewiesen=" + s_Rejected.ToString()
-            + "  plaetze=" + s_SlotCount.ToString()
-            + "  ab Rezept-ID " + s_BaseIndex.ToString()
-            + "  kennsumme=" + s_Fingerprint.ToString()
-            + "  verweigert=" + s_IntentRefusals.ToString());
+        outLines.Insert("ChefZ Handwerk  rezepte=" + s_Filled.ToString() + "  abgewiesen=" + s_Rejected.ToString() + "  plaetze=" + s_SlotCount.ToString() + "  ab Rezept-ID " + s_BaseIndex.ToString() + "  kennsumme=" + s_Fingerprint.ToString() + "  verweigert=" + s_IntentRefusals.ToString());
 
         if (!s_Order)
             return;
@@ -969,8 +892,7 @@ class ChefZ_HandcraftBridge
             if (s_BaseIndex >= 0)
                 id = (s_BaseIndex + i).ToString();
 
-            outLines.Insert("  Platz " + i.ToString() + "  Rezept-ID " + id
-                + "  " + s_Order.Get(i));
+            outLines.Insert("  Platz " + i.ToString() + "  Rezept-ID " + id + "  " + s_Order.Get(i));
         }
     }
 }

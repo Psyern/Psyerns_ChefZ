@@ -133,10 +133,7 @@ class ChefZ_ToolRegistry
 
         if (report)
         {
-            report.AddInfo("Werkzeuge: " + m_Groups.Count().ToString() + " Gruppen, "
-                + m_ClassCount.ToString() + " Klassen zugeordnet, "
-                + m_SubclassRoots.Count().ToString() + " Gruppen mit Vererbung"
-                + ", " + m_RejectedCount.ToString() + " Eintraege verworfen.");
+            report.AddInfo("Werkzeuge: " + m_Groups.Count().ToString() + " Gruppen, " + m_ClassCount.ToString() + " Klassen zugeordnet, " + m_SubclassRoots.Count().ToString() + " Gruppen mit Vererbung" + ", " + m_RejectedCount.ToString() + " Eintraege verworfen.");
         }
 
         LogIfDebug();
@@ -515,9 +512,7 @@ class ChefZ_ToolRegistry
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Werkzeuge  bereit=" + m_Ready.ToString()
-            + "  gruppen=" + m_Groups.Count().ToString()
-            + "  klassen=" + m_ClassCount.ToString());
+        outLines.Insert("ChefZ Werkzeuge  bereit=" + m_Ready.ToString() + "  gruppen=" + m_Groups.Count().ToString() + "  klassen=" + m_ClassCount.ToString());
 
         for (int i = 0; i < m_Groups.Count(); i++)
         {

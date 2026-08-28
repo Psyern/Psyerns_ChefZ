@@ -84,7 +84,7 @@
       "durationOverrideSec": 900,
       "qualityRule": "MIN",
       "inputs": [
-        { "slotId": "pod", "match": { "cls": "ChefZ_Paprika" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "pod", "match": { "cls": "GreenBellPepper" }, "minCount": 1, "consume": "whole" }
       ],
       "outputs": [
         { "cls": "ChefZ_DriedPaprika", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }

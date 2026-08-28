@@ -91,8 +91,7 @@ class ChefZ_RecipeRanker
      * Zweimal dieselbe Formel waere zwei Stellen, an denen sie auseinander
      * laufen kann.
      */
-    static float ComputeSpecificity(notnull ChefZ_CompiledRecipe recipe,
-                                    notnull ChefZ_PriorityWeights w)
+    static float ComputeSpecificity(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_PriorityWeights w)
     {
         float total = 0.0;
         int i;
@@ -157,10 +156,7 @@ class ChefZ_RecipeRanker
      * Score um 1.0 - genug, um eine knappe Entscheidung zu drehen, zu wenig,
      * um die Spezifitaetsordnung zu ueberstimmen.
      */
-    static float ComputeMatchScore(notnull ChefZ_CompiledRecipe recipe,
-                                   notnull ChefZ_MatchResult match,
-                                   int itemsInVessel,
-                                   notnull ChefZ_PriorityWeights w)
+    static float ComputeMatchScore(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_MatchResult match, int itemsInVessel, notnull ChefZ_PriorityWeights w)
     {
         float score = recipe.specificity;
 
@@ -223,8 +219,7 @@ class ChefZ_RecipeRanker
      * ausschliesslich beim BUILD geschieht - bei einem Kessel-Tick faellt kein
      * Sortieren an, weil die Indexlisten bereits sortiert sind.
      */
-    static void SortCandidates(notnull array<ref ChefZ_RecipeRank> ranks,
-                               notnull array<int> candidateIdx)
+    static void SortCandidates(notnull array<ref ChefZ_RecipeRank> ranks, notnull array<int> candidateIdx)
     {
         for (int i = 1; i < candidateIdx.Count(); i++)
         {
@@ -260,9 +255,7 @@ class ChefZ_RecipeRanker
      * Fuer "chefz recipes" und fuer den Validator: die einzige Stelle, an der
      * ein Content-Autor SIEHT, warum sein Rezept hinter einem anderen steht.
      */
-    static void ExplainOrder(notnull array<ref ChefZ_RecipeRank> ranks,
-                             notnull array<int> candidateIdx,
-                             out array<string> outLines)
+    static void ExplainOrder(notnull array<ref ChefZ_RecipeRank> ranks, notnull array<int> candidateIdx, out array<string> outLines)
     {
         if (!outLines)
             outLines = new array<string>();
@@ -302,9 +295,7 @@ class ChefZ_RecipeRanker
      * Das verdeckte Rezept BLEIBT geladen (09 §7) - die Verdeckung kann bei
      * anderem Geraet oder anderer Menge aufgehoben sein.
      */
-    static void ReportAmbiguities(notnull array<ref ChefZ_CompiledRecipe> recipes,
-                                  notnull array<ref ChefZ_RecipeRank> ranks,
-                                  ChefZ_LoadReport report)
+    static void ReportAmbiguities(notnull array<ref ChefZ_CompiledRecipe> recipes, notnull array<ref ChefZ_RecipeRank> ranks, ChefZ_LoadReport report)
     {
         if (!report)
             return;
@@ -315,11 +306,7 @@ class ChefZ_RecipeRanker
 
         if (n > MAX_PAIRWISE_RECIPES)
         {
-            report.AddInfo("Ambiguitaetsanalyse uebersprungen: " + n.ToString()
-                + " Rezepte liegen ueber der Grenze von " + MAX_PAIRWISE_RECIPES.ToString()
-                + ". Die Pruefung ist paarweise und damit quadratisch; sie wuerde den "
-                + "Serverstart merklich verzoegern. Die Rangordnung selbst ist davon "
-                + "unberuehrt (09 E5).");
+            report.AddInfo("Ambiguitaetsanalyse uebersprungen: " + n.ToString() + " Rezepte liegen ueber der Grenze von " + MAX_PAIRWISE_RECIPES.ToString() + ". Die Pruefung ist paarweise und damit quadratisch; sie wuerde den " + "Serverstart merklich verzoegern. Die Rangordnung selbst ist davon " + "unberuehrt (09 E5).");
             return;
         }
 
@@ -352,9 +339,7 @@ class ChefZ_RecipeRanker
 
                 if (SameSignature(sa, sb) && ChefZ_RecipeRank.SameRank(ranks.Get(a), ranks.Get(b)))
                 {
-                    report.AddWarn(ra.sourceRef, ra.id,
-                        "Rezept \"" + ra.id + "\" und \"" + rb.id + "\" (" + rb.sourceRef + ") " + "haben denselben Rang UND dieselbe Slotmenge. Welches gewinnt, " + "entscheidet allein die alphabetische ID - hier also \"" + FirstById(ra.id, rb.id) + "\". Das ist fast immer ein Duplikat aus "
-                        + "zwei Slices (09 §7).");
+                    report.AddWarn(ra.sourceRef, ra.id, "Rezept \"" + ra.id + "\" und \"" + rb.id + "\" (" + rb.sourceRef + ") " + "haben denselben Rang UND dieselbe Slotmenge. Welches gewinnt, " + "entscheidet allein die alphabetische ID - hier also \"" + FirstById(ra.id, rb.id) + "\". Das ist fast immer ein Duplikat aus " + "zwei Slices (09 §7).");
                     reported++;
                     continue;
                 }
@@ -377,22 +362,13 @@ class ChefZ_RecipeRanker
 
         if (reported >= MAX_REPORTED_PAIRS)
         {
-            report.AddInfo("Weitere Ambiguitaeten wurden nicht mehr einzeln gemeldet - "
-                + MAX_REPORTED_PAIRS.ToString() + " Paare reichen, um das Muster zu erkennen.");
+            report.AddInfo("Weitere Ambiguitaeten wurden nicht mehr einzeln gemeldet - " + MAX_REPORTED_PAIRS.ToString() + " Paare reichen, um das Muster zu erkennen.");
         }
     }
 
-    private static void ReportShadow(notnull ChefZ_LoadReport report,
-                                     notnull ChefZ_CompiledRecipe shadowed,
-                                     notnull ChefZ_CompiledRecipe winner)
+    private static void ReportShadow(notnull ChefZ_LoadReport report, notnull ChefZ_CompiledRecipe shadowed, notnull ChefZ_CompiledRecipe winner)
     {
-        report.AddWarn(shadowed.sourceRef, shadowed.id,
-            "Rezept \"" + shadowed.id + "\" wird voraussichtlich von \"" + winner.id + "\" ("
-            + winner.sourceRef + ") verdeckt: es verlangt alles, was jenes verlangt, und mehr, "
-            + "rangiert aber niedriger (spez " + shadowed.specificity.ToString() + " gegen "
-            + winner.specificity.ToString() + "). Wo beide binden koennten, gewinnt immer das "
-            + "andere. Das Rezept bleibt geladen - bei anderem Geraet oder anderer Menge kann "
-            + "die Verdeckung aufgehoben sein. Die Analyse ist heuristisch (09 E5).");
+        report.AddWarn(shadowed.sourceRef, shadowed.id, "Rezept \"" + shadowed.id + "\" wird voraussichtlich von \"" + winner.id + "\" (" + winner.sourceRef + ") verdeckt: es verlangt alles, was jenes verlangt, und mehr, " + "rangiert aber niedriger (spez " + shadowed.specificity.ToString() + " gegen " + winner.specificity.ToString() + "). Wo beide binden koennten, gewinnt immer das " + "andere. Das Rezept bleibt geladen - bei anderem Geraet oder anderer Menge kann " + "die Verdeckung aufgehoben sein. Die Analyse ist heuristisch (09 E5).");
     }
 
     private static string FirstById(string a, string b)

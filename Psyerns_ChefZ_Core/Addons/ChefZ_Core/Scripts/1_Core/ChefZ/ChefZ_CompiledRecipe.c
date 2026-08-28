@@ -141,8 +141,7 @@ class ChefZ_CompiledContext
         {
             if (deviceClasses.Find(ctx.deviceClass) >= 0)
                 return true;
-            if (ChefZ_SymbolTable.IsValid(ctx.deviceRootClass)
-                && deviceClasses.Find(ctx.deviceRootClass) >= 0)
+            if (ChefZ_SymbolTable.IsValid(ctx.deviceRootClass) && deviceClasses.Find(ctx.deviceRootClass) >= 0)
                 return true;
         }
 
@@ -497,8 +496,7 @@ class ChefZ_CompiledRecipe
 
     //! Alle Geraetesymbole, unter denen dieses Rezept im Index steht. Leer
     //! heisst "an jedem Geraet" (siehe ChefZ_CompiledContext.MatchesDevice).
-    void CollectDeviceKeys(notnull array<ChefZ_Sym> outClasses,
-                           notnull array<ChefZ_Sym> outCategories)
+    void CollectDeviceKeys(notnull array<ChefZ_Sym> outClasses, notnull array<ChefZ_Sym> outCategories)
     {
         outClasses.Clear();
         outCategories.Clear();

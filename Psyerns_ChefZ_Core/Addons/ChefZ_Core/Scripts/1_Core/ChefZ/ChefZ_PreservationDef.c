@@ -283,32 +283,21 @@ class ChefZ_PreservationDef extends ChefZ_Record
         if (ChefZ_PreservationScope.FromName(scope) == ChefZ_PreservationScope.UNKNOWN)
         {
             if (ctx)
-                ctx.Error(this, "scope \"" + scope + "\" ist keine bekannte Dimension - der "
-                    + "Record wird abgewiesen. Ohne scope ist unbestimmt, ob \"" + id
-                    + "\" einen Zustand, eine Klasse, eine Kategorie, einen Tag oder eine "
-                    + "Qualitaetsstufe bezeichnet. Gueltig: "
-                    + ChefZ_PreservationScope.ValidNames() + ".");
+                ctx.Error(this, "scope \"" + scope + "\" ist keine bekannte Dimension - der " + "Record wird abgewiesen. Ohne scope ist unbestimmt, ob \"" + id + "\" einen Zustand, eine Klasse, eine Kategorie, einen Tag oder eine " + "Qualitaetsstufe bezeichnet. Gueltig: " + ChefZ_PreservationScope.ValidNames() + ".");
             return false;
         }
 
         if (spoilageMultiplier <= 0.0)
         {
             if (ctx)
-                ctx.Warn(this, "spoilageMultiplier ist " + spoilageMultiplier.ToString()
-                    + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"verdirbt nie\" oder "
-                    + "\"verdirbt rueckwaerts\"; gemeint ist das nie, und eine Null waere der "
-                    + "wirkungsvollste Tippfehler ueberhaupt. Es gilt "
-                    + MIN_SPOILAGE_MULTIPLIER.ToString() + ". Wer echte Unsterblichkeit will, "
-                    + "setzt stopsDecay - dann steht es da.");
+                ctx.Warn(this, "spoilageMultiplier ist " + spoilageMultiplier.ToString() + " und damit nicht positiv. Ein Faktor <= 0 hiesse \"verdirbt nie\" oder " + "\"verdirbt rueckwaerts\"; gemeint ist das nie, und eine Null waere der " + "wirkungsvollste Tippfehler ueberhaupt. Es gilt " + MIN_SPOILAGE_MULTIPLIER.ToString() + ". Wer echte Unsterblichkeit will, " + "setzt stopsDecay - dann steht es da.");
             spoilageMultiplier = MIN_SPOILAGE_MULTIPLIER;
         }
 
         if (!ChefZ_Undefined.IsFloatUndefined(onPlayerMultiplier) && onPlayerMultiplier <= 0.0)
         {
             if (ctx)
-                ctx.Warn(this, "onPlayerMultiplier ist " + onPlayerMultiplier.ToString()
-                    + " und damit nicht positiv. Der Wert wird ausgelassen; am Spieler gilt "
-                    + "dann Vanillas eigener Bonus (DECAY_RATE_ON_PLAYER) unveraendert.");
+                ctx.Warn(this, "onPlayerMultiplier ist " + onPlayerMultiplier.ToString() + " und damit nicht positiv. Der Wert wird ausgelassen; am Spieler gilt " + "dann Vanillas eigener Bonus (DECAY_RATE_ON_PLAYER) unveraendert.");
 
             // Hier ist der Sentinel richtig: er BEDEUTET "Vanilla-Verhalten"
             // (14 §5), und ResolveDefaults laesst ihn bewusst stehen.
@@ -318,10 +307,7 @@ class ChefZ_PreservationDef extends ChefZ_Record
         if (environmentTemperature && !environmentTemperature.IsValid())
         {
             if (ctx)
-                ctx.Warn(this, "environmentTemperature " + environmentTemperature.ToDebugString()
-                    + " hat min > max und beschreibt damit einen leeren Bereich - die Regel "
-                    + "koennte nie greifen. Der Bereich wird verworfen; die Regel gilt "
-                    + "wieder bei jeder Temperatur.");
+                ctx.Warn(this, "environmentTemperature " + environmentTemperature.ToDebugString() + " hat min > max und beschreibt damit einen leeren Bereich - die Regel " + "koennte nie greifen. Der Bereich wird verworfen; die Regel gilt " + "wieder bei jeder Temperatur.");
             environmentTemperature = null;
         }
 

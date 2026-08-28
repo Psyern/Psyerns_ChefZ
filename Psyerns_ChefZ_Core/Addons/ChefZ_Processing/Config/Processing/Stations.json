@@ -3,14 +3,6 @@
     "schemaVersion": 1,
     "records": [
         {
-            "id": "ChefZ_CuttingBoard",
-            "stationCategories": ["BOARD"],
-            "processes": ["PROCESS_CLEAN_CASING"],
-            "parallelSlots": 1,
-            "speedMultiplier": 1.0,
-            "needsFuel": false
-        },
-        {
             "id": "ChefZ_MeatGrinder",
             "stationCategories": ["GRINDER"],
             "processes": ["PROCESS_GRIND_MEAT", "PROCESS_STUFF_SAUSAGE"],

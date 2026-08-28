@@ -438,42 +438,18 @@ class ChefZ_Boot
         // Eine Zeile je Seite, an der Stufenpruefung vorbei: ein Betreiber muss
         // ohne Debugstufe sehen koennen, in welchem Zustand der Core ist
         // (18 §4).
-        ChefZ_Log.Banner("Config " + side
-            + "  health=" + ChefZ_ConfigManager.HealthName(cfg.GetHealth())
-            + "  records=" + cfg.TotalRecordCount().ToString()
-            + "  kategorien=" + ChefZ_CategoryManager.Get().GetCategoryCount().ToString()
-            + "  zutaten=" + ChefZ_IngredientManager.Get().GetKnownCount().ToString()
-            + "  zustaende=" + ChefZ_StateManager.Get().GetStateCount().ToString()
-            + "  stufen=" + ChefZ_QualityManager.Get().GetTierCount().ToString()
-            + "  rezepte=" + ChefZ_RecipeEngine.Get().GetRecipeCount().ToString()
-            + "  haltbarkeit=" + ChefZ_PreservationManager.Get().GetRuleCount().ToString()
-            + "  naehrwerte=" + ChefZ_NutritionManager.Get().GetRecordCount().ToString()
-            + "  prozesse=" + ChefZ_ProcessingManager.Get().GetProcessCount().ToString()
-            + "  stationen=" + ChefZ_ProcessingManager.Get().GetStationCount().ToString()
-            + "  transforms=" + ChefZ_ProcessingManager.Get().GetTransformCount().ToString()
-            + "  werkzeuggruppen=" + ChefZ_ToolRegistry.Get().GetGroupCount().ToString()
-            + "  handwerksrezepte=" + ChefZ_HandcraftBridge.GetRegisteredCount().ToString()
-            + "/" + ChefZ_HandcraftBridge.GetSlotCount().ToString()
-            + "  portionsgerichte=" + ChefZ_PortionManager.Get().GetSpecCount().ToString()
-            + "  behaelter=" + ChefZ_ContainerRegistry.Get().GetClassCount().ToString()
-            + "  behaelterkategorien=" + ChefZ_ContainerRegistry.Get().GetCategoryCount().ToString()
-            + "  aktiv=" + cfg.IsActive().ToString());
+        ChefZ_Log.Banner("Config " + side + "  health=" + ChefZ_ConfigManager.HealthName(cfg.GetHealth()) + "  records=" + cfg.TotalRecordCount().ToString() + "  kategorien=" + ChefZ_CategoryManager.Get().GetCategoryCount().ToString() + "  zutaten=" + ChefZ_IngredientManager.Get().GetKnownCount().ToString() + "  zustaende=" + ChefZ_StateManager.Get().GetStateCount().ToString() + "  stufen=" + ChefZ_QualityManager.Get().GetTierCount().ToString() + "  rezepte=" + ChefZ_RecipeEngine.Get().GetRecipeCount().ToString() + "  haltbarkeit=" + ChefZ_PreservationManager.Get().GetRuleCount().ToString() + "  naehrwerte=" + ChefZ_NutritionManager.Get().GetRecordCount().ToString() + "  prozesse=" + ChefZ_ProcessingManager.Get().GetProcessCount().ToString() + "  stationen=" + ChefZ_ProcessingManager.Get().GetStationCount().ToString() + "  transforms=" + ChefZ_ProcessingManager.Get().GetTransformCount().ToString() + "  werkzeuggruppen=" + ChefZ_ToolRegistry.Get().GetGroupCount().ToString() + "  handwerksrezepte=" + ChefZ_HandcraftBridge.GetRegisteredCount().ToString() + "/" + ChefZ_HandcraftBridge.GetSlotCount().ToString() + "  portionsgerichte=" + ChefZ_PortionManager.Get().GetSpecCount().ToString() + "  behaelter=" + ChefZ_ContainerRegistry.Get().GetClassCount().ToString() + "  behaelterkategorien=" + ChefZ_ContainerRegistry.Get().GetCategoryCount().ToString() + "  aktiv=" + cfg.IsActive().ToString());
 
         // S13: wer haengt an ChefZ? Eine eigene Zeile und ebenfalls an der
         // Stufenpruefung vorbei, weil sie die haeufigste Betreiberfrage
         // beantwortet - "warum tut mein Comp-Modul nichts". Steht hier eine
         // Null, hat sich niemand angemeldet, und die Ursache liegt im anderen
         // Mod, nicht in ChefZ.
-        ChefZ_Log.Banner("Aussenkante " + side
-            + "  abonnenten=" + ChefZ_EventBus.Get().GetSubscriptionCount().ToString()
-            + "  faehigkeitsanbieter=" + ChefZ_CapabilityRegistry.Get().GetProviderCount().ToString()
-            + "  fortschrittsempfaenger=" + ChefZ_ProgressRegistry.GetSinkCount().ToString()
-            + "  modus=" + ChefZ_CapabilityRegistry.Get().GetMode());
+        ChefZ_Log.Banner("Aussenkante " + side + "  abonnenten=" + ChefZ_EventBus.Get().GetSubscriptionCount().ToString() + "  faehigkeitsanbieter=" + ChefZ_CapabilityRegistry.Get().GetProviderCount().ToString() + "  fortschrittsempfaenger=" + ChefZ_ProgressRegistry.GetSinkCount().ToString() + "  modus=" + ChefZ_CapabilityRegistry.Get().GetMode());
 
         if (cfg.GetHealth() == ChefZ_ConfigHealth.SAFE_MODE)
         {
-            ChefZ_Log.Banner("ChefZ ist im SAFE MODE inert. Vanilla-Kochen ist davon "
-                + "unberuehrt und laeuft vollstaendig.");
+            ChefZ_Log.Banner("ChefZ ist im SAFE MODE inert. Vanilla-Kochen ist davon " + "unberuehrt und laeuft vollstaendig.");
         }
 
         ChefZ_Log.Flush();

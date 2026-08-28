@@ -173,10 +173,7 @@ class ChefZ_ConfigManager
     {
         if (m_Ready)
         {
-            ChefZ_Log.Warn(ChefZ_LogChannel.CONFIG,
-                "LoadAll() wurde erneut aufgerufen und ignoriert. Ein Neuladen zur Laufzeit "
-                + "gibt es in V1 bewusst nicht (02 E5) - es wuerde Sync-Ordinale neu vergeben, "
-                + "waehrend Items bereits Zustandswerte tragen.");
+            ChefZ_Log.Warn(ChefZ_LogChannel.CONFIG, "LoadAll() wurde erneut aufgerufen und ignoriert. Ein Neuladen zur Laufzeit " + "gibt es in V1 bewusst nicht (02 E5) - es wuerde Sync-Ordinale neu vergeben, " + "waehrend Items bereits Zustandswerte tragen.");
             return m_Health == ChefZ_ConfigHealth.OK || m_Health == ChefZ_ConfigHealth.DEGRADED;
         }
 
@@ -219,8 +216,7 @@ class ChefZ_ConfigManager
             m_Health = ChefZ_ConfigHealth.OK;
             m_Ready  = true;
             m_LoadMillis = TickCount(startTick);
-            ChefZ_Log.Banner("Core ist per Einstellung abgeschaltet (enabled=false) - "
-                + "Vanilla-Kochen laeuft unveraendert.");
+            ChefZ_Log.Banner("Core ist per Einstellung abgeschaltet (enabled=false) - " + "Vanilla-Kochen laeuft unveraendert.");
             // 18 §4 verlangt die Zusammenfassungszeile IMMER - auch dann, wenn
             // gar nichts geladen wurde. Sonst sieht ein Betreiber im RPT nicht,
             // ob der Core stumm oder abwesend ist.
@@ -247,9 +243,7 @@ class ChefZ_ConfigManager
         if (m_SliceCount == 0 && cppSource.GetFileCount() == 0)
         {
             // 02 §8, erste Zeile: keine Datenquelle ist KEIN Fehler.
-            m_Report.AddInfo("Keine ChefZ-Datenquelle gefunden - Core inert. "
-                + "Vanilla-Kochen laeuft unveraendert. Ein Content-Addon meldet sich ueber "
-                + "CfgChefZ in seiner eigenen config.cpp an (02 §4).");
+            m_Report.AddInfo("Keine ChefZ-Datenquelle gefunden - Core inert. " + "Vanilla-Kochen laeuft unveraendert. Ein Content-Addon meldet sich ueber " + "CfgChefZ in seiner eigenen config.cpp an (02 §4).");
         }
 
         // ---- Rang 3: Overlay, nur Server -------------------------------------
@@ -265,9 +259,7 @@ class ChefZ_ConfigManager
         }
         else if (m_IsServer)
         {
-            ChefZ_Log.Info(ChefZ_LogChannel.CONFIG,
-                "Overlay ist per Einstellung abgeschaltet (allowProfileOverlay=false) - "
-                + "$profile:ChefZ wird nicht gelesen.");
+            ChefZ_Log.Info(ChefZ_LogChannel.CONFIG, "Overlay ist per Einstellung abgeschaltet (allowProfileOverlay=false) - " + "$profile:ChefZ wird nicht gelesen.");
         }
 
         // ---- Aufbereitung ----------------------------------------------------
@@ -328,9 +320,7 @@ class ChefZ_ConfigManager
 
         for (int i = 0; i < unknown.Count(); i++)
         {
-            m_Report.AddWarn(m_Settings.sourceRef, m_Settings.id,
-                "Unbekannter Logkanal \"" + unknown.Get(i) + "\" - ignoriert. Gueltig: "
-                + ChefZ_LogChannel.ValidNames());
+            m_Report.AddWarn(m_Settings.sourceRef, m_Settings.id, "Unbekannter Logkanal \"" + unknown.Get(i) + "\" - ignoriert. Gueltig: " + ChefZ_LogChannel.ValidNames());
         }
     }
 
@@ -425,8 +415,7 @@ class ChefZ_ConfigManager
         //
         // Der Aufruf ist unbedingt - auch ohne eine einzige Stufe soll der
         // Manager "bereit und leer" sein (12 §8, erste Zeile).
-        ChefZ_QualityManager.Get().Build(m_QualityTiers, m_Report,
-                                         GetSettings(), m_QualityIdentities);
+        ChefZ_QualityManager.Get().Build(m_QualityTiers, m_Report, GetSettings(), m_QualityIdentities);
 
         // ZUTATENBINDUNGEN (05 §4).
         //
@@ -522,8 +511,7 @@ class ChefZ_ConfigManager
         // Das Naehrwertaudit (13 §5) laeuft seit S12 im Anschluss an den
         // Engine-Build, siehe RunNutritionAudit() weiter unten. Die
         // Ambiguitaetsanalyse (09 §5) laeuft im Engine-Build mit.
-        ChefZ_RecipeEngine.Get().Build(m_Recipes, m_Devices, m_SelectorCtx,
-                                       GetSettings(), m_Report);
+        ChefZ_RecipeEngine.Get().Build(m_Recipes, m_Devices, m_SelectorCtx, GetSettings(), m_Report);
 
         // QUALITAETSREGELN DER REZEPTE (12 §3).
         //
@@ -536,8 +524,7 @@ class ChefZ_ConfigManager
         // Ebenfalls unbedingt: ohne Regeln bekommt ein Gericht seine Stufe
         // allein aus Slotpunkten, Frische, Zutatenqualitaet und
         // Zustandsstrafen. Das ist weniger ChefZ, nicht falsches ChefZ.
-        ChefZ_QualityManager.Get().BuildRecipeRules(ChefZ_RecipeEngine.Get(),
-                                                    m_SelectorCtx, m_Report);
+        ChefZ_QualityManager.Get().BuildRecipeRules(ChefZ_RecipeEngine.Get(), m_SelectorCtx, m_Report);
 
         // WERKZEUGE (11 E8) - seit S14.
         //
@@ -579,9 +566,7 @@ class ChefZ_ConfigManager
         // Manager "bereit und leer" sein. Dann bieten Stationen nichts an und
         // sind inerte Deko (11 §7, erste Zeile), und Vanilla-Crafting ist
         // davon ohnehin unberuehrt.
-        ChefZ_ProcessingManager.Get().Build(m_Processes, m_Stations, m_Transforms,
-                                            ChefZ_ToolRegistry.Get(), m_SelectorCtx,
-                                            GetSettings(), m_Report);
+        ChefZ_ProcessingManager.Get().Build(m_Processes, m_Stations, m_Transforms, ChefZ_ToolRegistry.Get(), m_SelectorCtx, GetSettings(), m_Report);
 
         // BEHAELTER (16 §7, BOOT) - seit S17.
         //
@@ -618,8 +603,7 @@ class ChefZ_ConfigManager
         // weil 15 §7 fuer eine Welt OHNE Behaeltersystem geschrieben ist und
         // 16 §7 fuer eine MIT. Die Fallunterscheidung dazu steht in
         // ChefZ_PortionManager.CanTakePortion().
-        ChefZ_PortionManager.SetContainerSystemReady(
-            ChefZ_ContainerRegistry.Get().HasAnyContainer());
+        ChefZ_PortionManager.SetContainerSystemReady( ChefZ_ContainerRegistry.Get().HasAnyContainer());
 
         // PORTIONEN (15 §6, BOOT) - seit S16.
         //
@@ -642,9 +626,7 @@ class ChefZ_ConfigManager
         // soll der Manager "bereit und leer" sein. Dann ist IsBulkClass() ein
         // ruhiges false, die Entnahmeaktion erscheint nirgends, und jedes
         // Kochergebnis entsteht als gewoehnliches Item (15 §7, erste Zeile).
-        ChefZ_PortionManager.Get().Build(ChefZ_RecipeEngine.Get(),
-                                         ChefZ_ProcessingManager.Get(),
-                                         m_Report, GetSettings());
+        ChefZ_PortionManager.Get().Build(ChefZ_RecipeEngine.Get(), ChefZ_ProcessingManager.Get(), m_Report, GetSettings());
 
         // BEHAELTERAUDIT (16 §7, Zeile 2) - seit S17.
         //
@@ -745,8 +727,7 @@ class ChefZ_ConfigManager
         ChefZ_NutritionManager.Get().AuditAllRecipes(findings);
     }
 
-    private void FillRegistry(ChefZ_RegistryBase registry, string kind,
-                              ChefZ_ValidationContext vctx, ChefZ_CompileContext cctx)
+    private void FillRegistry(ChefZ_RegistryBase registry, string kind, ChefZ_ValidationContext vctx, ChefZ_CompileContext cctx)
     {
         array<ref ChefZ_Record> records = m_Sink.GetRecords(kind);
         for (int i = 0; i < records.Count(); i++)
@@ -772,9 +753,7 @@ class ChefZ_ConfigManager
 
             if (!registry.Add(rec))
             {
-                m_Report.AddError(rec.sourceRef, rec.id,
-                    "Record konnte nicht in die Registry \"" + kind + "\" aufgenommen werden "
-                    + "(bereits vorhanden oder eingefroren).");
+                m_Report.AddError(rec.sourceRef, rec.id, "Record konnte nicht in die Registry \"" + kind + "\" aufgenommen werden " + "(bereits vorhanden oder eingefroren).");
             }
         }
     }
@@ -807,11 +786,7 @@ class ChefZ_ConfigManager
             // Rang 2 darf sync-relevante Arten nicht stellen: die Datei liegt
             // zwar auf beiden Seiten, aber 03 §4 verlangt EINE Quelle, die
             // beide Seiten garantiert identisch lesen. Das ist die Game-Config.
-            m_Report.AddError(rec.sourceRef, rec.id,
-                "Die Art \"" + kind + "\" ist sync-relevant und darf ausschliesslich aus "
-                + "Rang 1 (CfgChefZ*-Klassenbaum) kommen (03 §4). Der Record bleibt geladen, "
-                + "bekommt aber keinen Sync-Ordinal und ist damit clientseitig nicht "
-                + "darstellbar.");
+            m_Report.AddError(rec.sourceRef, rec.id, "Die Art \"" + kind + "\" ist sync-relevant und darf ausschliesslich aus " + "Rang 1 (CfgChefZ*-Klassenbaum) kommen (03 §4). Der Record bleibt geladen, " + "bekommt aber keinen Sync-Ordinal und ist damit clientseitig nicht " + "darstellbar.");
         }
 
         ChefZ_StringOrder.SortAscending(rank1Ids);
@@ -852,15 +827,13 @@ class ChefZ_ConfigManager
 
         if (m_Settings.strictMode)
         {
-            EnterSafeMode("strictMode ist eingeschaltet und es gab " + errors.ToString()
-                + " Fehler. Das ist der ausdrueckliche Notausgang (02 E4).");
+            EnterSafeMode("strictMode ist eingeschaltet und es gab " + errors.ToString() + " Fehler. Das ist der ausdrueckliche Notausgang (02 E4).");
             return;
         }
 
         if (errors > m_Settings.safeModeErrorThreshold)
         {
-            EnterSafeMode(errors.ToString() + " Fehler ueberschreiten die Schwelle "
-                + m_Settings.safeModeErrorThreshold.ToString() + ".");
+            EnterSafeMode(errors.ToString() + " Fehler ueberschreiten die Schwelle " + m_Settings.safeModeErrorThreshold.ToString() + ".");
             return;
         }
 
@@ -996,10 +969,7 @@ class ChefZ_ConfigManager
         ChefZ_CapabilityGate.ClearActive();
         ChefZ_QualityManager.Get().SetCapabilityProbe(null);
 
-        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG,
-            "SAFE MODE. " + reason + " Alle ChefZ-Registries sind geleert, der Core ist inert, "
-            + "Vanilla-Kochen laeuft unveraendert weiter. Die Einzelfehler stehen oben im "
-            + "Ladebericht.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "SAFE MODE. " + reason + " Alle ChefZ-Registries sind geleert, der Core ist inert, " + "Vanilla-Kochen laeuft unveraendert weiter. Die Einzelfehler stehen oben im " + "Ladebericht.");
     }
 
     private void ReportSummary()
@@ -1070,8 +1040,7 @@ class ChefZ_ConfigManager
         m_SelectorCtx.Init(m_Report);
 
         ChefZ_ManagerSymbolResolver resolver = new ChefZ_ManagerSymbolResolver();
-        resolver.Prepare(ChefZ_CategoryManager.Get(), ChefZ_IngredientManager.Get(), this,
-                         ChefZ_QualityManager.Get());
+        resolver.Prepare(ChefZ_CategoryManager.Get(), ChefZ_IngredientManager.Get(), this, ChefZ_QualityManager.Get());
         m_SelectorCtx.SetResolver(resolver);
 
         m_SelectorCtx.SetMaxSelectorDepth(settings.maxSelectorDepth);
@@ -1108,8 +1077,7 @@ class ChefZ_ConfigManager
         // 04 E4 / 09 E3: derselbe Gewichtssatz muss den Kategoriebaum
         // erreichen, sonst rechnete der Baum mit anderen Zahlen als der
         // Selektorcompiler.
-        ChefZ_CategoryManager.Get().SetSpecificityWeights(weights.wCategoryBase,
-                                                          weights.wCategoryPerDepth);
+        ChefZ_CategoryManager.Get().SetSpecificityWeights(weights.wCategoryBase, weights.wCategoryPerDepth);
     }
 
     /**
@@ -1204,9 +1172,7 @@ class ChefZ_ConfigManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Registries  health=" + HealthName(m_Health) + "  records=" + TotalRecordCount().ToString()
-            + "  fehler=" + m_Report.ErrorCount().ToString()
-            + "  warnungen=" + m_Report.WarnCount().ToString());
+        outLines.Insert("ChefZ Registries  health=" + HealthName(m_Health) + "  records=" + TotalRecordCount().ToString() + "  fehler=" + m_Report.ErrorCount().ToString() + "  warnungen=" + m_Report.WarnCount().ToString());
         outLines.Insert("Einstellungen: " + m_Settings.ToDebugString());
 
         array<string> order = ChefZ_RecordKind.LoadOrder();
@@ -1257,15 +1223,11 @@ class ChefZ_ConfigManager
      */
     void SyncOverlayTo(PlayerIdentity identity)
     {
-        ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.CONFIG, "config.overlaysync.pending",
-            "Overlay-Sync ist noch nicht aktiv. Der Client arbeitet mit Rang 1 und 2; "
-            + "Spielentscheidungen trifft ausschliesslich der Server.");
+        ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.CONFIG, "config.overlaysync.pending", "Overlay-Sync ist noch nicht aktiv. Der Client arbeitet mit Rang 1 und 2; " + "Spielentscheidungen trifft ausschliesslich der Server.");
     }
 
     void OnOverlayRPC(ParamsReadContext ctx)
     {
-        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONFIG, "config.overlayrpc.unexpected",
-            "Overlay-RPC empfangen, obwohl der Sync nicht aktiv ist - verworfen. "
-            + "Das deutet auf einen Versionsunterschied zwischen Server und Client hin.");
+        ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONFIG, "config.overlayrpc.unexpected", "Overlay-RPC empfangen, obwohl der Sync nicht aktiv ist - verworfen. " + "Das deutet auf einen Versionsunterschied zwischen Server und Client hin.");
     }
 }

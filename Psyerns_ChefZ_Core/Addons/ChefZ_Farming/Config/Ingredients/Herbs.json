@@ -48,15 +48,6 @@
       "decays": true
     },
     {
-      "id": "ChefZ_Paprika",
-      "categories": ["VEGETABLE"],
-      "tags": [],
-      "defaultState": "RAW",
-      "quantityUnit": "PIECE",
-      "unitsPerWholeItem": 1,
-      "decays": true
-    },
-    {
       "id": "ChefZ_PepperBerries",
       "categories": ["SPICE"],
       "tags": ["CHEFZ_SPICE"],

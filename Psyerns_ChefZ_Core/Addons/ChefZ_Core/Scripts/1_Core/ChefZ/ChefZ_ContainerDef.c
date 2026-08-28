@@ -257,10 +257,7 @@ class ChefZ_ContainerDef extends ChefZ_Record
         if (!containerCategories)
         {
             if (ctx)
-                ctx.Error(this, "Behaelter nennt keine \"containerCategories\" (16 §3.1) - "
-                    + "abgewiesen. Ein Behaelter ohne Kategorie kann von keinem Rezept "
-                    + "gefordert werden; die Entnahmeaktion erschiene nie und niemand "
-                    + "wuesste warum.");
+                ctx.Error(this, "Behaelter nennt keine \"containerCategories\" (16 §3.1) - " + "abgewiesen. Ein Behaelter ohne Kategorie kann von keinem Rezept " + "gefordert werden; die Entnahmeaktion erschiene nie und niemand " + "wuesste warum.");
             return false;
         }
 
@@ -389,12 +386,9 @@ class ChefZ_ContainerDef extends ChefZ_Record
         if (def.searchScope != ChefZ_ContainerScope.DEFAULT) return false;
 
         // 4. Das Bitfeld (16 E5).
-        if (!ChefZ_ContainerScope.Has(ChefZ_ContainerScope.DEFAULT,
-                                      ChefZ_ContainerScope.HANDS))          return false;
-        if (!ChefZ_ContainerScope.Has(ChefZ_ContainerScope.DEFAULT,
-                                      ChefZ_ContainerScope.INVENTORY))      return false;
-        if (ChefZ_ContainerScope.Has(ChefZ_ContainerScope.DEFAULT,
-                                     ChefZ_ContainerScope.NEARBY_CARGO))    return false;
+        if (!ChefZ_ContainerScope.Has(ChefZ_ContainerScope.DEFAULT, ChefZ_ContainerScope.HANDS))          return false;
+        if (!ChefZ_ContainerScope.Has(ChefZ_ContainerScope.DEFAULT, ChefZ_ContainerScope.INVENTORY))      return false;
+        if (ChefZ_ContainerScope.Has(ChefZ_ContainerScope.DEFAULT, ChefZ_ContainerScope.NEARBY_CARGO))    return false;
         if (ChefZ_ContainerScope.UnknownBits(ChefZ_ContainerScope.ALL) != 0) return false;
         if (ChefZ_ContainerScope.UnknownBits(8) == 0)                        return false;
         if (ChefZ_ContainerScope.Sanitize(8 | 1) != 1)                       return false;

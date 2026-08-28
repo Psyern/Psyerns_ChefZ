@@ -70,10 +70,7 @@ class ChefZ_StateSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.STATE,
-            "Selbsttest " + name + " FEHLGESCHLAGEN. Das Food State System verhaelt sich nicht "
-            + "wie entworfen - Zustandsermittlung, Persistenz und Anzeige sind ab hier "
-            + "unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.STATE, "Selbsttest " + name + " FEHLGESCHLAGEN. Das Food State System verhaelt sich nicht " + "wie entworfen - Zustandsermittlung, Persistenz und Anzeige sind ab hier " + "unzuverlaessig. Vanilla-Kochen ist davon unberuehrt.");
     }
 
     static int PassedCount() { return s_Passed; }
@@ -103,8 +100,7 @@ class ChefZ_StateSelfTest
         return reg;
     }
 
-    private static ChefZ_StateDef Add(notnull ChefZ_Registry<ChefZ_StateDef> reg,
-                                      string id, string projectsTo)
+    private static ChefZ_StateDef Add(notnull ChefZ_Registry<ChefZ_StateDef> reg, string id, string projectsTo)
     {
         ChefZ_StateDef def = new ChefZ_StateDef();
         def.id                     = id;
@@ -186,8 +182,7 @@ class ChefZ_StateSelfTest
             return false;
 
         // Unbekannter Zustand: keine Projektion, kein Absturz, Rueckfall.
-        if (mgr.ProjectToVanillaStage(ChefZ_SymbolTable.Intern("CHEFZ_ST_GIBTSNICHT"))
-            != ChefZ_VanillaStage.NONE)                                         return false;
+        if (mgr.ProjectToVanillaStage(ChefZ_SymbolTable.Intern("CHEFZ_ST_GIBTSNICHT")) != ChefZ_VanillaStage.NONE)                                         return false;
         if (!mgr.GetOrFallback(ChefZ_SymbolTable.Lookup("CHEFZ_ST_GIBTSNICHT"))) return false;
         if (mgr.GetDef(ChefZ_SymbolTable.Lookup("CHEFZ_ST_GIBTSNICHT")))        return false;
 
@@ -439,8 +434,7 @@ class ChefZ_StateSelfTest
         if (!mgr.IsReady())                                                     return false;
         if (mgr.GetStateCount() != 0)                                           return false;
         if (mgr.Exists(ChefZ_SymbolTable.Intern("CHEFZ_ST_EGAL")))              return false;
-        if (mgr.ProjectToVanillaStage(ChefZ_SymbolTable.Intern("CHEFZ_ST_EGAL"))
-            != ChefZ_VanillaStage.NONE)                                         return false;
+        if (mgr.ProjectToVanillaStage(ChefZ_SymbolTable.Intern("CHEFZ_ST_EGAL")) != ChefZ_VanillaStage.NONE)                                         return false;
         if (ChefZ_SymbolTable.IsValid(mgr.FromVanillaStage(ChefZ_VanillaStage.RAW)))
             return false;
 

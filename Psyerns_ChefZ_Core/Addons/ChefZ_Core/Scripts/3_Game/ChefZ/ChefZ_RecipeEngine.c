@@ -143,11 +143,7 @@ class ChefZ_RecipeEngine
      * "nicht gebaut": jede Abfrage antwortet ruhig false, statt einen Fehler
      * ueber einen fehlenden Aufbau zu melden, den es nie geben wird.
      */
-    void Build(ChefZ_Registry<ChefZ_RecipeDef> defs,
-               ChefZ_Registry<ChefZ_DeviceDef> devices,
-               ChefZ_CompileContext ctx,
-               ChefZ_CoreSettingsDef settings,
-               ChefZ_LoadReport report)
+    void Build(ChefZ_Registry<ChefZ_RecipeDef> defs, ChefZ_Registry<ChefZ_DeviceDef> devices, ChefZ_CompileContext ctx, ChefZ_CoreSettingsDef settings, ChefZ_LoadReport report)
     {
         ClearAll();
 
@@ -206,10 +202,7 @@ class ChefZ_RecipeEngine
      * wird ohnehin nach Rang sortiert -, fuer die Vergleichbarkeit zweier
      * Ladeberichte ist sie alles.
      */
-    private void CompileAll(notnull ChefZ_Registry<ChefZ_RecipeDef> defs,
-                            ChefZ_CompileContext ctx,
-                            ChefZ_CoreSettingsDef settings,
-                            ChefZ_LoadReport report)
+    private void CompileAll(notnull ChefZ_Registry<ChefZ_RecipeDef> defs, ChefZ_CompileContext ctx, ChefZ_CoreSettingsDef settings, ChefZ_LoadReport report)
     {
         ChefZ_RecipeCompiler compiler = new ChefZ_RecipeCompiler();
         compiler.Init(ctx, report, settings);
@@ -391,11 +384,7 @@ class ChefZ_RecipeEngine
         if (!report)
             return;
 
-        report.AddInfo("Recipe Engine: " + m_Recipes.Count().ToString() + " Rezepte, "
-            + m_ByDeviceClass.Count().ToString() + " Geraeteklassen im Index, "
-            + m_ByDeviceCategory.Count().ToString() + " Geraetekategorien, "
-            + m_AnyDevice.Count().ToString() + " ohne Geraetebindung. Knotenbudget "
-            + m_NodeBudget.ToString() + ".");
+        report.AddInfo("Recipe Engine: " + m_Recipes.Count().ToString() + " Rezepte, " + m_ByDeviceClass.Count().ToString() + " Geraeteklassen im Index, " + m_ByDeviceCategory.Count().ToString() + " Geraetekategorien, " + m_AnyDevice.Count().ToString() + " ohne Geraetebindung. Knotenbudget " + m_NodeBudget.ToString() + ".");
     }
 
     //==========================================================================
@@ -491,8 +480,7 @@ class ChefZ_RecipeEngine
      * weil der Index die Rangreihenfolge ist, ist das Ergebnis in
      * Rangreihenfolge (09 §5). Es wird NICHT sortiert.
      */
-    private void CollectCandidates(notnull ChefZ_CookContext ctx, int itemCount,
-                                   notnull array<int> outIdx)
+    private void CollectCandidates(notnull ChefZ_CookContext ctx, int itemCount, notnull array<int> outIdx)
     {
         outIdx.Clear();
 
@@ -523,8 +511,7 @@ class ChefZ_RecipeEngine
         }
     }
 
-    private void MergeFromIndex(notnull map<int, ref array<int>> index, ChefZ_Sym key,
-                                notnull array<int> dst)
+    private void MergeFromIndex(notnull map<int, ref array<int>> index, ChefZ_Sym key, notnull array<int> dst)
     {
         if (!ChefZ_SymbolTable.IsValid(key))
             return;
@@ -568,10 +555,7 @@ class ChefZ_RecipeEngine
      * ist die nuetzlichere Auskunft: der bestplatzierte Kandidat ist der, den
      * der Spieler am ehesten gemeint hat.
      */
-    bool EvaluateBest(notnull ChefZ_CookContext ctx,
-                      notnull ChefZ_FactSnapshot snapshot,
-                      ChefZ_MatchTrace trace,
-                      out ChefZ_MatchResult result)
+    bool EvaluateBest(notnull ChefZ_CookContext ctx, notnull ChefZ_FactSnapshot snapshot, ChefZ_MatchTrace trace, out ChefZ_MatchResult result)
     {
         if (!result)
             result = new ChefZ_MatchResult();
@@ -621,12 +605,10 @@ class ChefZ_RecipeEngine
             nodes = nodes + result.nodesExplored;
             result.nodesExplored   = nodes;
             result.candidatesTried = tried;
-            result.score = ChefZ_RecipeRanker.ComputeMatchScore(rec, result,
-                                                               snapshot.Count(), m_Weights);
+            result.score = ChefZ_RecipeRanker.ComputeMatchScore(rec, result, snapshot.Count(), m_Weights);
 
             string readyReason;
-            result.ready          = ChefZ_RecipeEvaluator.CheckReady(rec, result, snapshot,
-                                                                     ctx, readyReason);
+            result.ready          = ChefZ_RecipeEvaluator.CheckReady(rec, result, snapshot, ctx, readyReason);
             result.notReadyReason = readyReason;
 
             if (trace)
@@ -671,10 +653,7 @@ class ChefZ_RecipeEngine
      * Sortiert wird hier sehr wohl, und zwar mit ChefZ_RecipeRanker.
      * CompareMatches: erst hier liegen die Laufzeitscores vor.
      */
-    int EvaluateAll(notnull ChefZ_CookContext ctx,
-                    notnull ChefZ_FactSnapshot snapshot,
-                    out array<ref ChefZ_MatchResult> results,
-                    int maxResults)
+    int EvaluateAll(notnull ChefZ_CookContext ctx, notnull ChefZ_FactSnapshot snapshot, out array<ref ChefZ_MatchResult> results, int maxResults)
     {
         if (!results)
             results = new array<ref ChefZ_MatchResult>();
@@ -713,8 +692,7 @@ class ChefZ_RecipeEngine
     }
 
     //! Einfuegesortierung nach 09 §4.4. Die Listen sind einstellig lang.
-    private void InsertSorted(notnull array<ref ChefZ_MatchResult> list,
-                              notnull ChefZ_MatchResult item)
+    private void InsertSorted(notnull array<ref ChefZ_MatchResult> list, notnull ChefZ_MatchResult item)
     {
         int at = list.Count();
         while (at > 0 && ChefZ_RecipeRanker.CompareMatches(list.Get(at - 1), item) > 0)
@@ -738,10 +716,7 @@ class ChefZ_RecipeEngine
      * gebunden ist. Sie ist deshalb billig gehalten: kein Kandidatenlauf,
      * keine Bindung, nur ein Blick auf die FoodStages der gebundenen Zutaten.
      */
-    bool CheckReady(notnull ChefZ_MatchResult result,
-                    notnull ChefZ_FactSnapshot snapshot,
-                    notnull ChefZ_CookContext ctx,
-                    out string reason)
+    bool CheckReady(notnull ChefZ_MatchResult result, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_CookContext ctx, out string reason)
     {
         reason = "";
 
@@ -759,10 +734,7 @@ class ChefZ_RecipeEngine
      *
      * Fuer "chefz why" (18 §3) und das Cookbook ab V1.1. Nie im Kochtick.
      */
-    bool EvaluatePartial(notnull ChefZ_CookContext ctx,
-                         notnull ChefZ_FactSnapshot snapshot,
-                         ChefZ_Sym recipeSym,
-                         out ChefZ_PartialMatchReport report)
+    bool EvaluatePartial(notnull ChefZ_CookContext ctx, notnull ChefZ_FactSnapshot snapshot, ChefZ_Sym recipeSym, out ChefZ_PartialMatchReport report)
     {
         if (!report)
             report = new ChefZ_PartialMatchReport();
@@ -789,9 +761,7 @@ class ChefZ_RecipeEngine
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Recipe Engine  bereit=" + m_Ready.ToString()
-            + "  rezepte=" + m_Recipes.Count().ToString()
-            + "  budget=" + m_NodeBudget.ToString());
+        outLines.Insert("ChefZ Recipe Engine  bereit=" + m_Ready.ToString() + "  rezepte=" + m_Recipes.Count().ToString() + "  budget=" + m_NodeBudget.ToString());
 
         for (int i = 0; i < m_Recipes.Count(); i++)
             outLines.Insert("  " + (i + 1).ToString() + ". " + m_Recipes.Get(i).ToDebugString());
@@ -820,9 +790,7 @@ class ChefZ_RecipeEngine
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Ambiguitaetsanalyse ueber " + m_Recipes.Count().ToString()
-            + " Rezepte (heuristisch, 09 E5 - sie vergleicht Slotmengen und "
-            + "Geraetemengen, keine Selektorsemantik).");
+        outLines.Insert("Ambiguitaetsanalyse ueber " + m_Recipes.Count().ToString() + " Rezepte (heuristisch, 09 E5 - sie vergleicht Slotmengen und " + "Geraetemengen, keine Selektorsemantik).");
 
         if (!m_Ready)
         {
@@ -836,8 +804,7 @@ class ChefZ_RecipeEngine
 
         if (scratch.Count() == 0)
         {
-            outLines.Insert("  Keine. Kein Rezept verdeckt ein anderes, und kein Paar "
-                + "teilt sich Rang und Slotmenge.");
+            outLines.Insert("  Keine. Kein Rezept verdeckt ein anderes, und kein Paar " + "teilt sich Rang und Slotmenge.");
             return;
         }
 

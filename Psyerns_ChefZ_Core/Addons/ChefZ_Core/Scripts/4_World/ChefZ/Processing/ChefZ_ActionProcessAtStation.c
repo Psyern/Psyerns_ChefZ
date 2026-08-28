@@ -111,12 +111,9 @@ class ChefZ_ActionProcessAtStationCB extends ActionContinuousBaseCB
         if (!Class.CastTo(station, m_ActionData.m_Target.GetObject()))
             return FALLBACK_SEC;
 
-        ChefZ_Sym process = ChefZ_ActionProcessAtStation.ResolveProcessFor(
-            station, m_ActionData.m_MainItem, ProcessHashOf(m_ActionData));
+        ChefZ_Sym process = ChefZ_ActionProcessAtStation.ResolveProcessFor( station, m_ActionData.m_MainItem, ProcessHashOf(m_ActionData));
 
-        float seconds = ChefZ_ActionProcessAtStation.DurationOf(station,
-                                                                m_ActionData.m_MainItem,
-                                                                process);
+        float seconds = ChefZ_ActionProcessAtStation.DurationOf(station, m_ActionData.m_MainItem, process);
         if (seconds <= 0.0)
             return FALLBACK_SEC;
         return seconds;
@@ -270,8 +267,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      *   3. passender Transform          - NUR, wenn diese Seite Transforms
      *                                     kennt; siehe Dateikopf
      */
-    protected bool IsProcessUsable(notnull ChefZ_ProcessingStation_Base station,
-                                   ItemBase item, ChefZ_Sym process, int actorId)
+    protected bool IsProcessUsable(notnull ChefZ_ProcessingStation_Base station, ItemBase item, ChefZ_Sym process, int actorId)
     {
         ChefZ_ProcessingManager mgr = ChefZ_ProcessingManager.Get();
 
@@ -298,10 +294,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
             // fehlenden Werkzeuggruppe. Keine irrefuehrende HUD-Meldung."
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS,
-                    "action.tool." + missing,
-                    "Die Aktion an \"" + station.GetType() + "\" erscheint nicht: die "
-                    + "Werkzeuggruppe " + missing + " fehlt.");
+                ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS, "action.tool." + missing, "Die Aktion an \"" + station.GetType() + "\" erscheint nicht: die " + "Werkzeuggruppe " + missing + " fehlt.");
             }
             return false;
         }
@@ -353,8 +346,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      * OnFinishProgressServer nimmt am Ende den, den der Client benannt hat,
      * und prueft ihn gegen das Angebot der Station.
      */
-    protected ChefZ_Sym SelectProcess(notnull ChefZ_ProcessingStation_Base station,
-                                      ItemBase item)
+    protected ChefZ_Sym SelectProcess(notnull ChefZ_ProcessingStation_Base station, ItemBase item)
     {
         ChefZ_Sym variant = VariantProcess();
         if (ChefZ_SymbolTable.IsValid(variant))
@@ -479,8 +471,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      * zu verwerfen. Dieselbe Bedingung und derselbe Grund wie in
      * ActionWorldCraft.SetupAction().
      */
-    override bool SetupAction(PlayerBase player, ActionTarget target, ItemBase item,
-                              out ActionData action_data, Param extra_data = NULL)
+    override bool SetupAction(PlayerBase player, ActionTarget target, ItemBase item, out ActionData action_data, Param extra_data = NULL)
     {
         if (!super.SetupAction(player, target, item, action_data, extra_data))
             return false;
@@ -551,10 +542,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
             string beginErr;
             if (!station.ChefZ_BeginJob(process, action_data.m_MainItem, actorId, beginErr))
             {
-                ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS,
-                    "action.begin." + station.GetType(),
-                    "Der Job an \"" + station.GetType() + "\" konnte nicht starten: "
-                    + beginErr + ". Es wurde nichts veraendert.");
+                ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS, "action.begin." + station.GetType(), "Der Job an \"" + station.GetType() + "\" konnte nicht starten: " + beginErr + ". Es wurde nichts veraendert.");
                 return;
             }
 
@@ -574,10 +562,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      * genau das - und der ChefZ_ProcessRunner revalidiert danach ein drittes
      * Mal, unmittelbar vor dem Verbrauch (08 §6, Schritt 1).
      */
-    protected void RunImmediate(notnull ChefZ_ProcessingStation_Base station,
-                                notnull ActionData action_data,
-                                notnull ChefZ_CompiledProcess proc,
-                                ChefZ_Sym process, int actorId)
+    protected void RunImmediate(notnull ChefZ_ProcessingStation_Base station, notnull ActionData action_data, notnull ChefZ_CompiledProcess proc, ChefZ_Sym process, int actorId)
     {
         ChefZ_ProcessContext ctx = new ChefZ_ProcessContext();
         station.ChefZ_BuildContext(action_data.m_MainItem, actorId, ctx);
@@ -590,10 +575,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
         ChefZ_TransformMatch match;
         if (!ChefZ_ProcessingManager.Get().FindTransform(process, ctx, snapshot, null, match))
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS,
-                "action.nomatch." + station.GetType(),
-                "An \"" + station.GetType() + "\" passt beim Abschluss kein Transform mehr: "
-                + match.failReason + ". Es wurde nichts veraendert.");
+            ChefZ_Log.Once(ChefZ_LogLevel.DEBUG, ChefZ_LogChannel.PROCESS, "action.nomatch." + station.GetType(), "An \"" + station.GetType() + "\" passt beim Abschluss kein Transform mehr: " + match.failReason + ". Es wurde nichts veraendert.");
             return;
         }
 
@@ -616,8 +598,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      * NACH dem Erfolg, nie davor: ein Werkzeug, das sich abnutzt, obwohl
      * nichts entstanden ist, waere ein Verlust ohne Gegenleistung.
      */
-    protected void ApplyToolDamage(notnull ActionData action_data,
-                                   notnull ChefZ_CompiledProcess proc)
+    protected void ApplyToolDamage(notnull ActionData action_data, notnull ChefZ_CompiledProcess proc)
     {
         if (proc.toolDamage <= 0)
             return;
@@ -691,8 +672,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      * angebotene Prozess. Der Client kann damit auswaehlen, aber nichts
      * erfinden.
      */
-    static ChefZ_Sym ResolveProcessFor(notnull ChefZ_ProcessingStation_Base station,
-                                       ItemBase inHands, int processHash)
+    static ChefZ_Sym ResolveProcessFor(notnull ChefZ_ProcessingStation_Base station, ItemBase inHands, int processHash)
     {
         if (processHash != ChefZ_ProcessJob.NO_HASH)
         {
@@ -725,8 +705,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
 
     //! Die Dauer, die der Fortschrittsbalken abbilden soll. 0, wenn sie sich
     //! nicht ermitteln laesst - der Callback nimmt dann seinen Rueckfallwert.
-    static float DurationOf(notnull ChefZ_ProcessingStation_Base station,
-                            ItemBase inHands, ChefZ_Sym process)
+    static float DurationOf(notnull ChefZ_ProcessingStation_Base station, ItemBase inHands, ChefZ_Sym process)
     {
         if (!ChefZ_SymbolTable.IsValid(process))
             return 0.0;

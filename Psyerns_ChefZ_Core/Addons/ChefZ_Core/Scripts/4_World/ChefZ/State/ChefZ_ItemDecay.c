@@ -162,15 +162,12 @@ class ChefZ_ItemDecay
         // Mod ueberschrieben werden. Ein Schutz, der an einer Zusage haengt,
         // die uns nicht gehoert, ist kein Schutz. Die Abfrage kostet einen
         // Map-Zugriff je Dimension.
-        plan.stopsDecay = mgr.StopsDecay(facts.chefzState, facts.chefzQuality, facts.classSym,
-                                         facts.closure, facts.tags);
+        plan.stopsDecay = mgr.StopsDecay(facts.chefzState, facts.chefzQuality, facts.classSym, facts.closure, facts.tags);
         if (plan.stopsDecay)
             return plan;
 
         array<string> noTrace = null;
-        float mul = mgr.ComputeDecayScale(facts.chefzState, facts.chefzQuality, facts.classSym,
-                                          facts.closure, facts.tags,
-                                          NO_CONTAINER_MODIFIER, envTemp, noTrace);
+        float mul = mgr.ComputeDecayScale(facts.chefzState, facts.chefzQuality, facts.classSym, facts.closure, facts.tags, NO_CONTAINER_MODIFIER, envTemp, noTrace);
 
         if (hasRootAsPlayer)
         {
@@ -178,9 +175,7 @@ class ChefZ_ItemDecay
             // dessen - die Begruendung steht bei
             // ChefZ_PreservationDef.onPlayerMultiplier. Ohne Regel ist der
             // Faktor 1.0 und diese Zeile ist wirkungslos.
-            mul = mgr.ClampToBounds(mul * mgr.ComputeOnPlayerScale(
-                facts.chefzState, facts.chefzQuality, facts.classSym,
-                facts.closure, facts.tags, envTemp));
+            mul = mgr.ClampToBounds(mul * mgr.ComputeOnPlayerScale( facts.chefzState, facts.chefzQuality, facts.classSym, facts.closure, facts.tags, envTemp));
         }
 
         plan.scale = mul;
@@ -239,8 +234,7 @@ class ChefZ_ItemDecay
      * (03 §4). Was der Client ohnehin nicht unterscheiden kann, wird nicht
      * geschickt.
      */
-    private static void AdvanceFreshness(notnull ItemBase item, notnull ChefZ_DecayPlan plan,
-                                         float rawDelta)
+    private static void AdvanceFreshness(notnull ItemBase item, notnull ChefZ_DecayPlan plan, float rawDelta)
     {
         ChefZ_ItemStateComponent comp = ChefZ_ItemStateComponent.Of(item);
         if (!comp)
@@ -254,17 +248,11 @@ class ChefZ_ItemDecay
         // nur Zahlen.
         if (ChefZ_PreservationManager.IsFreshnessBroken(current))
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PRESERV,
-                "preserv.freshness." + item.GetType(),
-                "\"" + item.GetType() + "\" traegt eine unbrauchbare Restfrische ("
-                + current.ToString() + "). Sie wird auf 1.0 gesetzt. Ursache ist ein "
-                + "beschaedigter Spielstandblock oder eine Rechnung, die NaN erzeugt hat. "
-                + "Diese Meldung erscheint je Klasse genau einmal.");
+            ChefZ_Log.Once(ChefZ_LogLevel.WARN, ChefZ_LogChannel.PRESERV, "preserv.freshness." + item.GetType(), "\"" + item.GetType() + "\" traegt eine unbrauchbare Restfrische (" + current.ToString() + "). Sie wird auf 1.0 gesetzt. Ursache ist ein " + "beschaedigter Spielstandblock oder eine Rechnung, die NaN erzeugt hat. " + "Diese Meldung erscheint je Klasse genau einmal.");
             current = 1.0;
         }
 
-        float next = ChefZ_PreservationManager.Get().AdvanceFreshness(
-            current, rawDelta, plan.freshnessScale, plan.state);
+        float next = ChefZ_PreservationManager.Get().AdvanceFreshness( current, rawDelta, plan.freshnessScale, plan.state);
 
         ChefZ_ItemStateComponent.SetFreshness01Throttled(item, next);
     }
@@ -299,11 +287,7 @@ class ChefZ_ItemDecay
         // davor (plan.stageBefore). Dieselbe Loesung wie in
         // ChefZ_ItemStateComponent.SetState.
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.PRESERV, ChefZ_LogLevel.DEBUG))
-            ChefZ_Log.Debug(ChefZ_LogChannel.PRESERV,
-                item.GetType() + ": verdorben. " + ChefZ_VanillaStage.Name(plan.stageBefore)
-                + " -> " + ChefZ_VanillaStage.Name(stageNow)
-                + "  zustand=" + ChefZ_SymbolTable.NameOrMark(plan.state)
-                + "  faktor=" + plan.scale.ToString());
+            ChefZ_Log.Debug(ChefZ_LogChannel.PRESERV, item.GetType() + ": verdorben. " + ChefZ_VanillaStage.Name(plan.stageBefore) + " -> " + ChefZ_VanillaStage.Name(stageNow) + "  zustand=" + ChefZ_SymbolTable.NameOrMark(plan.state) + "  faktor=" + plan.scale.ToString());
     }
 
     //==========================================================================
@@ -345,8 +329,7 @@ class ChefZ_ItemDecay
         if (!CollectFacts(item, facts))
             return false;
 
-        return mgr.StopsDecay(facts.chefzState, facts.chefzQuality, facts.classSym,
-                              facts.closure, facts.tags);
+        return mgr.StopsDecay(facts.chefzState, facts.chefzQuality, facts.classSym, facts.closure, facts.tags);
     }
 
     /**
@@ -385,8 +368,7 @@ class ChefZ_ItemDecay
         if (!CollectFacts(item, facts))
             return false;
 
-        return mgr.PreventsRotten(facts.chefzState, facts.chefzQuality, facts.classSym,
-                                  facts.closure, facts.tags);
+        return mgr.PreventsRotten(facts.chefzState, facts.chefzQuality, facts.classSym, facts.closure, facts.tags);
     }
 
     /**
@@ -407,9 +389,7 @@ class ChefZ_ItemDecay
         if (!CollectFacts(item, facts))
             return ChefZ_PreservationManager.NEUTRAL;
 
-        return mgr.ComputeDecayScale(facts.chefzState, facts.chefzQuality, facts.classSym,
-                                     facts.closure, facts.tags,
-                                     NO_CONTAINER_MODIFIER, EnvironmentTemperature(item), trace);
+        return mgr.ComputeDecayScale(facts.chefzState, facts.chefzQuality, facts.classSym, facts.closure, facts.tags, NO_CONTAINER_MODIFIER, EnvironmentTemperature(item), trace);
     }
 
     //==========================================================================

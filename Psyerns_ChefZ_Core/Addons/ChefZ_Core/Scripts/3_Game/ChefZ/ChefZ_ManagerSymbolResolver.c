@@ -57,10 +57,7 @@ class ChefZ_ManagerSymbolResolver extends ChefZ_SymbolResolver
      * nichts" - dann werden Rezepte abgewiesen, statt auf alles zu matchen.
      * Das ist die Richtung, in die jeder Fehler laufen soll (02 §8).
      */
-    void Prepare(ChefZ_CategoryManager categories,
-                 ChefZ_IngredientManager ingredients,
-                 ChefZ_ConfigManager config,
-                 ChefZ_QualityManager quality = null)
+    void Prepare(ChefZ_CategoryManager categories, ChefZ_IngredientManager ingredients, ChefZ_ConfigManager config, ChefZ_QualityManager quality = null)
     {
         m_Categories  = categories;
         m_Ingredients = ingredients;

@@ -448,10 +448,7 @@ class ChefZ_ApplicatorSelfTest
         s_Failed++;
 
         // An der Klammer SetQuietForTest vorbei: dieser Fehler ist echt.
-        ChefZ_Log.Error(ChefZ_LogChannel.COOK,
-            "Selbsttest S8 fehlgeschlagen: " + name + ". Der Applicator ist damit nicht "
-            + "vertrauenswuerdig - er ist die einzige Stelle des Core, die Zutaten "
-            + "verbraucht. Vanilla-Kochen ist davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.COOK, "Selbsttest S8 fehlgeschlagen: " + name + ". Der Applicator ist damit nicht " + "vertrauenswuerdig - er ist die einzige Stelle des Core, die Zutaten " + "verbraucht. Vanilla-Kochen ist davon unberuehrt.");
     }
 
     static string Summary()
