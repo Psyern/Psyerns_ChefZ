@@ -791,8 +791,7 @@ class ChefZ_PreservationManager
         {
             for (int c = 0; c < m_CategoryDefs.Count(); c++)
             {
-                if (closure.HasBit(m_CategoryBits.Get(c))
-                    && FlagOf(m_CategoryDefs.Get(c), wantStops))
+                if (closure.HasBit(m_CategoryBits.Get(c)) && FlagOf(m_CategoryDefs.Get(c), wantStops))
                     return true;
             }
         }

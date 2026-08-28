@@ -282,8 +282,7 @@ class ChefZ_ContainerService
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.CONTAIN, ChefZ_LogLevel.DEBUG))
         {
             ChefZ_Log.Debug(ChefZ_LogChannel.CONTAIN,
-                "Behaelter \"" + container.GetType() + "\" fuer das Servieren "
-                + BoolWord(def.consumedOnServe, "verbraucht", "benutzt, aber nicht verbraucht")
+                "Behaelter \"" + container.GetType() + "\" fuer das Servieren " + BoolWord(def.consumedOnServe, "verbraucht", "benutzt, aber nicht verbraucht")
                 + ".");
         }
 

@@ -420,8 +420,7 @@ class ChefZ_ProcessJob
         if (!ChefZ_SymbolTable.IsValid(transformSym))
             s = "hash " + transformPersistHash.ToString();
 
-        return s + "  " + elapsedSec.ToString() + "/" + durationSec.ToString() + "s"
-                 + " (" + Progress01().ToString() + ")";
+        return s + "  " + elapsedSec.ToString() + "/" + durationSec.ToString() + "s" + " (" + Progress01().ToString() + ")";
     }
 
     //! Nur fuer den Selbsttest.

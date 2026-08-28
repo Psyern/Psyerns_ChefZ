@@ -101,3 +101,6 @@
 /Psyerns_ChefZ_Core/**/Thumbs.db
 /Psyerns_ChefZ_Core/**/Desktop.ini
 /Psyerns_ChefZ_Core/**/.DS_Store
+
+# Python bytecode from tooling runs
+__pycache__/

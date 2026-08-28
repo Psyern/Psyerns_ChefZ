@@ -178,9 +178,7 @@ class ChefZ_CategoryManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien, "
-                + "Tiefe " + m_MaxDepth.ToString() + ", " + GetTagCount().ToString() + " Tags"
-                + " in " + TickCount(startTick).ToString() + "ms.");
+            report.AddInfo("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien, " + "Tiefe " + m_MaxDepth.ToString() + ", " + GetTagCount().ToString() + " Tags" + " in " + TickCount(startTick).ToString() + "ms.");
 
         LogTreeIfDebug();
     }
@@ -955,10 +953,7 @@ class ChefZ_CategoryManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien"
-            + ", Tiefe " + m_MaxDepth.ToString()
-            + ", verworfen " + m_RejectedCount.ToString()
-            + ", Tags " + GetTagCount().ToString()
+        outLines.Insert("Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien" + ", Tiefe " + m_MaxDepth.ToString() + ", verworfen " + m_RejectedCount.ToString() + ", Tags " + GetTagCount().ToString()
             + ", ready=" + m_Ready.ToString());
 
         for (int i = 0; i < m_Parent.Count(); i++)

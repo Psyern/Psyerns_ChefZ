@@ -185,8 +185,7 @@ class ChefZ_CapabilityRegistry
             // gehoert ins Startlog - sonst sucht irgendwann jemand stundenlang,
             // warum sein Rezeptschloss nicht greift.
             ChefZ_Log.Info(ChefZ_LogChannel.EVENT,
-                "capabilityMode = \"" + m_Mode + "\": "
-                + ModeExplanation(m_Mode));
+                "capabilityMode = \"" + m_Mode + "\": " + ModeExplanation(m_Mode));
         }
     }
 

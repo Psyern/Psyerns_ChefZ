@@ -526,9 +526,7 @@ class ChefZ_QualityManager
         if (report)
         {
             report.AddError(recipe.sourceRef, recipe.id,
-                "qualityTierSet \"" + ChefZ_SymbolTable.NameOrMark(recipe.qualityTierSet)
-                + "\" ist kein bekannter Stufensatz. Das Rezept bleibt gueltig und benutzt "
-                + "den Vorgabesatz \"" + Scoring().defaultTierSet + "\" - die Qualitaet ist "
+                "qualityTierSet \"" + ChefZ_SymbolTable.NameOrMark(recipe.qualityTierSet) + "\" ist kein bekannter Stufensatz. Das Rezept bleibt gueltig und benutzt " + "den Vorgabesatz \"" + Scoring().defaultTierSet + "\" - die Qualitaet ist "
                 + "eine Verfeinerung, und ein Rezept deswegen ganz auszuschalten waere "
                 + "unverhaeltnismaessig.");
         }
@@ -557,8 +555,7 @@ class ChefZ_QualityManager
                 if (report)
                 {
                     report.AddError(recipe.sourceRef, recipe.id,
-                        "gradeRules[" + i.ToString() + "]"
-                        + RuleIdSuffix(raw) + ": " + why
+                        "gradeRules[" + i.ToString() + "]" + RuleIdSuffix(raw) + ": " + why
                         + " Die Regel wird verworfen; die uebrigen Regeln zaehlen weiter.");
                 }
                 continue;
@@ -1599,8 +1596,7 @@ class ChefZ_QualityManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Qualitaetsstufen: " + GetTierCount().ToString()
-            + "  saetze=" + GetTierSetCount().ToString()
+        outLines.Insert("Qualitaetsstufen: " + GetTierCount().ToString() + "  saetze=" + GetTierSetCount().ToString()
             + "  regeln=" + m_RuleCount.ToString()
             + "  bereit=" + m_Ready.ToString());
         outLines.Insert("    " + Scoring().ToDebugString());
@@ -1621,9 +1617,7 @@ class ChefZ_QualityManager
                 if (!def)
                     continue;
 
-                string line = "        " + def.ToLine()
-                    + "  wirksamerRang=" + GetRank(sym).ToString()
-                    + "  ord=" + GetSyncOrdinal(sym).ToString();
+                string line = "        " + def.ToLine() + "  wirksamerRang=" + GetRank(sym).ToString() + "  ord=" + GetSyncOrdinal(sym).ToString();
                 outLines.Insert(line);
             }
         }

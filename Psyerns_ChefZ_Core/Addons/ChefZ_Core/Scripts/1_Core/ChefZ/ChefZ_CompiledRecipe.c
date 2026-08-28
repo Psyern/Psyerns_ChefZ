@@ -83,8 +83,7 @@ class ChefZ_CompiledContext
 
         if (!MatchesDevice(ctx))
         {
-            reason = "Geraet " + ChefZ_SymbolTable.NameOrMark(ctx.deviceClass)
-                   + " passt nicht (erwartet: " + DeviceDescription() + ")";
+            reason = "Geraet " + ChefZ_SymbolTable.NameOrMark(ctx.deviceClass) + " passt nicht (erwartet: " + DeviceDescription() + ")";
             return false;
         }
 

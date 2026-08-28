@@ -983,8 +983,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         if (m_ChefZ_ToolIndex >= 0)
             s = s + " werkzeugplatz=" + m_ChefZ_ToolIndex.ToString();
 
-        s = s + " klassen=" + ChefZ_GetIngredientClassCount(0).ToString()
-              + "/" + ChefZ_GetIngredientClassCount(1).ToString();
+        s = s + " klassen=" + ChefZ_GetIngredientClassCount(0).ToString() + "/" + ChefZ_GetIngredientClassCount(1).ToString();
 
         if (m_ChefZ_PureStateChange)
             s = s + " ZUSTANDSWECHSEL";

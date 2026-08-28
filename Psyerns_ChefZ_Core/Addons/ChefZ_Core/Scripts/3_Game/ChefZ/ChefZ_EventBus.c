@@ -622,17 +622,13 @@ class ChefZ_EventBus
         else if (bonus > limit)
         {
             Warn("bus.query.high." + args.eventId,
-                "Externer Qualitaetsbonus " + bonus.ToString() + " ueberschreitet "
-                + "maxExternalQualityBonus (" + limit.ToString() + ") und wird geklemmt. "
-                + "Beitraege kamen von: " + SubscriberNames(args.eventId));
+                "Externer Qualitaetsbonus " + bonus.ToString() + " ueberschreitet " + "maxExternalQualityBonus (" + limit.ToString() + ") und wird geklemmt. " + "Beitraege kamen von: " + SubscriberNames(args.eventId));
             bonus = limit;
         }
         else if (bonus < -limit)
         {
             Warn("bus.query.low." + args.eventId,
-                "Externer Qualitaetsabzug " + bonus.ToString() + " unterschreitet "
-                + (-limit).ToString() + " und wird geklemmt. Beitraege kamen von: "
-                + SubscriberNames(args.eventId));
+                "Externer Qualitaetsabzug " + bonus.ToString() + " unterschreitet " + (-limit).ToString() + " und wird geklemmt. Beitraege kamen von: " + SubscriberNames(args.eventId));
             bonus = -limit;
         }
 

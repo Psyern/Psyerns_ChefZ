@@ -382,9 +382,7 @@ class ChefZ_RecipeEvaluator
 
                 if (!recipe.AcceptsDoneStage(facts.vanillaFoodStage))
                 {
-                    reason = ChefZ_SymbolTable.NameOrMark(facts.classSym) + " ist "
-                           + ChefZ_VanillaStage.Name(facts.vanillaFoodStage)
-                           + ", gebraucht wird " + StagesToString(recipe);
+                    reason = ChefZ_SymbolTable.NameOrMark(facts.classSym) + " ist " + ChefZ_VanillaStage.Name(facts.vanillaFoodStage) + ", gebraucht wird " + StagesToString(recipe);
                     return false;
                 }
             }

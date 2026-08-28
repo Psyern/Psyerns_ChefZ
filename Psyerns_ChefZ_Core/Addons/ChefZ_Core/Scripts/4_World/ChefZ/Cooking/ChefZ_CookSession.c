@@ -332,8 +332,7 @@ class ChefZ_CookSession
 
     string ToDebugString()
     {
-        string s = "Gefaess " + vesselId.ToString()
-                 + "  " + StateName(state)
+        string s = "Gefaess " + vesselId.ToString() + "  " + StateName(state)
                  + "  seitMatch=" + ticksSinceMatch.ToString();
 
         if (outcome)

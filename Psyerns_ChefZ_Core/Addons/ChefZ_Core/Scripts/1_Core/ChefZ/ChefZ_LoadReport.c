@@ -246,8 +246,7 @@ class ChefZ_LoadReport
 
         int notShown = m_Errors + m_Warns - shown;
         if (notShown > 0)
-            PrintToRPT(ChefZ_Log.PREFIX + "[CONFIG]   ... " + notShown.ToString()
-                + " weitere - vollstaendig in " + WriteTargetHint());
+            PrintToRPT(ChefZ_Log.PREFIX + "[CONFIG]   ... " + notShown.ToString() + " weitere - vollstaendig in " + WriteTargetHint());
     }
 
     private string WriteTargetHint()

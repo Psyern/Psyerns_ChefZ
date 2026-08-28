@@ -219,11 +219,7 @@ class ChefZ_NutritionManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Naehrwertangaben: " + GetRecordCount().ToString() + " geladen"
-                + " (Klasse " + m_ByClass.Count().ToString()
-                + ", Kategorie " + m_CategoryDefs.Count().ToString()
-                + ", Tag " + m_ByTag.Count().ToString() + ")"
-                + ", Audit " + AuditStateName()
+            report.AddInfo("Naehrwertangaben: " + GetRecordCount().ToString() + " geladen" + " (Klasse " + m_ByClass.Count().ToString() + ", Kategorie " + m_CategoryDefs.Count().ToString() + ", Tag " + m_ByTag.Count().ToString() + ")" + ", Audit " + AuditStateName()
                 + ", Toleranz " + m_TolerancePct.ToString() + "%.");
 
         LogIfDebug();
@@ -1008,8 +1004,7 @@ class ChefZ_NutritionManager
 
         ChefZ_NutritionFinding f = new ChefZ_NutritionFinding();
         f.Init(ChefZ_NutritionFindingKind.DEVIATION, recipe.id, cls,
-            "erwartet " + Rounded(expected.energy) + " energy aus den Zutaten, "
-            + "CfgVehicles sagt " + Rounded(actual) + " (" + Signed(deviation) + "%). "
+            "erwartet " + Rounded(expected.energy) + " energy aus den Zutaten, " + "CfgVehicles sagt " + Rounded(actual) + " (" + Signed(deviation) + "%). "
             + "KEINE Korrektur - der Core aendert nie einen Balancingwert (13 E1).");
         f.expectedEnergy = expected.energy;
         f.actualEnergy   = actual;
@@ -1499,8 +1494,7 @@ class ChefZ_NutritionManager
 
         if (!m_AuditDone)
         {
-            outLines.Insert("Naehrwertaudit: nicht gelaufen ("
-                + NotRunReason() + ").");
+            outLines.Insert("Naehrwertaudit: nicht gelaufen (" + NotRunReason() + ").");
             return;
         }
 

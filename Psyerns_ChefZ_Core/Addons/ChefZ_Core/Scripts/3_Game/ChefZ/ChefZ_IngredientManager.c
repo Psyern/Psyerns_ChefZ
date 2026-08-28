@@ -167,12 +167,7 @@ class ChefZ_IngredientManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen, "
-                + m_InheritedCount.ToString() + " davon mit geerbten Feldern, "
-                + m_RejectedCount.ToString() + " abgewiesen, "
-                + m_ByCategory.Count().ToString() + " Kategorien und "
-                + m_ByTag.Count().ToString() + " Tags rueckwaerts indiziert"
-                + " in " + TickCount(startTick).ToString() + "ms.");
+            report.AddInfo("Zutatenbindungen: " + GetKnownCount().ToString() + " Klassen, " + m_InheritedCount.ToString() + " davon mit geerbten Feldern, " + m_RejectedCount.ToString() + " abgewiesen, " + m_ByCategory.Count().ToString() + " Kategorien und " + m_ByTag.Count().ToString() + " Tags rueckwaerts indiziert" + " in " + TickCount(startTick).ToString() + "ms.");
 
         LogIfDebug();
     }

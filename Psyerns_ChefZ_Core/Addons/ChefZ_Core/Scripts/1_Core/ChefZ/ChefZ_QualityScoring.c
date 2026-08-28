@@ -214,17 +214,12 @@ class ChefZ_QualityScoring
 
     string ToDebugString()
     {
-        string s = "satz=" + defaultTierSet
-                 + " frische=" + freshnessWeight.ToString()
-                 + " zutatenqualitaet=" + ingredientQualityWeight.ToString()
-                 + " bezugsrang=" + baseRank.ToString()
-                 + " strafen=" + StatePenaltyCount().ToString();
+        string s = "satz=" + defaultTierSet + " frische=" + freshnessWeight.ToString() + " zutatenqualitaet=" + ingredientQualityWeight.ToString() + " bezugsrang=" + baseRank.ToString() + " strafen=" + StatePenaltyCount().ToString();
 
         for (int i = 0; i < m_PenaltyOrder.Count(); i++)
         {
             ChefZ_Sym sym = m_PenaltyOrder.Get(i);
-            s = s + "  " + ChefZ_SymbolTable.NameOrMark(sym)
-                  + ":" + GetStatePenalty(sym).ToString();
+            s = s + "  " + ChefZ_SymbolTable.NameOrMark(sym) + ":" + GetStatePenalty(sym).ToString();
         }
         return s;
     }

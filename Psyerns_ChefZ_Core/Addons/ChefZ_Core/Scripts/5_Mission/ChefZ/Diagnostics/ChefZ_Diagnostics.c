@@ -407,10 +407,7 @@ class ChefZ_Diagnostics
                 + "   Knoten " + result.nodesExplored.ToString());
             if (result.failReason != "")
             {
-                lines.Insert("  Bestplatzierter Fehlschlag: "
-                    + ChefZ_SymbolTable.NameOrMark(result.failedRecipe)
-                    + " -> " + result.failReason
-                    + SlotSuffix(result.failSlotId));
+                lines.Insert("  Bestplatzierter Fehlschlag: " + ChefZ_SymbolTable.NameOrMark(result.failedRecipe) + " -> " + result.failReason + SlotSuffix(result.failSlotId));
             }
             lines.Insert(VANILLA_UNTOUCHED);
         }
@@ -456,8 +453,7 @@ class ChefZ_Diagnostics
      */
     static void WhyNotMatched(ItemBase device, string recipeId, out array<string> outLines)
     {
-        array<string> lines = Begin(outLines, "Warum nicht: " + recipeId
-            + " an " + Describe(device));
+        array<string> lines = Begin(outLines, "Warum nicht: " + recipeId + " an " + Describe(device));
         if (!Guard(lines))
         {
             outLines = End(lines);
@@ -543,8 +539,7 @@ class ChefZ_Diagnostics
         }
         else
         {
-            lines.Insert("ERSTER VERLETZTER PUNKT: " + result.failReason
-                + SlotSuffix(result.failSlotId));
+            lines.Insert("ERSTER VERLETZTER PUNKT: " + result.failReason + SlotSuffix(result.failSlotId));
         }
 
         // ---- 2) die slotweise Betrachtung -----------------------------------

@@ -353,10 +353,7 @@ class ChefZ_RecipeRanker
                 if (SameSignature(sa, sb) && ChefZ_RecipeRank.SameRank(ranks.Get(a), ranks.Get(b)))
                 {
                     report.AddWarn(ra.sourceRef, ra.id,
-                        "Rezept \"" + ra.id + "\" und \"" + rb.id + "\" (" + rb.sourceRef + ") "
-                        + "haben denselben Rang UND dieselbe Slotmenge. Welches gewinnt, "
-                        + "entscheidet allein die alphabetische ID - hier also \""
-                        + FirstById(ra.id, rb.id) + "\". Das ist fast immer ein Duplikat aus "
+                        "Rezept \"" + ra.id + "\" und \"" + rb.id + "\" (" + rb.sourceRef + ") " + "haben denselben Rang UND dieselbe Slotmenge. Welches gewinnt, " + "entscheidet allein die alphabetische ID - hier also \"" + FirstById(ra.id, rb.id) + "\". Das ist fast immer ein Duplikat aus "
                         + "zwei Slices (09 §7).");
                     reported++;
                     continue;

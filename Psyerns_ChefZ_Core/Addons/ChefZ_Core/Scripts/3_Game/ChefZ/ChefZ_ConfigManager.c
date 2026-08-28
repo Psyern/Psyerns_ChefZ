@@ -1005,13 +1005,7 @@ class ChefZ_ConfigManager
     private void ReportSummary()
     {
         // Format woertlich aus 02 §8.
-        string line = "slices=" + m_SliceCount.ToString()
-                    + " files=" + m_FileCount.ToString()
-                    + " records=" + m_Sink.GetSubmittedCount().ToString()
-                    + " ok=" + m_Sink.GetAcceptedCount().ToString()
-                    + " rejected=" + m_Sink.GetRejectedCount().ToString()
-                    + " patched=" + m_Sink.GetPatchedCount().ToString()
-                    + " health=" + HealthName(m_Health)
+        string line = "slices=" + m_SliceCount.ToString() + " files=" + m_FileCount.ToString() + " records=" + m_Sink.GetSubmittedCount().ToString() + " ok=" + m_Sink.GetAcceptedCount().ToString() + " rejected=" + m_Sink.GetRejectedCount().ToString() + " patched=" + m_Sink.GetPatchedCount().ToString() + " health=" + HealthName(m_Health)
                     + " in " + m_LoadMillis.ToString() + "ms";
 
         // Geht an der Stufenpruefung vorbei: 18 §4 verlangt diese Zeile IMMER,
@@ -1210,8 +1204,7 @@ class ChefZ_ConfigManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("ChefZ Registries  health=" + HealthName(m_Health)
-            + "  records=" + TotalRecordCount().ToString()
+        outLines.Insert("ChefZ Registries  health=" + HealthName(m_Health) + "  records=" + TotalRecordCount().ToString()
             + "  fehler=" + m_Report.ErrorCount().ToString()
             + "  warnungen=" + m_Report.WarnCount().ToString());
         outLines.Insert("Einstellungen: " + m_Settings.ToDebugString());

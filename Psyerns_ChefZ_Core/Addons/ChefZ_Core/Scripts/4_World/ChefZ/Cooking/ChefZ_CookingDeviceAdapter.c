@@ -530,8 +530,7 @@ class ChefZ_CookingDeviceAdapter
         // nicht zuendet, muss den Abbrecher im Log finden koennen, ohne den
         // Debugkanal einzuschalten (17 §7).
         ChefZ_Log.Info(ChefZ_LogChannel.MATCH,
-            "Rezept " + result.recipeId + " wurde von " + who + " storniert"
-            + ReasonSuffix(reason) + " - Vanilla-Kochen laeuft unveraendert weiter.");
+            "Rezept " + result.recipeId + " wurde von " + who + " storniert" + ReasonSuffix(reason) + " - Vanilla-Kochen laeuft unveraendert weiter.");
 
         return true;
     }

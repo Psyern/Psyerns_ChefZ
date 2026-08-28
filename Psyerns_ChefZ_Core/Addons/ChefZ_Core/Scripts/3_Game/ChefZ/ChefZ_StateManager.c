@@ -174,9 +174,7 @@ class ChefZ_StateManager
         m_Ready = true;
 
         if (report)
-            report.AddInfo("Zustaende: " + GetStateCount().ToString() + " geladen, "
-                + m_SymByStage.Count().ToString() + " Vanilla-Garstufen rueckabbildbar"
-                + ", Sync-Ordinale " + GetMaxOrdinal().ToString() + ".");
+            report.AddInfo("Zustaende: " + GetStateCount().ToString() + " geladen, " + m_SymByStage.Count().ToString() + " Vanilla-Garstufen rueckabbildbar" + ", Sync-Ordinale " + GetMaxOrdinal().ToString() + ".");
 
         LogIfDebug();
     }
@@ -543,8 +541,7 @@ class ChefZ_StateManager
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert("Zustaende: " + GetStateCount().ToString()
-            + "  ordinale=" + GetMaxOrdinal().ToString()
+        outLines.Insert("Zustaende: " + GetStateCount().ToString() + "  ordinale=" + GetMaxOrdinal().ToString()
             + "  bereit=" + m_Ready.ToString());
 
         for (int i = 0; i < m_Order.Count(); i++)
@@ -554,9 +551,7 @@ class ChefZ_StateManager
             if (!def)
                 continue;
 
-            string line = "    " + def.ToLine()
-                + "  ord=" + GetSyncOrdinal(sym).ToString()
-                + "  hash=" + GetPersistHash(sym).ToString();
+            string line = "    " + def.ToLine() + "  ord=" + GetSyncOrdinal(sym).ToString() + "  hash=" + GetPersistHash(sym).ToString();
 
             array<ChefZ_Sym> tags;
             GetImpliedTags(sym, tags);

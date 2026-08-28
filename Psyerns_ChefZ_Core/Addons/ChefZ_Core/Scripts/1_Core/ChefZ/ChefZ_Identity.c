@@ -414,8 +414,7 @@ class ChefZ_IdentityMap
         if (!outLines)
             outLines = new array<string>();
 
-        outLines.Insert(SourceRef() + "  gebaut=" + m_Built.ToString()
-            + "  Ordinale=" + GetMaxOrdinal().ToString()
+        outLines.Insert(SourceRef() + "  gebaut=" + m_Built.ToString() + "  Ordinale=" + GetMaxOrdinal().ToString()
             + "  Deckel=" + m_SyncLimit.ToString());
 
         for (int i = 1; i < m_ByOrdinal.Count(); i++)

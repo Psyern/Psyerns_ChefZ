@@ -244,8 +244,7 @@ class ChefZ_ContainerRegistry
         }
 
         // 16 §7: fehlende Leerklasse -> Rueckgabe entfaellt, WARN BEIM LADEN.
-        if (def.reusable && def.consumedOnServe && def.emptyClass != ""
-            && !ClassExists(def.emptyClass))
+        if (def.reusable && def.consumedOnServe && def.emptyClass != "" && !ClassExists(def.emptyClass))
         {
             m_MissingEmptyClass++;
             Note(report, def, ChefZ_LogLevel.WARN, "container.empty." + def.emptyClass,
@@ -657,8 +656,7 @@ class ChefZ_ContainerRegistry
             if (!m_ClassesByCategory.Find(category, classes))
                 continue;
 
-            outLines.Insert("  " + ChefZ_SymbolTable.NameOrMark(category)
-                + " [" + ChefZ_ContainerScope.Name(GetSearchScope(category)) + "]: "
+            outLines.Insert("  " + ChefZ_SymbolTable.NameOrMark(category) + " [" + ChefZ_ContainerScope.Name(GetSearchScope(category)) + "]: "
                 + ChefZ_TextList.JoinSymbols(classes, ", "));
         }
 
