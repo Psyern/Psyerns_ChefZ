@@ -242,7 +242,13 @@ class ChefZ_RecipeCompiler
 
         if (def.policy)
         {
-            if (def.policy.extraItemsAllowedIf)
+            // Auf IsEmpty() geprueft, nicht nur auf null: der
+            // JsonSerializer legt auch ABWESENDE ref-Member an (siehe
+            // ChefZ_SelectorNode.HasAnyOf). Ohne diese Zeile findet der
+            // Compiler in JEDEM Rezept ein extraItemsAllowedIf vor, das kein
+            // Praedikat traegt, und weist es als "leeren Selektor" ab - am
+            // 28.08.2026 waren das 47 von 47 Rezepten in ChefZ_Cooking.
+            if (def.policy.extraItemsAllowedIf && !def.policy.extraItemsAllowedIf.IsEmpty())
             {
                 string selError;
                 policy.extraItemsAllowedIf = ChefZ_SelectorCompiler.Compile(def.policy.extraItemsAllowedIf, m_Ctx, selError);

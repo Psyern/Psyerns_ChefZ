@@ -540,6 +540,49 @@ class ChefZ_Record : Managed
         return current;
     }
 
+    //--------------------------------------------------------------------------
+    // Defaults - dieselbe Frage wie beim Patch, nur eine Ebene frueher
+    //--------------------------------------------------------------------------
+    //
+    // ResolveDefaults() hat frueher ChefZ_Undefined.IntOr(wert, vorgabe)
+    // benutzt. Seit die Sentinel die Typdefaults SIND (siehe Kopf von
+    // ChefZ_Undefined.c) waere das zweideutig: eine ausdruecklich geschriebene
+    // 0 saehe aus wie ein fehlendes Feld und bekaeme die Vorgabe. Genau das
+    // waere bei "minCount": 0 und "takeDurationSec": 0 falsch, und beides steht
+    // im vorhandenen Inhalt.
+    //
+    // Deshalb wird zuerst der Text gefragt und erst danach der Wert. Die zweite
+    // Zeile ist kein Beiwerk: Records, die von Hand gebaut werden - Selbsttest,
+    // Vorschau - haben kein explicitFields[], und dort ist der Wert die einzige
+    // Auskunft, die es gibt.
+
+    int DefaultInt(string field, int value, int fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsIntUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    float DefaultFloat(string field, float value, float fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsFloatUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    string DefaultText(string field, string value, string fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsTextUndefined(value))
+            return value;
+        return fallback;
+    }
+
     //! ref-Typen: abwesend heisst null, und null heisst "nicht gesetzt".
     //! Ganzersatz, nicht elementweise - eine Liste ist eine Aussage als Ganzes.
     static array<string> PatchStringArray(array<string> current, array<string> incoming)
@@ -596,7 +639,7 @@ class ChefZ_Record : Managed
      */
     void ResolveDefaults()
     {
-        loadOrder = ChefZ_Undefined.IntOr(loadOrder, 0);
+        loadOrder = DefaultInt("loadOrder", loadOrder, 0);
     }
 
     //--------------------------------------------------------------------------

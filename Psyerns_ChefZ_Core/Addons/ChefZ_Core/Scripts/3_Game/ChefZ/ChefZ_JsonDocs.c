@@ -298,6 +298,149 @@ class ChefZ_JsonText
  * fehlen lediglich die automatisch erkannten bool-Felder, und ein
  * handgeschriebenes explicitFields[] wirkt weiterhin.
  */
+/**
+ * Traegt in jeden Record ein, welche Schluessel im JSON WIRKLICH geschrieben
+ * stehen.
+ *
+ * ---------------------------------------------------------------------------
+ * Warum das noetig ist
+ * ---------------------------------------------------------------------------
+ * Der JsonSerializer ruft den Skriptkonstruktor nicht auf. Nachgewiesen am
+ * 28.08.2026: eine TRACE-Zeile in ChefZ_CoreSettingsDef() erschien kein
+ * einziges Mal, in einem Lauf mit 162 anderen TRACE-Zeilen. Die
+ * Sentinel-Vorbelegung aus 02 E3, Mittel 2, kommt also nie zustande - jedes
+ * fehlende Feld erreicht uns als 0, "" oder false.
+ *
+ * Damit war die Rangordnung auf den Kopf gestellt: das Rang-3-Overlay
+ * ueberschrieb jede Einstellung, die der Betreiber NICHT geschrieben hatte. Die
+ * mitgelieferte Overlay-Vorlage enthaelt nur { "id": "CORE" } - und genau sie
+ * klemmte safeModeErrorThreshold auf 1 und legte den Core lahm.
+ *
+ * Die Antwort steht in 02 E3 selbst, bei Mittel 3: explicitFields[]. Bisher
+ * musste ein Autor das von Hand schreiben. Hier wird es aus dem Text
+ * abgeleitet, und damit gilt Mittel 3 fuer JEDES Feld, ohne Zutun.
+ *
+ * ---------------------------------------------------------------------------
+ * Warum ueber den Rohtext und nicht ueber die Bool-Sonde
+ * ---------------------------------------------------------------------------
+ * Die Sonde (ChefZ_RecordProbe) liest ihren Ausgangswert ebenfalls im
+ * Konstruktor. Sie kann aus demselben Grund nicht funktionieren. Der Text ist
+ * die einzige Quelle, die uebrig bleibt - und die einzige, die die Frage
+ * "steht das Feld da?" ueberhaupt beantwortet, statt sie aus einem Wert zu
+ * erraten.
+ */
+class ChefZ_JsonExplicit
+{
+    /**
+     * Zuordnung ueber die REIHENFOLGE, nicht ueber die ID.
+     *
+     * Die Leser haengen ihre Records in Dokumentreihenfolge an, und die Zahl
+     * muss uebereinstimmen; tut sie es nicht, wird gar nichts eingetragen. Das
+     * ist die vorsichtige Wahl: ein falsch zugeordnetes explicitFields[] waere
+     * schlimmer als keines, weil es einen fremden Wert durch die Rangordnung
+     * traegt.
+     */
+    static void Apply(string text, notnull array<ref ChefZ_Record> records)
+    {
+        if (records.Count() == 0)
+            return;
+
+        int start = text.IndexOf("\"records\"");
+        if (start < 0)
+            return;
+
+        int len = text.Length();
+        int i = start;
+        while (i < len && text.Get(i) != "[")
+            i++;
+        if (i >= len)
+            return;
+
+        i++;                        // hinter die oeffnende Klammer
+
+        int square    = 1;          // Tiefe eckiger Klammern ab records[
+        int curly     = 0;          // Tiefe geschweifter Klammern im Record
+        int recIndex  = 0;
+        bool inStr    = false;
+        bool esc      = false;
+        string token  = "";
+
+        while (i < len)
+        {
+            string c = text.Get(i);
+
+            if (inStr)
+            {
+                if (esc)
+                {
+                    esc = false;
+                    token = token + c;
+                    i++;
+                    continue;
+                }
+                if (c == "\\")
+                {
+                    esc = true;
+                    i++;
+                    continue;
+                }
+                if (c == "\"")
+                {
+                    inStr = false;
+                    // Ein String auf Objektebene 1, dem ein ":" folgt, ist ein
+                    // Feldname dieses Records. Alles andere ist ein Wert.
+                    if (curly == 1 && recIndex < records.Count())
+                    {
+                        int j = i + 1;
+                        while (j < len && IsSpace(text.Get(j)))
+                            j++;
+                        if (j < len && text.Get(j) == ":")
+                        {
+                            ChefZ_Record rec = records.Get(recIndex);
+                            if (rec)
+                                rec.MarkExplicit(token);
+                        }
+                    }
+                    token = "";
+                    i++;
+                    continue;
+                }
+                token = token + c;
+                i++;
+                continue;
+            }
+
+            if (c == "\"")      { inStr = true; token = ""; i++; continue; }
+            if (c == "{")       { curly++; i++; continue; }
+            if (c == "}")
+            {
+                curly--;
+                if (curly == 0)
+                    recIndex++;
+                i++;
+                continue;
+            }
+            if (c == "[")       { square++; i++; continue; }
+            if (c == "]")
+            {
+                square--;
+                if (square == 0)
+                    return;         // records[] ist zu Ende
+                i++;
+                continue;
+            }
+            i++;
+        }
+    }
+
+    private static bool IsSpace(string c)
+    {
+        return c == " " || c == "\t" || c == "\n" || c == "\r";
+    }
+}
+
+//==============================================================================
+
 class ChefZ_JsonRecordReader
 {
     /**
@@ -343,6 +486,12 @@ class ChefZ_JsonRecordReader
             outRecords.Clear();
             return false;
         }
+
+        // Erst die geschriebenen Schluessel eintragen, dann die Herkunft. Ohne
+        // diesen Schritt bleibt explicitFields[] leer, und die Rangordnung
+        // koennte "nicht geschrieben" nicht von "auf 0 geschrieben"
+        // unterscheiden - siehe den Kopf von ChefZ_JsonExplicit.
+        ChefZ_JsonExplicit.Apply(text, outRecords);
 
         for (int i = 0; i < outRecords.Count(); i++)
             outRecords.Get(i).SetOrigin(sourceRef, rank);

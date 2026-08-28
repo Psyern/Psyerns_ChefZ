@@ -275,11 +275,11 @@ class ChefZ_TransformDef extends ChefZ_Record
     {
         super.ResolveDefaults();
 
-        process        = ChefZ_Undefined.TextOr(process, "");
-        qualityRule    = ChefZ_Undefined.TextOr(qualityRule, "");
-        freshnessCarry = ChefZ_Undefined.FloatOr(freshnessCarry, 1.0);
-        qualityDelta   = ChefZ_Undefined.FloatOr(qualityDelta, 0.0);
-        priority       = ChefZ_Undefined.IntOr(priority, 0);
+        process        = DefaultText("process", process, "");
+        qualityRule    = DefaultText("qualityRule", qualityRule, "");
+        freshnessCarry = DefaultFloat("freshnessCarry", freshnessCarry, 1.0);
+        qualityDelta   = DefaultFloat("qualityDelta", qualityDelta, 0.0);
+        priority       = DefaultInt("priority", priority, 0);
 
         int i;
         if (inputs)

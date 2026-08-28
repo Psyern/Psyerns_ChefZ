@@ -9,6 +9,11 @@
 // NAECHSTE Ebene. ChefZ_SelectorL8 hat keine Kinder mehr und beendet die
 // Typkette.
 //
+// Warum HasAnyOf() auf Count() prueft und GetNot() auf IsEmpty(): der
+// Deserialisierer legt auch ABWESENDE ref-Member an. Ein blosser Nulltest
+// meldete deshalb jeden Selektor als "anyOf, allOf und not gleichzeitig
+// gesetzt" - siehe ChefZ_SelectorNode.HasAnyOf().
+//
 // Wer eine Ebene ergaenzt: hier einfuegen, LAST hochsetzen, und
 // ChefZ_Selector.c bleibt unberuehrt - es zeigt auf L1.
 //
@@ -37,10 +42,18 @@ class ChefZ_SelectorL1 : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 class ChefZ_SelectorL2 : ChefZ_SelectorNode
@@ -65,10 +78,18 @@ class ChefZ_SelectorL2 : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 class ChefZ_SelectorL3 : ChefZ_SelectorNode
@@ -93,10 +114,18 @@ class ChefZ_SelectorL3 : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 class ChefZ_SelectorL4 : ChefZ_SelectorNode
@@ -121,10 +150,18 @@ class ChefZ_SelectorL4 : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 class ChefZ_SelectorL5 : ChefZ_SelectorNode
@@ -149,10 +186,18 @@ class ChefZ_SelectorL5 : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 class ChefZ_SelectorL6 : ChefZ_SelectorNode
@@ -177,10 +222,18 @@ class ChefZ_SelectorL6 : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 class ChefZ_SelectorL7 : ChefZ_SelectorNode
@@ -205,10 +258,18 @@ class ChefZ_SelectorL7 : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 //! Letzte Ebene: keine Kinder mehr. Hier endet die Typkette, und damit

@@ -125,8 +125,8 @@ class ChefZ_StationDef extends ChefZ_Record
     {
         super.ResolveDefaults();
 
-        parallelSlots   = ChefZ_Undefined.IntOr(parallelSlots, 1);
-        speedMultiplier = ChefZ_Undefined.FloatOr(speedMultiplier, 1.0);
+        parallelSlots   = DefaultInt("parallelSlots", parallelSlots, 1);
+        speedMultiplier = DefaultFloat("speedMultiplier", speedMultiplier, 1.0);
 
         if (parallelSlots < 1)
             parallelSlots = 1;

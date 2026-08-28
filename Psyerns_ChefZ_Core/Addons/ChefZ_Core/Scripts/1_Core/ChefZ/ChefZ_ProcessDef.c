@@ -244,12 +244,12 @@ class ChefZ_ProcessDef extends ChefZ_Record
     {
         super.ResolveDefaults();
 
-        exec            = ChefZ_Undefined.TextOr(exec, "");
-        displayName     = ChefZ_Undefined.TextOr(displayName, "");
-        baseDurationSec = ChefZ_Undefined.FloatOr(baseDurationSec, 0.0);
-        animationLength = ChefZ_Undefined.FloatOr(animationLength, 0.0);
-        specialty       = ChefZ_Undefined.FloatOr(specialty, 0.0);
-        toolDamage      = ChefZ_Undefined.IntOr(toolDamage, 0);
+        exec            = DefaultText("exec", exec, "");
+        displayName     = DefaultText("displayName", displayName, "");
+        baseDurationSec = DefaultFloat("baseDurationSec", baseDurationSec, 0.0);
+        animationLength = DefaultFloat("animationLength", animationLength, 0.0);
+        specialty       = DefaultFloat("specialty", specialty, 0.0);
+        toolDamage      = DefaultInt("toolDamage", toolDamage, 0);
 
         if (!HasExplicit("requiresHeat"))
             requiresHeat = false;

@@ -255,7 +255,7 @@ class ChefZ_StateDef extends ChefZ_Record
         super.ResolveDefaults();
 
         // 1.0 = neutral. 0.0 waere ein stiller Totalausfall des Verderbs.
-        spoilageMultiplier = ChefZ_Undefined.FloatOr(spoilageMultiplier, 1.0);
+        spoilageMultiplier = DefaultFloat("spoilageMultiplier", spoilageMultiplier, 1.0);
 
         // freshnessLifetimeSec bleibt bewusst auf dem Sentinel - siehe Feld.
 

@@ -77,10 +77,23 @@ class ChefZ_Selector : ChefZ_SelectorNode
             outList.Insert(allOf.Get(i));
     }
 
-    override ChefZ_SelectorNode GetNot()   { return not; }
-    override bool HasAnyOf()               { return anyOf != null; }
-    override bool HasAllOf()               { return allOf != null; }
-    override bool IsLastLevel()            { return false; }
+    // Auf Count() bzw. IsEmpty() geprueft, nicht auf null: der
+    // JsonSerializer legt auch ABWESENDE ref-Member an. Siehe
+    // ChefZ_SelectorNode.HasAnyOf() - ohne diese Pruefung meldete der Compiler
+    // jeden Selektor als "anyOf, allOf und not gleichzeitig gesetzt", und
+    // saemtliche Rezepte von ChefZ_Cooking wurden abgewiesen.
+    override ChefZ_SelectorNode GetNot()
+    {
+        if (!not)
+            return null;
+        if (not.IsEmpty())
+            return null;
+        return not;
+    }
+
+    override bool HasAnyOf()    { return anyOf != null && anyOf.Count() > 0; }
+    override bool HasAllOf()    { return allOf != null && allOf.Count() > 0; }
+    override bool IsLastLevel() { return false; }
 }
 
 //==============================================================================
@@ -189,6 +202,37 @@ class ChefZ_SlotDef : Managed
         return explicitFields.Find(field) >= 0;
     }
 
+    //! Wie ChefZ_Record.DefaultInt: erst den Text fragen, dann den Wert. Seit
+    //! die Sentinel die Typdefaults sind, ist eine geschriebene 0 sonst nicht
+    //! von einem fehlenden Feld zu unterscheiden - und "minCount": 0 steht im
+    //! vorhandenen Inhalt neun Mal.
+    int DefaultInt(string field, int value, int fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsIntUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    float DefaultFloat(string field, float value, float fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsFloatUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    string DefaultText(string field, string value, string fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsTextUndefined(value))
+            return value;
+        return fallback;
+    }
+
     /**
      * Vergleich mit demselben Slot aus dem Sondendurchgang: was in BEIDEN
      * Durchgaengen gleich ist, stand ausdruecklich in der Datei.
@@ -209,10 +253,10 @@ class ChefZ_SlotDef : Managed
     //! macht der Compiler, nicht dieser Datensatz - er hat keinen Bericht.
     void ResolveDefaults()
     {
-        minCount    = ChefZ_Undefined.IntOr(minCount, 1);
-        maxCount    = ChefZ_Undefined.IntOr(maxCount, minCount);
-        gradePoints = ChefZ_Undefined.IntOr(gradePoints, 0);
-        consume     = ChefZ_Undefined.TextOr(consume, ChefZ_ConsumeMode.WHOLE_NAME);
+        minCount    = DefaultInt("minCount", minCount, 1);
+        maxCount    = DefaultInt("maxCount", maxCount, minCount);
+        gradePoints = DefaultInt("gradePoints", gradePoints, 0);
+        consume     = DefaultText("consume", consume, ChefZ_ConsumeMode.WHOLE_NAME);
 
         if (!HasExplicit("optional"))
             optional = false;

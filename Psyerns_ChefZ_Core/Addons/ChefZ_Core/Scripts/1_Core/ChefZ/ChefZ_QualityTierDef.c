@@ -245,18 +245,18 @@ class ChefZ_QualityTierDef extends ChefZ_Record
     {
         super.ResolveDefaults();
 
-        rank               = ChefZ_Undefined.IntOr(rank, 0);
-        portionBonus       = ChefZ_Undefined.IntOr(portionBonus, 0);
+        rank               = DefaultInt("rank", rank, 0);
+        portionBonus       = DefaultInt("portionBonus", portionBonus, 0);
 
         // 0.0 und nicht "sehr klein": eine Stufe ohne minScore ist die Stufe,
         // ab der es normal wird. Die Leiter beginnt bei null Punkten.
-        minScore           = ChefZ_Undefined.FloatOr(minScore, 0.0);
+        minScore           = DefaultFloat("minScore", minScore, 0.0);
 
         // 1.0 = neutral. Eine Stufe ohne Angabe soll weder Ausbeute noch
         // Haltbarkeit veraendern - sie ist dann reine Beschriftung, und das
         // ist ein zulaessiger Entwurf.
-        yieldMultiplier    = ChefZ_Undefined.FloatOr(yieldMultiplier, 1.0);
-        spoilageMultiplier = ChefZ_Undefined.FloatOr(spoilageMultiplier, 1.0);
+        yieldMultiplier    = DefaultFloat("yieldMultiplier", yieldMultiplier, 1.0);
+        spoilageMultiplier = DefaultFloat("spoilageMultiplier", spoilageMultiplier, 1.0);
     }
 
     //--------------------------------------------------------------------------

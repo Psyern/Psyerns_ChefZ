@@ -198,8 +198,8 @@ class ChefZ_DeviceDef extends ChefZ_Record
         super.ResolveDefaults();
         // 1.0 = neutral. Ein Geraet ohne Angabe soll die Qualitaet weder heben
         // noch senken; 0.0 waere ein stiller Totalausfall.
-        qualityModifier = ChefZ_Undefined.FloatOr(qualityModifier, 1.0);
-        portionCapacity = ChefZ_Undefined.IntOr(portionCapacity, 0);
+        qualityModifier = DefaultFloat("qualityModifier", qualityModifier, 1.0);
+        portionCapacity = DefaultInt("portionCapacity", portionCapacity, 0);
     }
 }
 

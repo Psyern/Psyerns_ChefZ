@@ -305,9 +305,9 @@ class ChefZ_ContainerDef extends ChefZ_Record
         super.ResolveDefaults();
 
         // "Eine Schuessel gibt eine Schuessel zurueck" - siehe Feldkommentar.
-        emptyClass       = ChefZ_Undefined.TextOr(emptyClass, id);
-        spoilageModifier = ChefZ_Undefined.FloatOr(spoilageModifier, DEFAULT_SPOILAGE);
-        searchScope      = ChefZ_Undefined.IntOr(searchScope, ChefZ_ContainerScope.DEFAULT);
+        emptyClass       = DefaultText("emptyClass", emptyClass, id);
+        spoilageModifier = DefaultFloat("spoilageModifier", spoilageModifier, DEFAULT_SPOILAGE);
+        searchScope      = DefaultInt("searchScope", searchScope, ChefZ_ContainerScope.DEFAULT);
 
         if (!HasExplicit("reusable"))
             reusable = true;

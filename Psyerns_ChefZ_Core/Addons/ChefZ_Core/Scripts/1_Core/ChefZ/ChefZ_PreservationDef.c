@@ -384,10 +384,10 @@ class ChefZ_PreservationDef extends ChefZ_Record
         // 14 E3: der Zustand ist die primaere Dimension. Ein Record ohne
         // scope meint fast immer einen Zustand - und wenn nicht, faellt es
         // beim Zielabgleich im Manager sofort auf ("unbekannter Zustand").
-        scope = ChefZ_Undefined.TextOr(scope, ChefZ_PreservationScope.NAME_STATE);
+        scope = DefaultText("scope", scope, ChefZ_PreservationScope.NAME_STATE);
 
         // 1.0 = neutral. 0.0 waere ein stiller Totalausfall des Verderbs.
-        spoilageMultiplier = ChefZ_Undefined.FloatOr(spoilageMultiplier, 1.0);
+        spoilageMultiplier = DefaultFloat("spoilageMultiplier", spoilageMultiplier, 1.0);
 
         // onPlayerMultiplier bleibt bewusst auf dem Sentinel - siehe Feld.
 

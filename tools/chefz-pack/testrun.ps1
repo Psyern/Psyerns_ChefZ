@@ -91,7 +91,10 @@ for ($i = 0; $i -lt $TimeoutSec; $i++) {
   # Der gebundene Port ist das erste verlaessliche Zeichen, dass der Start
   # wirklich durch ist - unabhaengig davon, welche Zeile die Engine gerade
   # schreibt.
-  $bound = netstat -ano -p UDP | Select-String ":2602\s" | Select-Object -First 1
+  # Der Port zaehlt nur, wenn UNSER Prozess ihn haelt. Ein gerade beendeter
+  # Vorgaenger laesst den Socket kurz stehen; ohne die PID-Pruefung meldet der
+  # Testlauf "gebunden" in Sekunde 0 und misst danach das Falsche.
+  $bound = netstat -ano -p UDP | Select-String (":2602\s+.*\s" + $srv.Id + "$") | Select-Object -First 1
   if ($bound -and $boundAt -lt 0) { $boundAt = $i; Write-Host ("  {0,3}s  Port 2602 gebunden - Mission faehrt hoch" -f $i) }
 
   # NACH dem Portbinden noch zusehen. Der Start ist damit nicht vorbei: die

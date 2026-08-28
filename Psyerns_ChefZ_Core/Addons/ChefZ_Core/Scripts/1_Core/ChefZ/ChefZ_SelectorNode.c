@@ -127,9 +127,18 @@ class ChefZ_SelectorNode : Managed
     //! Der Negationsknoten, oder null.
     ChefZ_SelectorNode GetNot() { return null; }
 
-    //! Ob der Kombinator ueberhaupt geschrieben wurde. Wichtig: ein LEERES
-    //! anyOf ist gesetzt und damit ein Praedikat - 07 §7 verlangt dafuer einen
-    //! Kompilierfehler und keine stille Annahme.
+    //! Ob der Kombinator etwas enthaelt.
+    //!
+    //! "Nicht leer" und nicht "nicht null": der JsonSerializer legt ABWESENDE
+    //! ref-Member trotzdem an. 02 E3, Mittel 1 ("abwesend bleibt null") trifft
+    //! also nicht zu - nachgewiesen am 28.08.2026, als ein Selektor mit nur
+    //! einem "category" im JSON als "(category, anyOf, allOf, not)" gemeldet
+    //! wurde und JEDES Rezept von ChefZ_Cooking daran scheiterte.
+    //!
+    //! Ein ausdruecklich leeres anyOf faellt damit nicht mehr unter "mehrere
+    //! Praedikate", sondern unter "Selektor ohne auswertbares Praedikat". Beides
+    //! ist ein Kompilierfehler, wie 07 §7 es verlangt - nur die Meldung ist eine
+    //! andere.
     bool HasAnyOf() { return false; }
     bool HasAllOf() { return false; }
 
@@ -225,17 +234,33 @@ class ChefZ_SelectorNode : Managed
         return CountRanges() > 0;
     }
 
+    //! Gezaehlt wird ein Wertebereich nur, wenn er auch eine Grenze nennt.
+    //!
+    //! Derselbe Grund wie bei HasAnyOf(): der JsonSerializer legt alle sieben
+    //! ChefZ_Range-Member an, auch die abwesenden. Ohne diese Pruefung haette
+    //! JEDER Selektor sieben Wertebereiche, jeder davon [0..0], und damit
+    //! passte nichts mehr auf irgendetwas.
     int CountRanges()
     {
         int n = 0;
-        if (health)         n++;
-        if (freshness)      n++;
-        if (temperature)    n++;
-        if (wetness)        n++;
-        if (cleanness)      n++;
-        if (quantity)       n++;
-        if (quantityPct)    n++;
+        if (HasRange(health))       n++;
+        if (HasRange(freshness))    n++;
+        if (HasRange(temperature))  n++;
+        if (HasRange(wetness))      n++;
+        if (HasRange(cleanness))    n++;
+        if (HasRange(quantity))     n++;
+        if (HasRange(quantityPct))  n++;
         return n;
+    }
+
+    //! Ein Wertebereich zaehlt, wenn er existiert UND mindestens eine Grenze
+    //! nennt. Die Unterscheidung gehoert hierher und nicht an die sieben
+    //! Aufrufstellen.
+    static bool HasRange(ChefZ_Range r)
+    {
+        if (!r)
+            return false;
+        return !r.IsUnbounded();
     }
 
     //! Vollstaendig leer - weder Praedikat noch Kind noch Einschraenkung.

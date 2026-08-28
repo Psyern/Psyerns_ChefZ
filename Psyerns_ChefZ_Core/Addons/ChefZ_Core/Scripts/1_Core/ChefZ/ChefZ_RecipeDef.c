@@ -387,6 +387,34 @@ class ChefZ_OutputDef : Managed
         return explicitFields.Find(field) >= 0;
     }
 
+    //! Erst den Text fragen, dann den Wert - siehe ChefZ_Record.DefaultInt.
+    int DefaultInt(string field, int value, int fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsIntUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    float DefaultFloat(string field, float value, float fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsFloatUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    string DefaultText(string field, string value, string fallback)
+    {
+        if (HasExplicit(field))
+            return value;
+        if (!ChefZ_Undefined.IsTextUndefined(value))
+            return value;
+        return fallback;
+    }
+
     //! Vergleich mit demselben Output aus dem Sondendurchgang: was in BEIDEN
     //! Durchgaengen gleich ist, stand ausdruecklich in der Datei.
     void CaptureExplicitBools(ChefZ_OutputDef other)
@@ -404,11 +432,11 @@ class ChefZ_OutputDef : Managed
     //! Code-Defaults aus 08 §2.
     void ResolveDefaults()
     {
-        quantityMode   = ChefZ_Undefined.TextOr(quantityMode, "fixed");
-        portions       = ChefZ_Undefined.IntOr(portions, 0);
-        freshnessCarry = ChefZ_Undefined.FloatOr(freshnessCarry, 1.0);
-        chance         = ChefZ_Undefined.FloatOr(chance, 1.0);
-        ratio          = ChefZ_Undefined.FloatOr(ratio, 1.0);
+        quantityMode   = DefaultText("quantityMode", quantityMode, "fixed");
+        portions       = DefaultInt("portions", portions, 0);
+        freshnessCarry = DefaultFloat("freshnessCarry", freshnessCarry, 1.0);
+        chance         = DefaultFloat("chance", chance, 1.0);
+        ratio          = DefaultFloat("ratio", ratio, 1.0);
 
         if (!HasExplicit("inheritFreshness"))
             inheritFreshness = true;
@@ -556,6 +584,31 @@ class ChefZ_GradeRule : Managed
  */
 class ChefZ_CapabilityReq : Managed
 {
+    //! Diese Klasse fuehrt kein explicitFields[] - eine Faehigkeitsforderung
+    //! wird nie feldweise gepatcht, sie steht als Ganzes oder gar nicht. Die
+    //! Helfer entscheiden deshalb allein am Wert; das ist genau das Verhalten
+    //! von vor dem Sentinel-Umbau.
+    int DefaultInt(string field, int value, int fallback)
+    {
+        if (!ChefZ_Undefined.IsIntUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    float DefaultFloat(string field, float value, float fallback)
+    {
+        if (!ChefZ_Undefined.IsFloatUndefined(value))
+            return value;
+        return fallback;
+    }
+
+    string DefaultText(string field, string value, string fallback)
+    {
+        if (!ChefZ_Undefined.IsTextUndefined(value))
+            return value;
+        return fallback;
+    }
+
     string capability;
     float  min;
     string onFail;          // "block" | "degrade" | "reduceYield"
@@ -580,10 +633,10 @@ class ChefZ_CapabilityReq : Managed
     //! Code-Defaults aus 17 §3.3.
     void ResolveDefaults()
     {
-        onFail       = ChefZ_Undefined.TextOr(onFail, "degrade");
-        min          = ChefZ_Undefined.FloatOr(min, 0.0);
-        degradeSteps = ChefZ_Undefined.IntOr(degradeSteps, 1);
-        yieldFactor  = ChefZ_Undefined.FloatOr(yieldFactor, 0.75);
+        onFail       = DefaultText("onFail", onFail, "degrade");
+        min          = DefaultFloat("min", min, 0.0);
+        degradeSteps = DefaultInt("degradeSteps", degradeSteps, 1);
+        yieldFactor  = DefaultFloat("yieldFactor", yieldFactor, 0.75);
     }
 }
 
@@ -884,11 +937,11 @@ class ChefZ_RecipeDef extends ChefZ_Record
     {
         super.ResolveDefaults();
 
-        priority          = ChefZ_Undefined.IntOr(priority, 0);
-        qualityBias       = ChefZ_Undefined.FloatOr(qualityBias, 0.0);
-        nutritionModifier = ChefZ_Undefined.FloatOr(nutritionModifier, 1.0);
-        cookSeconds       = ChefZ_Undefined.FloatOr(cookSeconds, 0.0);
-        minTemperature    = ChefZ_Undefined.FloatOr(minTemperature, 0.0);
+        priority          = DefaultInt("priority", priority, 0);
+        qualityBias       = DefaultFloat("qualityBias", qualityBias, 0.0);
+        nutritionModifier = DefaultFloat("nutritionModifier", nutritionModifier, 1.0);
+        cookSeconds       = DefaultFloat("cookSeconds", cookSeconds, 0.0);
+        minTemperature    = DefaultFloat("minTemperature", minTemperature, 0.0);
 
         int i;
         if (slots)

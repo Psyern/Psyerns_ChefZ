@@ -305,14 +305,14 @@ class ChefZ_NutritionDef extends ChefZ_Record
     {
         super.ResolveDefaults();
 
-        scope            = ChefZ_Undefined.TextOr(scope, ChefZ_NutritionScope.NAME_CLASS);
+        scope            = DefaultText("scope", scope, ChefZ_NutritionScope.NAME_CLASS);
 
-        fullness         = ChefZ_Undefined.FloatOr(fullness,         0.0);
-        energy           = ChefZ_Undefined.FloatOr(energy,           0.0);
-        water            = ChefZ_Undefined.FloatOr(water,            0.0);
-        nutritionalIndex = ChefZ_Undefined.FloatOr(nutritionalIndex, 0.0);
-        toxicity         = ChefZ_Undefined.FloatOr(toxicity,         0.0);
-        digestibility    = ChefZ_Undefined.FloatOr(digestibility,    0.0);
+        fullness         = DefaultFloat("fullness", fullness,         0.0);
+        energy           = DefaultFloat("energy", energy,           0.0);
+        water            = DefaultFloat("water", water,            0.0);
+        nutritionalIndex = DefaultFloat("nutritionalIndex", nutritionalIndex, 0.0);
+        toxicity         = DefaultFloat("toxicity", toxicity,         0.0);
+        digestibility    = DefaultFloat("digestibility", digestibility,    0.0);
 
         if (!HasExplicit("perUnit"))
             perUnit = false;

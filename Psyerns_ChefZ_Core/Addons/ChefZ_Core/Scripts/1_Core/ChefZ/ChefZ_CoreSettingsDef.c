@@ -519,29 +519,29 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         if (id == "")
             id = PRIMARY_ID;
 
-        safeModeErrorThreshold  = ChefZ_Undefined.IntOr(safeModeErrorThreshold, 25);
-        logLevel                = ChefZ_Undefined.IntOr(logLevel, 2);
-        logBufferLines          = ChefZ_Undefined.IntOr(logBufferLines, 64);
-        maxOnceKeys             = ChefZ_Undefined.IntOr(maxOnceKeys, 512);
-        maxLogSizeMB            = ChefZ_Undefined.IntOr(maxLogSizeMB, 8);
-        matcherNodeBudget       = ChefZ_Undefined.IntOr(matcherNodeBudget, 4096);
-        matchThrottleTicks      = ChefZ_Undefined.IntOr(matchThrottleTicks, 2);
-        maxSelectorDepth        = ChefZ_Undefined.IntOr(maxSelectorDepth, 8);
-        maxCategories           = ChefZ_Undefined.IntOr(maxCategories, 256);
+        safeModeErrorThreshold  = DefaultInt("safeModeErrorThreshold", safeModeErrorThreshold, 25);
+        logLevel                = DefaultInt("logLevel", logLevel, 2);
+        logBufferLines          = DefaultInt("logBufferLines", logBufferLines, 64);
+        maxOnceKeys             = DefaultInt("maxOnceKeys", maxOnceKeys, 512);
+        maxLogSizeMB            = DefaultInt("maxLogSizeMB", maxLogSizeMB, 8);
+        matcherNodeBudget       = DefaultInt("matcherNodeBudget", matcherNodeBudget, 4096);
+        matchThrottleTicks      = DefaultInt("matchThrottleTicks", matchThrottleTicks, 2);
+        maxSelectorDepth        = DefaultInt("maxSelectorDepth", maxSelectorDepth, 8);
+        maxCategories           = DefaultInt("maxCategories", maxCategories, 256);
 
         // 300 Sekunden: lang genug, dass ein Spieler zwischen zwei Handgriffen
         // am Topf keine Sitzung verliert, kurz genug, dass eine abgebrannte
         // Feuerstelle nicht bis zum Serverneustart Speicher belegt.
-        sessionTtlSec           = ChefZ_Undefined.FloatOr(sessionTtlSec, 300.0);
+        sessionTtlSec           = DefaultFloat("sessionTtlSec", sessionTtlSec, 300.0);
 
         // 6 Meter: siehe Feldkommentar. Eine Zahl, die ein Betreiber ohne
         // Codekenntnis verstehen und aendern koennen soll.
-        cookActorRadius         = ChefZ_Undefined.FloatOr(cookActorRadius, 6.0);
+        cookActorRadius         = DefaultFloat("cookActorRadius", cookActorRadius, 6.0);
 
-        matcherCooldownSec      = ChefZ_Undefined.FloatOr(matcherCooldownSec, 1.0);
-        globalSpoilageScale     = ChefZ_Undefined.FloatOr(globalSpoilageScale, 1.0);
-        minDecayScale           = ChefZ_Undefined.FloatOr(minDecayScale, 0.01);
-        maxDecayScale           = ChefZ_Undefined.FloatOr(maxDecayScale, 10.0);
+        matcherCooldownSec      = DefaultFloat("matcherCooldownSec", matcherCooldownSec, 1.0);
+        globalSpoilageScale     = DefaultFloat("globalSpoilageScale", globalSpoilageScale, 1.0);
+        minDecayScale           = DefaultFloat("minDecayScale", minDecayScale, 0.01);
+        maxDecayScale           = DefaultFloat("maxDecayScale", maxDecayScale, 10.0);
 
         // 21600 Sekunden = 6 Stunden. Die Zahl ist nicht geraten, sondern
         // GameConstants.DECAY_FOOD_RAW_MEAT (3_Game/DayZ/constants.c:1037) -
@@ -554,32 +554,32 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         // GameConstants gelesen: GameConstants lebt in 3_Game, dieser Record in
         // 1_Core (00 §4). Der Wert ist eine Vorgabe, kein Vanilla-Vertrag -
         // aendert DayZ ihn, bleibt diese Vorgabe trotzdem sinnvoll.
-        defaultFreshnessLifetimeSec = ChefZ_Undefined.FloatOr(defaultFreshnessLifetimeSec, 21600.0);
+        defaultFreshnessLifetimeSec = DefaultFloat("defaultFreshnessLifetimeSec", defaultFreshnessLifetimeSec, 21600.0);
 
-        priorityScale           = ChefZ_Undefined.FloatOr(priorityScale, 0.01);
-        maxExternalQualityBonus = ChefZ_Undefined.FloatOr(maxExternalQualityBonus, 2.0);
+        priorityScale           = DefaultFloat("priorityScale", priorityScale, 0.01);
+        maxExternalQualityBonus = DefaultFloat("maxExternalQualityBonus", maxExternalQualityBonus, 2.0);
 
         // 13 §8 und 13 §5. Die Begruendung jeder einzelnen Zahl steht am Feld.
-        nutritionAuditMaxFindings = ChefZ_Undefined.IntOr(nutritionAuditMaxFindings, 64);
-        nutritionTolerancePct     = ChefZ_Undefined.FloatOr(nutritionTolerancePct, 25.0);
-        nutritionExpectedCap      = ChefZ_Undefined.FloatOr(nutritionExpectedCap, 100000.0);
+        nutritionAuditMaxFindings = DefaultInt("nutritionAuditMaxFindings", nutritionAuditMaxFindings, 64);
+        nutritionTolerancePct     = DefaultFloat("nutritionTolerancePct", nutritionTolerancePct, 25.0);
+        nutritionExpectedCap      = DefaultFloat("nutritionExpectedCap", nutritionExpectedCap, 100000.0);
 
         // 15 §3. Die Begruendung der Zahl steht am Feld.
-        defaultTakePortionSec   = ChefZ_Undefined.FloatOr(defaultTakePortionSec, ChefZ_PortionLimits.DEFAULT_TAKE_SEC);
+        defaultTakePortionSec   = DefaultFloat("defaultTakePortionSec", defaultTakePortionSec, ChefZ_PortionLimits.DEFAULT_TAKE_SEC);
 
         // 16 E5. Die Begruendung beider Zahlen steht am Feld.
-        containerSearchRadius   = ChefZ_Undefined.FloatOr(containerSearchRadius, 3.0);
-        maxContainerCandidates  = ChefZ_Undefined.IntOr(maxContainerCandidates, 32);
+        containerSearchRadius   = DefaultFloat("containerSearchRadius", containerSearchRadius, 3.0);
+        maxContainerCandidates  = DefaultInt("maxContainerCandidates", maxContainerCandidates, 32);
 
         // 17 §3.3 und 17 §9. Die Begruendung jeder einzelnen Zahl steht am Feld.
-        defaultCapabilityValue  = ChefZ_Undefined.FloatOr(defaultCapabilityValue, 0.0);
-        capabilityMin           = ChefZ_Undefined.FloatOr(capabilityMin, 0.0);
-        capabilityMax           = ChefZ_Undefined.FloatOr(capabilityMax, 10.0);
-        eventMaxDepth           = ChefZ_Undefined.IntOr(eventMaxDepth, 3);
-        eventSlowSubscriberMs   = ChefZ_Undefined.IntOr(eventSlowSubscriberMs, 5);
+        defaultCapabilityValue  = DefaultFloat("defaultCapabilityValue", defaultCapabilityValue, 0.0);
+        capabilityMin           = DefaultFloat("capabilityMin", capabilityMin, 0.0);
+        capabilityMax           = DefaultFloat("capabilityMax", capabilityMax, 10.0);
+        eventMaxDepth           = DefaultInt("eventMaxDepth", eventMaxDepth, 3);
+        eventSlowSubscriberMs   = DefaultInt("eventSlowSubscriberMs", eventSlowSubscriberMs, 5);
 
-        capabilityMode          = ChefZ_Undefined.TextOr(capabilityMode, "asAuthored");
-        defaultExtraItems       = ChefZ_Undefined.TextOr(defaultExtraItems, "forbid");
+        capabilityMode          = DefaultText("capabilityMode", capabilityMode, "asAuthored");
+        defaultExtraItems       = DefaultText("defaultExtraItems", defaultExtraItems, "forbid");
 
         if (!logChannels)
         {
