@@ -11,30 +11,59 @@ If you are deciding whether to run ChefZ on a live server, read this page first.
 
 ## The short version
 
-ChefZ has never been compiled and has never run in DayZ.
+ChefZ compiles and the mod boots. It does not yet keep a server running.
 
-167 script files exist, the static validation passes with zero errors across
-fourteen checkers, and every design rule the project set for itself is machine
-enforced. None of that is the same as a build, and none of it is the same as a
-server that starts.
+As of 28.08.2026 all five script modules compile with zero errors and zero
+warnings, the server binds its port, and all twelve addons register. The config
+load then reads 551 records, 550 of them good. After that the process still dies,
+and the core comes up inert.
+
+Two properties of the engine's JSON layer caused most of this. One is fixed, one
+is not. Both are described below, because neither is visible from the code and
+neither produces an error message.
 
 ---
 
 ## Not yet done
 
-### No compiler run
+### The server does not stay up
 
-No Enforce compiler has ever seen this code. What has been checked instead:
-brace balance per file, every referenced type against the project's own class
-index, and every vanilla signature against the real `scripts` sources rather than
-from memory. A compile error is not ruled out.
+After the config load the process ends with an access violation inside the
+mission's `OnInit` chain. The same server, started without `@ChefZ` in the mod
+list, runs stably — measured over two minutes — so the deployment itself is
+sound.
 
-This is the first thing to do with the repository, and it may produce surprises.
+The most likely link: `ChefZ_HandcraftBridge` anchors its recipe slots in the
+mission constructor and fills them only after loading. While the core is in safe
+mode they stay empty.
 
-### No PBOs, no signatures
+### The core comes up in safe mode
 
-Nothing has been packed. See [Installation](Installation) for the route through
-DayZ Tools. That route has not been walked by anyone yet.
+551 records read, 550 good, none rejected — and every registry empty. Two causes,
+both listed under *Engine limits* below: the overlay clamps
+`safeModeErrorThreshold` to 1, and a single failing self-test then trips it,
+because self-test errors count towards the same counter that guards safe mode.
+
+`ChefZ_Log.ResetCounters()` after `RunSelfTest()` would separate the two.
+
+### Eight self-test groups fail
+
+S1, S9, S10, S11, S13, S14, S16 and S17 report failures. Some of them are likely
+downstream of the constructor limit below, since the tests assume the sentinel
+machinery works.
+
+### No signatures, no binarisation
+
+`tools/chefz-pack/pack.mjs` packs all twelve PBOs, unsigned and unbinarised, and
+`tools/chefz-pack/testrun.ps1` starts the test server and reads its verdict.
+Neither signing nor binarising has been done. See [Installation](Installation).
+
+### A config error is invisible in the logs
+
+Worth knowing before debugging anything: DayZ reports a config error in a **modal
+window**, not in the RPT. On a server nobody clicks it away, so the process sits
+there with an eight-line RPT, no error and no exit. `testrun.ps1` reads that
+window first and the logs second.
 
 ### No in-game test
 
@@ -57,6 +86,61 @@ anything: **no config declares `hiddenSelections`**, so none of the planned text
 variants can be applied to a shared mesh. The selection name has to be agreed first.
 Applied consistently, the shared-mesh strategy cuts the V1 mesh count from 161 to
 about 45.
+
+---
+
+## Engine limits
+
+Both were found by running the server, not by reading documentation, and both are
+silent — no error, no warning, in the first case not even a call stack.
+
+### A self-referential class crashes the JSON deserializer — fixed
+
+`ChefZ_Selector` used to contain `anyOf`, `allOf` and `not`, all of its own type.
+The engine builds its type descriptor by walking members, and a class that
+contains itself never lets that walk finish. Reading the first document whose
+records carry a selector ended the process with an access violation.
+
+Proved rather than guessed: only the record kinds whose graph reaches a selector
+crashed; `ChefZ_Range`, nested but not self-referential, reads fine; renaming the
+`not` member changed nothing; and a throwaway self-referential class hung on
+`ChefZ_PreservationDef` made `Preservation.json` crash too. Across the ~35 mods on
+the test server there is not one self-referential class.
+
+The cycle is now a chain — `ChefZ_Selector` → `ChefZ_SelectorL1` → … →
+`ChefZ_SelectorL8`, the last without children. **The JSON is unchanged**: same
+keys, same nesting, same files. The deepest nesting in all existing content is
+two, and `maxSelectorDepth = 8` remains the binding limit.
+
+> **Rule:** no class read from JSON may contain itself — not directly, not through
+> a container, not through an intermediate class.
+
+### The deserializer does not run the constructor — open
+
+`ChefZ_Record` and its subclasses preset their fields with a sentinel in the
+constructor: `ChefZ_Undefined.INT` is `int.MIN`. The whole ranked-configuration
+scheme rests on it — `PatchInt` takes an incoming value only when it is *not* the
+sentinel.
+
+That constructor does not run during deserialization. A TRACE line placed inside
+`ChefZ_CoreSettingsDef()` never appeared, in a run that wrote 162 other TRACE
+lines and whose log shows the overlay being read two lines earlier.
+
+So every **absent** field comes back as `0` / `""` / `false` / `null`. The rank-3
+`$profile` overlay therefore overwrites every setting the operator did *not*
+write — the opposite of what an overlay is for. The core's own overlay template
+contains nothing but `{"id": "CORE"}`, and that is what clamps
+`safeModeErrorThreshold` to 1 and puts the core into safe mode.
+
+The bool probe is affected for the same reason: `ChefZ_RecordProbe.Bool()` is read
+in the constructor, so "`allowPartial` not written" can no longer be told apart
+from "`allowPartial: false`".
+
+**Fix direction:** presence must come from the JSON text, not from the value.
+Collect each record's written keys while reading and put them into
+`explicitFields[]`. `PatchInt`, `PatchFloat`, `PatchText` and `PatchBool` already
+consult `HasExplicit(field)`, so they need no change, and the sentinel becomes
+unnecessary.
 
 ---
 
