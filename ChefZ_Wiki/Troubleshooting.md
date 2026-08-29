@@ -67,7 +67,7 @@ not report this.** It just stands there.
    ```
    It checks that every `#STR_CHEFZ_*` referenced anywhere is defined, that
    there are no duplicates, and that the full column set is present.
-3. Verify the file landed in the PBO at `<Prefix>/Language/stringtable.csv`.
+3. Verify the file landed in the PBO at `<Prefix>/stringtable.csv` — beside `config.cpp`, not in a subfolder. DayZ does not look anywhere else, and reports nothing when it cannot find it.
 4. Check the header row against the fifteen columns DayZ expects:
    ```
    "Language","original","english","czech","german","russian","polish","hungarian",

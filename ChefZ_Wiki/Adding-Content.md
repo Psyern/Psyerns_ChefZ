@@ -66,7 +66,7 @@ mechanism.
 | `ChefZ_Cooking/config.cpp` → `CfgChefZIngredients` | both classes, as ingredient bindings |
 | `ChefZ_Cooking/config.cpp` → `CfgChefZ` | the `dataFiles[]` entry, if the recipe file is new |
 | `ChefZ_Cooking/Config/Recipes/Dishes_A.json` | the recipe record |
-| `ChefZ_Cooking/Language/stringtable.csv` | 4 keys: name and description, bulk and portion |
+| `ChefZ_Cooking/stringtable.csv` | 4 keys: name and description, bulk and portion |
 | `Psyerns_ChefZ_Core/_deltas/dishes-a.json` | both class names in `classes` |
 | *(optional)* a script file | empty derivations, see below |
 
@@ -254,7 +254,7 @@ If yours does, see [Pitfalls](#pitfalls).
 
 ### Step 5 — the strings
 
-Four rows in `ChefZ_Cooking/Language/stringtable.csv`:
+Four rows in `ChefZ_Cooking/stringtable.csv`:
 
 ```
 STR_CHEFZ_ITEM_SAUSAGEPASTA

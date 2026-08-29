@@ -385,7 +385,7 @@ own `TerjeCompatibilityCOT` does the same thing on the same class.
 
 ## Localisation
 
-`Language/stringtable.csv` ships the dropdown label, the *All* entry and the eight
+`stringtable.csv` ships the dropdown label, the *All* entry and the eight
 category names in the project's standard column set (`original` plus 13 languages).
 English strings:
 

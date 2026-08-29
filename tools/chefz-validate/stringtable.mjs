@@ -66,6 +66,26 @@ export default function run() {
   for (const dir of modules) {
     for (const csv of walk(dir, (_p, n) => n.toLowerCase() === 'stringtable.csv')) {
       csvFiles.push(csv);
+
+      // --- Ablageort ---
+      // Die Tabelle muss neben der config.cpp liegen, nicht in einem
+      // Unterverzeichnis. Belegt an jedem Referenzmod im Suchraum:
+      // TerjeCore/stringtable.csv, TerjeMedicine/stringtable.csv,
+      // DayZExpansion/languagecore/<Modul>/stringtable.csv,
+      // JM/COT/languagecore/stringtable.csv, DabsFramework/Scripts/stringtable.csv
+      // - ausnahmslos <Ordner mit config.cpp>/stringtable.csv.
+      //
+      // Ausfallbild bei falscher Ablage: der Spieler liest den Rohschluessel,
+      // also "STR_CHEFZ_ACTION_PROCESS" statt "Verarbeiten". Die Engine meldet
+      // dazu NICHTS - weder RPT noch Ladefehler. Genau deshalb steht die Regel
+      // hier und nicht in einer Konvention.
+      //
+      // Gate 1 hatte den Verdacht schon (GATE_1_REPORT, Conflict-Scout), er
+      // blieb unbewiesen und damit unbehoben. Am 29.08.2026 im Spiel bestaetigt.
+      if (!exists(path.join(path.dirname(csv), 'config.cpp'))) {
+        f.error(csv, 1, 'stringtable.csv liegt nicht neben der config.cpp. DayZ findet sie dort nicht - im Spiel erscheinen die rohen STR_-Schluessel, ohne jede Meldung. Sie gehoert in denselben Ordner wie die config.cpp des Moduls.');
+      }
+
       const rows = parseCsv(csv);
       if (!rows || rows.length === 0) {
         f.error(csv, 0, 'stringtable.csv ist leer oder nicht lesbar');

@@ -113,7 +113,7 @@ Addon Builder's default include list drops file types it does not know. ChefZ
 ships data that must survive packing:
 
 - `**/Config/**/*.json` — the whole rank-2 data layer
-- `**/Language/stringtable.csv` — display names
+- `**/stringtable.csv` — display names, next to `config.cpp`
 - `**/Config/Templates/Core.overlay.json` — the operator settings template
 
 If the JSON is filtered out, the mod loads and does nothing: the config manager

@@ -400,7 +400,7 @@ ChefZ_Meat/
 │   └── 5_Mission/ChefZ/Meat/
 ├── Data/                       textures, materials
 ├── Models/                     .p3d (initially empty — vanilla proxies)
-└── Language/stringtable.csv
+└── stringtable.csv          beside config.cpp
 ```
 
 ---
