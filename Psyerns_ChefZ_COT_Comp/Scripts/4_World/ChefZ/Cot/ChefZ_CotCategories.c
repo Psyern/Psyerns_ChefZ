@@ -214,9 +214,8 @@ class ChefZ_CotCategories
 			"ChefZ_Onion", 
 			"ChefZ_Garlic", 
 			"ChefZ_Carrot", 
-			"ChefZ_Cabbage", "ChefZ_SlicedPotato", "ChefZ_ChoppedTomato",
-			"ChefZ_ChoppedPaprika", "ChefZ_ChoppedOnion", "ChefZ_ChoppedGarlic",
-			"ChefZ_ChoppedCarrot", "ChefZ_ChoppedCabbage", "ChefZ_Egg",
+			"ChefZ_Cabbage", 
+			"ChefZ_Egg",
 			"ChefZ_RawSalt", "ChefZ_Salt", "ChefZ_BoneBroth",
 			"ChefZ_TomatoSauce", "ChefZ_CreamSauce", "ChefZ_MushroomCreamSauce"
 		});
@@ -229,7 +228,6 @@ class ChefZ_CotCategories
 		// dahinter interessieren ihn nicht.
 		Add("chefz_cot_herbs", "#STR_CHEFZ_COT_CAT_HERBS",
 		{
-			
 			
 			"ChefZ_Parsley",
 			"ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",

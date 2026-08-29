@@ -14,33 +14,16 @@ schreiben."
 Die Notiz steht neben der Datei und nicht im Kopf der `config.cpp`, weil Transforms
 laut 11 §5 ausdruecklich nicht in die `config.cpp` gehoeren.
 
-## Produce.json
+## Produce.json — entfallen
 
-Slice produce. Acht Schnitt-Transforms, alle ueber `PROCESS_CHOP_VEGETABLE`
-(`exec HANDCRAFT`, Werkzeuggruppe `CUTTING_TOOL`). Ein Eingang plus Werkzeug ist
-genau die Form, die Vanillas RecipeBase traegt — `MAX_NUMBER_OF_INGREDIENTS = 2`,
-das Messer belegt den zweiten Platz (01 V12). Transforms stehen ausdruecklich NICHT
-in der `config.cpp` (11 §5, `ChefZ_ConfigCppSource` Kopf): sie tragen Selektoren und
-sind eine serverseitige Entscheidung.
+Die acht Schnitt-Transforms und `PROCESS_CHOP_VEGETABLE` sind am 29.08.2026 mit
+dem Schnittgut entfernt worden. Rezepte nehmen das ganze Gemuese.
 
 
 ## VanillaFoodProcessing.json
 
-Slice `vanilla-foods`. Drei Transforms, zwei Prozesse, keine neue Station und kein
-neuer Prozess — beide werden nur **benutzt**.
-
-### `TR_ChopZucchini` — `PROCESS_CHOP_VEGETABLE`
-
-Wortgleich zu `TR_ChopBellPepper` gebaut: ein Eingang plus Werkzeuggruppe
-`CUTTING_TOOL`, das Messer belegt Vanillas zweiten Zutatenplatz (01 V12).
-Ergebnis ist `ChefZ_ChoppedZucchini`, das achte Schnittgut der Familie.
-
-Dieser eine Transform ist der einzige Grund, warum der `CfgChefZ`-Knoten
-`ChefZ_VanillaFoods` **`handcraftRecipeSlots = 1`** nennt. Die Reservierung muss vor
-dem ersten Laden feststehen — Vanilla vergibt Rezept-IDs als Position in seiner
-Liste, und diese Positionen entstehen im Missionskonstruktor (Kopf von
-`ChefZ_HandcraftBridge.c`). Wer hier einen HANDCRAFT-Transform ergänzt, erhöht die
-Zahl in derselben Änderung.
+Slice `vanilla-foods`. Zwei Transforms, ein Prozess (`PROCESS_DRY`), keine neue
+Station und kein neuer Prozess — er wird nur **benutzt**.
 
 ### `TR_CaninaBerriesToDried` und `TR_SambucusBerriesToDried` — `PROCESS_DRY`
 

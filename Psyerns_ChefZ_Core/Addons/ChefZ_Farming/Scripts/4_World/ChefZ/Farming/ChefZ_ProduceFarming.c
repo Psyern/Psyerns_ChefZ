@@ -13,9 +13,8 @@
 // PepperSeedsPack -> PepperSeeds -> Plant_Pepper -> GreenBellPepper ->
 // CutOutPepperSeeds -> PepperSeeds. ChefZ haengt sich an EINER Stelle ein, an
 // der Frucht: der Zutaten-Datensatz von GreenBellPepper in
-// ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json. Von dort laufen
-// TR_ChopBellPepper (-> ChefZ_ChoppedPaprika) und TR_PaprikaToDried
-// (-> ChefZ_DriedPaprika -> ChefZ_PaprikaPowder). Es fehlt KEIN Glied: das
+// ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json. Von dort laeuft
+// TR_PaprikaToDried (-> ChefZ_DriedPaprika -> ChefZ_PaprikaPowder). Es fehlt KEIN Glied: das
 // Zurueckgewinnen von Saatgut erledigt Vanillas CutOutPepperSeeds.
 //
 // Andockregel aus dem Kopf von ChefZ_Edible_Base.c: die CONFIGklasse erbt von

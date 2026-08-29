@@ -36,7 +36,7 @@ Zutatensaetze gehaengt (Delta `_deltas/sauces.json`):
 
 | Kategorie | haengt an | Datei |
 |---|---|---|
-| `TOMATO` | `Tomato`, `ChefZ_ChoppedTomato` | `ChefZ_Ingredients` |
+| `TOMATO` | `Tomato` | `ChefZ_Ingredients` |
 | `CREAM` | `ChefZ_Cream` | `ChefZ_Ingredients/Config/Ingredients/Dairy.json` |
 | `BUTTER` | `ChefZ_Butter` | `ChefZ_Ingredients/Config/Ingredients/Dairy.json` |
 | `MUSHROOM` | sieben Vanilla-Pilze | `ChefZ_Ingredients/Config/Ingredients/Mushrooms.json` |

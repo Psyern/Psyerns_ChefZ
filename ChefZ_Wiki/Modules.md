@@ -169,14 +169,14 @@ See [Processing Stations](Processing-Stations).
 Cut produce, dairy, salt, spices and mushrooms — the intermediate goods that sit
 between raw produce and a dish.
 
-- **28 item classes**: the `Chopped*` vegetables, `ChefZ_SlicedPotato`, dairy
-  (`ChefZ_Butter`, `ChefZ_Cheese`, `ChefZ_Cream`, …), `ChefZ_Salt` and
-  `ChefZ_RawSalt`, dried spices.
-- **3 script files**.
-- **Rank 1**: 8 ingredient bindings, 1 process (`PROCESS_CHOP_VEGETABLE`).
-- **Rank 2**: 28 ingredient records, 8 transforms.
+- **item classes**: dairy (`ChefZ_Butter`, `ChefZ_Cheese`, `ChefZ_Cream`, …),
+  `ChefZ_Salt` and `ChefZ_RawSalt`, dried herbs and spices, dried berries. The
+  knife-cut vegetables (`Chopped*`, `ChefZ_SlicedPotato`) were removed on
+  2026-08-29 — recipes take the whole vegetable.
+- **2 script files**.
+- **Rank 2**: ingredient records and the drying transforms.
 - **`CfgChefZ` slices**: five — `ChefZ_SaltIngredients` (205),
-  `ChefZ_Produce` (220, **12 handcraft slots**), `ChefZ_HerbIngredients` (220),
+  `ChefZ_Produce` (220, no handcraft slots), `ChefZ_HerbIngredients` (220),
   `ChefZ_SauceIngredients` (230), `ChefZ_DairyIngredients` (260).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Food`, `DZ_Gear_Consumables`,
   `ChefZ_Core`, `ChefZ_Farming`, `ChefZ_Processing`.

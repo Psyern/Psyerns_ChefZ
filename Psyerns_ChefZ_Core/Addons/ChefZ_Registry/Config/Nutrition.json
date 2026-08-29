@@ -507,48 +507,6 @@
             "fullness": 30
         },
         {
-            "id": "ChefZ_ChoppedCabbage",
-            "scope": "class",
-            "energy": 110,
-            "water": 80,
-            "fullness": 45
-        },
-        {
-            "id": "ChefZ_ChoppedCarrot",
-            "scope": "class",
-            "energy": 100,
-            "water": 60,
-            "fullness": 30
-        },
-        {
-            "id": "ChefZ_ChoppedGarlic",
-            "scope": "class",
-            "energy": 40,
-            "water": 15,
-            "fullness": 8
-        },
-        {
-            "id": "ChefZ_ChoppedOnion",
-            "scope": "class",
-            "energy": 90,
-            "water": 55,
-            "fullness": 25
-        },
-        {
-            "id": "ChefZ_ChoppedPaprika",
-            "scope": "class",
-            "energy": 60,
-            "water": 45,
-            "fullness": 20
-        },
-        {
-            "id": "ChefZ_ChoppedTomato",
-            "scope": "class",
-            "energy": 45,
-            "water": 70,
-            "fullness": 20
-        },
-        {
             "id": "ChefZ_Garlic",
             "scope": "class",
             "energy": 40,
@@ -561,13 +519,6 @@
             "energy": 90,
             "water": 55,
             "fullness": 25
-        },
-        {
-            "id": "ChefZ_SlicedPotato",
-            "scope": "class",
-            "energy": 180,
-            "water": 40,
-            "fullness": 40
         },
         {
             "id": "ChefZ_BoneBroth",
@@ -596,13 +547,6 @@
             "energy": 130,
             "water": 105,
             "fullness": 45
-        },
-        {
-            "id": "ChefZ_ChoppedZucchini",
-            "scope": "class",
-            "energy": 55,
-            "water": 75,
-            "fullness": 25
         },
         {
             "id": "ChefZ_DriedBerries",

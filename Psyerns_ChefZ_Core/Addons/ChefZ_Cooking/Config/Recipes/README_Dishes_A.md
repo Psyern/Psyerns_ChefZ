@@ -110,7 +110,7 @@ so ist, gilt:
 
 | gemeint | geschrieben | Folge |
 |---|---|---|
-| Kartoffel | `{"cls":"Potato"}` | `ChefZ_SlicedPotato` bindet nicht mit |
+| Kartoffel | `{"cls":"Potato"}` | genau die Vanilla-Kartoffel, keine Kategorie |
 | Zwiebel | `{"category":"ROOT_VEGETABLE"}` | auch eine Karotte erfüllt den Slot |
 | Milch + Käse | `{"allOf":[DAIRY, not BUTTER]}`, `minCount: 2` | auch Sahne erfüllt ihn |
 

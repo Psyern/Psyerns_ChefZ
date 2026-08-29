@@ -37,7 +37,7 @@ Pflichtzutat eine gültige Endstufe verlangt.
 | Gericht | Anker-Slot | erfüllbar durch | Kette |
 |---|---|---|---|
 | Kürbissuppe | `fat` → `{ "category": "BUTTER" }` | nur `ChefZ_Butter` | Milch → Sahne → Butter (`ChefZ_ButterChurn`) |
-| Kleinfischpfanne | `garlic` → `anyOf [ ChefZ_ChoppedGarlic, ChefZ_Garlic ]` | nur ChefZ-Klassen | Knoblauch anbauen, mit dem Messer schneiden |
+| Kleinfischpfanne | `garlic` → `cls ChefZ_Garlic` | nur ChefZ-Klassen | Knoblauch anbauen, mit dem Messer schneiden |
 | Obstkompott | `berries` → `{ "cls": "ChefZ_DriedBerries" }` | nur `ChefZ_DriedBerries` | Waldbeeren am `ChefZ_DryingRack` trocknen |
 
 Jeder dieser Anker ist zugleich **fachlich** die Zutat, die aus der Zutatensammlung
@@ -73,7 +73,7 @@ Endstufe auch erreichen kann. Nachgeschlagen wurde deshalb jede einzelne in
 
 - `SlicedPumpkin`, `Sardines`, `Bitterlings`, `Apple`, `Pear`, `Plum`,
   `CaninaBerry`, `SambucusBerry` — eigener `CanBeCooked()`-Override auf `true`.
-- `ChefZ_Butter`, `ChefZ_Garlic`, `ChefZ_ChoppedGarlic`, `Lard` — `FoodStages` mit
+- `ChefZ_Butter`, `ChefZ_Garlic`, `Lard` — `FoodStages` mit
   Übergängen aus `Raw` nach `Baked` und `Boiled`.
 - `ChefZ_DriedBerries` — trägt eigens einen Übergang `Dried -> Boiled`, den keine
   andere Trockenware des Mods hat. Ohne ihn fiele

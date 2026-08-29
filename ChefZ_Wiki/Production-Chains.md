@@ -182,37 +182,16 @@ alongside vanilla potato, tomato and green bell pepper. The chain is a closed lo
 the four ChefZ vegetables are found in the world, like mushrooms (no seeds since
 2026-08-29).
 
-```mermaid
-graph LR
-  V(["Onion, Garlic,<br/>Carrot, Cabbage<br/>found"])
-  V -->|"knife, 5 s"| CH(["Chopped Onion, Garlic,<br/>Carrot, Cabbage"])
-  PT(["Potato / Tomato /<br/>Green Bell Pepper<br/>vanilla"]) -->|"knife, 5 s"| CP(["Sliced Potato,<br/>Chopped Tomato / Paprika"])
-  PK(["Paprika"]) -->|"knife, 5 s"| CP
-```
-
-| Step | Input | Output | Where | Tool | Duration |
-|---|---|---|---|---|---|
-| `TR_ChopPotato` | 1+× Potato | Sliced Potato (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_ChopTomato` | 1+× Tomato | Chopped Tomato (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_ChopPaprika` | 1+× Paprika | Chopped Paprika (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_ChopBellPepper` | 1+× Green Bell Pepper | Chopped Paprika (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_ChopOnion` | 1+× Onion | Chopped Onion (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_ChopGarlic` | 1+× Garlic | Chopped Garlic (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_ChopCarrot` | 1+× Carrot | Chopped Carrot (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_ChopCabbage` | 1+× Cabbage | Chopped Cabbage (1×) | *handcraft* | `CUTTING_TOOL` | 5 s |
-| `TR_SeedsFromOnion` | 1+× Onion | Onion Seeds (1×) | *handcraft* | `CUTTING_TOOL` | 6 s |
-| `TR_SeedsFromGarlic` | 1+× Garlic | Garlic Cloves (1×) | *handcraft* | `CUTTING_TOOL` | 6 s |
-| `TR_SeedsFromCarrot` | 1+× Carrot | Carrot Seeds (1×) | *handcraft* | `CUTTING_TOOL` | 6 s |
-| `TR_SeedsFromCabbage` | 1+× Cabbage | Cabbage Seeds (1×) | *handcraft* | `CUTTING_TOOL` | 6 s |
+Since 2026-08-29 there is no chopping step either: the knife-cut variants
+(`Chopped*`, `ChefZ_SlicedPotato`) are gone, and every recipe takes the whole
+vegetable — which every one of them already accepted as the alternative.
 
 **Where it feeds in.** `ROOT_VEGETABLE` is used by 14 recipes,
 `TOMATO` by 5, `LEAF_VEGETABLE` by 2, `VEGETABLE` by 2.
 
-**Chopping is almost never required.** Whole and chopped forms carry the same
-categories, and the recipes that name the chopped form list the whole one as an
-alternative in the same slot (`ChefZ_ChoppedOnion or ChefZ_Onion`). The one place
-where the distinction is real is Chernarus Chili, which needs `ChefZ_PaprikaPowder`
-in a **required** slot — that one has to come out of the [spice chain](#herbs-and-spices).
+**The one processing step that matters** is Chernarus Chili, which needs
+`ChefZ_PaprikaPowder` in a **required** slot — that one has to come out of the
+[spice chain](#herbs-and-spices).
 
 All twelve steps are handcraft with a `CUTTING_TOOL`; none of them touches a
 station. The twelve places are reserved in the vanilla crafting list through

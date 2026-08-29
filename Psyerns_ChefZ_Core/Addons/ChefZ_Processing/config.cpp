@@ -506,8 +506,8 @@ class CfgVehicles
     // Die EINE Station der Fleischkette (Production Map §57).
     //
     // KEIN SCHNEIDEBRETT MEHR (Entscheidung vom 29.08.2026): Schneiden ist
-    // "Zutat + Messer kombinieren" - PROCESS_CHOP_VEGETABLE, PROCESS_CUT_MEAT
-    // und PROCESS_CLEAN_CASING sind HANDCRAFT mit CUTTING_TOOL und brauchen
+    // "Zutat + Messer kombinieren" - PROCESS_CUT_MEAT und PROCESS_CLEAN_CASING
+    // sind HANDCRAFT mit CUTTING_TOOL und brauchen
     // keinen Ort. Die frueher als Ausstattungsstueck erhaltene Klasse
     // ChefZ_CuttingBoard ist entfernt; ein Server, der eines platziert hatte,
     // verliert dieses eine Objekt beim naechsten Start.

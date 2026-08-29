@@ -17,9 +17,8 @@ Slice produce. Entwurf 05 §2, zweiter Deklarationsweg: FREMDE Klassen werden im
 Slice-JSON gebunden, nie in ihrer eigenen `config.cpp` (Workflow §10.5). `Potato`
 und `Tomato` existieren in Vanilla — ChefZ erweitert sie, statt eine zweite
 Kartoffel zu bauen (Production Map §13, §14). `GreenBellPepper` ist die
-Paprika des Mods (§15): es gibt keine eigene frische Paprikaklasse mehr, und
-`TR_ChopBellPepper` ist der einzige Weg zu `ChefZ_ChoppedPaprika`
-(Vanilla-Audit §2).
+Paprika des Mods (§15): es gibt keine eigene frische Paprikaklasse mehr
+(Vanilla-Audit §2), und seit dem 29.08.2026 auch kein Schnittgut.
 
 **Warum der Datensatz von `GreenBellPepper` kein `decays` bekommen hat.** Das
 abgeloeste `ChefZ_Paprika` trug `decays: true`. Uebernommen wurde es NICHT, und
@@ -58,7 +57,6 @@ Additiv, ohne Verhaltensaenderung fuer bestehende Selektoren:
 - `Dairy.json` — `ChefZ_Cream` bekommt `CREAM`, `ChefZ_Butter` bekommt `BUTTER`
   (zusaetzlich zu `DAIRY`).
 - `VanillaProduce.json` — `Tomato` bekommt `TOMATO` (zusaetzlich zu `VEGETABLE`).
-- `config.cpp`, `CfgChefZIngredients` — `ChefZ_ChoppedTomato` bekommt `TOMATO`.
 
 Grund: `RCP_ChefZ_TomatoSauce` und `RCP_ChefZ_CreamSauce` brauchen Slots, die
 Tomate, Sahne und Butter treffen und nicht jedes Gemuese beziehungsweise jedes
@@ -93,8 +91,7 @@ Nachgeschlagen wurde deshalb jede Klasse einzeln in `scripts - 1.29`:
 `Pumpkin.c` überschreibt `CanBeCooked()` mit `false`. Stünde der ganze Kürbis in
 `VEGETABLE`, könnte ein Spieler damit den `VEGETABLE`-Pflichtslot von
 `RCP_ChefZ_BoneBrothSoup` füllen — und die Suppe würde nie fertig. Gebunden ist
-deshalb nur `SlicedPumpkin`; Vanilla liefert das Schneiden ohnehin selbst mit, ein
-`TR_ChopPumpkin` wäre eine Doppelung.
+deshalb nur `SlicedPumpkin`; Vanilla liefert das Schneiden selbst mit.
 
 ### Warum `CANNED_MEAT`, `CANNED_FISH` und `CANNED_FRUIT` Wurzelkategorien sind
 

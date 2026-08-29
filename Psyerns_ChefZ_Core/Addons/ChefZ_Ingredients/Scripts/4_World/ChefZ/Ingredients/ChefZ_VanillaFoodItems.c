@@ -3,8 +3,9 @@
 //
 // Quelle: Vanilla-Audit §3 C (Zucchini) und §3 F (Beeren an der vorhandenen
 // Trockenkette). Der Slice bindet ueberwiegend FREMDE Klassen - die brauchen
-// kein Skript, sie stehen im JSON. Hier stehen nur die zwei EIGENEN Klassen,
-// die dabei entstehen.
+// kein Skript, sie stehen im JSON. Hier steht nur die EINE eigene Klasse,
+// die dabei entsteht (die geschnittene Zucchini ist am 29.08.2026 mit dem
+// uebrigen Schnittgut entfallen).
 //
 // Andockregel aus dem Kopf von ChefZ_Edible_Base.c: die CONFIGklasse erbt von
 // einer Vanilla-Klasse, die SKRIPTklasse von ChefZ_Edible_Base.
@@ -12,20 +13,11 @@
 // Layer: 4_World.
 //==============================================================================
 
-//! Zucchini + Knife -> ChefZ_ChoppedZucchini (TR_ChopZucchini).
-//!
-//! Leer, und das ist die Aussage: sie erbt Kochbarkeit, Zustand, Essaktion und
-//! IsFruit() von ChefZ_ChoppedVegetableBase (Slice produce). Ein achtes
-//! Schnittgut mit eigener Basis waere eine zweite Wahrheit ueber dieselbe
-//! Frage.
-class ChefZ_ChoppedZucchini extends ChefZ_ChoppedVegetableBase {}
-
 //! Hagebutten und Holunderbeeren vom Trockenrahmen
 //! (TR_CaninaBerriesToDried, TR_SambucusBerriesToDried).
 //!
-//! Eigene Skriptklasse und nicht ChefZ_ChoppedVegetableBase: getrocknete
-//! Beeren sind kein Schnittgut, und ihre Configklasse traegt einen Uebergang,
-//! den kein Schnittgut hat (Dried -> Boiled).
+//! Eigene Skriptklasse: ihre Configklasse traegt einen Uebergang
+//! Dried -> Boiled.
 class ChefZ_DriedBerries extends ChefZ_Edible_Base
 {
     /**

@@ -140,7 +140,6 @@ Keyed on the **process ID**, resolved from the reported transform via
 
 | Process | XP | Note |
 |---|---:|---|
-| `PROCESS_CHOP_VEGETABLE` | 1 | |
 | `PROCESS_CUT_MEAT` | 1 | |
 | `PROCESS_CLEAN_CASING` | 1 | |
 | `PROCESS_CARVE_BOWL` | 1 | |

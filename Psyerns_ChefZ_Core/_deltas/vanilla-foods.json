@@ -36,12 +36,6 @@
     "processes": [],
     "nutrition": [
         {
-            "class": "ChefZ_ChoppedZucchini",
-            "energy": 55,
-            "water": 75,
-            "stomach": 25
-        },
-        {
             "class": "ChefZ_DriedBerries",
             "energy": 130,
             "water": 4,
@@ -50,7 +44,6 @@
     ],
     "preservation": [],
     "classes": [
-        "ChefZ_ChoppedZucchini",
         "ChefZ_DriedBerries"
     ]
 }

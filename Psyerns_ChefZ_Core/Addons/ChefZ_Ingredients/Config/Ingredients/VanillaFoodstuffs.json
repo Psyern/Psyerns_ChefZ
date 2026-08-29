@@ -14,7 +14,7 @@
         {
             "id": "SlicedPumpkin",
             "categories": ["VEGETABLE"],
-            "tags": ["CHEFZ_FRESH", "CHEFZ_CHOPPED"],
+            "tags": ["CHEFZ_FRESH"],
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,

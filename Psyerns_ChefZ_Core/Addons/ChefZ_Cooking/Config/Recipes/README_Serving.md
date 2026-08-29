@@ -163,9 +163,8 @@ hin. Wer hier einen Transform ergänzt, erhöht die Zahl in derselben Änderung.
 ### Werkzeuggruppen: warum `CUTTING_TOOL` nicht erweitert wurde
 
 „any axe or knife" wäre als Erweiterung von `CUTTING_TOOL` billiger gewesen —
-und falsch. `CUTTING_TOOL` ist geteiltes Vokabular: `PROCESS_CUT_MEAT`,
-`PROCESS_CHOP_VEGETABLE`, `PROCESS_CUT_OUT_SEEDS` und `PROCESS_CLEAN_CASING`
-lesen dieselben acht Messer. Eine Feuerwehraxt darin hackt ab sofort auch
+und falsch. `CUTTING_TOOL` ist geteiltes Vokabular: `PROCESS_CUT_MEAT` und
+`PROCESS_CLEAN_CASING` lesen dieselben acht Messer. Eine Feuerwehraxt darin hackt ab sofort auch
 Kräuter. Die Gruppe gehört außerdem `ChefZ_Processing`, nicht diesem Modul.
 
 Stattdessen steht `AXE_TOOL` daneben, und `PROCESS_CARVE_BOWL_BARK` nennt

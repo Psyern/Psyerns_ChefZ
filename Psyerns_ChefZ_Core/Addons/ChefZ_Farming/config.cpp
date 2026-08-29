@@ -521,7 +521,7 @@ class CfgVehicles
     // aber unerreichbar: kein Datensatz im Projekt erzeugte je ChefZ_PaprikaSeeds.
     // ChefZ setzt jetzt an der Frucht an - GreenBellPepper traegt den
     // Zutaten-Datensatz (ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json)
-    // und ist Eingang von TR_ChopBellPepper und TR_PaprikaToDried.
+    // und ist Eingang von TR_PaprikaToDried.
 
     //--------------------------------------------------------------------------
     // Die Ernte.
@@ -1067,9 +1067,8 @@ class CfgChefZProcesses
     // "m_Name = proc.displayName". Zwei Transforms an EINEM Prozess erscheinen
     // deshalb unter demselben Menuepunkt.
     //
-    // Solange sich ihre Eingaenge unterscheiden, ist das folgenlos - so machen
-    // es PROCESS_CHOP_VEGETABLE (sieben Eingaenge). Hier ist es NICHT
-    // folgenlos: Bausatz, Raehmchen UND
+    // Solange sich ihre Eingaenge unterscheiden, ist das folgenlos. Hier ist
+    // es NICHT folgenlos: Bausatz, Raehmchen UND
     // Entdeckelungsgabel entstehen alle drei aus WoodenPlank + Nails und
     // unterscheiden sich nur in der Menge. An einem gemeinsamen Prozess
     // stuenden drei gleichnamige Eintraege im Kontextmenue, und der Spieler

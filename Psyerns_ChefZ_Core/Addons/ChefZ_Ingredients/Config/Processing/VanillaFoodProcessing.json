@@ -3,27 +3,6 @@
     "schemaVersion": 1,
     "records": [
         {
-            "id": "TR_ChopZucchini",
-            "process": "PROCESS_CHOP_VEGETABLE",
-            "inputs": [
-                {
-                    "slotId": "veg",
-                    "match": { "cls": "Zucchini" },
-                    "minCount": 1,
-                    "consume": "whole"
-                }
-            ],
-            "outputs": [
-                {
-                    "cls": "ChefZ_ChoppedZucchini",
-                    "quantity": 1,
-                    "quantityMode": "fixed",
-                    "setState": "RAW",
-                    "inheritFreshness": true
-                }
-            ]
-        },
-        {
             "id": "TR_CaninaBerriesToDried",
             "process": "PROCESS_DRY",
             "stationsAllowed": ["ChefZ_DryingRack"],

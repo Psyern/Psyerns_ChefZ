@@ -392,7 +392,6 @@ class CfgChefZTerjeSkills
             class ChefZ_Processes
             {
                 // Zerkleinern und Zurichten - Handgriffe, kein Erzeugnis.
-                PROCESS_CHOP_VEGETABLE = 1;
                 PROCESS_CUT_MEAT       = 1;
                 PROCESS_CLEAN_CASING   = 1;
                 PROCESS_CARVE_BOWL     = 1;

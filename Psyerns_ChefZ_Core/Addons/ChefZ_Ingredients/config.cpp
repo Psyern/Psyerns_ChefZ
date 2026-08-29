@@ -10,38 +10,19 @@
 // legen hier ebenfalls Zutaten ab. Alles unterhalb eines Slice-Banners gehoert
 // dem genannten Slice; wer etwas ergaenzt, HAENGT AN und ueberschreibt nichts.
 //
-// Was hier liegt: die geschnittenen Gemuesestufen. Das ganze Gemuese (Ernte)
-// liegt in ChefZ_Farming, weil es dort waechst - Production Map §2.
+// KEIN SCHNITTGUT MEHR (Entscheidung vom 29.08.2026): die geschnittenen
+// Gemuesestufen (die Chopped-Varianten und die geschnittene Kartoffel) und
+// der Schnittprozess sind entfernt. Jedes Rezept nimmt das ganze Gemuese - das war ohnehin
+// ueberall als Alternative zugelassen. Das ganze Gemuese (Fundpflanze) liegt
+// in ChefZ_Farming; hier bleiben Milchprodukte, Salz, getrocknete Kraeuter,
+// Gewuerze und die Beeren.
 //
 // Andockregel des Core (Kopf von ChefZ_Edible_Base.c): die CONFIGklasse erbt
 // von einer VANILLA-Klasse, die SKRIPTklasse von ChefZ_Edible_Base. Der Core
 // bringt bewusst keinen CfgVehicles-Eintrag mit (Invariante I3).
 //
-// GARSTUFEN: geschnittenes Gemuese IST Garobjekt. Der urspruengliche Satz
-// "Zutat, nicht Garobjekt" ist an den Rezepten gescheitert - RCP_ChefZ_
-// FarmersBreakfast verlangt ChefZ_SlicedPotato und ChefZ_ChoppedOnion in
-// PFLICHT-Slots, RCP_ChefZ_ChernarusChili ChefZ_ChoppedPaprika. Was in einem
-// Pflicht-Slot liegt, muss zwei Dinge koennen:
-//
-//   1. es darf nicht verbrennen. Ohne FoodStageTransitions faellt
-//      FoodStage.GetNextFoodStageType auf FoodStageType.BURNED zurueck
-//      (FoodStage.c:472).
-//   2. es muss die Endstufe des Rezepts ERREICHEN. ChefZ_RecipeEvaluator.
-//      CheckStages verlangt von JEDER gebundenen Pflichtzutat eine erlaubte
-//      Vanilla-Endstufe; eine Klasse ohne FoodStage meldet Stufe 0 (NONE),
-//      und das Gericht wuerde nie fertig.
-//
-// Deshalb traegt ChefZ_ChoppedVegetableBase Stufen UND Uebergaenge, und jede
-// Klasse darunter ihre eigenen Stufen-Naehrwerte: sobald FoodStages
-// existieren, schlagen sie class Nutrition (Edible_Base.c:394-503) - eine
-// Stufe ohne nutrition_properties saettigte lautlos nicht.
-//
-// Vorbild ist Vanillas eigenes Gemuese (Potato.c, GreenBellPepper.c,
-// Zucchini.c): kochbar, mit Stufen, mit Uebergaengen aus "Raw".
-//
 // MODELLE: saemtliche model=-Pfade sind VANILLA-PROXIES. Kein Item dieses
-// Slices hat eigene Geometrie; der Bedarf steht im Slice-Bericht und im
-// Asset-To-Do §3.4 (geschnittene Varianten teilen sich ein Schnittgut-Mesh).
+// Slices hat eigene Geometrie; der Bedarf steht im Slice-Bericht.
 //==============================================================================
 
 class CfgPatches
@@ -49,10 +30,6 @@ class CfgPatches
     class ChefZ_Ingredients
     {
         units[] = {
-            "ChefZ_ChoppedVegetableBase",
-            "ChefZ_SlicedPotato", "ChefZ_ChoppedTomato", "ChefZ_ChoppedPaprika",
-            "ChefZ_ChoppedOnion", "ChefZ_ChoppedGarlic", "ChefZ_ChoppedCarrot",
-            "ChefZ_ChoppedCabbage",
             // ### SLICE dairy ###
             "ChefZ_Milk", "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese", "ChefZ_Egg",
             // ### SLICE salt ###
@@ -66,7 +43,6 @@ class CfgPatches
             "ChefZ_PaprikaPowder", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper",
             "ChefZ_HerbMix", "ChefZ_HunterSeasoning",
             // ### SLICE vanilla-foods ###
-            "ChefZ_ChoppedZucchini",
             "ChefZ_DriedBerries"
         };
         weapons[] = {};
@@ -74,11 +50,9 @@ class CfgPatches
         // DZ_Data       - Edible_Base, die Vanilla-Configbasis dieser Items
         // DZ_Gear_Food  - die Proxy-Modelle unter \dz\gear\food\
         // ChefZ_Core    - ChefZ_Edible_Base und die Auswertung der CfgChefZ*-Knoten
-        // ChefZ_Farming - die Eingangsklassen der Schnitt-Transforms (ChefZ_Onion ...)
-        // ChefZ_Processing: liefert CfgChefZTools/CUTTING_TOOL, das dieses
-        // Modul in PROCESS_CHOP_VEGETABLE benutzt, und die Station
-        // ChefZ_DryingRack, an der die beiden Beeren-Transforms des Slice
-        // vanilla-foods laufen.
+        // ChefZ_Farming - die Frischkraeuter als Eingang der Trocknungs-Transforms
+        // ChefZ_Processing: die Station ChefZ_DryingRack, an der die beiden
+        // Beeren-Transforms des Slice vanilla-foods laufen.
         //   ### SLICE vanilla-foods ### GENAU ZWEI weitere Eintraege:
         //   ChefZ_Meat        die Kategorie MEAT und ihre Geschwister stammen
         //                     aus ChefZ_Meat/Config/Ingredients/Meat.json; die
@@ -158,389 +132,15 @@ class CfgVehicles
     class Edible_Base;
 
     //==========================================================================
-    // ### SLICE produce ### Geschnittenes Gemuese
-    //
-    // class Nutrition ist PFLICHT und keine Kuer: PlayerStomach.InitData
-    // registriert nur Klassen mit "Nutrition" ODER "Food" und scope != 0
-    // (01 V7, PlayerStomach.c:208-250). Ohne den Block saettigt der Bissen
-    // lautlos nicht - der leiseste denkbare Content-Fehler.
-    //==========================================================================
-    class ChefZ_ChoppedVegetableBase : Edible_Base
-    {
-        scope = 0;
-        model = "\dz\gear\food\pumpkin_sliced.p3d";
-        weight = 90;
-        itemSize[] = {1,1};
-        rotationFlags = 17;
-        varQuantityInit = 1;
-        varQuantityMin = 0;
-        varQuantityMax = 1;
-        varQuantityDestroyOnMin = 1;
-        absorbency = 0.0;
-        isMeleeWeapon = 0;
-        soundImpactType = "food";
-
-        // visual_properties[] = { selectionIndex, textureIndex, materialIndex }
-        // Alle Proxys sind einteilige Modelle - deshalb ueberall 0.
-        // cooking_properties[] = { minTemp, cookTime, maxTemp }
-        // woertlich aus enum eCookingPropertyIndices (FoodStage.c:15).
-        // Geschnittenes gart schneller als ein ganzes Stueck: 40 s statt 60 s
-        // in der Pfanne, 50 s statt 80 s im Topf.
-        //
-        // Die Stufen-NAEHRWERTE stehen NICHT hier, sondern an jeder einzelnen
-        // Klasse: ein Basiswert waere fuer sechs von sieben falsch.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {0, 0, 0};
-                };
-                class Baked
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {100, 40, 200};
-                };
-                class Boiled
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {100, 50, 150};
-                };
-                class Burned
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {200, 20, 0};
-                };
-                class Rotten
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {0, 0, 0};
-                };
-            };
-
-            // OHNE DIESEN BLOCK VERBRENNT JEDES STUECK GESCHNITTENES GEMUESE
-            // BEIM ERSTEN GARSTUFENWECHSEL (01 V4, FoodStage.c:472).
-            //
-            // transition_to und cooking_method sind ZAHLEN, nicht Namen:
-            // SetupFoodStageTransitionMapping liest sie mit ConfigGetInt
-            // (FoodStage.c:167ff).
-            //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
-            //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
-            //
-            // Nur Uebergaenge AUS "Raw": aus "Baked" und "Boiled" gibt es
-            // keinen, und genau deshalb liefert GetNextFoodStageType dort
-            // BURNED - wer die Pfanne vergisst, verliert sie. Das ist gewollt.
-            //
-            // DRYING fehlt absichtlich: Trocknen laeuft in ChefZ am eigenen
-            // Trockenrahmen (11 E6) und nicht in Vanillas Smoking-Slots.
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class Baking
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class Boiling
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
-
-    // §13: Potato + Knife -> ChefZ_SlicedPotato
-    class ChefZ_SlicedPotato : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SLICEDPOTATO";
-        descriptionShort = "#STR_CHEFZ_ITEM_SLICEDPOTATO_DESC";
-        weight = 120;
-        class Nutrition
-        {
-            fullnessIndex = 40;
-            energy = 180;
-            water = 40;
-            nutritionalIndex = 30;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {40, 180, 40, 30, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {36, 205, 18, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {38, 190, 46, 26, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {10, 25, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {10, 25, 8, 0, 15, 0, 1}; };
-            };
-        };
-    };
-
-    // §14: Tomato + Knife -> ChefZ_ChoppedTomato
-    class ChefZ_ChoppedTomato : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHOPPEDTOMATO";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHOPPEDTOMATO_DESC";
-        weight = 110;
-        class Nutrition
-        {
-            fullnessIndex = 20;
-            energy = 45;
-            water = 70;
-            nutritionalIndex = 25;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {20, 45, 70, 25, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {18, 50, 32, 26, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {19, 48, 80, 21, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {5, 7, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {5, 7, 14, 0, 15, 0, 1}; };
-            };
-        };
-    };
-
-    // §15: GreenBellPepper + Knife (TR_ChopBellPepper). Eine eigene frische
-    // Paprikaklasse gibt es nicht mehr - Vanilla-Audit §2.
-    class ChefZ_ChoppedPaprika : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHOPPEDPAPRIKA";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHOPPEDPAPRIKA_DESC";
-        weight = 100;
-        class Nutrition
-        {
-            fullnessIndex = 20;
-            energy = 60;
-            water = 45;
-            nutritionalIndex = 35;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {20, 60, 45, 35, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {18, 70, 20, 37, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {19, 63, 52, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {5, 9, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {5, 9, 9, 0, 15, 0, 1}; };
-            };
-        };
-    };
-
-    // §17: ChefZ_Onion + Knife -> ChefZ_ChoppedOnion
-    class ChefZ_ChoppedOnion : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHOPPEDONION";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHOPPEDONION_DESC";
-        class Nutrition
-        {
-            fullnessIndex = 25;
-            energy = 90;
-            water = 55;
-            nutritionalIndex = 30;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {25, 90, 55, 30, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {22, 105, 25, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {24, 95, 63, 26, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {6, 14, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {6, 14, 11, 0, 15, 0, 1}; };
-            };
-        };
-    };
-
-    // §18: ChefZ_Garlic + Knife -> ChefZ_ChoppedGarlic
-    class ChefZ_ChoppedGarlic : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHOPPEDGARLIC";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHOPPEDGARLIC_DESC";
-        weight = 30;
-        class Nutrition
-        {
-            fullnessIndex = 8;
-            energy = 40;
-            water = 15;
-            nutritionalIndex = 40;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {8, 40, 15, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {7, 46, 7, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {8, 42, 17, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {2, 6, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {2, 6, 3, 0, 15, 0, 1}; };
-            };
-        };
-    };
-
-    // §19: ChefZ_Carrot + Knife -> ChefZ_ChoppedCarrot
-    class ChefZ_ChoppedCarrot : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHOPPEDCARROT";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHOPPEDCARROT_DESC";
-        class Nutrition
-        {
-            fullnessIndex = 30;
-            energy = 100;
-            water = 60;
-            nutritionalIndex = 45;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {30, 100, 60, 45, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {27, 115, 27, 47, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {29, 105, 69, 38, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {8, 15, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {8, 15, 12, 0, 15, 0, 1}; };
-            };
-        };
-    };
-
-    // §20: ChefZ_Cabbage + Knife -> ChefZ_ChoppedCabbage
-    class ChefZ_ChoppedCabbage : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHOPPEDCABBAGE";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHOPPEDCABBAGE_DESC";
-        weight = 140;
-        class Nutrition
-        {
-            fullnessIndex = 45;
-            energy = 110;
-            water = 80;
-            nutritionalIndex = 40;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {45, 110, 80, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {40, 125, 36, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {43, 115, 92, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {11, 17, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {11, 17, 16, 0, 15, 0, 1}; };
-            };
-        };
-    };
-
-    //==========================================================================
-    // ### SLICE vanilla-foods ### Zwei neue Klassen, mehr nicht
+    // ### SLICE vanilla-foods ### Eine neue Klasse, mehr nicht
     //
     // Quelle: Vanilla-Audit §3 C (Zucchini) und §3 F (Beeren an der
     // vorhandenen Trockenkette).
     //
-    // ChefZ_ChoppedZucchini haengt an derselben Familienbasis wie die sieben
-    // Schnittgutklassen des Slice produce. Das ist Absicht und kein Uebergriff:
-    // die Basis traegt FoodStages UND FoodStageTransitions, und ein achtes
-    // Schnittgut mit eigener Basis waere eine zweite Wahrheit ueber dieselbe
-    // Frage. Nur die Stufen-Naehrwerte stehen an der Klasse, weil sie
-    // class Nutrition schlagen (Edible_Base.c:394-503).
-    //
-    // ChefZ_DriedBerries ist die einzige Klasse dieses Slice mit eigener
-    // Bauform, und der Grund steht in ihrem eigenen Kommentar.
+    // Seit dem 29.08.2026 nur noch EINE Klasse: die geschnittene Zucchini ist
+    // mit dem uebrigen Schnittgut entfallen (Kopf dieser Datei). Der Grund
+    // fuer die Bauform von ChefZ_DriedBerries steht in ihrem eigenen Kommentar.
     //==========================================================================
-
-    // Zucchini + Knife -> ChefZ_ChoppedZucchini  (TR_ChopZucchini)
-    class ChefZ_ChoppedZucchini : ChefZ_ChoppedVegetableBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHOPPEDZUCCHINI";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHOPPEDZUCCHINI_DESC";
-        weight = 120;
-        class Nutrition
-        {
-            fullnessIndex = 25;
-            energy = 55;
-            water = 75;
-            nutritionalIndex = 28;
-            toxicity = 0;
-            digestibility = 1;
-        };
-
-        // Stufen-Naehrwerte (01 V7): sobald eine Klasse FoodStages traegt,
-        // schlagen sie class Nutrition (Edible_Base.c:394-503). Rohwerte = class Nutrition,
-        // Gebacken trocknet aus und verdichtet, Gekocht zieht Wasser und
-        // verliert Vitamine, Verbrannt und Verdorben sind Verlust.
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {25, 55, 75, 28, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {22, 62, 34, 29, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {24, 58, 86, 24, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {6, 9, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {6, 9, 15, 0, 15, 0, 1}; };
-            };
-        };
-    };
 
     //--------------------------------------------------------------------------
     // Getrocknete Beeren - Hagebutte und Holunder vom Trockenrahmen.
@@ -1389,48 +989,16 @@ class CfgVehicles
 // nur ChefZ-Eigenes; die drei Vanillaklassen stehen in
 // Config/Ingredients/VanillaProduce.json.
 //
-// Die Kategorien VEGETABLE, ROOT_VEGETABLE, LEAF_VEGETABLE und die Tags
-// CHEFZ_FRESH, CHEFZ_CHOPPED stehen im Delta _deltas/produce.json und werden
-// vom chefz-registry-integrator gemergt. Dieses Modul fasst keine zentrale
+// Die Kategorien VEGETABLE, ROOT_VEGETABLE, LEAF_VEGETABLE und der Tag
+// CHEFZ_FRESH stehen im Delta _deltas/produce.json und werden vom
+// chefz-registry-integrator gemergt. Dieses Modul fasst keine zentrale
 // Registry an (Workflow §5).
 //
-// Der Basisknoten heisst bewusst NICHT wie die CfgVehicles-Basisklasse: die
-// Config-Vererbung INNERHALB von CfgChefZIngredients loest die Engine selbst
-// auf (Kopf von ChefZ_ConfigCppSource.ReadIngredients), ein zweiter Knoten
-// gleichen Namens waere nur eine Verwechslungsquelle.
+// Seit dem 29.08.2026 bindet der Slice produce hier NICHTS mehr: das
+// Schnittgut ist entfallen, und das ganze Gemuese bindet ChefZ_Farming.
 //==============================================================================
 class CfgChefZIngredients
 {
-    class ChefZ_ChoppedProduceIngredient
-    {
-        categories[]      = {"VEGETABLE"};
-        tags[]            = {"CHEFZ_CHOPPED"};
-        defaultState      = "RAW";
-        quantityUnit      = "PIECE";
-        unitsPerWholeItem = 1;
-        decays            = 1;
-    };
-
-    class ChefZ_SlicedPotato : ChefZ_ChoppedProduceIngredient   { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
-    class ChefZ_ChoppedOnion : ChefZ_ChoppedProduceIngredient   { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
-    class ChefZ_ChoppedGarlic : ChefZ_ChoppedProduceIngredient  { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
-    class ChefZ_ChoppedCarrot : ChefZ_ChoppedProduceIngredient  { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
-    class ChefZ_ChoppedCabbage : ChefZ_ChoppedProduceIngredient { categories[] = {"VEGETABLE","LEAF_VEGETABLE"}; };
-    // TOMATO ergaenzt der Slice "sauces": RCP_ChefZ_TomatoSauce braucht einen
-    // Slot, der Tomaten trifft und nicht jedes Gemuese. Rein additiv - VEGETABLE
-    // bleibt, jeder bestehende Selektor trifft weiter (Delta _deltas/sauces.json).
-    class ChefZ_ChoppedTomato : ChefZ_ChoppedProduceIngredient  { categories[] = {"VEGETABLE","TOMATO"}; };
-    class ChefZ_ChoppedPaprika : ChefZ_ChoppedProduceIngredient {};
-
-    //--------------------------------------------------------------------------
-    // ### SLICE vanilla-foods ###
-    //
-    // Das achte Schnittgut haengt an demselben Basisknoten wie die sieben
-    // darueber. Rein additiv: jeder vorhandene Selektor auf VEGETABLE oder
-    // CHEFZ_CHOPPED trifft es mit, kein bestehender Datensatz aendert sich.
-    //--------------------------------------------------------------------------
-    class ChefZ_ChoppedZucchini : ChefZ_ChoppedProduceIngredient {};
-
     // Getrocknete Beeren. BERRY haengt unter FRUIT (Delta _deltas/vanilla-foods.json);
     // ein FRUIT-Slot nimmt sie damit mit, ein BERRY-Slot nur sie und die zwei
     // frischen Vanillabeeren. CHEFZ_PRESERVED trennt sie im Rezept vom frischen
@@ -1451,48 +1019,6 @@ class CfgChefZIngredients
 };
 
 //==============================================================================
-// ### SLICE produce ### Der Schnittprozess, Rang 1
-//
-// Prozesse stehen in der Game-Config und nicht nur im JSON (11 E8, 02 §2):
-// ChefZ_ActionProcessAtStation.ActionCondition() laeuft auch auf dem CLIENT und
-// muss dort Werkzeuggruppe und Aktionstext kennen. Der Client liest Rang 1
-// garantiert.
-//
-// HANDCRAFT und nicht STATION_ACTION: Production Map §13-§20 sagt durchweg
-// "+ Knife", nicht "+ Schneidebrett". Ein Eingang plus Werkzeuggruppe ist genau
-// die Form, die Vanillas RecipeBase traegt (01 V12,
-// MAX_NUMBER_OF_INGREDIENTS = 2: das Messer belegt den zweiten Platz).
-//
-// Die Werkzeuggruppe CUTTING_TOOL wird hier BENUTZT, aber nicht deklariert.
-// Sie steht EINMAL in ChefZ_Processing (CfgChefZTools/CUTTING_TOOL), zusammen
-// mit ROLLING_PIN - Werkzeuge sind geteiltes Vokabular (Gemuese schneiden,
-// Kraeuter schneiden, Fleisch schneiden verlangen dasselbe Messer) und gehoeren
-// fachlich in das Verarbeitungsmodul.
-//
-// Frueher stand hier ein zweiter, inhaltlich identischer Knoten mit der
-// Begruendung, der Slice bleibe dadurch ohne ChefZ_Processing lauffaehig. Das
-// traegt nicht: CfgChefZTools wird von der Engine ueber alle Addons gemergt,
-// und zwei Knoten gleichen Namens sind keine Redundanz, sondern eine stille
-// Ueberschreibung - der spaeter geladene gewinnt, ohne Meldung. Sobald eine der
-// beiden Listen sich aendert, laufen sie auseinander und niemand sieht es.
-// Deshalb: eine Deklaration, und ChefZ_Processing steht in requiredAddons.
-//==============================================================================
-
-class CfgChefZProcesses
-{
-    class PROCESS_CHOP_VEGETABLE
-    {
-        exec = "HANDCRAFT";
-        displayName = "#STR_CHEFZ_PROC_CHOP_VEGETABLE";
-        toolGroups[] = {"CUTTING_TOOL"};
-        baseDurationSec = 5.0;
-        animationLength = 1.0;
-        specialty = 0.01;
-        toolDamage = 1;
-    };
-};
-
-//==============================================================================
 // Anmeldung beim Core (02 §4). CfgChefZ fuehrt einen Knoten je SLICE, nicht je
 // Modul: ChefZ_SliceManifest.name ist eine Kennung fuer den Ladebericht (Kopf
 // von ChefZ_RecordSource.c). Der Slice "produce" liegt in ZWEI Modulen -
@@ -1502,14 +1028,9 @@ class CfgChefZProcesses
 //
 // handcraftRecipeSlots ist eine RESERVIERUNG in Vanillas Rezeptliste und muss
 // vor dem ersten Laden feststehen (Kopf von ChefZ_HandcraftBridge):
-//    7 Schnitt-Transforms (Potato, Tomato, GreenBellPepper,
-//                          Onion, Garlic, Carrot, Cabbage)
-//  = 7 Plaetze.
-//
-// Frueher 11: die vier Samen-Transforms sind mit dem Saatgut entfallen -
-// Gemuese sind Fundpflanzen (Kopf von ChefZ_Farming/config.cpp). Davor 12:
-// TR_ChopPaprika (Eingang ChefZ_Paprika) war eine reine Doppelung von
-// TR_ChopBellPepper (Vanilla-Audit §2).
+//    0 Plaetze seit dem 29.08.2026: die sieben Schnitt-Transforms sind mit
+//    dem Schnittgut entfallen, davor die vier Samen-Transforms mit dem
+//    Saatgut. Der Slice bindet nur noch die drei Vanilla-Gemuese.
 //==============================================================================
 class CfgChefZ
 {
@@ -1518,11 +1039,10 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 220;
-        handcraftRecipeSlots = 7;
+        handcraftRecipeSlots = 0;
         dataFiles[] =
         {
-            "ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json",
-            "ChefZ_Ingredients/Config/Processing/Produce.json"
+            "ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json"
         };
     };
 
@@ -1637,22 +1157,16 @@ class CfgChefZ
     // aber selbst aus keiner anderen Kette. Der Core haengt Records nicht
     // voneinander ab - die Reihenfolge ist Vorsorge und kostet nichts.
     //
-    // handcraftRecipeSlots = 1, und die Zahl gehoert zu GENAU EINEM Transform:
-    //
-    //     VanillaFoodProcessing.json   TR_ChopZucchini   PROCESS_CHOP_VEGETABLE
-    //
-    // Die beiden Beeren-Transforms zaehlen NICHT mit: PROCESS_DRY laeuft als
-    // STATION_TIMED am ChefZ_DryingRack und ruehrt Vanillas Rezeptliste nicht
-    // an. Die Reservierung muss VOR dem ersten Laden feststehen - Vanilla
-    // vergibt Rezept-IDs als Position in seiner Liste, und diese Positionen
-    // entstehen im Missionskonstruktor (Kopf von ChefZ_HandcraftBridge.c).
+    // handcraftRecipeSlots = 0: die beiden Beeren-Transforms laufen als
+    // PROCESS_DRY (STATION_TIMED am ChefZ_DryingRack) und ruehren Vanillas
+    // Rezeptliste nicht an. TR_ChopZucchini ist mit dem Schnittgut entfallen.
     // Wer hier einen HANDCRAFT-Transform ergaenzt, erhoeht diese Zahl in
-    // derselben Aenderung.
+    // derselben Aenderung (Kopf von ChefZ_HandcraftBridge.c).
     class ChefZ_VanillaFoods
     {
         chefzApiVersion = 1;
         loadOrder = 240;
-        handcraftRecipeSlots = 1;
+        handcraftRecipeSlots = 0;
         dataFiles[] =
         {
             "ChefZ_Ingredients/Config/Ingredients/VanillaFoodstuffs.json",

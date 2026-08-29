@@ -213,8 +213,8 @@ class CfgPatches
         //                    ChefZ_Baking/Config/GrainIngredients.json.
         //   Alles Weitere, was dieser Slice anfasst, steht bereits oben:
         //   FLOUR liegt in ChefZ_Processing, EGG/DAIRY/SALT/SPICE/MUSHROOM und
-        //   ChefZ_SlicedPotato in ChefZ_Ingredients, HERB und die Zwiebel in
-        //   ChefZ_Farming, SAUSAGE/MINCED_MEAT/FAT in ChefZ_Meat.
+        //   Salz in ChefZ_Ingredients, HERB, Kartoffel (Vanilla) und die
+        //   Zwiebel in ChefZ_Farming, SAUSAGE/MINCED_MEAT/FAT in ChefZ_Meat.
         //   ChefZ_Preservation steht bewusst NICHT hier: geraeucherte und
         //   getrocknete Wurst erreicht dieser Slice ueber die Kategorie
         //   SAUSAGE, nicht ueber eine Klasse aus jenem Modul (08 E4).
@@ -1701,9 +1701,9 @@ class CfgVehicles
     // Meilenstein-2-Slices in ihren Deltas festgelegt haben und die inzwischen
     // in ChefZ_Registry/Config/Nutrition.json stehen:
     //
-    //     ChefZ_SlicedPotato  180 /  45 / 40    ChefZ_Carrot     100 /  60 / 30
+    //     Potato (Vanilla)   ~180 / ~45 /~40    ChefZ_Carrot     100 /  60 / 30
     //     ChefZ_Onion          90 /  55 / 25    ChefZ_Cabbage    110 /  80 / 45
-    //     ChefZ_ChoppedTomato  45 /  70 / 20    ChefZ_BoneBroth  150 / 320 / 60
+    //     Tomato (Vanilla)    ~45 / ~70 /~20    ChefZ_BoneBroth  150 / 320 / 60
     //     Kraeuter             15 /  12 /  5    Paprikapulver     20 /   0 /  3
     //                                            (energy / water / stomach)
     //
@@ -2040,7 +2040,7 @@ class CfgVehicles
     //   x 1.10 / 4 Portionen                 ->  325 /  85 / 105
     //
     // Die Zeile "1x Paprika" trug die Werte des abgeloesten ChefZ_Paprika. Der
-    // Slot nimmt jetzt GreenBellPepper oder ChefZ_ChoppedPaprika
+    // Slot nimmt jetzt GreenBellPepper
     // (Vanilla-Audit §2); GreenBellPeppers Naehrwerte setzt Vanilla, sie stehen
     // nicht in diesem Projekt. Die Rechnung bleibt als ENTWURFSZIEL stehen und
     // wird nicht zur Laufzeit nachgerechnet - der Nutrition-Block unten ist der
@@ -3210,8 +3210,8 @@ class CfgChefZProcesses
     //
     // ZWEI Werkzeuggruppen, und genau darin liegt die Entscheidung:
     // CUTTING_TOOL (acht Messer, deklariert in ChefZ_Processing) wurde NICHT
-    // um Aexte erweitert. Sie ist geteiltes Vokabular - PROCESS_CUT_MEAT,
-    // PROCESS_CHOP_VEGETABLE und PROCESS_CLEAN_CASING lesen dieselbe Gruppe.
+    // um Aexte erweitert. Sie ist geteiltes Vokabular - PROCESS_CUT_MEAT
+    // und PROCESS_CLEAN_CASING lesen dieselbe Gruppe.
     // Eine Feuerwehraxt, mit der man Kraeuter hackt, waere der Preis dafuer
     // gewesen. Stattdessen steht die Axtgruppe daneben; ChefZ_HandcraftBridge.
     // CollectToolClasses bildet die VEREINIGUNG ueber alle genannten Gruppen,
@@ -3947,9 +3947,7 @@ class CfgChefZ
     //
     // handcraftRecipeSlots = 0: alle drei Rezepte zuenden am Kochgeraet.
     // Dieser Slice registriert KEIN Handcraft-Rezept; Vanillas Rezeptliste
-    // bleibt um kein Bit veraendert. Der eine HANDCRAFT-Transform, den die
-    // Erweiterung mitbringt (TR_ChopZucchini), gehoert dem Slice vanilla-foods
-    // und ist dort reserviert.
+    // bleibt um kein Bit veraendert.
     class ChefZ_DishesVanilla
     {
         chefzApiVersion = 1;

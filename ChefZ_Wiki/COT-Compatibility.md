@@ -122,20 +122,19 @@ passes `m_CurrentType` to `g_Game.IsKindOf`, and no config class name looks like
 that — so even if one of these values ever reached COT's branch instead of ChefZ's,
 it would yield an empty list rather than a wrong match.
 
-### 1. Ingredients (20)
+### 1. Ingredients (12)
 
 Everything that goes *into* a recipe and does not belong in a more specific
-category: the found vegetables, knife-cut produce, egg, salt, wheat and flour.
-(Plants and seeds are gone since 2026-08-29 — everything is found, like mushrooms.)
+category: the found vegetables, egg, salt, wheat and flour. (Plants, seeds and
+the knife-cut variants are gone since 2026-08-29 — vegetables are found whole,
+like mushrooms, and used whole.)
 
 ```
 ChefZ_Wheat            ChefZ_Flour            ChefZ_Onion
 ChefZ_Garlic           ChefZ_Carrot           ChefZ_Cabbage
-ChefZ_SlicedPotato     ChefZ_ChoppedTomato    ChefZ_ChoppedPaprika
-ChefZ_ChoppedOnion     ChefZ_ChoppedGarlic    ChefZ_ChoppedCarrot
-ChefZ_ChoppedCabbage   ChefZ_Egg              ChefZ_RawSalt
-ChefZ_Salt             ChefZ_BoneBroth        ChefZ_TomatoSauce
-ChefZ_CreamSauce       ChefZ_MushroomCreamSauce
+ChefZ_Egg              ChefZ_RawSalt          ChefZ_Salt
+ChefZ_BoneBroth        ChefZ_TomatoSauce      ChefZ_CreamSauce
+ChefZ_MushroomCreamSauce
 ```
 
 Two placement decisions worth knowing:

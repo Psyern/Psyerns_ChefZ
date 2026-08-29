@@ -662,7 +662,7 @@
         },
         {
             "id": "RCP_ChefZ_FishermanStew",
-            "_note": "§62 Fisherman's Stew: Fish + Potato + Carrot + Water + Dill. Der Dill hebt die Stufe, er ist nicht Pflicht. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze und als ganze oder geschnittene Karotte zulaessig. Die Pflichtmenge bleibt unveraendert.",
+            "_note": "§62 Fisherman's Stew: Fish + Potato + Carrot + Water + Dill. Der Dill hebt die Stufe, er ist nicht Pflicht. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze. Die Pflichtmenge bleibt unveraendert.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -711,16 +711,7 @@
                 },
                 {
                     "slotId": "carrot",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_Carrot"
-                            },
-                            {
-                                "cls": "ChefZ_ChoppedCarrot"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "ChefZ_Carrot" },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole",
@@ -853,7 +844,7 @@
         },
         {
             "id": "RCP_ChefZ_FishermanStewBroth",
-            "_note": "Der Bruehe-Weg von §62 'Water/Broth' fuer den Fischeintopf. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze und als ganze oder geschnittene Karotte zulaessig. Die Pflichtmenge bleibt unveraendert.",
+            "_note": "Der Bruehe-Weg von §62 'Water/Broth' fuer den Fischeintopf. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze. Die Pflichtmenge bleibt unveraendert.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.15,
@@ -907,16 +898,7 @@
                 },
                 {
                     "slotId": "carrot",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_Carrot"
-                            },
-                            {
-                                "cls": "ChefZ_ChoppedCarrot"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "ChefZ_Carrot" },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole",
@@ -1031,7 +1013,7 @@
         },
         {
             "id": "RCP_ChefZ_FishermanStewGroup",
-            "_note": "Gruppenfassung nach DME §44, uebertragen auf den Fischeintopf: 4x Fisch, 6x Wurzelgemuese, viel Wasser -> 8 Portionen. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze und als ganze oder geschnittene Karotte zulaessig. Die Pflichtmenge bleibt unveraendert.",
+            "_note": "Gruppenfassung nach DME §44, uebertragen auf den Fischeintopf: 4x Fisch, 6x Wurzelgemuese, viel Wasser -> 8 Portionen. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze. Die Pflichtmenge bleibt unveraendert.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -1080,16 +1062,7 @@
                 },
                 {
                     "slotId": "carrot",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_Carrot"
-                            },
-                            {
-                                "cls": "ChefZ_ChoppedCarrot"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "ChefZ_Carrot" },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",
@@ -1301,9 +1274,6 @@
                                 "cls": "ChefZ_Garlic"
                             },
                             {
-                                "cls": "ChefZ_ChoppedGarlic"
-                            },
-                            {
                                 "cls": "ChefZ_WildGarlic"
                             },
                             {
@@ -1480,9 +1450,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Garlic"
-                            },
-                            {
-                                "cls": "ChefZ_ChoppedGarlic"
                             },
                             {
                                 "cls": "ChefZ_WildGarlic"
@@ -1863,7 +1830,7 @@
         },
         {
             "id": "RCP_ChefZ_ChernarusChili",
-            "_note": "§62 Chernarus Chili: Meat + Baked Beans + Tomato + Paprika + Paprika Powder. KEINE Gefaessfluessigkeit gefordert - Bohnen und Tomaten bringen sie mit; deshalb sind BOILING und BAKING beide zugelassen. Paprika und Paprikapulver werden ueber KLASSEN gebunden und nicht ueber eine Kategorie, entgegen der sonst durchgehaltenen Regel. Der Grund ist eine Luecke, keine Bequemlichkeit: eine Kategorie PAPRIKA gibt es nicht, und die Zutatendatensaetze von GreenBellPepper, ChefZ_ChoppedPaprika und ChefZ_PaprikaPowder (ChefZ_Ingredients) gehoeren einem fremden Modul. Die frische Paprika ist seit dem Vanilla-Audit GreenBellPepper; eine eigene ChefZ-Paprikaklasse gibt es nicht mehr. Der Delta-Weg hilft hier nicht: der Integrator uebernimmt aus einem Tag-Delta nur id und displayName, appliesTo faellt weg - ein hier deklarierter Tag CHEFZ_PAPRIKA haenge an keiner Klasse. FOLGE, offen benannt: chefzstage meldet fuer die beiden verbliebenen ChefZ-Klassen 'kochbar ohne FoodStageTransitions'. Der Befund ist hier gegenstandslos - keine von beiden hat ueberhaupt einen Food-Knoten, HasFoodStage() liefert false (ItemBase.c:2654), es entsteht kein FoodStage und damit kann auch nichts auf BURNED fallen (FoodStage.c:472). Aufloesen kann ihn nur, wem die Klassen gehoeren - entweder durch eine Kategorie PAPRIKA an ihren Zutatendatensaetzen (dann steht hier ein Kategorieselektor) oder durch einen Food-Knoten mit Uebergaengen. Ein unscharfer Selektor auf VEGETABLE waere die schlechtere Antwort: dann ergaebe eine Zwiebel ein Chili.",
+            "_note": "§62 Chernarus Chili: Meat + Baked Beans + Tomato + Paprika + Paprika Powder. KEINE Gefaessfluessigkeit gefordert - Bohnen und Tomaten bringen sie mit; deshalb sind BOILING und BAKING beide zugelassen. Paprika und Paprikapulver werden ueber KLASSEN gebunden und nicht ueber eine Kategorie, entgegen der sonst durchgehaltenen Regel. Der Grund ist eine Luecke, keine Bequemlichkeit: eine Kategorie PAPRIKA gibt es nicht, und die Zutatendatensaetze von GreenBellPepper und ChefZ_PaprikaPowder (ChefZ_Ingredients) gehoeren einem fremden Modul. Die frische Paprika ist seit dem Vanilla-Audit GreenBellPepper; eine eigene ChefZ-Paprikaklasse gibt es nicht mehr. Der Delta-Weg hilft hier nicht: der Integrator uebernimmt aus einem Tag-Delta nur id und displayName, appliesTo faellt weg - ein hier deklarierter Tag CHEFZ_PAPRIKA haenge an keiner Klasse. FOLGE, offen benannt: chefzstage meldet fuer die beiden verbliebenen ChefZ-Klassen 'kochbar ohne FoodStageTransitions'. Der Befund ist hier gegenstandslos - keine von beiden hat ueberhaupt einen Food-Knoten, HasFoodStage() liefert false (ItemBase.c:2654), es entsteht kein FoodStage und damit kann auch nichts auf BURNED fallen (FoodStage.c:472). Aufloesen kann ihn nur, wem die Klassen gehoeren - entweder durch eine Kategorie PAPRIKA an ihren Zutatendatensaetzen (dann steht hier ein Kategorieselektor) oder durch einen Food-Knoten mit Uebergaengen. Ein unscharfer Selektor auf VEGETABLE waere die schlechtere Antwort: dann ergaebe eine Zwiebel ein Chili.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -1914,16 +1881,7 @@
                 },
                 {
                     "slotId": "paprika",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "GreenBellPepper"
-                            },
-                            {
-                                "cls": "ChefZ_ChoppedPaprika"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "GreenBellPepper" },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole",
@@ -2099,16 +2057,7 @@
                 },
                 {
                     "slotId": "paprika",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "GreenBellPepper"
-                            },
-                            {
-                                "cls": "ChefZ_ChoppedPaprika"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "GreenBellPepper" },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",

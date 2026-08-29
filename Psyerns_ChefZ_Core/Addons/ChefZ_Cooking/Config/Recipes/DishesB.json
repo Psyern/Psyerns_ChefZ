@@ -339,16 +339,7 @@
             "slots": [
                 {
                     "slotId": "potato",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_SlicedPotato"
-                            },
-                            {
-                                "cls": "Potato"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "Potato" },
                     "minCount": 2,
                     "maxCount": 4,
                     "consume": "whole"
@@ -373,16 +364,7 @@
                 },
                 {
                     "slotId": "onion",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_ChoppedOnion"
-                            },
-                            {
-                                "cls": "ChefZ_Onion"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "ChefZ_Onion" },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
@@ -942,9 +924,6 @@
                     "selector": {
                         "anyOf": [
                             {
-                                "cls": "ChefZ_ChoppedGarlic"
-                            },
-                            {
                                 "cls": "ChefZ_Garlic"
                             },
                             {
@@ -1030,16 +1009,7 @@
             "slots": [
                 {
                     "slotId": "potato",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_SlicedPotato"
-                            },
-                            {
-                                "cls": "Potato"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "Potato" },
                     "minCount": 2,
                     "maxCount": 4,
                     "consume": "whole"
@@ -1099,16 +1069,7 @@
                 },
                 {
                     "slotId": "onion",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_ChoppedOnion"
-                            },
-                            {
-                                "cls": "ChefZ_Onion"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "ChefZ_Onion" },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -1231,16 +1192,7 @@
                 },
                 {
                     "slotId": "onion",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_ChoppedOnion"
-                            },
-                            {
-                                "cls": "ChefZ_Onion"
-                            }
-                        ]
-                    },
+                    "match": { "cls": "ChefZ_Onion" },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"

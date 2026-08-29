@@ -60,7 +60,7 @@ Two tool groups exist. Both are declared exactly once, in
 
 | Group | Members | Used by |
 |---|---|---|
-| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife (`allowSubclasses = 1`) | `PROCESS_CHOP_VEGETABLE`, `PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL` |
+| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife (`allowSubclasses = 1`) | `PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL` |
 | `ROLLING_PIN` | `ChefZ_RollingPin` (`allowSubclasses = 1`) | `PROCESS_ROLL` |
 
 **Only one station process requires a tool at all** — `PROCESS_CLEAN_CASING` at the
@@ -256,7 +256,7 @@ Presses milk into cheese. At 5 minutes for 3 milk, the longest single dairy step
 
 ## Cutting Board — removed
 
-Removed on 2026-08-29. Cutting is "ingredient + knife" (`PROCESS_CHOP_VEGETABLE`,
+Removed on 2026-08-29. Cutting is "ingredient + knife" (
 `PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING` are `HANDCRAFT` with `CUTTING_TOOL`), so
 there was nothing left for a station to do. A server that had one placed loses that
 object on its next start.
@@ -313,7 +313,6 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 | `PROCESS_ROLL` | 10 s | `ROLLING_PIN` | 2 | 2 |
 | `PROCESS_CARVE_PLATE` | 20 s | `CUTTING_TOOL` | 0 | 1 |
 | `PROCESS_CARVE_BOWL` | 25 s | `CUTTING_TOOL` | 0 | 1 |
-| `PROCESS_CHOP_VEGETABLE` | 5 s | `CUTTING_TOOL` | 1 | 8 |
 | `PROCESS_CUT_MEAT` | 4 s | `CUTTING_TOOL` | 2 | 1 |
 | `PROCESS_SALT_CURE` | 6 s | none | 0 | 2 |
 
@@ -323,14 +322,6 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 | `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta | 500× | 10 s | — |
 | `TR_CarveWoodenPlate` | 1+× Firewood | Empty Plate | 1× | 20 s | — |
 | `TR_CarveWoodenBowl` | 1+× Firewood | Empty Bowl | 1× | 25 s | — |
-| `TR_ChopPotato` | 1+× Potato | Sliced Potato | 1× | 5 s | RAW |
-| `TR_ChopTomato` | 1+× Tomato | Chopped Tomato | 1× | 5 s | RAW |
-| `TR_ChopPaprika` | 1+× Paprika | Chopped Paprika | 1× | 5 s | RAW |
-| `TR_ChopBellPepper` | 1+× Green Bell Pepper | Chopped Paprika | 1× | 5 s | RAW |
-| `TR_ChopOnion` | 1+× Onion | Chopped Onion | 1× | 5 s | RAW |
-| `TR_ChopGarlic` | 1+× Garlic | Chopped Garlic | 1× | 5 s | RAW |
-| `TR_ChopCarrot` | 1+× Carrot | Chopped Carrot | 1× | 5 s | RAW |
-| `TR_ChopCabbage` | 1+× Cabbage | Chopped Cabbage | 1× | 5 s | RAW |
 | `TR_DicedMeat` | 1+× *MEAT* + stage Raw | Diced Meat | 1× | 4 s | PREPARED |
 | `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat | 1× | 6 s | SALTED |
 | `TR_SaltFish` | 1× *FISH* + state RAW + 1× *SALT* (20) | Salted Fish | 1× | 6 s | SALTED |

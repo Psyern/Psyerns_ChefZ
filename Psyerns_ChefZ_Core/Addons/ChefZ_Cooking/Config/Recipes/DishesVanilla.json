@@ -74,7 +74,7 @@
             "slots": [
                 { "slotId": "smallfish", "match": { "anyOf": [ { "cls": "Sardines" }, { "cls": "Bitterlings" } ] }, "minCount": 4, "maxCount": 6, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "fat",       "match": { "anyOf": [ { "category": "FAT" }, { "category": "BUTTER" } ] }, "minCount": 1, "maxCount": 1, "consume": "whole", "gradePoints": 0 },
-                { "slotId": "garlic",    "match": { "anyOf": [ { "cls": "ChefZ_ChoppedGarlic" }, { "cls": "ChefZ_Garlic" } ] }, "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 0 },
+                { "slotId": "garlic",    "match": { "cls": "ChefZ_Garlic" }, "minCount": 1, "maxCount": 2, "consume": "whole", "gradePoints": 0 },
                 { "slotId": "herb",      "match": { "tag": "CHEFZ_HERB" }, "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 3 },
                 { "slotId": "salt",      "match": { "category": "SALT" }, "minCount": 1, "maxCount": 1, "optional": true, "unit": "GRAM", "amount": { "min": 5.0 }, "consume": "amount", "consumeAmount": 5.0, "gradePoints": 2 },
                 { "slotId": "spice",     "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
