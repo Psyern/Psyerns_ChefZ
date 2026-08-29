@@ -215,6 +215,7 @@ class ChefZ_CotCategories
 			"ChefZ_Garlic", 
 			"ChefZ_Carrot", 
 			"ChefZ_Cabbage", 
+			"ChefZ_Corn",
 			"ChefZ_Egg",
 			"ChefZ_RawSalt", "ChefZ_Salt", "ChefZ_BoneBroth",
 			"ChefZ_TomatoSauce", "ChefZ_CreamSauce", "ChefZ_MushroomCreamSauce"
@@ -224,14 +225,15 @@ class ChefZ_CotCategories
 		// EINER Kategorie: frisch (Fundpflanze), getrocknet, gemahlen.
 		//
 		// Bewusst nicht nach Verarbeitungsgrad aufgeteilt. Ein Admin sucht
-		// "Thymian", nicht "Thymian, Stufe 2 von 3"; die fuenf Basisklassen
-		// dahinter interessieren ihn nicht.
+		// "Thymian", nicht "Thymian, Stufe 2 von 3"; die drei Basisklassen
+		// dahinter (ChefZ_FreshHerbBase, ChefZ_DriedHerbBase, ChefZ_SpiceBase)
+		// interessieren ihn nicht.
 		Add("chefz_cot_herbs", "#STR_CHEFZ_COT_CAT_HERBS",
 		{
 			"ChefZ_Parsley",
-			"ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
+			"ChefZ_Thyme", "ChefZ_Rosemary",
 			"ChefZ_WildGarlic", "ChefZ_PepperBerries",
-			"ChefZ_DriedParsley", "ChefZ_DriedDill", "ChefZ_DriedThyme",
+			"ChefZ_DriedParsley", "ChefZ_DriedThyme",
 			"ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_DriedPaprika",
 			"ChefZ_PaprikaPowder", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper",
 			"ChefZ_HerbMix", "ChefZ_HunterSeasoning"

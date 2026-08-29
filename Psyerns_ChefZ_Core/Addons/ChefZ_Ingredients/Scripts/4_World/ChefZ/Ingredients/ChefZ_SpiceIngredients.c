@@ -170,7 +170,7 @@ class ChefZ_SpiceBase extends Edible_Base
     }
 }
 
-//! Basis der getrockneten Kraeuter (§16, §9): Petersilie, Dill, Thymian,
+//! Basis der getrockneten Kraeuter (§16, §9): Petersilie, Thymian,
 //! Rosmarin, Baerlauch und getrocknete Paprikaschoten. Traegt NUR die
 //! Essaktion; Begruendung der Variante siehe ChefZ_SpiceBase.
 class ChefZ_DriedHerbBase extends Edible_Base

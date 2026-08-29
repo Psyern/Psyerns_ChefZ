@@ -8,8 +8,6 @@ If you only want to add a dish, an ingredient or a station, start with
 [Adding Content](Adding-Content) — it tells you when you need a delta and when
 you do not.
 
----
-
 ## 1. The problem
 
 Categories, tags, nutrition values and spoilage rules are **shared vocabulary**.
@@ -30,8 +28,6 @@ things would break:
 
 So the registries have exactly one writer, and everyone else files a request.
 
----
-
 ## 2. The two halves
 
 ```
@@ -51,10 +47,14 @@ entry points at it. It is a build-time input.
 [Modules](Modules#chefz_registry) for why it is a separate addon rather than part
 of the core.
 
-There are currently twelve deltas: `dairy`, `dishes-a`, `dishes-b`, `dishes-c`,
-`grain`, `herbs`, `meat`, `preservation`, `produce`, `salt`, `sauces`, `serving`.
+There are currently fifteen deltas: `apiary`, `dairy`, `dishes-a`, `dishes-b`,
+`dishes-c`, `dishes-vanilla`, `grain`, `herbs`, `meat`, `preservation`, `produce`,
+`salt`, `sauces`, `serving`, `vanilla-foods`.
 
----
+The last three joined after the original twelve: `vanilla-foods` and
+`dishes-vanilla` when ChefZ started filing vanilla items into its own categories
+rather than cloning them, and `apiary` with beekeeping. `apiary` and `serving` are
+the two thin ones — they declare only `processes` and `classes`, no vocabulary.
 
 ## 3. What a delta looks like
 
@@ -108,8 +108,6 @@ A real one — `Psyerns_ChefZ_Core/_deltas/salt.json`, complete and unedited:
 and a process may name a station that is only announced — so the salt chain can
 reference `ChefZ_FryingPan` before anyone has modelled it.
 
----
-
 ## 4. What the integrator does
 
 The integrator (`chefz-registry-integrator`) is the only writer of
@@ -158,7 +156,7 @@ Tags lose a field entirely. A delta may write:
 
 ```json
 { "id": "CHEFZ_HERB", "displayName": "#STR_CHEFZ_TAG_HERB",
-  "appliesTo": ["ChefZ_Parsley", "ChefZ_Dill", ...] }
+  "appliesTo": ["ChefZ_Parsley", "ChefZ_Thyme", ...] }
 ```
 
 `ChefZ_TagDef` has only `id` and `displayName`. There is no `appliesTo` — a tag
@@ -178,8 +176,6 @@ with `kind` being `category`, `tag`, `nutrition` or `preservation`.
 **If a delta uses a field name the core does not have, that is a conflict to
 report — not a rename to make quietly.** A silent rename hides the fact that the
 author and the core disagree about what the field means.
-
----
 
 ## 5. What deltas do *not* become registry files
 
@@ -229,8 +225,6 @@ named station. Its result is a report, not a file.
 The comment in `ChefZ_Registry/config.cpp` records this as decision **K1**,
 taken after step S19.
 
----
-
 ## 6. Collision resolution
 
 Two slices defining the same id differently is a conflict. The integrator
@@ -279,8 +273,6 @@ the parent writes `null`, a slice that does know it writes it down.
 same state, two different parents that are both concrete, two different energy
 values for the same class — none of those has a defensible automatic answer.
 
----
-
 ## 7. What the validator checks
 
 `tools/chefz-validate/deltas.mjs`, in order:
@@ -311,8 +303,6 @@ node tools/chefz-validate/index.mjs --only=deltas
 
 or as part of the full run — see [Validation](Validation).
 
----
-
 ## 8. Checklist for a content author
 
 You need a delta when your module introduces:
@@ -338,8 +328,6 @@ When you file one:
 4. Run the integrator, then `node tools/chefz-validate/index.mjs`.
 5. If a collision is reported, resolve it with the other slice's owner. Do not
    edit their delta and do not edit `ChefZ_Registry` by hand.
-
----
 
 ## Related pages
 

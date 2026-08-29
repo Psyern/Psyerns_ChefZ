@@ -10,13 +10,12 @@ This page describes what a server operator has to do to run ChefZ.
 > and no gate checklist has been run in a live game.
 > See [Known Limitations](Known-Limitations).
 
----
-
 ## 1. What ChefZ consists of
 
-ChefZ is shipped as **four mod folders**, which pack into **thirteen PBOs**.
+ChefZ is shipped as **four mod folders**, which pack into **fifteen PBOs** — of which
+two do not build today, see [Known Limitations](Known-Limitations#two-asset-addons-that-never-reach-a-pbo).
 
-### `Psyerns_ChefZ_Core` — the main mod (10 PBOs)
+### `Psyerns_ChefZ_Core` — the main mod (12 PBOs)
 
 One PBO per subfolder of `Psyerns_ChefZ_Core/Addons/`. Each subfolder carries a
 `$PREFIX$` file whose content is the PBO prefix, and the prefix is the root of
@@ -34,6 +33,8 @@ every runtime path inside that PBO.
 | `ChefZ_Preservation` | `ChefZ_Preservation` | yes | `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Processing`, `ChefZ_Meat` |
 | `ChefZ_Cooking` | `ChefZ_Cooking` | yes | `DZ_Data`, `DZ_Gear_Food`, `DZ_Gear_Cooking`, `ChefZ_Core`, `ChefZ_Ingredients`, `ChefZ_Farming`, `ChefZ_Meat`, `ChefZ_Processing`, `ChefZ_Baking`, `ChefZ_Preservation` |
 | `ChefZ_Cookbook` | `ChefZ_Cookbook` | yes | `DZ_Data`, `DZ_Gear_Books`, `ChefZ_Core` |
+| `ChefZ_Devices` | `ChefZ\ChefZ_Devices` | yes | `DZ_Data` |
+| `ChefZ_Items` | `ChefZ\ChefZ_Items` | yes | `DZ_Data` |
 
 "Mandatory" here means: the dependency graph above is closed. `ChefZ_Cooking`
 requires seven other ChefZ addons; `ChefZ_Registry` requires eight. You cannot
@@ -62,8 +63,6 @@ names classes that do not exist.
 
 See [Terje Compatibility](Terje-Compatibility) and
 [COT Compatibility](COT-Compatibility).
-
----
 
 ## 2. Building the PBOs
 
@@ -156,8 +155,6 @@ There is no `mod.cpp` anywhere in the repository. Without it the DayZ Launcher
 shows the mod folder name instead of a title and no picture. This does not stop
 a server from starting, but it should be added before any public release.
 
----
-
 ## 3. Load order
 
 Do **not** rely on the order of `-mod=` alone. DayZ resolves the addon graph
@@ -188,8 +185,6 @@ node; the config manager reads records in that order.
 | `ChefZ_Cooking` | 300, 310, 330 |
 
 See [Delta Protocol](Delta-Protocol) for what the shared registry at 150 does.
-
----
 
 ## 4. `-mod` versus `-serverMod`
 
@@ -224,8 +219,6 @@ DayZServer_x64.exe -config=serverDZ.cfg -profiles=profiles -port=2302 ^
   -cpuCount=4 -dologs -adminlog -netlog -freezecheck
 ```
 
----
-
 ## 5. `-profiles` is required
 
 ChefZ writes to `$profile:ChefZ`:
@@ -250,8 +243,6 @@ The client never creates or reads `$profile:ChefZ` — there, `$profile:` is the
 player's own directory and an overlay would be a player-owned file deciding
 server rules.
 
----
-
 ## 6. First start: what a healthy RPT looks like
 
 Search the server RPT for `[ChefZ]`. You should see, in this order:
@@ -274,8 +265,6 @@ The `Handwerk` line and the `Config`/`Aussenkante` lines are printed
 **regardless of log level** — they exist to be compared between the client RPT
 and the server RPT.
 
----
-
 ## 7. Known noise in the current state
 
 `ChefZ_Core/config.cpp` still ships a temporary smoke test
@@ -291,8 +280,6 @@ This is a measurement artefact, not an error. It answers the still-open
 question of whether a JSON file inside a PBO is readable at runtime. It is meant
 to be removed once the answer is recorded. Until then, expect two extra RPT
 blocks per start (one server, one client).
-
----
 
 ## 8. Next
 

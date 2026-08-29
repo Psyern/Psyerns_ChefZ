@@ -18,21 +18,6 @@
       "priority": 100
     },
     {
-      "id": "TR_DillToDried",
-      "process": "PROCESS_DRY",
-      "stationsAllowed": ["ChefZ_DryingRack"],
-      "durationOverrideSec": 480,
-      "qualityRule": "MIN",
-      "inputs": [
-        { "slotId": "herb", "match": { "cls": "ChefZ_Dill" }, "minCount": 1, "consume": "whole" }
-      ],
-      "outputs": [
-        { "cls": "ChefZ_DriedDill", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
-      ],
-      "freshnessCarry": 1.0,
-      "priority": 100
-    },
-    {
       "id": "TR_ThymeToDried",
       "process": "PROCESS_DRY",
       "stationsAllowed": ["ChefZ_DryingRack"],

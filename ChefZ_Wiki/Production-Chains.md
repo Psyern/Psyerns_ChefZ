@@ -7,9 +7,9 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 |---|---|---|---|
 | [Grain](#grain) | 5 transforms + 2 recipes | Grain Mill, Drying Rack | Bread, Flatbread, Pasta |
 | [Salt](#salt) | 2 transforms | Frying Pan | `SALT` — required or optional in 35 recipes |
-| [Herbs and spices](#herbs-and-spices) | 11 transforms | Drying Rack, Mortar | `DRIED_HERB`, `SPICE` |
+| [Herbs and spices](#herbs-and-spices) | 10 transforms | Drying Rack, Mortar | `DRIED_HERB`, `SPICE` |
 | [Vegetables](#vegetables) | no transforms since 29.08.2026 | none | `ROOT_VEGETABLE`, `LEAF_VEGETABLE`, `TOMATO` |
-| [Meat and sausage](#meat-and-sausage) | 15 transforms + 6 recipes | Meat Grinder | Six cooked sausages |
+| [Meat and sausage](#meat-and-sausage) | 16 transforms + 6 recipes | Meat Grinder | Six cooked sausages |
 | [Milk](#milk) | 3 transforms | Butter Churn, Cheese Press | Cream, Butter, Cheese |
 | [Fish](#fish) | 3 transforms | Drying Rack, Smoker | `FISH`, preserved fish |
 | [Preservation](#preservation) | 7 transforms, plus the 3 fish steps above | Drying Rack, Smoker | `CHEFZ_PRESERVED` |
@@ -20,13 +20,11 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 the station or the tool, and `[]` boxes are the dishes a chain feeds into.
 
 > **Nothing in this mod spawns by itself.** ChefZ ships no `types.xml`. Every chain
-> head below — wheat, the four vegetables, the six herbs, eggs, the three legs —
+> head below — wheat, the five vegetables, the five herbs, eggs, the three legs —
 > needs an admin spawn until a loot table exists. Since 29.08.2026 they are *found*
 > items rather than crops, which makes the missing loot table the only thing between
 > them and the world. Milk is vanilla `PowderedMilk` and spawns on its own.
 > See [Known-Limitations](Known-Limitations).
-
----
 
 ## Grain
 
@@ -37,6 +35,7 @@ longest chain in the mod: three steps from the found grain to dried pasta. (Sinc
 ```mermaid
 graph LR
   W(["Wheat<br/>found"]) -->|Grain Mill<br/>25 s| F(["Flour"])
+  CO(["Corn<br/>found"]) -->|"Grain Mill 25 s<br/>120 g flour per cob"| F
   F -->|"knead + water<br/>8 s"| SD(["Simple Dough"])
   SD -->|"knead + yeast<br/>8 s"| YD(["Yeast Dough"])
   YD -->|"bake"| B["Bread"]
@@ -55,6 +54,7 @@ graph LR
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
 | `TR_WheatToFlour` | 1× Wheat | Flour (×0.78 of input) | Grain Mill | — | 25 s |
+| `TR_CornToFlour` | 1-5× Corn | Flour (120 g per cob) | Grain Mill (currently no cargo, see [Known-Limitations](Known-Limitations)) | — | 25 s |
 | `TR_FlourWaterToDough` | 1× Flour (250) + 1× container with Water (150) | Dough (1×) | *handcraft* | — | 8 s |
 | `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta (500×) | *handcraft* | `ROLLING_PIN` (pasta machine) | 10 s |
 | `TR_RawPastaToDriedPasta` | 1× Fresh Pasta | Dried Pasta (1:1) | Drying Rack | — | 30 min |
@@ -82,8 +82,6 @@ Honey Bread Platter). `DOUGH` is required by 2 (Cheese Flatbread, Meat Dumplings
 **Gaps.** `ChefZ_Wheat` is found in the world; without it the chain does not
 start. The knead step also needs a **water container**: `TR_FlourWaterToDough`
 matches `isLiquidContainer` with `liquidType: "Water"` and takes 150 units.
-
----
 
 ## Salt
 
@@ -114,22 +112,18 @@ an optional slot worth +1 or +2 grade points, at 3 to 12 g per dish. It is also 
 hard requirement of the three sauces and of both salt-curing transforms in the
 [preservation chain](#preservation), which take 20 units each.
 
----
-
 ## Herbs and spices
 
-Five fresh herbs, two spice crops, and four ground products. Everything dries on the
+Four fresh herbs, two spice crops, and four ground products. Everything dries on the
 rack and everything grinds in the mortar.
 
 ```mermaid
 graph LR
   PS(["Parsley Seeds"]) --> PL(["Fresh Parsley"])
-  DS(["Dill Seeds"]) --> DL(["Fresh Dill"])
   TS(["Thyme Seeds"]) --> TH(["Fresh Thyme"])
   RS(["Rosemary Seeds"]) --> RO(["Fresh Rosemary"])
   WS(["Wild Garlic Seeds"]) --> WG(["Fresh Wild Garlic"])
   PL -->|"Rack 8 min"| DPa(["Dried Parsley"])
-  DL -->|"Rack 8 min"| DDi(["Dried Dill"])
   TH -->|"Rack 8 min"| DTh(["Dried Thyme"])
   RO -->|"Rack 10 min"| DRo(["Dried Rosemary"])
   WG -->|"Rack 8 min"| DWg(["Dried Wild Garlic"])
@@ -159,7 +153,6 @@ graph LR
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
 | `TR_ParsleyToDried` | 1+× Fresh Parsley | Dried Parsley (1:1) | Drying Rack | — | 8 min |
-| `TR_DillToDried` | 1+× Fresh Dill | Dried Dill (1:1) | Drying Rack | — | 8 min |
 | `TR_ThymeToDried` | 1+× Fresh Thyme | Dried Thyme (1:1) | Drying Rack | — | 8 min |
 | `TR_RosemaryToDried` | 1+× Fresh Rosemary | Dried Rosemary (1:1) | Drying Rack | — | 10 min |
 | `TR_WildGarlicToDried` | 1+× Fresh Wild Garlic | Dried Wild Garlic (1:1) | Drying Rack | — | 8 min |
@@ -182,14 +175,21 @@ Hunter Plate.
 The spice chain is also where the sausage chain gets its seasoning: all six
 sausage transforms require one to three `SPICE` items (Venison and Boar swap the second spice for a herb).
 
----
-
 ## Vegetables
 
-Four ChefZ crops (onion, garlic, carrot, cabbage) plus one spice crop (paprika),
+Five ChefZ crops (onion, garlic, carrot, cabbage, corn) plus one spice crop (paprika),
 alongside vanilla potato, tomato and green bell pepper. The chain is a closed loop:
-the four ChefZ vegetables are found in the world, like mushrooms (no seeds since
-2026-08-29).
+the five ChefZ vegetables are found in the world, like mushrooms (no seeds since
+2026-08-29). Corn (`ChefZ_Corn`, since 29.08.2026, in place of dill) is a found
+vegetable like the carrot and doubles as a mill input — see [Grain](#grain).
+
+Where corn goes: it has its own optional slot in Chernarus Chili, Vegetable Soup
+and Farmer's Breakfast (each also in the group version where one exists). Because
+its ingredient record carries the category `VEGETABLE`, it is also accepted by
+Bone Broth Soup's `veg` slot without any recipe change — that is the reach of the
+category decision, and it is deliberate. No recipe slot matches `GRAIN`, so the
+second category has no effect on cooking. Every recipe involved keeps its
+required ChefZ-only anchor, so vanilla cooking is untouched (I2).
 
 Since 2026-08-29 there is no chopping step either: the knife-cut variants
 (`Chopped*`, `ChefZ_SlicedPotato`) are gone, and every recipe takes the whole
@@ -207,8 +207,6 @@ The chain therefore has **no transforms left at all**. `ChefZ_Produce` reserves
 then seven, and the last of them went with the chopping step. A vegetable goes from
 the ground into the pot.
 
----
-
 ## Meat and sausage
 
 The longest chain by step count, and the one where the two halves of a station
@@ -217,9 +215,11 @@ matter: the Meat Grinder both minces and stuffs.
 ```mermaid
 graph LR
   LG(["Beef / Pork / Venison Leg"]) -->|"knife, 4 s"| RM(["Raw meat<br/>2 steaks per leg"])
+  RM -->|"knife, 4 s"| DM(["Diced Meat<br/>MEAT + MINCED_MEAT"])
   RM -->|"Meat Grinder<br/>20 s"| MM(["Minced Meat<br/>+ 5 species variants"])
   MM -.->|"35-60 % chance"| AF(["Animal Fat"])
   MM --> ST["Hunter Stew<br/>Fisherman's Stew"]
+  DM --> ST
   MM --> MD["Meat Dumplings"]
 ```
 
@@ -259,11 +259,26 @@ same transforms.
 | `TR_ChickenToMinced` | 1+× Chicken Breast + stage Raw | Minced Chicken (1:1) | Meat Grinder | — | 20 s |
 | `TR_BearToMinced` | 1+× Bear Steak + stage Raw | Minced Bear (1:1) | Meat Grinder | — | 20 s |
 
-Since 2026-08-29 there is no dicing step: the stews take minced meat, and a raw
-vanilla steak in a pot stays vanilla cooking (invariant I2). `PROCESS_CUT_MEAT`
-survived the removal because the legs still need it. The six mincing transforms are ordered by priority —
-the generic `TR_MeatToMinced` sits at 0, the five species transforms at 20, so pork
-becomes Minced Pork rather than generic Minced Meat.
+The six mincing transforms are ordered by priority — the generic `TR_MeatToMinced`
+sits at 0, the five species transforms at 20, so pork becomes Minced Pork rather than
+generic Minced Meat.
+
+### Dicing
+
+Dicing was removed on 29.08.2026 and **came back the same day**, once the delivered
+models arrived: `beefcubes.p3d` gave the cube its own geometry, and a class that had
+only ever been a vanilla proxy was worth having again.
+
+| Step | Input | Output | Where | Tool | Duration |
+|---|---|---|---|---|---|
+| `TR_DicedMeat` | 1+× *MEAT* + stage Raw | Diced Meat | *handcraft* | `CUTTING_TOOL` | 4 s |
+
+It shares `PROCESS_CUT_MEAT` with the three leg cuts and sits at priority 0 against
+their 20, so a leg still becomes steaks and everything else raw becomes cubes.
+
+`ChefZ_DicedMeat` is filed under **`MEAT` and `MINCED_MEAT`** with state `PREPARED`,
+which is the part worth knowing: every slot that asks for `MINCED_MEAT` accepts diced
+meat too. The stews reach it without naming it.
 
 ### Stuffing
 
@@ -299,8 +314,6 @@ chain at its two narrowest points: no casing, therefore no raw sausage, therefor
 none of the six cooked sausages, and no Dry or Smoked Sausage either. Diced Meat is
 unaffected, because it is handcraft. See
 [Processing-Stations](Processing-Stations) and [Known-Limitations](Known-Limitations).
-
----
 
 ## Milk
 
@@ -340,8 +353,6 @@ sauce chains.
 **Gaps.** None of the three dairy outputs declares a `quantityMode` or `quantity`.
 Every other transform in the mod does. Two milk therefore yield one implicit cream.
 
----
-
 ## Fish
 
 ChefZ adds no fish. It binds the four vanilla fillets as ingredients and gives them
@@ -368,8 +379,6 @@ category, so a preserved fillet still cooks.
 
 **Gaps.** Smoked Fish is unreachable — see the smoker note under
 [preservation](#preservation).
-
----
 
 ## Preservation
 
@@ -421,8 +430,6 @@ record sets `needsFuel: true` while the class has no fuel slot, so
 `stationPowered`. Smoked Meat, Smoked Fish and Smoked Sausage are therefore
 unreachable in V1. The drying half is unaffected — `PROCESS_DRY` needs neither
 heat nor fuel. See [Known-Limitations](Known-Limitations).
-
----
 
 ## Honey
 
@@ -488,8 +495,6 @@ size in the cargo and whether it takes the jar's exact cell cannot be promised.
 The nail ingredient is vanilla `Nail` (`Nails` is a script-only class,
 assumption A5).
 
----
-
 ## Tableware
 
 Not food, but the chain everything portioned depends on: without a bowl there is
@@ -524,24 +529,21 @@ nothing crafts it and nothing spawns it, because there is no `types.xml`. The ot
 four are craftable from vanilla materials, which is why the bark bowl and the metal
 cans were added — a bowl should not depend on finding firewood alone.
 
----
-
 ## Chain coverage
 
-All 59 transforms are accounted for above.
+All 61 transforms are accounted for above.
 
 | | |
 |---|---|
-| Transforms | 59 |
+| Transforms | 61 |
 | Of those, at a station | 39 |
-| Of those, handcraft | 20 |
-| Recipes fed by these chains | 44 |
-| Chains blocked at least in part | 3 — meat/sausage (no cargo), preservation (smoker), everything upstream of loot (no `types.xml`) |
+| Of those, handcraft | 22 |
+| Recipes fed by these chains | 47 |
+| Chains blocked at least in part | 4 — grain (mill has no cargo), meat/sausage (no cargo), preservation (smoker), everything upstream of loot (no `types.xml`) |
 
-The transform totals above predate the honey chain (recounted 2026-08-29: 59
-transforms in the repository, 8 of them in the apiary). The honey chain is the
-one chain that is not blocked upstream: planks, nails and tuna cans are vanilla
-loot.
+Recounted 2026-08-29 after the apiary, the bee smoker fuel step and the return of
+diced meat: 61 transforms, 9 of them in the apiary. The honey chain is the one chain
+that is not blocked upstream — planks, nails and tuna cans are vanilla loot.
 
 ## See also
 

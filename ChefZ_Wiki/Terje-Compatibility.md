@@ -15,8 +15,6 @@ mod ([Modules](Modules)); these two are wiring.
 > items it describes do not exist in the main mod yet. See
 > [The Medicine module is dormant](#the-medicine-module-is-dormant) below.
 
----
-
 ## The ground rule: ChefZ runs fully without Terje
 
 ChefZ Core has **no Terje dependency in any direction that matters**. The dependency
@@ -80,8 +78,6 @@ Three places, in increasing order of hardness:
 You can load ChefZ without Terje, Terje without ChefZ, or both. There is no build
 of ChefZ that requires you to run TerjeMods, and adding or removing a comp PBO does
 not touch any ChefZ save data — neither module writes persistent state.
-
----
 
 ## Module 1: `Psyerns_ChefZ_Terje_Skills_Comp`
 
@@ -211,8 +207,6 @@ survives of the herbalist is the highlight on herbs lying in the world
 | `consume` | **no** | See [System boundaries](#system-boundaries). |
 | `discover` | **no** | A first-time recipe success already paid through `cook` in the same operation. |
 
----
-
 ### System boundaries
 
 Three things ChefZ deliberately does **not** award XP for, because someone else
@@ -240,8 +234,6 @@ The general rule: **if Terje already covers an action, ChefZ stays out of it.** 
 double-XP failure mode is invisible in play — nothing breaks, a skill bar just
 climbs faster than it should — which is exactly why it is guarded structurally
 rather than by testing.
-
----
 
 ### The Herbalist perk (`chefzherb`)
 
@@ -292,10 +284,16 @@ The perk asks **only** for the ChefZ food tag `CHEFZ_HERB`, resolved through
 class. A new herb added by any content module works with the perk the moment it
 carries the tag — no code change in this module. See [Adding-Content](Adding-Content).
 
-In the current data set that is five classes:
-`ChefZ_Parsley`, `ChefZ_Dill`, `ChefZ_Thyme`, `ChefZ_Rosemary`, `ChefZ_WildGarlic`.
-`ChefZ_PepperBerries` carries `CHEFZ_SPICE` instead, so it earns harvest XP but is
-**not** highlighted and gets **no** yield bonus. `ChefZ_Paprika` carries neither.
+In the current data set that is four classes:
+`ChefZ_Parsley`, `ChefZ_Thyme`, `ChefZ_Rosemary`, `ChefZ_WildGarlic`.
+`ChefZ_PepperBerries` carries `CHEFZ_SPICE` instead and is therefore **not**
+highlighted. Fresh paprika is vanilla `GreenBellPepper` since 2026-08-29 — category
+`VEGETABLE`, tag `CHEFZ_FRESH` — so it carries no ChefZ herb or spice tag at all and
+the perk passes over it too. The class `ChefZ_Paprika` these pages once named no
+longer exists.
+
+Since harvest XP and the yield bonus went with the herb plants, **highlighting is the
+only effect left**, which makes the tag the only thing that matters here.
 
 #### Icon and localisation
 
@@ -305,8 +303,6 @@ config pointer to a missing texture would render as an empty slot in the perk tr
 Display name and description are shipped in the module's stringtable in the project's
 standard column set — `original` plus 13 languages — under
 `STR_CHEFZ_PERK_HERBALIST` and `STR_CHEFZ_PERK_HERBALIST_DESC`.
-
----
 
 ### Anti-exploit
 
@@ -368,8 +364,6 @@ mid-grind at the moment of the restart.
 circular chain in the data set (onion → seeds → plant → onion). Seeds and plants are
 gone since 2026-08-29, and the entry with them.
 
----
-
 ### Capability provider — read this before you expect recipe locks
 
 `ChefZ_TerjeCapabilityProvider` registers with `ChefZ_CapabilityRegistry` at
@@ -396,8 +390,6 @@ returns `false` — "does not block" — by default and stays that way. See
 
 Operators who want the provider gone entirely: `CfgChefZTerjeSkills >
 ChefZ_Capabilities > enabled = 0`.
-
----
 
 ### Configuration switches
 
@@ -427,8 +419,6 @@ TerjeSkills-Anbindung v0.0.1 aktiv  aktiv=1 xp=1 skill=surv kraut=CHEFZ_HERB her
 
 See [Configuration](Configuration) for ChefZ's own settings and
 [Troubleshooting](Troubleshooting) if the banner does not appear.
-
----
 
 ## Module 2: `Psyerns_ChefZ_Terje_Medicine_Comp`
 
@@ -596,8 +586,6 @@ dieselbe Handlung. Parameter entfernen.
 This is the one rule whose violation you would never notice in play, so it is
 checked at startup rather than left to testing.
 
----
-
 ## What Terje already has, and ChefZ therefore does not duplicate
 
 | Terje feature | Where | Why ChefZ leaves it alone |
@@ -612,8 +600,6 @@ checked at startup rather than left to testing.
 
 The one perk ChefZ does add — `chefzherb` — covers ground Terje has no perk for:
 finding and harvesting cultivated herbs.
-
----
 
 ## Who owns a dish: attribution and its known edge case
 
@@ -727,8 +713,6 @@ an item exploit (nothing extra spawns) — only a misattributed XP grant of at m
 XP. If that matters on your server, set `cookActorRadius = 0` and switch attribution
 off entirely; you lose all ChefZ cooking XP with it.
 
----
-
 ## Not yet confirmed in game
 
 The following are code-verified but have **not** been confirmed on a live server, and
@@ -743,8 +727,6 @@ belong to [Known-Limitations](Known-Limitations) until they are:
 * Repeat-damping behaviour under real multi-player load.
 * Whether `CfgTerjeSkills > Survival > Perks` merges cleanly with every combination
   of other perk-adding Terje-compatible mods on the same server.
-
----
 
 ## See also
 

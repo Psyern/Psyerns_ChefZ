@@ -5,8 +5,6 @@ Every case here has actually happened during development. Each one is written as
 RPT**. That is the difference between a useful troubleshooting page and a
 decorative one.
 
----
-
 ## 0. Start here: read the boot block
 
 Before chasing any individual symptom, find the ChefZ boot block in the server
@@ -46,8 +44,6 @@ If the whole block is absent, ChefZ never booted. Check that the PBOs are in
 `-mod` and not `-serverMod`, and that the `$PREFIX$` survived packing — a wrong
 prefix makes DayZ skip the script module **silently, with no RPT line at all**.
 
----
-
 ## 1. Raw key names in the UI instead of a name
 
 **Symptom** — An item shows `STR_CHEFZ_ITEM_BREAD0` in the inventory, in the
@@ -78,8 +74,6 @@ not report this.** It just stands there.
 but the key still shows raw in-game, the file is not being packed: check
 `include.txt` contains `*.csv`. `Psyerns_ChefZ_COT_Comp` has no `include.txt` at
 all — see [Installation](Installation).
-
----
 
 ## 2. A dish never finishes cooking
 
@@ -121,8 +115,6 @@ the dish.
 **Fix** — Add the missing `FoodStageTransitions`, or the missing `FoodStages`,
 or the cookability override in the script chain. See [Food States](Food-States).
 
----
-
 ## 3. A food item cannot be eaten
 
 **Symptom** — The item exists, has nutrition values, and offers no "Eat" action.
@@ -157,8 +149,6 @@ animation may even play — and do nothing.
 
 **Fix** — Add `AddAction(ActionEat…)` in the script class, or add the
 `Nutrition`/`Food` block and a non-zero `scope`.
-
----
 
 ## 4. A crafting recipe does not appear
 
@@ -235,8 +225,6 @@ PBO-internal JSON is client-readable is still an **open measurement**; the
 `[ChefZ][V-A]` smoke test block in the RPT is what answers it. See
 [Known Limitations](Known-Limitations).
 
----
-
 ## 5. Crafting produces the wrong item, or nothing
 
 **Symptom** — A craft action runs and either yields something unrelated, or
@@ -292,8 +280,6 @@ the server.
 - If `abgewiesen > 0` on one side and `0` on the other, fix
   `handcraftRecipeSlots` first (Case 4) and re-check.
 
----
-
 ## 6. Vanilla cooking behaves unexpectedly
 
 **Symptom** — A player puts ordinary vanilla ingredients in a pan and gets a
@@ -337,8 +323,6 @@ cooks on exactly as it always did.**
 **Fix** — Give the recipe at least one ChefZ-only ingredient slot, or raise its
 specificity so it cannot be satisfied by vanilla alone. Set `defaultExtraItems`
 back to `forbid`.
-
----
 
 ## 7. A whole module is missing in-game
 
@@ -402,8 +386,6 @@ never registered. Check `slices=` in the summary. A missing `CfgChefZ` node, or
 a script module whose `dir` does not match the PBO prefix, makes DayZ skip the
 module **without any RPT entry**.
 
----
-
 ## 8. Cooking XP never arrives
 
 **Symptom** — With `Psyerns_ChefZ_Terje_Skills_Comp` loaded, processing at
@@ -454,8 +436,6 @@ stood at the device in the tick when its cargo grew. Three ways it ends up `0`:
 the XP matrix, the perk and the damper are on
 [Terje Compatibility](Terje-Compatibility).
 
----
-
 ## 9. `health=SAFE_MODE` — ChefZ is inert
 
 **Symptom** — Nothing ChefZ works at all. Vanilla cooking is completely normal.
@@ -491,8 +471,6 @@ Run the full validator first — it finds most load errors statically:
 ```
 node tools/chefz-validate/index.mjs
 ```
-
----
 
 ## 10. Settings changes have no effect
 
@@ -532,8 +510,6 @@ node tools/chefz-validate/index.mjs
    and `qualityScoring` are replaced **whole** by an overlay; keys you omit fall
    back to the **code** defaults, not to the shipped `Core.json` values.
 
----
-
 ## 11. Quick reference: RPT search strings
 
 | Search for | Means |
@@ -561,8 +537,6 @@ node tools/chefz-validate/index.mjs
 | `[ChefZ][NUTRI]` | nutrition audit findings |
 | `Kein Treffer -> Vanilla-Kochen laeuft unveraendert weiter.` | no ChefZ recipe matched — usually correct |
 
----
-
 ## 12. Turning the log up
 
 The single most useful setting when investigating anything:
@@ -589,8 +563,6 @@ Restart. Then read `$profile:ChefZ\Logs\ChefZ_<date>.log` and
 Use the channel mask, not a global `DEBUG`. On a server with dozens of active
 fireplaces a global debug level is unusable — the one interesting line drowns in
 thousands. Channels and levels are listed in [Configuration](Configuration).
-
----
 
 ## Next
 

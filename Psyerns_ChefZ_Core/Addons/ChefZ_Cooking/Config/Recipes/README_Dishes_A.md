@@ -9,8 +9,6 @@ gegenüber unbekannten JSON-Feldern **nicht belegt** ist. Ist er intolerant, wir
 Datei mit Kommentarfeld **komplett** verworfen — dann liesse sich kein einziges
 dieser zehn Gerichte mehr kochen, ohne dass irgendetwas darauf hinweist.
 
----
-
 ## 1. `completion: "TIMED"` und nicht `ON_STAGE`
 
 `ON_STAGE` verlangt, dass **jede gebundene Pflichtzutat** in einer erlaubten
@@ -56,7 +54,7 @@ Stufenschwellen aus `CfgChefZQualityTiers` in der `config.cpp` dieses Moduls
 | Gewürz (`CHEFZ_SPICE`) | 1 | optionaler Slot |
 | Kraut (`CHEFZ_HERB`) | 1 | optionaler Slot |
 | Premiumzutat (Sahne, Sauce, Butter) | 1–2 | optionaler Slot |
-| Signaturzutat (Thymian, Dill, Paprikapulver, Hunter Seasoning, Hunter Sausage) | 1–3 | `gradeRules` |
+| Signaturzutat (Thymian, Petersilie, Paprikapulver, Hunter Seasoning, Hunter Sausage) | 1–3 | `gradeRules` |
 
 Damit ergibt sich: Grundzutaten allein → **SIMPLE**; mit Salz → **PREPARED**;
 zusätzlich Gewürz und Kraut → **SEASONED**; dazu die Premium- oder Signaturzutat →

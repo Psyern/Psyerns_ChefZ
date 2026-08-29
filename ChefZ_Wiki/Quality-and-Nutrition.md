@@ -9,8 +9,6 @@ Related pages: [Recipes](Recipes), [Food-States](Food-States),
 [Configuration](Configuration), [Validation](Validation),
 [Known-Limitations](Known-Limitations), [Adding-Content](Adding-Content).
 
----
-
 ## Part 1 — Quality
 
 ### 1.1 Where the tiers live
@@ -79,7 +77,7 @@ The three levers that do work:
 
 Over a whole meal, yield is the same balancing lever as nutrition, just applied
 where the engine allows it. This is also why the shipped dishes carry no
-`outputs[].variants` and no `_Premium` classes: 25 dishes × 4 tiers would be 100
+`outputs[].variants` and no `_Premium` classes: 28 dishes × 4 tiers would be 112
 classes with model, stringtable and loot entry.
 
 ### 1.4 The score formula
@@ -265,8 +263,6 @@ summand is written as a separate note line
 created without a tier. Deliberately not a rollback reason — a dish without a
 tier is a better outcome than no dish.
 
----
-
 ## Part 2 — Nutrition
 
 ### 2.1 The manager that changes nothing
@@ -277,8 +273,12 @@ in the core: **it changes nothing at runtime.** No item, no config, no balancing
 value, no stomach. It has no writing method, and it should not get one.
 
 Its value is in the start-up log, not in the game. Its own header calls it what
-it is: the only tool with which 25 dishes across six content slices can be
+it is: the only tool with which "25 Gerichte ueber sechs Content-Slices" can be
 balanced consistently.
+
+(That header count is itself out of date — there are **28** dishes since the three
+vanilla-produce plates arrived. The quote is left as the file writes it; the file is
+what needs the edit, not this page.)
 
 It also explicitly does **not** hand out energy or water past the stomach.
 `consumer.GetStatEnergy().Add(...)` in `OnConsume` would be technically possible

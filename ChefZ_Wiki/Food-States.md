@@ -9,8 +9,6 @@ Related pages: [Recipes](Recipes), [Processing-Stations](Processing-Stations),
 [Validation](Validation), [Known-Limitations](Known-Limitations),
 [Troubleshooting](Troubleshooting).
 
----
-
 ## 1. Where the catalogue actually lives
 
 **`CfgChefZStates` in
@@ -31,8 +29,6 @@ The core itself declares no state. `ChefZ_StateDef`
 (`.../ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_StateDef.c`) describes only *which
 fields* a state has; the words `SMOKED`, `SALTED` and `PREPARED` do not occur in
 it and must not.
-
----
 
 ## 2. The ten shipped states
 
@@ -68,8 +64,6 @@ Notes that are load-bearing:
 `spoilageMultiplier` is deliberately absent from `CfgChefZStates`. It is stated
 once, in the preservation records (§6).
 
----
-
 ## 3. What `projectsToVanillaStage` actually means
 
 The valid names are `Raw`, `Baked`, `Boiled`, `Dried`, `Burned`, `Rotten`
@@ -94,8 +88,6 @@ every item carrying it, whereas a state without projection can merely do less.
 * `spoilageMultiplier <= 0` → WARN, set to `1.0` (neutral).
 * `freshnessLifetimeSec <= 0` → WARN, dropped; the server default applies.
 
----
-
 ## 4. How the state of an item is determined
 
 `ChefZ_ItemStateComponent.GetState()`
@@ -112,8 +104,6 @@ in order:
    check and an `Edible_Base` without a `FoodStage` — an empty pot, for instance —
    would crash.
 4. `INVALID`.
-
----
 
 ## 5. Transitions
 
@@ -183,8 +173,6 @@ nutrition, the state carries the preservation factor and the tag.
 See [Processing-Stations](Processing-Stations) and
 [Production-Chains](Production-Chains).
 
----
-
 ## 6. Setting a state — the rules
 
 `ChefZ_ItemStateComponent.SetState(item, state, applyVanillaTransition = false)`:
@@ -231,8 +219,6 @@ of the two failure stages, the ChefZ overlay is **deleted**. The item then falls
 back to the projection rule and reads its state from the vanilla stage. Two
 systems both allowed to say "this is spoiled" would drift apart guaranteed.
 Spoiled stays spoiled.
-
----
 
 ## 7. Preservation
 
@@ -354,8 +340,6 @@ fresh goods. Same principle as the quality freshness term; see
 unset, so a later server value can still override it. Filling in a number at
 `ResolveDefaults()` would make "the state declared a lifetime" and "nobody said
 anything" indistinguishable.
-
----
 
 ## 8. The two traps — read this before adding a class
 

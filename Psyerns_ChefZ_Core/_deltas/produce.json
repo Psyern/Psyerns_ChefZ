@@ -12,7 +12,7 @@
             "id": "CHEFZ_FRESH",
             "appliesTo": [
                 "Potato", "Tomato", "GreenBellPepper",
-                "ChefZ_Onion", "ChefZ_Garlic", "ChefZ_Carrot", "ChefZ_Cabbage"
+                "ChefZ_Onion", "ChefZ_Garlic", "ChefZ_Carrot", "ChefZ_Cabbage", "ChefZ_Corn"
             ]
         }
     ],
@@ -23,7 +23,8 @@
         { "class": "ChefZ_Onion", "energy": 90, "water": 55, "stomach": 25 },
         { "class": "ChefZ_Garlic", "energy": 40, "water": 15, "stomach": 8 },
         { "class": "ChefZ_Carrot", "energy": 100, "water": 60, "stomach": 30 },
-        { "class": "ChefZ_Cabbage", "energy": 110, "water": 80, "stomach": 45 }
+        { "class": "ChefZ_Cabbage", "energy": 110, "water": 80, "stomach": 45 },
+        { "class": "ChefZ_Corn", "energy": 180, "water": 40, "stomach": 60 }
     ],
 
     "classes": [
@@ -31,6 +32,7 @@
         "ChefZ_Onion",
         "ChefZ_Garlic",
         "ChefZ_Carrot",
-        "ChefZ_Cabbage"
+        "ChefZ_Cabbage",
+        "ChefZ_Corn"
     ]
 }

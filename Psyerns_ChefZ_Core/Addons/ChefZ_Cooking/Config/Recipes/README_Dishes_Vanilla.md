@@ -112,7 +112,7 @@ Grundzutat.
 | Gericht | erreichbare Summe |
 |---|---|
 | Kürbissuppe | 9 (Wurzelgemüse 1 + Sahne 2 + Kräuter 2 + Salz 1 + Gewürz 1 + Thymian 1 + frische Kräuter 1) |
-| Kleinfischpfanne | 8 (Kräuter 3 + Salz 2 + Gewürz 1 + Dill 1 + frische Kräuter 1) |
+| Kleinfischpfanne | 8 (Kräuter 3 + Salz 2 + Gewürz 1 + Petersilie 1 + frische Kräuter 1) |
 | Obstkompott | 9 (Süßung 3 + Konserve 1 + Sahne 1 + Gewürz 1 + Honig 2 + frisches Obst 1) |
 
 Alle drei erreichen `PREMIUM`. Das ist keine Kosmetik: die Blutwurstplatte kam

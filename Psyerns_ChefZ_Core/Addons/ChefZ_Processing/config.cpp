@@ -148,6 +148,9 @@ class CfgVehicles
     // Sie ist ein tragbares und ablegbares Objekt, kein Kochgeraet: sie fasst
     // Vanillas Kochkette an keiner Stelle an (11 E6).
     //
+    // Eingang: Weizen (TR_WheatToFlour) oder Mais (TR_CornToFlour, seit
+    // 29.08.2026), Ausgang immer ChefZ_Flour - es gibt kein eigenes Maismehl.
+    //
     // PROXY: wooden_case.p3d - eine Holzkiste in der richtigen Groessenordnung.
     // Eigenes Muehlenmesh ist gemeldet (U, P1).
     //--------------------------------------------------------------------------

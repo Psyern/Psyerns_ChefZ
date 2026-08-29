@@ -12,17 +12,15 @@ what is in the pot, DayZ cooks the way it always did. That rule runs both ways: 
 ChefZ recipe that could be satisfied entirely with vanilla ingredients would hijack
 vanilla cooking, so the build refuses to contain one. See [Architecture](Architecture).
 
----
-
 > ### Read this before running it
 >
-> **ChefZ has never been compiled and has never run in DayZ.** The code is complete
-> and every design rule is machine-enforced, but no build has been produced and no
-> gate checklist has been executed. [Known Limitations](Known-Limitations) is the
-> full inventory, and it is the right page to start on if you are considering a live
-> server.
-
----
+> **ChefZ compiles and boots, and does not yet keep a server running.** On
+> 28.08.2026 every script module compiled clean, the server bound its port and all
+> addons of the time registered — then the process died in the mission's `OnInit`
+> chain, with the core in safe mode and its registries empty. Nothing has been
+> signed or binarised, and no gate checklist has been executed in a live game.
+> [Known Limitations](Known-Limitations) is the full inventory, and it is the right
+> page to start on if you are considering a live server.
 
 ## Start here
 
@@ -39,16 +37,16 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 
 | | |
 |---|---:|
-| Addons | 10 |
+| Addons | 12 — ten with content, two assets only |
 | Optional compatibility mods | 3 |
 | Recipes | 47 |
 | Ingredient records | 112 — 60 ChefZ classes, 52 vanilla items mapped in |
-| Processing transforms | 59 |
+| Processing transforms | 61 |
 | Processing stations | 11 |
 | Ingredient categories | 41 |
 | Food tags | 19 |
 | Script files | 171 in the mod, 22 in the comp mods |
-| Translated strings | 398 keys × 13 languages |
+| Translated strings | 401 keys × 13 languages |
 
 ## How it is organised
 
@@ -71,6 +69,8 @@ ChefZ_Preservation  salting, drying, smoking
 ChefZ_Baking        dough, bread, flatbread, pasta
 ChefZ_Cooking       plates, bowls, stews, breakfasts, sauces
 ChefZ_Cookbook      recipe knowledge and RPC - no UI yet
+ChefZ_Devices       models and textures only - hive, beekeeper
+ChefZ_Items         models and textures only - frames, jar, carrot, smoker
 ```
 
 Three optional mods hook ChefZ into other systems. **ChefZ runs fully without all

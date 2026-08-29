@@ -39,8 +39,8 @@ nothing can be cooked inside one.**
 | Cheese Press | `ChefZ_CheesePress` | `PRESS` | 1 | 1 | 6×4 | no | 6800 g | `wooden_case.p3d` |
 | Meat Grinder | `ChefZ_MeatGrinder` | `GRINDER` | 2 | 1 | **none** | no | 3200 g | `Cauldron.p3d` |
 | Honey Extractor | `ChefZ_HoneyExtractor` | `EXTRACTOR` | 1 | 1 | 10×10 | no | 9500 g | `Cauldron.p3d` |
-| Beehive | `ChefZ_Beehive` | `APIARY` | 1 | 1 | 10×9 | no | 14000 g | `wooden_case.p3d` |
-| Double Beehive | `ChefZ_BeehiveDouble` | `APIARY` | 1 | 1 | 10×15 | no | 26000 g | `wooden_case.p3d` |
+| Beehive | `ChefZ_Beehive` | `APIARY` | 1 | 1 | 10×9 | no | 14000 g | own: `ChefZ_Devices/models/beekeeper.p3d` |
+| Double Beehive | `ChefZ_BeehiveDouble` | `APIARY` | 1 | 1 | 10×15 | no | 26000 g | own: `ChefZ_Devices/models/beehive.p3d` |
 
 All eleven run at `speedMultiplier` 1.0. Every model is a vanilla proxy — no station
 has its own geometry yet.
@@ -62,25 +62,44 @@ record, after the apiary rework.)
 
 ## Tool groups
 
-Two tool groups exist. Both are declared exactly once, in
-`ChefZ_Processing/config.cpp` under `CfgChefZTools`; every other module only
-*uses* them.
+Eight tool groups, declared across three modules — `ChefZ_Cooking`, `ChefZ_Farming`
+and `ChefZ_Processing`, each under its own `CfgChefZTools`. Every group allows
+subclasses, so a variant of a listed class counts as a member.
 
-| Group | Members | Used by |
-|---|---|---|
-| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife (`allowSubclasses = 1`) | `PROCESS_CUT_MEAT`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL` |
-| `ROLLING_PIN` | `ChefZ_RollingPin` (`allowSubclasses = 1`) | `PROCESS_ROLL` |
+| Group | Members | Declared in | Used by |
+|---|---|---|---|
+| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife | `ChefZ_Processing` | `PROCESS_CUT_MEAT`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL`, `PROCESS_CARVE_BOWL_BARK` |
+| `ROLLING_PIN` | `ChefZ_PastaMachine`, MeatTenderizer | `ChefZ_Processing` | `PROCESS_ROLL` |
+| `METALWORK_TOOL` | Pliers, Hammer, Wrench, LugWrench, Screwdriver | `ChefZ_Processing` | `PROCESS_ASSEMBLE` |
+| `AXE_TOOL` | WoodAxe, Hatchet, FirefighterAxe, Iceaxe | `ChefZ_Cooking` | `PROCESS_CARVE_BOWL_BARK` |
+| `SAWING_TOOL` | Hacksaw | `ChefZ_Cooking` | `PROCESS_CUT_CANS` |
+| `HAND_TOOL` | Hammer, Hatchet, Pliers, Screwdriver | `ChefZ_Farming` | `PROCESS_BUILD_BEE_SMOKER`, `PROCESS_RAISE_HIVE` |
+| `UNCAPPING_TOOL` | `ChefZ_UncappingFork` | `ChefZ_Farming` | `PROCESS_UNCAP_COMB` |
+| `BEE_SMOKER` | `ChefZ_BeeSmoker` | `ChefZ_Farming` | — |
+
+**`ROLLING_PIN` contains no rolling pin.** The group keeps the name because
+`PROCESS_ROLL` in `ChefZ_Baking/Config/GrainProcesses.json` names it, and a rename
+would have to move through both. Its former sole member `ChefZ_RollingPin` had no
+source at all — no loot entry, no transform that made one — which left `PROCESS_ROLL`
+unreachable and the whole baking chain behind the dough dead, without a single error
+message. Two sources replaced it: vanilla `MeatTenderizer`, which spawns in town and
+village, and `ChefZ_PastaMachine`, built from a metal plate through
+`TR_AssemblePastaMachine`.
+
+**`BEE_SMOKER` is used by no process**, and that is deliberate. The smoker is not a
+tool a process demands — it is checked in script, in the hive's sting hook, where
+having one in hand calms the bees. The group exists so that check has a declared
+membership list rather than a hard-coded class name.
 
 **No station process requires a tool.** Milling, grinding, churning, pressing,
-drying and smoking need nothing but the station.
-
----
+drying, smoking and spinning honey need nothing but the station. Every tool group
+above serves a handcraft process.
 
 ## Grain Mill
 
 `ChefZ_GrainMill` · category `MILL` · 1 parallel slot · cargo **none**
 
-Turns wheat into flour. One process, one transform — the narrowest station in the mod, and the head of the entire grain chain.
+Turns wheat or corn into flour. One process, two transforms — the narrowest station in the mod, and the head of the entire grain chain.
 
 ### Processes
 
@@ -88,21 +107,25 @@ Turns wheat into flour. One process, one transform — the narrowest station in 
 |---|---|---|---|---|
 | `PROCESS_MILL` | STATION_ACTION | 25 s | no | none |
 
-### Transforms (1)
+### Transforms (2)
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
 | `TR_WheatToFlour` | 1× Wheat | Flour | × 0.78 of input | 25 s | — |
+| `TR_CornToFlour` | 1-5× Corn | Flour | 120 g per cob (needs a future cargo of at least 5 cells) | 25 s | — |
+
+`TR_CornToFlour` carries `priority` 1 while `TR_WheatToFlour` stays at 0. The two
+transforms match disjoint inputs, so the order never decides anything; the offset
+only keeps `ChefZ_ProcessingManager` from reporting a tie between two transforms
+of equal specificity on the same process at build time.
 
 > **This station has no cargo.** Its `config.cpp` class carries no
 > `class Cargo { itemsCargoSize[] = {...}; }` block, and `Inventory_Base`
 > supplies none. `ChefZ_FactCollector.CollectFromCargo` returns as soon as
 > `inventory.GetCargo()` is null, so nothing can ever be placed in the station and
-> no transform above can match. The Butter Churn, Cheese Press, Salt Pan, Smoker
+> no transform above can match. The Butter Churn, Cheese Press, Frying Pan, Smoker
 > and the herb-station base all carry such a block; these three do not.
 > See [Known-Limitations](Known-Limitations).
-
----
 
 ## Mortar and Pestle
 
@@ -126,13 +149,11 @@ Grinds dried herbs and spices into powders and mixes. Both processes are `STATIO
 | `TR_HunterSeasoning` | 1+× Black Pepper + 1+× Paprika Powder + 1+× Dried Thyme + 1+× Dried Wild Garlic + 1+× *SPICE* | Hunter Seasoning | 1× | 35 s | PREPARED |
 | `TR_HerbMix` | 1+× Dried Thyme + 1+× Dried Parsley + 1+× Dried Rosemary | Herb Mix | 1× | 25 s | PREPARED |
 
----
-
 ## Drying Rack
 
 `ChefZ_DryingRack` · category `RACK` · 4 parallel slots · cargo 4×3
 
-The busiest station in the mod. Eleven transforms across four different chains — herbs, spices, pasta and preservation. `PROCESS_DRY` needs neither heat nor fuel, only time, so a rack works anywhere. Four parallel slots. Individual transforms override the 10-minute base duration; the spread is 8 minutes for parsley to 90 minutes for dry sausage.
+The busiest station in the mod. Twelve transforms across four different chains — herbs, spices, pasta and preservation. `PROCESS_DRY` needs neither heat nor fuel, only time, so a rack works anywhere. Four parallel slots. Individual transforms override the 10-minute base duration; the spread is 8 minutes for parsley to 90 minutes for dry sausage.
 
 ### Processes
 
@@ -140,7 +161,7 @@ The busiest station in the mod. Eleven transforms across four different chains �
 |---|---|---|---|---|
 | `PROCESS_DRY` | STATION_TIMED | 10 min | no | none |
 
-### Transforms (11)
+### Transforms (12)
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
@@ -149,14 +170,17 @@ The busiest station in the mod. Eleven transforms across four different chains �
 | `TR_SaltedFishToDried` | 1+× Salted Fish | Dried Fish | 1:1 from input | 45 min | DRIED |
 | `TR_RawSausageToDry` | 1+× *SAUSAGE* + state RAW | Dry Sausage | 1:1 from input | 90 min | DRIED |
 | `TR_ParsleyToDried` | 1+× Fresh Parsley | Dried Parsley | 1:1 from input | 8 min | DRIED |
-| `TR_DillToDried` | 1+× Fresh Dill | Dried Dill | 1:1 from input | 8 min | DRIED |
 | `TR_ThymeToDried` | 1+× Fresh Thyme | Dried Thyme | 1:1 from input | 8 min | DRIED |
 | `TR_RosemaryToDried` | 1+× Fresh Rosemary | Dried Rosemary | 1:1 from input | 10 min | DRIED |
 | `TR_WildGarlicToDried` | 1+× Fresh Wild Garlic | Dried Wild Garlic | 1:1 from input | 8 min | DRIED |
 | `TR_PaprikaToDried` | 1+× Paprika | Dried Paprika | 1:1 from input | 15 min | DRIED |
 | `TR_PepperBerriesToDried` | 1+× Pepper Berries | Dried Peppercorns | 1:1 from input | 15 min | DRIED |
+| `TR_CaninaBerriesToDried` | 2× `CaninaBerry` | Dried Berries | 2 → 1, fixed | 7 min | DRIED |
+| `TR_SambucusBerriesToDried` | 2× `SambucusBerry` | Dried Berries | 2 → 1, fixed | 7 min | DRIED |
 
----
+The two berry transforms are the only ones at this rack that do not keep a 1:1
+ratio: two vanilla berries become one `ChefZ_DriedBerries`, and both kinds converge
+on the same output class.
 
 ## Smoker
 
@@ -195,13 +219,11 @@ Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` se
 > effect is that all three smoking transforms are unreachable in V1.
 > See [Known-Limitations](Known-Limitations).
 
----
-
 ## Frying Pan
 
 `ChefZ_FryingPan` · category `SALTWORKS` · 1 parallel slot · cargo 3×2
 
-The entire salt chain. Boil sea water down to raw salt, then dry raw salt into salt. Boiling needs a burning fireplace within range; drying does not. Neither transform names a station, so any station offering the process would do — the Salt Pan is currently the only one.
+The entire salt chain. Boil sea water down to raw salt, then dry raw salt into salt. Boiling needs a burning fireplace within range; drying does not. Neither transform names a station, so any station offering the process would do — the Frying Pan is currently the only one.
 
 ### Processes
 
@@ -216,8 +238,6 @@ The entire salt chain. Boil sea water down to raw salt, then dry raw salt into s
 |---|---|---|---|---|---|
 | `TR_SaltwaterToRawSalt` | 1× container with SaltWater (0.6) | Raw Salt | × 0.04 of input | 15 min | — |
 | `TR_RawSaltToSalt` | 1× Raw Salt | Salt | × 0.67 of input | 20 min | — |
-
----
 
 ## Butter Churn
 
@@ -239,8 +259,6 @@ Skims milk into cream and churns cream into butter. Both are `STATION_TIMED`: st
 | `TR_MilkToCream` | 2× Milk | Cream | 1× (no mode given) | 2 min | — |
 | `TR_CreamToButter` | 2× Cream | Butter | 1× (no mode given) | 3 min | — |
 
----
-
 ## Cheese Press
 
 `ChefZ_CheesePress` · category `PRESS` · 1 parallel slot · cargo 6×4
@@ -258,8 +276,6 @@ Presses milk into cheese. At 5 minutes for 3 milk, the longest single dairy step
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
 | `TR_MilkToCheese` | 3× Milk | Cheese | 1× (no mode given) | 5 min | — |
-
----
 
 ## Cutting Board — removed
 
@@ -302,11 +318,9 @@ Mince raw meat, then stuff the mince into casing. Twelve transforms — six minc
 > `class Cargo { itemsCargoSize[] = {...}; }` block, and `Inventory_Base`
 > supplies none. `ChefZ_FactCollector.CollectFromCargo` returns as soon as
 > `inventory.GetCargo()` is null, so nothing can ever be placed in the station and
-> no transform above can match. The Butter Churn, Cheese Press, Salt Pan, Smoker
+> no transform above can match. The Butter Churn, Cheese Press, Frying Pan, Smoker
 > and the herb-station base all carry such a block; these three do not.
 > See [Known-Limitations](Known-Limitations).
-
----
 
 ## Honey Extractor
 
@@ -352,8 +366,6 @@ anything and the chain **stops**: taking honey out or adding jars does not resta
 it — the player has to crank again. The same applies whenever a follow-up job
 cannot start (no jar, no frame with 2 units left).
 
----
-
 ## Beehive and Double Beehive
 
 `ChefZ_Beehive` · category `APIARY` · 1 parallel slot · cargo 10×9 · **10 frames** · lifetime 604800 s
@@ -365,7 +377,7 @@ script, and a rotated or shifted frame must not lock the last one out. The confi
 the same server time as the bees; a `types.xml` entry overrides it, so keep it at
 least that high there.
 
-The one station that runs **no transform**. Its single process exists to give the
+The one station that runs **no transform**. Its two processes exist to give the
 player an action; the actual work — bees filling frames — is script in
 `ChefZ_Apiary.c`, not a station job.
 
@@ -373,7 +385,8 @@ player an action; the actual work — bees filling frames — is script in
 
 | Process | Kind | Base duration | Heat | Tool |
 |---|---|---|---|---|
-| `PROCESS_HARVEST_HIVE` | STATION_ACTION | 8 s | no | none (a Bee Smoker in hand prevents the sting) |
+| `PROCESS_HARVEST_HIVE` | STATION_ACTION | 8 s | no | none (a lit Bee Smoker in hand prevents the sting) |
+| `PROCESS_PACK_HIVE` | STATION_ACTION | — | no | none |
 
 ### Transforms (0)
 
@@ -403,6 +416,31 @@ mask** (`IsGasMask()`, so GasMask, GP5GasMask, AirborneMask) seals the face; sui
 plus gas mask is full protection — nothing is damaged, nobody bleeds. Taking the
 frame is an inventory drag.
 
+**The swarm is audible.** The sting hook calls `StartItemSoundServer` right after the
+base damage, playing `ChefZ_Bees_Attack_SoundSet` from the hive itself. Because it is
+started server-side through vanilla's `ItemSoundHandler`, everyone in earshot hears
+it, not only the keeper who was stung — a hive being robbed is a thing other players
+can notice. The sound ID is bound once in `InitItemSounds`; the second shipped file,
+`Beehive_Ambient.ogg`, is packed but not yet bound to anything.
+
+**Packing it up again.** `PROCESS_PACK_HIVE` is the second station action, added
+29.08.2026 from Lykos' delivery, where it had been a vanilla crafting recipe (hive +
+screwdriver → kit). A handcraft step would need the 14 kg hive *in hand*; a placed
+hive offers only one shape of action, `ChefZ_ActionProcessAtStation`, so the teardown
+became a station action with tool group `HAND_TOOL`.
+
+It has **no transform** — it does not change the cargo, it changes the station. One
+frame after `ChefZ_OnStationActionFinished`, `ChefZ_Beehive.ChefZ_PackUp()` drops a
+kit where the hive stood (two for the double), carries the health across
+proportionally, and deletes the hive.
+
+The action appears **only on an empty, closed hive**: `ChefZ_GetProcessAt` and
+`ChefZ_SupportsProcess` return `INVALID` otherwise, on the client
+(`RefreshProcesses`) as on the server (`ResolveProcessFor`). A hive with frames in it
+cannot be packed away with the colony inside — take the frames out first. And the
+bees sting during teardown like at any other action, unless a **lit** smoker is in
+hand.
+
 **Double Beehive.** `ChefZ_BeehiveDouble` inherits config and script from the
 hive and only raises the capacity to 20. It is built from **two** Beehive Kits
 (`TR_ExtendBeehive`, `PROCESS_EXTEND_HIVE`, handcraft), not from a placed hive —
@@ -416,11 +454,9 @@ glass bottle as extractor input (it is the empty jar now). The kits' nail
 ingredient is vanilla `Nail` — `Nails` is a script-only class without a config
 entry (assumption A5).
 
----
-
 ## Handcraft transforms — no station needed
 
-22 of the 59 transforms need no station at all. They run
+22 of the 61 transforms need no station at all. They run
 through the vanilla crafting menu; each module reserves places in that list up front
 with `handcraftRecipeSlots` in its `CfgChefZ` node.
 
@@ -466,12 +502,13 @@ slots for them.
 |---|---|
 | Stations | 11 (9 in `ChefZ_Processing`, 2 beehives in `ChefZ_Farming`) |
 | Station categories | 11 |
-| Processes | 31 — 17 handcraft, 6 station action, 8 station timed (recounted 2026-08-29) |
-| Transforms | 59 (recounted 2026-08-29; the per-chain split above predates the apiary) |
+| Processes | 33 — 18 handcraft, 7 station action, 8 station timed (recounted 2026-08-29) |
+| Handcraft slots reserved | 22, matching the 22 handcraft transforms exactly |
+| Transforms | 61 — 39 at a station, 22 handcraft (recounted 2026-08-29) |
 | Processes with no transform | 1 — `PROCESS_HARVEST_HIVE`, by design |
 | Transforms naming an undeclared process | 0 |
 | Transforms naming an unknown station | 0 |
-| Stations without cargo | 3 (Grain Mill, Cutting Board, Meat Grinder) |
+| Stations without cargo | 2 (Grain Mill, Meat Grinder) — Mortar and Drying Rack inherit theirs from `ChefZ_HerbStationBase` |
 
 ## See also
 

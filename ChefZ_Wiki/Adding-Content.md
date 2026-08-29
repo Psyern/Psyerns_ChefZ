@@ -11,8 +11,6 @@ content identifier that appears there.
 Background reading: [Architecture](Architecture) for the three configuration
 ranks, [Delta Protocol](Delta-Protocol) for shared vocabulary.
 
----
-
 ## Ground rules
 
 **1. Path root is the addon's folder name.**
@@ -44,8 +42,6 @@ vanilla and known third-party class names.
 ```
 node tools/chefz-validate/index.mjs
 ```
-
----
 
 ## A: adding a new dish
 
@@ -294,8 +290,6 @@ without first creating a class. Pick one convention per slice.
 **If a script class here ever grows a line of logic, that is a sign something
 generic has landed in content.**
 
----
-
 ## B: adding a new ingredient
 
 Worked example: **`ChefZ_Butter`** in `ChefZ_Ingredients`.
@@ -401,8 +395,6 @@ An ingredient that nothing produces is unreachable. Add a transform:
 
 See [Production Chains](Production-Chains).
 
----
-
 ## C: adding a new processing station
 
 Worked example: **`ChefZ_Mortar`** in `ChefZ_Processing`. Three declarations,
@@ -498,8 +490,6 @@ process id collisions are caught. See
 
 See [Processing Stations](Processing-Stations).
 
----
-
 ## Pitfalls
 
 These are the ones that actually bit this project. Each was found late, and each
@@ -534,7 +524,7 @@ food class individually (`Rice.c`, `Potato.c`, `Marmalade.c`). Without one, the
 game simply never offers your finished dish for eating — no error, no log line,
 the action is just absent.
 
-ChefZ solves this once for all 25 dishes on `ChefZ_ServedDish_Base`:
+ChefZ solves this once for all 28 dishes on `ChefZ_ServedDish_Base`:
 
 ```c
 override void SetActions()
@@ -620,8 +610,6 @@ It is also why `ChefZ_Registry`'s `CfgChefZ` node is called
 `ChefZ_MergedRegistry` and not `ChefZ_Registry` — a node with the same name as
 the `CfgPatches` entry counts as a duplicate.
 
----
-
 ## Before you commit
 
 ```
@@ -638,8 +626,6 @@ check 6 will otherwise report that the merge is incomplete.
 A green validator is not a working mod. Nothing in this repository has been
 compiled, packed or run in DayZ — see [Known Limitations](Known-Limitations),
 and expect the first compile to produce surprises.
-
----
 
 ## Related pages
 

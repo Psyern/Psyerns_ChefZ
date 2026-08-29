@@ -626,7 +626,7 @@
         },
         {
             "id": "RCP_ChefZ_FishermanStew",
-            "_note": "§62 Fisherman's Stew: Fish + Potato + Carrot + Water + Dill. Der Dill hebt die Stufe, er ist nicht Pflicht. I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze. Die Pflichtmenge bleibt unveraendert.",
+            "_note": "§62 Fisherman's Stew: Fish + Potato + Carrot + Water + Parsley. Die Petersilie hebt die Stufe, sie ist nicht Pflicht (seit 29.08.2026 statt Dill - Dill entfaellt, der Fischbonus bleibt). I2-ANKER: der Karotten-Slot aus §62 ist aus dem Sammel-Slot roots herausgeloest. §62 nennt Kartoffel UND Karotte; zusammengefasst als ROOT_VEGETABLE liess sich das Gericht mit Vanilla-Kartoffeln allein erfuellen. Die Karotte ist das eine Wurzelgemuese, das Vanilla nicht kennt - sie ist eine Fundpflanze wie Vanillas Pilze. Die Pflichtmenge bleibt unveraendert.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -722,15 +722,15 @@
             ],
             "gradeRules": [
                 {
-                    "ruleId": "GR_FS_Dill",
+                    "ruleId": "GR_FS_Parsley",
                     "when": "anyItem",
                     "selector": {
                         "anyOf": [
                             {
-                                "cls": "ChefZ_Dill"
+                                "cls": "ChefZ_Parsley"
                             },
                             {
-                                "cls": "ChefZ_DriedDill"
+                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },
@@ -909,15 +909,15 @@
             ],
             "gradeRules": [
                 {
-                    "ruleId": "GR_FSB_Dill",
+                    "ruleId": "GR_FSB_Parsley",
                     "when": "anyItem",
                     "selector": {
                         "anyOf": [
                             {
-                                "cls": "ChefZ_Dill"
+                                "cls": "ChefZ_Parsley"
                             },
                             {
-                                "cls": "ChefZ_DriedDill"
+                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },
@@ -1073,15 +1073,15 @@
             ],
             "gradeRules": [
                 {
-                    "ruleId": "GR_FSG_Dill",
+                    "ruleId": "GR_FSG_Parsley",
                     "when": "anyItem",
                     "selector": {
                         "anyOf": [
                             {
-                                "cls": "ChefZ_Dill"
+                                "cls": "ChefZ_Parsley"
                             },
                             {
-                                "cls": "ChefZ_DriedDill"
+                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },
@@ -1142,7 +1142,7 @@
         },
         {
             "id": "RCP_ChefZ_VegetableSoup",
-            "_note": "§62 Vegetable Soup: Potato + Carrot + Onion + Cabbage + Water. Kartoffel, Karotte und Zwiebel sind alle ROOT_VEGETABLE - drei Stueck davon plus ein Blattgemuese bilden das Rezept ab, ohne vier Einzelklassen zu nennen. DME §37 fuehrt sie als 'Basic': fruehes Ueberlebensgericht, keine Zusatzstoffe noetig.",
+            "_note": "§62 Vegetable Soup: Potato + Carrot + Onion + Cabbage + Water. Kartoffel, Karotte und Zwiebel sind alle ROOT_VEGETABLE - drei Stueck davon plus ein Blattgemuese bilden das Rezept ab, ohne vier Einzelklassen zu nennen. DME §37 fuehrt sie als 'Basic': fruehes Ueberlebensgericht, keine Zusatzstoffe noetig. Mais als optionale Einlage (29.08.2026), 1 Punkt - eigener Slot statt Erweiterung von roots, damit der Pflicht-Slot Wurzelgemuese und der I2-Anker leaf unberuehrt bleiben.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1,
@@ -1188,6 +1188,15 @@
                     "maxCount": 2,
                     "consume": "whole",
                     "gradePoints": 0
+                },
+                {
+                    "slotId": "corn",
+                    "match": { "cls": "ChefZ_Corn" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
                 },
                 {
                     "slotId": "herb",
@@ -1320,7 +1329,7 @@
         },
         {
             "id": "RCP_ChefZ_VegetableSoupGroup",
-            "_note": "Gruppenfassung nach DME §44: 6x Wurzelgemuese, 2x Blattgemuese, viel Wasser -> 8 Portionen. Das billigste Gruppengericht des Mods und damit der Einstieg fuer eine Gruppe ohne Jaeger.",
+            "_note": "Gruppenfassung nach DME §44: 6x Wurzelgemuese, 2x Blattgemuese, viel Wasser -> 8 Portionen. Das billigste Gruppengericht des Mods und damit der Einstieg fuer eine Gruppe ohne Jaeger. Mais als optionale Einlage (29.08.2026), 1 Punkt.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1,
@@ -1366,6 +1375,15 @@
                     "maxCount": 3,
                     "consume": "whole",
                     "gradePoints": 0
+                },
+                {
+                    "slotId": "corn",
+                    "match": { "cls": "ChefZ_Corn" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
                 },
                 {
                     "slotId": "herb",
@@ -1481,7 +1499,7 @@
         },
         {
             "id": "RCP_ChefZ_BoneBrothSoup",
-            "_note": "§62 Bone Broth Soup: Bone Broth + Vegetables + Herbs. Die Bruehe IST die Fluessigkeit - deshalb keine Gefaessfluessigkeit gefordert und beide Garmethoden zugelassen. Die Kraeuter sind hier Pflicht: ohne sie waere das Gericht von einer aufgewaermten Bruehe nicht zu unterscheiden.",
+            "_note": "§62 Bone Broth Soup: Bone Broth + Vegetables + Herbs. Die Bruehe IST die Fluessigkeit - deshalb keine Gefaessfluessigkeit gefordert und beide Garmethoden zugelassen. Die Kraeuter sind hier Pflicht: ohne sie waere das Gericht von einer aufgewaermten Bruehe nicht zu unterscheiden. Der Slot veg matcht die Oberkategorie VEGETABLE; seit 29.08.2026 zaehlt damit auch ChefZ_Corn (VEGETABLE, GRAIN) als Einlage - bewusst zugelassen, Mais in einer Bruehsuppe passt. I2-Anker bleibt der Slot broth.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.05,
@@ -1643,7 +1661,7 @@
         },
         {
             "id": "RCP_ChefZ_BoneBrothSoupGroup",
-            "_note": "Gruppenfassung nach DME §44: 4x Bruehe, 6x Gemuese, Kraeuter -> 8 Portionen. Der Kessel voll Bruehe ist das, was §55 mit 'Premium-Basis' meint.",
+            "_note": "Gruppenfassung nach DME §44: 4x Bruehe, 6x Gemuese, Kraeuter -> 8 Portionen. Der Kessel voll Bruehe ist das, was §55 mit 'Premium-Basis' meint. Wie in der Basisfassung zaehlt ChefZ_Corn ueber VEGETABLE als Einlage (29.08.2026).",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.05,
@@ -1794,7 +1812,7 @@
         },
         {
             "id": "RCP_ChefZ_ChernarusChili",
-            "_note": "§62 Chernarus Chili: Meat + Baked Beans + Tomato + Paprika + Paprika Powder. KEINE Gefaessfluessigkeit gefordert - Bohnen und Tomaten bringen sie mit; deshalb sind BOILING und BAKING beide zugelassen. Paprika und Paprikapulver werden ueber KLASSEN gebunden und nicht ueber eine Kategorie, entgegen der sonst durchgehaltenen Regel. Der Grund ist eine Luecke, keine Bequemlichkeit: eine Kategorie PAPRIKA gibt es nicht, und die Zutatendatensaetze von GreenBellPepper und ChefZ_PaprikaPowder (ChefZ_Ingredients) gehoeren einem fremden Modul. Die frische Paprika ist seit dem Vanilla-Audit GreenBellPepper; eine eigene ChefZ-Paprikaklasse gibt es nicht mehr. Der Delta-Weg hilft hier nicht: der Integrator uebernimmt aus einem Tag-Delta nur id und displayName, appliesTo faellt weg - ein hier deklarierter Tag CHEFZ_PAPRIKA haenge an keiner Klasse. FOLGE, offen benannt: chefzstage meldet fuer die beiden verbliebenen ChefZ-Klassen 'kochbar ohne FoodStageTransitions'. Der Befund ist hier gegenstandslos - keine von beiden hat ueberhaupt einen Food-Knoten, HasFoodStage() liefert false (ItemBase.c:2654), es entsteht kein FoodStage und damit kann auch nichts auf BURNED fallen (FoodStage.c:472). Aufloesen kann ihn nur, wem die Klassen gehoeren - entweder durch eine Kategorie PAPRIKA an ihren Zutatendatensaetzen (dann steht hier ein Kategorieselektor) oder durch einen Food-Knoten mit Uebergaengen. Ein unscharfer Selektor auf VEGETABLE waere die schlechtere Antwort: dann ergaebe eine Zwiebel ein Chili.",
+            "_note": "§62 Chernarus Chili: Meat + Baked Beans + Tomato + Paprika + Paprika Powder. KEINE Gefaessfluessigkeit gefordert - Bohnen und Tomaten bringen sie mit; deshalb sind BOILING und BAKING beide zugelassen. Paprika und Paprikapulver werden ueber KLASSEN gebunden und nicht ueber eine Kategorie, entgegen der sonst durchgehaltenen Regel. Der Grund ist eine Luecke, keine Bequemlichkeit: eine Kategorie PAPRIKA gibt es nicht, und die Zutatendatensaetze von GreenBellPepper und ChefZ_PaprikaPowder (ChefZ_Ingredients) gehoeren einem fremden Modul. Die frische Paprika ist seit dem Vanilla-Audit GreenBellPepper; eine eigene ChefZ-Paprikaklasse gibt es nicht mehr. Der Delta-Weg hilft hier nicht: der Integrator uebernimmt aus einem Tag-Delta nur id und displayName, appliesTo faellt weg - ein hier deklarierter Tag CHEFZ_PAPRIKA haenge an keiner Klasse. FOLGE, offen benannt: chefzstage meldet fuer die beiden verbliebenen ChefZ-Klassen 'kochbar ohne FoodStageTransitions'. Der Befund ist hier gegenstandslos - keine von beiden hat ueberhaupt einen Food-Knoten, HasFoodStage() liefert false (ItemBase.c:2654), es entsteht kein FoodStage und damit kann auch nichts auf BURNED fallen (FoodStage.c:472). Aufloesen kann ihn nur, wem die Klassen gehoeren - entweder durch eine Kategorie PAPRIKA an ihren Zutatendatensaetzen (dann steht hier ein Kategorieselektor) oder durch einen Food-Knoten mit Uebergaengen. Ein unscharfer Selektor auf VEGETABLE waere die schlechtere Antwort: dann ergaebe eine Zwiebel ein Chili. Mais (29.08.2026) ist ein optionaler Slot mit 1 Punkt, nicht 2: powder bringt immer 2, und DISH_DEFAULT setzt SEASONED bei 4 - mit 2 Maispunkten stuende das Chili ohne Salz, Gewuerz und Kraut auf SEASONED, entgegen dem Stufenschema (Salz -> PREPARED, Gewuerz+Kraut -> SEASONED). Alle anderen optionalen Gemuese-Slots tragen ebenfalls 1. I2 bleibt am Pflicht-Slot powder (ChefZ_PaprikaPowder).",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -1860,6 +1878,15 @@
                     "maxCount": 2,
                     "consume": "whole",
                     "gradePoints": 2
+                },
+                {
+                    "slotId": "corn",
+                    "match": { "cls": "ChefZ_Corn" },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
                 },
                 {
                     "slotId": "salt",
@@ -1970,7 +1997,7 @@
         },
         {
             "id": "RCP_ChefZ_ChernarusChiliGroup",
-            "_note": "Gruppenfassung nach DME §44: 4x Fleisch, 2x Bohnen, 4x Tomate, 2x Paprika, 2x Paprikapulver -> 8 Portionen aus dem Kessel.",
+            "_note": "Gruppenfassung nach DME §44: 4x Fleisch, 2x Bohnen, 4x Tomate, 2x Paprika, 2x Paprikapulver -> 8 Portionen aus dem Kessel. Mais (29.08.2026) ist ein optionaler Slot mit 1 Punkt, nicht 2: powder bringt immer 2, und DISH_DEFAULT setzt SEASONED bei 4 - mit 2 Maispunkten stuende das Chili ohne Salz, Gewuerz und Kraut auf SEASONED, entgegen dem Stufenschema (Salz -> PREPARED, Gewuerz+Kraut -> SEASONED). Alle anderen optionalen Gemuese-Slots tragen ebenfalls 1. I2 bleibt am Pflicht-Slot powder (ChefZ_PaprikaPowder).",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -2036,6 +2063,15 @@
                     "maxCount": 3,
                     "consume": "whole",
                     "gradePoints": 2
+                },
+                {
+                    "slotId": "corn",
+                    "match": { "cls": "ChefZ_Corn" },
+                    "minCount": 1,
+                    "maxCount": 3,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
                 },
                 {
                     "slotId": "salt",

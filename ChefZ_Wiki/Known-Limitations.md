@@ -7,8 +7,6 @@ it saves.
 
 If you are deciding whether to run ChefZ on a live server, read this page first.
 
----
-
 ## The short version
 
 ChefZ compiles and the mod boots. It does not yet keep a server running.
@@ -19,15 +17,70 @@ The config load then reads 551 records, 550 of them good. After that the process
 still dies, and the core comes up inert.
 
 **That measurement is older than the code.** `ChefZ_Cookbook` (Milestone 5.1), the
-self-test trace and Beekeeping V2 all landed on 29.08.2026, after this run. There
-are thirteen PBOs now, not twelve, and none of the changes since have been through
-a compiler or a server start. The static suite is green; that is a different claim.
+self-test trace, Beekeeping V2 and the two asset addons all landed on 29.08.2026,
+after this run. The mod is fifteen sources now, not twelve addons, and none of the
+changes since have been through a compiler or a server start. The static suite is green; that is a different claim.
 
 Two properties of the engine's JSON layer caused most of this. One is fixed, one
 is not. Both are described below, because neither is visible from the code and
 neither produces an error message.
 
----
+## Two asset addons that never reach a PBO
+
+The first delivered models landed on 29.08.2026: **8 `.p3d` and 8 `.paa` files** in
+two new addons, `ChefZ_Devices` (hive, beekeeper) and `ChefZ_Items` (comb frames,
+jar, carrot, bee smoker, beef cubes). Seven classes were rebound from vanilla proxies
+to their own geometry. Both addons are assets only — no class, no script, no record.
+
+**They are not packed.** `pack.mjs` reads each addon's `$PREFIX$` and skips the addon
+when it differs from the folder name:
+
+```js
+if (prefix !== name) {
+  failed.push(`${name}: Praefix "${prefix}" weicht vom Ordnernamen ab - ...`);
+  continue;
+}
+```
+
+The two carry `ChefZ\ChefZ_Devices` and `ChefZ\ChefZ_Items` — two levels, inherited
+from the prototype layout they came from. That prefix is **not a mistake in itself**:
+the model paths written into `ChefZ_Farming` point at exactly those roots
+(`ChefZ\ChefZ_Items\models\carrot.p3d`), so config and prefix agree. What disagrees
+is the packer's rule.
+
+Counted through: **15 sources collected, 13 packed, 2 skipped.** And
+`ChefZ_Farming` now names both in its `requiredAddons[]`, so a build made today ships
+an addon whose dependencies were never built — the mod would not load at all.
+
+The header comment in `pack.mjs` was updated in the same commit to say "fuenfzehn
+Paketen"; the rule underneath it was not. That is the whole of the defect.
+
+Neither the validator nor the self-test can see this: `chefz-validate` does not read
+`$PREFIX$` files, and nothing else compares a prefix against the paths that depend on
+it.
+
+## The delivery folder is back in the tree
+
+`ChefZ/` was removed on 29.08.2026 and restored the same evening (`cf8efa5`,
+"exactly as uploaded"). It is the asset delivery in its original shape: 30 files,
+8 models, 8 textures, 9 scripts, three `CfgPatches` classes.
+
+Nothing consumes it. The models it carries were copied into `ChefZ_Devices` and
+`ChefZ_Items` under `Addons/`, and those are what the content addons point at. The
+folder is kept as the record of what arrived, not as a second source.
+
+**It must not be packed as it stands.** All three of its `CfgPatches` names —
+`ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Items` — are now the names of real addons under
+`Addons/`. When it was first uploaded only `ChefZ_Core` collided; the asset
+integration added the other two. Two addons of one name cannot both load.
+
+Three checks keep it harmless today, and all three are checkable:
+
+| Check | Result |
+|---|---|
+| Packed by `pack.mjs`? | **No** — it matches neither `Psyerns_ChefZ_Core/Addons/*` nor `Psyerns_ChefZ_*_Comp` |
+| Carries a `$PREFIX$`? | **No** |
+| Read by `chefz-validate`? | **No** — `ADDONS_DIR` is `Psyerns_ChefZ_Core/Addons` and nothing else |
 
 ## Not yet done
 
@@ -59,7 +112,8 @@ machinery works.
 
 ### No signatures, no binarisation
 
-`tools/chefz-pack/pack.mjs` packs all thirteen PBOs, unsigned and unbinarised, and
+`tools/chefz-pack/pack.mjs` packs thirteen of the fifteen sources, unsigned and
+unbinarised — the two asset addons are skipped, as described above — and
 `tools/chefz-pack/testrun.ps1` starts the test server and reads its verdict.
 Neither signing nor binarising has been done. See [Installation](Installation).
 
@@ -91,8 +145,6 @@ anything: **no config declares `hiddenSelections`**, so none of the planned text
 variants can be applied to a shared mesh. The selection name has to be agreed first.
 Applied consistently, the shared-mesh strategy cuts the V1 mesh count from 161 to
 about 45.
-
----
 
 ## Engine limits
 
@@ -147,8 +199,6 @@ Collect each record's written keys while reading and put them into
 consult `HasExplicit(field)`, so they need no change, and the sentinel becomes
 unnecessary.
 
----
-
 ## Verified only as far as static analysis reaches
 
 ### Vanilla class collisions are unchecked
@@ -200,8 +250,6 @@ static check, and each would have looked like something else in game:
 | Cooking attributed no player | XP "isn't implemented" |
 | Two stations derived from cookware | Vanilla cooking "behaves oddly" |
 
----
-
 ## Stations that cannot work
 
 Both of these were found while writing this wiki, not by a gate review, and neither
@@ -216,6 +264,12 @@ cargo — so these two cannot receive input at all. (The cutting board, which ha
 same problem, was removed on 2026-08-29.)
 
 The six other stations all have one.
+
+This also covers `TR_CornToFlour` (added 2026-08-29): corn is configured as a
+second mill input, but until the grain mill gets a cargo block it is exactly as
+unreachable as `TR_WheatToFlour`. Its `maxCount` of 5 means the future cargo needs
+at least five cells — that is a requirement for the mill's gate entry, not a
+separate defect.
 
 What this costs: the grain chain stops at its first step, so no flour and therefore
 no dough, bread, pasta or dumplings. The sausage chain stops at the cutting board,
@@ -235,8 +289,6 @@ Independently, the station record sets `needsFuel` while the class has no fuel
 attachment slot, so the powered check fails before the heat check is even reached.
 
 All three smoking transforms are unreachable.
-
----
 
 ## Built but inert
 
@@ -263,15 +315,19 @@ herbalist perk and its yield bonus. **No recipe in the entire data set declares
 decision about how hard the locks should be — refuse the recipe, degrade its
 quality, slow it down, or reduce the yield.
 
-### Two herbs earn nothing from the perk
+### Two harvestables are invisible to the herbalist perk
 
-`ChefZ_PepperBerries` carries the spice tag, so it earns harvest XP, but it is not
-highlighted and gets no yield bonus. `ChefZ_Paprika` carries neither harvest tag and
-gets nothing at all. Code comments in the skills module refer to "the seven ChefZ
-herbs"; only five actually carry the herb tag. The behaviour may well be intended —
-the comments are not.
+The perk keys on the tag `CHEFZ_HERB`, and exactly four classes carry it. Two things
+a player picks up as a seasoning do not: `ChefZ_PepperBerries` carries `CHEFZ_SPICE`
+instead, and fresh paprika is vanilla `GreenBellPepper` (category `VEGETABLE`, tag
+`CHEFZ_FRESH`) since 2026-08-29. Neither is highlighted in the world.
 
----
+Since the harvest XP and the yield bonus were removed together with the herb plants,
+highlighting is the only effect the perk still has — so this is the whole of it.
+
+A comment in `ChefZ_TerjeHerbItem.c:25` still speaks of "die sieben frischen
+ChefZ-Kraeuter". There are five. The behaviour may well be intended; the comment is
+not.
 
 ## Balance consequences worth knowing
 
@@ -292,8 +348,6 @@ oversight rather than a decision.
 
 **Chain XP is per step, not per result.** Skipping a step pays only the steps you
 actually performed — smoking meat without curing it first pays 3 rather than 5.
-
----
 
 ## Open decisions
 
@@ -335,8 +389,6 @@ The place name is written in the target script for Russian, Chinese and Japanese
 (`по-чернорусски`, `切爾諾盧斯`, `チェルナルス`) rather than kept in Latin. If the
 project prefers the Latin form everywhere, it is a small, contained change.
 
----
-
 ## Housekeeping
 
 ### The registry merge is not reproducible from the repository
@@ -365,8 +417,6 @@ suppressed, and none is a defect:
 | `chefznut` | 8 | Seeds, containers and salt without a nutrition block, correctly so |
 | `classrefs` | 1 | Foreign classes unverifiable — same missing index |
 | `deltas` | 1 | Two slices define one category with different parents; the concrete one wins |
-
----
 
 ## What to do first
 

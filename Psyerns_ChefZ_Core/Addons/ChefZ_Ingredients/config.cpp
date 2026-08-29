@@ -37,7 +37,7 @@ class CfgPatches
             "ChefZ_Salt",
             // ### SLICE herbs ###
             "ChefZ_DriedHerbBase",
-            "ChefZ_DriedParsley", "ChefZ_DriedDill", "ChefZ_DriedThyme",
+            "ChefZ_DriedParsley", "ChefZ_DriedThyme",
             "ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_DriedPaprika",
             "ChefZ_SpiceBase",
             "ChefZ_PaprikaPowder", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper",
@@ -787,13 +787,6 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_DRIEDPARSLEY";
         descriptionShort = "#STR_CHEFZ_ITEM_DRIEDPARSLEY_DESC";
-    };
-
-    class ChefZ_DriedDill : ChefZ_DriedHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDDILL";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDDILL_DESC";
     };
 
     class ChefZ_DriedThyme : ChefZ_DriedHerbBase

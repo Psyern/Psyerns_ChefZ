@@ -157,20 +157,6 @@
             "fullness": 1
         },
         {
-            "id": "ChefZ_Dill",
-            "scope": "class",
-            "energy": 15,
-            "water": 12,
-            "fullness": 5
-        },
-        {
-            "id": "ChefZ_DriedDill",
-            "scope": "class",
-            "energy": 8,
-            "water": 0,
-            "fullness": 2
-        },
-        {
             "id": "ChefZ_DriedPaprika",
             "scope": "class",
             "energy": 30,
@@ -491,6 +477,13 @@
             "energy": 100,
             "water": 60,
             "fullness": 30
+        },
+        {
+            "id": "ChefZ_Corn",
+            "scope": "class",
+            "energy": 180,
+            "water": 40,
+            "fullness": 60
         },
         {
             "id": "ChefZ_Garlic",

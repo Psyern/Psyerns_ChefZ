@@ -8,8 +8,6 @@ Related pages: [Recipes](Recipes), [Food-States](Food-States),
 [Adding-Content](Adding-Content), [Known-Limitations](Known-Limitations),
 [Troubleshooting](Troubleshooting).
 
----
-
 ## 1. Bulk dish vs. served portion
 
 This is the distinction the whole subsystem is built on. **Two classes per dish,
@@ -50,8 +48,6 @@ Single-plate dishes are portioned dishes with a small portion count — there is
 exactly one mechanism, also for plate food. `RCP_ChefZ_SurvivorSpaghetti` has
 `"portions": 2`.
 
----
-
 ## 2. Why a separate counter and not vanilla `quantity`
 
 `ChefZ_PortionedFood_Base` keeps its own `int`. From its header
@@ -85,8 +81,6 @@ for a number that never changes.
 `ChefZ_GetPortionsMax()` answers with the current count if no maximum was ever
 set (an item from a save predating the block, an admin spawn). That is the only
 answer which never displays "3 / 0".
-
----
 
 ## 3. Declaring a portioned output
 
@@ -146,8 +140,6 @@ From `RCP_ChefZ_HunterStew`
 The shipped dish recipes size it so the target amount works out exactly:
 base recipe `6 required units / 1.5 = 4 portions` (Pot cap 4); group recipe
 `10 required units / 1.25 = 8 portions`.
-
----
 
 ## 4. How the portion count is computed
 
@@ -214,8 +206,6 @@ Two failure modes worth knowing, both WARN and both non-fatal:
 * The result class is declared as portioned but its **script class does not
   extend `ChefZ_PortionedFood_Base`** → no counter and no take action. The dish
   is created as an ordinary item.
-
----
 
 ## 5. Taking a portion
 
@@ -286,8 +276,6 @@ therefore honest.
 If `portionsLeft <= 0` on an existing item, the action simply does not appear.
 The item stays consumable as a normal item if its class allows that. **No
 deletion of player property.**
-
----
 
 ## 6. Containers
 
@@ -390,8 +378,6 @@ apparent contradiction is resolved deliberately:
   reason is written into the load report once, with the recipe ID, by
   `ChefZ_ContainerRegistry.AuditPortionSpecs()`.
 
----
-
 ## 7. What is left over after eating
 
 Two separate moments. Do not confuse them.
@@ -453,8 +439,6 @@ class binding in `CfgChefZIngredients` must name a real class.
 Return placement follows hands → inventory → the dish's former position. If all
 three fail, the return lapses with a WARN. Never a crash — the dish was consumed
 either way; only the container is lost.
-
----
 
 ## 8. Checklist for a new portioned dish
 

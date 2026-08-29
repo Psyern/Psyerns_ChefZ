@@ -1,6 +1,6 @@
 # Modules
 
-ChefZ is one mod folder containing ten addons, plus three separate
+ChefZ is one mod folder containing twelve addons, plus three separate
 compatibility mods that ship as their own PBOs. This page lists what each one
 contains, what it depends on and how many classes and records it contributes.
 
@@ -9,23 +9,23 @@ snapshot; re-count before quoting them in a release note.
 
 For the reasoning behind the split, see [Architecture](Architecture).
 
----
-
 ## Overview
 
 | Addon | Item classes | Script files | Rank 1 records | Rank 2 records | Stringtable keys |
 |---|---:|---:|---:|---:|---:|
 | `ChefZ_Core` | 0 | 137 | — | 2 | 4 |
 | `ChefZ_Registry` | 0 | 0 | — | 142 | — |
-| `ChefZ_Farming` | 27 | 4 | 16 | 19 | 46 |
+| `ChefZ_Farming` | 27 | 4 | 17 | 22 | 47 |
 | `ChefZ_Processing` | 14 | 7 | 18 | 30 | 41 |
 | `ChefZ_Ingredients` | 25 | 3 | 1 | 50 | 54 |
-| `ChefZ_Meat` | 31 | 1 | — | 56 | 53 |
+| `ChefZ_Meat` | 32 | 1 | — | 58 | 55 |
 | `ChefZ_Baking` | 6 | 1 | — | 12 | 16 |
 | `ChefZ_Preservation` | 10 | 1 | 10 | 20 | 28 |
 | `ChefZ_Cooking` | 72 | 5 | 84 | 45 | 153 |
 | `ChefZ_Cookbook` | 2 | 11 | — | — | 3 |
-| **total** | **187** | **170** | **129** | **376** | **398** |
+| `ChefZ_Devices` | 0 | 0 | — | — | — |
+| `ChefZ_Items` | 0 | 0 | — | — | — |
+| **total** | **188** | **170** | **130** | **382** | **401** |
 
 | Comp mod | Item classes | Script files | Stringtable keys |
 |---|---:|---:|---:|
@@ -42,12 +42,10 @@ The script-file total counts what ships. `ChefZ_Core` carries one more —
 `Tests/V_A_PboJsonSmoke/.../ChefZ_PboProbe.c`, the PBO-JSON smoke probe — which
 brings the repository to 171 `.c` files.
 
-Across all modules that adds up to **47 recipes**, **59 transforms**,
-**31 processes**, **11 stations**, **182 ingredient bindings**, **5 containers**,
+Across all modules that adds up to **47 recipes**, **61 transforms**,
+**33 processes**, **11 stations**, **185 ingredient bindings**, **5 containers**,
 **3 cooking devices**, **10 food states**, **5 quality tiers** and
 **8 tool groups**.
-
----
 
 ## `ChefZ_Core`
 
@@ -66,8 +64,6 @@ The rule engine. It contains no item, no ingredient, no dish and no station —
 - **Depends on**: `DZ_Data` only.
 
 Everything else is documented on [Architecture](Architecture).
-
----
 
 ## `ChefZ_Registry`
 
@@ -114,27 +110,32 @@ An addon of its own fixes both: its own `CfgChefZ` registration, one
 
 The merge itself is described on [Delta Protocol](Delta-Protocol).
 
----
-
 ## `ChefZ_Farming`
 
 Grain, vegetables and herbs — the start of most production chains. Since
 2026-08-29 all of them are **found**, like vanilla mushrooms: there are no plant
 classes, no seeds and no growth stages. Where they spawn is the server's `types.xml`.
 
-- **item classes**: wheat, the four ChefZ vegetables (`ChefZ_Onion`,
-  `ChefZ_Garlic`, `ChefZ_Carrot`, `ChefZ_Cabbage`), six fresh herbs and spices,
+- **item classes**: wheat, the five ChefZ vegetables (`ChefZ_Onion`,
+  `ChefZ_Garlic`, `ChefZ_Carrot`, `ChefZ_Cabbage`, `ChefZ_Corn`), five fresh herbs and spices,
   plus the apiary: `ChefZ_Beehive`, `ChefZ_BeehiveDouble`, `ChefZ_BeehiveKit`,
   three comb frames (empty, full, uncapped), `ChefZ_UncappingFork`,
   `ChefZ_BeeSmoker`. The two hives are the only stations outside
   `ChefZ_Processing`; see [Processing Stations](Processing-Stations#beehive-and-double-beehive).
 - **Script files**: `ChefZ_FarmingItems.c`, `ChefZ_HerbItems.c`,
   `ChefZ_ProduceFarming.c`, `ChefZ_Apiary.c`.
-- **Rank 1**: **16 records** — 5 ingredient bindings (`ChefZ_ProduceIngredient`
-  and the four vegetables), 8 processes and 3 tool groups (`HAND_TOOL`,
+- **Rank 1**: **17 records** — 5 ingredient bindings (`ChefZ_ProduceIngredient`
+  and the four vegetables), 9 processes and 3 tool groups (`HAND_TOOL`,
   `UNCAPPING_TOOL`, `BEE_SMOKER`).
-- **Rank 2**: **19 records** across 5 documents — 10 ingredients, 7 transforms
+- **Rank 2**: **22 records** across 5 documents — 12 ingredients, 8 transforms
   and the 2 hive stations.
+- **The only asset folder in the mod**: `Sounds/` with `Bees_Attack.ogg` and
+  `Beehive_Ambient.ogg`, bound through `CfgSoundShaders` and `CfgSoundSets`. The
+  sting hook plays `ChefZ_Bees_Attack_SoundSet` **server-side** through vanilla's
+  `ItemSoundHandler`, so the swarm is heard by everyone in earshot rather than only
+  by the keeper who was stung. `Beehive_Ambient.ogg` ships but is not bound to
+  anything yet. This addon is also the only one whose `include.txt` lists `*.ogg` —
+  without that line AddonBuilder drops the files from the PBO and says nothing.
 - **`CfgChefZ` slices**: `ChefZ_GrainFarming` (210, 0 slots),
   `ChefZ_HerbFarming` (215, 0 slots), `ChefZ_Apiary` (7 handcraft slots:
   five build steps, uncapping, and the double hive).
@@ -142,8 +143,6 @@ classes, no seeds and no growth stages. Where they spawn is the server's `types.
 
 `ChefZ_FreshHerbBase` is the only ChefZ class extended by `modded class` from a
 comp mod (see [Terje Compatibility](Terje-Compatibility)).
-
----
 
 ## `ChefZ_Processing`
 
@@ -174,8 +173,6 @@ the thing that is kept, not a station somebody builds a workflow around.
 
 See [Processing Stations](Processing-Stations).
 
----
-
 ## `ChefZ_Ingredients`
 
 Dairy, salt, spices, mushrooms and the vanilla foodstuffs — the intermediate
@@ -200,26 +197,24 @@ files into its own categories without cloning them.
 `ChefZ_Produce` carries the largest handcraft reservation in the mod. See
 [Production Chains](Production-Chains).
 
----
-
 ## `ChefZ_Meat`
 
 Butchery products and the sausage chain.
 
-- **31 item classes**: the three primal cuts, the `Minced*` classes, the raw
-  and cooked sausages. (Diced meat and the sausage casing are gone since
-  2026-08-29 — the steak goes in whole, vanilla `Guts`/`SmallGuts` are the casing.)
+- **32 item classes**: the three primal cuts, `ChefZ_DicedMeat`, the `Minced*`
+  classes, the raw and cooked sausages. The sausage casing is gone since 2026-08-29 —
+  vanilla `Guts`/`SmallGuts` fill that role. Diced meat went the same day and
+  returned hours later with `beefcubes.p3d`, a model of its own.
 - **1 script file** (`ChefZ_MeatItemBase.c`).
 - **Rank 1**: none.
-- **Rank 2**: **56 records** — 35 ingredient bindings, 15 transforms, 6 recipes.
+- **Rank 2**: **58 records** — 36 ingredient bindings, 16 transforms, 6 recipes.
   The ingredient count is the highest in the mod because this module also
   classifies *vanilla* meat: `PigSteakMeat` through `BearSteakMeat`, plus
   `Lard`, `Bone` and `Guts`. ChefZ creates no own class for those — that would
   be a second version of the same thing — it only files them into categories.
-- **`CfgChefZ` slice**: `ChefZ_Meat` (200, **1 handcraft slot**).
+- **`CfgChefZ` slice**: `ChefZ_Meat` (200, **4 handcraft slots** — the three leg
+  cuts and dicing).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Processing`.
-
----
 
 ## `ChefZ_Baking`
 
@@ -234,8 +229,6 @@ bread, flatbread and pasta.
 - **`CfgChefZ` slice**: `ChefZ_GrainBaking` (230, **4 handcraft slots**).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Farming`,
   `ChefZ_Processing`.
-
----
 
 ## `ChefZ_Preservation`
 
@@ -256,8 +249,6 @@ Salting, drying, smoking — and the food-state vocabulary of the whole mod.
 This is the module that decides how long everything in ChefZ keeps: `SALTED`
 gets a 43 200 s freshness lifetime, `SMOKED` 86 400 s, `DRIED` 129 600 s, and
 each of them implies the tag `CHEFZ_PRESERVED`.
-
----
 
 ## `ChefZ_Cooking`
 
@@ -301,8 +292,6 @@ script classes — but the two slices are not written the same way.
 See [Portions and Containers](Portions-and-Containers) and
 [Quality and Nutrition](Quality-and-Nutrition).
 
----
-
 ## `ChefZ_Cookbook`
 
 Recipe knowledge — which recipes a player has met, and how much of one they know.
@@ -330,7 +319,50 @@ RPC that would feed a screen all exist, and nothing draws them.
 exists because of what `chefzaction.mjs` found: an action class nobody registers
 compiles cleanly and never appears in the game. See [Validation](Validation).
 
----
+## `ChefZ_Devices` and `ChefZ_Items`
+
+The first delivered geometry, and the only two addons in the mod that contain **no
+code at all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key.
+Each is a `models/` folder, a `data/` folder and a three-line `CfgPatches`. Both
+depend on `DZ_Data` alone.
+
+| Addon | Models | Textures | Contents |
+|---|---:|---:|---|
+| `ChefZ_Devices` | 2 | 2 | `beehive.p3d`, `beekeeper.p3d` |
+| `ChefZ_Items` | 6 | 6 | `honeycomb_frame.p3d`, `wooden_frame.p3d`, `jar.p3d`, `carrot.p3d`, `beesmoker.p3d`, `beefcubes.p3d` |
+
+They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
+about categories, recipes or states — it is a shape a content class points at. Keeping
+the shapes in their own PBOs means a content addon can rebind a class from a vanilla
+proxy to its own mesh without moving anything else, and the asset packages carry no
+dependency of their own in return.
+
+Seven classes were rebound on 29.08.2026:
+
+| Class | Model | Was |
+|---|---|---|
+| `ChefZ_Beehive` | `beekeeper.p3d` | `wooden_case.p3d` |
+| `ChefZ_BeehiveDouble` | `beehive.p3d` | `wooden_case.p3d` |
+| `ChefZ_HoneycombFrame_Base` | `honeycomb_frame.p3d` | `birch_bark.p3d` |
+| `ChefZ_HoneycombFrameEmpty` | `wooden_frame.p3d` | `birch_bark.p3d` |
+| `ChefZ_BeeSmoker` | `beesmoker.p3d` | `food_can_open.p3d` |
+| `ChefZ_EmptyJar` | `jar.p3d` | vanilla proxy |
+| `ChefZ_Carrot` | `carrot.p3d` | `zucchini.p3d` |
+
+`ChefZ_Corn` (added 29.08.2026 in place of dill) still sits on the inherited
+`zucchini.p3d` proxy of `ChefZ_VegetableFood_Base`; its own mesh is open in the asset list.
+
+**The file names of the delivery are swapped.** `beekeeper.p3d` is 0.59 m wide and
+1.0 m tall — the single-box hive — while `beehive.p3d` is 1.65 m wide, the double.
+The binding follows the measurements, not the names, which is why `ChefZ_Beehive`
+points at *beekeeper* and `ChefZ_BeehiveDouble` at *beehive*. Anyone renaming the
+files has to swap the two `model =` lines with them.
+
+`beefcubes.p3d` ships but is bound to nothing yet — eight models, seven bindings.
+
+**Neither addon packs today.** Their `$PREFIX$` files carry two-level prefixes and
+`pack.mjs` refuses those; the model paths in `ChefZ_Farming` depend on exactly those
+prefixes. See [Known Limitations](Known-Limitations#two-asset-addons-that-never-reach-a-pbo).
 
 ## Dependency order
 
@@ -339,7 +371,9 @@ Read top to bottom; each module only depends on modules above it.
 ```
 ChefZ_Core
   ChefZ_Cookbook               (depends on the core alone)
-  ChefZ_Farming
+  ChefZ_Devices                (assets, depends on DZ_Data alone)
+  ChefZ_Items                  (assets, depends on DZ_Data alone)
+  ChefZ_Farming                (requires both asset addons)
     ChefZ_Processing
       ChefZ_Ingredients
       ChefZ_Meat
@@ -353,8 +387,6 @@ ChefZ_Core
 (150). Those are two different orderings and both are intentional:
 `requiredAddons[]` is about PBO load and class availability, `loadOrder` is
 about the sequence in which the config manager reads slices.
-
----
 
 ## The three compatibility mods
 
@@ -408,8 +440,6 @@ Gives ChefZ teas TerjeMedicine consumable effects.
   missing. They will work unchanged once the main mod ships the classes.
 
 See [Terje Compatibility](Terje-Compatibility).
-
----
 
 ## Related pages
 

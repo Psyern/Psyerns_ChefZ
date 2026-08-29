@@ -35,8 +35,6 @@ Messung wichtiger als diese Tabelle.
 `MissionGameplay` mehr mit. Beide Seiten werden aus `ChefZ_CoreEntry` gestartet —
 ein Einstiegspunkt je Seite im ganzen Modul.
 
----
-
 ## 1. PBO bauen
 
 Der Build ist bereits gemessen; beide Varianten liefern die Testdaten ins PBO.

@@ -1147,6 +1147,7 @@ class CfgVehicles
     //
     //    3 Kartoffeln (540/120/120) + 2 Eier (180/80/24) + 1 Wurst (490/17/140)
     //    + 1 Zwiebel (90/55/25) = 1300 Energie auf ZWEI der drei Portionen.
+    //    Mais (180/40/60) ist optional und zaehlt nicht in die Summe.
     //
     // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
     // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
@@ -1813,13 +1814,13 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
-    // §62 Fisherman's Stew - Fisch, Kartoffel, Karotte, Dill.
+    // §62 Fisherman's Stew - Fisch, Kartoffel, Karotte, Petersilie.
     // DME §42: Fischgericht -> ausgewogene Werte, hoher Naehrwertindex.
     //
     //   2x Fischfilet     2 x 160 /  40 /  95 = 320 /  80 / 190   (Vanilla)
     //   2x Kartoffel      2 x 180 /  45 /  40 = 360 /  90 /  80
     //   1x Karotte            100 /  60 /  30 = 100 /  60 /  30
-    //   1x Dill                15 /  12 /   5 =  15 /  12 /   5
+    //   1x Petersilie          15 /  12 /   5 =  15 /  12 /   5
     //   Wasser im Topf                        =   0 / 400 /   0
     //   ------------------------------------------------------------------
     //   Summe                                   795 / 642 / 305
@@ -1892,6 +1893,7 @@ class CfgVehicles
     //   1x Zwiebel             90 /  55 /  25 =  90 /  55 /  25
     //   1x Kohl               110 /  80 /  45 = 110 /  80 /  45
     //   Wasser im Topf                        =   0 / 500 /   0
+    //   optional: 1x Mais     180 /  40 /  60 - nicht in der Summe, wie Kraut und Salz
     //   ------------------------------------------------------------------
     //   Summe                                   660 / 785 / 180
     //   x 1.00 / 4 Portionen                 -> 165 / 195 /  45
@@ -2036,6 +2038,7 @@ class CfgVehicles
     //   2x Tomate         2 x  45 /  70 /  20 =  90 / 140 /  40
     //   1x Paprika             60 /  45 /  20 =  60 /  45 /  20
     //   1x Paprikapulver       20 /   0 /   3 =  20 /   0 /   3
+    //   optional: 1x Mais     180 /  40 /  60 - nicht in der Summe (optionaler Slot)
     //   ------------------------------------------------------------------
     //   Summe                                  1190 / 335 / 423
     //   x 1.10 / 4 Portionen                 ->  325 /  85 / 105

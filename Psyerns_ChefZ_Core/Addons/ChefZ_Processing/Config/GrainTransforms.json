@@ -28,6 +28,32 @@
             "priority": 0
         },
         {
+            "id": "TR_CornToFlour",
+            "_note": "Mais an der Muehle (29.08.2026). quantityMode ratio multipliziert die verbrauchte Vanilla-Menge; ein Kolben hat Menge 1, also ist ratio hier GRAMM MEHL JE KOLBEN: 250 g Kolben, rund 60 % Koerner, x 0.78 wie beim Weizen = 117, gerundet 120. Bis zu fuenf Kolben je Lauf, damit ein Brot nicht acht Muehlenlaeufe kostet. Kein eigenes Maismehl - Ausgang ist ChefZ_Flour. priority 1 nur, um den Gleichstandsbericht des ProcessingManagers mit TR_WheatToFlour zu vermeiden (gleicher Prozess, gleiche Spezifitaet) - die Eingaben sind disjunkt, die Reihenfolge ist ohne Wirkung. HINWEIS: ChefZ_GrainMill hat derzeit keinen Cargo-Block (Known-Limitations), die Kette ist bis dahin im Spiel nicht erreichbar; maxCount 5 setzt einen kuenftigen Cargo von mindestens 5 Feldern voraus.",
+            "process": "PROCESS_MILL",
+            "stationsAllowed": ["ChefZ_GrainMill"],
+            "inputs": [
+                {
+                    "slotId": "corn",
+                    "match": { "cls": "ChefZ_Corn" },
+                    "minCount": 1,
+                    "maxCount": 5,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_Flour",
+                    "quantityMode": "ratio",
+                    "ratio": 120,
+                    "inheritFreshness": true,
+                    "freshnessCarry": 1.0
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 1
+        },
+        {
             "id": "TR_AssemblePastaMachine",
             "process": "PROCESS_ASSEMBLE",
             "inputs": [

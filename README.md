@@ -32,15 +32,13 @@
   </a>
 </p>
 
----
-
 ## Project Status
 
 **The mod is written. It has never kept a DayZ server running.**
 
-Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 187 `CfgVehicles`
-classes (`scope = 0` base classes included), 171 script files, 505 data records and
-398 stringtable keys in 13 languages. The static validator suite runs green. What
+Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 188 `CfgVehicles`
+classes (`scope = 0` base classes included), 171 script files, 512 data records and
+401 stringtable keys in 13 languages. The static validator suite runs green. What
 has not happened is a server that survives startup — the process registers every
 addon, loads its config, and then dies with an access violation in the mission's
 `OnInit` chain while the core sits in safe mode with empty registries.
@@ -56,21 +54,19 @@ design questions — is kept internally and is not part of this repository.
 | | |
 |---|---|
 | **`ChefZ_Core`** | Implemented — 137 script files, zero content classes |
-| **Content modules** | Implemented — 7 content addons plus the merged registry · 47 recipes · 59 transforms · 11 stations |
+| **Content modules** | Implemented — 7 content addons, the merged registry and 2 asset packages · 47 recipes · 61 transforms · 11 stations |
 | **Cookbook** | Implemented as knowledge state and RPC — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
 | **Validation** | 19 checkers · **exit code 0 · 0 errors · 55 warnings** |
 | **Validator self-test** | 18 of 19 checkers provably fire · `chefzaction` not yet covered |
-| **Packing** | `tools/chefz-pack/pack.mjs` packs all 13 PBOs — unsigned, unbinarised |
+| **Packing** | 15 sources, **13 packed** — the two asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Vanilla proxy models until the asset backlog is worked off |
-
----
+| **3D assets** | First delivery in — 8 models, 8 textures, 7 classes rebound; the rest still vanilla proxies |
 
 ## Repository Layout
 
-One Steam Workshop item (`Psyerns_ChefZ_Core`) containing ten PBOs, plus three
+One Steam Workshop item (`Psyerns_ChefZ_Core`) containing twelve PBOs, plus three
 independent compatibility mods that are only needed if you run Terje or COT.
 
 ```text
@@ -79,8 +75,8 @@ Psyerns_ChefZ/                              ← repository root (this README)
 ├── data/                                   ← banner, screenshots
 ├── ChefZ_Wiki/                             ← the full wiki, published from here
 │
-├── Psyerns_ChefZ_Core/                     ← THE mod (one workshop item, 10 PBOs)
-│   ├── Addons/
+├── Psyerns_ChefZ_Core/                     ← THE mod (one workshop item, 12 PBOs)
+│   ├── Addons/                             12 addons, two of them assets only
 │   │   ├── ChefZ_Core/                     systems only — no content
 │   │   ├── ChefZ_Registry/                 the merged vocabulary, no scripts, no items
 │   │   ├── ChefZ_Farming/                  found plants, herbs, beekeeping
@@ -90,9 +86,13 @@ Psyerns_ChefZ/                              ← repository root (this README)
 │   │   ├── ChefZ_Preservation/             salting, drying, smoking
 │   │   ├── ChefZ_Baking/                   dough, bread, flatbread, pasta
 │   │   ├── ChefZ_Cooking/                  plates, bowls, stews, breakfasts, sauces
-│   │   └── ChefZ_Cookbook/                 recipe knowledge and RPC — no UI yet
+│   │   ├── ChefZ_Cookbook/                 recipe knowledge and RPC — no UI yet
+│   │   ├── ChefZ_Devices/                  models and textures — hive, beekeeper
+│   │   └── ChefZ_Items/                    models and textures — frames, jar, carrot …
 │   ├── Keys/
 │   └── _deltas/                            registry deltas from the content slices
+│
+├── ChefZ/                                   ← the delivery, kept verbatim; not built
 │
 ├── Psyerns_ChefZ_Terje_Skills_Comp/        ← optional mod — Survival XP, Herbalist perk
 ├── Psyerns_ChefZ_Terje_Medicine_Comp/      ← optional mod — herbal teas, immunity, poisoning
@@ -103,14 +103,22 @@ Psyerns_ChefZ/                              ← repository root (this README)
     └── chefz-pack/                         PBO packing and test-server launch
 ```
 
+
 **`ChefZ_Core` is dependency-free** — no Community Framework, no Terje, no Expansion. The
 compatibility mods are optional consumers; ChefZ runs unchanged without any of them.
+
+**About `ChefZ/`.** The asset delivery as it was handed over, kept in the repository
+unchanged on purpose (`cf8efa5`). Its models and textures already live in
+`ChefZ_Devices` and `ChefZ_Items` under `Addons/`; this folder is the original, not a
+second copy in use. It is **not part of the build** — `pack.mjs` collects
+`Psyerns_ChefZ_Core/Addons/*` and root folders matching `Psyerns_ChefZ_*_Comp`, and
+`ChefZ/` is neither — and the validator never reads it. Worth knowing: its three
+`CfgPatches` names, `ChefZ_Core`, `ChefZ_Devices` and `ChefZ_Items`, are now all three
+in use by real addons, so it must never be packed as it stands.
 
 `ChefZ_Registry` is the one addon allowed to hold the merged category, tag, nutrition
 and preservation tables. Content modules never write them — they hand in a delta, and a
 single integrator merges it. See [Registry Delta Protocol](#registry-delta-protocol).
-
----
 
 ## Features
 
@@ -142,7 +150,7 @@ single integrator merges it. See [Registry Delta Protocol](#registry-delta-proto
 <td width="33%" valign="top">
 
 ### Production Chains
-- Wheat → Flour → Dough → Bread
+- Wheat / Corn → Flour → Dough → Bread
 - Dough → Raw pasta → Dried pasta
 - Meat → Minced meat → Sausage
 - Sausage → Smoked / dry sausage
@@ -187,7 +195,7 @@ naming the processes it accepts.
 
 | Station | Processes | Turns |
 |---|---|---|
-| `ChefZ_GrainMill` | `PROCESS_MILL` | Wheat → Flour |
+| `ChefZ_GrainMill` | `PROCESS_MILL` | Wheat / Corn → Flour |
 | `ChefZ_MeatGrinder` | `PROCESS_GRIND_MEAT`, `PROCESS_STUFF_SAUSAGE` | Meat → Minced meat → Raw sausage |
 | `ChefZ_Mortar` | `PROCESS_GRIND_SPICE`, `PROCESS_GRIND_HERB` | Peppercorns → Black pepper · Dried paprika → Powder · Dried herbs → Herb mix |
 | `ChefZ_DryingRack` | `PROCESS_DRY` | Herbs, berries, pepper, paprika, pasta, meat, fish, sausage — 4 parallel slots |
@@ -198,6 +206,10 @@ naming the processes it accepts.
 | `ChefZ_Beehive` | `PROCESS_HARVEST_HIVE` | Frames fill one after another |
 | `ChefZ_BeehiveDouble` | `PROCESS_HARVEST_HIVE` | The extended hive |
 | `ChefZ_HoneyExtractor` | `PROCESS_SPIN_HONEY` | Uncapped frame → Honey, runs itself |
+
+`ChefZ_FryingPan` is a **station**, not the vanilla `FryingPan` cooking device listed
+further down — same idea, different class. It boils brine over a fire and dries the
+raw salt afterwards; the fire is only needed for the first half.
 
 ### Preservation Matrix
 
@@ -215,7 +227,7 @@ that keeps better dry, not just meat.
 | Raw Sausage | Smoke | Smoked Sausage |
 | Raw Sausage | Dry | Dry Sausage |
 | Raw Pasta | Dry | Dried Pasta |
-| Parsley · Dill · Thyme · Rosemary · Wild Garlic | Dry | the five dried herbs |
+| Parsley · Thyme · Rosemary · Wild Garlic | Dry | the four dried herbs |
 | Bell Pepper | Dry | Dried Paprika |
 | Pepper Berries | Dry | Dried Peppercorns |
 | Canina · Sambucus Berries | Dry | Dried Berries |
@@ -245,8 +257,6 @@ up *below* the baseline.
 | `SEASONED` | 4 | ×1.25 | ×0.90 |
 | `PREMIUM` | 7 | ×1.50 | ×0.85 |
 
----
-
 ## The Central Design Rule
 
 > **`ChefZ_Core` contains systems — ChefZ modules contain content.**
@@ -272,8 +282,6 @@ No Match
 ↓
 Vanilla DayZ Cooking          ← unchanged, always
 ```
-
----
 
 ## System Architecture
 
@@ -365,8 +373,6 @@ CHEFZ_RAW_SAUSAGE CHEFZ_WILD_MEAT   CHEFZ_PRESERVED   CHEFZ_FRESH
 CHEFZ_CREAMY      CHEFZ_MUSHROOM    CHEFZ_SAUCE_BASE
 ```
 
----
-
 ## Recipe Definition
 
 Recipes are JSON, not hardcoded. New dishes ship as config, not as Core edits. Trimmed
@@ -412,8 +418,6 @@ from the real `RCP_ChefZ_SausagePasta` — optional slots and grade rules remove
 into a quality tier: points are scored, the score picks the tier, the tier scales yield,
 spoilage and portions.
 
----
-
 ## Configuration
 
 Configuration arrives in three ranks, and the later rank patches the earlier one.
@@ -455,8 +459,6 @@ With debug logging enabled, every recipe check is traceable:
 
 Full reference: [Configuration](ChefZ_Wiki/Configuration.md).
 
----
-
 ## Addon Structure
 
 Every addon under `Psyerns_ChefZ_Core/Addons/` follows the same shape:
@@ -475,13 +477,21 @@ ChefZ_Meat/
 └── stringtable.csv             beside config.cpp, not one folder down
 ```
 
-`Data/` and `Models/` appear only where a module ships its own assets. Until the asset
-backlog is worked off, ChefZ items point at vanilla proxy models.
+Asset folders appear only where a module ships its own. Three do:
+`ChefZ_Farming/Sounds/` holds the two beekeeping `.ogg` files, bound through
+`CfgSoundShaders` and `CfgSoundSets`, and `ChefZ_Devices` and `ChefZ_Items` are
+nothing *but* assets — `models/` and `data/`, no class, no script, no record. Every
+other ChefZ item still points at a vanilla proxy model until the backlog is worked
+off.
 
-The `$PREFIX$` rule is not cosmetic: if the prefix and the `files[]` paths in `config.cpp`
-disagree, DayZ **silently skips** the script modules. See [Packing](#packing).
+Two rules here are not cosmetic, and both fail **silently**:
 
----
+- **The prefix file must equal the folder name.** If it and the `files[]` paths in
+  `config.cpp` disagree, DayZ skips the script modules without a word in the RPT.
+- **`include.txt` is a whitelist, not a formality.** AddonBuilder packs only the
+  extensions listed there. `ChefZ_Farming` had to add `*.ogg` to ship its sounds;
+  `ChefZ_Ingredients`, `ChefZ_Processing` and `ChefZ_Registry` carry `*.hpp` for the
+  same reason. A file type nobody listed is dropped from the PBO and nothing says so.
 
 ## Registry Delta Protocol
 
@@ -522,8 +532,6 @@ whether a merge actually reached the registry it claims to be in.
 Processes are the one section that stays with its slice: the registry would re-declare
 them at the same rank, and a duplicate record of the same rank is rejected rather than
 patched.
-
----
 
 ## Static Validation
 
@@ -598,8 +606,6 @@ Static validation cannot check runtime behaviour, cooking logic, in-game balanci
 model correctness. That is exactly what the gates are for — and why the sentence at the
 top of this README says the mod has never kept a server running.
 
----
-
 ## Build Workflow
 
 ChefZ is built by a defined agent crew with **one writing owner per file** and four human
@@ -660,8 +666,6 @@ deltas at once. Everywhere else the slices pipeline without locking.
 8. **No success claim without evidence.** "Validation green" only with an actual exit code 0 in the report.
 9. **Foreign repos are read sources**, never work folders.
 
----
-
 ## Terje Compatibility
 
 ChefZ does **not** rebuild Terje. Terje already has skills, XP, perks, modifiers, nutrition,
@@ -717,8 +721,6 @@ processing is explicitly damped against XP farming.
 Full reference, including the double-XP guard and every config key:
 [Terje Compatibility](ChefZ_Wiki/Terje-Compatibility.md).
 
----
-
 ## Naming Convention
 
 All ChefZ classes use the `ChefZ_PascalCase` prefix. Where vanilla already has the item,
@@ -736,7 +738,7 @@ ChefZ_Bread              ChefZ_RawSalt            ChefZ_MincedBear
 ChefZ_Flatbread          ChefZ_Salt
                                                   ChefZ_RawSausage      ChefZ_CookedSausage
 ChefZ_Parsley            ChefZ_PepperBerries      ChefZ_RawPorkSausage  ChefZ_PorkSausage
-ChefZ_Dill               ChefZ_DriedPeppercorns   ChefZ_RawVenisonS…    ChefZ_VenisonSausage
+ChefZ_Corn               ChefZ_DriedPeppercorns   ChefZ_RawVenisonS…    ChefZ_VenisonSausage
 ChefZ_Thyme              ChefZ_BlackPepper        ChefZ_RawBoarSausage  ChefZ_BoarSausage
 ChefZ_Rosemary           ChefZ_DriedPaprika       ChefZ_RawHunterS…     ChefZ_HunterSausage
 ChefZ_WildGarlic         ChefZ_PaprikaPowder      ChefZ_RawSpicyS…      ChefZ_SpicySausage
@@ -760,8 +762,6 @@ ChefZ_SausagePotatoes     ChefZ_ScrambledEggSausage   ChefZ_MeatDumplings
 Every dish exists twice: a `…Bulk` class that comes out of the pot, and the portion class
 listed above that a player takes off it.
 
----
-
 ## Roadmap
 
 V1 is content-complete. What separates it from a release is a server that stays up, then
@@ -779,8 +779,6 @@ the four gate checklists run in a live game.
 Fermentation · canning · pickling · a separate Cooking skill · deep hygiene simulation ·
 farmed herbs (they are found, not grown) · cut vegetables · yeast · 3D asset production
 (vanilla proxies plus a backlog until then) · in-game balancing.
-
----
 
 ## Installation
 
@@ -800,12 +798,21 @@ farmed herbs (they are found, not grown) · cut vegetables · yeast · 3D asset 
 ### Packing
 
 ```bash
-node tools/chefz-pack/pack.mjs            # all 13 PBOs, unsigned and unbinarised
+node tools/chefz-pack/pack.mjs            # 15 sources, unsigned and unbinarised
 powershell tools/chefz-pack/testrun.ps1   # start the test server, read its verdict, stop it
 ```
 
-`Psyerns_ChefZ_Core` packs to ten PBOs, one per addon folder; the three compatibility mods
-pack to one each. The dependency graph inside the main mod is closed — `ChefZ_Cooking`
+> **The two asset addons do not pack today.** `pack.mjs` requires `$PREFIX$` to equal
+> the folder name and skips the addon otherwise (`pack.mjs:85`). `ChefZ_Devices` and
+> `ChefZ_Items` carry the two-level prefix `ChefZ\ChefZ_Devices` and
+> `ChefZ\ChefZ_Items`, which is what their model paths in `ChefZ_Farming` point at —
+> config and prefix agree, the packer's rule does not. The result is 13 PBOs out of
+> 15 sources, with `ChefZ_Farming` requiring two addons that were never built. Either
+> the prefixes and the model paths move to one level, or the rule learns about
+> multi-level prefixes while still proving that prefix and paths match.
+
+`Psyerns_ChefZ_Core` packs to twelve PBOs, one per addon folder; the three compatibility
+mods pack to one each. The dependency graph inside the main mod is closed — `ChefZ_Cooking`
 requires seven other ChefZ addons and `ChefZ_Registry` requires eight — so the main mod
 cannot ship as a subset. Treat it as one indivisible workshop item.
 
@@ -818,8 +825,6 @@ time with errors that point at the consumer rather than the real cause.
 
 Check after every build that the PBO header's `prefix` property and the `files[]` paths inside
 `config.bin` share the same root.
-
----
 
 ## The Vision
 
@@ -855,8 +860,6 @@ SERVING
 EAT / STORE / TRADE
 ```
 
----
-
 ## Credits
 
 <p align="center">
@@ -865,8 +868,6 @@ EAT / STORE / TRADE
   Concept inspired by the clean, well-working logic of <b>CookZ</b>.<br>
   Terje compatibility is designed against <b>TerjeMods</b> by <b>TerjeBruoygard</b> — extended, never modified.
 </p>
-
----
 
 ## License
 

@@ -10,8 +10,6 @@ Everything on this page is read from
 blocks. The blocks contribute 19 (`priorityWeights`) and 5 (`qualityScoring`)
 further keys. **66 individual settings in total.**
 
----
-
 ## 1. Where settings come from
 
 Three ranks. A higher rank patches a lower one **field by field**.
@@ -40,8 +38,6 @@ resolved **a second time**, because an overlay is allowed to patch them.
 `coreSettings` is the only record kind that carries complete defaults in code.
 If `Core.json` is missing entirely, that is a **warning, not an error** —
 nothing is lost, every value falls back to the code default listed below.
-
----
 
 ## 2. Overriding without touching shipped files
 
@@ -127,8 +123,6 @@ records every field that came out the same as explicitly present. A hand-written
 > only takes effect if its name also appears in `explicitFields`. That text
 > predates the probe mechanism and is **wrong**. The probe covers it.
 
----
-
 ## 3. What happens with a broken file
 
 The failure doctrine is one sentence: *every error moves the system towards
@@ -156,8 +150,6 @@ At the end of the load, the health is decided:
 | `DEGRADED` | errors ≤ `safeModeErrorThreshold` and `strictMode` off | the sound records run, the broken ones do not |
 | `SAFE_MODE` | `strictMode` on with ≥ 1 error, **or** errors > threshold | **all ChefZ registries are emptied, the core is inert, vanilla cooking runs unchanged** |
 
----
-
 ## 4. Basic switches
 
 | Setting | Type | Default | Meaning |
@@ -165,8 +157,6 @@ At the end of the load, the health is decided:
 | `enabled` | bool | `true` | `false` makes the core inert: nothing further is loaded, nothing frozen, one banner line in the RPT (`Core ist per Einstellung abgeschaltet (enabled=false) - Vanilla-Kochen laeuft unveraendert.`). Pure vanilla. |
 | `strictMode` | bool | `false` | `true` sends the core into `SAFE_MODE` on the **first** error. The explicit emergency exit. |
 | `safeModeErrorThreshold` | int | `25` | Number of load errors above which `SAFE_MODE` is entered. Clamped to a minimum of `1`. |
-
----
 
 ## 5. Logging
 
@@ -254,8 +244,6 @@ chefz registries | categories | symbols | ambiguities | audit | stats | report
 > `$profile:ChefZ\Core.json` and restart. Runtime changes are never persistent
 > anyway — after a restart `Core.json` applies again.
 
----
-
 ## 6. Matcher and selectors
 
 | Setting | Type | Default | Meaning |
@@ -270,8 +258,6 @@ chefz registries | categories | symbols | ambiguities | audit | stats | report
 > outside `ChefZ_CoreSettingsDef` reads it. The design documents describe it as
 > a time-based re-evaluation cooldown next to `matchThrottleTicks`; only the
 > tick-based throttle was implemented. Setting it has no effect today.
-
----
 
 ## 7. Cooking sessions
 
@@ -302,8 +288,6 @@ Consequences you should know before changing the number:
 - 6 m is far enough to stand next to a fireplace and move, tight enough that a
   passer-by does not count as the cook.
 
----
-
 ## 8. Spoilage and freshness
 
 | Setting | Type | Default | Meaning |
@@ -314,8 +298,6 @@ Consequences you should know before changing the number:
 | `defaultFreshnessLifetimeSec` | float | `21600.0` | Freshness lifetime for every state that does not name its own — and therefore for **every item without a state record**. `21600` is six hours, taken from vanilla's `DECAY_FOOD_RAW_MEAT`, its shortest decay. A value `<= 0` is legal and means "freeze freshness server-wide"; it is **not** clamped, but the preservation manager reports it at boot so a typo does not pass as a design decision. |
 
 See [Food States](Food-States).
-
----
 
 ## 9. Recipes and quality
 
@@ -332,8 +314,6 @@ See [Food States](Food-States).
 `defaultExtraItems: "forbid"` is the safe default because it falls back to
 vanilla: a foreign item in the pot means "no ChefZ recipe", and vanilla cooks on
 exactly as a player without ChefZ would expect. See [Recipes](Recipes).
-
----
 
 ## 10. `priorityWeights` — specificity scoring
 
@@ -379,8 +359,6 @@ and are almost never intended:
 
 Negative weights are clamped — they would invert the ordering.
 
----
-
 ## 11. `qualityScoring` — quality calculation
 
 Server-wide dials for how a dish's quality rank is computed. Quality *tiers*
@@ -408,8 +386,6 @@ quality at all — old meat gives the same dish as fresh. The core says so.
 
 See [Quality and Nutrition](Quality-and-Nutrition).
 
----
-
 ## 12. Nutrition audit
 
 Four dials for a subsystem that does **nothing at runtime**. They control only
@@ -422,8 +398,6 @@ the configuration: the audience is the operator, not the content author.
 | `nutritionTolerancePct` | float | `25.0` | Percentage deviation between target and actual above which the audit writes a `WARN`. **`0` means "report every deviation"** and is an explicitly valid setting; only a negative value is clamped. No correction is ever applied. |
 | `nutritionAuditMaxFindings` | int | `64` | How many findings are logged individually before the audit summarises. Not a saving measure but a readability limit — the total still appears in the closing line, nothing is lost. Minimum `1`. |
 | `nutritionExpectedCap` | float | `100000.0` | Probe limit of the target calculation. **Not a balancing cap** — the target value is never applied. It only catches an obviously derailed order of magnitude so the log carries one number instead of a column. A hit is an `INFO`, not an error. A value `<= 0` is clamped back to `100000.0`. |
-
----
 
 ## 13. Capabilities and events
 
@@ -438,8 +412,6 @@ Six dials for a layer that does nothing on a server without comp modules.
 | `eventTiming` | bool | `false` | Whether the bus measures duration per subscriber and reports outliers as `WARN`. Off by default: it costs two time queries per subscriber and event. Switch it on when hunting a hanging mod. |
 | `eventSlowSubscriberMs` | int | `5` | Threshold in milliseconds above which a subscriber counts as an outlier. Only effective with `eventTiming = true`. Minimum `1`. |
 
----
-
 ## 14. Portions and containers
 
 | Setting | Type | Default | Meaning |
@@ -449,8 +421,6 @@ Six dials for a layer that does nothing on a server without comp modules.
 | `maxContainerCandidates` | int | `32` | Cap on found containers per search. A pure protective cap: only the first entry is ever used, and the search stages run in fixed order, so the best choice is in front of the cap and not behind it. Minimum `1` — below that every container condition would fail without a log line. It matters because the search runs on every crosshair target change. |
 
 See [Portions and Containers](Portions-and-Containers).
-
----
 
 ## 15. Full reference file
 
@@ -557,8 +527,6 @@ take only the lines you actually want to change.
 }
 ```
 
----
-
 ## 16. Recipes for common goals
 
 **Slow down all spoilage by half**
@@ -596,8 +564,6 @@ take only the lines you actually want to change.
 ```json
 { "id": "CORE", "strictMode": true }
 ```
-
----
 
 ## Next
 

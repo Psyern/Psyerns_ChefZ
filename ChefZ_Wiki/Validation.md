@@ -7,8 +7,6 @@ ever sees it.
 The tool lives in `tools/chefz-validate/`. Every path it prints is relative to
 the project root.
 
----
-
 ## 1. Running it
 
 ```bash
@@ -27,8 +25,6 @@ and nothing else.
 
 Run the full pass **before every pack**. It is fast enough that there is no
 reason not to.
-
----
 
 ## 2. Exit codes
 
@@ -54,8 +50,6 @@ ERGEBNIS: <n> Validator(en) selbst fehlgeschlagen - Ergebnis unbrauchbar.
 ```
 
 Do not read past that. Fix the tool first.
-
----
 
 ## 3. Reading the report
 
@@ -123,8 +117,6 @@ a validator that is red in the normal state gets ignored after two weeks.
 
 Each item carries `severity`, `summary`, and where applicable `file` and `line`.
 
----
-
 ## 4. The nineteen checkers
 
 ### Form of the files
@@ -173,7 +165,6 @@ build-and-start cycle before it existed.
 | `chefzswitch.mjs` | A `case` label must be a literal. `static const int FLAG = 1 << 3;` compiles and then matches nothing at runtime — silently. |
 | `chefzaction.mjs` | An action class must be registered in `ActionConstructor.RegisterActions()`. That list is maintained by hand; `ConstructActions()` instantiates only what stands in it, so an unregistered action compiles cleanly, appears in no log, and never exists in the game. Found on 28.08.2026: `ChefZ_ActionTakePortion` and `ChefZ_ActionProcessAtStation` had been missing since they were written. |
 
-
 `chefzcookable` exists because of a blocker that walked past every other
 checker: `ChefZ_Edible_Base` did not override `CanBeCooked()`, vanilla's default
 is `false`, and every ChefZ ingredient with a ChefZ script class stayed on `Raw`
@@ -203,8 +194,6 @@ grep -rn "I4-BELEG" Psyerns_ChefZ_Core/Addons/ChefZ_Core
 
 String literals prefixed `CHEFZ_` are self-test markers and are exempt: the
 prefix is reserved and cannot name content.
-
----
 
 ## 5. The self-test
 
@@ -257,8 +246,6 @@ it. Treat it as a broken checker, not as a passing project.
 > The self-test names the uncovered checker in its own output, so the gap cannot
 > quietly widen.
 
----
-
 ## 6. The reference index and the remaining gap
 
 `refindex/*.txt` — one class per line, `#` starts a comment. Built automatically
@@ -303,8 +290,6 @@ line, `#` for comments.
 Unknown `ChefZ_`-prefixed classes were never affected by the gap. They are **always**
 an error.
 
----
-
 ## 7. What the checkers cannot do
 
 They read files. That is the whole boundary. **Not checked, and no amount of
@@ -334,8 +319,6 @@ One more, worth knowing before you trust a green run:
 
 - **`schema.mjs` validates against the documented form.** The *form* of the real
   shipped data files is not covered by it.
-
----
 
 ## 8. Current state of this repository
 
@@ -370,8 +353,6 @@ should be edible, add a `Nutrition` block. If not, the warning may stand.
 running game. The suite reads files; the mod has never survived server startup. See
 [Known Limitations](Known-Limitations).
 
----
-
 ## 9. Layout of the tool
 
 ```text
@@ -389,8 +370,6 @@ Adding a checker means adding a `.mjs` file with a default export returning
 `lib.mjs`. Add a case to `selftest.mjs` in the same commit, or the new checker
 is unverifiable by construction.
 
----
-
 ## 10. Portability note
 
 `chefzcookable.mjs` hard-codes an absolute path to the vanilla script sources:
@@ -403,8 +382,6 @@ const VANILLA_SCRIPTS = 'C:/Users/Administrator/Desktop/Mod Repositories/scripts
 machine those paths do not exist. The checkers degrade rather than crash, but
 their coverage drops silently. Adjust both constants, or set up the same
 directory layout, before trusting a run on a different machine.
-
----
 
 ## Next
 

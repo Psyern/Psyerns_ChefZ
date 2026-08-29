@@ -7,8 +7,8 @@
     { "id": "VEGETABLE", "parent": null, "displayName": "#STR_CHEFZ_CAT_VEGETABLE" }
   ],
   "tags": [
-    { "id": "CHEFZ_HERB", "displayName": "#STR_CHEFZ_TAG_HERB", "appliesTo": ["ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary", "ChefZ_WildGarlic", "ChefZ_DriedParsley", "ChefZ_DriedDill", "ChefZ_DriedThyme", "ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_HerbMix"] },
-    { "id": "CHEFZ_WILD_HERB", "displayName": "#STR_CHEFZ_TAG_WILD_HERB", "appliesTo": ["ChefZ_Dill", "ChefZ_Thyme", "ChefZ_WildGarlic", "ChefZ_DriedDill", "ChefZ_DriedThyme", "ChefZ_DriedWildGarlic"] },
+    { "id": "CHEFZ_HERB", "displayName": "#STR_CHEFZ_TAG_HERB", "appliesTo": ["ChefZ_Parsley", "ChefZ_Thyme", "ChefZ_Rosemary", "ChefZ_WildGarlic", "ChefZ_DriedParsley", "ChefZ_DriedThyme", "ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_HerbMix"] },
+    { "id": "CHEFZ_WILD_HERB", "displayName": "#STR_CHEFZ_TAG_WILD_HERB", "appliesTo": ["ChefZ_Thyme", "ChefZ_WildGarlic", "ChefZ_DriedThyme", "ChefZ_DriedWildGarlic"] },
     { "id": "CHEFZ_SPICE", "displayName": "#STR_CHEFZ_TAG_SPICE", "appliesTo": ["ChefZ_PepperBerries", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper", "ChefZ_DriedPaprika", "ChefZ_PaprikaPowder", "ChefZ_HerbMix", "ChefZ_HunterSeasoning"] }
   ],
   "processes": [
@@ -18,13 +18,11 @@
   ],
   "nutrition": [
     { "class": "ChefZ_Parsley", "energy": 15, "water": 12, "stomach": 5 },
-    { "class": "ChefZ_Dill", "energy": 15, "water": 12, "stomach": 5 },
     { "class": "ChefZ_Thyme", "energy": 15, "water": 12, "stomach": 5 },
     { "class": "ChefZ_Rosemary", "energy": 15, "water": 12, "stomach": 5 },
     { "class": "ChefZ_WildGarlic", "energy": 15, "water": 12, "stomach": 5 },
     { "class": "ChefZ_PepperBerries", "energy": 12, "water": 8, "stomach": 4 },
     { "class": "ChefZ_DriedParsley", "energy": 8, "water": 0, "stomach": 2 },
-    { "class": "ChefZ_DriedDill", "energy": 8, "water": 0, "stomach": 2 },
     { "class": "ChefZ_DriedThyme", "energy": 8, "water": 0, "stomach": 2 },
     { "class": "ChefZ_DriedRosemary", "energy": 8, "water": 0, "stomach": 2 },
     { "class": "ChefZ_DriedWildGarlic", "energy": 8, "water": 0, "stomach": 2 },
@@ -41,14 +39,12 @@
   "classes": [
     "ChefZ_FreshHerbBase",
     "ChefZ_Parsley",
-    "ChefZ_Dill",
     "ChefZ_Thyme",
     "ChefZ_Rosemary",
     "ChefZ_WildGarlic",
     "ChefZ_PepperBerries",
     "ChefZ_DriedHerbBase",
     "ChefZ_DriedParsley",
-    "ChefZ_DriedDill",
     "ChefZ_DriedThyme",
     "ChefZ_DriedRosemary",
     "ChefZ_DriedWildGarlic",

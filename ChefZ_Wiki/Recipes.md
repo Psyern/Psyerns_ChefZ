@@ -12,8 +12,6 @@ Related pages: [Recipe-Reference](Recipe-Reference), [Adding-Content](Adding-Con
 [Portions-and-Containers](Portions-and-Containers), [Validation](Validation),
 [Known-Limitations](Known-Limitations).
 
----
-
 ## 1. The one rule that matters most
 
 **If no recipe binds, vanilla cooking happens and nothing else does.**
@@ -60,8 +58,6 @@ Practical consequences you should expect on a live server:
 * A typo in a recipe file makes that recipe unavailable, not the cooking system
   broken.
 
----
-
 ## 2. Where recipes live
 
 Recipes are JSON records of `"kind": "recipe"`. As shipped:
@@ -83,8 +79,6 @@ Recipes are read as a **raw form** (`ChefZ_RecipeDef`,
 `.../Scripts/1_Core/ChefZ/ChefZ_RecipeDef.c`) and then compiled into
 `ChefZ_CompiledRecipe`. Evaluation *never* runs on the raw form. Raw records are
 allowed to be incomplete; compiled ones are not.
-
----
 
 ## 3. The worked example
 
@@ -154,8 +148,6 @@ portioned output.
 }
 ```
 
----
-
 ## 4. Slots
 
 A slot is one requirement of the recipe. Fields are declared in
@@ -223,8 +215,6 @@ without any trick.
 An unknown name is a WARN at compile time and falls back to `whole` — never
 silently to "consume nothing".
 
----
-
 ## 5. Matching: selectors
 
 A selector is one node. Fields are declared in `class ChefZ_Selector`
@@ -279,8 +269,6 @@ resulting message:
 The order exists so a player who put raw meat in instead of dried reads
 "state RAW not allowed, DRIED required" rather than "no recipe matches".
 
----
-
 ## 6. Amounts, quantities and policy
 
 ### Amounts
@@ -310,8 +298,6 @@ statement about what goes *into* the dish and therefore only checks bound items.
 With `extraItems: "consume"`, the foreign items go into the consume plan but are
 deliberately **not** counted towards coverage — otherwise a sloppy recipe that
 sweeps everything up would beat a precise one.
-
----
 
 ## 7. Cooking devices and context
 
@@ -345,8 +331,6 @@ once the water has evaporated, and vanilla refreshes it mid-run.
 Without a capability provider loaded, `ChefZ_CapabilityGate.Denies()` always
 returns false and the flow is identical to a server without the skills module.
 See [Terje-Compatibility](Terje-Compatibility).
-
----
 
 ## 8. Completion: `ON_STAGE` vs. `TIMED` vs. `INSTANT`
 
@@ -383,8 +367,6 @@ Compiler behaviour (`.../Scripts/3_Game/ChefZ/ChefZ_RecipeCompiler.c`):
 ready signal and the persisted progress display, and burnt food becomes a natural
 failure condition instead of being rebuilt.
 
----
-
 ## 9. Evaluation order for one recipe
 
 `ChefZ_RecipeEvaluator.Evaluate()`:
@@ -420,8 +402,6 @@ Three guaranteed properties:
 3. **Bounded.** Every binding attempt counts against
    `CoreSettings.matcherNodeBudget` (shipped: `4096`). A pathological recipe
    cannot stall the server, and the log names which one.
-
----
 
 ## 10. Priority when several recipes match
 
@@ -536,8 +516,6 @@ slot strings and device sets, not selector semantics. Two selectors that mean th
 same thing but are written differently are not found. See
 [Validation](Validation) and [Known-Limitations](Known-Limitations).
 
----
-
 ## 11. Outputs
 
 `class ChefZ_OutputDef` (`.../ChefZ_RecipeDef.c`). Only the fields relevant to
@@ -568,8 +546,6 @@ creation is ingredient loss from the player's point of view.
 `byproducts[]` use the same record type. They are checked for edibility
 registration but are deliberately **not** compared against the nutrition target
 value — see [Quality-and-Nutrition](Quality-and-Nutrition).
-
----
 
 ## 12. Checklist for a new recipe
 

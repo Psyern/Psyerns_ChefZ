@@ -80,7 +80,7 @@
                 { "slotId": "spice",     "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 1 }
             ],
             "gradeRules": [
-                { "ruleId": "GR_SFP_Dill",       "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Dill" }, { "cls": "ChefZ_DriedDill" } ] }, "points": 1.0 },
+                { "ruleId": "GR_SFP_Parsley",    "when": "anyItem", "selector": { "anyOf": [ { "cls": "ChefZ_Parsley" }, { "cls": "ChefZ_DriedParsley" } ] }, "points": 1.0 },
                 { "ruleId": "GR_SFP_FreshHerbs", "when": "anyItem", "selector": { "allOf": [ { "tag": "CHEFZ_HERB" }, { "freshness": { "min": 0.8 } } ] }, "points": 1.0 }
             ],
             "policy": {

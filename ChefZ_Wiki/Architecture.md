@@ -6,11 +6,9 @@ from the design documents — where the two disagree, the code wins.
 Nothing on this page has ever been compiled or executed. See
 [Known Limitations](Known-Limitations) before you rely on any of it.
 
----
-
 ## 1. The shape of the mod
 
-ChefZ ships as one mod folder with ten addons inside it, plus three separate
+ChefZ ships as one mod folder with twelve addons inside it, plus three separate
 compatibility mods:
 
 ```
@@ -34,8 +32,6 @@ The division is not cosmetic. `ChefZ_Core/config.cpp` declares
 `units[] = {}` and `weapons[] = {}` — the core contains no `CfgVehicles` entry
 at all, not even an invisible one. Every item in ChefZ belongs to a content
 addon.
-
----
 
 ## 2. The central idea: a rule engine without vocabulary
 
@@ -84,8 +80,6 @@ content identifier and no foreign-mod name appears anywhere under
 Runtime symbols are explicitly **not** stable across server starts. Persistence
 uses the hash from `ChefZ_Identity`, network sync uses the ordinal from
 `ChefZ_IdentityMap`.
-
----
 
 ## 3. Where configuration comes from: three ranks
 
@@ -218,8 +212,6 @@ kinds is loaded but gets no ordinal and is reported as an error
 record is allowed — it does not change the id and adds no record, so it cannot
 move an ordinal.
 
----
-
 ## 4. The load pipeline
 
 `ChefZ_ConfigManager.LoadAll(isServer)` runs, verbatim from the code:
@@ -299,8 +291,6 @@ recipe rejected; counting them twice could push a server over the safe-mode
 threshold for a single cause. Everything else the audit finds is balancing, and
 a dish that misses its target by 30 % is not a reason to switch off a server's
 cooking system.
-
----
 
 ## 5. The central design rule
 
@@ -427,8 +417,6 @@ checker exists because a real blocker walked past every other one —
 ever complete, and the validator output was byte-identical before and after the
 bug.
 
----
-
 ## 6. Script layers
 
 `ChefZ_Core/config.cpp` declares four script modules. The split is not
@@ -451,8 +439,6 @@ does the same for quality rules. Without a provider, both answer "no" and block
 nothing — a self-test, a server without config and a server without a capability
 registry behave identically.
 
----
-
 ## 7. What the core is allowed to override
 
 Seven `modded class` declarations exist in `ChefZ_Core`:
@@ -469,8 +455,6 @@ Item state is *not* done by overriding vanilla. `ChefZ_Edible_Base` and
 consequences: no extra byte on a vanilla steak, no extra `OnStoreSave` block in
 foreign save files, and no override competing with another food mod for the same
 method.
-
----
 
 ## 8. The transaction
 
@@ -498,8 +482,6 @@ Three negative tests are named as acceptance conditions: full cargo, ingredient
 removed mid-flight, missing output class. Each must consume nothing and create
 nothing. None has been run — see [Known Limitations](Known-Limitations).
 
----
-
 ## 9. Extension points
 
 Comp mods depend on ChefZ; ChefZ never depends on them. `chefzcore.mjs` enforces
@@ -516,8 +498,6 @@ that no foreign system name appears in the core, in code *or* in comments.
 
 See [Terje Compatibility](Terje-Compatibility) and
 [COT Compatibility](COT-Compatibility).
-
----
 
 ## 10. Related pages
 

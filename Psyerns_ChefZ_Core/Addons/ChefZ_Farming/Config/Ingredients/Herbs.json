@@ -12,15 +12,6 @@
       "decays": true
     },
     {
-      "id": "ChefZ_Dill",
-      "categories": ["HERB"],
-      "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],
-      "defaultState": "RAW",
-      "quantityUnit": "PIECE",
-      "unitsPerWholeItem": 1,
-      "decays": true
-    },
-    {
       "id": "ChefZ_Thyme",
       "categories": ["HERB"],
       "tags": ["CHEFZ_HERB", "CHEFZ_WILD_HERB"],

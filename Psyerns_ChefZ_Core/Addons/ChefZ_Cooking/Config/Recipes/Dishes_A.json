@@ -1044,12 +1044,12 @@
             "policy": { "extraItems": "forbid", "forbiddenStates": ["BURNT", "ROTTEN"] },
             "gradeRules": [
                 {
-                    "ruleId": "GR_FishDill",
+                    "ruleId": "GR_FishParsley",
                     "when": "anyItem",
                     "selector": {
                         "anyOf": [
-                            { "cls": "ChefZ_Dill" },
-                            { "cls": "ChefZ_DriedDill" }
+                            { "cls": "ChefZ_Parsley" },
+                            { "cls": "ChefZ_DriedParsley" }
                         ]
                     },
                     "points": 2.0

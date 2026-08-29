@@ -8,13 +8,11 @@ That is the whole feature. It is an **admin tool**. It changes no game mechanic.
 | | |
 |---|---|
 | **Categories added** | 8 |
-| **Classes listed** | 168 |
+| **Classes listed** | 128 |
 | **Item classes defined** | 0 |
 | **Recipes / nutrition / transforms touched** | none |
 | **Vanilla or COT classes overridden** | 1 (`JMObjectSpawnerForm`, additively) |
 | **Server-side game effect** | none |
-
----
 
 ## What it does and does not do
 
@@ -37,9 +35,7 @@ from a curated list when one of them is selected.
 
 If you are deciding whether to load it: the cost is one extra dropdown in one admin
 window and one `modded class` on a COT form. The benefit is that finding
-`ChefZ_MushroomCreamSauce` among 168 ChefZ classes stops being a typing exercise.
-
----
+`ChefZ_MushroomCreamSauce` among 149 spawnable ChefZ classes stops being a typing exercise.
 
 ## Installation
 
@@ -66,8 +62,6 @@ record, it only carries class names.
 
 See [Installation](Installation) for the general load order and
 [Modules](Modules) for what each ChefZ addon contains.
-
----
 
 ## Using it as an admin
 
@@ -98,8 +92,6 @@ COT uses for its own four action rows; it carries *Size To Content V* and grows.
 A select box rather than a drop-down list, because a drop-down list in the bottom
 row would open downwards out of the window.
 
----
-
 ## The eight categories
 
 Counted from `Scripts/4_World/ChefZ/Cot/ChefZ_CotCategories.c`. Every class appears
@@ -107,22 +99,61 @@ in **exactly one** category.
 
 | # | Filter ID | Label | Classes |
 |---:|---|---|---:|
-| 1 | `chefz_cot_ingredients` | ChefZ / Ingredients | **30** |
-| 2 | `chefz_cot_herbs` | ChefZ / Herbs and Spices | **32** |
-| 3 | `chefz_cot_meat` | ChefZ / Meat and Sausage | **29** |
-| 4 | `chefz_cot_baking` | ChefZ / Dough, Bread and Pasta | **8** |
-| 5 | `chefz_cot_dairy` | ChefZ / Dairy | **4** |
-| 6 | `chefz_cot_stations` | ChefZ / Stations and Tools | **10** |
+| 1 | `chefz_cot_ingredients` | ChefZ / Ingredients | **13** |
+| 2 | `chefz_cot_herbs` | ChefZ / Herbs and Spices | **17** |
+| 3 | `chefz_cot_meat` | ChefZ / Meat and Sausage | **26** |
+| 4 | `chefz_cot_baking` | ChefZ / Dough, Bread and Pasta | **5** |
+| 5 | `chefz_cot_dairy` | ChefZ / Dairy | **3** |
+| 6 | `chefz_cot_stations` | ChefZ / Stations and Tools | **9** |
 | 7 | `chefz_cot_dishes` | ChefZ / Dishes | **50** |
 | 8 | `chefz_cot_containers` | ChefZ / Containers | **5** |
-| | | **Total** | **168** |
+| | | **Total** | **128** |
+
+> **Recounted 2026-08-29.** The table above stood at 168 and had not been counted
+> since before the vanilla swap: the cut vegetables, the ChefZ milk and casing and
+> the yeast are gone, and their classes went with them. (Diced meat went too, then
+> came back the same day with its own model — and is **not** in any category.) The
+> numbers here now come from `ChefZ_CotCategories.c` itself.
 
 The filter IDs are lower-case and prefixed `chefz_cot_` on purpose. COT's own branch
 passes `m_CurrentType` to `g_Game.IsKindOf`, and no config class name looks like
 that — so even if one of these values ever reached COT's branch instead of ChefZ's,
 it would yield an empty list rather than a wrong match.
 
-### 1. Ingredients (12)
+## What COT cannot spawn
+
+The categories are **curated lists**, not a query. Nothing recomputes them when a
+content module adds an item, and nothing fails when one is forgotten — the class
+simply never appears in the dropdown.
+
+**Twenty-one spawnable classes (`scope = 2`) are in no category today.** Every one of
+them arrived after these lists were written:
+
+| Group | Classes | Arrived with |
+|---|---|---|
+| The whole apiary | `ChefZ_Beehive`, `ChefZ_BeehiveDouble`, `ChefZ_BeehiveKit`, `ChefZ_HoneycombFrameEmpty`, `ChefZ_HoneycombFrameFull`, `ChefZ_HoneycombFrameUncapped`, `ChefZ_UncappingFork`, `ChefZ_BeeSmoker` | Beekeeping, then V2 |
+| Honey Extractor | `ChefZ_HoneyExtractor` | Beekeeping |
+| The three primal cuts | `ChefZ_BeefLeg`, `ChefZ_PorkLeg`, `ChefZ_VenisonLeg` | Butchering legs |
+| The vanilla-produce dishes | `ChefZ_PumpkinSoupBulk` / `Bowl`, `ChefZ_SmallFishPanBulk` / `ChefZ_SmallFishPan`, `ChefZ_FruitCompoteBulk` / `Bowl` | Dishes from vanilla ingredients |
+| Dried berries | `ChefZ_DriedBerries` | The berry drying pair |
+| Diced meat | `ChefZ_DicedMeat` | Its return on 29.08.2026 |
+| The cookbook | `ChefZ_CookbookItem` | Milestone 5.1 |
+
+That is a real gap for an admin: **beekeeping cannot be tested through COT at all**,
+because neither the hive, nor a frame, nor the smoker can be spawned from the menu.
+The classes exist and work — `#spawn ChefZ_Beehive` through any other route places
+one — they are only absent from this list.
+
+The other thirteen ChefZ classes that appear in no category are `scope = 0` base
+classes (`ChefZ_MeatItemBase`, `ChefZ_PortionedDish_Base`, `ChefZ_HerbStationBase`
+and the like). Those are excluded **correctly** — a base class is not an item.
+
+**Keeping it closed.** Adding an item to a content module means adding its class to
+the matching list in `ChefZ_CotCategories.c`. No validator checks this today, which
+is precisely why the list drifted; the count in the table above is the only thing
+that makes the drift visible, so recount it when you touch the file.
+
+### 1. Ingredients (14)
 
 Everything that goes *into* a recipe and does not belong in a more specific
 category: the found vegetables, egg, salt, wheat and flour. (Plants, seeds and
@@ -132,9 +163,9 @@ like mushrooms, and used whole.)
 ```
 ChefZ_Wheat            ChefZ_Flour            ChefZ_Onion
 ChefZ_Garlic           ChefZ_Carrot           ChefZ_Cabbage
-ChefZ_Egg              ChefZ_RawSalt          ChefZ_Salt
-ChefZ_BoneBroth        ChefZ_TomatoSauce      ChefZ_CreamSauce
-ChefZ_MushroomCreamSauce
+ChefZ_Corn             ChefZ_Egg              ChefZ_RawSalt
+ChefZ_Salt             ChefZ_BoneBroth        ChefZ_TomatoSauce
+ChefZ_CreamSauce       ChefZ_MushroomCreamSauce
 ```
 
 Two placement decisions worth knowing:
@@ -151,18 +182,17 @@ Two placement decisions worth knowing:
 The complete herb chain in one category: fresh (found), dried, ground.
 
 ```
-ChefZ_Parsley          ChefZ_Dill             ChefZ_Thyme
-ChefZ_Rosemary         ChefZ_WildGarlic       ChefZ_PepperBerries
-ChefZ_DriedParsley     ChefZ_DriedDill        ChefZ_DriedThyme
-ChefZ_DriedRosemary    ChefZ_DriedWildGarlic  ChefZ_DriedPaprika
-ChefZ_PaprikaPowder    ChefZ_DriedPeppercorns ChefZ_BlackPepper
-ChefZ_HerbMix          ChefZ_HunterSeasoning
+ChefZ_Parsley          ChefZ_Thyme            ChefZ_Rosemary
+ChefZ_WildGarlic       ChefZ_PepperBerries    ChefZ_DriedParsley
+ChefZ_DriedThyme       ChefZ_DriedRosemary    ChefZ_DriedWildGarlic
+ChefZ_DriedPaprika     ChefZ_PaprikaPowder    ChefZ_DriedPeppercorns
+ChefZ_BlackPepper      ChefZ_HerbMix          ChefZ_HunterSeasoning
 ```
 
 Deliberately **not** split by processing stage. An admin looks for "thyme", not for
-"thyme, stage 2 of 3"; the five base classes behind these are not their problem.
+"thyme, stage 2 of 3"; the four base classes behind these are not their problem.
 
-### 3. Meat and Sausage (29)
+### 3. Meat and Sausage (26)
 
 Minced meat, fat, casing, raw and cooked sausage — plus the eight preserved goods.
 
@@ -229,7 +259,12 @@ he has to find it. See [Processing-Stations](Processing-Stations).
 
 ### 7. Dishes (50)
 
-25 dishes, each in two forms.
+25 dishes, each in two forms — the `*Bulk` class that forms in the cooking vessel
+and the served portion the player eats.
+
+The mod has **28** dishes. The three built from vanilla produce — Pumpkin Soup,
+Small Fish Pan, Fruit Compote — are missing from this list, which is six of the
+twenty classes named under [What COT cannot spawn](#what-cot-cannot-spawn).
 
 ```
 ChefZ_TacticalBreakfastBulk     ChefZ_TacticalBreakfast
@@ -276,8 +311,6 @@ ChefZ_EmptyJar         ChefZ_EmptyBox
 Separated from Stations and Tools even though both are inedible: a plate is a
 consumable handed out in quantity, a cheese press is a single item.
 
----
-
 ## Why class lists and not base classes
 
 COT's own type filter is a single base class name evaluated with `g_Game.IsKindOf`:
@@ -298,24 +331,31 @@ The alternative would have been to rewrite item inheritance so that an admin fil
 looks tidy. That is changing game mechanics for the sake of a tool — so: explicit
 lists.
 
----
-
-## Where the 168 come from, and the 17 that are missing
+## Where the 128 come from
 
 The class names come from the `config.cpp` files under
 `Psyerns_ChefZ_Core/Addons/` and nowhere else. Every name listed is a class defined
-there with a body and `scope = 2`. Cross-checked against the `classes` lists in
-`Psyerns_ChefZ_Core/_deltas/*.json`: both sources name the same **185** classes, of
-which **168** have `scope = 2`. Those 168 are listed.
+there with a body and `scope = 2`.
 
-The 17 missing ones are the `scope = 0` base classes (`ChefZ_GrainFoodBase`,
-`ChefZ_MeatItemBase`, `ChefZ_ServedDish_Base`, …). They are absent on purpose:
-they are not spawnable, COT would discard them anyway (`scope == 0` → `continue`),
-and listing them would offer the admin seventeen dead rows.
+Counted against the project as it stands:
+
+| | |
+|---|---:|
+| `ChefZ_` classes in `CfgVehicles` | 162 |
+| of those, spawnable (`scope = 2`) | 149 |
+| of those, listed in a COT category | **128** |
+| spawnable but in no category | **21** |
+| `scope = 0` base classes, excluded on purpose | 13 |
+
+The 13 base classes (`ChefZ_GrainFoodBase`, `ChefZ_MeatItemBase`,
+`ChefZ_ServedDish_Base`, …) are absent for a good reason: they are not spawnable,
+COT would discard them anyway (`scope == 0` → `continue`), and listing them would
+offer the admin thirteen dead rows.
+
+The 21 spawnable ones are a different matter — that is drift, not design, and it is
+itemised under [What COT cannot spawn](#what-cot-cannot-spawn).
 
 See [Delta-Protocol](Delta-Protocol) for what the `_deltas/*.json` files are.
-
----
 
 ## Robustness: a missing addon just loses its entries
 
@@ -345,8 +385,6 @@ silently discarded at runtime, and an admin ends up searching for an item that n
 existed. Anyone adding a class must verify it actually exists with `scope = 2` in a
 `config.cpp` under `Psyerns_ChefZ_Core/Addons/`, and must add the owning addon to
 `requiredAddons[]`. See [Adding-Content](Adding-Content).
-
----
 
 ## The code footprint
 
@@ -381,8 +419,6 @@ falls back to it:
 `modded class` — the modded class *is* the class, not a descendant. TerjeMods'
 own `TerjeCompatibilityCOT` does the same thing on the same class.
 
----
-
 ## Localisation
 
 `stringtable.csv` ships the dropdown label, the *All* entry and the eight
@@ -402,8 +438,6 @@ English strings:
 | `STR_CHEFZ_COT_CAT_DISHES` | ChefZ / Dishes |
 | `STR_CHEFZ_COT_CAT_CONTAINERS` | ChefZ / Containers |
 
----
-
 ## Not yet confirmed in game
 
 Code-verified but **not** confirmed against a running server with COT loaded. Until
@@ -416,10 +450,8 @@ someone does, these belong to [Known-Limitations](Known-Limitations):
   behaves identically inside a ChefZ category and inside COT's *All* branch.
 * Behaviour when another mod also extends `JMObjectSpawnerForm` — Enforce chains the
   overrides, but the chaining order with a third mod is untested.
-* That every one of the 168 names resolves at runtime. A wrong name is discarded
+* That every one of the 128 names resolves at runtime. A wrong name is discarded
   silently by design, so a typo would show up as a short list rather than an error.
-
----
 
 ## See also
 

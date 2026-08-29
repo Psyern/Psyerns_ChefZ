@@ -9,11 +9,11 @@
 // ---------------------------------------------------------------------------
 // FUNDPFLANZEN, KEIN ANBAU (Entscheidung vom 29.08.2026)
 // ---------------------------------------------------------------------------
-// Weizen, die vier Gemuese und die sechs Kraeuter werden GEFUNDEN, nicht
+// Weizen, die fuenf Gemuese und die fuenf Kraeuter werden GEFUNDEN, nicht
 // gezogen - dasselbe Verhalten wie Vanillas Pilze: ein Item liegt in der
 // Welt, wird aufgehoben, gegessen oder verarbeitet. Es gibt keine
 // Pflanzenklasse, kein Saatgut, keine Wachstumsstufe und keinen Horticulture-
-// Knoten mehr. Zwoelf Pflanzen mit je fuenf Wachstumsstufen haetten den
+// Knoten mehr. Elf Pflanzen mit je fuenf Wachstumsstufen haetten den
 // Modellaufwand vervielfacht, und die Kette dahinter (mahlen, trocknen,
 // moersern) ist die eigentliche Spielmechanik - nicht das Beet.
 //
@@ -61,13 +61,13 @@ class CfgPatches
             // ### SLICE produce ###
             "ChefZ_VegetableFood_Base", 
             
-            "ChefZ_Onion", "ChefZ_Garlic", "ChefZ_Carrot", "ChefZ_Cabbage",
+            "ChefZ_Onion", "ChefZ_Garlic", "ChefZ_Carrot", "ChefZ_Cabbage", "ChefZ_Corn",
             // ### SLICE herbs ###
             "ChefZ_FreshHerbBase",
             
             
             
-            "ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
+            "ChefZ_Parsley", "ChefZ_Thyme", "ChefZ_Rosemary",
             "ChefZ_WildGarlic", "ChefZ_PepperBerries",
             // ### SLICE apiary ###
             "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_BeehiveKit",
@@ -239,7 +239,7 @@ class CfgVehicles
     // ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json (05 §2,
     // zweiter Deklarationsweg fuer FREMDE Klassen).
     //
-    // Zwiebel, Knoblauch, Karotte und Kohl sind FUNDPFLANZEN wie Vanillas
+    // Zwiebel, Knoblauch, Karotte, Kohl und Mais sind FUNDPFLANZEN wie Vanillas
     // Pilze (Kopf dieser Datei): kein Saatgut, keine Pflanze, kein Beet.
     //
     // class Food MIT FoodStages UND FoodStageTransitions - der urspruengliche
@@ -287,7 +287,7 @@ class CfgVehicles
         // woertlich aus enum eCookingPropertyIndices (FoodStage.c:15).
         //
         // Die Stufen-NAEHRWERTE stehen NICHT hier, sondern an jeder Klasse:
-        // Zwiebel, Knoblauch, Karotte und Kohl liegen zu weit auseinander, als
+        // Zwiebel, Knoblauch, Karotte, Kohl und Mais liegen zu weit auseinander, als
         // dass ein Basiswert fuer mehr als einen von ihnen richtig waere.
         class Food
         {
@@ -459,6 +459,51 @@ class CfgVehicles
         };
     };
 
+    // --- Mais (29.08.2026, loest Dill ab) --------------------------------------
+    //
+    // Fundpflanze wie die Karotte: kein Saatgut, keine Pflanze. Staerkehaltig,
+    // deshalb energiereicher und saettigender als Wurzelgemuese, aber trocken.
+    // Referenz ist Vanillas Kartoffel (180 / 45 / 40): ein Kolben traegt mehr
+    // Masse, aber nicht das Doppelte an Saettigung.
+    //
+    // PROXY: zucchini.p3d der Basis - laenglich, einteilig, derzeit von keiner
+    // sichtbaren Klasse belegt. Eigenes Mesh ist gemeldet (Asset-ToDo §4).
+    //
+    // Zweites Leben: an der Getreidemuehle wird der Kolben zu Mehl
+    // (TR_CornToFlour in ChefZ_Processing). Die Kategorie GRAIN dafuer steht
+    // in CfgChefZIngredients unten.
+    class ChefZ_Corn : ChefZ_VegetableFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CORN";
+        descriptionShort = "#STR_CHEFZ_ITEM_CORN_DESC";
+        weight = 250;
+        class Nutrition
+        {
+            fullnessIndex = 60;
+            energy = 180;
+            water = 40;
+            nutritionalIndex = 40;
+            toxicity = 0;
+            digestibility = 1;
+        };
+
+        // Stufen-Naehrwerte nach demselben Muster wie die Karotte: Gebacken
+        // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
+        // Vitamine, Verbrannt und Verdorben sind Verlust.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {60, 180, 40, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {54, 205, 18, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {58, 190, 46, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {15, 27, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {15, 27, 8, 0, 15, 0, 1}; };
+            };
+        };
+    };
+
     // --- §20 Kohl ------------------------------------------------------------
 
     class ChefZ_Cabbage : ChefZ_VegetableFood_Base
@@ -498,7 +543,7 @@ class CfgVehicles
     //==========================================================================
     // ### SLICE herbs ###   Production Map §21-§24, §15, §16
     //
-    // Fuenf Kraeuter, dazu Pfeffer: Fund -> (spaeter, in ChefZ_Processing)
+    // Vier Kraeuter, dazu Pfeffer: Fund -> (spaeter, in ChefZ_Processing)
     // Trockenrahmen und Moerser. Paprika steht hier nicht mehr - sie ist
     // vollstaendig Vanilla (Vanilla-Audit §2).
     //
@@ -556,13 +601,6 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PARSLEY";
         descriptionShort = "#STR_CHEFZ_ITEM_PARSLEY_DESC";
-    };
-
-    class ChefZ_Dill : ChefZ_FreshHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DILL";
-        descriptionShort = "#STR_CHEFZ_ITEM_DILL_DESC";
     };
 
     class ChefZ_Thyme : ChefZ_FreshHerbBase
@@ -1148,7 +1186,8 @@ class CfgChefZ
 // hier - Workflow §10.5, fremde Dateien werden nie veraendert.
 //
 // VEGETABLE, ROOT_VEGETABLE, LEAF_VEGETABLE und CHEFZ_FRESH stehen im Delta
-// _deltas/produce.json. Dieses Modul fasst keine zentrale Registry an.
+// _deltas/produce.json; GRAIN kommt aus dem Slice grain. Dieses Modul fasst
+// keine zentrale Registry an.
 //==============================================================================
 class CfgChefZIngredients
 {
@@ -1166,6 +1205,10 @@ class CfgChefZIngredients
     class ChefZ_Garlic : ChefZ_ProduceIngredient  { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
     class ChefZ_Carrot : ChefZ_ProduceIngredient  { categories[] = {"VEGETABLE","ROOT_VEGETABLE"}; };
     class ChefZ_Cabbage : ChefZ_ProduceIngredient { categories[] = {"VEGETABLE","LEAF_VEGETABLE"}; };
+    // Mais ist Gemuese UND Korn: VEGETABLE fuer Topf und Pfanne, GRAIN fuer die
+    // Muehle. Kein Rezept-Slot matcht auf GRAIN - die Kategorie ist deshalb
+    // I2-neutral. Tag bleibt CHEFZ_FRESH; CHEFZ_GRAIN gehoert dem Slice grain.
+    class ChefZ_Corn : ChefZ_ProduceIngredient    { categories[] = {"VEGETABLE","GRAIN"}; };
 };
 
 //==============================================================================
@@ -1421,6 +1464,37 @@ class CfgChefZProcesses
         specialty = 0.01;
         toolDamage = 0;
     };
+
+    // ------------------------------------------------------------------
+    // 6. STOCK ABBAUEN (29.08.2026): der aufgestellte Stock wird wieder zum
+    //    Bausatz - Lykos' Lieferung hatte das als Vanilla-Rezept
+    //    (Pack_BeeHive: Stock + Schraubenzieher -> Kit); hier ist es der
+    //    zweite Stationsvorgang des Stocks.
+    //
+    // STATION_ACTION und nicht HANDCRAFT: ein 14-kg-Stock liegt am Boden,
+    // und ein Handwerksschritt braeuchte ihn in der Hand. Am Stock in der
+    // Welt gibt es genau eine Aktionsform, und das ist diese.
+    //
+    // KEIN Transform: der Vorgang veraendert nicht den Inhalt der Station,
+    // sondern die Station selbst. Das erledigt ChefZ_Beehive im Haken
+    // ChefZ_OnStationActionFinished (Scripts/4_World/ChefZ/Farming/
+    // ChefZ_Apiary.c): Bausatz an Ort und Stelle, Stock weg. Der Vorgang
+    // erscheint nur an einem LEEREN, GESCHLOSSENEN Stock - mit Raehmchen
+    // darin blendet das Skript ihn aus (ChefZ_GetProcessAt), damit niemand
+    // sein Volk samt vierzig Stunden Arbeit in eine Kiste packt.
+    //
+    // HAND_TOOL wie beim Aufstellen; toolDamage 2 trifft sicher das
+    // Werkzeug, weil die Aktion ohne eines nicht erscheint (vgl. die
+    // Anmerkung zu toolDamage 0 an PROCESS_HARVEST_HIVE).
+    // ------------------------------------------------------------------
+    class PROCESS_PACK_HIVE
+    {
+        exec = "STATION_ACTION";
+        displayName = "#STR_CHEFZ_PROC_PACK_HIVE";
+        toolGroups[] = {"HAND_TOOL"};
+        baseDurationSec = 20.0;
+        toolDamage = 2;
+    };
 };
 
 //==============================================================================
@@ -1464,37 +1538,6 @@ class CfgChefZTools
     class HAND_TOOL
     {
         classes[] =
-
-    // ------------------------------------------------------------------
-    // 6. STOCK ABBAUEN (29.08.2026): der aufgestellte Stock wird wieder zum
-    //    Bausatz - Lykos' Lieferung hatte das als Vanilla-Rezept
-    //    (Pack_BeeHive: Stock + Schraubenzieher -> Kit); hier ist es der
-    //    zweite Stationsvorgang des Stocks.
-    //
-    // STATION_ACTION und nicht HANDCRAFT: ein 14-kg-Stock liegt am Boden,
-    // und ein Handwerksschritt braeuchte ihn in der Hand. Am Stock in der
-    // Welt gibt es genau eine Aktionsform, und das ist diese.
-    //
-    // KEIN Transform: der Vorgang veraendert nicht den Inhalt der Station,
-    // sondern die Station selbst. Das erledigt ChefZ_Beehive im Haken
-    // ChefZ_OnStationActionFinished (Scripts/4_World/ChefZ/Farming/
-    // ChefZ_Apiary.c): Bausatz an Ort und Stelle, Stock weg. Der Vorgang
-    // erscheint nur an einem LEEREN, GESCHLOSSENEN Stock - mit Raehmchen
-    // darin blendet das Skript ihn aus (ChefZ_GetProcessAt), damit niemand
-    // sein Volk samt vierzig Stunden Arbeit in eine Kiste packt.
-    //
-    // HAND_TOOL wie beim Aufstellen; toolDamage 2 trifft sicher das
-    // Werkzeug, weil die Aktion ohne eines nicht erscheint (vgl. die
-    // Anmerkung zu toolDamage 0 an PROCESS_HARVEST_HIVE).
-    // ------------------------------------------------------------------
-    class PROCESS_PACK_HIVE
-    {
-        exec = "STATION_ACTION";
-        displayName = "#STR_CHEFZ_PROC_PACK_HIVE";
-        toolGroups[] = {"HAND_TOOL"};
-        baseDurationSec = 20.0;
-        toolDamage = 2;
-    };
         {
             "Hammer",
             "Hatchet",

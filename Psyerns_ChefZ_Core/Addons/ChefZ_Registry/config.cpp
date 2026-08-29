@@ -44,7 +44,7 @@ class CfgPatches
 
         // ChefZ_Core:        liest die Registries (ChefZ_JsonDocs, Rang 2).
         // ChefZ_Farming:     ChefZ_Onion, ChefZ_Carrot, ChefZ_Cabbage,
-        //                    ChefZ_Garlic und die Frischkraeuter.
+        //                    ChefZ_Corn, ChefZ_Garlic und die Frischkraeuter.
         // ChefZ_Ingredients: ChefZ_Salt und ChefZ_RawSalt.
         // ChefZ_Processing:  ChefZ_Flour, die Teige, die Pasta.
         // ChefZ_Meat:        die Minced*- und Sausage-Klassen.

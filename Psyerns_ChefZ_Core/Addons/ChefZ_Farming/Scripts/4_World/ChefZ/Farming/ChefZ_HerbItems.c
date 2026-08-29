@@ -39,7 +39,7 @@ class ChefZ_FreshHerbBase extends ChefZ_Edible_Base
     }
 
     /**
-     * Die Essaktion der sechs frischen Kraeuter.
+     * Die Essaktion der fuenf frischen Kraeuter.
      *
      * Vanilla registriert sie auf jeder Nahrungsklasse einzeln; ohne sie wird
      * das Buendel im Spiel nicht zum Essen angeboten, ohne dass irgendwo etwas
@@ -69,7 +69,6 @@ class ChefZ_FreshHerbBase extends ChefZ_Edible_Base
 }
 
 class ChefZ_Parsley    extends ChefZ_FreshHerbBase {}
-class ChefZ_Dill       extends ChefZ_FreshHerbBase {}
 class ChefZ_Thyme      extends ChefZ_FreshHerbBase {}
 class ChefZ_Rosemary   extends ChefZ_FreshHerbBase {}
 class ChefZ_WildGarlic extends ChefZ_FreshHerbBase {}

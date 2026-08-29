@@ -18,8 +18,6 @@ Alle vier folgen der Empfehlung aus `OFFENE_ENTSCHEIDUNGEN.md`. Nichts davon wur
 gedreht. Was hinzukommt, sind **vier Auflagen** aus einer erneuten, eigenhändigen
 Lesung der Vanilla-Quellen (§6) — sie schärfen die Entscheidungen, sie kippen keine.
 
----
-
 ## 0. Wie die Belege entstanden sind
 
 Jede Fundstelle in diesem Protokoll wurde für die Abnahme **selbst nachgeschlagen**,
@@ -29,8 +27,6 @@ nicht aus `01_Vanilla_Befunde.md` übernommen. Quelle:
 Wo die Lesung den Befund bestätigt, steht das Kürzel aus `01` dabei. Wo sie mehr
 gefunden hat, als in `01` steht, ist es als **Neu** markiert und hat eine Auflage
 zur Folge.
-
----
 
 ## 1. OF-01 — Food States: Hybrid, Klassentausch als V1-Normalfall
 
@@ -91,8 +87,6 @@ Items. Genau dafür ist der Hybrid da. Würde man dagegen `modded class Edible_B
 brauchen, wäre das eine Revision von Invariante I6 — eine Entwurfsänderung, keine
 Datenänderung.
 
----
-
 ## 2. OF-02 — Persistenz: eigener `OnStoreSave`-Block
 
 ### Entscheidung
@@ -152,8 +146,6 @@ angedeutet sind:
 Ein Wechsel auf CF-ModStorage ist eine Migration bestehender Spielstände **und** eine
 harte Fremdabhängigkeit, die entscheidet, welche Server den Mod überhaupt fahren
 können. Deshalb wird sie hier bewusst und einmalig ausgeschlossen.
-
----
 
 ## 3. OF-03 — `extraItems`-Default: `forbid`
 
@@ -226,8 +218,6 @@ den Default immer.
 ### Umkehrkosten
 
 Eine Zeile in `Core.json`. Genau deshalb darf die Entscheidung streng ausfallen.
-
----
 
 ## 4. OF-05 — Qualität wirkt auf Ausbeute, nicht auf den Bissen
 
@@ -321,8 +311,6 @@ Von B auf A zu wechseln vervierfacht jede Gerichteklasse — Modell, Nutrition-B
 Stringtable, Loot-Eintrag je Stufe. Von A auf B zurück wäre ein Rückbau von rund 75
 Klassen. Genau deshalb fällt die Entscheidung vor M2 und nicht in M3.
 
----
-
 ## 5. Was diese vier Entscheidungen zusammen bewirken
 
 Sie greifen ineinander, und das ist kein Zufall:
@@ -346,8 +334,6 @@ Die gemeinsame Linie: **ChefZ schreibt nur auf das, was ihm gehört.** Zustand,
 Qualität, Frische, Portionen, Persistenz — alles vier lebt auf ChefZ-Klassen, und
 der Rückfallpfad ist überall unverändertes Vanilla.
 
----
-
 ## 6. Auflagen dieser Abnahme — Sammelliste
 
 | # | Auflage | Wer | Wann |
@@ -356,8 +342,6 @@ der Rückfallpfad ist überall unverändertes Vanilla.
 | 2 | `ChefZ_CoreSettingsDef.defaultExtraItems` (Addendum zu `02 §5.4`) | S2 baut, S6 liest | S2 |
 | 3 | Ausbeute reitet auf `ChefZ_Portions`, nicht auf `quantity` | S12, S15, Content | S12 |
 | 4 | Essbare Ergebnisklassen brauchen `Nutrition`/`Food` und `scope != 0`; `chefznut.mjs` vor M2 | Werkzeug + Content | vor M2 |
-
----
 
 ## 7. Bekannte Grenzen, in den Gate-1-Report zu übernehmen
 
@@ -368,8 +352,6 @@ der Rückfallpfad ist überall unverändertes Vanilla.
    (OF-14). Bewusste Asymmetrie: ChefZ speichert nur auf eigenen Klassen.
 4. Qualität kann den Nährwert **pro Bissen** nie verändern. Wer eine Balancing-Idee
    hat, die das voraussetzt, hat eine Idee, die DayZ nicht zulässt (OF-05).
-
----
 
 ## 8. Was diese Abnahme im Addon hinterlässt
 
@@ -393,8 +375,6 @@ Varianten.
 Der Eintrag entsteht in S2, mit dem Messergebnis in der Hand. Fällt V-A negativ aus,
 wird derselbe Datensatz stattdessen zu einem `CfgChefZSeed`-Klassenbaum — die Werte
 in `Core.json` bleiben davon unberührt, nur ihre Quelle wechselt (`02 E7`, OF-10).
-
----
 
 ## 9. Abnahmevermerk
 

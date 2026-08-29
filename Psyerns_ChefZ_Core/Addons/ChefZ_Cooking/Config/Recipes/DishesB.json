@@ -320,6 +320,7 @@
         },
         {
             "id": "RCP_ChefZ_FarmersBreakfast",
+            "_note": "Mais (29.08.2026) als optionale Pfannenbeilage, 1 Punkt; Pflicht bleiben Kartoffel, Ei, Wurst, Zwiebel (I2-Anker: ChefZ_Onion und SAUSAGE).",
             "contexts": [
                 {
                     "deviceClasses": [
@@ -368,6 +369,15 @@
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
+                },
+                {
+                    "slotId": "corn",
+                    "match": { "cls": "ChefZ_Corn" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
                 },
                 {
                     "slotId": "fat",
