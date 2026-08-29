@@ -8,6 +8,11 @@
 // Verhalten bleiben bei den Slices, die die Modelle nur ueber den Pfad
 // "\ChefZ\\ChefZ_Items\models\<name>.p3d" ansprechen.
 //
+// QUELLE: die Dateien kommen aus ChefZ/ChefZ_Items/models und /data - dem Ordner,
+// in dem Lykos' Lieferung liegt und bleibt. Nach einer neuen Lieferung:
+//     node tools/chefz-pack/sync-assets.mjs
+// kopiert sie hierher. Hier nichts von Hand aendern.
+//
 // KEIN CfgMods, KEIN Skript: nichts zu laden ausser Dateien. Und KEIN
 // ChefZ_Core in requiredAddons - Dateien brauchen keinen Code; der Validator
 // fragt nach, und die Antwort ist: ja, beabsichtigt.
