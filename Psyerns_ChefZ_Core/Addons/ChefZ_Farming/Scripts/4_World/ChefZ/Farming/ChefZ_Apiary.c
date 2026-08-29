@@ -164,6 +164,12 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     //! oeffnet.
     static const string CHEFZ_STING_PROCESS = "PROCESS_HARVEST_HIVE";
 
+    //! Der zweite Stationsvorgang: Stock abbauen, Bausatz zurueck (29.08.2026,
+    //! aus Lykos' Pack_BeeHive uebernommen). Er veraendert nicht den Inhalt
+    //! der Station, sondern die Station selbst - siehe ChefZ_PackUp().
+    static const string CHEFZ_PACK_PROCESS = "PROCESS_PACK_HIVE";
+    static const string CHEFZ_KIT_CLASS    = "ChefZ_BeehiveKit";
+
     //==========================================================================
     // Die Slotnamen der Schutzausruestung
     //==========================================================================
@@ -228,6 +234,14 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     int ChefZ_FrameCapacity()
     {
         return 10;
+    }
+
+    //! Wie viele Bausaetze beim Abbau herauskommen. Virtuell aus demselben
+    //! Grund: die Doppelbeute entsteht aus zwei Bausaetzen (TR_ExtendBeehive)
+    //! und gibt beide zurueck.
+    int ChefZ_KitCount()
+    {
+        return 1;
     }
 
     //! Beim Spawn (EEInit) und beim Laden (AfterStoreLoad) - beide Wege
@@ -514,6 +528,151 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     }
 
     //==========================================================================
+    // Abbauen (PROCESS_PACK_HIVE)
+    //==========================================================================
+
+    //! Ist process der Abbau-Vorgang? Lookup() und nicht Intern() - ein nie
+    //! deklarierter Prozessname bleibt INVALID und trifft dann nichts.
+    protected bool ChefZ_IsPackProcess(ChefZ_Sym process)
+    {
+        if (!ChefZ_SymbolTable.IsValid(process))
+            return false;
+        ChefZ_Sym pack = ChefZ_SymbolTable.Lookup(CHEFZ_PACK_PROCESS);
+        if (!ChefZ_SymbolTable.IsValid(pack))
+            return false;
+        return process == pack;
+    }
+
+    /**
+     * Darf der Stock jetzt abgebaut werden? Nur leer und geschlossen.
+     *
+     * Leer heisst: KEIN Item im Cargo - nicht nur kein Raehmchen. Das Cargo
+     * nimmt zwar ueber CanReceiveItemIntoCargo nichts anderes an, aber der
+     * Ladepfad (CanLoadItemIntoCargo) ist absichtlich nicht ueberschrieben,
+     * und was ein Spielstand hineingelegt hat, soll beim Abbau nicht still
+     * verschwinden. Ein offener Deckel heisst: gerade geerntet, das Volk ist
+     * aufgebracht - zwei Minuten warten. Ein laufender Job kann es an
+     * dieser Station nicht geben (parallelSlots 1, kein STATION_TIMED); die
+     * Pruefung steht trotzdem da, damit ein spaeter ergaenzter Vorgang den
+     * Abbau nicht unter sich weggezogen bekommt.
+     *
+     * Client UND Server rechnen dieselbe Antwort: der Deckel ist netsync,
+     * und den Cargo-Inhalt einer Station in Reichweite kennt der Client.
+     */
+    protected bool ChefZ_CanPack()
+    {
+        if (m_ChefZ_LidOpen)
+            return false;
+        if (ChefZ_ActiveJobCount() > 0)
+            return false;
+        GameInventory inv = GetInventory();
+        if (!inv)
+            return false;
+        CargoBase cargo = inv.GetCargo();
+        if (!cargo)
+            return true;
+        return cargo.GetItemCount() == 0;
+    }
+
+    /**
+     * Der Abbau-Vorgang wird AUSGEBLENDET, solange er nicht erlaubt ist -
+     * statt zu erscheinen und dann nichts zu tun.
+     *
+     * ChefZ_ActionProcessAtStation liest die Prozessliste der Station ueber
+     * ChefZ_GetProcessCount/ChefZ_GetProcessAt (RefreshProcesses auf dem
+     * Client, ResolveProcessFor auf dem Server) und ueberspringt INVALID.
+     * Der Hash-Pfad von ResolveProcessFor fragt ChefZ_SupportsProcess; auch
+     * der sagt nein. So verschwindet der Vorgang aus dem Aktionsmenue, sobald
+     * ein Raehmchen im Stock liegt, und die Aktion "Bienenstock oeffnen"
+     * bleibt allein uebrig - ohne Variantenrad.
+     *
+     * Die Zaehlung (ChefZ_GetProcessCount) bleibt unveraendert: der Core
+     * adressiert Prozesse ueber ihren Index (ChefZ_GetActiveProcessOrdinal),
+     * und ein wandernder Index waere ein Fehler, den niemand sieht.
+     */
+    override bool ChefZ_SupportsProcess(ChefZ_Sym process)
+    {
+        if (!super.ChefZ_SupportsProcess(process))
+            return false;
+        if (ChefZ_IsPackProcess(process) && !ChefZ_CanPack())
+            return false;
+        return true;
+    }
+
+    override ChefZ_Sym ChefZ_GetProcessAt(int index)
+    {
+        ChefZ_Sym process = super.ChefZ_GetProcessAt(index);
+        if (ChefZ_IsPackProcess(process) && !ChefZ_CanPack())
+            return ChefZ_SymbolTable.INVALID;
+        return process;
+    }
+
+    /**
+     * Der Stock wird zum Bausatz. OEFFENTLICH, weil CallLater die Methode
+     * ueber ihren Namen ruft.
+     *
+     * Einen Frame NACH dem Haken (CallLater 0, wie die Schleuder ihren
+     * naechsten Durchlauf anstoesst): der Haken laeuft mitten in
+     * OnFinishProgressServer der Aktion, deren Ziel dieser Stock ist. Ihn
+     * dort zu loeschen hiesse, der laufenden Aktion ihr Ziel unter den
+     * Fuessen wegzuziehen - erst soll die Aktion enden, dann der Stock.
+     *
+     * Vorgehen: Zustand noch einmal pruefen (zwischen Aktionsstart und Ende
+     * kann jemand ein Raehmchen hineingelegt haben), Timer aus, je Bausatz
+     * ein Objekt auf dem Boden an der Stelle des Stocks (CreateObjectEx mit
+     * ECE_PLACE_ON_SURFACE - derselbe Aufruf, mit dem Vanilla ein gefangenes
+     * Tier ablegt, CatchingResultBasic.c:107), Gesundheit anteilig
+     * uebernehmen (GetHealth01 Object.c:997, GetMaxHealth Object.c:1004,
+     * SetHealth Object.c:1011), dann DeleteSafe (EntityAI.c:786).
+     *
+     * Entsteht kein Bausatz - ein Klassenname, den keine Config kennt -,
+     * bleibt der Stock stehen. Lieber ein Stock zu viel als einer zu wenig.
+     */
+    void ChefZ_PackUp()
+    {
+        if (!g_Game || !g_Game.IsServer())
+            return;
+
+        if (!ChefZ_CanPack())
+        {
+            ChefZ_LogPack("nicht abgebaut: der Stock ist nicht mehr leer oder noch offen.");
+            return;
+        }
+
+        float health01 = GetHealth01("", "");
+        vector pos = GetPosition();
+        int wanted = ChefZ_KitCount();
+        int made = 0;
+
+        for (int i = 0; i < wanted; i++)
+        {
+            EntityAI kit = EntityAI.Cast(g_Game.CreateObjectEx(CHEFZ_KIT_CLASS, pos, ECE_PLACE_ON_SURFACE));
+            if (!kit)
+                continue;
+            float maxHealth = kit.GetMaxHealth("", "");
+            kit.SetHealth("", "", maxHealth * health01);
+            made = made + 1;
+        }
+
+        if (made == 0)
+        {
+            ChefZ_LogPack("nicht abgebaut: " + CHEFZ_KIT_CLASS + " liess sich nicht anlegen.");
+            return;
+        }
+
+        ChefZ_LogPack("abgebaut, " + made.ToString() + " Bausatz/Bausaetze abgelegt.");
+        ChefZ_StopFillTimer();
+        DeleteSafe();
+    }
+
+    protected void ChefZ_LogPack(string msg)
+    {
+        if (!ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
+            return;
+        ChefZ_Log.Debug(ChefZ_LogChannel.PROCESS, "Bienenstock " + GetType() + ": " + msg);
+    }
+
+    //==========================================================================
     // Der Deckel
     //==========================================================================
 
@@ -643,6 +802,12 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         // traegt absichtlich keinen Transform.
         if (outcome == ChefZ_StationActionOutcome.RUN_FAILED)
             return;
+
+        // Abbauen: der Bausatz kommt einen Frame spaeter (ChefZ_PackUp).
+        // Das Stechen unten laeuft davor ganz normal durch - wer sein Volk
+        // ohne Rauch in die Kiste packt, wird dabei gestochen.
+        if (ChefZ_IsPackProcess(process))
+            g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(ChefZ_PackUp, 0, false);
 
         // Der Deckel geht nur beim Oeffnen auf; gestochen wird bei JEDER
         // Aktion am Stock. Lookup() und nicht Intern(): ein Prozessname, den
@@ -890,6 +1055,11 @@ class ChefZ_BeehiveDouble extends ChefZ_Beehive
     override int ChefZ_FrameCapacity()
     {
         return 20;
+    }
+
+    override int ChefZ_KitCount()
+    {
+        return 2;
     }
 }
 

@@ -185,3 +185,26 @@ Platz: `ChefZ_HandcraftBridge` reserviert ausschließlich für `exec = HANDCRAFT
 - Alte Leerrähmchen starten bei 0 %.
 - `GlassBottle` ist kein Eingang der Schleuder mehr; das leere Glas ist
   `ChefZ_EmptyJar` (`ChefZ_Cooking`).
+
+## Abbauen — `PROCESS_PACK_HIVE` (29.08.2026)
+
+Lykos' Lieferung (`ChefZ/ChefZ_Devices/scripts/.../Pack_BeeHive.c`) hatte den
+Rückbau als Vanilla-Rezept: Stock + Schraubenzieher → Bausatz. Ein
+Handwerksschritt bräuchte den 14-kg-Stock aber in der Hand; am aufgestellten
+Stock gibt es nur eine Aktionsform, und das ist `ChefZ_ActionProcessAtStation`.
+Deshalb ist der Rückbau der **zweite Stationsvorgang** beider Beuten
+(`Apiary_Stations.json`), `exec = STATION_ACTION`, Werkzeuggruppe `HAND_TOOL`.
+
+Er hat **keinen Transform** — er verändert nicht den Cargo, sondern die
+Station selbst. Das erledigt `ChefZ_Beehive.ChefZ_PackUp()` einen Frame nach
+dem Haken `ChefZ_OnStationActionFinished`: ein Bausatz (Doppelbeute: zwei) auf
+dem Boden an der Stelle des Stocks, Gesundheit anteilig übernommen, dann
+`DeleteSafe()`.
+
+Der Vorgang **erscheint nur an einem leeren, geschlossenen Stock**:
+`ChefZ_GetProcessAt` und `ChefZ_SupportsProcess` liefern ihn sonst als
+`INVALID`, und die Aktion überspringt ihn — auf dem Client (`RefreshProcesses`)
+wie auf dem Server (`ResolveProcessFor`). Ein Stock mit Rähmchen lässt sich
+also nicht samt Volk einpacken; erst alle Rähmchen herausnehmen. Gestochen wird
+beim Abbau wie bei jeder Aktion am Stock, wenn keine brennende Imkerpfeife in
+der Hand ist.

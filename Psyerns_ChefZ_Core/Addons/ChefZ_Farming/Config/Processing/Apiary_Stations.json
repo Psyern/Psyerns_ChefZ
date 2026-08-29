@@ -5,7 +5,7 @@
         {
             "id": "ChefZ_Beehive",
             "stationCategories": ["APIARY"],
-            "processes": ["PROCESS_HARVEST_HIVE"],
+            "processes": ["PROCESS_HARVEST_HIVE", "PROCESS_PACK_HIVE"],
             "parallelSlots": 1,
             "speedMultiplier": 1.0,
             "needsFuel": false
@@ -13,7 +13,7 @@
         {
             "id": "ChefZ_BeehiveDouble",
             "stationCategories": ["APIARY"],
-            "processes": ["PROCESS_HARVEST_HIVE"],
+            "processes": ["PROCESS_HARVEST_HIVE", "PROCESS_PACK_HIVE"],
             "parallelSlots": 1,
             "speedMultiplier": 1.0,
             "needsFuel": false

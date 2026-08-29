@@ -1113,8 +1113,8 @@ class CfgChefZ
     //   TR_BuildBeeSmoker       PROCESS_BUILD_BEE_SMOKER
     //   TR_UncapHoneycombFrame  PROCESS_UNCAP_COMB
     //
-    // Die beiden Stationsvorgaenge (PROCESS_HARVEST_HIVE, PROCESS_SPIN_HONEY)
-    // brauchen KEINEN Platz - sie laufen ueber ChefZ_ActionProcessAtStation
+    // Die drei Stationsvorgaenge (PROCESS_HARVEST_HIVE, PROCESS_PACK_HIVE,
+    // PROCESS_SPIN_HONEY) brauchen KEINEN Platz - sie laufen ueber ChefZ_ActionProcessAtStation
     // und fassen Vanillas Rezeptliste nicht an: ChefZ_HandcraftBridge zieht
     // seine Liste ueber GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT), und
     // ein Stationsprozess ist dort nie dabei.
@@ -1464,6 +1464,37 @@ class CfgChefZTools
     class HAND_TOOL
     {
         classes[] =
+
+    // ------------------------------------------------------------------
+    // 6. STOCK ABBAUEN (29.08.2026): der aufgestellte Stock wird wieder zum
+    //    Bausatz - Lykos' Lieferung hatte das als Vanilla-Rezept
+    //    (Pack_BeeHive: Stock + Schraubenzieher -> Kit); hier ist es der
+    //    zweite Stationsvorgang des Stocks.
+    //
+    // STATION_ACTION und nicht HANDCRAFT: ein 14-kg-Stock liegt am Boden,
+    // und ein Handwerksschritt braeuchte ihn in der Hand. Am Stock in der
+    // Welt gibt es genau eine Aktionsform, und das ist diese.
+    //
+    // KEIN Transform: der Vorgang veraendert nicht den Inhalt der Station,
+    // sondern die Station selbst. Das erledigt ChefZ_Beehive im Haken
+    // ChefZ_OnStationActionFinished (Scripts/4_World/ChefZ/Farming/
+    // ChefZ_Apiary.c): Bausatz an Ort und Stelle, Stock weg. Der Vorgang
+    // erscheint nur an einem LEEREN, GESCHLOSSENEN Stock - mit Raehmchen
+    // darin blendet das Skript ihn aus (ChefZ_GetProcessAt), damit niemand
+    // sein Volk samt vierzig Stunden Arbeit in eine Kiste packt.
+    //
+    // HAND_TOOL wie beim Aufstellen; toolDamage 2 trifft sicher das
+    // Werkzeug, weil die Aktion ohne eines nicht erscheint (vgl. die
+    // Anmerkung zu toolDamage 0 an PROCESS_HARVEST_HIVE).
+    // ------------------------------------------------------------------
+    class PROCESS_PACK_HIVE
+    {
+        exec = "STATION_ACTION";
+        displayName = "#STR_CHEFZ_PROC_PACK_HIVE";
+        toolGroups[] = {"HAND_TOOL"};
+        baseDurationSec = 20.0;
+        toolDamage = 2;
+    };
         {
             "Hammer",
             "Hatchet",

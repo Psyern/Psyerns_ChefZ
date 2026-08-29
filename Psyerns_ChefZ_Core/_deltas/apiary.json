@@ -8,6 +8,7 @@
     { "id": "PROCESS_BUILD_UNCAPPING_FORK", "durationSec": 15 },
     { "id": "PROCESS_BUILD_BEE_SMOKER", "durationSec": 20 },
     { "id": "PROCESS_HARVEST_HIVE", "station": "ChefZ_Beehive", "durationSec": 8 },
+    { "id": "PROCESS_PACK_HIVE", "station": "ChefZ_Beehive", "durationSec": 20 },
     { "id": "PROCESS_UNCAP_COMB", "durationSec": 18 },
     { "id": "PROCESS_FILL_SMOKER", "durationSec": 6 },
     { "id": "PROCESS_SPIN_HONEY", "station": "ChefZ_HoneyExtractor", "durationSec": 90 }
