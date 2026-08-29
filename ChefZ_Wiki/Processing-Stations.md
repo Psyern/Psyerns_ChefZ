@@ -393,9 +393,11 @@ frame by the engine's variable block; while the server is down no time passes
 
 **How the frames come out.** `CanReleaseCargo` allows only a **Full** Comb Frame,
 and only while the lid is open. "Open Hive" (`PROCESS_HARVEST_HIVE`) opens the lid
-for 120 s (server-side, not persisted) and triggers the bee sting exactly as
-before — light forearm damage, absorbed by gloves, a Bee Smoker in hand or a
-covered head (assumption A4). Since 2026-08-29 an **NBC suit** (jacket and
+for 120 s (server-side, not persisted). Every completed action at the hive (not
+`RUN_FAILED`) wakes the bees. A **Bee Smoker in hand** calms them completely.
+Without it there is always a base cost — 20 shock plus one bleeding forearm —
+and on top of that bare hands bleed a second arm and a bare head adds 15 shock;
+gloves and a covered head absorb only those extras. Since 2026-08-29 an **NBC suit** (jacket and
 trousers, neither ruined) seals hands and body without taking wear, and a **gas
 mask** (`IsGasMask()`, so GasMask, GP5GasMask, AirborneMask) seals the face; suit
 plus gas mask is full protection — nothing is damaged, nobody bleeds. Taking the

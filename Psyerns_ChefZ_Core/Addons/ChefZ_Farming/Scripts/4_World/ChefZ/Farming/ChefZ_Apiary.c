@@ -137,6 +137,13 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     //! setzt (Contamination3): spuerbar, blickt kurz weg, wirft niemanden um,
     //! und die Shock-Modifier fuellen sie von selbst wieder auf.
     static const float CHEFZ_STING_SHOCK = 15.0;
+    //! Der GRUNDSCHADEN ohne Pfeife (29.08.2026): "wer sie nicht benutzt,
+    //! bekommt grundsaetzlich schon mehr Schockschaden und einen Bleed-Schaden
+    //! zusaetzlich". Das ist der Schwarm um den Kopf, den keine Muetze
+    //! abhaelt: 20 Schock IMMER, dazu ein Stich an den Unterarm, den nur der
+    //! Gummianzug verhindert. Die Regionen oben kommen OBENDRAUF - ohne Hut
+    //! also 35 Schock, ohne Handschuhe zwei blutende Arme.
+    static const float CHEFZ_STING_SHOCK_BASE = 20.0;
 
     //! Die Werkzeuggruppe, die den Schutz traegt. Ueber die GRUPPE und nicht
     //! ueber IsKindOf("ChefZ_BeeSmoker"): eine Gruppe ist ein offener
@@ -610,16 +617,22 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         if (!actor)
             return;
 
-        // Nur beim Oeffnen. Lookup() und nicht Intern(): ein Prozessname, den
+        // "Bei Abschluss einer erfolgreichen Aktion mit dem Bienenstock"
+        // (29.08.2026). Diese Methode laeuft nur aus OnFinishProgressServer -
+        // eine abgebrochene Aktion kommt nie hierher. Erfolglos ist allein
+        // RUN_FAILED (der Applicator ist mittendrin gescheitert); NO_MATCH ist
+        // fuer "Bienenstock oeffnen" der GEWOLLTE Ausgang, denn der Prozess
+        // traegt absichtlich keinen Transform.
+        if (outcome == ChefZ_StationActionOutcome.RUN_FAILED)
+            return;
+
+        // Der Deckel geht nur beim Oeffnen auf; gestochen wird bei JEDER
+        // Aktion am Stock. Lookup() und nicht Intern(): ein Prozessname, den
         // niemand deklariert hat, ist INVALID und trifft dann auf keinen
         // gueltigen process - genau die stille, richtige Antwort.
         ChefZ_Sym harvest = ChefZ_SymbolTable.Lookup(CHEFZ_STING_PROCESS);
-        if (!ChefZ_SymbolTable.IsValid(harvest) || process != harvest)
-            return;
-
-        // Zuerst der Deckel - er geht auch dann auf, wenn die Pfeife das
-        // Volk beruhigt.
-        ChefZ_OpenLid();
+        if (ChefZ_SymbolTable.IsValid(harvest) && process == harvest)
+            ChefZ_OpenLid();
 
         // Schritt 1: die Pfeife in der Hand. Ruiniert zaehlt sie nicht - eine
         // durchgebrannte Pfeife raucht nicht mehr, dieselbe Pruefung, die
@@ -644,8 +657,25 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         // Schaden und niemand blutet.
         // -----------------------------------------------------------------
         bool nbcSuit = ChefZ_WearsNbcSuit(actor);
+        bool gasMask = ChefZ_WearsGasMask(actor);
 
-        // Schritt 2 und 3, je Region getrennt.
+        if (nbcSuit && gasMask)
+        {
+            ChefZ_LogSting("Ohne Pfeife, aber Anzug und Gasmaske: dicht.");
+            return;
+        }
+
+        // DER GRUNDSCHADEN - ohne Pfeife immer, egal was sonst getragen wird
+        // (siehe CHEFZ_STING_SHOCK_BASE). Ueber eine float-Zwischenvariable,
+        // aus demselben Grund, den ChefZ_ActionProcessAtStation.
+        // ApplyToolDamage() ausschreibt: eine implizite Umwandlung an einer
+        // Aufrufgrenze ist in Enforce nirgends zugesichert.
+        float baseShock = CHEFZ_STING_SHOCK_BASE;
+        actor.AddHealth("", "Shock", -baseShock);
+        if (!nbcSuit)
+            ChefZ_StingForearm(actor);
+
+        // Schritt 2 und 3, je Region getrennt - OBENDRAUF.
         bool stungHands = true;
         if (nbcSuit)
             stungHands = false;
@@ -665,7 +695,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         // Core/Inherited/InventoryItem.c:995), ueberschrieben in MaskBase.c:6
         // fuer GasMask, GP5GasMask und AirborneMask.
         bool stungHead = true;
-        if (ChefZ_WearsGasMask(actor))
+        if (gasMask)
             stungHead = false;
         else if (ChefZ_AbsorbSting(actor, CHEFZ_SLOT_HEADGEAR))
             stungHead = false;
@@ -677,15 +707,11 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
 
         if (stungHead)
         {
-            // Ueber eine float-Zwischenvariable, aus demselben Grund, den
-            // ChefZ_ActionProcessAtStation.ApplyToolDamage() ausschreibt: eine
-            // implizite Umwandlung an einer Aufrufgrenze ist in Enforce
-            // nirgends zugesichert.
             float shock = CHEFZ_STING_SHOCK;
             actor.AddHealth("", "Shock", -shock);
         }
 
-        ChefZ_LogSting("Ohne Pfeife geoeffnet: anzug=" + ChefZ_YesNo(nbcSuit) + " haende=" + ChefZ_YesNo(stungHands) + " kopf=" + ChefZ_YesNo(stungHead) + ".");
+        ChefZ_LogSting("Ohne Pfeife: grundschaden ja, anzug=" + ChefZ_YesNo(nbcSuit) + " haende=" + ChefZ_YesNo(stungHands) + " kopf=" + ChefZ_YesNo(stungHead) + ".");
     }
 
     /**

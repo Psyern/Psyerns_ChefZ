@@ -431,8 +431,11 @@ frame is swapped in its cell for a Full Comb Frame. The fill level is stored wit
 the frame; while the server is down no time passes (assumption A1).
 
 **Out of the hive.** "Open Hive" (`PROCESS_HARVEST_HIVE`, 8 s) opens the lid for
-120 s and stings the beekeeper unless gloves, a covered head, an NBC suit (jacket + trousers: hands and body sealed, no wear), a gas mask (face sealed) or a Bee Smoker in
-hand absorb it (assumption A4). While the lid is open, and only then, a **Full**
+120 s and wakes the bees. Only a Bee Smoker in hand calms them; without it the
+beekeeper always takes 20 shock and one bleeding arm, plus a second arm without
+gloves and 15 more shock without a covered head. An NBC suit (jacket + trousers)
+stops the bleeding, a gas mask seals the face, suit plus gas mask is the only
+full protection (assumption A4). While the lid is open, and only then, a **Full**
 frame can be dragged out; empty frames stay put.
 
 **At the extractor.** Up to 5 uncapped frames and 15 empty jars
