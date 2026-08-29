@@ -3,7 +3,7 @@
     "schemaVersion": 1,
     "records": [
         {
-            "id": "TR_FlourWaterToSimpleDough",
+            "id": "TR_FlourWaterToDough",
             "process": "PROCESS_KNEAD",
             "inputs": [
                 {
@@ -25,7 +25,7 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_SimpleDough",
+                    "cls": "ChefZ_Dough",
                     "quantity": 1,
                     "quantityMode": "fixed",
                     "inheritFreshness": true,
@@ -36,68 +36,12 @@
             "priority": 0
         },
         {
-            "id": "TR_SimpleDoughYeastToYeastDough",
-            "process": "PROCESS_KNEAD",
-            "inputs": [
-                {
-                    "slotId": "dough",
-                    "match": { "cls": "ChefZ_SimpleDough" },
-                    "minCount": 1,
-                    "maxCount": 1,
-                    "consume": "whole"
-                },
-                {
-                    "slotId": "yeast",
-                    "match": { "cls": "ChefZ_Yeast" },
-                    "minCount": 1,
-                    "maxCount": 1,
-                    "consume": "amount",
-                    "consumeAmount": 20
-                }
-            ],
-            "outputs": [
-                {
-                    "cls": "ChefZ_YeastDough",
-                    "quantity": 1,
-                    "quantityMode": "fixed",
-                    "inheritFreshness": true,
-                    "freshnessCarry": 1.0
-                }
-            ],
-            "qualityRule": "WEIGHTED_MEAN",
-            "priority": 10
-        },
-        {
-            "id": "TR_SimpleDoughToPastaDough",
+            "id": "TR_DoughToRawPasta",
             "process": "PROCESS_ROLL",
             "inputs": [
                 {
                     "slotId": "dough",
-                    "match": { "cls": "ChefZ_SimpleDough" },
-                    "minCount": 1,
-                    "maxCount": 1,
-                    "consume": "whole"
-                }
-            ],
-            "outputs": [
-                {
-                    "cls": "ChefZ_PastaDough",
-                    "quantity": 1,
-                    "quantityMode": "fixed",
-                    "inheritFreshness": true,
-                    "freshnessCarry": 1.0
-                }
-            ],
-            "qualityRule": "WEIGHTED_MEAN",
-            "priority": 0
-        },
-        {
-            "id": "TR_PastaDoughToRawPasta",
-            "process": "PROCESS_ROLL",
-            "inputs": [
-                {
-                    "slotId": "dough",
-                    "match": { "cls": "ChefZ_PastaDough" },
+                    "match": { "cls": "ChefZ_Dough" },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"

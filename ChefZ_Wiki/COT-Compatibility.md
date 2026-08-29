@@ -191,11 +191,10 @@ The price of that decision, stated openly: **`ChefZ_SaltedFish`, `ChefZ_DriedFis
 and `ChefZ_SmokedFish` are therefore also under "Meat and Sausage".** If you are
 looking for fish, that is where it is.
 
-### 4. Dough, Bread and Pasta (8)
+### 4. Dough, Bread and Pasta (5)
 
 ```
-ChefZ_Yeast            ChefZ_SimpleDough      ChefZ_YeastDough
-ChefZ_PastaDough       ChefZ_RawPasta         ChefZ_DriedPasta
+ChefZ_Dough            ChefZ_RawPasta         ChefZ_DriedPasta
 ChefZ_Bread            ChefZ_Flatbread
 ```
 

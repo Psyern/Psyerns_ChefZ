@@ -1,6 +1,6 @@
-// ChefZ_Baking - Hefe, Teig, Pasta, Brot (Slice "grain").
+// ChefZ_Baking - Teig, Pasta, Brot (Slice "grain").
 //
-// Quelle: Production Map §9 (Hefe), §10 (Teig), §11 (Pasta), §12 (Brot),
+// Quelle: Production Map §10 (Teig), §11 (Pasta), §12 (Brot),
 // §56 (Preservation-Matrix, Zeile "Raw Pasta -> Dry -> Dried Pasta"),
 // §73 (Klassenliste), DME-Plan §53 (Namenskonvention).
 //
@@ -20,18 +20,19 @@
 // enthaelt ausschliesslich Klassenableitungen ohne Rumpf.
 //
 // ---------------------------------------------------------------------------
-// Warum Hefeteig ZWEISTUFIG entsteht
+// EINE Teigart, keine Hefe (Entscheidung vom 29.08.2026)
 // ---------------------------------------------------------------------------
-// Production Map §10 schreibt "Flour + Water + Yeast -> Yeast Dough" - drei
-// Eingaenge. Vanillas RecipeBase kennt MAX_NUMBER_OF_INGREDIENTS = 2
-// (01 V12); ein HANDCRAFT-Transform mit drei Eingaengen liesse sich STILL
-// nicht registrieren. Die Kette ist deshalb aufgeteilt:
+// Production Map §9/§10 kannten Hefe, einfachen Teig, Hefeteig und Nudelteig.
+// Das ist auf EINEN Teig vereinfacht:
 //
-//   Flour + Water        -> ChefZ_SimpleDough
-//   ChefZ_SimpleDough + Yeast -> ChefZ_YeastDough
+//   Flour + Water            -> ChefZ_Dough           (PROCESS_KNEAD)
+//   ChefZ_Dough              -> Brot, Fladenbrot      (Rezepte, je nach Geraet)
+//   ChefZ_Dough + Nudelmaschine -> ChefZ_RawPasta     (PROCESS_ROLL)
+//   ChefZ_Dough              -> Kaesefladen, Teigtaschen (Kategorie DOUGH)
 //
-// Das Ergebnis ist dasselbe, die Zwischenstufe ist ohnehin ein eigenes Item
-// (§10, "Einfacher Teig"), und keine Zutat geht verloren.
+// Was das Geraet entscheidet: in der Pfanne wird aus dem Teig Fladenbrot, im
+// Topf oder Ofen ein Brot. Hefe, Hefeteig und Nudelteig gibt es als Klassen
+// nicht mehr.
 //
 // ---------------------------------------------------------------------------
 // Nahrungsdaten
@@ -41,18 +42,17 @@
 // (01 V7), die stueckgenauen Zahlen stehen im Nutrition-Delta des Slices
 // (_deltas/grain.json, Entwurf 13 §4).
 //
-// Damit tragen SimpleDough und YeastDough auch FoodStageTransitions - und das
-// ist hier keine Formalie: beide sind Zutat eines Rezepts, liegen also im
-// Kochgeraet, waehrend Vanilla den Garzustand fortschreibt. Ohne Uebergaenge
+// Damit traegt auch ChefZ_Dough FoodStageTransitions - und das ist hier keine
+// Formalie: der Teig ist Zutat eines Rezepts, liegt also im Kochgeraet,
+// waehrend Vanilla den Garzustand fortschreibt. Ohne Uebergaenge
 // faellt FoodStage.GetNextFoodStageType auf BURNED zurueck (01 V4,
 // FoodStage.c:472) - der Spieler legte Teig in die Pfanne und bekaeme Kohle.
 //
 // ---------------------------------------------------------------------------
 // 3D
 // ---------------------------------------------------------------------------
-// Jede Klasse traegt ein Vanilla-Proxy-Modell. Die drei Teige teilen sich
-// bewusst EIN Proxy (Production Map §71, Shared Mesh Strategy); der Bedarf ist
-// im Slice-Bericht gemeldet.
+// Jede Klasse traegt ein Vanilla-Proxy-Modell; der Bedarf ist im
+// Slice-Bericht gemeldet.
 
 class CfgPatches
 {
@@ -60,8 +60,7 @@ class CfgPatches
     {
         units[] =
         {
-            "ChefZ_Yeast", "ChefZ_SimpleDough", "ChefZ_YeastDough", "ChefZ_PastaDough",
-            "ChefZ_RawPasta", "ChefZ_DriedPasta", "ChefZ_Bread", "ChefZ_Flatbread"
+            "ChefZ_Dough", "ChefZ_RawPasta", "ChefZ_DriedPasta", "ChefZ_Bread", "ChefZ_Flatbread"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -125,75 +124,18 @@ class CfgVehicles
     class ChefZ_GrainFoodBase;
 
     //--------------------------------------------------------------------------
-    // Hefe (Production Map §9). V1 ausschliesslich Loot - keine Hefekultur.
+    // DER Teig (§10): Mehl + Wasser. Brot, Fladenbrot, Nudeln, Teigtaschen -
+    // alles aus diesem einen Item (Kopf dieser Datei).
     //
-    // PROXY: garden_lime.p3d - ein Pulverbeutel. Eigenes Mesh gemeldet (U, P2).
+    // PROXY: lard.p3d - ein heller Klumpen. Eigenes Mesh gemeldet (S, P2).
     //--------------------------------------------------------------------------
-    class ChefZ_Yeast : ChefZ_GrainFoodBase
+    class ChefZ_Dough : ChefZ_GrainFoodBase
     {
         scope = 2;
-        displayName = "#STR_CHEFZ_YEAST";
-        descriptionShort = "#STR_CHEFZ_YEAST_DESC";
-        model = "\dz\gear\consumables\garden_lime.p3d";
-        weight = 60;
-        itemSize[] = {1, 1};
-        stackedUnit = "grams";
-        quantityBar = 1;
-        varQuantityInit = 100;
-        varQuantityMin = 0;
-        varQuantityMax = 100;
-        varQuantityDestroyOnMin = 1;
-        canBeSplit = 1;
-        lifetime = 28800;
-    };
-
-    //--------------------------------------------------------------------------
-    // Einfacher Teig (§10). Fladenbrot und einfache Teigtaschen.
-    //
-    // PROXY: lard.p3d - ein heller Klumpen. Geteiltes Proxy fuer alle drei
-    // Teige (§71). Eigenes Mesh gemeldet (S, P2).
-    //--------------------------------------------------------------------------
-    class ChefZ_SimpleDough : ChefZ_GrainFoodBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SIMPLEDOUGH";
-        descriptionShort = "#STR_CHEFZ_SIMPLEDOUGH_DESC";
+        displayName = "#STR_CHEFZ_DOUGH";
+        descriptionShort = "#STR_CHEFZ_DOUGH_DESC";
         model = "\dz\gear\food\lard.p3d";
         weight = 450;
-        itemSize[] = {2, 2};
-        varQuantityInit = 1;
-        varQuantityMin = 0;
-        varQuantityMax = 1;
-        lifetime = 7200;
-    };
-
-    //--------------------------------------------------------------------------
-    // Hefeteig (§10). Grundlage des Brots.
-    //--------------------------------------------------------------------------
-    class ChefZ_YeastDough : ChefZ_GrainFoodBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_YEASTDOUGH";
-        descriptionShort = "#STR_CHEFZ_YEASTDOUGH_DESC";
-        model = "\dz\gear\food\lard.p3d";
-        weight = 500;
-        itemSize[] = {2, 2};
-        varQuantityInit = 1;
-        varQuantityMin = 0;
-        varQuantityMax = 1;
-        lifetime = 7200;
-    };
-
-    //--------------------------------------------------------------------------
-    // Nudelteig (§10, §11).
-    //--------------------------------------------------------------------------
-    class ChefZ_PastaDough : ChefZ_GrainFoodBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PASTADOUGH";
-        descriptionShort = "#STR_CHEFZ_PASTADOUGH_DESC";
-        model = "\dz\gear\food\lard.p3d";
-        weight = 480;
         itemSize[] = {2, 2};
         varQuantityInit = 1;
         varQuantityMin = 0;
@@ -268,7 +210,7 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
-    // Fladenbrot (§12). Der Survival-Weg ohne Hefe und ohne Ofen.
+    // Fladenbrot (§12). Derselbe Teig wie beim Brot, nur in der Pfanne.
     //
     // PROXY: pumpkin_sliced.p3d - eine flache Scheibe. Mesh gemeldet (U, P2).
     //--------------------------------------------------------------------------
@@ -290,13 +232,11 @@ class CfgVehicles
 //------------------------------------------------------------------------------
 // Modulanmeldung am Config Manager (Entwurf 02 §4).
 //
-// handcraftRecipeSlots = 4 - genau die vier HANDCRAFT-Transforms aus
+// handcraftRecipeSlots = 2 - genau die zwei HANDCRAFT-Transforms aus
 // Config/GrainTransforms.json:
 //
-//   TR_FlourWaterToSimpleDough
-//   TR_SimpleDoughYeastToYeastDough
-//   TR_SimpleDoughToPastaDough
-//   TR_PastaDoughToRawPasta
+//   TR_FlourWaterToDough
+//   TR_DoughToRawPasta
 //
 // Die Zahl MUSS hier stehen und muss stimmen (02 §4.2): Vanilla vergibt
 // Rezept-IDs als POSITION in PluginRecipesManager.m_RecipeList, und die
@@ -314,13 +254,11 @@ class CfgChefZ
     // CfgMods-Eintrag zaehlte fuer configcpp.mjs als doppelte
     // Klassendefinition.
     //
-    // handcraftRecipeSlots = 4 - genau die vier HANDCRAFT-Transforms aus
+    // handcraftRecipeSlots = 2 - genau die zwei HANDCRAFT-Transforms aus
     // Config/GrainTransforms.json:
     //
-    //   TR_FlourWaterToSimpleDough
-    //   TR_SimpleDoughYeastToYeastDough
-    //   TR_SimpleDoughToPastaDough
-    //   TR_PastaDoughToRawPasta
+    //   TR_FlourWaterToDough
+    //   TR_DoughToRawPasta
     //
     // Die Zahl MUSS hier stehen und muss stimmen (02 §4.2): Vanilla vergibt
     // Rezept-IDs als POSITION in PluginRecipesManager.m_RecipeList, und die
@@ -341,7 +279,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 230;
-        handcraftRecipeSlots = 4;
+        handcraftRecipeSlots = 2;
         dataFiles[] =
         {
             "ChefZ_Baking/Config/GrainProcesses.json",

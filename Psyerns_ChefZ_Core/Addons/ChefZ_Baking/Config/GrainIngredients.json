@@ -3,26 +3,7 @@
     "schemaVersion": 1,
     "records": [
         {
-            "id": "ChefZ_Yeast",
-            "unitsPerWholeItem": 100,
-            "decays": true
-        },
-        {
-            "id": "ChefZ_SimpleDough",
-            "categories": ["DOUGH"],
-            "tags": ["CHEFZ_GRAIN"],
-            "unitsPerWholeItem": 1,
-            "decays": true
-        },
-        {
-            "id": "ChefZ_YeastDough",
-            "categories": ["DOUGH"],
-            "tags": ["CHEFZ_GRAIN"],
-            "unitsPerWholeItem": 1,
-            "decays": true
-        },
-        {
-            "id": "ChefZ_PastaDough",
+            "id": "ChefZ_Dough",
             "categories": ["DOUGH"],
             "tags": ["CHEFZ_GRAIN"],
             "unitsPerWholeItem": 1,

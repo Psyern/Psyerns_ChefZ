@@ -1,5 +1,5 @@
 //==============================================================================
-// ChefZ_BakingItems - Hefe, Teige, Pasta, Brot.
+// ChefZ_BakingItems - Teig, Pasta, Brot.
 //
 // Andockregel aus dem Kopf von ChefZ_Edible_Base.c: die CONFIGklasse erbt von
 // einer Vanilla-Klasse (hier ueber ChefZ_GrainFoodBase aus ChefZ_Farming),
@@ -13,17 +13,9 @@
 // Layer: 4_World.
 //==============================================================================
 
-//! Hefe. V1 ausschliesslich Loot (Production Map §9).
-class ChefZ_Yeast extends ChefZ_GrainFoodBase {}
-
-//! Einfacher Teig: Mehl + Wasser. Zutat des Fladenbrots.
-class ChefZ_SimpleDough extends ChefZ_GrainFoodBase {}
-
-//! Hefeteig: einfacher Teig + Hefe. Zutat des Brots.
-class ChefZ_YeastDough extends ChefZ_GrainFoodBase {}
-
-//! Nudelteig: ausgerollter einfacher Teig.
-class ChefZ_PastaDough extends ChefZ_GrainFoodBase {}
+//! DER Teig: Mehl + Wasser. Brot, Fladenbrot, Nudeln und Teigtaschen kommen
+//! alle aus ihm (Entscheidung vom 29.08.2026: eine Teigart, keine Hefe).
+class ChefZ_Dough extends ChefZ_GrainFoodBase {}
 
 //! Frische Nudeln. Kurze Haltbarkeit, direkt kochbar.
 class ChefZ_RawPasta extends ChefZ_GrainFoodBase {}
@@ -31,8 +23,8 @@ class ChefZ_RawPasta extends ChefZ_GrainFoodBase {}
 //! Trockennudeln. Der Vorratsartikel der Kette.
 class ChefZ_DriedPasta extends ChefZ_GrainFoodBase {}
 
-//! Brot aus Hefeteig.
+//! Brot: der Teig im Topf oder Ofen.
 class ChefZ_Bread extends ChefZ_GrainFoodBase {}
 
-//! Fladenbrot aus einfachem Teig - der Weg ohne Hefe.
+//! Fladenbrot: derselbe Teig in der Pfanne.
 class ChefZ_Flatbread extends ChefZ_GrainFoodBase {}

@@ -15,7 +15,7 @@
             "displayName": "#STR_CHEFZ_TAG_GRAIN",
             "appliesTo": [
                 "ChefZ_Wheat", "ChefZ_Flour",
-                "ChefZ_SimpleDough", "ChefZ_YeastDough", "ChefZ_PastaDough",
+                "ChefZ_Dough",
                 "ChefZ_RawPasta", "ChefZ_DriedPasta",
                 "ChefZ_Bread", "ChefZ_Flatbread"
             ]
@@ -37,10 +37,7 @@
     "nutrition": [
         { "class": "ChefZ_Wheat",       "energy": 180, "water": 5,  "stomach": 20 },
         { "class": "ChefZ_Flour",       "energy": 340, "water": 2,  "stomach": 25 },
-        { "class": "ChefZ_Yeast",       "energy": 90,  "water": 4,  "stomach": 5 },
-        { "class": "ChefZ_SimpleDough", "energy": 300, "water": 90, "stomach": 35 },
-        { "class": "ChefZ_YeastDough",  "energy": 310, "water": 90, "stomach": 35 },
-        { "class": "ChefZ_PastaDough",  "energy": 320, "water": 70, "stomach": 32 },
+        { "class": "ChefZ_Dough",       "energy": 300, "water": 90, "stomach": 35 },
         { "class": "ChefZ_RawPasta",    "energy": 260, "water": 60, "stomach": 30 },
         { "class": "ChefZ_DriedPasta",  "energy": 380, "water": 5,  "stomach": 28 },
         { "class": "ChefZ_Bread",       "energy": 500, "water": 20, "stomach": 45 },
@@ -53,10 +50,7 @@
         "ChefZ_GrainMill",
         "ChefZ_PastaMachine",
         "ChefZ_Flour",
-        "ChefZ_Yeast",
-        "ChefZ_SimpleDough",
-        "ChefZ_YeastDough",
-        "ChefZ_PastaDough",
+        "ChefZ_Dough",
         "ChefZ_RawPasta",
         "ChefZ_DriedPasta",
         "ChefZ_Bread",

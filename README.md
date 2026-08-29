@@ -581,9 +581,9 @@ All ChefZ classes use the `ChefZ_PascalCase` prefix.
 ```text
 ChefZ_Wheat              ChefZ_Milk               ChefZ_MincedMeat
 ChefZ_Flour              ChefZ_Cream              ChefZ_SausageCasing
-ChefZ_Yeast              ChefZ_Butter             ChefZ_RawSausage
+                         ChefZ_Butter             ChefZ_RawSausage
 ChefZ_Dough                                       ChefZ_PorkSausage
-ChefZ_PastaDough         ChefZ_RawSalt            ChefZ_VenisonSausage
+                         ChefZ_RawSalt            ChefZ_VenisonSausage
 ChefZ_RawPasta           ChefZ_Salt               ChefZ_BoarSausage
 ChefZ_DriedPasta                                  ChefZ_HunterSausage
                          ChefZ_PepperBerries      ChefZ_SpicySausage

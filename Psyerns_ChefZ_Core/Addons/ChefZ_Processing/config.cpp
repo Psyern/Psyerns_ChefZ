@@ -175,7 +175,7 @@ class CfgVehicles
     // passiert:
     //
     //  - Die beiden Vorgaenge, die sie ueberhaupt bedient, haben GENAU EINEN
-    //    Eingang: TR_SimpleDoughToPastaDough und TR_PastaDoughToRawPasta
+    //    Eingang: TR_DoughToRawPasta
     //    (ChefZ_Baking/Config/GrainTransforms.json). Der Vorteil einer Station
     //    ist, dass sie mehr als zwei Eingaenge traegt (11 E1) - hier gibt es
     //    nichts, was diesen Vorteil abrufen wuerde.

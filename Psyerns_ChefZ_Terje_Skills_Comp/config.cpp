@@ -375,7 +375,7 @@ class CfgChefZTerjeSkills
         // meldet Einzelschritte:
         //
         //   Salz          PROCESS_BOIL_BRINE 3 + PROCESS_DRY_SALT 2   = 5
-        //   Nudeln        PROCESS_ROLL 2 + TR_PastaDoughToRawPasta 3  = 5
+        //   Nudeln        TR_DoughToRawPasta 5 (einstufig seit 29.08.2026) = 5
         //   Trockenfleisch PROCESS_SALT_CURE 2 + PROCESS_DRY 3        = 5
         //   Raeucherwurst PROCESS_STUFF_SAUSAGE 5 + PROCESS_SMOKE 3   = 8
         //   Fisch raeuchern  TR_FishToSmoked 5 (einstufig, kein Salzen) = 5
@@ -436,9 +436,11 @@ class CfgChefZTerjeSkills
             // Ausnahmen je Transform-ID. Schlaegt ChefZ_Processes.
             class ChefZ_Transforms
             {
-                // "Nudeln herstellen 5": PROCESS_ROLL 2 (Teig ausrollen)
-                // + 3 hier (Nudeln schneiden).
-                TR_PastaDoughToRawPasta = 3;
+                // "Nudeln herstellen 5": seit dem 29.08.2026 EIN Schritt -
+                // Teig plus Nudelmaschine ergibt Nudeln. Der Transform traegt
+                // deshalb den ganzen Wert; PROCESS_ROLL 2 gilt nur fuer den
+                // Prozess ohne diesen Ueberschreiber.
+                TR_DoughToRawPasta = 5;
 
                 // "Fisch raeuchern 5". Einstufig: der Fisch geht ohne
                 // Salzschritt in den Raeucherofen, deshalb traegt dieser

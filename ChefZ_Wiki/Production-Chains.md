@@ -27,7 +27,7 @@ the station or the tool, and `[]` boxes are the dishes a chain feeds into.
 ## Grain
 
 Wheat is the only crop ChefZ adds that is not a vegetable. It is the head of the
-longest chain in the mod: four steps from the found grain to dried pasta. (Since
+longest chain in the mod: three steps from the found grain to dried pasta. (Since
 2026-08-29 wheat is found in the world, like mushrooms — no seeds, no garden plot.)
 
 ```mermaid
@@ -41,8 +41,7 @@ graph LR
 
 ```mermaid
 graph LR
-  SD(["Simple Dough"]) -->|"Rolling Pin<br/>10 s"| PD(["Pasta Dough"])
-  PD -->|"Rolling Pin<br/>10 s"| RP(["Fresh Pasta"])
+  SD(["Dough"]) -->|"Pasta Machine<br/>10 s"| RP(["Fresh Pasta"])
   RP -->|"Drying Rack<br/>30 min"| DP(["Dried Pasta"])
   RP --> PASTA["category PASTA"]
   DP --> PASTA
@@ -52,29 +51,28 @@ graph LR
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
 | `TR_WheatToFlour` | 1× Wheat | Flour (×0.78 of input) | Grain Mill | — | 25 s |
-| `TR_FlourWaterToSimpleDough` | 1× Flour (250) + 1× container with Water (150) | Simple Dough (1×) | *handcraft* | — | 8 s |
-| `TR_SimpleDoughYeastToYeastDough` | 1× Simple Dough + 1× Yeast (20) | Yeast Dough (1×) | *handcraft* | — | 8 s |
-| `TR_SimpleDoughToPastaDough` | 1× Simple Dough | Pasta Dough (1×) | *handcraft* | `ROLLING_PIN` | 10 s |
-| `TR_PastaDoughToRawPasta` | 1× Pasta Dough | Fresh Pasta (500×) | *handcraft* | `ROLLING_PIN` | 10 s |
+| `TR_FlourWaterToDough` | 1× Flour (250) + 1× container with Water (150) | Dough (1×) | *handcraft* | — | 8 s |
+| `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta (500×) | *handcraft* | `ROLLING_PIN` (pasta machine) | 10 s |
 | `TR_RawPastaToDriedPasta` | 1× Fresh Pasta | Dried Pasta (1:1) | Drying Rack | — | 30 min |
 
 Then in cookware:
 
 | Recipe | Input | Cookware | Done at |
 |---|---|---|---|
-| `REC_ChefZ_Bread` | 1× Yeast Dough | Pot, FryingPan, OvenIndoor | food stage `Baked` |
-| `REC_ChefZ_Flatbread` | 1× Simple Dough | FryingPan, Pot | food stage `Baked` |
+| `REC_ChefZ_Bread` | 1× Dough | Pot, OvenIndoor | food stage `Baked` |
+| `REC_ChefZ_Flatbread` | 1× Dough | FryingPan | food stage `Baked` |
+
+One dough since 2026-08-29 — no yeast, no pasta dough. The **cookware** decides:
+pot or oven bakes bread, the pan bakes flatbread.
 
 **Where it feeds in.** `PASTA` is required by 5 recipes (Survivor Spaghetti,
 Sausage Pasta, Hunter Pasta, Creamy Mushroom Pasta, Chernarus Mac and Cheese).
 `BREAD` is required by 3 (Tactical Bacon Breakfast, Sausage and Bread Plate,
 Honey Bread Platter). `DOUGH` is required by 2 (Cheese Flatbread, Meat Dumplings).
 
-**Gaps.** `ChefZ_Yeast` is loot-only, and so is `ChefZ_Wheat`. Without either
-one, the chain stops at Simple Dough — which is still enough for Flatbread, Pasta
-Dough and both dough dishes. The knead step also needs a **water container**:
-`TR_FlourWaterToSimpleDough` matches `isLiquidContainer` with `liquidType: "Water"`
-and takes 150 units.
+**Gaps.** `ChefZ_Wheat` is found in the world; without it the chain does not
+start. The knead step also needs a **water container**: `TR_FlourWaterToDough`
+matches `isLiquidContainer` with `liquidType: "Water"` and takes 150 units.
 
 ---
 

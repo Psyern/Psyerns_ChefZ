@@ -275,8 +275,7 @@ class ChefZ_CotCategories
 		// (Weizen, Mehl) steht dagegen unter "Zutaten".
 		Add("chefz_cot_baking", "#STR_CHEFZ_COT_CAT_BAKING",
 		{
-			"ChefZ_Yeast", "ChefZ_SimpleDough", "ChefZ_YeastDough",
-			"ChefZ_PastaDough", "ChefZ_RawPasta", "ChefZ_DriedPasta",
+			"ChefZ_Dough", "ChefZ_RawPasta", "ChefZ_DriedPasta",
 			"ChefZ_Bread", "ChefZ_Flatbread"
 		});
 

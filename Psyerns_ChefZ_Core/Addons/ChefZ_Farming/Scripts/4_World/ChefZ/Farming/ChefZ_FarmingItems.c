@@ -35,16 +35,6 @@ class ChefZ_GrainFoodBase extends ChefZ_Edible_Base
      * Klassen (Weizen 1000 g, Mehl 1000 g, Nudeln 500 g) brauchen sie, weil
      * EAT_SMALL bei diesen Mengen zu hundert Bissen fuehrte.
      *
-     * ZU HEFE, die als "sollte gar nicht essbar sein" in Frage stand: sie
-     * bleibt essbar, und die Entscheidung liegt nicht bei dieser Datei. Die
-     * zentrale Nutrition-Registry (ChefZ_Registry/Config/Nutrition.json)
-     * fuehrt ChefZ_Yeast mit energy 90 / water 4 / stomach 5 als Nahrung. Die
-     * saubere Loesung waere, ihr die Naehrwerte zu nehmen - dazu muesste
-     * dieser Slice die Registry aendern, und das ist ihm verboten (Workflow
-     * §5). Ein Item mit Naehrwerten und ohne Essaktion waere die schlechtere
-     * Haelfte von beidem: es saettigte auf dem Papier und liesse sich nicht
-     * anruehren.
-     *
      * KEINE Gattungszusage (IsFruit/IsMeat). Vanillas gemahlene und
      * verpackte Waren - Rice, PowderedMilk, BoxCerealCrunchin - sagen
      * ebenfalls nichts dazu; ihr Verfall laeuft nicht ueber die Obst- oder

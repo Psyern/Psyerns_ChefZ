@@ -136,13 +136,6 @@
             "fullness": 25
         },
         {
-            "id": "ChefZ_PastaDough",
-            "scope": "class",
-            "energy": 320,
-            "water": 70,
-            "fullness": 32
-        },
-        {
             "id": "ChefZ_RawPasta",
             "scope": "class",
             "energy": 260,
@@ -150,7 +143,7 @@
             "fullness": 30
         },
         {
-            "id": "ChefZ_SimpleDough",
+            "id": "ChefZ_Dough",
             "scope": "class",
             "energy": 300,
             "water": 90,
@@ -162,20 +155,6 @@
             "energy": 180,
             "water": 5,
             "fullness": 20
-        },
-        {
-            "id": "ChefZ_Yeast",
-            "scope": "class",
-            "energy": 90,
-            "water": 4,
-            "fullness": 5
-        },
-        {
-            "id": "ChefZ_YeastDough",
-            "scope": "class",
-            "energy": 310,
-            "water": 90,
-            "fullness": 35
         },
         {
             "id": "ChefZ_BlackPepper",

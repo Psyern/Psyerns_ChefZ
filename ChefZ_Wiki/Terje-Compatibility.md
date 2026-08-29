@@ -169,7 +169,7 @@ process value. Two entries exist:
 
 | Transform | XP | Why it overrides |
 |---|---:|---|
-| `TR_PastaDoughToRawPasta` | 3 | pasta is a two-step chain worth 5 total; `PROCESS_ROLL` carries 2 |
+| `TR_DoughToRawPasta` | 5 | pasta is a single step since 2026-08-29 (one dough, pasta machine); the transform carries the whole value |
 | `TR_FishToSmoked` | 5 | fish smoking is single-step (no curing stage), so this one transform carries the full value |
 
 **Chain totals.** The design target was stated per *result*, the Core reports per
@@ -178,7 +178,7 @@ process value. Two entries exist:
 | Chain | Steps | Total |
 |---|---|---:|
 | Salt from brine | `PROCESS_BOIL_BRINE` 3 + `PROCESS_DRY_SALT` 2 | 5 |
-| Pasta | `PROCESS_ROLL` 2 + `TR_PastaDoughToRawPasta` 3 | 5 |
+| Pasta | `TR_DoughToRawPasta` 5 | 5 |
 | Dried meat | `PROCESS_SALT_CURE` 2 + `PROCESS_DRY` 3 | 5 |
 | Smoked sausage | `PROCESS_STUFF_SAUSAGE` 5 + `PROCESS_SMOKE` 3 | 8 |
 | Smoked fish | `TR_FishToSmoked` 5 | 5 |

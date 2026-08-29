@@ -7,7 +7,8 @@
             "priority": 10,
             "contexts": [
                 {
-                    "deviceClasses": ["Pot", "FryingPan", "OvenIndoor"],
+                    "_note": "Eine Teigart (29.08.2026): Brot und Fladenbrot nehmen denselben ChefZ_Dough. Das GERAET entscheidet - Topf oder Ofen backt Brot, die Pfanne Fladenbrot. Ohne diese Trennung gewaenne im selben Geraet immer das Rezept mit der hoeheren priority, und Fladenbrot waere unerreichbar.",
+                    "deviceClasses": ["Pot", "OvenIndoor"],
                     "methods": ["BAKING"]
                 }
             ],
@@ -16,7 +17,7 @@
             "slots": [
                 {
                     "slotId": "dough",
-                    "match": { "cls": "ChefZ_YeastDough" },
+                    "match": { "cls": "ChefZ_Dough" },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole",
@@ -42,7 +43,7 @@
             "priority": 0,
             "contexts": [
                 {
-                    "deviceClasses": ["FryingPan", "Pot"],
+                    "deviceClasses": ["FryingPan"],
                     "methods": ["BAKING"]
                 }
             ],
@@ -51,7 +52,7 @@
             "slots": [
                 {
                     "slotId": "dough",
-                    "match": { "cls": "ChefZ_SimpleDough" },
+                    "match": { "cls": "ChefZ_Dough" },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole",

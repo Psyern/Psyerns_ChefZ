@@ -209,8 +209,7 @@ class CfgPatches
         //                    Schnitzvorgaenge (Brennholz + Messer -> Teller)
         //   ### SLICE dishes-b ### GENAU EIN weiterer Eintrag:
         //   ChefZ_Baking     die Kategorien BREAD und DOUGH haengen an
-        //                    ChefZ_Bread, ChefZ_Flatbread, ChefZ_SimpleDough,
-        //                    ChefZ_YeastDough und ChefZ_PastaDough - alle in
+        //                    ChefZ_Bread, ChefZ_Flatbread und ChefZ_Dough - alle in
         //                    ChefZ_Baking/Config/GrainIngredients.json.
         //   Alles Weitere, was dieser Slice anfasst, steht bereits oben:
         //   FLOUR liegt in ChefZ_Processing, EGG/DAIRY/SALT/SPICE/MUSHROOM und

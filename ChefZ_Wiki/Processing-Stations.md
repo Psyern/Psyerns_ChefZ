@@ -319,16 +319,10 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_FlourWaterToSimpleDough` | 1× Flour (250) + 1× container with Water (150) | Simple Dough | 1× | 8 s | — |
-| `TR_SimpleDoughYeastToYeastDough` | 1× Simple Dough + 1× Yeast (20) | Yeast Dough | 1× | 8 s | — |
-| `TR_SimpleDoughToPastaDough` | 1× Simple Dough | Pasta Dough | 1× | 10 s | — |
-| `TR_PastaDoughToRawPasta` | 1× Pasta Dough | Fresh Pasta | 500× | 10 s | — |
+| `TR_FlourWaterToDough` | 1× Flour (250) + 1× container with Water (150) | Dough | 1× | 8 s | — |
+| `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta | 500× | 10 s | — |
 | `TR_CarveWoodenPlate` | 1+× Firewood | Empty Plate | 1× | 20 s | — |
 | `TR_CarveWoodenBowl` | 1+× Firewood | Empty Bowl | 1× | 25 s | — |
-| `TR_SeedsFromOnion` | 1+× Onion | Onion Seeds | 1× | 6 s | — |
-| `TR_SeedsFromGarlic` | 1+× Garlic | Garlic Cloves | 1× | 6 s | — |
-| `TR_SeedsFromCarrot` | 1+× Carrot | Carrot Seeds | 1× | 6 s | — |
-| `TR_SeedsFromCabbage` | 1+× Cabbage | Cabbage Seeds | 1× | 6 s | — |
 | `TR_ChopPotato` | 1+× Potato | Sliced Potato | 1× | 5 s | RAW |
 | `TR_ChopTomato` | 1+× Tomato | Chopped Tomato | 1× | 5 s | RAW |
 | `TR_ChopPaprika` | 1+× Paprika | Chopped Paprika | 1× | 5 s | RAW |
