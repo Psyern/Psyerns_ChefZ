@@ -145,7 +145,6 @@ Keyed on the **process ID**, resolved from the reported transform via
 | `PROCESS_CLEAN_CASING` | 1 | |
 | `PROCESS_CARVE_BOWL` | 1 | |
 | `PROCESS_CARVE_PLATE` | 1 | |
-| `PROCESS_CUT_OUT_SEEDS` | **0** | anti-exploit, see below |
 | `PROCESS_GRIND_MEAT` | 2 | |
 | `PROCESS_SEPARATE_CREAM` | 2 | |
 | `PROCESS_GRIND_HERB` | 2 | |
@@ -189,37 +188,14 @@ share. Smoking meat *without* curing it first pays 3, not 5. This is intentional
 the XP follows the work actually done — but it does mean the "chain total" numbers
 only hold for players who run the full chain. See [Production-Chains](Production-Chains).
 
-#### Herb harvesting — `ChefZ_HerbPlantBase.Harvest()`
+#### Herb harvesting — removed
 
-Awarded server-side, after `super.Harvest()`, and only if the plant was actually
-harvestable (an attempt on an unripe plant pays nothing). The crop class must carry
-one of the tags in `harvestTags[] = {"CHEFZ_HERB", "CHEFZ_SPICE"}`.
-
-| Crop class | XP |
-|---|---:|
-| `ChefZ_Rosemary` | 5 |
-| `ChefZ_PepperBerries` | 5 |
-| anything else carrying `CHEFZ_HERB` or `CHEFZ_SPICE` | 2 (`defaultXp`) |
-
-In the current data set that resolves to:
-
-| Plant | Crop | Tags | Harvest XP |
-|---|---|---|---:|
-| `ChefZ_ParsleyPlant` | `ChefZ_Parsley` | `CHEFZ_HERB` | 2 |
-| `ChefZ_DillPlant` | `ChefZ_Dill` | `CHEFZ_HERB`, `CHEFZ_WILD_HERB` | 2 |
-| `ChefZ_ThymePlant` | `ChefZ_Thyme` | `CHEFZ_HERB`, `CHEFZ_WILD_HERB` | 2 |
-| `ChefZ_RosemaryPlant` | `ChefZ_Rosemary` | `CHEFZ_HERB` | **5** |
-| `ChefZ_WildGarlicPlant` | `ChefZ_WildGarlic` | `CHEFZ_HERB`, `CHEFZ_WILD_HERB` | 2 |
-| `ChefZ_PepperPlant` | `ChefZ_PepperBerries` | `CHEFZ_SPICE` | **5** |
-| `ChefZ_PaprikaPlant` | `ChefZ_Paprika` | *(none — category `VEGETABLE`)* | **0 (no XP)** |
-
-XP is granted **per harvest action**, not per crop item. The item count only enters
-through the capped batch bonus described below.
-
-`ChefZ_Paprika` grows on a `ChefZ_HerbPlantBase` but is classified as a vegetable
-and carries no herb or spice tag, so harvesting it pays nothing and the herbalist
-yield bonus does not apply to it. That is deliberate — the module checks the *tag*,
-never the plant class.
+Since 2026-08-29 the herbs are **found**, like vanilla mushrooms: there are no herb
+plants, no seeds and no `Harvest()` to hook. The harvest XP and the yield bonus that
+used to live in `modded class ChefZ_HerbPlantBase` are gone with the plant; the
+`harvestTags[]` / `ChefZ_Harvest` config nodes remain as inert configuration. What
+survives of the herbalist is the highlight on herbs lying in the world
+(`modded class ChefZ_FreshHerbBase`, see below).
 
 #### What gives no XP at all
 
@@ -298,13 +274,8 @@ By default only *harvestable* plants glow (`highlightUnripe = 0`); flipping that
 `1` also lights up growing ones, which defeats the point of the perk but is your
 server.
 
-**2. Yield bonus.** Server-side, applied in `ChefZ_HerbPlantBase.Harvest()` **after**
-`super.Harvest()` has run the complete vanilla harvest including fertiliser effects.
-The perk then spawns its share *on top*, computed from the plant's configured
-`Horticulture > CropsCount`. It does not modify `m_CropsCount` — that field is
-private and vanilla raises it when fertilised; reimplementing the count would throw
-the fertiliser bonus away. The fractional part is rolled, not truncated (3 crops at
-+10 % would otherwise always be zero).
+**2. Yield bonus.** Removed on 2026-08-29 together with the herb plants — there is
+no harvest any more, so there is nothing to multiply.
 
 The bonus is clamped to `[0.0, 2.0]` in the bridge even though the values come from
 the module's own config — because `GameOverrides.xml` can overwrite them, and a
@@ -389,11 +360,9 @@ up on player disconnect and hard-capped at 128 tracked keys per player. Restarti
 your server resets everyone's damping — which matters only for someone who was
 mid-grind at the moment of the restart.
 
-**One special zero.** `PROCESS_CUT_OUT_SEEDS = 0`, on purpose. Cutting seeds out of
-a vegetable is the only step in the entire data set that closes a *circular* chain
-(onion → seeds → plant → onion). Any value above zero there would be an XP loop, a
-slow one but a loop. Everything else in the table is a balance value; this one is a
-guard.
+**No special zero any more.** `PROCESS_CUT_OUT_SEEDS = 0` used to close the only
+circular chain in the data set (onion → seeds → plant → onion). Seeds and plants are
+gone since 2026-08-29, and the entry with them.
 
 ---
 

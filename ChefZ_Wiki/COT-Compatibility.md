@@ -122,23 +122,20 @@ passes `m_CurrentType` to `g_Game.IsKindOf`, and no config class name looks like
 that — so even if one of these values ever reached COT's branch instead of ChefZ's,
 it would yield an empty list rather than a wrong match.
 
-### 1. Ingredients (30)
+### 1. Ingredients (20)
 
 Everything that goes *into* a recipe and does not belong in a more specific
-category: vegetables with their seeds and plants, board-cut produce, egg, salt,
-wheat and flour.
+category: the found vegetables, knife-cut produce, egg, salt, wheat and flour.
+(Plants and seeds are gone since 2026-08-29 — everything is found, like mushrooms.)
 
 ```
-ChefZ_WheatPlant       ChefZ_WheatSeeds       ChefZ_Wheat
-ChefZ_Flour            ChefZ_OnionPlant       ChefZ_OnionSeeds
-ChefZ_Onion            ChefZ_GarlicPlant      ChefZ_GarlicSeeds
-ChefZ_Garlic           ChefZ_CarrotPlant      ChefZ_CarrotSeeds
-ChefZ_Carrot           ChefZ_CabbagePlant     ChefZ_CabbageSeeds
-ChefZ_Cabbage          ChefZ_SlicedPotato     ChefZ_ChoppedTomato
-ChefZ_ChoppedPaprika   ChefZ_ChoppedOnion     ChefZ_ChoppedGarlic
-ChefZ_ChoppedCarrot    ChefZ_ChoppedCabbage   ChefZ_Egg
-ChefZ_RawSalt          ChefZ_Salt             ChefZ_BoneBroth
-ChefZ_TomatoSauce      ChefZ_CreamSauce       ChefZ_MushroomCreamSauce
+ChefZ_Wheat            ChefZ_Flour            ChefZ_Onion
+ChefZ_Garlic           ChefZ_Carrot           ChefZ_Cabbage
+ChefZ_SlicedPotato     ChefZ_ChoppedTomato    ChefZ_ChoppedPaprika
+ChefZ_ChoppedOnion     ChefZ_ChoppedGarlic    ChefZ_ChoppedCarrot
+ChefZ_ChoppedCabbage   ChefZ_Egg              ChefZ_RawSalt
+ChefZ_Salt             ChefZ_BoneBroth        ChefZ_TomatoSauce
+ChefZ_CreamSauce       ChefZ_MushroomCreamSauce
 ```
 
 Two placement decisions worth knowing:
@@ -146,22 +143,17 @@ Two placement decisions worth knowing:
 * **The three sauces and the bone broth are here, not under Dishes.** Per
   `ChefZ_Cooking`'s own definition they are *ingredients of* a dish, not dishes.
   An admin looking for cream sauce looks for an ingredient.
-* **Wheat, wheat plant, wheat seeds and flour are here, not under Dough/Bread/Pasta**,
+* **Wheat and flour are here, not under Dough/Bread/Pasta**,
   even though they share the `ChefZ_GrainFoodBase` base class. They are the raw
   material of the chain, not its product.
 
-### 2. Herbs and Spices (32)
+### 2. Herbs and Spices
 
-The complete herb chain in one category: plant, seeds, fresh, dried, ground.
+The complete herb chain in one category: fresh (found), dried, ground.
 
 ```
-ChefZ_ParsleyPlant     ChefZ_DillPlant        ChefZ_ThymePlant
-ChefZ_RosemaryPlant    ChefZ_WildGarlicPlant  ChefZ_PepperPlant
-ChefZ_PaprikaPlant     ChefZ_ParsleySeeds     ChefZ_DillSeeds
-ChefZ_ThymeSeeds       ChefZ_RosemarySeeds    ChefZ_WildGarlicSeeds
-ChefZ_PepperSeeds      ChefZ_PaprikaSeeds     ChefZ_Parsley
-ChefZ_Dill             ChefZ_Thyme            ChefZ_Rosemary
-ChefZ_WildGarlic       ChefZ_PepperBerries    ChefZ_Paprika
+ChefZ_Parsley          ChefZ_Dill             ChefZ_Thyme
+ChefZ_Rosemary         ChefZ_WildGarlic       ChefZ_PepperBerries
 ChefZ_DriedParsley     ChefZ_DriedDill        ChefZ_DriedThyme
 ChefZ_DriedRosemary    ChefZ_DriedWildGarlic  ChefZ_DriedPaprika
 ChefZ_PaprikaPowder    ChefZ_DriedPeppercorns ChefZ_BlackPepper
@@ -225,13 +217,12 @@ these four inherit from four completely different vanilla classes (`PowderedMilk
 a dairy product. It is under Ingredients. The butter churn and cheese press are
 appliances and are under Stations and Tools.
 
-### 6. Stations and Tools (10)
+### 6. Stations and Tools (9)
 
 ```
-ChefZ_GrainMill        ChefZ_RollingPin       ChefZ_Mortar
+ChefZ_GrainMill        ChefZ_PastaMachine     ChefZ_Mortar
 ChefZ_DryingRack       ChefZ_ButterChurn      ChefZ_CheesePress
-ChefZ_SaltPan          ChefZ_CuttingBoard     ChefZ_MeatGrinder
-ChefZ_Smoker
+ChefZ_SaltPan          ChefZ_MeatGrinder      ChefZ_Smoker
 ```
 
 The only category with nothing edible in it, and in daily operation the most used
@@ -303,7 +294,7 @@ For ChefZ that does not work:
 |---|---|
 | Dairy | `ChefZ_Milk` extends `PowderedMilk`, `ChefZ_Cream` extends `Marmalade`, `ChefZ_Butter` extends `Lard`, `ChefZ_Cheese` extends `BoxCerealCrunchin`. Four goods, four unrelated vanilla branches — no common base to collect them by. |
 | Stations | `ChefZ_ButterChurn` extends `Pot`, `ChefZ_CheesePress` extends `Cauldron`, the rest `Inventory_Base`. Same picture. |
-| Herbs | spread across five bases (`ChefZ_HerbPlantBase`, `ChefZ_HerbSeedsBase`, `ChefZ_FreshHerbBase`, `ChefZ_DriedHerbBase`, `ChefZ_SpiceBase`). |
+| Herbs | spread across three bases (`ChefZ_FreshHerbBase`, `ChefZ_DriedHerbBase`, `ChefZ_SpiceBase`). |
 
 The alternative would have been to rewrite item inheritance so that an admin filter
 looks tidy. That is changing game mechanics for the sake of a tool — so: explicit

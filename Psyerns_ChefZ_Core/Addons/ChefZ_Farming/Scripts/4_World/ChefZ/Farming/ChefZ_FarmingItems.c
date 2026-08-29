@@ -5,10 +5,8 @@
 // einer Vanilla-Klasse, die SKRIPTklasse von der ChefZ-Basis. Der Core bringt
 // fuer keine der beiden einen CfgVehicles-Eintrag mit (Invariante I3).
 //
-// ChefZ_WheatPlant und ChefZ_WheatSeeds erben dagegen von den VANILLA-Basen:
-// sie tragen keinen ChefZ-Zustand, sie sind Gartenobjekte. PlantBase und
-// SeedBase bringen alles mit, was Anpflanzen und Ernten brauchen - eine
-// ChefZ-Ableitung waere dort Gewicht ohne Gegenwert.
+// Weizen ist eine FUNDPFLANZE wie Vanillas Pilze (Entscheidung vom
+// 29.08.2026): keine Pflanzenklasse, kein Saatgut - nur das Korn.
 //
 // Layer: 4_World.
 //==============================================================================
@@ -61,12 +59,6 @@ class ChefZ_GrainFoodBase extends ChefZ_Edible_Base
     }
 }
 
-//! Die Weizenpflanze im Beet. Wachstum, Krankheit und Ernte kommen
-//! vollstaendig von PlantBase; die Zahlen stehen im Horticulture-Knoten.
-class ChefZ_WheatPlant extends PlantBase {}
-
-//! Weizensaatgut. ActionPlantSeed und ActionAttachSeeds haengen an SeedBase.
-class ChefZ_WheatSeeds extends SeedBase {}
-
-//! Das geerntete Korn und Eingang der Getreidemuehle.
+//! Das gefundene Korn und Eingang der Getreidemuehle. Weizen ist eine
+//! Fundpflanze wie Vanillas Pilze - keine Pflanze, kein Saatgut.
 class ChefZ_Wheat extends ChefZ_GrainFoodBase {}

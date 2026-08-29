@@ -1504,12 +1504,12 @@ class CfgChefZProcesses
 // vor dem ersten Laden feststehen (Kopf von ChefZ_HandcraftBridge):
 //    7 Schnitt-Transforms (Potato, Tomato, GreenBellPepper,
 //                          Onion, Garlic, Carrot, Cabbage)
-//  + 4 Samen-Transforms   (Onion, Garlic, Carrot, Cabbage)
-//  = 11 Plaetze.
+//  = 7 Plaetze.
 //
-// Frueher 12: TR_ChopPaprika (Eingang ChefZ_Paprika) ist mit der Eigenklasse
-// entfallen. Er war eine reine Doppelung von TR_ChopBellPepper - beide lieferten
-// ChefZ_ChoppedPaprika (Vanilla-Audit §2).
+// Frueher 11: die vier Samen-Transforms sind mit dem Saatgut entfallen -
+// Gemuese sind Fundpflanzen (Kopf von ChefZ_Farming/config.cpp). Davor 12:
+// TR_ChopPaprika (Eingang ChefZ_Paprika) war eine reine Doppelung von
+// TR_ChopBellPepper (Vanilla-Audit §2).
 //==============================================================================
 class CfgChefZ
 {
@@ -1518,12 +1518,11 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 220;
-        handcraftRecipeSlots = 11;
+        handcraftRecipeSlots = 7;
         dataFiles[] =
         {
             "ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json",
-            "ChefZ_Ingredients/Config/Processing/Produce.json",
-            "ChefZ_Farming/Config/Processing/ProduceSeeds.json"
+            "ChefZ_Ingredients/Config/Processing/Produce.json"
         };
     };
 

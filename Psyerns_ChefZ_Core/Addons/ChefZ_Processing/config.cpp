@@ -49,11 +49,10 @@ class CfgPatches
             "ChefZ_ButterChurn", "ChefZ_CheesePress",
             // ### SLICE salt ###
             "ChefZ_SaltPan",
-            // ### SLICE meat ### (Production Map §57: Schneidebrett, Fleischwolf)
-            // ChefZ_CuttingBoard steht weiter hier, ist aber seit der
-            // Umstellung von PROCESS_CLEAN_CASING auf HANDCRAFT KEINE Station
-            // mehr - Begruendung an der Klasse selbst.
-            "ChefZ_CuttingBoard", "ChefZ_MeatGrinder",
+            // ### SLICE meat ### (Production Map §57: Fleischwolf. Das
+            // Schneidebrett gibt es nicht mehr - Schneiden ist "Zutat +
+            // Messer kombinieren", Entscheidung vom 29.08.2026.)
+            "ChefZ_MeatGrinder",
             // ### SLICE preservation ### (Production Map §57: Raeucherschrank.
             // Der Trockenrahmen steht schon oben beim Slice "herbs" - er ist
             // dieselbe Station und bekommt hier nur neue Transforms, keine
@@ -504,8 +503,14 @@ class CfgVehicles
     //==========================================================================
     // ### SLICE meat ###
     //
-    // Die EINE Station der Fleischkette (Production Map §57) - und daneben das
-    // Schneidebrett, das keine mehr ist.
+    // Die EINE Station der Fleischkette (Production Map §57).
+    //
+    // KEIN SCHNEIDEBRETT MEHR (Entscheidung vom 29.08.2026): Schneiden ist
+    // "Zutat + Messer kombinieren" - PROCESS_CHOP_VEGETABLE, PROCESS_CUT_MEAT
+    // und PROCESS_CLEAN_CASING sind HANDCRAFT mit CUTTING_TOOL und brauchen
+    // keinen Ort. Die frueher als Ausstattungsstueck erhaltene Klasse
+    // ChefZ_CuttingBoard ist entfernt; ein Server, der eines platziert hatte,
+    // verliert dieses eine Objekt beim naechsten Start.
     //
     // Andockregel woertlich aus dem Kopf von ChefZ_ProcessingStation_Base.c:
     // Configbasis ist eine VANILLA-Klasse, Skriptbasis ist
@@ -518,64 +523,9 @@ class CfgVehicles
     // Station", und ein gleichnamiger Knoten unter CfgChefZStations zaehlt
     // fuer configcpp.mjs als doppelte Klassendefinition.
     //
-    // MODELLE: Vanilla-Proxys. Ziel waere ein Holzbrett mit Hackspuren bzw.
-    // ein gusseiserner Wolf mit Kurbel - eigene Geometrie, siehe Asset-Bedarf
-    // des Slice.
+    // MODELL: Vanilla-Proxy. Ziel waere ein gusseiserner Wolf mit Kurbel -
+    // eigene Geometrie, siehe Asset-Bedarf des Slice.
     //==========================================================================
-
-    //--------------------------------------------------------------------------
-    // Das Schneidebrett - ab jetzt AUSSTATTUNG, keine Station mehr.
-    //
-    // WAS SICH GEAENDERT HAT
-    // ----------------------
-    // Es war die Station von PROCESS_CLEAN_CASING. Das hat nie funktioniert,
-    // und der Grund stand die ganze Zeit sichtbar in dieser Datei: die Klasse
-    // deklariert KEINEN Cargo-Bereich. ChefZ_ProcessingStation_Base liest
-    // seine Zutaten ueber ChefZ_FactCollector.CollectFromCargo aus genau
-    // diesem Bereich - ohne ihn findet ein Job nie eine Zutat, und die
-    // Wurstkette endete still beim Darm. Jede andere Station in dieser Datei
-    // (Moerser, Trockenrahmen, Butterfass, Kaesepresse, Salzpfanne,
-    // Raeucherschrank) traegt ihn; das Brett war der Ausreisser.
-    //
-    // Behoben wird das nicht durch einen nachgereichten Cargo-Block, sondern
-    // dadurch, dass der Vorgang gar keine Station mehr braucht:
-    // PROCESS_CLEAN_CASING ist jetzt HANDCRAFT mit der Werkzeuggruppe
-    // CUTTING_TOOL - Darm plus Messer, kombiniert wie jedes Handwerksrezept.
-    // Das ist dieselbe Form, die PROCESS_CUT_MEAT und PROCESS_CHOP_VEGETABLE
-    // schon tragen, und sie passt zur Sache: der Darm wird aufgeschnitten und
-    // ausgestreift, nicht an einem Ort verarbeitet.
-    //
-    // WARUM DIE KLASSE BLEIBT
-    // -----------------------
-    // Sie zu loeschen waere billiger und an drei Stellen teuer:
-    //   - Psyerns_ChefZ_COT_Comp fuehrt sie in seiner Spawnerliste
-    //     (ChefZ_CotCategories.c). Ein Eintrag auf eine geloeschte Klasse ist
-    //     ein Admin-Werkzeug, das ins Leere greift.
-    //   - _deltas/meat.json kuendigt sie in classes[] an.
-    //   - Auf jedem laufenden Server, der sie schon platziert hat, wuerden
-    //     abgelegte Objekte zu Waisen.
-    // Sie bleibt deshalb als das, was sie ohne Station ist: ein platzierbares
-    // Ausstattungsstueck. Es traegt bewusst KEINEN Cargo - ein Behaelter waere
-    // eine neue Zusage, und ChefZ verspricht hier nichts mehr.
-    //
-    // MODELL: Meat_Tenderizer.p3d. Der bisherige Pfad
-    // \dz\gear\cooking\MeatTenderizer.p3d ist unbelegt (ChefZ_Asset_Backlog
-    // §10.1 fuehrt ihn als Tippfehler und nennt genau diesen als den
-    // korrekten). Ein Holzbrett ist es nicht - eigene Geometrie ist gemeldet.
-    //--------------------------------------------------------------------------
-    class ChefZ_CuttingBoard : Inventory_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CUTTINGBOARD0";
-        descriptionShort = "#STR_CHEFZ_ITEM_CUTTINGBOARD1";
-        model = "\dz\gear\tools\Meat_Tenderizer.p3d";
-        rotationFlags = 17;
-        itemSize[] = {4, 2};
-        weight = 900;
-        absorbency = 0.1;
-        canBeDigged = 0;
-        varQuantityDestroyOnMin = 0;
-    };
 
     class ChefZ_MeatGrinder : Inventory_Base
     {
@@ -690,8 +640,8 @@ class CfgVehicles
     // --------------------------------------------------------------------
     // ChefZ_ProcessingStation_Base liest seine Zutaten ueber
     // ChefZ_FactCollector.CollectFromCargo aus genau diesem Bereich. Ohne ihn
-    // faende ein Job nie eine Zutat - der Fehler, an dem ChefZ_CuttingBoard
-    // gescheitert ist. 4x3 fasst ein Raehmchen (2x3) und ein Glas
+    // faende ein Job nie eine Zutat - der Fehler, an dem das fruehere
+    // Schneidebrett gescheitert ist. 4x3 fasst ein Raehmchen (2x3) und ein Glas
     // nebeneinander, mit Luft fuer ein zweites Paar.
     //
     // KEIN Pot und KEIN Cauldron als Basis, obwohl eine Schleuder ein

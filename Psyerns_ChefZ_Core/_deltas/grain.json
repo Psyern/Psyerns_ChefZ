@@ -49,8 +49,6 @@
 
     "classes": [
         "ChefZ_GrainFoodBase",
-        "ChefZ_WheatPlant",
-        "ChefZ_WheatSeeds",
         "ChefZ_Wheat",
         "ChefZ_GrainMill",
         "ChefZ_PastaMachine",

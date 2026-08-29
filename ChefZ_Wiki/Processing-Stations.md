@@ -35,10 +35,9 @@ nothing can be cooked inside one.**
 | Salt Boiling Pan | `ChefZ_SaltPan` | `SALTWORKS` | 2 | 1 | 3×2 | no | 2400 g | `FryingPan.p3d` |
 | Butter Churn | `ChefZ_ButterChurn` | `CHURN` | 2 | 1 | 4×4 | no | 4200 g | `wooden_case.p3d` |
 | Cheese Press | `ChefZ_CheesePress` | `PRESS` | 1 | 1 | 6×4 | no | 6800 g | `wooden_case.p3d` |
-| Cutting Board | `ChefZ_CuttingBoard` | `BOARD` | 1 | 1 | **none** | no | 900 g | `MeatTenderizer.p3d` |
 | Meat Grinder | `ChefZ_MeatGrinder` | `GRINDER` | 2 | 1 | **none** | no | 3200 g | `Cauldron.p3d` |
 
-All nine run at `speedMultiplier` 1.0. Every model is a vanilla proxy — no station
+All eight run at `speedMultiplier` 1.0. Every model is a vanilla proxy — no station
 has its own geometry yet.
 
 The cargo area **is** the input side: `ChefZ_ProcessingStation_Base` reads its
@@ -61,7 +60,7 @@ Two tool groups exist. Both are declared exactly once, in
 
 | Group | Members | Used by |
 |---|---|---|
-| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife (`allowSubclasses = 1`) | `PROCESS_CHOP_VEGETABLE`, `PROCESS_CUT_OUT_SEEDS`, `PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL` |
+| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife (`allowSubclasses = 1`) | `PROCESS_CHOP_VEGETABLE`, `PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL` |
 | `ROLLING_PIN` | `ChefZ_RollingPin` (`allowSubclasses = 1`) | `PROCESS_ROLL` |
 
 **Only one station process requires a tool at all** — `PROCESS_CLEAN_CASING` at the
@@ -255,33 +254,12 @@ Presses milk into cheese. At 5 minutes for 3 milk, the longest single dairy step
 
 ---
 
-## Cutting Board
+## Cutting Board — removed
 
-`ChefZ_CuttingBoard` · category `BOARD` · 1 parallel slot · cargo **none**
-
-Cleans vanilla `Guts` into sausage casing, at 2 casings per gut. That is its only job, and the sausage chain cannot start without it. The only station process in the mod that requires a tool.
-
-### Processes
-
-| Process | Kind | Base duration | Heat | Tool |
-|---|---|---|---|---|
-| `PROCESS_CLEAN_CASING` | STATION_ACTION | 12 s | no | `CUTTING_TOOL` |
-
-### Transforms (1)
-
-| Transform | Input | Output | Ratio | Duration | Sets state |
-|---|---|---|---|---|---|
-| `TR_SausageCasing` | 1+× Guts | Sausage Casing | 2× | 12 s | PREPARED |
-
-> **This station has no cargo.** Its `config.cpp` class carries no
-> `class Cargo { itemsCargoSize[] = {...}; }` block, and `Inventory_Base`
-> supplies none. `ChefZ_FactCollector.CollectFromCargo` returns as soon as
-> `inventory.GetCargo()` is null, so nothing can ever be placed in the station and
-> no transform above can match. The Butter Churn, Cheese Press, Salt Pan, Smoker
-> and the herb-station base all carry such a block; these three do not.
-> See [Known-Limitations](Known-Limitations).
-
----
+Removed on 2026-08-29. Cutting is "ingredient + knife" (`PROCESS_CHOP_VEGETABLE`,
+`PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING` are `HANDCRAFT` with `CUTTING_TOOL`), so
+there was nothing left for a station to do. A server that had one placed loses that
+object on its next start.
 
 ## Meat Grinder
 
@@ -335,7 +313,6 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 | `PROCESS_ROLL` | 10 s | `ROLLING_PIN` | 2 | 2 |
 | `PROCESS_CARVE_PLATE` | 20 s | `CUTTING_TOOL` | 0 | 1 |
 | `PROCESS_CARVE_BOWL` | 25 s | `CUTTING_TOOL` | 0 | 1 |
-| `PROCESS_CUT_OUT_SEEDS` | 6 s | `CUTTING_TOOL` | 1 | 4 |
 | `PROCESS_CHOP_VEGETABLE` | 5 s | `CUTTING_TOOL` | 1 | 8 |
 | `PROCESS_CUT_MEAT` | 4 s | `CUTTING_TOOL` | 2 | 1 |
 | `PROCESS_SALT_CURE` | 6 s | none | 0 | 2 |

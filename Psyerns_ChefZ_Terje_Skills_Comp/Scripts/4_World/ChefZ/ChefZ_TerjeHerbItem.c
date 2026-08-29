@@ -9,9 +9,9 @@
 //==============================================================================
 // modded class ChefZ_FreshHerbBase - hervorgehobene Kraeuter am Boden
 //
-// Die zweite Haelfte von Stufe I des Kraeuterkundigen. Die Pflanze im Beet
-// erledigt ChefZ_TerjeHerbPlant.c; hier geht es um ein Buendel Kraut, das
-// jemand fallen gelassen oder verloren hat.
+// Stufe I des Kraeuterkundigen. Kraeuter sind Fundpflanzen wie Vanillas
+// Pilze (Entscheidung vom 29.08.2026); das Buendel Kraut, das in der Welt
+// liegt, IST die Pflanze - genau wie bei TerjeSkills' MushroomBase.
 //
 // Woertlich nach dem Vorbild TerjeSkills/Scripts/4_World/Entities/
 // MushroomBase.c, mit denselben drei Bausteinen:

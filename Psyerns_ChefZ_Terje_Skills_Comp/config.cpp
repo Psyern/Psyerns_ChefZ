@@ -99,7 +99,7 @@
 //     Terje-Bezeichner im eigenen Quelltext. Registrierung ersetzt keine
 //     Symbolaufloesung.
 //   - requiredAddons ganz leeren: unzulaessig. Ohne ChefZ_Farming waere
-//     "modded class ChefZ_HerbPlantBase" unaufloesbar, und
+//     "modded class ChefZ_FreshHerbBase" unaufloesbar, und
 //     tools/chefz-validate/configcpp.mjs meldet leere requiredAddons als
 //     Fehler ("die Ladereihenfolge ist damit undefiniert").
 //
@@ -129,9 +129,10 @@ class CfgPatches
         //   ChefZ_Core     ChefZ_ProgressRegistry, ChefZ_CapabilityRegistry,
         //                  ChefZ_IProgressSink, ChefZ_ICapabilityProvider,
         //                  ChefZ_Log - Bezeichner im eigenen Quelltext.
-        //   ChefZ_Farming  ChefZ_HerbPlantBase und ChefZ_FreshHerbBase - die
-        //                  beiden einzigen ChefZ-Klassen, die hier per
-        //                  "modded class" erweitert werden.
+        //   ChefZ_Farming  ChefZ_FreshHerbBase - die einzige ChefZ-Klasse, die
+        //                  hier per "modded class" erweitert wird. Kraeuter
+        //                  sind Fundpflanzen; die fruehere Erweiterung der
+        //                  Pflanze im Beet ist mit ihr entfallen.
         //
         // TerjeCore und TerjeSkills stehen bewusst NICHT hier. Sie werden
         // ueber "#ifdef TERJE_SKILLS_MOD" in jeder Skriptdatei geprueft; die
@@ -396,13 +397,6 @@ class CfgChefZTerjeSkills
                 PROCESS_CLEAN_CASING   = 1;
                 PROCESS_CARVE_BOWL     = 1;
                 PROCESS_CARVE_PLATE    = 1;
-
-                // ANTI-EXPLOIT, ausdruecklich 0: Samen aus Gemuese schneiden
-                // ist der einzige Schritt im gesamten Datensatz, der eine
-                // KREISFOERMIGE Kette schliesst (Zwiebel -> Samen -> pflanzen
-                // -> Zwiebel). Jede Zahl > 0 waere eine, wenn auch langsame,
-                // XP-Schleife. Siehe Kopf von ChefZ_TerjeProgressSink.c.
-                PROCESS_CUT_OUT_SEEDS  = 0;
 
                 PROCESS_GRIND_MEAT     = 2;
                 PROCESS_SEPARATE_CREAM = 2;

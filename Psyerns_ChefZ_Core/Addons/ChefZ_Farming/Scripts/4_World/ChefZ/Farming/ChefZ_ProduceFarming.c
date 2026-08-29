@@ -16,31 +16,16 @@
 // ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json. Von dort laufen
 // TR_ChopBellPepper (-> ChefZ_ChoppedPaprika) und TR_PaprikaToDried
 // (-> ChefZ_DriedPaprika -> ChefZ_PaprikaPowder). Es fehlt KEIN Glied: das
-// Zurueckgewinnen von Saatgut erledigt Vanillas CutOutPepperSeeds, deshalb
-// braucht ProduceSeeds.json keinen fuenften Samen-Transform.
+// Zurueckgewinnen von Saatgut erledigt Vanillas CutOutPepperSeeds.
 //
 // Andockregel aus dem Kopf von ChefZ_Edible_Base.c: die CONFIGklasse erbt von
 // einer Vanilla-Klasse, die SKRIPTklasse von der ChefZ-Basis.
 //
-// Pflanzen und Samen erben dagegen von den VANILLA-Basen: sie tragen keinen
-// ChefZ-Zustand, sie sind Gartenobjekte. PlantBase bringt Wachstum, Krankheit
-// und Ernte mit, SeedBase bringt ActionPlantSeed und ActionAttachSeeds - eine
-// ChefZ-Ableitung waere dort Gewicht ohne Gegenwert.
+// Pflanzen und Samen gibt es nicht: die vier Gemuese sind FUNDPFLANZEN wie
+// Vanillas Pilze (Entscheidung vom 29.08.2026, Kopf der config.cpp).
 //
 // Layer: 4_World.
 //==============================================================================
-
-//--- Pflanzen im Beet. Die Zahlen stehen im Horticulture-Knoten der config.cpp.
-class ChefZ_OnionPlant extends PlantBase {}
-class ChefZ_GarlicPlant extends PlantBase {}
-class ChefZ_CarrotPlant extends PlantBase {}
-class ChefZ_CabbagePlant extends PlantBase {}
-
-//--- Saatgut. PlantType steht im Horticulture-Knoten der config.cpp.
-class ChefZ_OnionSeeds extends SeedBase {}
-class ChefZ_GarlicSeeds extends SeedBase {}
-class ChefZ_CarrotSeeds extends SeedBase {}
-class ChefZ_CabbageSeeds extends SeedBase {}
 
 //--- Die gemeinsame Skriptbasis der Ernte, gleichnamig zur CONFIGbasis
 //--- ChefZ_VegetableFood_Base (scope = 0). Dieselbe Bauform wie

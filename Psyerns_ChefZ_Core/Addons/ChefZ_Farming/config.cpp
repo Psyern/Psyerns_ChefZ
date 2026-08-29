@@ -1,4 +1,4 @@
-// ChefZ_Farming - Weizenanbau und Ernte (Slice "grain").
+// ChefZ_Farming - Weizen, Gemuese und Kraeuter als FUNDPFLANZEN (Slice "grain").
 //
 // Quelle: Production Map §7 (Weizen-Produktionskette), §69/§73 (Klassenliste),
 // DME-Plan §53 (Namenskonvention).
@@ -7,16 +7,18 @@
 // Laufzeitpfades ist dieses Praefix (Entwurf 02 §4.1, B4).
 //
 // ---------------------------------------------------------------------------
-// KEIN NEUES CORE-SYSTEM
+// FUNDPFLANZEN, KEIN ANBAU (Entscheidung vom 29.08.2026)
 // ---------------------------------------------------------------------------
-// Der Anbau laeuft vollstaendig ueber Vanillas Gartenkette:
+// Weizen, die vier Gemuese und die sechs Kraeuter werden GEFUNDEN, nicht
+// gezogen - dasselbe Verhalten wie Vanillas Pilze: ein Item liegt in der
+// Welt, wird aufgehoben, gegessen oder verarbeitet. Es gibt keine
+// Pflanzenklasse, kein Saatgut, keine Wachstumsstufe und keinen Horticulture-
+// Knoten mehr. Zwoelf Pflanzen mit je fuenf Wachstumsstufen haetten den
+// Modellaufwand vervielfacht, und die Kette dahinter (mahlen, trocknen,
+// moersern) ist die eigentliche Spielmechanik - nicht das Beet.
 //
-//   GardenBase.c:386/425   liest "CfgVehicles <samen> Horticulture PlantType"
-//   PlantBase.c:63-65      liest "CfgVehicles <pflanze> Horticulture
-//                          GrowthStagesCount / CropsCount / CropsType"
-//
-// Es ist deshalb keine Zeile ChefZ-Code noetig, um Weizen anzupflanzen und zu
-// ernten - und kein Core-System, das es dafuer nicht schon gibt.
+// Wo sie liegen, sagt die Servertypentabelle (types.xml / mapgroupproto),
+// genau wie bei Pilzen. Das ist Betreibersache und kein Modulinhalt.
 //
 // ---------------------------------------------------------------------------
 // ChefZ_GrainFoodBase - warum die Nahrungsdaten hier stehen
@@ -55,20 +57,16 @@ class CfgPatches
     {
         units[] =
         {
-            "ChefZ_GrainFoodBase", "ChefZ_WheatPlant", "ChefZ_WheatSeeds", "ChefZ_Wheat",
+            "ChefZ_GrainFoodBase", "ChefZ_Wheat",
             // ### SLICE produce ###
-            "ChefZ_VegetableFood_Base", "ChefZ_VegetablePlant_Base", "ChefZ_VegetableSeeds_Base",
-            "ChefZ_OnionPlant", "ChefZ_GarlicPlant", "ChefZ_CarrotPlant", "ChefZ_CabbagePlant",
-            "ChefZ_OnionSeeds", "ChefZ_GarlicSeeds", "ChefZ_CarrotSeeds", "ChefZ_CabbageSeeds",
+            "ChefZ_VegetableFood_Base", 
+            
             "ChefZ_Onion", "ChefZ_Garlic", "ChefZ_Carrot", "ChefZ_Cabbage",
             // ### SLICE herbs ###
-            "ChefZ_HerbPlantBase", "ChefZ_HerbSeedsBase", "ChefZ_FreshHerbBase",
-            "ChefZ_ParsleyPlant", "ChefZ_DillPlant", "ChefZ_ThymePlant",
-            "ChefZ_RosemaryPlant", "ChefZ_WildGarlicPlant",
-            "ChefZ_PepperPlant",
-            "ChefZ_ParsleySeeds", "ChefZ_DillSeeds", "ChefZ_ThymeSeeds",
-            "ChefZ_RosemarySeeds", "ChefZ_WildGarlicSeeds",
-            "ChefZ_PeppercornSeeds",
+            "ChefZ_FreshHerbBase",
+            
+            
+            
             "ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
             "ChefZ_WildGarlic", "ChefZ_PepperBerries",
             // ### SLICE apiary ###
@@ -82,7 +80,9 @@ class CfgPatches
         requiredVersion = 0.1;
         // ChefZ_Core:          Skriptbasis ChefZ_Edible_Base und - seit dem
         //                      Slice apiary - ChefZ_ProcessingStation_Base.
-        // DZ_Gear_Cultivation: SeedBase, PlantBase und ihre Proxy-Modelle.
+        // DZ_Gear_Cultivation: Proxy-Modelle einiger Fundpflanzen (tomato_seeds,
+        //                      cannabis_seedman). Keine Vererbung mehr von
+        //                      SeedBase oder PlantBase - Fundpflanzen.
         // DZ_Gear_Food:        Proxy-Modell des Korns und, fuer den Slice
         //                      apiary, food_can_open.p3d an der Imkerpfeife.
         // DZ_Gear_Camping:     wooden_case.p3d - Proxy von Bienenstock und
@@ -206,51 +206,6 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
-    // Die Pflanze im Gartenbeet.
-    //
-    // PROXY: plant_material.p3d. Eigenes Weizenmesh ist gemeldet (U, P1).
-    //--------------------------------------------------------------------------
-    class ChefZ_WheatPlant : PlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_WHEATPLANT";
-        descriptionShort = "#STR_CHEFZ_WHEATPLANT_DESC";
-        model = "\dz\gear\cultivation\plant_material.p3d";
-
-        class Horticulture
-        {
-            GrowthStagesCount = 6;
-            CropsCount = 4;
-            CropsType = "ChefZ_Wheat";
-        };
-    };
-
-    //--------------------------------------------------------------------------
-    // Saatgut. Vanillas ActionPlantSeed haengt an SeedBase, mehr braucht es
-    // nicht.
-    //
-    // PROXY: pepper_seeds.p3d. Eigenes Mesh ist gemeldet (S, P3).
-    //--------------------------------------------------------------------------
-    class ChefZ_WheatSeeds : SeedBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_WHEATSEEDS";
-        descriptionShort = "#STR_CHEFZ_WHEATSEEDS_DESC";
-        model = "\dz\gear\cultivation\pepper_seeds.p3d";
-        weight = 5;
-        itemSize[] = {1, 1};
-        varQuantityInit = 1;
-        varQuantityMin = 0;
-        varQuantityMax = 1;
-        lifetime = 14400;
-
-        class Horticulture
-        {
-            PlantType = "ChefZ_WheatPlant";
-        };
-    };
-
-    //--------------------------------------------------------------------------
     // Das geerntete Korn - Eingang der Getreidemuehle (Production Map §7).
     //
     // PROXY: Rice.p3d. Eigenes Mesh ist gemeldet (U, P1).
@@ -284,10 +239,8 @@ class CfgVehicles
     // ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json (05 §2,
     // zweiter Deklarationsweg fuer FREMDE Klassen).
     //
-    // Der Anbau braucht keine Zeile ChefZ-Code:
-    //   GardenBase.c:449-452   liest "CfgVehicles <samen> Horticulture PlantType"
-    //   PlantBase.c:63-65      liest "CfgVehicles <pflanze> Horticulture
-    //                          GrowthStagesCount / CropsCount / CropsType"
+    // Zwiebel, Knoblauch, Karotte und Kohl sind FUNDPFLANZEN wie Vanillas
+    // Pilze (Kopf dieser Datei): kein Saatgut, keine Pflanze, kein Beet.
     //
     // class Food MIT FoodStages UND FoodStageTransitions - der urspruengliche
     // Satz "rohes Gemuese ist Zutat" hat zwei Pruefungen nicht ueberstanden:
@@ -400,48 +353,7 @@ class CfgVehicles
         };
     };
 
-    class ChefZ_VegetablePlant_Base : PlantBase
-    {
-        scope = 0;
-        model = "\dz\gear\cultivation\plant_material.p3d";
-    };
-
-    class ChefZ_VegetableSeeds_Base : SeedBase
-    {
-        scope = 0;
-        model = "\dz\gear\cultivation\tomato_seeds.p3d";
-        weight = 5;
-        itemSize[] = {1, 1};
-        varQuantityInit = 1;
-        varQuantityMin = 0;
-        varQuantityMax = 1;
-        lifetime = 14400;
-    };
-
     // --- §17 Zwiebel ---------------------------------------------------------
-    class ChefZ_OnionPlant : ChefZ_VegetablePlant_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_ONION";
-        descriptionShort = "#STR_CHEFZ_PLANT_ONION_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 4;
-            CropsType = "ChefZ_Onion";
-        };
-    };
-
-    class ChefZ_OnionSeeds : ChefZ_VegetableSeeds_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_ONION";
-        descriptionShort = "#STR_CHEFZ_SEEDS_ONION_DESC";
-        class Horticulture
-        {
-            PlantType = "ChefZ_OnionPlant";
-        };
-    };
 
     class ChefZ_Onion : ChefZ_VegetableFood_Base
     {
@@ -477,30 +389,6 @@ class CfgVehicles
     };
 
     // --- §18 Knoblauch -------------------------------------------------------
-    class ChefZ_GarlicPlant : ChefZ_VegetablePlant_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_GARLIC";
-        descriptionShort = "#STR_CHEFZ_PLANT_GARLIC_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 4;
-            CropsType = "ChefZ_Garlic";
-        };
-    };
-
-    class ChefZ_GarlicSeeds : ChefZ_VegetableSeeds_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_GARLIC";
-        descriptionShort = "#STR_CHEFZ_SEEDS_GARLIC_DESC";
-        model = "\dz\gear\cultivation\pumpkin_seeds.p3d";
-        class Horticulture
-        {
-            PlantType = "ChefZ_GarlicPlant";
-        };
-    };
 
     class ChefZ_Garlic : ChefZ_VegetableFood_Base
     {
@@ -536,29 +424,6 @@ class CfgVehicles
     };
 
     // --- §19 Karotte ---------------------------------------------------------
-    class ChefZ_CarrotPlant : ChefZ_VegetablePlant_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_CARROT";
-        descriptionShort = "#STR_CHEFZ_PLANT_CARROT_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 5;
-            CropsType = "ChefZ_Carrot";
-        };
-    };
-
-    class ChefZ_CarrotSeeds : ChefZ_VegetableSeeds_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_CARROT";
-        descriptionShort = "#STR_CHEFZ_SEEDS_CARROT_DESC";
-        class Horticulture
-        {
-            PlantType = "ChefZ_CarrotPlant";
-        };
-    };
 
     class ChefZ_Carrot : ChefZ_VegetableFood_Base
     {
@@ -593,30 +458,6 @@ class CfgVehicles
     };
 
     // --- §20 Kohl ------------------------------------------------------------
-    class ChefZ_CabbagePlant : ChefZ_VegetablePlant_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_CABBAGE";
-        descriptionShort = "#STR_CHEFZ_PLANT_CABBAGE_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 6;
-            CropsCount = 2;
-            CropsType = "ChefZ_Cabbage";
-        };
-    };
-
-    class ChefZ_CabbageSeeds : ChefZ_VegetableSeeds_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_CABBAGE";
-        descriptionShort = "#STR_CHEFZ_SEEDS_CABBAGE_DESC";
-        model = "\dz\gear\cultivation\Zucchini_seeds.p3d";
-        class Horticulture
-        {
-            PlantType = "ChefZ_CabbagePlant";
-        };
-    };
 
     class ChefZ_Cabbage : ChefZ_VegetableFood_Base
     {
@@ -655,21 +496,15 @@ class CfgVehicles
     //==========================================================================
     // ### SLICE herbs ###   Production Map §21-§24, §15, §16
     //
-    // Fuenf Kraeuter, dazu Pfeffer: Pflanze -> Ernte -> (spaeter,
-    // in ChefZ_Processing) Trockenrahmen und Moerser. Paprika steht hier nicht
-    // mehr - sie ist vollstaendig Vanilla (Vanilla-Audit §2).
+    // Fuenf Kraeuter, dazu Pfeffer: Fund -> (spaeter, in ChefZ_Processing)
+    // Trockenrahmen und Moerser. Paprika steht hier nicht mehr - sie ist
+    // vollstaendig Vanilla (Vanilla-Audit §2).
     //
-    // KEIN NEUES CORE-SYSTEM: Anbau und Ernte laufen vollstaendig ueber
-    // Vanillas Gartenkette. GardenBase.c:386/425 liest "CfgVehicles <samen>
-    // Horticulture PlantType", PlantBase.c:63-65 liest GrowthStagesCount,
-    // CropsCount und CropsType der Pflanze. Es ist keine Zeile ChefZ-Code
-    // noetig, um Kraeuter anzupflanzen und zu ernten.
-    //
-    // SELTENHEIT (Production Map §21: Petersilie haeufig ... Rosmarin selten)
-    // steuert die VERFUEGBARKEIT der Samen und das Weltvorkommen, nicht die
-    // Wachstumszeit. Beides gehoert in die Servertypen (types.xml /
-    // mapgroupproto) und ist als offener Punkt gemeldet - eine Loot-Tabelle
-    // ist kein Modulinhalt.
+    // FUNDPFLANZEN wie Vanillas Pilze (Kopf dieser Datei): kein Saatgut,
+    // keine Pflanze, kein Beet. SELTENHEIT (Production Map §21: Petersilie
+    // haeufig ... Rosmarin selten) steuert das Weltvorkommen ueber die
+    // Servertypen (types.xml / mapgroupproto) - eine Loot-Tabelle ist kein
+    // Modulinhalt.
     //
     // class Nutrition ist PFLICHT (01 V7). Bewusst OHNE class Food /
     // FoodStages: frische Kraeuter kommen nicht in den Topf, sie kommen auf
@@ -678,93 +513,6 @@ class CfgVehicles
     //
     // PROXY-MODELLE, alle Vanilla, alle im Asset-Bedarf des Slice gemeldet.
     //==========================================================================
-    class ChefZ_HerbPlantBase : PlantBase
-    {
-        scope = 0;
-        model = "\dz\gear\cultivation\plant_material.p3d";
-        weight = 200;
-        itemSize[] = {2, 2};
-        rotationFlags = 2;
-    };
-
-    class ChefZ_ParsleyPlant : ChefZ_HerbPlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_PARSLEY";
-        descriptionShort = "#STR_CHEFZ_PLANT_PARSLEY_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 3;
-            CropsType = "ChefZ_Parsley";
-        };
-    };
-
-    class ChefZ_DillPlant : ChefZ_HerbPlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_DILL";
-        descriptionShort = "#STR_CHEFZ_PLANT_DILL_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 3;
-            CropsType = "ChefZ_Dill";
-        };
-    };
-
-    class ChefZ_ThymePlant : ChefZ_HerbPlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_THYME";
-        descriptionShort = "#STR_CHEFZ_PLANT_THYME_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 2;
-            CropsType = "ChefZ_Thyme";
-        };
-    };
-
-    class ChefZ_RosemaryPlant : ChefZ_HerbPlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_ROSEMARY";
-        descriptionShort = "#STR_CHEFZ_PLANT_ROSEMARY_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 2;
-            CropsType = "ChefZ_Rosemary";
-        };
-    };
-
-    class ChefZ_WildGarlicPlant : ChefZ_HerbPlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_WILDGARLIC";
-        descriptionShort = "#STR_CHEFZ_PLANT_WILDGARLIC_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 3;
-            CropsType = "ChefZ_WildGarlic";
-        };
-    };
-
-    // Pfeffer traegt Beeren und ist bewusst selten (Production Map §16).
-    class ChefZ_PepperPlant : ChefZ_HerbPlantBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_PLANT_PEPPER";
-        descriptionShort = "#STR_CHEFZ_PLANT_PEPPER_DESC";
-        class Horticulture
-        {
-            GrowthStagesCount = 5;
-            CropsCount = 2;
-            CropsType = "ChefZ_PepperBerries";
-        };
-    };
 
     // KEINE eigene Paprikapflanze (Vanilla-Audit §2). Vanilla schliesst den
     // Kreis bereits vollstaendig: PepperSeedsPack -> PepperSeeds -> Plant_Pepper
@@ -774,95 +522,6 @@ class CfgVehicles
     // ChefZ setzt jetzt an der Frucht an - GreenBellPepper traegt den
     // Zutaten-Datensatz (ChefZ_Ingredients/Config/Ingredients/VanillaProduce.json)
     // und ist Eingang von TR_ChopBellPepper und TR_PaprikaToDried.
-
-    //--------------------------------------------------------------------------
-    // Samen. SeedBase bringt ActionPlantSeed und ActionAttachSeeds mit; mehr
-    // braucht es nicht.
-    //--------------------------------------------------------------------------
-    class ChefZ_HerbSeedsBase : SeedBase
-    {
-        scope = 0;
-        model = "\dz\gear\cultivation\tomato_seeds.p3d";
-        weight = 10;
-        itemSize[] = {1, 1};
-        rotationFlags = 17;
-        varQuantityInit = 1;
-        varQuantityMin = 0;
-        varQuantityMax = 1;
-        lifetime = 14400;
-    };
-
-    class ChefZ_ParsleySeeds : ChefZ_HerbSeedsBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_PARSLEY";
-        descriptionShort = "#STR_CHEFZ_SEEDS_PARSLEY_DESC";
-        class Horticulture
-        {
-            PlantType = "ChefZ_ParsleyPlant";
-        };
-    };
-
-    class ChefZ_DillSeeds : ChefZ_HerbSeedsBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_DILL";
-        descriptionShort = "#STR_CHEFZ_SEEDS_DILL_DESC";
-        class Horticulture
-        {
-            PlantType = "ChefZ_DillPlant";
-        };
-    };
-
-    class ChefZ_ThymeSeeds : ChefZ_HerbSeedsBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_THYME";
-        descriptionShort = "#STR_CHEFZ_SEEDS_THYME_DESC";
-        class Horticulture
-        {
-            PlantType = "ChefZ_ThymePlant";
-        };
-    };
-
-    class ChefZ_RosemarySeeds : ChefZ_HerbSeedsBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_ROSEMARY";
-        descriptionShort = "#STR_CHEFZ_SEEDS_ROSEMARY_DESC";
-        class Horticulture
-        {
-            PlantType = "ChefZ_RosemaryPlant";
-        };
-    };
-
-    class ChefZ_WildGarlicSeeds : ChefZ_HerbSeedsBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_WILDGARLIC";
-        descriptionShort = "#STR_CHEFZ_SEEDS_WILDGARLIC_DESC";
-        model = "\dz\gear\cultivation\cannabis_seeds.p3d";
-        class Horticulture
-        {
-            PlantType = "ChefZ_WildGarlicPlant";
-        };
-    };
-
-    // Nicht "ChefZ_PepperSeeds": Vanillas PepperSeeds ist PAPRIKA-Saatgut
-    // (PlantType Plant_Pepper -> GreenBellPepper). Hier waechst Piper nigrum.
-    // Zwei verschiedene Pflanzen duerfen nicht denselben Namen im Inventar
-    // tragen (Vanilla-Audit §2).
-    class ChefZ_PeppercornSeeds : ChefZ_HerbSeedsBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_SEEDS_PEPPERCORN";
-        descriptionShort = "#STR_CHEFZ_SEEDS_PEPPERCORN_DESC";
-        model = "\dz\gear\cultivation\pepper_seeds.p3d";
-        class Horticulture
-        {
-            PlantType = "ChefZ_PepperPlant";
-        };
-    };
 
     //--------------------------------------------------------------------------
     // Die Ernte.
@@ -1041,7 +700,7 @@ class CfgVehicles
     // aus dem ChefZ_ProcessingStation_Base ueber
     // ChefZ_FactCollector.CollectFromCargo seine Zutaten liest. Ein Item ohne
     // Cargo koennte nichts aufnehmen; im Projekt sind Stationen genau daran
-    // schon gescheitert (siehe ChefZ_CuttingBoard in ChefZ_Processing).
+    // schon gescheitert (das fruehere Schneidebrett in ChefZ_Processing).
     //
     // class Cargo IST die Eingangsseite. 4x3 fasst vier Raehmchen nebeneinander
     // - dieselbe Groessenordnung wie der Trockenrahmen, und sie deckt sich mit
@@ -1208,8 +867,8 @@ class CfgVehicles
     // Gabel ueberfluessig.
     //
     // PROXY: Meat_Tenderizer.p3d - ein metallenes Kuechengeraet mit Griff.
-    // Derselbe Pfad, den ChefZ_PastaMachine und ChefZ_CuttingBoard tragen und
-    // den Asset-Backlog §10.1 als den korrekten ausweist.
+    // Derselbe Pfad, den ChefZ_PastaMachine traegt und den Asset-Backlog
+    // §10.1 als den korrekten ausweist.
     //--------------------------------------------------------------------------
     class ChefZ_UncappingFork : Inventory_Base
     {
@@ -1335,8 +994,7 @@ class CfgChefZ
     // ueber GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT), und dieser
     // Prozess war dort nie dabei.
     //
-    // Die beiden aelteren Knoten dieses Moduls bleiben bei 0, obwohl
-    // PROCESS_CUT_OUT_SEEDS vier HANDCRAFT-Transforms traegt: massgeblich ist
+    // Die beiden aelteren Knoten dieses Moduls bleiben bei 0: massgeblich ist
     // die projektweite SUMME, die ChefZ_HandcraftBridge.Reserve() ueber
     // ChefZ_ManifestReader.ReadHandcraftSlotTotal() liest - welcher Knoten sie
     // beisteuert, ist der Bruecke gleichgueltig. Diese Reservierung hier ist
@@ -1387,31 +1045,11 @@ class CfgChefZIngredients
 };
 
 //==============================================================================
-// ### SLICE produce ### Samengewinnung, Rang 1
-//
-// Vanilla macht es genauso: CutOutSeeds (4_World/.../Recipes/CutOutSeeds.c) ist
-// ein RecipeBase-Rezept "Gemuese + Messer -> Samen". ChefZ baut das nicht nach,
-// sondern beschreibt es als Prozess - die Bruecke
-// (ChefZ_GenericCraftRecipe/ChefZ_HandcraftBridge) macht daraus dieselbe Art
-// Vanilla-Rezept, ohne Vanillas eigene Liste anzufassen.
-//
-// Ein Eingang plus Werkzeuggruppe ist die Form, die RecipeBase traegt: das
-// Messer belegt den zweiten der zwei Zutatenplaetze (01 V12).
-// CUTTING_TOOL kommt aus ChefZ_Processing und wird hier nur BENUTZT.
+// Prozesse dieses Moduls, Rang 1. Die Samengewinnung gibt es nicht mehr:
+// Gemuese sind Fundpflanzen, es gibt kein Saatgut.
 //==============================================================================
 class CfgChefZProcesses
 {
-    class PROCESS_CUT_OUT_SEEDS
-    {
-        exec = "HANDCRAFT";
-        displayName = "#STR_CHEFZ_PROC_CUT_OUT_SEEDS";
-        toolGroups[] = {"CUTTING_TOOL"};
-        baseDurationSec = 6.0;
-        animationLength = 1.0;
-        specialty = 0.01;
-        toolDamage = 1;
-    };
-
     //--------------------------------------------------------------------------
     // ### SLICE apiary ###   Die acht Verben der Imkerei
     //
@@ -1430,8 +1068,8 @@ class CfgChefZProcesses
     // deshalb unter demselben Menuepunkt.
     //
     // Solange sich ihre Eingaenge unterscheiden, ist das folgenlos - so machen
-    // es PROCESS_CUT_OUT_SEEDS (vier Gemuese) und PROCESS_CHOP_VEGETABLE
-    // (sieben). Hier ist es NICHT folgenlos: Bausatz, Raehmchen UND
+    // es PROCESS_CHOP_VEGETABLE (sieben Eingaenge). Hier ist es NICHT
+    // folgenlos: Bausatz, Raehmchen UND
     // Entdeckelungsgabel entstehen alle drei aus WoodenPlank + Nails und
     // unterscheiden sich nur in der Menge. An einem gemeinsamen Prozess
     // stuenden drei gleichnamige Eintraege im Kontextmenue, und der Spieler
@@ -1636,7 +1274,6 @@ class CfgChefZProcesses
         toolDamage = 1;
     };
 };
-
 
 //==============================================================================
 // ### SLICE apiary ###   Die drei Werkzeuggruppen der Imkerei, Rang 1

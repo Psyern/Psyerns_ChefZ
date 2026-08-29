@@ -779,10 +779,18 @@ class CfgVehicles
         itemSize[] = {3, 2};
         weight = 900;
         absorbency = 0.7;
-        varQuantityInit = 1;
+        // MENGE 100 UND EINE LEISTE, WIE DER APFEL (Entscheidung vom
+        // 29.08.2026: der Verzehrzustand ist der Restwert auf der Leiste,
+        // keine Geometrie- oder Texturstufe). Das ist zugleich die Rechnung,
+        // die Vanilla verlangt: PlayerStomach teilt jeden Naehrwert durch 100
+        // Mengeneinheiten (PlayerStomach.c:92). Mit varQuantityMax = 1 kam von
+        // energy = 690 genau 6,9 im Magen an - ein Hundertstel. Ein Bissen
+        // (UAQuantityConsumed.EAT_BIG = 25) ist jetzt ein Viertel der Portion.
+        varQuantityInit = 100;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 100;
         varQuantityDestroyOnMin = 1;
+        quantityBar = 1;
         canBeSplit = 0;
         isMeleeWeapon = 0;
 
@@ -891,10 +899,18 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 450;
         absorbency = 0.5;
-        varQuantityInit = 1;
+        // MENGE 100 UND EINE LEISTE, WIE DER APFEL (Entscheidung vom
+        // 29.08.2026: der Verzehrzustand ist der Restwert auf der Leiste,
+        // keine Geometrie- oder Texturstufe). Das ist zugleich die Rechnung,
+        // die Vanilla verlangt: PlayerStomach teilt jeden Naehrwert durch 100
+        // Mengeneinheiten (PlayerStomach.c:92). Mit varQuantityMax = 1 kam von
+        // energy = 690 genau 6,9 im Magen an - ein Hundertstel. Ein Bissen
+        // (UAQuantityConsumed.EAT_BIG = 25) ist jetzt ein Viertel der Portion.
+        varQuantityInit = 100;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 100;
         varQuantityDestroyOnMin = 1;
+        quantityBar = 1;
         canBeSplit = 0;
         isMeleeWeapon = 0;
     };
@@ -1703,9 +1719,9 @@ class CfgVehicles
     // Portion bleibt derselbe, und genau deshalb ist er hier eine Konstante.
     //
     // WARUM DAS BULK DENSELBEN NAEHRWERT TRAEGT WIE DIE SCHUESSEL:
-    // ChefZ_PortionedDish_Base hat varQuantityMax = 1. Wer direkt aus dem Topf
-    // isst, isst genau eine Portion. Ein eigener Wert waere ein zweiter
-    // Balancinghebel fuer denselben Bissen.
+    // ChefZ_PortionedDish_Base hat varQuantityMax = 100 - eine Portion. Wer
+    // direkt aus dem Topf isst, isst genau eine Portion. Ein eigener Wert
+    // waere ein zweiter Balancinghebel fuer denselben Bissen.
     //
     // WARUM JEDE KLASSE IHREN EIGENEN NUTRITION-BLOCK HAT (01 V7):
     // PlayerStomach.InitData registriert nur Klassen mit "Nutrition" ODER

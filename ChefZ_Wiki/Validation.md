@@ -384,7 +384,7 @@ Where the 90 warnings sit:
 | `chefzcookable` | 0 | 0 | |
 
 The eight `chefznut` warnings are the honest kind: the checker cannot decide
-statically whether `ChefZ_CarrotSeeds` or `ChefZ_EmptyPlate` is *supposed* to be
+statically whether `ChefZ_RawSalt` or `ChefZ_EmptyPlate` is *supposed* to be
 edible, so it names the consequence and leaves the decision to a human. If the
 class should be edible, add a `Nutrition` block. If not, the warning may stand.
 

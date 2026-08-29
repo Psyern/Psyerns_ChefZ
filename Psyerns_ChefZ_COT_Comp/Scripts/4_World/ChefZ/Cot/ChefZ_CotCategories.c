@@ -42,8 +42,7 @@
 //                  koennte.
 //   Stationen      ChefZ_ButterChurn erbt Pot, ChefZ_CheesePress Cauldron,
 //                  der Rest Inventory_Base. Dasselbe Bild.
-//   Kraeuter       verteilen sich ueber fuenf Basen (ChefZ_HerbPlantBase,
-//                  ChefZ_HerbSeedsBase, ChefZ_FreshHerbBase,
+//   Kraeuter       verteilen sich ueber drei Basen (ChefZ_FreshHerbBase,
 //                  ChefZ_DriedHerbBase, ChefZ_SpiceBase).
 //
 // Die Alternative waere gewesen, die Vererbung der Items umzubauen, damit ein
@@ -204,17 +203,17 @@ class ChefZ_CotCategories
 		// Zutat eines Gerichts, kein Gericht - ein Admin, der Rahmsauce sucht,
 		// sucht sie als Zutat.
 		//
-		// Weizen, Weizenpflanze, Weizensaat und Mehl stehen hier und nicht
+		// Weizen und Mehl stehen hier und nicht
 		// unter "Teig, Brot und Pasta", obwohl sie dieselbe Basisklasse
 		// ChefZ_GrainFoodBase teilen: sie sind der Rohstoff der Kette, nicht
 		// ihr Erzeugnis.
 		Add("chefz_cot_ingredients", "#STR_CHEFZ_COT_CAT_INGREDIENTS",
 		{
-			"ChefZ_WheatPlant", "ChefZ_WheatSeeds", "ChefZ_Wheat",
-			"ChefZ_Flour", "ChefZ_OnionPlant", "ChefZ_OnionSeeds",
-			"ChefZ_Onion", "ChefZ_GarlicPlant", "ChefZ_GarlicSeeds",
-			"ChefZ_Garlic", "ChefZ_CarrotPlant", "ChefZ_CarrotSeeds",
-			"ChefZ_Carrot", "ChefZ_CabbagePlant", "ChefZ_CabbageSeeds",
+			"ChefZ_Wheat",
+			"ChefZ_Flour", 
+			"ChefZ_Onion", 
+			"ChefZ_Garlic", 
+			"ChefZ_Carrot", 
 			"ChefZ_Cabbage", "ChefZ_SlicedPotato", "ChefZ_ChoppedTomato",
 			"ChefZ_ChoppedPaprika", "ChefZ_ChoppedOnion", "ChefZ_ChoppedGarlic",
 			"ChefZ_ChoppedCarrot", "ChefZ_ChoppedCabbage", "ChefZ_Egg",
@@ -223,18 +222,16 @@ class ChefZ_CotCategories
 		});
 
 		// ChefZ / Kraeuter und Gewuerze - die vollstaendige Kraeuterkette in
-		// EINER Kategorie: Pflanze, Saat, frisch, getrocknet, gemahlen.
+		// EINER Kategorie: frisch (Fundpflanze), getrocknet, gemahlen.
 		//
 		// Bewusst nicht nach Verarbeitungsgrad aufgeteilt. Ein Admin sucht
 		// "Thymian", nicht "Thymian, Stufe 2 von 3"; die fuenf Basisklassen
 		// dahinter interessieren ihn nicht.
 		Add("chefz_cot_herbs", "#STR_CHEFZ_COT_CAT_HERBS",
 		{
-			"ChefZ_ParsleyPlant", "ChefZ_DillPlant", "ChefZ_ThymePlant",
-			"ChefZ_RosemaryPlant", "ChefZ_WildGarlicPlant", "ChefZ_PepperPlant",
-			"ChefZ_ParsleySeeds", "ChefZ_DillSeeds",
-			"ChefZ_ThymeSeeds", "ChefZ_RosemarySeeds", "ChefZ_WildGarlicSeeds",
-			"ChefZ_PeppercornSeeds", "ChefZ_Parsley",
+			
+			
+			"ChefZ_Parsley",
 			"ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
 			"ChefZ_WildGarlic", "ChefZ_PepperBerries",
 			"ChefZ_DriedParsley", "ChefZ_DriedDill", "ChefZ_DriedThyme",
@@ -309,7 +306,7 @@ class ChefZ_CotCategories
 		{
 			"ChefZ_GrainMill", "ChefZ_PastaMachine", "ChefZ_Mortar",
 			"ChefZ_DryingRack", "ChefZ_ButterChurn", "ChefZ_CheesePress",
-			"ChefZ_SaltPan", "ChefZ_CuttingBoard", "ChefZ_MeatGrinder",
+			"ChefZ_SaltPan", "ChefZ_MeatGrinder",
 			"ChefZ_Smoker"
 		});
 

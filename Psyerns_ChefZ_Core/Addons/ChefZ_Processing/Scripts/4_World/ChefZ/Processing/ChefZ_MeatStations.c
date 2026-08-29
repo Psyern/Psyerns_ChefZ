@@ -1,5 +1,5 @@
 //==============================================================================
-// Die Station der Fleischkette - und das Schneidebrett, das keine mehr ist.
+// Die Station der Fleischkette.
 //
 // Andockregel woertlich aus dem Kopf von ChefZ_ProcessingStation_Base.c:
 //
@@ -13,26 +13,12 @@
 // sind die Klassen leer, und das ist kein Versehen: jede Zeile hier waere
 // Content, der sich nicht mehr ueber Daten aendern liesse.
 //
-// In dieser Datei steht nur noch EINE Station. Das Schneidebrett hat seinen
-// Stationsdatensatz verloren, weil PROCESS_CLEAN_CASING auf HANDCRAFT
-// umgestellt wurde; es bleibt als Klasse bestehen und steht deshalb weiter
-// hier, direkt neben der Begruendung.
+// In dieser Datei steht EINE Station. Das Schneidebrett gibt es nicht mehr:
+// Schneiden ist "Zutat + Messer kombinieren" (HANDCRAFT mit CUTTING_TOOL),
+// Entscheidung vom 29.08.2026 - Begruendung in der config.cpp dieses Moduls.
 //
 // Layer: 4_World.
 //==============================================================================
-
-//! Das Schneidebrett. Es erbt AUSDRUECKLICH NICHT mehr von
-//! ChefZ_ProcessingStation_Base: PROCESS_CLEAN_CASING ist HANDCRAFT geworden,
-//! das Brett hat keinen Stationsdatensatz mehr und koennte als Station auch
-//! nichts ausrichten - die Configklasse deklariert keinen Cargo-Bereich, aus
-//! dem ChefZ_FactCollector.CollectFromCargo Zutaten lesen koennte. Genau das
-//! war der stille Ausfall der Wurstkette.
-//!
-//! Die Klasse bleibt als platzierbares Ausstattungsstueck bestehen; die
-//! vollstaendige Begruendung steht an der Configklasse.
-class ChefZ_CuttingBoard extends ItemBase
-{
-}
 
 class ChefZ_MeatGrinder extends ChefZ_ProcessingStation_Base
 {

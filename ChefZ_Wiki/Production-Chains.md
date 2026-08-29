@@ -27,12 +27,12 @@ the station or the tool, and `[]` boxes are the dishes a chain feeds into.
 ## Grain
 
 Wheat is the only crop ChefZ adds that is not a vegetable. It is the head of the
-longest chain in the mod: five steps from seed to dried pasta.
+longest chain in the mod: four steps from the found grain to dried pasta. (Since
+2026-08-29 wheat is found in the world, like mushrooms — no seeds, no garden plot.)
 
 ```mermaid
 graph LR
-  S(["Wheat Seeds<br/>loot"]) -->|garden plot| W(["Wheat"])
-  W -->|Grain Mill<br/>25 s| F(["Flour"])
+  W(["Wheat<br/>found"]) -->|Grain Mill<br/>25 s| F(["Flour"])
   F -->|"knead + water<br/>8 s"| SD(["Simple Dough"])
   SD -->|"knead + yeast<br/>8 s"| YD(["Yeast Dough"])
   YD -->|"bake"| B["Bread"]
@@ -70,7 +70,7 @@ Sausage Pasta, Hunter Pasta, Creamy Mushroom Pasta, Chernarus Mac and Cheese).
 `BREAD` is required by 3 (Tactical Bacon Breakfast, Sausage and Bread Plate,
 Honey Bread Platter). `DOUGH` is required by 2 (Cheese Flatbread, Meat Dumplings).
 
-**Gaps.** `ChefZ_Yeast` is loot-only, and so are `ChefZ_WheatSeeds`. Without either
+**Gaps.** `ChefZ_Yeast` is loot-only, and so is `ChefZ_Wheat`. Without either
 one, the chain stops at Simple Dough — which is still enough for Flatbread, Pasta
 Dough and both dough dishes. The knead step also needs a **water container**:
 `TR_FlourWaterToSimpleDough` matches `isLiquidContainer` with `liquidType: "Water"`
@@ -181,12 +181,12 @@ sausage transforms require one to three `SPICE` items (Venison and Boar swap the
 
 Four ChefZ crops (onion, garlic, carrot, cabbage) plus one spice crop (paprika),
 alongside vanilla potato, tomato and green bell pepper. The chain is a closed loop:
-a vegetable yields seeds, and seeds yield vegetables.
+the four ChefZ vegetables are found in the world, like mushrooms (no seeds since
+2026-08-29).
 
 ```mermaid
 graph LR
-  SE(["Onion / Garlic / Carrot /<br/>Cabbage Seeds"]) -->|"garden plot"| V(["Onion, Garlic,<br/>Carrot, Cabbage"])
-  V -->|"knife, 6 s"| SE
+  V(["Onion, Garlic,<br/>Carrot, Cabbage<br/>found"])
   V -->|"knife, 5 s"| CH(["Chopped Onion, Garlic,<br/>Carrot, Cabbage"])
   PT(["Potato / Tomato /<br/>Green Bell Pepper<br/>vanilla"]) -->|"knife, 5 s"| CP(["Sliced Potato,<br/>Chopped Tomato / Paprika"])
   PK(["Paprika"]) -->|"knife, 5 s"| CP

@@ -167,7 +167,6 @@ compatibility mods are optional consumers; ChefZ runs unchanged without any of t
 | `ChefZ_Mortar` | `GRIND_SPICES`, `GRIND_HERBS` | Peppercorns → Black pepper · Dried paprika → Powder · Dried herbs → Herb mix |
 | `ChefZ_DryingRack` | `DRY_*` | Herbs, pepper, paprika, pasta, meat, fish, sausage |
 | `ChefZ_Smoker` | `SMOKE_*` | Meat, fish, sausage |
-| `ChefZ_CuttingBoard` | `CUT` | Vegetables, meat, herbs |
 
 ### Preservation Matrix
 

@@ -113,31 +113,25 @@ The merge itself is described on [Delta Protocol](Delta-Protocol).
 
 ## `ChefZ_Farming`
 
-Grain, vegetables and the herb plants — the start of most production chains.
+Grain, vegetables and herbs — the start of most production chains. Since
+2026-08-29 all of them are **found**, like vanilla mushrooms: there are no plant
+classes, no seeds and no growth stages. Where they spawn is the server's `types.xml`.
 
-- **43 item classes**: wheat, the four ChefZ vegetables (`ChefZ_Onion`,
-  `ChefZ_Garlic`, `ChefZ_Carrot`, `ChefZ_Cabbage`), seven herb plants and their
-  seeds, seven fresh herbs and spices.
-- **4 script files**: `ChefZ_FarmingItems.c`, `ChefZ_HerbItems.c`,
-  `ChefZ_HerbPlants.c`, `ChefZ_ProduceFarming.c`.
+- **item classes**: wheat, the four ChefZ vegetables (`ChefZ_Onion`,
+  `ChefZ_Garlic`, `ChefZ_Carrot`, `ChefZ_Cabbage`), six fresh herbs and spices,
+  plus the apiary.
+- **Script files**: `ChefZ_FarmingItems.c`, `ChefZ_HerbItems.c`,
+  `ChefZ_ProduceFarming.c`, `ChefZ_Apiary.c`.
 - **Rank 1**: 5 ingredient bindings (`ChefZ_ProduceIngredient` and the four
-  vegetables), 1 process (`PROCESS_CUT_OUT_SEEDS`, `HANDCRAFT`).
-- **Rank 2**: 8 ingredient records, 4 transforms across
-  `Config/GrainIngredients.json`, `Config/Ingredients/Herbs.json`,
-  `Config/Processing/ProduceSeeds.json`.
+  vegetables).
+- **Rank 2**: ingredient records in `Config/GrainIngredients.json` and
+  `Config/Ingredients/Herbs.json`.
 - **`CfgChefZ` slices**: `ChefZ_GrainFarming` (210, 0 slots),
   `ChefZ_HerbFarming` (215, 0 slots).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Cultivation`, `DZ_Gear_Food`, `ChefZ_Core`.
 
-Note one crossing: `Config/Processing/ProduceSeeds.json` lives in this addon but
-is declared in `ChefZ_Ingredients`' `ChefZ_Produce` slice, because that slice
-owns the twelve seed-extraction handcraft slots. `dataFiles[]` paths are
-absolute within the mod, so this works — but it means a file's owner and its
-declaring slice are not always the same addon.
-
-`ChefZ_HerbPlantBase` and `ChefZ_FreshHerbBase` are the only two ChefZ classes
-extended by `modded class` from a comp mod
-(see [Terje Compatibility](Terje-Compatibility)).
+`ChefZ_FreshHerbBase` is the only ChefZ class extended by `modded class` from a
+comp mod (see [Terje Compatibility](Terje-Compatibility)).
 
 ---
 
@@ -146,9 +140,10 @@ extended by `modded class` from a comp mod
 Stations and tools. Every processing station in ChefZ lives here, regardless of
 which chain it belongs to.
 
-- **12 item classes**, including all 9 stations: `ChefZ_GrainMill`,
+- **11 item classes**, including all 8 stations: `ChefZ_GrainMill`,
   `ChefZ_Mortar`, `ChefZ_DryingRack`, `ChefZ_ButterChurn`, `ChefZ_CheesePress`,
-  `ChefZ_Smoker`, `ChefZ_SaltPan`, `ChefZ_CuttingBoard`, `ChefZ_MeatGrinder`.
+  `ChefZ_Smoker`, `ChefZ_SaltPan`, `ChefZ_MeatGrinder`. The cutting board is
+  gone — cutting is "ingredient + knife".
 - **6 script files**, each of which is a list of empty derivations from
   `ChefZ_ProcessingStation_Base` — the station behaviour is entirely in the core
   and in data.
@@ -340,9 +335,8 @@ See [COT Compatibility](COT-Compatibility).
 Hangs cooking perks into TerjeSkills' existing `surv` skill and feeds ChefZ's
 capability and progress registries.
 
-- 9 script files. Two of them use `modded class` on ChefZ's own
-  `ChefZ_FreshHerbBase` and `ChefZ_HerbPlantBase` — the only ChefZ classes any
-  comp mod extends.
+- 8 script files. One of them uses `modded class` on ChefZ's own
+  `ChefZ_FreshHerbBase` — the only ChefZ class any comp mod extends.
 - Depends on `DZ_Data`, `ChefZ_Core`, `ChefZ_Farming`, `TerjeCore`, `TerjeSkills`.
 - The whole XP matrix is config, not script, so an operator can override it via
   `$profile:TerjeSettings\Core\GameOverrides.xml`.

@@ -185,14 +185,15 @@ static check, and each would have looked like something else in game:
 Both of these were found while writing this wiki, not by a gate review, and neither
 is reported by any checker. Both would look in game like "the station is broken".
 
-### Three stations have no cargo
+### Two stations have no cargo
 
-`ChefZ_GrainMill`, `ChefZ_CuttingBoard` and `ChefZ_MeatGrinder` declare no
-`class Cargo` block in `ChefZ_Processing/config.cpp`. The processing station base
-reads its ingredients through the fact collector, which returns immediately when the
-inventory has no cargo — so these three cannot receive input at all.
+`ChefZ_GrainMill` and `ChefZ_MeatGrinder` declare no `class Cargo` block in
+`ChefZ_Processing/config.cpp`. The processing station base reads its ingredients
+through the fact collector, which returns immediately when the inventory has no
+cargo — so these two cannot receive input at all. (The cutting board, which had the
+same problem, was removed on 2026-08-29.)
 
-The five other stations all have one.
+The six other stations all have one.
 
 What this costs: the grain chain stops at its first step, so no flour and therefore
 no dough, bread, pasta or dumplings. The sausage chain stops at the cutting board,

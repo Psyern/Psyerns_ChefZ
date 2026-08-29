@@ -276,7 +276,7 @@ class ChefZ_TerjeSkillsConfig
      *
      * ConfigIsExisting() ZUERST, weil ConfigGetInt() fuer einen fehlenden
      * Pfad 0 liefert und 0 hier ein gueltiger, absichtlicher Wert ist
-     * (PROCESS_CUT_OUT_SEEDS = 0 schliesst eine XP-Schleife). Ohne die
+     * (eine Null schliesst eine XP-Schleife). Ohne die
      * Existenzpruefung waere "gibt es nicht" von "soll null geben" nicht zu
      * unterscheiden.
      *
