@@ -228,7 +228,7 @@ Two independent reasons, either of which alone would be enough:
 
 `PROCESS_SMOKE` sets `requiresHeat`, but `ChefZ_Smoker.c` is an empty class that
 never overrides the heat check, which the base answers with `false`.
-`ChefZ_SaltPan` does override it, with a fireplace proximity test — the pattern
+`ChefZ_FryingPan` does override it, with a fireplace proximity test — the pattern
 exists, it was just not applied here.
 
 Independently, the station record sets `needsFuel` while the class has no fuel

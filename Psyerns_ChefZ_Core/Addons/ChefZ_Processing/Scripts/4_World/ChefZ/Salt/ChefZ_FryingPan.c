@@ -1,14 +1,14 @@
 //==============================================================================
-// ChefZ_SaltPan - die Siedepfanne der Salzkette.
+// ChefZ_FryingPan - die Siedepfanne der Salzkette.
 //
 // Slice "salt". Production Map §25 (Saltwater -> Raw Salt -> Salt),
 // Planungsschritte §16 (Salz als Wirtschaftssystem).
 //
 // Andockregel woertlich aus dem Kopf von ChefZ_ProcessingStation_Base.c:
 //
-//   config.cpp          class ChefZ_SaltPan : Inventory_Base { ... };
+//   config.cpp          class ChefZ_FryingPan : Inventory_Base { ... };
 //   Stationsdatensatz   id == Klassenname, processes[] = { ... }
-//   Skript              class ChefZ_SaltPan extends ChefZ_ProcessingStation_Base
+//   Skript              class ChefZ_FryingPan extends ChefZ_ProcessingStation_Base
 //
 // WELCHE PROZESSE die Pfanne anbietet, steht ausschliesslich im
 // Stationsdatensatz (Config/Processing/SaltStations.json) - nicht hier. WAS aus
@@ -44,7 +44,7 @@
 // Layer: 4_World.
 //==============================================================================
 
-class ChefZ_SaltPan extends ChefZ_ProcessingStation_Base
+class ChefZ_FryingPan extends ChefZ_ProcessingStation_Base
 {
     //! Umkreis, in dem eine brennende Feuerstelle als Waermequelle zaehlt.
     //! 2.5 m ist "unmittelbar daneben" - weit genug, dass der Spieler die

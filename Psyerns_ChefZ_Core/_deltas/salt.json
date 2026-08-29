@@ -11,8 +11,8 @@
     ],
 
     "processes": [
-        { "id": "PROCESS_BOIL_BRINE", "station": "ChefZ_SaltPan", "durationSec": 900 },
-        { "id": "PROCESS_DRY_SALT", "station": "ChefZ_SaltPan", "durationSec": 1200 }
+        { "id": "PROCESS_BOIL_BRINE", "station": "ChefZ_FryingPan", "durationSec": 900 },
+        { "id": "PROCESS_DRY_SALT", "station": "ChefZ_FryingPan", "durationSec": 1200 }
     ],
 
     "preservation": [
@@ -22,6 +22,6 @@
     "classes": [
         "ChefZ_RawSalt",
         "ChefZ_Salt",
-        "ChefZ_SaltPan"
+        "ChefZ_FryingPan"
     ]
 }

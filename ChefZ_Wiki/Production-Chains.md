@@ -93,11 +93,11 @@ graph LR
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_SaltwaterToRawSalt` | 1× container with SaltWater (0.6) | Raw Salt (×0.04 of input) | Salt Boiling Pan | — | 15 min + heat |
-| `TR_RawSaltToSalt` | 1× Raw Salt | Salt (×0.67 of input) | Salt Boiling Pan | — | 20 min |
+| `TR_SaltwaterToRawSalt` | 1× container with SaltWater (0.6) | Raw Salt (×0.04 of input) | Frying Pan | — | 15 min + heat |
+| `TR_RawSaltToSalt` | 1× Raw Salt | Salt (×0.67 of input) | Frying Pan | — | 20 min |
 
 The heat requirement is a proximity check, not a temperature threshold:
-`ChefZ_SaltPan.ChefZ_HasHeat()` looks for a burning `FireplaceBase` within range.
+`ChefZ_FryingPan.ChefZ_HasHeat()` looks for a burning `FireplaceBase` within range.
 If the fire goes out the job **pauses**; it never rolls back and never loses the
 brine. Drying does not need heat, so the fire may go out for the second half.
 

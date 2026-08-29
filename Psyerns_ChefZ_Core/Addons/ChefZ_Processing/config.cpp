@@ -48,7 +48,7 @@ class CfgPatches
             // ### SLICE dairy ###
             "ChefZ_ButterChurn", "ChefZ_CheesePress",
             // ### SLICE salt ###
-            "ChefZ_SaltPan",
+            "ChefZ_FryingPan",
             // ### SLICE meat ### (Production Map §57: Fleischwolf. Das
             // Schneidebrett gibt es nicht mehr - Schneiden ist "Zutat +
             // Messer kombinieren", Entscheidung vom 29.08.2026.)
@@ -350,7 +350,7 @@ class CfgVehicles
     //    nie in der Kette: ein Behaelter, den man fuellen, aber nicht leeren
     //    kann.
     //
-    // Dieselbe Datei lehnt bei ChefZ_SaltPan die Ableitung von Pot/Cauldron
+    // Dieselbe Datei lehnt bei ChefZ_FryingPan die Ableitung von Pot/Cauldron
     // schon laenger ausdruecklich ab. Beide Stationen folgen jetzt genau
     // diesem Vorbild - Inventory_Base, Modell ueber model=, Eingangsseite ueber
     // einen eigenen Cargo-Block.
@@ -449,7 +449,7 @@ class CfgVehicles
     //==========================================================================
     // ### SLICE salt ###   Production Map §25, Planungsschritte §16
     //
-    // ChefZ_SaltPan - die Siedepfanne. EINE Station traegt die ganze Kette:
+    // ChefZ_FryingPan - die Siedepfanne. EINE Station traegt die ganze Kette:
     // sieden (PROCESS_BOIL_BRINE) und trocknen (PROCESS_DRY_SALT).
     //
     // WARUM EINE EIGENE STATION UND NICHT DER KOCHTOPF (Production Map §25
@@ -469,16 +469,16 @@ class CfgVehicles
     // nicht selbst Kochgeschirr ist, ueber PARAM_BURN_DAMAGE_COEF - die
     // Feldflasche mit dem Meerwasser ginge im Feuer kaputt. Inventory_Base
     // haelt die Pfanne aus Vanillas Kochkette heraus; die Waerme holt sie sich
-    // ueber die Feuerstelle daneben (ChefZ_SaltPan.ChefZ_HasHeat).
+    // ueber die Feuerstelle daneben (ChefZ_FryingPan.ChefZ_HasHeat).
     //
     // MODELL: Vanilla-Proxy FryingPan. Ziel: eine breite, flache Siedepfanne
     // mit Salzkruste - eigene Geometrie, siehe Asset-Bedarf des Slice.
     //==========================================================================
-    class ChefZ_SaltPan : Inventory_Base
+    class ChefZ_FryingPan : Inventory_Base
     {
         scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SALTPAN";
-        descriptionShort = "#STR_CHEFZ_ITEM_SALTPAN_DESC";
+        displayName = "#STR_CHEFZ_ITEM_FRYINGPAN";
+        descriptionShort = "#STR_CHEFZ_ITEM_FRYINGPAN_DESC";
         model = "\dz\gear\cooking\FryingPan.p3d";
         rotationFlags = 17;
         itemSize[] = {4, 3};
@@ -564,7 +564,7 @@ class CfgVehicles
     // PARAM_BURN_DAMAGE_COEF. Die Wurst im Schrank ginge darin kaputt, bevor
     // der ChefZ-Job auch nur laeuft. Die Waerme holt sich der Schrank statt
     // dessen aus einer brennenden Feuerstelle in Reichweite - dieselbe Loesung
-    // wie bei ChefZ_SaltPan und aus demselben Grund.
+    // wie bei ChefZ_FryingPan und aus demselben Grund.
     //
     // Der Cargo-Bereich IST die Eingangsseite: ChefZ_ProcessingStation_Base
     // liest seine Zutaten ueber ChefZ_FactCollector.CollectFromCargo aus genau
@@ -619,7 +619,7 @@ class CfgVehicles
     // waere der Zwischenstand "Honig steht in der Schleuder" - also eine
     // FLUESSIGKEIT im Gefaess, kein Item. Genau dieser Fall ist in der Recipe
     // Engine nicht ausdrueckbar; die Begruendung steht ausgeschrieben an
-    // ChefZ_SaltPan weiter oben ("Salzwasser IM Topf ist Fluessigkeit, kein
+    // ChefZ_FryingPan weiter oben ("Salzwasser IM Topf ist Fluessigkeit, kein
     // Item ... ChefZ_RecipeDef.Validate weist ein Rezept ohne slots
     // ausdruecklich ab"). Ein eigener Zwischenstand als ITEM waere eine
     // vierte Wabenklasse ohne eigene Aussage.
@@ -957,7 +957,7 @@ class CfgChefZProcesses
     // werden ... Energie-/Brennstoffverbrauch").
     //
     // KEIN minTemperature: die Waermebedingung haengt an einer BRENNENDEN
-    // Feuerstelle in Reichweite (ChefZ_SaltPan.ChefZ_HasHeat), nicht an der
+    // Feuerstelle in Reichweite (ChefZ_FryingPan.ChefZ_HasHeat), nicht an der
     // Eigentemperatur der Pfanne. Ein Temperaturschwellwert waere hier eine
     // geratene Zahl - die Feuerabfrage ist eine gepruefte Tatsache.
     class PROCESS_BOIL_BRINE

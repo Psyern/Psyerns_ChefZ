@@ -192,7 +192,7 @@ naming the processes it accepts.
 | `ChefZ_Mortar` | `PROCESS_GRIND_SPICE`, `PROCESS_GRIND_HERB` | Peppercorns → Black pepper · Dried paprika → Powder · Dried herbs → Herb mix |
 | `ChefZ_DryingRack` | `PROCESS_DRY` | Herbs, berries, pepper, paprika, pasta, meat, fish, sausage — 4 parallel slots |
 | `ChefZ_Smoker` | `PROCESS_SMOKE` | Meat, fish, sausage — 2 slots, needs fuel |
-| `ChefZ_SaltPan` | `PROCESS_BOIL_BRINE`, `PROCESS_DRY_SALT` | Saltwater → Raw salt → Salt |
+| `ChefZ_FryingPan` | `PROCESS_BOIL_BRINE`, `PROCESS_DRY_SALT` | Saltwater → Raw salt → Salt |
 | `ChefZ_ButterChurn` | `PROCESS_SEPARATE_CREAM`, `PROCESS_CHURN_BUTTER` | Milk → Cream → Butter |
 | `ChefZ_CheesePress` | `PROCESS_PRESS_CHEESE` | Milk → Cheese |
 | `ChefZ_Beehive` | `PROCESS_HARVEST_HIVE` | Frames fill one after another |

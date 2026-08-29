@@ -34,7 +34,7 @@ nothing can be cooked inside one.**
 | Mortar and Pestle | `ChefZ_Mortar` | `MORTAR` | 2 | 1 | 4×3 | no | 1800 g | `CookingPot.p3d` |
 | Drying Rack | `ChefZ_DryingRack` | `RACK` | 1 | 4 | 4×3 | no | 4200 g | `rack_dz.p3d` |
 | Smoker | `ChefZ_Smoker` | `SMOKER` | 1 | 2 | 4×3 | **yes** | 11000 g | `wooden_case.p3d` |
-| Salt Boiling Pan | `ChefZ_SaltPan` | `SALTWORKS` | 2 | 1 | 3×2 | no | 2400 g | `FryingPan.p3d` |
+| Frying Pan | `ChefZ_FryingPan` | `SALTWORKS` | 2 | 1 | 3×2 | no | 2400 g | `FryingPan.p3d` |
 | Butter Churn | `ChefZ_ButterChurn` | `CHURN` | 2 | 1 | 4×4 | no | 4200 g | `wooden_case.p3d` |
 | Cheese Press | `ChefZ_CheesePress` | `PRESS` | 1 | 1 | 6×4 | no | 6800 g | `wooden_case.p3d` |
 | Meat Grinder | `ChefZ_MeatGrinder` | `GRINDER` | 2 | 1 | **none** | no | 3200 g | `Cauldron.p3d` |
@@ -184,7 +184,7 @@ Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` se
 >    `ChefZ_ProcessingStation_Base.ChefZ_HasHeat()` returns `false` in the base
 >    class, and the smoker is declared as
 >    `class ChefZ_Smoker extends ChefZ_ProcessingStation_Base {}` — it never
->    overrides it. `ChefZ_SaltPan` does override it, with a proximity check for a
+>    overrides it. `ChefZ_FryingPan` does override it, with a proximity check for a
 >    burning `FireplaceBase`; the smoker has no equivalent.
 > 2. The station record sets `"needsFuel": true`, and `ChefZ_IsPowered()` returns
 >    `!m_ChefZ_NeedsFuel`. `ChefZ_CompiledProcess.MeetsEnvironment` rejects on
@@ -197,9 +197,9 @@ Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` se
 
 ---
 
-## Salt Boiling Pan
+## Frying Pan
 
-`ChefZ_SaltPan` · category `SALTWORKS` · 1 parallel slot · cargo 3×2
+`ChefZ_FryingPan` · category `SALTWORKS` · 1 parallel slot · cargo 3×2
 
 The entire salt chain. Boil sea water down to raw salt, then dry raw salt into salt. Boiling needs a burning fireplace within range; drying does not. Neither transform names a station, so any station offering the process would do — the Salt Pan is currently the only one.
 

@@ -1054,7 +1054,7 @@ class CfgChefZ
     // Reihenfolge ist Vorsorge und kostet nichts.
     //
     // handcraftRecipeSlots = 0: die Salzkette laeuft vollstaendig an der
-    // Station ChefZ_SaltPan. Vanillas Rezeptliste bleibt um kein Bit
+    // Station ChefZ_FryingPan. Vanillas Rezeptliste bleibt um kein Bit
     // veraendert.
     class ChefZ_SaltIngredients
     {

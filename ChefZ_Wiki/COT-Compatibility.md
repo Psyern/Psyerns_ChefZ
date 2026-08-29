@@ -220,7 +220,7 @@ appliances and are under Stations and Tools.
 ```
 ChefZ_GrainMill        ChefZ_PastaMachine     ChefZ_Mortar
 ChefZ_DryingRack       ChefZ_ButterChurn      ChefZ_CheesePress
-ChefZ_SaltPan          ChefZ_MeatGrinder      ChefZ_Smoker
+ChefZ_FryingPan          ChefZ_MeatGrinder      ChefZ_Smoker
 ```
 
 The only category with nothing edible in it, and in daily operation the most used

@@ -153,7 +153,7 @@ the thing that is kept, not a station somebody builds a workflow around.
 
 - **item classes** including 9 stations: `ChefZ_GrainMill`,
   `ChefZ_Mortar`, `ChefZ_DryingRack`, `ChefZ_ButterChurn`, `ChefZ_CheesePress`,
-  `ChefZ_Smoker`, `ChefZ_SaltPan`, `ChefZ_MeatGrinder`, `ChefZ_HoneyExtractor`.
+  `ChefZ_Smoker`, `ChefZ_FryingPan`, `ChefZ_MeatGrinder`, `ChefZ_HoneyExtractor`.
   The cutting board is gone — cutting is "ingredient + knife".
 - **7 script files**, mostly empty derivations from
   `ChefZ_ProcessingStation_Base` — the station behaviour is in the core and in

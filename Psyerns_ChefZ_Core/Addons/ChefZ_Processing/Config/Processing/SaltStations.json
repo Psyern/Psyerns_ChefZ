@@ -3,7 +3,7 @@
     "schemaVersion": 1,
     "records": [
         {
-            "id": "ChefZ_SaltPan",
+            "id": "ChefZ_FryingPan",
             "stationCategories": ["SALTWORKS"],
             "processes": ["PROCESS_BOIL_BRINE", "PROCESS_DRY_SALT"],
             "parallelSlots": 1,

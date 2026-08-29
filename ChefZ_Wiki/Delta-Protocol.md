@@ -74,8 +74,8 @@ A real one — `Psyerns_ChefZ_Core/_deltas/salt.json`, complete and unedited:
     ],
 
     "processes": [
-        { "id": "PROCESS_BOIL_BRINE", "station": "ChefZ_SaltPan", "durationSec": 900 },
-        { "id": "PROCESS_DRY_SALT", "station": "ChefZ_SaltPan", "durationSec": 1200 }
+        { "id": "PROCESS_BOIL_BRINE", "station": "ChefZ_FryingPan", "durationSec": 900 },
+        { "id": "PROCESS_DRY_SALT", "station": "ChefZ_FryingPan", "durationSec": 1200 }
     ],
 
     "preservation": [
@@ -85,7 +85,7 @@ A real one — `Psyerns_ChefZ_Core/_deltas/salt.json`, complete and unedited:
     "classes": [
         "ChefZ_RawSalt",
         "ChefZ_Salt",
-        "ChefZ_SaltPan"
+        "ChefZ_FryingPan"
     ]
 }
 ```
@@ -106,7 +106,7 @@ A real one — `Psyerns_ChefZ_Core/_deltas/salt.json`, complete and unedited:
 `classes` is the reason a delta can be filed before the `config.cpp` exists.
 `deltas.mjs` warns for each announced class that is not yet defined anywhere,
 and a process may name a station that is only announced — so the salt chain can
-reference `ChefZ_SaltPan` before anyone has modelled it.
+reference `ChefZ_FryingPan` before anyone has modelled it.
 
 ---
 
