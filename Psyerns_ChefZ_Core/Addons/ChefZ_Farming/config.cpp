@@ -1455,3 +1455,44 @@ class CfgChefZTools
         allowSubclasses = 1;
     };
 };
+
+//------------------------------------------------------------------------------
+// Die Geraeusche der Imkerei (29.08.2026).
+//
+// Bees_Attack: das Volk geht auf den Imker los - gespielt vom SERVER ueber
+// Vanillas ItemSoundHandler (ItemBase.StartItemSoundServer, scripts - 1.29/
+// 4_World/DayZ/Entities/ItemBase.c:4468), damit jeder in Hoerweite es hoert
+// und nicht nur der Gestochene. Die Bindung ID -> SoundSet steht im Skript
+// (ChefZ_Beehive.InitItemSounds in ChefZ_Apiary.c).
+//
+// Form und Basisklassen woertlich nach einem Vorbild, das laeuft:
+// DayZExpansion/AI/Sounds/config.cpp:14 (Shader) und :270 (Set). Der
+// Samplepfad ist der PBO-Prefix plus Dateiname OHNE Endung; die Datei liegt
+// als .ogg in ChefZ_Farming/Sounds und wird ueber include.txt (*.ogg)
+// gepackt - ohne diesen Eintrag laesst der Packer sie still liegen.
+//
+// Beehive_Ambient liegt daneben, ist aber noch nicht eingebunden: ein
+// Dauerton am Stock braucht eine Schleife mit Start/Stop und einen Grund,
+// wann sie schweigt. Das ist eine eigene Entscheidung.
+//------------------------------------------------------------------------------
+class CfgSoundShaders
+{
+    class baseCharacter_SoundShader;
+    class ChefZ_Bees_Attack_SoundShader : baseCharacter_SoundShader
+    {
+        samples[] = { { "\ChefZ_Farming\Sounds\Bees_Attack", 1 } };
+        volume = 1.0;
+        range = 40;
+    };
+};
+
+class CfgSoundSets
+{
+    class baseCharacter_SoundSet;
+    class ChefZ_Bees_Attack_SoundSet : baseCharacter_SoundSet
+    {
+        soundShaders[] = { "ChefZ_Bees_Attack_SoundShader" };
+        spatial = 1;
+        volumeFactor = 1.0;
+    };
+};

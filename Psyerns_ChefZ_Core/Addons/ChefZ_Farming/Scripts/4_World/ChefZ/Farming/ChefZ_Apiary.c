@@ -144,6 +144,12 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     //! Gummianzug verhindert. Die Regionen oben kommen OBENDRAUF - ohne Hut
     //! also 35 Schock, ohne Handschuhe zwei blutende Arme.
     static const float CHEFZ_STING_SHOCK_BASE = 20.0;
+    //! Kennung des Angriffsgeraeuschs im ItemSoundHandler. Vanillas eigene
+    //! IDs stehen in SoundConstants (3_Game/DayZ/constants.c:415-434) und
+    //! enden bei 29; 10000 liegt weit ausserhalb - dieselbe Vorsorge wie bei
+    //! RPC-Nummern. Das SoundSet steht in der config.cpp (CfgSoundSets).
+    static const int    CHEFZ_SOUND_BEES_ATTACK    = 10000;
+    static const string CHEFZ_SOUNDSET_BEES_ATTACK = "ChefZ_Bees_Attack_SoundSet";
 
     //! Die Werkzeuggruppe, die den Schutz traegt. Ueber die GRUPPE und nicht
     //! ueber IsKindOf("ChefZ_BeeSmoker"): eine Gruppe ist ein offener
@@ -230,6 +236,18 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     {
         super.EEInit();
         ChefZ_StartFillTimer();
+    }
+
+    //! Bindet die Kennung an das SoundSet - laeuft auf beiden Seiten, gehoert
+    //! wird auf dem Client. Vorbild: Barrel_ColorBase.InitItemSounds
+    //! (scripts - 1.29/4_World/DayZ/Entities/ItemBase/Barrel_ColorBase.c:532).
+    override void InitItemSounds()
+    {
+        super.InitItemSounds();
+        ItemSoundHandler handler = GetItemSoundHandler();
+        if (!handler)
+            return;
+        handler.AddSound(CHEFZ_SOUND_BEES_ATTACK, CHEFZ_SOUNDSET_BEES_ATTACK);
     }
 
     override void AfterStoreLoad()
@@ -674,6 +692,12 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         actor.AddHealth("", "Shock", -baseShock);
         if (!nbcSuit)
             ChefZ_StingForearm(actor);
+
+        // Und man hoert es: der Stock spielt den Angriff fuer alle in
+        // Hoerweite. StartItemSoundServer setzt eine Synchronvariable, der
+        // Client spielt das in InitItemSounds gebundene SoundSet
+        // (ItemSoundHandler.c:12-17, das Vorbild ist Barrel_ColorBase.c:532).
+        StartItemSoundServer(CHEFZ_SOUND_BEES_ATTACK);
 
         // Schritt 2 und 3, je Region getrennt - OBENDRAUF.
         bool stungHands = true;
