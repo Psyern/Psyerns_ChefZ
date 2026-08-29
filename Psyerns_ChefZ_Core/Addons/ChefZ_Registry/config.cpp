@@ -47,7 +47,7 @@ class CfgPatches
         //                    ChefZ_Garlic und die Frischkraeuter.
         // ChefZ_Ingredients: ChefZ_Salt und ChefZ_RawSalt.
         // ChefZ_Processing:  ChefZ_Flour, die Teige, die Pasta.
-        // ChefZ_Meat:        ChefZ_DicedMeat, die Minced*- und Sausage-Klassen.
+        // ChefZ_Meat:        die Minced*- und Sausage-Klassen.
         // ChefZ_Baking:      ChefZ_Bread, ChefZ_Flatbread.
         //
         // Zugekommen mit dem Merge der ERSTEN WELLE (Slices preservation,

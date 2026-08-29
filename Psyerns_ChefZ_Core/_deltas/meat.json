@@ -107,20 +107,9 @@
       "id": "PROCESS_STUFF_SAUSAGE",
       "station": "ChefZ_MeatGrinder",
       "durationSec": 15
-    },
-    {
-      "id": "PROCESS_CLEAN_CASING",
-      "tool": "CUTTING_TOOL",
-      "durationSec": 12
     }
   ],
   "nutrition": [
-    {
-      "class": "ChefZ_DicedMeat",
-      "energy": 140,
-      "water": 45,
-      "stomach": 120
-    },
     {
       "class": "ChefZ_MincedMeat",
       "energy": 150,
@@ -156,12 +145,6 @@
       "energy": 205,
       "water": 36,
       "stomach": 130
-    },
-    {
-      "class": "ChefZ_SausageCasing",
-      "energy": 20,
-      "water": 12,
-      "stomach": 15
     },
     {
       "class": "ChefZ_RawSausage",
@@ -271,14 +254,12 @@
     "ChefZ_BeefLeg",
     "ChefZ_PorkLeg",
     "ChefZ_VenisonLeg",
-    "ChefZ_DicedMeat",
     "ChefZ_MincedMeat",
     "ChefZ_MincedPork",
     "ChefZ_MincedVenison",
     "ChefZ_MincedBoar",
     "ChefZ_MincedChicken",
     "ChefZ_MincedBear",
-    "ChefZ_SausageCasing",
     "ChefZ_RawSausage",
     "ChefZ_RawPorkSausage",
     "ChefZ_RawVenisonSausage",

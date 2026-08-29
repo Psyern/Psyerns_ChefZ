@@ -361,7 +361,7 @@ class CfgVehicles
     // ---------------------------------------------------------------------
     // Nachgeprueft an Config/Processing/Dairy_Transforms.json: alle drei
     // Transforms (TR_MilkToCream, TR_CreamToButter, TR_MilkToCheese) matchen
-    // ueber "cls" auf ITEM-Klassen - ChefZ_Milk und ChefZ_Cream. Keiner nennt
+    // ueber "cls" auf ITEM-Klassen - PowderedMilk und ChefZ_Cream. Keiner nennt
     // isLiquidContainer oder liquidType. Sahne und Bruch sind in V1 Stueckware,
     // keine Fluessigkeit; die Station traegt sie in ihrem Cargo, genau wie der
     // Trockenrahmen seine Kraeuter.
@@ -390,7 +390,7 @@ class CfgVehicles
     //   seine Zutaten ueber ChefZ_FactCollector.CollectFromCargo aus genau
     //   diesem Bereich; ohne ihn faende ein Job nie eine Zutat. Die Groessen
     //   sind aus den Transforms gerechnet und in beiden Rasterlesarten
-    //   tragfaehig: ChefZ_Milk ist 2x3, ChefZ_Cream 2x2.
+    //   tragfaehig: der Milchkarton (PowderedMilk) ist 2x3, ChefZ_Cream 2x2.
     //     Butterfass  4x4 - TR_MilkToCream und TR_CreamToButter verlangen je
     //                 2 Einheiten.
     //     Presse      6x4 - TR_MilkToCheese verlangt 3 Milch gleichzeitig.
@@ -506,8 +506,8 @@ class CfgVehicles
     // Die EINE Station der Fleischkette (Production Map §57).
     //
     // KEIN SCHNEIDEBRETT MEHR (Entscheidung vom 29.08.2026): Schneiden ist
-    // "Zutat + Messer kombinieren" - PROCESS_CUT_MEAT und PROCESS_CLEAN_CASING
-    // sind HANDCRAFT mit CUTTING_TOOL und brauchen
+    // "Zutat + Messer kombinieren" - PROCESS_CUT_MEAT ist HANDCRAFT mit
+    // CUTTING_TOOL und braucht
     // keinen Ort. Die frueher als Ausstattungsstueck erhaltene Klasse
     // ChefZ_CuttingBoard ist entfernt; ein Server, der eines platziert hatte,
     // verliert dieses eine Objekt beim naechsten Start.
@@ -681,13 +681,12 @@ class CfgVehicles
 //------------------------------------------------------------------------------
 // Modulanmeldung am Config Manager (Entwurf 02 §4).
 //
-// handcraftRecipeSlots: dieses Modul reserviert ZWEI Plaetze, einen je Knoten,
-// und beide sind neu (02 §4.2):
+// handcraftRecipeSlots: dieses Modul reserviert EINEN Platz (02 §4.2):
 //
 //   ChefZ_GrainProcessing  1   TR_AssemblePastaMachine ueber PROCESS_ASSEMBLE
-//   ChefZ_MeatProcessing   1   TR_SausageCasing ueber PROCESS_CLEAN_CASING
 //
-// Die uebrigen vier Knoten bleiben bei 0 - ihre Ketten laufen an Stationen.
+// Die uebrigen Knoten bleiben bei 0 - ihre Ketten laufen an Stationen. Der
+// fruehere Platz fuer TR_SausageCasing ist mit der Huelle entfallen (29.08.2026).
 // Projektweite Summe damit 23 (vorher 21) bei 22 HANDCRAFT-Transforms; der
 // eine ueberzaehlige Platz gehoert ChefZ_Ingredients (12 reserviert, 11
 // belegt) und ist nicht Teil dieser Aenderung. Ein unbelegter Platz ist
@@ -785,30 +784,13 @@ class CfgChefZ
     // liegen in ChefZ_Meat und melden sich dort an - hier stuende sonst
     // Content eines anderen Moduls.
     //
-    // handcraftRecipeSlots = 1 (war 0). Der Fleischslice hat seit dieser
-    // Aenderung ZWEI HANDCRAFT-Transforms:
-    //
-    //   TR_DicedMeat     ueber PROCESS_CUT_MEAT       - Platz reserviert in
-    //                                                   ChefZ_Meat (dort 1)
-    //   TR_SausageCasing ueber PROCESS_CLEAN_CASING   - dieser Platz hier
-    //
-    // Warum der zweite Platz HIER steht und nicht in ChefZ_Meat: Vanillas
-    // Rezeptliste kennt keine Slices. ChefZ_HandcraftBridge.Reserve() liest
-    // ueber ChefZ_ManifestReader.ReadHandcraftSlotTotal() die SUMME aller
-    // handcraftRecipeSlots und reserviert so viele Plaetze - welcher Knoten
-    // sie beisteuert, ist der Bruecke gleichgueltig. Massgeblich ist, dass die
-    // Summe stimmt und auf Client und Server dieselbe ist; beides gilt hier.
-    //
-    // Und der Ort ist auch sachlich richtig: PROCESS_CLEAN_CASING wird in
-    // GENAU DIESER Datei deklariert (CfgChefZProcesses weiter unten), und
-    // seine Umstellung von STATION_ACTION auf HANDCRAFT ist es, die den Platz
-    // ueberhaupt noetig macht. Wer die Umstellung zurueckdreht, findet die
-    // Reservierung daneben.
+    // handcraftRecipeSlots = 0: Wuerfeln und Darm reinigen sind am 29.08.2026
+    // entfallen; die drei Keulen-Transforms reserviert ChefZ_Meat selbst.
     class ChefZ_MeatProcessing
     {
         chefzApiVersion = 1;
         loadOrder = 190;
-        handcraftRecipeSlots = 1;
+        handcraftRecipeSlots = 0;
         dataFiles[] =
         {
             "ChefZ_Processing/Config/Processing/Stations.json"
@@ -1000,12 +982,13 @@ class CfgChefZProcesses
     // WORAUS was wird. Das steht in den Transforms in ChefZ_Meat.
     //--------------------------------------------------------------------------
 
-    // §29: Raw Meat + Knife -> ChefZ_DicedMeat. HANDCRAFT, weil es OHNE Station
-    // gehen muss: es ist der frueheste Schritt der Kette, und wer noch kein
-    // Brett hat, soll trotzdem Fleisch wuerfeln koennen. Ein Eingang plus
-    // Werkzeuggruppe ist genau die Form, die Vanillas RecipeBase traegt
-    // (01 V12: MAX_NUMBER_OF_INGREDIENTS = 2, das Werkzeug belegt den zweiten
-    // Platz).
+    // Keule + Messer -> zwei Vanilla-Steaks (TR_CutBeefLeg / PorkLeg /
+    // VenisonLeg). HANDCRAFT, weil es OHNE Station gehen muss: es ist der
+    // frueheste Schritt der Kette. Ein Eingang plus Werkzeuggruppe ist genau
+    // die Form, die Vanillas RecipeBase traegt (01 V12:
+    // MAX_NUMBER_OF_INGREDIENTS = 2, das Werkzeug belegt den zweiten Platz).
+    // Das Wuerfeln (§29) gibt es seit dem 29.08.2026 nicht mehr - die
+    // Eintoepfe nehmen gewolftes Fleisch (MINCED_MEAT).
     class PROCESS_CUT_MEAT
     {
         exec = "HANDCRAFT";
@@ -1034,35 +1017,6 @@ class CfgChefZProcesses
         exec = "STATION_ACTION";
         displayName = "#STR_CHEFZ_PROC_STUFF_SAUSAGE";
         baseDurationSec = 15.0;
-    };
-
-    // §33: Intestines -> ChefZ_SausageCasing. HANDCRAFT, seit das Schneidebrett
-    // keine Station mehr ist.
-    //
-    // Er war STATION_ACTION am Schneidebrett, und das war ein stiller Ausfall:
-    // die Brettklasse deklarierte nie einen Cargo-Bereich, aus dem
-    // ChefZ_ProcessingStation_Base seine Zutaten liest. Die Wurstkette endete
-    // damit beim Darm, ohne dass irgendwo etwas gemeldet wurde.
-    //
-    // HANDCRAFT statt Cargo nachreichen, aus demselben Grund, der schon bei
-    // PROCESS_CUT_MEAT steht: es ist der frueheste Schritt der Wurstkette, und
-    // wer gerade ein Tier ausgenommen hat, soll den Darm reinigen koennen,
-    // ohne erst eine Station zu bauen. Die Form passt: EIN Eingang (Guts) plus
-    // Werkzeuggruppe ist genau das, was Vanillas RecipeBase traegt - das
-    // Messer belegt den zweiten der zwei Zutatenplaetze (01 V12).
-    //
-    // baseDurationSec bleibt bei 12 - der Vorgang ist derselbe, nur der Ort
-    // faellt weg. animationLength/specialty kommen dazu, weil ein
-    // Handwerksrezept beides braucht (dieselben Werte wie PROCESS_CUT_MEAT).
-    class PROCESS_CLEAN_CASING
-    {
-        exec = "HANDCRAFT";
-        displayName = "#STR_CHEFZ_PROC_CLEAN_CASING";
-        toolGroups[] = {"CUTTING_TOOL"};
-        baseDurationSec = 12.0;
-        animationLength = 1.0;
-        specialty = 0.02;
-        toolDamage = 1;
     };
 
     //--------------------------------------------------------------------------

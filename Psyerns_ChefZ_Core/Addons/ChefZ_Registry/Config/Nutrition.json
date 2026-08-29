@@ -31,13 +31,6 @@
             "fullness": 12
         },
         {
-            "id": "ChefZ_Milk",
-            "scope": "class",
-            "energy": 200,
-            "water": 400,
-            "fullness": 30
-        },
-        {
             "id": "ChefZ_BoneBrothSoupBowl",
             "scope": "class",
             "energy": 180,
@@ -297,13 +290,6 @@
             "fullness": 140
         },
         {
-            "id": "ChefZ_DicedMeat",
-            "scope": "class",
-            "energy": 140,
-            "water": 45,
-            "fullness": 120
-        },
-        {
             "id": "ChefZ_HunterSausage",
             "scope": "class",
             "energy": 525,
@@ -407,13 +393,6 @@
             "energy": 235,
             "water": 36,
             "fullness": 148
-        },
-        {
-            "id": "ChefZ_SausageCasing",
-            "scope": "class",
-            "energy": 20,
-            "water": 12,
-            "fullness": 15
         },
         {
             "id": "ChefZ_SpicySausage",

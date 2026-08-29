@@ -60,12 +60,11 @@ Two tool groups exist. Both are declared exactly once, in
 
 | Group | Members | Used by |
 |---|---|---|
-| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife (`allowSubclasses = 1`) | `PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL` |
+| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife (`allowSubclasses = 1`) | `PROCESS_CUT_MEAT`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL` |
 | `ROLLING_PIN` | `ChefZ_RollingPin` (`allowSubclasses = 1`) | `PROCESS_ROLL` |
 
-**Only one station process requires a tool at all** — `PROCESS_CLEAN_CASING` at the
-Cutting Board. Milling, grinding, churning, pressing, drying and smoking need
-nothing but the station.
+**No station process requires a tool.** Milling, grinding, churning, pressing,
+drying and smoking need nothing but the station.
 
 ---
 
@@ -257,7 +256,7 @@ Presses milk into cheese. At 5 minutes for 3 milk, the longest single dairy step
 ## Cutting Board — removed
 
 Removed on 2026-08-29. Cutting is "ingredient + knife" (
-`PROCESS_CUT_MEAT`, `PROCESS_CLEAN_CASING` are `HANDCRAFT` with `CUTTING_TOOL`), so
+`PROCESS_CUT_MEAT` is `HANDCRAFT` with `CUTTING_TOOL`), so
 there was nothing left for a station to do. A server that had one placed loses that
 object on its next start.
 
@@ -322,7 +321,6 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 | `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta | 500× | 10 s | — |
 | `TR_CarveWoodenPlate` | 1+× Firewood | Empty Plate | 1× | 20 s | — |
 | `TR_CarveWoodenBowl` | 1+× Firewood | Empty Bowl | 1× | 25 s | — |
-| `TR_DicedMeat` | 1+× *MEAT* + stage Raw | Diced Meat | 1× | 4 s | PREPARED |
 | `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat | 1× | 6 s | SALTED |
 | `TR_SaltFish` | 1× *FISH* + state RAW + 1× *SALT* (20) | Salted Fish | 1× | 6 s | SALTED |
 

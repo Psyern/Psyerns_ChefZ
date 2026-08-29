@@ -3210,8 +3210,8 @@ class CfgChefZProcesses
     //
     // ZWEI Werkzeuggruppen, und genau darin liegt die Entscheidung:
     // CUTTING_TOOL (acht Messer, deklariert in ChefZ_Processing) wurde NICHT
-    // um Aexte erweitert. Sie ist geteiltes Vokabular - PROCESS_CUT_MEAT
-    // und PROCESS_CLEAN_CASING lesen dieselbe Gruppe.
+    // um Aexte erweitert. Sie ist geteiltes Vokabular - PROCESS_CUT_MEAT und
+    // die Schnitzprozesse lesen dieselbe Gruppe.
     // Eine Feuerwehraxt, mit der man Kraeuter hackt, waere der Preis dafuer
     // gewesen. Stattdessen steht die Axtgruppe daneben; ChefZ_HandcraftBridge.
     // CollectToolClasses bildet die VEREINIGUNG ueber alle genannten Gruppen,

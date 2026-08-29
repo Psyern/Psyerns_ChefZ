@@ -113,7 +113,7 @@ portioned output.
         }
     ],
     "slots": [
-        { "slotId": "meat",      "match": { "anyOf": [ { "cls": "ChefZ_DicedMeat" }, { "cls": "ChefZ_MincedVenison" }, { "cls": "ChefZ_MincedBoar" } ] }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
+        { "slotId": "meat",      "match": { "category": "MINCED_MEAT" }, "minCount": 2, "maxCount": 3, "consume": "whole", "gradePoints": 0 },
         { "slotId": "roots",     "match": { "category": "ROOT_VEGETABLE" }, "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
         { "slotId": "mushrooms", "match": { "category": "MUSHROOM" },       "minCount": 2, "maxCount": 4, "consume": "whole", "gradePoints": 0 },
         { "slotId": "herb",      "match": { "tag": "CHEFZ_HERB" },          "minCount": 1, "maxCount": 2, "optional": true, "consume": "whole", "gradePoints": 2 },

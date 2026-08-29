@@ -167,9 +167,8 @@ Deliberately **not** split by processing stage. An admin looks for "thyme", not 
 Minced meat, fat, casing, raw and cooked sausage — plus the eight preserved goods.
 
 ```
-ChefZ_DicedMeat        ChefZ_MincedMeat       ChefZ_MincedPork
-ChefZ_MincedVenison    ChefZ_MincedBoar       ChefZ_MincedChicken
-ChefZ_MincedBear       ChefZ_AnimalFat        ChefZ_SausageCasing
+ChefZ_MincedMeat       ChefZ_MincedPork       ChefZ_MincedVenison
+ChefZ_MincedBoar       ChefZ_MincedChicken    ChefZ_MincedBear
 ChefZ_RawSausage       ChefZ_RawPorkSausage   ChefZ_RawVenisonSausage
 ChefZ_RawBoarSausage   ChefZ_RawHunterSausage ChefZ_RawSpicySausage
 ChefZ_CookedSausage    ChefZ_PorkSausage      ChefZ_VenisonSausage
@@ -200,12 +199,13 @@ ChefZ_Bread            ChefZ_Flatbread
 Yeast is here because it exists solely to raise dough. The chain's raw materials
 (wheat, flour) are under Ingredients.
 
-### 5. Dairy (4)
+### 5. Dairy (3)
 
 ```
-ChefZ_Milk             ChefZ_Cream            ChefZ_Butter
-ChefZ_Cheese
+ChefZ_Cream            ChefZ_Butter           ChefZ_Cheese
 ```
+
+Milk is vanilla `PowderedMilk` since 2026-08-29 and needs no ChefZ spawner entry.
 
 The smallest category, and the one that most clearly defeats COT's own type filter:
 these four inherit from four completely different vanilla classes (`PowderedMilk`,
@@ -290,7 +290,7 @@ For ChefZ that does not work:
 
 | Category | Problem |
 |---|---|
-| Dairy | `ChefZ_Milk` extends `PowderedMilk`, `ChefZ_Cream` extends `Marmalade`, `ChefZ_Butter` extends `Lard`, `ChefZ_Cheese` extends `BoxCerealCrunchin`. Four goods, four unrelated vanilla branches — no common base to collect them by. |
+| Dairy | `ChefZ_Cream` extends `Marmalade`, `ChefZ_Butter` extends `Lard`, `ChefZ_Cheese` extends `BoxCerealCrunchin`. Four goods, four unrelated vanilla branches — no common base to collect them by. |
 | Stations | `ChefZ_ButterChurn` extends `Pot`, `ChefZ_CheesePress` extends `Cauldron`, the rest `Inventory_Base`. Same picture. |
 | Herbs | spread across three bases (`ChefZ_FreshHerbBase`, `ChefZ_DriedHerbBase`, `ChefZ_SpiceBase`). |
 

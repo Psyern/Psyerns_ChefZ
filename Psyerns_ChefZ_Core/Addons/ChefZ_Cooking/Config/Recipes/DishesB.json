@@ -1382,14 +1382,14 @@
                 },
                 {
                     "slotId": "butter",
+                    "_note": "PFLICHT seit dem 29.08.2026: Milch ist Vanillas PowderedMilk, Reis ist Vanilla - ohne die Butter waere das Rezept vollstaendig mit Vanilla-Zutaten erfuellbar und kaperte Vanilla-Kochen (Invariante I2, chefzvanilla). Ein Stueck Butter gehoert ohnehin in den Milchreis.",
                     "match": {
                         "category": "BUTTER"
                     },
-                    "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole",
-                    "gradePoints": 1
+                    "gradePoints": 0
                 },
                 {
                     "slotId": "salt",
@@ -1426,7 +1426,7 @@
                     "ruleId": "GR_MR_RealMilk",
                     "when": "anyItem",
                     "selector": {
-                        "cls": "ChefZ_Milk"
+                        "cls": "PowderedMilk"
                     },
                     "points": 1
                 }

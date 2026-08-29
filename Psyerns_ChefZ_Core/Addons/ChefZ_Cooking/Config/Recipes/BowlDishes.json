@@ -89,7 +89,7 @@
     "records": [
         {
             "id": "RCP_ChefZ_HunterStew",
-            "_note": "§62 Hunter Stew: Wild Meat + Potato + Mushrooms + Water + Thyme. Der Thymian ist ein OPTIONALER Slot: ohne ihn ist es SIMPLE, mit ihm das vollstaendige Rezept (DME §41 'Prepared'). I2-ANKER: der Pflicht-Slot meat verlangt ZERKLEINERTES Fleisch (ChefZ_DicedMeat aus TR_DicedMeat - rohes Fleisch plus Messer, ohne Station - oder gewolftes Wild aus der Muehle). Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. ChefZ_DicedMeat kennt seine Herkunft nicht (TR_DicedMeat erzeugt EINE Klasse fuer jedes Fleisch); die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht mehr der Slot.",
+            "_note": "§62 Hunter Stew: Wild Meat + Potato + Mushrooms + Water + Thyme. Der Thymian ist ein OPTIONALER Slot: ohne ihn ist es SIMPLE, mit ihm das vollstaendige Rezept (DME §41 'Prepared'). I2-ANKER: der Pflicht-Slot meat verlangt GEWOLFTES Fleisch (Kategorie MINCED_MEAT aus dem Fleischwolf). Seit dem 29.08.2026 gibt es keinen Wuerfel mehr - ein rohes Vanilla-Steak im Topf bleibt Vanilla-Kochen, und genau das ist der Anker. Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. Gewolftes Fleisch jeder Sorte ist zulaessig; die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht der Slot.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -118,19 +118,7 @@
             "slots": [
                 {
                     "slotId": "meat",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_DicedMeat"
-                            },
-                            {
-                                "cls": "ChefZ_MincedVenison"
-                            },
-                            {
-                                "cls": "ChefZ_MincedBoar"
-                            }
-                        ]
-                    },
+                    "match": { "category": "MINCED_MEAT" },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",
@@ -275,7 +263,7 @@
         },
         {
             "id": "RCP_ChefZ_HunterStewBroth",
-            "_note": "§62 schreibt 'Water/Broth'. Das ist der Bruehe-Weg: die Knochenbruehe (§55, Premium-Basis) ersetzt das Wasser im Gefaess. Ohne Gefaessfluessigkeit gart Vanilla per BAKING - deshalb beide Methoden und beide Endstufen. I2-ANKER: der Pflicht-Slot meat verlangt ZERKLEINERTES Fleisch (ChefZ_DicedMeat aus TR_DicedMeat - rohes Fleisch plus Messer, ohne Station - oder gewolftes Wild aus der Muehle). Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. ChefZ_DicedMeat kennt seine Herkunft nicht (TR_DicedMeat erzeugt EINE Klasse fuer jedes Fleisch); die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht mehr der Slot.",
+            "_note": "§62 schreibt 'Water/Broth'. Das ist der Bruehe-Weg: die Knochenbruehe (§55, Premium-Basis) ersetzt das Wasser im Gefaess. Ohne Gefaessfluessigkeit gart Vanilla per BAKING - deshalb beide Methoden und beide Endstufen. I2-ANKER: der Pflicht-Slot meat verlangt GEWOLFTES Fleisch (Kategorie MINCED_MEAT aus dem Fleischwolf). Seit dem 29.08.2026 gibt es keinen Wuerfel mehr - ein rohes Vanilla-Steak im Topf bleibt Vanilla-Kochen, und genau das ist der Anker. Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. Gewolftes Fleisch jeder Sorte ist zulaessig; die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht der Slot.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.15,
@@ -309,19 +297,7 @@
                 },
                 {
                     "slotId": "meat",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_DicedMeat"
-                            },
-                            {
-                                "cls": "ChefZ_MincedVenison"
-                            },
-                            {
-                                "cls": "ChefZ_MincedBoar"
-                            }
-                        ]
-                    },
+                    "match": { "category": "MINCED_MEAT" },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",
@@ -465,7 +441,7 @@
         },
         {
             "id": "RCP_ChefZ_HunterStewGroup",
-            "_note": "DME-Plan §44 woertlich: 4x Meat, 4x Potato, 2x Tomato, Water, Herbs -> 8x Hunter Stew Portion. Kessel oder Topf; der Topf deckelt die Ausbeute ueber portionCapacity auf vier (Vanilla-Audit §4.2 A). Pilze sind hier optional, weil §44 sie nicht nennt - sie heben stattdessen die Stufe. I2-ANKER: der Pflicht-Slot meat verlangt ZERKLEINERTES Fleisch (ChefZ_DicedMeat aus TR_DicedMeat - rohes Fleisch plus Messer, ohne Station - oder gewolftes Wild aus der Muehle). Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. ChefZ_DicedMeat kennt seine Herkunft nicht (TR_DicedMeat erzeugt EINE Klasse fuer jedes Fleisch); die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht mehr der Slot.",
+            "_note": "DME-Plan §44 woertlich: 4x Meat, 4x Potato, 2x Tomato, Water, Herbs -> 8x Hunter Stew Portion. Kessel oder Topf; der Topf deckelt die Ausbeute ueber portionCapacity auf vier (Vanilla-Audit §4.2 A). Pilze sind hier optional, weil §44 sie nicht nennt - sie heben stattdessen die Stufe. I2-ANKER: der Pflicht-Slot meat verlangt GEWOLFTES Fleisch (Kategorie MINCED_MEAT aus dem Fleischwolf). Seit dem 29.08.2026 gibt es keinen Wuerfel mehr - ein rohes Vanilla-Steak im Topf bleibt Vanilla-Kochen, und genau das ist der Anker. Das ist der Unterschied zwischen einem Eintopf und einem Steak im Topf: fuer den Eintopf wird das Fleisch geschnitten. Vanillas Weg bleibt damit unberuehrt - wer ganze Steaks in den Topf legt, kocht weiter wie immer. Gewolftes Fleisch jeder Sorte ist zulaessig; die Wildbindung traegt der Hunter-Seasoning-Bonus, nicht der Slot.",
             "priority": 0,
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
@@ -494,19 +470,7 @@
             "slots": [
                 {
                     "slotId": "meat",
-                    "match": {
-                        "anyOf": [
-                            {
-                                "cls": "ChefZ_DicedMeat"
-                            },
-                            {
-                                "cls": "ChefZ_MincedVenison"
-                            },
-                            {
-                                "cls": "ChefZ_MincedBoar"
-                            }
-                        ]
-                    },
+                    "match": { "category": "MINCED_MEAT" },
                     "minCount": 4,
                     "maxCount": 6,
                     "consume": "whole",

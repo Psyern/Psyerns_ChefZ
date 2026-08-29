@@ -6,10 +6,13 @@
 // und keine Terje-Referenz, in keiner Form.
 //
 //   Keule    --Messer-->        2x Vanilla-Steak + Knochen  (Zerteilen)
-//   Fleisch  --Messer-->        ChefZ_DicedMeat            §29
 //   Fleisch  --Fleischwolf-->   ChefZ_Minced*              §30
-//   Guts     --Schneidebrett--> ChefZ_SausageCasing        §33
-//   Hack + Gewuerz + Huelle --> ChefZ_Raw*Sausage          §34-§39
+//   Hack + Gewuerz + Darm   --> ChefZ_Raw*Sausage          §34-§39
+//
+//   Seit dem 29.08.2026 ohne Zwischenstufen, die Vanilla schon hat: kein
+//   Wuerfel mehr (die Eintoepfe nehmen gewolftes Fleisch; das rohe Steak
+//   bleibt Vanilla-Kochen, Invariante I2), und Vanillas Guts / SmallGuts
+//   sind die Wursthuelle (kein ChefZ_SausageCasing).
 //   Raw*Sausage  --Pfanne/Topf--> ChefZ_*Sausage           §40 (Vanilla-Garstufe)
 //
 // Raeuchern und Trocknen (§41, §42) stehen NICHT hier: sie gehoeren dem Slice
@@ -100,14 +103,12 @@ class CfgPatches
             "ChefZ_BeefLeg",
             "ChefZ_PorkLeg",
             "ChefZ_VenisonLeg",
-            "ChefZ_DicedMeat",
             "ChefZ_MincedMeat",
             "ChefZ_MincedPork",
             "ChefZ_MincedVenison",
             "ChefZ_MincedBoar",
             "ChefZ_MincedChicken",
             "ChefZ_MincedBear",
-            "ChefZ_SausageCasing",
             "ChefZ_RawSausage",
             "ChefZ_RawPorkSausage",
             "ChefZ_RawVenisonSausage",
@@ -126,7 +127,7 @@ class CfgPatches
         // Jeder Eintrag steht fuer etwas, das dieses Modul TATSAECHLICH nutzt:
         //   ChefZ_Core       ChefZ_Edible_Base (Skriptbasis) und der Config Manager
         //   ChefZ_Processing PROCESS_CUT_MEAT, PROCESS_GRIND_MEAT,
-        //                    PROCESS_STUFF_SAUSAGE, PROCESS_CLEAN_CASING, die
+        //                    PROCESS_STUFF_SAUSAGE, die
         //                    Werkzeuggruppe CUTTING_TOOL und die beiden Stationen
         //   DZ_Gear_Food     die Proxy-Modelle und die Basisklasse Edible_Base
         //   DZ_Data          Grundlage von allem
@@ -319,7 +320,6 @@ class CfgVehicles
         };
     };
 
-
     // ------------------------------------------------------------------------
     // DIE KEULEN
     //
@@ -328,7 +328,7 @@ class CfgVehicles
     // KEINE Kategorie, sondern nur Tags. Der Grund steht dort und ist die
     // wichtigste Entscheidung an diesen drei Klassen - kurz: Kategorien sind in
     // ChefZ self-or-ancestor (ChefZ_CategoryClosure), und eine Keule in "MEAT"
-    // waere fuer TR_DicedMeat und TR_MeatToMinced EIN Fleischstueck. Eine ganze
+    // waere fuer TR_MeatToMinced EIN Fleischstueck. Eine ganze
     // Rinderkeule ergaebe dann ein einziges Hackfleisch.
     //
     // Adressiert wird die Keule deshalb ausschliesslich ueber ihren
@@ -350,7 +350,7 @@ class CfgVehicles
     // eines Abschlags fuer den Knochen, der zwar mitgewogen, aber nicht
     // mitgegessen wird:
     //
-    //   ChefZ_BeefLeg     <- 2 x ChefZ_DicedMeat    (Raw 140 -> 265 statt 280)
+    //   ChefZ_BeefLeg     <- 2 x Steak (Raw 140)   (Raw 140 -> 265 statt 280)
     //   ChefZ_PorkLeg     <- 2 x ChefZ_MincedPork   (Raw 185 -> 350 statt 370)
     //   ChefZ_VenisonLeg  <- 2 x ChefZ_MincedVenison(Raw 145 -> 275 statt 290)
     //
@@ -465,41 +465,6 @@ class CfgVehicles
                 class Boiled { nutrition_properties[] = {195, 535, 110, 58, 0, 0, 1}; };
                 class Burned { nutrition_properties[] = {105, 148, 18, 12, 0, 0, 1}; };
                 class Rotten { nutrition_properties[] = {165, 178, 52, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
-
-    // §29: Raw Meat + Knife. Wuerfel fuer Eintopf, Pasta, Suppe, Gulasch.
-    class ChefZ_DicedMeat : ChefZ_MeatItemBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DICEDMEAT0";
-        descriptionShort = "#STR_CHEFZ_ITEM_DICEDMEAT1";
-        model = "\dz\gear\food\steak.p3d";
-        itemSize[] = {2, 1};
-        weight = 260;
-
-        class Nutrition
-        {
-            fullnessIndex = 120;
-            energy = 140;
-            water = 45;
-            nutritionalIndex = 15;
-            toxicity = 0;
-            agents = 4;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { nutrition_properties[] = {120, 140, 45, 15, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {110, 300, 25, 25, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {115, 280, 60, 25, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {80, 80, 10, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {100, 90, 30, 5, 20, 16, 1}; };
             };
         };
     };
@@ -716,40 +681,6 @@ class CfgVehicles
     // Wolfens an (Config/Processing/Meat.json). Nicht wieder anlegen: soll sich
     // Wolfenfett vom Schlachtfett unterscheiden, gehoert das zuerst als
     // Kategorie oder Tag in die Registry, nicht als zweite Klasse.
-
-    // §33: gereinigter Darm. Essbar, aber sinnlos - er ist Huelle, keine Mahlzeit. Der Nutrition-Block steht trotzdem hier: ohne ihn saettigt ein Bissen lautlos nicht (01 V7).
-    class ChefZ_SausageCasing : ChefZ_MeatItemBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SAUSAGECASING0";
-        descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGECASING1";
-        model = "\dz\gear\food\guts.p3d";
-        itemSize[] = {1, 1};
-        weight = 60;
-
-        class Nutrition
-        {
-            fullnessIndex = 15;
-            energy = 20;
-            water = 12;
-            nutritionalIndex = 2;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { nutrition_properties[] = {15, 20, 12, 2, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {12, 30, 4, 2, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {14, 26, 20, 2, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {8, 10, 2, 1, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {12, 12, 8, 1, 30, 16, 1}; };
-            };
-        };
-    };
 
     // §34: die Basiswurst - Hack, Salz, Huelle.
     class ChefZ_RawSausage : ChefZ_MeatItemBase
@@ -1159,7 +1090,6 @@ class CfgVehicles
         };
     };
 
-
     // ========================================================================
     // ZERLEGEAUSBEUTE - je Tierart EIN zusaetzliches Kind in Vanillas
     // "Skinning"-Tabelle.
@@ -1314,12 +1244,10 @@ class CfgVehicles
 // ---------------------------------------------------------------------------
 // Anmeldung beim Core (02 §4).
 //
-// handcraftRecipeSlots = 5: dieses Modul bringt GENAU FUENF Transforms mit,
+// handcraftRecipeSlots = 3: dieses Modul bringt GENAU DREI Transforms mit,
 // deren Prozess exec = "HANDCRAFT" hat. Die Liste, damit die Zahl nachpruefbar
 // bleibt und nicht wieder driftet:
 //
-//   TR_DicedMeat        PROCESS_CUT_MEAT       Fleisch + Messer -> Wuerfel §29
-//   TR_SausageCasing    PROCESS_CLEAN_CASING   Guts    + Messer -> Huelle  §33
 //   TR_CutBeefLeg       PROCESS_CUT_MEAT       Keule   + Messer -> 2x CowSteakMeat  + Bone
 //   TR_CutPorkLeg       PROCESS_CUT_MEAT       Keule   + Messer -> 2x PigSteakMeat  + Lard
 //   TR_CutVenisonLeg    PROCESS_CUT_MEAT       Keule   + Messer -> 2x DeerSteakMeat + Bone
@@ -1329,12 +1257,10 @@ class CfgVehicles
 // ein Slice zu wenig Plaetze, weist ChefZ_HandcraftBridge.Reserve die
 // ueberzaehligen Transforms ab - sie erscheinen dann nie im Kontextmenue.
 //
-// SIE STAND VORHER AUF 1 UND WAR DAMIT SCHON VOR DEN KEULEN ZU KLEIN.
-// PROCESS_CLEAN_CASING wurde irgendwann von STATION_ACTION auf HANDCRAFT
-// umgestellt (siehe den Kommentar dort in ChefZ_Processing), ohne dass diese
-// Zahl mitgezogen wurde. Einer der beiden - TR_DicedMeat oder TR_SausageCasing -
-// wurde seitdem abgewiesen. Mit den drei Keulen sind es fuenf.
-// Alles andere laeuft an einer Station und braucht keinen Platz.
+// Frueher fuenf: Wuerfeln (TR_DicedMeat) und Darm reinigen (TR_SausageCasing)
+// sind am 29.08.2026 entfallen - die Eintoepfe nehmen gewolftes Fleisch, und
+// Vanillas Darm IST die Huelle. Alles andere laeuft an einer Station und
+// braucht keinen Platz.
 //
 // dataFiles[] beginnt mit dem PBO-Praefix, also dem ORDNERNAMEN des Addons.
 // ---------------------------------------------------------------------------
@@ -1344,7 +1270,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 200;
-        handcraftRecipeSlots = 5;
+        handcraftRecipeSlots = 3;
         dataFiles[] =
         {
             "ChefZ_Meat/Config/Ingredients/Meat.json",

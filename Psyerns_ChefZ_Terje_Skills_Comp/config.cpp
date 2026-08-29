@@ -393,7 +393,6 @@ class CfgChefZTerjeSkills
             {
                 // Zerkleinern und Zurichten - Handgriffe, kein Erzeugnis.
                 PROCESS_CUT_MEAT       = 1;
-                PROCESS_CLEAN_CASING   = 1;
                 PROCESS_CARVE_BOWL     = 1;
                 PROCESS_CARVE_PLATE    = 1;
 

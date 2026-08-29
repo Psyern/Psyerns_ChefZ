@@ -5,7 +5,7 @@
         { "id": "EGG", "parent": null, "displayName": "#STR_CHEFZ_CAT_EGG" }
     ],
     "tags": [
-        { "id": "CHEFZ_DAIRY", "appliesTo": ["ChefZ_Milk", "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese"] },
+        { "id": "CHEFZ_DAIRY", "appliesTo": ["PowderedMilk", "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese"] },
         { "id": "CHEFZ_EGG", "appliesTo": ["ChefZ_Egg"] }
     ],
     "processes": [
@@ -14,14 +14,12 @@
         { "id": "PROCESS_PRESS_CHEESE", "station": "ChefZ_CheesePress", "durationSec": 300 }
     ],
     "nutrition": [
-        { "class": "ChefZ_Milk", "energy": 200, "water": 400, "stomach": 30 },
         { "class": "ChefZ_Cream", "energy": 350, "water": 150, "stomach": 20 },
         { "class": "ChefZ_Butter", "energy": 600, "water": 20, "stomach": 15 },
         { "class": "ChefZ_Cheese", "energy": 450, "water": 60, "stomach": 35 },
         { "class": "ChefZ_Egg", "energy": 90, "water": 40, "stomach": 12 }
     ],
     "classes": [
-        "ChefZ_Milk",
         "ChefZ_Cream",
         "ChefZ_Butter",
         "ChefZ_Cheese",

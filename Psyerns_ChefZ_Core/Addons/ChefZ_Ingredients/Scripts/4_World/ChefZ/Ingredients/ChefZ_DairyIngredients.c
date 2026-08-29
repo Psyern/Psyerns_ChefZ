@@ -6,9 +6,10 @@
 // ---------------------------------------------------------------------------
 // Warum hier nur ZWEI der fuenf Klassen des Slice stehen
 // ---------------------------------------------------------------------------
-// ChefZ_Milk, ChefZ_Cream und ChefZ_Butter stehen bewusst NICHT hier.
+// ChefZ_Cream und ChefZ_Butter stehen bewusst NICHT hier; die Milch ist seit
+// dem 29.08.2026 Vanillas PowderedMilk und hat ohnehin kein ChefZ-Skript.
 //
-//   - Milch und Sahne haben keinen Food-Knoten. Sie liegen in keinem
+//   - Sahne hat keinen Food-Knoten. Sie liegt in keinem
 //     Pflicht-Slot eines Kochgeraets, HasFoodStage() ist false, und
 //     Cooking.ProcessItemToCook laesst sie unangetastet liegen (Cooking.c:47).
 //     Eine Skriptklasse wuerde daran nichts aendern.

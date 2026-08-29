@@ -76,11 +76,9 @@ class ChefZ_MeatItemBase extends ChefZ_Edible_Base
      * ActionForceFeed gehoert dazu, weil in Vanilla ueberall dort, wo selbst
      * gegessen wird, auch gefuettert werden kann.
      *
-     * Das gilt bewusst AUCH fuer ChefZ_SausageCasing: der Darm ist rohes
-     * Tiergewebe mit Raw/Baked/Boiled-Stufen. Vanillas naechster Verwandter
-     * (Guts.c) nimmt zwar ActionEatBig, ist dort aber ein Angelkoeder mit
-     * Sonderrolle. Innerhalb dieser Familie ist die Fleischvariante die
-     * ehrlichere Antwort.
+     * Vanillas Darm (Guts.c) nimmt zwar ActionEatBig, ist dort aber ein
+     * Angelkoeder mit Sonderrolle. Innerhalb dieser Familie ist die
+     * Fleischvariante die ehrlichere Antwort.
      */
     override void SetActions()
     {

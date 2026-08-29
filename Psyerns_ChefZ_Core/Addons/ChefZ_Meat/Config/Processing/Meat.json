@@ -2,29 +2,6 @@
     "kind": "transform",
     "schemaVersion": 1,
     "records": [
-        {
-            "id": "TR_DicedMeat",
-            "process": "PROCESS_CUT_MEAT",
-            "inputs": [
-                {
-                    "slotId": "meat",
-                    "match": { "allOf": [ { "category": "MEAT" }, { "vanillaStage": "Raw" } ] },
-                    "minCount": 1,
-                    "consume": "whole"
-                }
-            ],
-            "outputs": [
-                {
-                    "cls": "ChefZ_DicedMeat",
-                    "quantity": 1,
-                    "quantityMode": "fixed",
-                    "setState": "PREPARED",
-                    "inheritFreshness": true
-                }
-            ],
-            "qualityRule": "WEIGHTED_MEAN",
-            "priority": 0
-        },
 
         {
             "id": "TR_CutBeefLeg",
@@ -219,29 +196,6 @@
             "priority": 20
         },
 
-        {
-            "id": "TR_SausageCasing",
-            "process": "PROCESS_CLEAN_CASING",
-            "inputs": [
-                {
-                    "slotId": "guts",
-                    "match": { "cls": "Guts" },
-                    "minCount": 1,
-                    "consume": "whole"
-                }
-            ],
-            "outputs": [
-                {
-                    "cls": "ChefZ_SausageCasing",
-                    "quantity": 2,
-                    "quantityMode": "fixed",
-                    "setState": "PREPARED",
-                    "inheritFreshness": true,
-                    "freshnessCarry": 0.9
-                }
-            ],
-            "priority": 0
-        },
 
         {
             "id": "TR_RawSausage",
@@ -250,7 +204,7 @@
             "inputs": [
                 { "slotId": "meat",   "match": { "category": "MINCED_MEAT" }, "minCount": 1, "consume": "whole" },
                 { "slotId": "spice",  "match": { "category": "SPICE" },       "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+                { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
                 { "cls": "ChefZ_RawSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
@@ -266,7 +220,7 @@
                 { "slotId": "meat",   "match": { "cls": "ChefZ_MincedPork" }, "minCount": 1, "consume": "whole" },
                 { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+                { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
                 { "cls": "ChefZ_RawPorkSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
@@ -282,7 +236,7 @@
                 { "slotId": "meat",   "match": { "cls": "ChefZ_MincedVenison" }, "minCount": 1, "consume": "whole" },
                 { "slotId": "spice",  "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "herb",   "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+                { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
                 { "cls": "ChefZ_RawVenisonSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
@@ -298,7 +252,7 @@
                 { "slotId": "meat",   "match": { "cls": "ChefZ_MincedBoar" }, "minCount": 1, "consume": "whole" },
                 { "slotId": "spice",  "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "herb",   "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+                { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
                 { "cls": "ChefZ_RawBoarSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
@@ -314,7 +268,7 @@
                 { "slotId": "meat",   "match": { "allOf": [ { "category": "WILD_MEAT" }, { "vanillaStage": "Raw" } ] }, "minCount": 2, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
                 { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1, "gradePoints": 1 },
-                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+                { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
                 { "cls": "ChefZ_RawHunterSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
@@ -332,7 +286,7 @@
                 { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "spice3", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "casing", "match": { "cls": "ChefZ_SausageCasing" }, "minCount": 1, "consume": "whole" }
+                { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
                 { "cls": "ChefZ_RawSpicySausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }

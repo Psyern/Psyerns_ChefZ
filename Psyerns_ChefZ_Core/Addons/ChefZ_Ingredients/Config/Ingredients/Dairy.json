@@ -3,10 +3,10 @@
     "schemaVersion": 1,
     "records": [
         {
-            "id": "ChefZ_Milk",
+            "id": "PowderedMilk",
+            "_note": "Vanillas Milchpulver ist die Milch des Mods (29.08.2026). Fremde Klasse, deshalb hier im JSON (05 §2).",
             "categories": ["DAIRY"],
-            "tags": ["CHEFZ_DAIRY"],
-            "decays": true
+            "tags": ["CHEFZ_DAIRY"]
         },
         {
             "id": "ChefZ_Cream",

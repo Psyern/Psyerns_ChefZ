@@ -156,7 +156,7 @@ kochen nicht — `SWEETENER` taucht deshalb ausschließlich in optionalen Slots 
   `ChefZ_Preservation`, nicht hierher.
 - **`BoxCerealCrunchin`** (Audit §3 B). Sein einziger vorgeschlagener Zweck ist ein
   optionaler Slot in `RCP_ChefZ_MilkRice` — und dieses Rezept kann heute gar nicht
-  fertig werden (siehe die Notiz zu `PowderedMilk`: `Rice` und `ChefZ_Milk` sind
+  fertig werden (siehe die Notiz zu `PowderedMilk`: `Rice` und `PowderedMilk` sind
   beide nicht kochbar, `doneStages` ist `Boiled`). Einen Slot an ein totes Rezept
   zu hängen bringt nichts.
 - **`CatFoodCan`, `DogFoodCan`, `UnknownFoodCan`, `HumanSteakMeat`** — wie im Audit

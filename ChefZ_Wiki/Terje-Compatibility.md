@@ -141,7 +141,6 @@ Keyed on the **process ID**, resolved from the reported transform via
 | Process | XP | Note |
 |---|---:|---|
 | `PROCESS_CUT_MEAT` | 1 | |
-| `PROCESS_CLEAN_CASING` | 1 | |
 | `PROCESS_CARVE_BOWL` | 1 | |
 | `PROCESS_CARVE_PLATE` | 1 | |
 | `PROCESS_GRIND_MEAT` | 2 | |

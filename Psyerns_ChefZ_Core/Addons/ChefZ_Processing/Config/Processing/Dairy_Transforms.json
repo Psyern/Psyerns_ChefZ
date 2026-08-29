@@ -9,7 +9,7 @@
             "inputs": [
                 {
                     "slotId": "milk",
-                    "match": { "cls": "ChefZ_Milk" },
+                    "match": { "cls": "PowderedMilk" },
                     "minCount": 2,
                     "maxCount": 2,
                     "consume": "whole"
@@ -55,7 +55,7 @@
             "inputs": [
                 {
                     "slotId": "milk",
-                    "match": { "cls": "ChefZ_Milk" },
+                    "match": { "cls": "PowderedMilk" },
                     "minCount": 3,
                     "maxCount": 3,
                     "consume": "whole"

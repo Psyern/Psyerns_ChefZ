@@ -13,21 +13,10 @@ Erlaeuterung dorthin zu verschieben haette den Text von seinem Gegenstand getren
 
 ## Transforms in der Reihenfolge der Datei
 
-### `TR_DicedMeat`
+### `TR_DicedMeat` — entfallen (29.08.2026)
 
-§29: Raw Meat + Knife -> ChefZ_DicedMeat. Ein Eingang plus Werkzeuggruppe: genau
-die Form, die Vanillas RecipeBase traegt (01 V12). `vanillaStage` statt `state`,
-weil die Garstufe eines Vanilla-Steaks unabhaengig von jeder ChefZ-Registry
-entscheidbar ist.
-
-Dieser Abschnitt sagte bis zu den Keulen "der EINZIGE HANDCRAFT-Transform des
-Moduls — deshalb `handcraftRecipeSlots = 1`". Das stimmte schon damals nicht:
-`TR_SausageCasing` laeuft ueber `PROCESS_CLEAN_CASING`, und der wurde irgendwann
-von `STATION_ACTION` auf `HANDCRAFT` umgestellt, ohne dass die Platzzahl
-mitgezogen wurde. Einer der beiden wurde seitdem von
-`ChefZ_HandcraftBridge.Reserve` abgewiesen. Die Zahl steht jetzt auf **5** und
-die Liste dazu im CfgChefZ-Knoten der `config.cpp` — sie ist dort ausgeschrieben,
-damit sie nicht wieder driftet.
+Die Eintoepfe nehmen gewolftes Fleisch (`MINCED_MEAT`); ein rohes Vanilla-Steak im
+Topf bleibt Vanilla-Kochen (Invariante I2). Die Wuerfelstufe war ein Nachbau.
 
 ### `TR_CutBeefLeg`, `TR_CutPorkLeg`, `TR_CutVenisonLeg`
 
@@ -52,9 +41,7 @@ Daten.
 **Warum die Keule ueber `cls` und nicht ueber eine Kategorie gematcht wird:**
 siehe `../Ingredients/README.md`, Abschnitt "Keulen".
 
-`priority 20` wie bei den Sortenregeln: die Keule ist der spezielle Fall
-gegenueber `TR_DicedMeat` — der matcht sie ohnehin nicht, aber die Rangfolge
-bleibt damit lesbar.
+`priority 20` wie bei den Sortenregeln, damit die Rangfolge lesbar bleibt.
 
 ### `TR_MeatToMinced`
 
@@ -76,12 +63,10 @@ liefert `null`), der Eintrag waere wirkungslose Daten.
 Umgesetzt als eigene Klasse und nicht als Variable am Item: eine Variable haette
 die Naehrwerte nicht mitgenommen, denn die haengen an Klasse x Garstufe (13 §2).
 
-### `TR_SausageCasing`
+### `TR_SausageCasing` — entfallen (29.08.2026)
 
-§33: Intestines + Knife/Processing -> ChefZ_SausageCasing. Das Wasser aus §33
-fehlt bewusst: es haette einen dritten Eingang gekostet und damit eine
-Fluessigkeitsbindung, die V1 nicht braucht. Wer Hygiene will, bekommt sie in V2
-als eigenen Zustand — nicht als stiller Zusatzslot.
+Vanillas `Guts` und `SmallGuts` sind die Huelle (Kategorie `CASING`); die
+Wurst-Transforms nehmen sie direkt.
 
 ### `TR_RawSausage`
 

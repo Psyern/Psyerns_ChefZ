@@ -41,8 +41,6 @@ jede Kategorie eines Items auch alle Vorfahren, und ein Slot fuer `MEAT` trifft
 damit jedes Item, das `DOMESTIC_MEAT` oder `WILD_MEAT` traegt. Eine Keule mit
 Fleischkategorie waere fuer die vorhandenen Slots **ein Fleischstueck**:
 
-* `TR_DicedMeat` (`category: MEAT` + `vanillaStage: Raw`) machte aus einer ganzen
-  Rinderkeule **einen** Wuerfel.
 * `TR_MeatToMinced` (dieselbe Bedingung) machte daraus **ein** Hackfleisch.
 * `TR_RawHunterSausage` (`category: WILD_MEAT`, `minCount 2`) machte aus zwei
   Wildkeulen ohne jedes Wolfen direkt eine Jaegerwurst.
@@ -62,7 +60,7 @@ vorne an. Sie ist ein Eintrag in der zentralen `Categories.json`, den nur der
 solange er nicht gemergt ist, waere ein Delta-Eintrag dafuer ein harter
 Validatorfehler (`deltas.mjs`, "der Merge ist unvollstaendig") und kein Fortschritt.
 
-### 3. Eigene Zwischenprodukte (`ChefZ_DicedMeat` … `ChefZ_SausageCasing`)
+### 3. Eigene Zwischenprodukte (`ChefZ_MincedMeat` … `ChefZ_MincedBear`)
 
 §29/§30: die eigenen Zwischenprodukte.
 

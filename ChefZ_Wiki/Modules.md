@@ -190,8 +190,9 @@ between raw produce and a dish.
 
 Butchery products and the sausage chain.
 
-- **22 item classes**: `ChefZ_DicedMeat`, the `Minced*` classes,
-  `ChefZ_SausageCasing`, the raw sausages.
+- **20 item classes**: the three primal cuts, the `Minced*` classes, the raw
+  and cooked sausages. (Diced meat and the sausage casing are gone since
+  2026-08-29 — the steak goes in whole, vanilla `Guts`/`SmallGuts` are the casing.)
 - **1 script file** (`ChefZ_MeatItemBase.c`).
 - **Rank 1**: none.
 - **Rank 2**: **54 records** — 34 ingredient bindings, 14 transforms, 6 recipes.

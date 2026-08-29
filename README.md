@@ -431,7 +431,7 @@ deterministically, rejecting collisions rather than silently overwriting them.
   "preservation": [
     { "state": "SMOKED", "spoilageMultiplier": 0.25 }
   ],
-  "classes": ["ChefZ_MincedMeat", "ChefZ_SausageCasing", "ChefZ_RawSausage", "ChefZ_PorkSausage"]
+  "classes": ["ChefZ_MincedMeat", "ChefZ_RawSausage", "ChefZ_PorkSausage"]
 }
 ```
 
@@ -579,8 +579,8 @@ perks, concrete herbal medicine effects, recipe locks, server config structure.
 All ChefZ classes use the `ChefZ_PascalCase` prefix.
 
 ```text
-ChefZ_Wheat              ChefZ_Milk               ChefZ_MincedMeat
-ChefZ_Flour              ChefZ_Cream              ChefZ_SausageCasing
+ChefZ_Wheat                                       ChefZ_MincedMeat
+ChefZ_Flour              ChefZ_Cream              
                          ChefZ_Butter             ChefZ_RawSausage
 ChefZ_Dough                                       ChefZ_PorkSausage
                          ChefZ_RawSalt            ChefZ_VenisonSausage

@@ -31,7 +31,7 @@ class CfgPatches
     {
         units[] = {
             // ### SLICE dairy ###
-            "ChefZ_Milk", "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese", "ChefZ_Egg",
+            "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese", "ChefZ_Egg",
             // ### SLICE salt ###
             "ChefZ_RawSalt",
             "ChefZ_Salt",
@@ -124,7 +124,6 @@ class CfgVehicles
     // Zusatz, sondern ein Umbau: FoodStage-Werte schlagen class Nutrition
     // (Edible_Base.c:394-503), und Vanillas Honig-Naehrwerte stehen in
     // Spieldaten, die dieses Projekt nicht liest.
-    class PowderedMilk;
     class Lard;
     class BoxCerealCrunchin;
     class Marmalade;
@@ -313,31 +312,11 @@ class CfgVehicles
     // der Konservierungskette.
     //==========================================================================
 
-    // §47: Milch. Quelle ist ausschliesslich Loot.
-    // PROXY: PowderedMilk (Karton). Ziel: eigene Milchflasche.
-    class ChefZ_Milk : PowderedMilk
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_MILK";
-        descriptionShort = "#STR_CHEFZ_ITEM_MILK_DESC";
-        weight = 520;
-        itemSize[] = {2, 3};
-        varQuantityInit = 100;
-        varQuantityMin = 0;
-        varQuantityMax = 100;
-        varQuantityDestroyOnMin = 1;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 30;
-            energy = 200;
-            water = 400;
-            nutritionalIndex = 15;
-            toxicity = 0;
-            digestibility = 1;
-        };
-    };
+    // §47: Milch. KEINE eigene Klasse mehr (29.08.2026): Vanillas PowderedMilk
+    // IST die Milch des Mods. Beide waren reiner Loot, beide hingen an
+    // demselben Karton - eine zweite Klasse war ein Nachbau. Die
+    // Zutatenbindung steht in Config/Ingredients/Dairy.json (fremde Klasse ->
+    // JSON, 05 §2); Butterfass und Kaesepresse nehmen den Karton direkt.
 
     // §48: Sahne. Entsteht am Butterfass aus Milch.
     //

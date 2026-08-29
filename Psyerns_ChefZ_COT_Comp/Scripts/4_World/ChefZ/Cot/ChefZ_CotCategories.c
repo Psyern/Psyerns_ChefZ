@@ -35,7 +35,7 @@
 // COTs eigener Typfilter ist ein einzelner Basisklassenname und arbeitet mit
 // g_Game.IsKindOf (JMObjectSpawnerForm.c:954). Fuer ChefZ traegt das nicht:
 //
-//   Milchprodukte  ChefZ_Milk erbt PowderedMilk, ChefZ_Cream Marmalade,
+//   Milchprodukte  ChefZ_Cream erbt Marmalade,
 //                  ChefZ_Butter Lard, ChefZ_Cheese BoxCerealCrunchin - vier
 //                  Waren, vier voellig verschiedene Vanilla-Aeste. Es gibt
 //                  keine gemeinsame Basis, ueber die IsKindOf sie einsammeln
@@ -228,7 +228,6 @@ class ChefZ_CotCategories
 		// dahinter interessieren ihn nicht.
 		Add("chefz_cot_herbs", "#STR_CHEFZ_COT_CAT_HERBS",
 		{
-			
 			"ChefZ_Parsley",
 			"ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
 			"ChefZ_WildGarlic", "ChefZ_PepperBerries",
@@ -254,9 +253,9 @@ class ChefZ_CotCategories
 		// derselben Entscheidung.
 		Add("chefz_cot_meat", "#STR_CHEFZ_COT_CAT_MEAT",
 		{
-			"ChefZ_DicedMeat", "ChefZ_MincedMeat", "ChefZ_MincedPork",
+			"ChefZ_MincedMeat", "ChefZ_MincedPork",
 			"ChefZ_MincedVenison", "ChefZ_MincedBoar", "ChefZ_MincedChicken",
-			"ChefZ_MincedBear", "ChefZ_SausageCasing",
+			"ChefZ_MincedBear", 
 			"ChefZ_RawSausage", "ChefZ_RawPorkSausage", "ChefZ_RawVenisonSausage",
 			"ChefZ_RawBoarSausage", "ChefZ_RawHunterSausage", "ChefZ_RawSpicySausage",
 			"ChefZ_CookedSausage", "ChefZ_PorkSausage", "ChefZ_VenisonSausage",
@@ -290,7 +289,7 @@ class ChefZ_CotCategories
 		// und Werkzeuge", nicht hier.
 		Add("chefz_cot_dairy", "#STR_CHEFZ_COT_CAT_DAIRY",
 		{
-			"ChefZ_Milk", "ChefZ_Cream", "ChefZ_Butter",
+			"ChefZ_Cream", "ChefZ_Butter",
 			"ChefZ_Cheese"
 		});
 

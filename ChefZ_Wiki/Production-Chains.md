@@ -229,7 +229,6 @@ graph LR
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_DicedMeat` | 1+× *MEAT* + stage Raw | Diced Meat (1×) | *handcraft* | `CUTTING_TOOL` | 4 s |
 | `TR_MeatToMinced` | 1+× *MEAT* + stage Raw | Minced Meat (1:1) | Meat Grinder | — | 20 s |
 | `TR_PorkToMinced` | 1+× Pig Steak + stage Raw | Minced Pork (1:1) | Meat Grinder | — | 20 s |
 | `TR_VenisonToMinced` | 1+× Deer Steak + stage Raw | Minced Venison (1:1) | Meat Grinder | — | 20 s |
@@ -237,23 +236,24 @@ graph LR
 | `TR_ChickenToMinced` | 1+× Chicken Breast + stage Raw | Minced Chicken (1:1) | Meat Grinder | — | 20 s |
 | `TR_BearToMinced` | 1+× Bear Steak + stage Raw | Minced Bear (1:1) | Meat Grinder | — | 20 s |
 
-`TR_DicedMeat` is the only meat step that needs no station. That is deliberate: it
-is the earliest step of the chain, and a player who has not built a grinder yet must
-still be able to make a stew. The six mincing transforms are ordered by priority —
+Since 2026-08-29 there is no dicing step: the stews take minced meat, and a raw
+vanilla steak in a pot stays vanilla cooking (invariant I2). The six mincing transforms are ordered by priority —
 the generic `TR_MeatToMinced` sits at 0, the five species transforms at 20, so pork
 becomes Minced Pork rather than generic Minced Meat.
 
-### Casing and stuffing
+### Stuffing
+
+The casing is vanilla's own gut since 2026-08-29 — `Guts` or `SmallGuts`, both
+category `CASING`; there is no cleaning step and no ChefZ casing class.
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_SausageCasing` | 1+× Guts | Sausage Casing (2×) | Cutting Board | `CUTTING_TOOL` | 12 s |
-| `TR_RawSausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawPorkSausage` | 1+× Minced Pork + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Pork Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawVenisonSausage` | 1+× Minced Venison + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× Sausage Casing | Raw Venison Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawBoarSausage` | 1+× Minced Boar + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× Sausage Casing | Raw Boar Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Hunter Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawSpicySausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Spicy Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawSausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawPorkSausage` | 1+× Minced Pork + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Pork Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawVenisonSausage` | 1+× Minced Venison + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Venison Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawBoarSausage` | 1+× Minced Boar + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Boar Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Hunter Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawSpicySausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Spicy Sausage (1×) | Meat Grinder | — | 15 s |
 
 `TR_RawHunterSausage` is the only stuffing transform that takes **whole raw wild
 meat** instead of mince — 2× `WILD_MEAT` at stage `Raw`. It is also the only
