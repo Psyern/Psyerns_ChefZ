@@ -227,6 +227,21 @@
             "decays": true
         },
         {
+            "id": "ChefZ_DicedMeat",
+            "categories": [
+                "MEAT",
+                "MINCED_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "PREPARED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
             "id": "ChefZ_MincedMeat",
             "categories": [
                 "MEAT",

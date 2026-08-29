@@ -318,6 +318,13 @@
             "fullness": 95
         },
         {
+            "id": "ChefZ_DicedMeat",
+            "scope": "class",
+            "energy": 140,
+            "water": 45,
+            "fullness": 120
+        },
+        {
             "id": "ChefZ_MincedMeat",
             "scope": "class",
             "energy": 150,

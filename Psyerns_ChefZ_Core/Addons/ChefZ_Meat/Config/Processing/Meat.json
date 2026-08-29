@@ -65,6 +65,30 @@
         },
 
         {
+            "id": "TR_DicedMeat",
+            "process": "PROCESS_CUT_MEAT",
+            "_note": "§29: rohes Fleisch + Messer -> Wuerfel. Wieder da seit dem 29.08.2026 (eigenes Modell beefcubes.p3d). Die Keulen matchen ihre eigenen Transforms mit hoeherer Spezifitaet (cls) - dieser hier faengt jedes andere rohe Fleisch.",
+            "inputs": [
+                {
+                    "slotId": "meat",
+                    "match": { "allOf": [ { "category": "MEAT" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_DicedMeat",
+                    "quantity": 1,
+                    "quantityMode": "fixed",
+                    "setState": "PREPARED",
+                    "inheritFreshness": true
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "priority": 0
+        },
+        {
             "id": "TR_MeatToMinced",
             "process": "PROCESS_GRIND_MEAT",
             "stationsAllowed": ["ChefZ_MeatGrinder"],

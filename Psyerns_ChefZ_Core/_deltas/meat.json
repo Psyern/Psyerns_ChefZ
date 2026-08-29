@@ -111,6 +111,12 @@
   ],
   "nutrition": [
     {
+      "class": "ChefZ_DicedMeat",
+      "energy": 140,
+      "water": 45,
+      "stomach": 120
+    },
+    {
       "class": "ChefZ_MincedMeat",
       "energy": 150,
       "water": 40,
@@ -254,6 +260,7 @@
     "ChefZ_BeefLeg",
     "ChefZ_PorkLeg",
     "ChefZ_VenisonLeg",
+    "ChefZ_DicedMeat",
     "ChefZ_MincedMeat",
     "ChefZ_MincedPork",
     "ChefZ_MincedVenison",

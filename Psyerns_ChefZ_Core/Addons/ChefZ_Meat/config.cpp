@@ -103,6 +103,7 @@ class CfgPatches
             "ChefZ_BeefLeg",
             "ChefZ_PorkLeg",
             "ChefZ_VenisonLeg",
+            "ChefZ_DicedMeat",
             "ChefZ_MincedMeat",
             "ChefZ_MincedPork",
             "ChefZ_MincedVenison",
@@ -147,6 +148,7 @@ class CfgPatches
             "DZ_Data",
             "DZ_Gear_Food",
             "ChefZ_Core",
+            "ChefZ_Items",
             "ChefZ_Processing",
             "DZ_Animals_bos_taurus",
             "DZ_Animals_bos_taurus_fem",
@@ -465,6 +467,44 @@ class CfgVehicles
                 class Boiled { nutrition_properties[] = {195, 535, 110, 58, 0, 0, 1}; };
                 class Burned { nutrition_properties[] = {105, 148, 18, 12, 0, 0, 1}; };
                 class Rotten { nutrition_properties[] = {165, 178, 52, 12, 20, 16, 1}; };
+            };
+        };
+    };
+
+    // §29: Raw Meat + Messer -> Wuerfel. Am 29.08.2026 gestrichen ("ein rohes
+    // Steak mit anderem Namen") und am selben Tag wieder aufgenommen, als das
+    // eigene Modell kam: beefcubes.p3d aus der Lieferung 043ad52. Kategorie
+    // MINCED_MEAT (Zutatendatensatz), damit die Eintoepfe es neben dem Hack
+    // nehmen - der I2-Anker der Eintoepfe bleibt verarbeitetes Fleisch.
+    class ChefZ_DicedMeat : ChefZ_MeatItemBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_DICEDMEAT0";
+        descriptionShort = "#STR_CHEFZ_ITEM_DICEDMEAT1";
+        model = "\ChefZ\ChefZ_Items\models\beefcubes.p3d";
+        itemSize[] = {2, 1};
+        weight = 260;
+
+        class Nutrition
+        {
+            fullnessIndex = 120;
+            energy = 140;
+            water = 45;
+            nutritionalIndex = 15;
+            toxicity = 0;
+            agents = 4;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw { nutrition_properties[] = {120, 140, 45, 15, 0, 4, 1}; };
+                class Baked { nutrition_properties[] = {110, 300, 25, 25, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {115, 280, 60, 25, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {80, 80, 10, 5, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {100, 90, 30, 5, 20, 16, 1}; };
             };
         };
     };
@@ -1244,13 +1284,14 @@ class CfgVehicles
 // ---------------------------------------------------------------------------
 // Anmeldung beim Core (02 §4).
 //
-// handcraftRecipeSlots = 3: dieses Modul bringt GENAU DREI Transforms mit,
+// handcraftRecipeSlots = 4: dieses Modul bringt GENAU VIER Transforms mit,
 // deren Prozess exec = "HANDCRAFT" hat. Die Liste, damit die Zahl nachpruefbar
 // bleibt und nicht wieder driftet:
 //
 //   TR_CutBeefLeg       PROCESS_CUT_MEAT       Keule   + Messer -> 2x CowSteakMeat  + Bone
 //   TR_CutPorkLeg       PROCESS_CUT_MEAT       Keule   + Messer -> 2x PigSteakMeat  + Lard
 //   TR_CutVenisonLeg    PROCESS_CUT_MEAT       Keule   + Messer -> 2x DeerSteakMeat + Bone
+//   TR_DicedMeat        PROCESS_CUT_MEAT       Fleisch + Messer -> Wuerfel (seit 29.08.2026 wieder)
 //
 // Die Zahl ist eine Reservierung in Vanillas Rezeptliste und muss vorab
 // feststehen; die Begruendung steht im Kopf von ChefZ_HandcraftBridge.c. Nennt
@@ -1270,7 +1311,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 200;
-        handcraftRecipeSlots = 3;
+        handcraftRecipeSlots = 4;
         dataFiles[] =
         {
             "ChefZ_Meat/Config/Ingredients/Meat.json",
