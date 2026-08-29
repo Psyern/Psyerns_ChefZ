@@ -479,6 +479,11 @@ class ChefZ_PreservationDef extends ChefZ_Record
         zero.id    = "CHEFZ_SELFTEST_PRES_C";
         zero.scope = ChefZ_PreservationScope.NAME_TAG;
         zero.spoilageMultiplier = 0.0;
+        // Ohne diese Markierung sieht die 0.0 seit ChefZ_Undefined.FLOAT
+        // == 0.0 wie ein fehlendes Feld aus, ResolveDefaults setzt 1.0 und
+        // Validate hat nichts mehr zu klemmen. Aus einer Datei traegt
+        // ChefZ_JsonExplicit den Schluessel ein - hier tut es der Test.
+        zero.MarkExplicit("spoilageMultiplier");
         zero.ResolveDefaults();
         if (!zero.Validate(ctx))                                return false;
         if (zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER) return false;

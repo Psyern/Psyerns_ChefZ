@@ -61,12 +61,22 @@
 /**
  * Ein Abonnent zum Anfassen.
  *
+ * : Managed ist Pflicht, keine Verzierung. ChefZ_EventSubscription haelt
+ * den Besitzer bewusst SCHWACH (17 §9) - ein Abonnent, der seinen Bus am
+ * Leben haelt, waere der Zyklus, den 17 §8 vermeidet. Eine nicht-managed
+ * Instanz in einer gewoehnlichen lokalen Variablen ueberlebt das nicht:
+ * sie wird eingesammelt, IsAlive() liefert false, und Dispatch()
+ * ueberspringt sie stillschweigend. Genau die neun Gruppen, die diese
+ * Klasse benutzen, sind daran gescheitert - und nur die. Jede andere
+ * Klasse dieses Umfelds ist Managed, ChefZ_EventTestSink und
+ * ChefZ_EventTestProvider ueber ihre Schnittstellenbasis.
+ *
  * Eine Klasse fuer alle Rollen statt fuenf kleine: die Rolle steckt in der
  * gewaehlten Methode, nicht im Typ, und ein Test, der fuenf Typen deklariert,
  * um dreimal etwas zu zaehlen, liest sich schlechter als einer mit fuenf
  * Methoden.
  */
-class ChefZ_EventTestSubscriber
+class ChefZ_EventTestSubscriber : Managed
 {
     string name;
     int    count;

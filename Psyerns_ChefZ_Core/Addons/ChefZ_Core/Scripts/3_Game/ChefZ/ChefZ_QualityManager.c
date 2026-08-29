@@ -506,6 +506,16 @@ class ChefZ_QualityManager : Managed
         if (!recipe.gradeRules || recipe.gradeRules.Count() == 0)
             return;
 
+        // Wem gehoert, was hier gleich gemeldet wird. Ohne diese Zeile trug
+        // jede Warnung aus dem Selektorcompiler die ID des Rezepts, das der
+        // ChefZ_RecipeCompiler ZULETZT angefasst hatte - die Regeln aller
+        // uebrigen Rezepte sammelten sich unter einem fremden Namen. Der
+        // Fehlerpfad unten nimmt recipe.id direkt und war nie betroffen;
+        // aufgefallen ist es an einem Rezept mit einem einzigen Selektor,
+        // dem hundertsiebenundachtzig Meldungen zugeschrieben waren.
+        if (ctx)
+            ctx.SetSubject(recipe.sourceRef, recipe.id);
+
         array<ref ChefZ_CompiledGradeRule> compiled = new array<ref ChefZ_CompiledGradeRule>();
 
         for (int i = 0; i < recipe.gradeRules.Count(); i++)

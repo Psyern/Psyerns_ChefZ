@@ -79,6 +79,15 @@ class ChefZ_IdentityMap : Managed
     private bool   m_Built;
     private bool   m_UseBeforeBuildReported;
 
+    //! Nur fuer den Selbsttest. ChefZ_IdentityMap.SelfCheck() prueft die
+    //! Sperre aus 03 §7 absichtlich, indem es VOR Build() abfragt - und
+    //! schrieb damit bei jedem Serverstart eine ERROR-Zeile ins RPT, die
+    //! keinen Betreiber etwas angeht. Das Verhalten bleibt unveraendert
+    //! (INVALID, einmalige Meldung); nur der Logsatz entfaellt - dasselbe
+    //! Mittel wie ChefZ_EventBus.SetQuietForTest und
+    //! ChefZ_LoadReport.SetMirrorToLog, das dieser Test schon benutzt.
+    private bool   m_QuietForTest;
+
     private int    m_SyncLimit;
 
     private ref array<ref ChefZ_Identity> m_ByOrdinal;   // Index 0 bleibt null
@@ -96,6 +105,7 @@ class ChefZ_IdentityMap : Managed
         m_RegistryName           = "";
         m_Built                  = false;
         m_UseBeforeBuildReported = false;
+        m_QuietForTest           = false;
         m_SyncLimit              = ChefZ_SyncLimits.NO_LIMIT;
         m_HadCollision           = false;
         m_CollisionA             = "";
@@ -116,6 +126,12 @@ class ChefZ_IdentityMap : Managed
     void SetRegistryName(string name)
     {
         m_RegistryName = name;
+    }
+
+    //! Nur fuer den Selbsttest - siehe m_QuietForTest.
+    void SetQuietForTest(bool quiet)
+    {
+        m_QuietForTest = quiet;
     }
 
     string GetRegistryName()
@@ -305,7 +321,8 @@ class ChefZ_IdentityMap : Managed
         if (!m_UseBeforeBuildReported)
         {
             m_UseBeforeBuildReported = true;
-            ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, SourceRef() + ": Abfrage vor Build(). Liefert INVALID. " + "Das ist ein Reihenfolgefehler im Boot, kein Datenfehler.");
+            if (!m_QuietForTest)
+                ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, SourceRef() + ": Abfrage vor Build(). Liefert INVALID. " + "Das ist ein Reihenfolgefehler im Boot, kein Datenfehler.");
         }
         return false;
     }
@@ -425,6 +442,7 @@ class ChefZ_IdentityMap : Managed
 
         ChefZ_IdentityMap m = new ChefZ_IdentityMap();
         m.SetRegistryName("SELFTEST_STATES");
+        m.SetQuietForTest(true);
 
         // Abfrage vor Build darf nicht abstuerzen.
         if (m.IsBuilt())                                        return false;

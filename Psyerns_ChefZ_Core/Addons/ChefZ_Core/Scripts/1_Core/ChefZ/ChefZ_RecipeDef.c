@@ -477,8 +477,21 @@ class ChefZ_OutputDef : Managed
         return !ChefZ_Undefined.IsFloatUndefined(portionQuantity);
     }
 
+    //! Erst explicitFields[], dann der Wert - dieselbe Reihenfolge wie in
+    //! ChefZ_Record.DefaultFloat. 15 E7 erlaubt takeDurationSec = 0
+    //! ausdruecklich ("fast unsichtbar"), und seit ChefZ_Undefined.FLOAT
+    //! == 0.0 waere diese Null sonst von einem fehlenden Feld nicht zu
+    //! unterscheiden.
+    //!
+    //! Fuer Daten AUS EINER DATEI aendert das heute nichts:
+    //! ChefZ_JsonExplicit traegt nur Schluessel auf Recordebene ein, und
+    //! ein Ergebnis ist ein Unterobjekt. Die Markierung setzt bisher nur,
+    //! wer den Def von Hand baut - so wie schon bei den beiden bool-Feldern
+    //! dieser Klasse. Wenn der Walker Pfade lernt, wirkt sie auch dort.
     bool HasTakeDuration()
     {
+        if (HasExplicit("takeDurationSec"))
+            return true;
         return !ChefZ_Undefined.IsFloatUndefined(takeDurationSec);
     }
 

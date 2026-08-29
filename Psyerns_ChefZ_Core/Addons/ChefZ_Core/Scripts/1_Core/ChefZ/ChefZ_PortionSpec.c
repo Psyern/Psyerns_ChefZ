@@ -324,6 +324,7 @@ class ChefZ_PortionSpec : Managed
         // takeDurationSec = 0 ist zulaessig (15 E7) und wird trotzdem nie zu
         // einer Dauer von 0 - sonst teilte der Fortschrittsbalken durch null.
         def.takeDurationSec = 0.0;
+        def.MarkExplicit("takeDurationSec");   // sonst gilt die 0 als fehlend
         spec.FillFrom(def, def.cls, "CHEFZ_PO_REZEPT", 2.0);
         if (spec.takeDurationSec != 0.0)                  return false;
         if (spec.EffectiveTakeSeconds() < ChefZ_PortionLimits.MIN_TAKE_SEC) return false;

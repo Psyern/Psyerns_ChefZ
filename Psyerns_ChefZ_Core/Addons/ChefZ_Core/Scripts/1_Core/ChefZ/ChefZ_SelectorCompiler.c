@@ -327,11 +327,17 @@ class ChefZ_SelectorCompiler
         if (!range)
             return;
 
+        // KEINE Warnung. Ein unbegrenzter Bereich ist nicht von einem
+        // weggelassenen zu unterscheiden: JsonSerializer legt jedes
+        // ref-Feld an, ob es im JSON steht oder nicht (ba6a9d4), und seit
+        // ChefZ_Undefined.FLOAT == 0.0 traegt so ein Bereich zwei Sentinel.
+        // Ein Selektor ohne "wetness" bekam dadurch eine Warnung fuer
+        // "wetness" - siebenmal je Selektor, viertausendmal je Serverstart.
+        // Beide Faelle wirken ohnehin gleich: der Bereich schraenkt nichts
+        // ein. Wer wirklich "wetness": {} schreibt, bekommt genau das, was
+        // dasteht.
         if (range.IsUnbounded())
-        {
-            ctx.Warn("Wertebereich \"" + ChefZ_RangeConstraint.FieldName(field) + "\" hat weder min noch max und schraenkt nichts ein - Feld ignoriert.");
             return;
-        }
 
         if (!range.IsValid())
         {
@@ -734,11 +740,10 @@ class ChefZ_SelectorCompiler
         if (!src.amount)
             return;
 
+        // Wie bei AddRange: unbegrenzt und weggelassen sind dasselbe, und
+        // eine Warnung darueber ist nicht zu befolgen.
         if (src.amount.IsUnbounded())
-        {
-            ctx.Warn("Slot \"" + slot.slotId + "\": amount ohne min und max schraenkt nichts " + "ein - Feld ignoriert.");
             return;
-        }
 
         if (!src.amount.IsValid())
         {

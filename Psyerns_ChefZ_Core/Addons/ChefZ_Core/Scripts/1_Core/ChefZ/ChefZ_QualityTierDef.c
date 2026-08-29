@@ -325,6 +325,14 @@ class ChefZ_QualityTierDef extends ChefZ_Record
         bad.yieldMultiplier    = 0.0;
         bad.spoilageMultiplier = -2.0;
         bad.rank               = -3;
+        // Die 0.0 muss als GESCHRIEBEN gelten, sonst ist sie seit
+        // ChefZ_Undefined.FLOAT == 0.0 von einem fehlenden Feld nicht zu
+        // unterscheiden und ResolveDefaults ersetzt sie durch die 1.0 -
+        // dann klemmt Validate nie und die Zusicherung unten ist unpruefbar.
+        // Aus einer Datei besorgt ChefZ_JsonExplicit diese Markierung; ein
+        // von Hand gebauter Record hat kein explicitFields[] und muss sie
+        // selbst setzen (siehe ChefZ_Record, Abschnitt Defaults).
+        bad.MarkExplicit("yieldMultiplier");
         bad.ResolveDefaults();
         if (!bad.Validate(ctx))                             return false;
         if (bad.yieldMultiplier != MIN_YIELD_MULTIPLIER)    return false;

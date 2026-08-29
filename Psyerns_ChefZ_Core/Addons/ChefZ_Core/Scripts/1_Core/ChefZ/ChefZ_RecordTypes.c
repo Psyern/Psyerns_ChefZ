@@ -326,8 +326,14 @@ class ChefZ_IngredientDef extends ChefZ_Record
         return !ChefZ_Undefined.IsTextUndefined(quantityUnit);
     }
 
+    //! Erst der Text, dann der Wert - wie DefaultFloat und wie HasDecays()
+    //! darunter. Seit ChefZ_Undefined.FLOAT == 0.0 saehe ein geschriebenes
+    //! "unitsPerWholeItem": 0 sonst wie ein fehlendes Feld aus, und der
+    //! Nenner Null kaeme nie beim Manager an, der ihn abweisen soll.
     bool HasUnitsPerWholeItem()
     {
+        if (HasExplicit("unitsPerWholeItem"))
+            return true;
         return !ChefZ_Undefined.IsFloatUndefined(unitsPerWholeItem);
     }
 

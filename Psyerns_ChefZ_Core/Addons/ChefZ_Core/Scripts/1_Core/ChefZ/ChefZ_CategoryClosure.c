@@ -145,7 +145,7 @@ class ChefZ_CategoryClosure : Managed
                 continue;
             for (int b = 0; b < BITS_PER_WORD; b++)
             {
-                if ((value & (1 << b)) != 0)
+                if ((value & MaskOfBit(b)) != 0)
                     n++;
             }
         }
@@ -177,10 +177,27 @@ class ChefZ_CategoryClosure : Managed
 
     private static int MaskOf(int categoryIndex)
     {
-        // Fuer Bit 31 ist die Maske negativ (Vorzeichenbit). Das ist
-        // unerheblich: es wird ausschliesslich mit AND und OR gearbeitet, nie
-        // verglichen oder gerechnet.
-        return 1 << (categoryIndex % BITS_PER_WORD);
+        return MaskOfBit(categoryIndex % BITS_PER_WORD);
+    }
+
+    /**
+     * Die Maske eines Bits 0..31.
+     *
+     * Fuer Bit 31 ist die Maske negativ (Vorzeichenbit). Das ist fuer AND
+     * und OR unerheblich - aber ob Enforce einen LAUFZEIT-Shift um 31
+     * zusichert, steht nirgends: Vanilla schreibt 1 << 31 ausschliesslich
+     * als Konstante hin (ActionCheckPulse.c:4), die der Compiler faltet.
+     * int.MIN IST dasselbe Bitmuster (0x80000000) und braucht keinen Shift.
+     *
+     * Das ist Vorsicht, kein Befund: ob der Shift hier je falsch gerechnet
+     * hat, ist ungeprueft. Sicher ist nur, dass diese Fassung nicht davon
+     * abhaengt - und Bit 31 ist bei 41 geladenen Kategorien in Reichweite.
+     */
+    private static int MaskOfBit(int bit)
+    {
+        if (bit == 31)
+            return int.MIN;
+        return 1 << bit;
     }
 
     private void EnsureWords(int count)

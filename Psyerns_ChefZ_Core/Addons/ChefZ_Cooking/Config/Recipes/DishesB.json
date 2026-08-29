@@ -1388,6 +1388,7 @@
                 }
             ],
             "completion": "TIMED",
+            "cookSeconds": 240.0,
             "slots": [
                 {
                     "slotId": "rice",

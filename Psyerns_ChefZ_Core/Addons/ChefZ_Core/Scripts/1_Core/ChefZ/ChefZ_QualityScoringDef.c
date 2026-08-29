@@ -44,6 +44,14 @@ class ChefZ_QualityScoringDef : Managed
     //! etwas anderes und heisst "ausdruecklich keine Strafen".
     ref array<ref ChefZ_StatePenaltyDef> statePenalties;
 
+    //! Wie in ChefZ_PriorityWeightsDef und ChefZ_OutputDef: seit
+    //! ChefZ_Undefined.FLOAT == 0.0 ist eine geschriebene Null am Wert
+    //! allein nicht mehr von einem fehlenden Feld zu unterscheiden, und
+    //! genau das verlangt der Selbsttest unten ("ausdrueckliche 0").
+    //! Gefuellt heute nur von Hand - qualityScoring ist ein Unterobjekt
+    //! von ChefZ_CoreSettingsDef und von ChefZ_JsonExplicit nicht erfasst.
+    ref array<string> explicitFields;
+
     void ChefZ_QualityScoringDef()
     {
         defaultTierSet          = ChefZ_Undefined.TEXT;
@@ -51,6 +59,7 @@ class ChefZ_QualityScoringDef : Managed
         ingredientQualityWeight = ChefZ_Undefined.FLOAT;
         baseRank                = ChefZ_Undefined.FLOAT;
         statePenalties          = null;
+        explicitFields          = null;
     }
 
     void Normalize()
@@ -86,17 +95,17 @@ class ChefZ_QualityScoringDef : Managed
             sc.defaultTierSet = defaultTierSet;
             n++;
         }
-        if (IsSet(freshnessWeight))
+        if (IsSet("freshnessWeight", freshnessWeight))
         {
             sc.freshnessWeight = freshnessWeight;
             n++;
         }
-        if (IsSet(ingredientQualityWeight))
+        if (IsSet("ingredientQualityWeight", ingredientQualityWeight))
         {
             sc.ingredientQualityWeight = ingredientQualityWeight;
             n++;
         }
-        if (IsSet(baseRank))
+        if (IsSet("baseRank", baseRank))
         {
             sc.baseRank = baseRank;
             n++;
@@ -144,9 +153,26 @@ class ChefZ_QualityScoringDef : Managed
 
     //! Steht dieses Feld tatsaechlich in der Datei? Eine ausdrueckliche 0 ist
     //! ein Wert und wird uebernommen - nur der Sentinel heisst "nicht gesetzt".
-    private bool IsSet(float value)
+    private bool IsSet(string field, float value)
     {
+        if (HasExplicit(field))
+            return true;
         return !ChefZ_Undefined.IsFloatUndefined(value);
+    }
+
+    void MarkExplicit(string field)
+    {
+        if (!explicitFields)
+            explicitFields = new array<string>();
+        if (explicitFields.Find(field) < 0)
+            explicitFields.Insert(field);
+    }
+
+    bool HasExplicit(string field)
+    {
+        if (!explicitFields)
+            return false;
+        return explicitFields.Find(field) >= 0;
     }
 
     //! Nur fuer den Selbsttest (S10).
@@ -164,6 +190,7 @@ class ChefZ_QualityScoringDef : Managed
         ChefZ_QualityScoringDef partial = new ChefZ_QualityScoringDef();
         partial.freshnessWeight = 2.5;
         partial.baseRank        = 0.0;                      // ausdrueckliche 0
+        partial.MarkExplicit("baseRank");
         if (partial.ApplyTo(sc, null) != 2)                 return false;
         if (sc.freshnessWeight != 2.5)                      return false;
         if (sc.baseRank != 0.0)                             return false;

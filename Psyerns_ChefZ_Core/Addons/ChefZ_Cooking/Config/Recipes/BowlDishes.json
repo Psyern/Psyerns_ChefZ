@@ -1868,6 +1868,7 @@
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
             "completion": "TIMED",
+            "cookSeconds": 300.0,
             "contexts": [
                 {
                     "deviceClasses": [
@@ -2052,6 +2053,7 @@
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
             "completion": "TIMED",
+            "cookSeconds": 300.0,
             "contexts": [
                 {
                     "deviceClasses": [

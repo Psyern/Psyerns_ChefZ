@@ -596,12 +596,21 @@ class ChefZ_MatcherSelfTest
         if (!schiefSlot)                                            return false;
         if (schiefSlot.maxCount != 3)                               return false;
 
-        // amount <= 0 wird auf 1 gesetzt.
+        // amount <= 0 wird auf 1 gesetzt (07 §7).
+        //
+        // Geprueft wird mit -5.0 und nicht mit 0.0: seit
+        // ChefZ_Undefined.FLOAT == 0.0 ist eine Untergrenze von null von
+        // "keine Untergrenze" nicht mehr zu unterscheiden, und ein Bereich
+        // ohne Grenzen ist kein Bereich <= 0, sondern gar keiner. Die Regel
+        // selbst ist davon unberuehrt, und ihr Ergebnis auch: ein Slot ohne
+        // amount liefert RequiredUnits() == 0.0, was jeder Aufrufer als eine
+        // Einheit liest (ChefZ_PortionManager.RequiredUnitsOf). Der Weg ist
+        // ein anderer, die Menge dieselbe.
         ChefZ_SlotDef nullAmount = new ChefZ_SlotDef();
         nullAmount.slotId = "e";
         nullAmount.match  = Leaf("category", "CHEFZ_MT_KAT_TIER");
         nullAmount.amount = new ChefZ_Range();
-        nullAmount.amount.min = 0.0;
+        nullAmount.amount.min = -5.0;
         ChefZ_CompiledSlot nullSlot = ChefZ_SelectorCompiler.CompileSlot(nullAmount, 4, ctx, error);
         if (!nullSlot)                                              return false;
         if (nullSlot.RequiredUnits() != 1.0)                        return false;

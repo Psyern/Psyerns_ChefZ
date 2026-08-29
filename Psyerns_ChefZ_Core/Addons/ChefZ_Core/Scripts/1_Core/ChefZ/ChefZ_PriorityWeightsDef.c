@@ -53,6 +53,18 @@ class ChefZ_PriorityWeightsDef : Managed
     float coverageBonus;
     float priorityScale;
 
+    //! Wie ChefZ_Record.explicitFields (02 E3, Mittel 3) und wie das
+    //! gleichnamige Feld in ChefZ_OutputDef. Notwendig geworden, als
+    //! ChefZ_Undefined.FLOAT zu 0.0 wurde: die Zusicherung im Kopf von
+    //! IsSet - "eine ausdrueckliche 0 ist ein Wert" - laesst sich am Wert
+    //! allein nicht mehr einhalten.
+    //!
+    //! Gefuellt wird sie heute nur von Hand (Selbsttest). ChefZ_JsonExplicit
+    //! traegt Schluessel auf Recordebene ein; priorityWeights ist ein
+    //! Unterobjekt von ChefZ_CoreSettingsDef und damit noch nicht erfasst.
+    //! Fuer Dateien bleibt es deshalb beim bisherigen Verhalten.
+    ref array<string> explicitFields;
+
     void ChefZ_PriorityWeightsDef()
     {
         wClass              = ChefZ_Undefined.FLOAT;
@@ -74,6 +86,7 @@ class ChefZ_PriorityWeightsDef : Managed
         coverageBonus       = ChefZ_Undefined.FLOAT;
         priorityScale       = ChefZ_Undefined.FLOAT;
         amountCap           = ChefZ_Undefined.INT;
+        explicitFields      = null;
     }
 
     /**
@@ -93,26 +106,26 @@ class ChefZ_PriorityWeightsDef : Managed
         // laufen, sind der sichere Weg.
         int n = 0;
 
-        if (IsSet(wClass))              { w.wClass = wClass;                           n++; }
-        if (IsSet(wState))              { w.wState = wState;                           n++; }
-        if (IsSet(wTag))                { w.wTag = wTag;                               n++; }
-        if (IsSet(wVanillaStage))       { w.wVanillaStage = wVanillaStage;             n++; }
-        if (IsSet(wCategoryBase))       { w.wCategoryBase = wCategoryBase;             n++; }
-        if (IsSet(wCategoryPerDepth))   { w.wCategoryPerDepth = wCategoryPerDepth;     n++; }
-        if (IsSet(wNot))                { w.wNot = wNot;                               n++; }
-        if (IsSet(wRangePerBound))      { w.wRangePerBound = wRangePerBound;           n++; }
-        if (IsSet(wMinQuality))         { w.wMinQuality = wMinQuality;                 n++; }
-        if (IsSet(wOptionalSlot))       { w.wOptionalSlot = wOptionalSlot;             n++; }
-        if (IsSet(wContextDeviceClass)) { w.wContextDeviceClass = wContextDeviceClass; n++; }
-        if (IsSet(wContextBound))       { w.wContextBound = wContextBound;             n++; }
-        if (IsSet(wPolicyForbid))       { w.wPolicyForbid = wPolicyForbid;             n++; }
-        if (IsSet(wPolicyPerState))     { w.wPolicyPerState = wPolicyPerState;         n++; }
-        if (IsSet(wCapability))         { w.wCapability = wCapability;                 n++; }
-        if (IsSet(wToolGroup))          { w.wToolGroup = wToolGroup;                   n++; }
-        if (IsSet(coverageBonus))       { w.coverageBonus = coverageBonus;             n++; }
-        if (IsSet(priorityScale))       { w.priorityScale = priorityScale;             n++; }
+        if (IsSet("wClass", wClass))                           { w.wClass = wClass;                           n++; }
+        if (IsSet("wState", wState))                           { w.wState = wState;                           n++; }
+        if (IsSet("wTag", wTag))                               { w.wTag = wTag;                               n++; }
+        if (IsSet("wVanillaStage", wVanillaStage))             { w.wVanillaStage = wVanillaStage;             n++; }
+        if (IsSet("wCategoryBase", wCategoryBase))             { w.wCategoryBase = wCategoryBase;             n++; }
+        if (IsSet("wCategoryPerDepth", wCategoryPerDepth))     { w.wCategoryPerDepth = wCategoryPerDepth;     n++; }
+        if (IsSet("wNot", wNot))                               { w.wNot = wNot;                               n++; }
+        if (IsSet("wRangePerBound", wRangePerBound))           { w.wRangePerBound = wRangePerBound;           n++; }
+        if (IsSet("wMinQuality", wMinQuality))                 { w.wMinQuality = wMinQuality;                 n++; }
+        if (IsSet("wOptionalSlot", wOptionalSlot))             { w.wOptionalSlot = wOptionalSlot;             n++; }
+        if (IsSet("wContextDeviceClass", wContextDeviceClass)) { w.wContextDeviceClass = wContextDeviceClass; n++; }
+        if (IsSet("wContextBound", wContextBound))             { w.wContextBound = wContextBound;             n++; }
+        if (IsSet("wPolicyForbid", wPolicyForbid))             { w.wPolicyForbid = wPolicyForbid;             n++; }
+        if (IsSet("wPolicyPerState", wPolicyPerState))         { w.wPolicyPerState = wPolicyPerState;         n++; }
+        if (IsSet("wCapability", wCapability))                 { w.wCapability = wCapability;                 n++; }
+        if (IsSet("wToolGroup", wToolGroup))                   { w.wToolGroup = wToolGroup;                   n++; }
+        if (IsSet("coverageBonus", coverageBonus))             { w.coverageBonus = coverageBonus;             n++; }
+        if (IsSet("priorityScale", priorityScale))             { w.priorityScale = priorityScale;             n++; }
 
-        if (!ChefZ_Undefined.IsIntUndefined(amountCap))
+        if (HasExplicit("amountCap") || !ChefZ_Undefined.IsIntUndefined(amountCap))
         {
             w.amountCap = amountCap;
             n++;
@@ -122,9 +135,26 @@ class ChefZ_PriorityWeightsDef : Managed
 
     //! Steht dieses Feld tatsaechlich in der Datei? Eine ausdrueckliche 0 ist
     //! ein Wert und wird uebernommen - nur der Sentinel heisst "nicht gesetzt".
-    private bool IsSet(float value)
+    private bool IsSet(string field, float value)
     {
+        if (HasExplicit(field))
+            return true;
         return !ChefZ_Undefined.IsFloatUndefined(value);
+    }
+
+    void MarkExplicit(string field)
+    {
+        if (!explicitFields)
+            explicitFields = new array<string>();
+        if (explicitFields.Find(field) < 0)
+            explicitFields.Insert(field);
+    }
+
+    bool HasExplicit(string field)
+    {
+        if (!explicitFields)
+            return false;
+        return explicitFields.Find(field) >= 0;
     }
 
     //! Nur fuer den Selbsttest.
@@ -151,6 +181,7 @@ class ChefZ_PriorityWeightsDef : Managed
         // Eine ausdrueckliche 0 ist ein Wert, kein "nicht gesetzt".
         ChefZ_PriorityWeightsDef zero = new ChefZ_PriorityWeightsDef();
         zero.wTag = 0.0;
+        zero.MarkExplicit("wTag");
         if (zero.ApplyTo(w) != 1)           return false;
         if (w.wTag != 0.0)                  return false;
 

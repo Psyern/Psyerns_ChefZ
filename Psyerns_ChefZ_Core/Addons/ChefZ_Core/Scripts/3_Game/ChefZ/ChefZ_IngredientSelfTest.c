@@ -511,10 +511,14 @@ class ChefZ_IngredientSelfTest
         ChefZ_IngredientDef bad = NewIng(defs, "CHEFZ_ST_I_U_BAD");
         bad.quantityUnit      = U_BULK;
         bad.unitsPerWholeItem = 0.0;
+        // Die Null muss als geschrieben gelten - aus einer Datei traegt sie
+        // ChefZ_JsonExplicit ein, von Hand gebaut niemand.
+        bad.MarkExplicit("unitsPerWholeItem");
 
         // Nenner Null bei der Standardeinheit -> auf 1 geklemmt.
         ChefZ_IngredientDef clamped = NewIng(defs, "CHEFZ_ST_I_U_CLAMP");
         clamped.unitsPerWholeItem = 0.0;
+        clamped.MarkExplicit("unitsPerWholeItem");
 
         // Negativ, ebenfalls Standardeinheit -> geklemmt.
         ChefZ_IngredientDef negative = NewIng(defs, "CHEFZ_ST_I_U_NEG");

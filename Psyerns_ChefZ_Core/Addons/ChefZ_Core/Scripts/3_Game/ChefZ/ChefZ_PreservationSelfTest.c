@@ -454,7 +454,20 @@ class ChefZ_PreservationSelfTest
         array<string> trace = null;
 
         // In der Kaelte greift die Regel.
-        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, 0.0, trace), 0.5))
+        //
+        // -10.0 und nicht 0.0: seit ChefZ_Undefined.FLOAT == 0.0 IST die
+        // Null der Sentinel fuer "Temperatur unbekannt". Mit 0.0 haette
+        // dieser Test denselben Wert einmal als Kaelte (Regel greift) und
+        // drei Zeilen weiter als unbekannt (Regel greift nicht) gefordert -
+        // beides zugleich ist nicht erfuellbar. -10.0 liegt ebenso im
+        // Bereich -50..5 und ist als Wert lesbar.
+        //
+        // Die Einschraenkung dahinter bleibt und ist echt: eine
+        // Umgebungstemperatur von genau 0 Grad gilt als unbekannt, und
+        // Kaelteregeln greifen dort nicht. Am Gefrierpunkt ist das die
+        // sichere Richtung (02 §8: "Richtung weniger ChefZ"), aber es ist
+        // eine Einschraenkung und keine Absicht.
+        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, -10.0, trace), 0.5))
             return false;
 
         // In der Waerme nicht.
@@ -639,6 +652,10 @@ class ChefZ_PreservationSelfTest
         ChefZ_PreservationManager frozen = NewManager(NewCats(), NewStates(), NewQuality());
         ChefZ_CoreSettingsDef noLifetime = NewSettings(1.0);
         noLifetime.defaultFreshnessLifetimeSec = 0.0;
+        // Die 0 ist hier die Aussage (14 §8), nicht ihr Fehlen - ohne die
+        // Markierung ersetzt ResolveDefaults sie durch die Vorgabelaufzeit
+        // und nichts friert ein.
+        noLifetime.MarkExplicit("defaultFreshnessLifetimeSec");
         frozen.Build(NewRegistry(), null, noLifetime);
         if (!Near(frozen.AdvanceFreshness(0.7, 10000.0, 1.0, ChefZ_SymbolTable.INVALID), 0.7))
             return false;

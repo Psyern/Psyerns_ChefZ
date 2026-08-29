@@ -134,8 +134,19 @@ class ChefZ_Range : Managed
         if (bounded.Clamp(0.0) != 0.2)     return false;
         if (bounded.Clamp(1.0) != 0.8)     return false;
 
+        // Vertauschte Grenzen. Frueher stand hier Init(1.0, 0.0); seit
+        // ChefZ_Undefined.FLOAT == 0.0 ist die 0 als Obergrenze aber gar
+        // keine Obergrenze mehr, und ein Bereich mit nur einer Untergrenze
+        // ist gueltig - der Test prueft dann das Gegenteil dessen, was er
+        // meint. 0.5 sagt dasselbe und ist darstellbar.
+        //
+        // Was dabei verloren geht, steht im Kopf dieser Datei: eine Grenze
+        // von genau 0 laesst sich nicht mehr ausdruecken. Fuer health,
+        // freshness, cleanness, wetness und quantityPct ist das folgenlos -
+        // dort ist "min 0" dasselbe wie "keine Untergrenze". Fuer
+        // temperature und quantity ist es eine echte Einschraenkung.
         ChefZ_Range bad = new ChefZ_Range();
-        bad.Init(1.0, 0.0);
+        bad.Init(1.0, 0.5);
         if (bad.IsValid())              return false;
 
         return true;
