@@ -458,8 +458,8 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         capabilityMode          = PatchText(capabilityMode, s.capabilityMode, s, "capabilityMode");
         defaultExtraItems       = PatchText(defaultExtraItems, s.defaultExtraItems, s, "defaultExtraItems");
 
-        logChannels             = PatchStringArray(logChannels, s.logChannels);
-        defaultExcludedStates   = PatchStringArray(defaultExcludedStates, s.defaultExcludedStates);
+        logChannels             = PatchStringArray(logChannels, s.logChannels, s, "logChannels");
+        defaultExcludedStates   = PatchStringArray(defaultExcludedStates, s.defaultExcludedStates, s, "defaultExcludedStates");
 
         // Ganzersatz, nicht feldweise: ein Overlay, das den Gewichtsblock
         // schreibt, meint diesen Block - und ein halb aus zwei Dateien
@@ -467,11 +467,17 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
         // aufgeschrieben hat. Innerhalb des Blocks wirkt der feldweise Patch
         // weiterhin: was der Betreiber nicht nennt, behaelt seinen
         // Code-Default (ChefZ_PriorityWeightsDef).
-        if (s.priorityWeights)
+        //
+        // Nur wenn das Overlay den Block WIRKLICH schreibt: der Serializer
+        // legt jedes ref-Feld an, auch ohne Schluessel im JSON (ba6a9d4).
+        // Die mitgelieferte Vorlage { "id": "CORE" } brachte so einen leeren
+        // qualityScoring-Block mit und loeschte die Zustandsstrafen aus
+        // Core.json - BURNT und ROTTEN kosteten nichts mehr.
+        if (s.priorityWeights && s.MayReplace("priorityWeights"))
             priorityWeights = s.priorityWeights;
 
         // Dasselbe fuer die Qualitaetsrechnung und aus demselben Grund.
-        if (s.qualityScoring)
+        if (s.qualityScoring && s.MayReplace("qualityScoring"))
             qualityScoring = s.qualityScoring;
 
         enabled             = PatchBool(enabled, s.enabled, s, "enabled");

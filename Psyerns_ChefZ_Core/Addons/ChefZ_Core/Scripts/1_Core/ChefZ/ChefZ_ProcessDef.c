@@ -211,8 +211,8 @@ class ChefZ_ProcessDef extends ChefZ_Record
 
         exec            = PatchText(exec, s.exec, s, "exec");
         displayName     = PatchText(displayName, s.displayName, s, "displayName");
-        toolGroups      = PatchStringArray(toolGroups, s.toolGroups);
-        emitEvents      = PatchStringArray(emitEvents, s.emitEvents);
+        toolGroups      = PatchStringArray(toolGroups, s.toolGroups, s, "toolGroups");
+        emitEvents      = PatchStringArray(emitEvents, s.emitEvents, s, "emitEvents");
 
         baseDurationSec = PatchFloat(baseDurationSec, s.baseDurationSec, s, "baseDurationSec");
         minTemperature  = PatchFloat(minTemperature, s.minTemperature, s, "minTemperature");

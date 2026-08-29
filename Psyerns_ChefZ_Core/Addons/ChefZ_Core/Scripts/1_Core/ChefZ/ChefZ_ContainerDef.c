@@ -270,7 +270,7 @@ class ChefZ_ContainerDef extends ChefZ_Record
         ChefZ_ContainerDef s = ChefZ_ContainerDef.Cast(src);
         if (!s)
             return;
-        containerCategories = PatchStringArray(containerCategories, s.containerCategories);
+        containerCategories = PatchStringArray(containerCategories, s.containerCategories, s, "containerCategories");
         emptyClass          = PatchText(emptyClass, s.emptyClass, s, "emptyClass");
         displayName         = PatchText(displayName, s.displayName, s, "displayName");
         spoilageModifier    = PatchFloat(spoilageModifier, s.spoilageModifier, s, "spoilageModifier");

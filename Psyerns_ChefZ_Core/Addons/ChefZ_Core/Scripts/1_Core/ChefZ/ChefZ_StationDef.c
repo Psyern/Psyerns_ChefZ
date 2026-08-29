@@ -92,8 +92,8 @@ class ChefZ_StationDef extends ChefZ_Record
         if (!s)
             return;
 
-        stationCategories = PatchStringArray(stationCategories, s.stationCategories);
-        processes         = PatchStringArray(processes, s.processes);
+        stationCategories = PatchStringArray(stationCategories, s.stationCategories, s, "stationCategories");
+        processes         = PatchStringArray(processes, s.processes, s, "processes");
         parallelSlots     = PatchInt(parallelSlots, s.parallelSlots, s, "parallelSlots");
         speedMultiplier   = PatchFloat(speedMultiplier, s.speedMultiplier, s, "speedMultiplier");
         needsFuel         = PatchBool(needsFuel, s.needsFuel, s, "needsFuel");

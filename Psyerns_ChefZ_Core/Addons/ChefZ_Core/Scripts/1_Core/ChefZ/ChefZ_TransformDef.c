@@ -202,12 +202,13 @@ class ChefZ_TransformDef extends ChefZ_Record
         if (!s)
             return;
 
-        if (s.inputs)       inputs     = s.inputs;
-        if (s.outputs)      outputs    = s.outputs;
-        if (s.byproducts)   byproducts = s.byproducts;
-        if (s.requires)     requires   = s.requires;
+        // Ersetzt wird nur, was die Quelle geschrieben hat (ChefZ_Record.MayReplace).
+        if (s.inputs && s.MayReplace("inputs"))         inputs     = s.inputs;
+        if (s.outputs && s.MayReplace("outputs"))       outputs    = s.outputs;
+        if (s.byproducts && s.MayReplace("byproducts")) byproducts = s.byproducts;
+        if (s.requires && s.MayReplace("requires"))     requires   = s.requires;
 
-        stationsAllowed     = PatchStringArray(stationsAllowed, s.stationsAllowed);
+        stationsAllowed     = PatchStringArray(stationsAllowed, s.stationsAllowed, s, "stationsAllowed");
 
         process             = PatchText(process, s.process, s, "process");
         qualityRule         = PatchText(qualityRule, s.qualityRule, s, "qualityRule");

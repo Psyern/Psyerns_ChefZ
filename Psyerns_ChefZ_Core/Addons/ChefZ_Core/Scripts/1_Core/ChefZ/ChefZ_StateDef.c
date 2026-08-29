@@ -226,7 +226,7 @@ class ChefZ_StateDef extends ChefZ_Record
 
         displayName            = PatchText(displayName, s.displayName, s, "displayName");
         projectsToVanillaStage = PatchText(projectsToVanillaStage, s.projectsToVanillaStage, s, "projectsToVanillaStage");
-        implies                = PatchStringArray(implies, s.implies);
+        implies                = PatchStringArray(implies, s.implies, s, "implies");
         spoilageMultiplier     = PatchFloat(spoilageMultiplier, s.spoilageMultiplier, s, "spoilageMultiplier");
         freshnessLifetimeSec   = PatchFloat(freshnessLifetimeSec, s.freshnessLifetimeSec, s, "freshnessLifetimeSec");
         edible                 = PatchBool(edible, s.edible, s, "edible");

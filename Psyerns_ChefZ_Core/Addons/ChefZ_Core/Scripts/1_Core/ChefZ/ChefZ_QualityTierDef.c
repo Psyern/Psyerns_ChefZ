@@ -233,8 +233,8 @@ class ChefZ_QualityTierDef extends ChefZ_Record
         yieldMultiplier    = PatchFloat(yieldMultiplier, s.yieldMultiplier, s, "yieldMultiplier");
         spoilageMultiplier = PatchFloat(spoilageMultiplier, s.spoilageMultiplier, s, "spoilageMultiplier");
 
-        grantsEffects      = PatchStringArray(grantsEffects, s.grantsEffects);
-        grantsTags         = PatchStringArray(grantsTags, s.grantsTags);
+        grantsEffects      = PatchStringArray(grantsEffects, s.grantsEffects, s, "grantsEffects");
+        grantsTags         = PatchStringArray(grantsTags, s.grantsTags, s, "grantsTags");
     }
 
     //--------------------------------------------------------------------------

@@ -120,8 +120,8 @@ class ChefZ_ToolGroupDef extends ChefZ_Record
         ChefZ_ToolGroupDef s = ChefZ_ToolGroupDef.Cast(src);
         if (!s)
             return;
-        classes         = PatchStringArray(classes, s.classes);
-        toolCategories  = PatchStringArray(toolCategories, s.toolCategories);
+        classes         = PatchStringArray(classes, s.classes, s, "classes");
+        toolCategories  = PatchStringArray(toolCategories, s.toolCategories, s, "toolCategories");
         allowSubclasses = PatchBool(allowSubclasses, s.allowSubclasses, s, "allowSubclasses");
     }
 

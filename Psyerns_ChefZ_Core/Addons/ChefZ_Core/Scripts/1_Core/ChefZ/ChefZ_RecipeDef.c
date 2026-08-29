@@ -862,18 +862,20 @@ class ChefZ_RecipeDef extends ChefZ_Record
         if (!s)
             return;
 
-        if (s.contexts)             contexts           = s.contexts;
-        if (s.slots)                slots              = s.slots;
-        if (s.policy)               policy             = s.policy;
-        if (s.outputs)              outputs            = s.outputs;
-        if (s.byproducts)           byproducts         = s.byproducts;
-        if (s.gradeRules)           gradeRules         = s.gradeRules;
-        if (s.requires)             requires           = s.requires;
+        // Der Serializer legt jede Liste an, auch ohne Schluessel (ba6a9d4):
+        // ersetzt wird nur, was die Quelle wirklich geschrieben hat.
+        if (s.contexts && s.MayReplace("contexts"))     contexts   = s.contexts;
+        if (s.slots && s.MayReplace("slots"))           slots      = s.slots;
+        if (s.policy && s.MayReplace("policy"))         policy     = s.policy;
+        if (s.outputs && s.MayReplace("outputs"))       outputs    = s.outputs;
+        if (s.byproducts && s.MayReplace("byproducts")) byproducts = s.byproducts;
+        if (s.gradeRules && s.MayReplace("gradeRules")) gradeRules = s.gradeRules;
+        if (s.requires && s.MayReplace("requires"))     requires   = s.requires;
 
-        doneStages         = PatchStringArray(doneStages, s.doneStages);
-        requiredToolGroups = PatchStringArray(requiredToolGroups, s.requiredToolGroups);
-        effects            = PatchStringArray(effects, s.effects);
-        emitEvents         = PatchStringArray(emitEvents, s.emitEvents);
+        doneStages         = PatchStringArray(doneStages, s.doneStages, s, "doneStages");
+        requiredToolGroups = PatchStringArray(requiredToolGroups, s.requiredToolGroups, s, "requiredToolGroups");
+        effects            = PatchStringArray(effects, s.effects, s, "effects");
+        emitEvents         = PatchStringArray(emitEvents, s.emitEvents, s, "emitEvents");
 
         completion         = PatchText(completion, s.completion, s, "completion");
         qualityTierSet     = PatchText(qualityTierSet, s.qualityTierSet, s, "qualityTierSet");

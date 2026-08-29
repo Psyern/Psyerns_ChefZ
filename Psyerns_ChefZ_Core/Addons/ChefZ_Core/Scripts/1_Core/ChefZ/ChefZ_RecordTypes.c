@@ -188,7 +188,7 @@ class ChefZ_DeviceDef extends ChefZ_Record
         ChefZ_DeviceDef s = ChefZ_DeviceDef.Cast(src);
         if (!s)
             return;
-        deviceCategories = PatchStringArray(deviceCategories, s.deviceCategories);
+        deviceCategories = PatchStringArray(deviceCategories, s.deviceCategories, s, "deviceCategories");
         portionCapacity  = PatchInt(portionCapacity, s.portionCapacity, s, "portionCapacity");
         qualityModifier  = PatchFloat(qualityModifier, s.qualityModifier, s, "qualityModifier");
     }
@@ -299,8 +299,8 @@ class ChefZ_IngredientDef extends ChefZ_Record
         ChefZ_IngredientDef s = ChefZ_IngredientDef.Cast(src);
         if (!s)
             return;
-        categories        = PatchStringArray(categories, s.categories);
-        tags              = PatchStringArray(tags, s.tags);
+        categories        = PatchStringArray(categories, s.categories, s, "categories");
+        tags              = PatchStringArray(tags, s.tags, s, "tags");
         defaultState      = PatchText(defaultState, s.defaultState, s, "defaultState");
         quantityUnit      = PatchText(quantityUnit, s.quantityUnit, s, "quantityUnit");
         unitsPerWholeItem = PatchFloat(unitsPerWholeItem, s.unitsPerWholeItem, s, "unitsPerWholeItem");

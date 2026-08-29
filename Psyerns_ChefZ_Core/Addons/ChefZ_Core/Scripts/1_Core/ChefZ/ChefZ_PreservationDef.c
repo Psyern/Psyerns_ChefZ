@@ -355,7 +355,7 @@ class ChefZ_PreservationDef extends ChefZ_Record
         // Temperaturbereich schreibt, meint diesen Bereich. Ein halb aus zwei
         // Dateien zusammengesetzter Bereich waere eine Grenze, die niemand
         // aufgeschrieben hat.
-        if (s.environmentTemperature)
+        if (s.environmentTemperature && s.MayReplace("environmentTemperature"))
             environmentTemperature = s.environmentTemperature;
 
         stopsDecay     = PatchBool(stopsDecay, s.stopsDecay, s, "stopsDecay");

@@ -588,11 +588,34 @@ class ChefZ_Record : Managed
         return fallback;
     }
 
-    //! ref-Typen: abwesend heisst null, und null heisst "nicht gesetzt".
-    //! Ganzersatz, nicht elementweise - eine Liste ist eine Aussage als Ganzes.
-    static array<string> PatchStringArray(array<string> current, array<string> incoming)
+    /**
+     * Darf die Quelle dieses ref-Feld (Liste, Unterobjekt) ganz ersetzen?
+     *
+     * Frueher hiess null "nicht gesetzt", und jede nicht-null Liste ersetzte.
+     * Der Serializer legt aber JEDE Liste und jedes Unterobjekt an, ob der
+     * Schluessel im JSON steht oder nicht (ba6a9d4). Ein Overlay
+     * { "id": "CORE" } brachte deshalb leere Listen fuer logChannels und
+     * defaultExcludedStates und leere Bloecke fuer priorityWeights und
+     * qualityScoring mit - und ersetzte damit alles, was Core.json gesagt
+     * hatte: keine Zustandsstrafen mehr fuer BURNT und ROTTEN, auf jedem
+     * Server mit eingeschaltetem Overlay.
+     *
+     * Ersetzt wird deshalb nur, was die Quelle WIRKLICH geschrieben hat.
+     * Eine Quelle ohne jedes Textwissen - handgebaut, explicitFields null -
+     * gilt weiter beim Wort: dort ist eine gesetzte Liste eine Absicht.
+     */
+    bool MayReplace(string field)
     {
-        if (incoming)
+        if (!explicitFields)
+            return true;
+        return HasExplicit(field);
+    }
+
+    //! ref-Typen: Ganzersatz, nicht elementweise - eine Liste ist eine Aussage
+    //! als Ganzes. Ob die Quelle die Aussage gemacht hat, sagt MayReplace.
+    static array<string> PatchStringArray(array<string> current, array<string> incoming, ChefZ_Record src, string field)
+    {
+        if (incoming && src && src.MayReplace(field))
             return incoming;
         return current;
     }
