@@ -251,6 +251,7 @@ class CfgPatches
             "DZ_Gear_Food",
             "DZ_Gear_Cooking",
             "ChefZ_Core",
+            "ChefZ_Items",
             "ChefZ_Ingredients",
             "ChefZ_Farming",
             "ChefZ_Meat",
@@ -722,8 +723,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_EMPTYJAR0";
         descriptionShort = "#STR_CHEFZ_ITEM_EMPTYJAR1";
-        // PROXY: zylindrischer Behaelter. Bedarf: eigenes Glasmesh (P3, V2).
-        model = "\dz\gear\food\PowderedMilk.p3d";
+        // EIGENES MODELL (29.08.2026): das leere Glas aus ChefZ_Items.
+        model = "\ChefZ\ChefZ_Items\models\jar.p3d";
         itemSize[] = {1, 2};
         weight = 210;
     };

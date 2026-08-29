@@ -96,7 +96,7 @@ class CfgPatches
         // Die Gegenrichtung waere ein Zyklus. Der Slice apiary fuehrt deshalb
         // seine drei Werkzeuggruppen selbst (CfgChefZTools weiter unten),
         // statt METALWORK_TOOL aus ChefZ_Processing zu benutzen.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices"};
     };
 };
 
@@ -430,6 +430,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CARROT";
         descriptionShort = "#STR_CHEFZ_ITEM_CARROT_DESC";
+        // EIGENES MODELL (29.08.2026) statt der geerbten Zucchini.
+        model = "\ChefZ\ChefZ_Items\models\carrot.p3d";
         weight = 120;
         class Nutrition
         {
@@ -756,7 +758,12 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BEEHIVE";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DESC";
-        model = "\DZ\gear\camping\wooden_case.p3d";
+        // EIGENES MODELL (29.08.2026). Die Datei heisst "beekeeper", nicht
+        // "beehive" - die Namen der Lieferung sind vertauscht, die Masse
+        // entscheiden: beekeeper.p3d ist 0,59 m breit und 1,0 m hoch, die
+        // einzargige Beute; beehive.p3d ist 1,65 m breit, die Doppelbeute.
+        // Textur steckt im Modell (chefz\chefz_devices\data\beekeeper_co.paa).
+        model = "\ChefZ\ChefZ_Devices\models\beekeeper.p3d";
         rotationFlags = 2;
         itemSize[] = {6, 5};
         weight = 14000;
@@ -794,6 +801,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BEEHIVE_DOUBLE";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DOUBLE_DESC";
+        // Die breite Zweizargen-Beute (1,65 m) - siehe Anmerkung am Stock.
+        model = "\ChefZ\ChefZ_Devices\models\beehive.p3d";
         itemSize[] = {6, 8};
         weight = 26000;
         lifetime = 1209600;
@@ -868,7 +877,9 @@ class CfgVehicles
     class ChefZ_HoneycombFrame_Base : Inventory_Base
     {
         scope = 0;
-        model = "\dz\gear\consumables\birch_bark.p3d";
+        // EIGENES MODELL (29.08.2026): der gefuellte Rahmen. Voll und
+        // entdeckelt erben ihn; der Leerrahmen bekommt wooden_frame.p3d.
+        model = "\ChefZ\ChefZ_Items\models\honeycomb_frame.p3d";
         itemSize[] = {2, 3};
         absorbency = 0.0;
         canBeDigged = 0;
@@ -897,6 +908,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_COMBFRAME_EMPTY";
         descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_EMPTY_DESC";
+        // Der leere Holzrahmen ohne Wabe.
+        model = "\ChefZ\ChefZ_Items\models\wooden_frame.p3d";
         weight = 400;
         varQuantityInit = 0;
         varQuantityMin = 0;
@@ -1014,7 +1027,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BEESMOKER";
         descriptionShort = "#STR_CHEFZ_ITEM_BEESMOKER_DESC";
-        model = "\dz\gear\food\food_can_open.p3d";
+        // EIGENES MODELL (29.08.2026), 0,29 x 0,37 m - eine echte Pfeife.
+        model = "\ChefZ\ChefZ_Items\models\beesmoker.p3d";
         rotationFlags = 17;
         itemSize[] = {2, 3};
         weight = 900;

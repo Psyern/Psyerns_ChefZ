@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // pack - baut aus jedem ChefZ-Addon eine PBO und legt sie in einen Zielordner.
 //
-// Warum ein Skript und kein Handgriff: der Mod besteht aus dreizehn Paketen
-// (zehn Core-Addons, drei Comp-Mods). Wer die von Hand packt, vergisst
+// Warum ein Skript und kein Handgriff: der Mod besteht aus fuenfzehn Paketen
+// (zwoelf Core-Addons, davon zwei reine Asset-Pakete, drei Comp-Mods). Wer die von Hand packt, vergisst
 // irgendwann eines, und ein vergessenes Paket faellt beim Serverstart nicht
 // auf - die Klassen fehlen einfach, ohne Fehlermeldung.
 //

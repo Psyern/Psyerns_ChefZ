@@ -1052,6 +1052,21 @@ class ChefZ_ProcessingStation_Base extends ItemBase
     {
         super.SetActions();
         AddAction(ChefZ_ActionProcessAtStation);
+        // Platzieren wie ein Fass (29.08.2026): Vanillas Hologramm zeigt die
+        // Station am Boden, bevor sie abgestellt wird. Beide Aktionen sind
+        // Vanillas eigene; sie erscheinen nur, weil IsDeployable() unten ja
+        // sagt (Hologram.c:252: item.IsDeployable() || ... DeployableContainer_Base).
+        // Das Hologramm zeigt die Station SELBST - GetProjectionName liefert
+        // fuer alles, was kein Bausatz und kein Zelt ist, item.GetType()
+        // (Hologram.c:246). Kein modded class Hologram noetig.
+        AddAction(ActionTogglePlaceObject);
+        AddAction(ActionPlaceObject);
+    }
+
+    //! Jede Station ist eine Sache, die man aufstellt - siehe SetActions.
+    override bool IsDeployable()
+    {
+        return true;
     }
 
     //==========================================================================
