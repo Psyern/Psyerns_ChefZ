@@ -5,23 +5,26 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 
 | Chain | Steps | Stations involved | Ends in |
 |---|---|---|---|
-| [Grain](#grain) | 6 transforms + 2 recipes | Grain Mill, Drying Rack | Bread, Flatbread, Pasta |
-| [Salt](#salt) | 2 transforms | Salt Pan | `SALT` — required or optional in 33 recipes |
+| [Grain](#grain) | 5 transforms + 2 recipes | Grain Mill, Drying Rack | Bread, Flatbread, Pasta |
+| [Salt](#salt) | 2 transforms | Frying Pan | `SALT` — required or optional in 35 recipes |
 | [Herbs and spices](#herbs-and-spices) | 11 transforms | Drying Rack, Mortar | `DRIED_HERB`, `SPICE` |
-| [Vegetables](#vegetables) | 12 transforms | none — all handcraft | `ROOT_VEGETABLE`, `LEAF_VEGETABLE`, `TOMATO` |
-| [Meat and sausage](#meat-and-sausage) | 14 transforms + 6 recipes | Meat Grinder, Cutting Board | Six cooked sausages |
+| [Vegetables](#vegetables) | no transforms since 29.08.2026 | none | `ROOT_VEGETABLE`, `LEAF_VEGETABLE`, `TOMATO` |
+| [Meat and sausage](#meat-and-sausage) | 15 transforms + 6 recipes | Meat Grinder | Six cooked sausages |
 | [Milk](#milk) | 3 transforms | Butter Churn, Cheese Press | Cream, Butter, Cheese |
 | [Fish](#fish) | 3 transforms | Drying Rack, Smoker | `FISH`, preserved fish |
-| [Preservation](#preservation) | 5 transforms, plus the 3 fish steps above | Drying Rack, Smoker | `CHEFZ_PRESERVED` |
-| [Tableware](#tableware) | 2 transforms | none — handcraft | Empty Plate, Empty Bowl |
+| [Preservation](#preservation) | 7 transforms, plus the 3 fish steps above | Drying Rack, Smoker | `CHEFZ_PRESERVED` |
+| [Tableware](#tableware) | 5 transforms | none — handcraft | The five empty containers |
 | [Honey](#honey) | 7 handcraft transforms + 1 station transform + the hive script | Beehive, Honey Extractor | vanilla `Honey` |
 
 **Read the diagrams like this:** rounded boxes are items, the label on an arrow is
 the station or the tool, and `[]` boxes are the dishes a chain feeds into.
 
 > **Nothing in this mod spawns by itself.** ChefZ ships no `types.xml`. Every chain
-> head below — wheat seeds, yeast, milk, eggs, herb seeds — needs an admin spawn
-> until a loot table exists. See [Known-Limitations](Known-Limitations).
+> head below — wheat, the four vegetables, the six herbs, eggs, the three legs —
+> needs an admin spawn until a loot table exists. Since 29.08.2026 they are *found*
+> items rather than crops, which makes the missing loot table the only thing between
+> them and the world. Milk is vanilla `PowderedMilk` and spawns on its own.
+> See [Known-Limitations](Known-Limitations).
 
 ---
 
@@ -55,6 +58,11 @@ graph LR
 | `TR_FlourWaterToDough` | 1× Flour (250) + 1× container with Water (150) | Dough (1×) | *handcraft* | — | 8 s |
 | `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta (500×) | *handcraft* | `ROLLING_PIN` (pasta machine) | 10 s |
 | `TR_RawPastaToDriedPasta` | 1× Fresh Pasta | Dried Pasta (1:1) | Drying Rack | — | 30 min |
+| `TR_AssemblePastaMachine` | 1× `MetalPlate` | Pasta Machine (1×) | *handcraft* | `METALWORK_TOOL` | 25 s |
+
+The pasta machine is equipment, not food, but it belongs to this chain: it is the
+`ROLLING_PIN` tool group that `TR_DoughToRawPasta` demands, and building one from a
+metal plate is the only way to get it — there is no `types.xml`.
 
 Then in cookware:
 
@@ -85,8 +93,8 @@ water you started with**.
 
 ```mermaid
 graph LR
-  SW(["Sea water<br/>in any container"]) -->|"Salt Pan<br/>15 min + burning fire"| RS(["Raw Salt"])
-  RS -->|"Salt Pan<br/>20 min, no fire"| SA(["Salt"])
+  SW(["Sea water<br/>in any container"]) -->|"Frying Pan<br/>15 min + burning fire"| RS(["Raw Salt"])
+  RS -->|"Frying Pan<br/>20 min, no fire"| SA(["Salt"])
   SA --> R["category SALT<br/>33 recipes"]
   SA --> C["Salt Cure<br/>meat and fish"]
 ```
@@ -194,9 +202,10 @@ vegetable — which every one of them already accepted as the alternative.
 `ChefZ_PaprikaPowder` in a **required** slot — that one has to come out of the
 [spice chain](#herbs-and-spices).
 
-All twelve steps are handcraft with a `CUTTING_TOOL`; none of them touches a
-station. The twelve places are reserved in the vanilla crafting list through
-`handcraftRecipeSlots = 12` in `ChefZ_Ingredients/config.cpp`.
+The chain therefore has **no transforms left at all**. `ChefZ_Produce` reserves
+`handcraftRecipeSlots = 0` in `ChefZ_Ingredients/config.cpp` — it once held eleven,
+then seven, and the last of them went with the chopping step. A vegetable goes from
+the ground into the pot.
 
 ---
 
@@ -207,26 +216,39 @@ matter: the Meat Grinder both minces and stuffs.
 
 ```mermaid
 graph LR
-  RM(["Raw meat<br/>any MEAT, stage Raw"]) -->|"knife, 4 s"| DM(["Diced Meat"])
+  LG(["Beef / Pork / Venison Leg"]) -->|"knife, 4 s"| RM(["Raw meat<br/>2 steaks per leg"])
   RM -->|"Meat Grinder<br/>20 s"| MM(["Minced Meat<br/>+ 5 species variants"])
   MM -.->|"35-60 % chance"| AF(["Animal Fat"])
-  DM --> ST["Hunter Stew<br/>Fisherman's Stew"]
+  MM --> ST["Hunter Stew<br/>Fisherman's Stew"]
   MM --> MD["Meat Dumplings"]
 ```
 
 ```mermaid
 graph LR
-  G(["Guts<br/>vanilla"]) -->|"Cutting Board<br/>knife, 12 s"| SC(["Sausage Casing<br/>2 per gut"])
+  G(["Guts / SmallGuts<br/>vanilla, category CASING"]) --> SS
   MM(["Minced Meat"]) --> SS
   SP(["1-3x SPICE<br/>or HERB"]) --> SS
-  SC --> SS(["Meat Grinder<br/>stuff, 15 s"])
+  SS(["Meat Grinder<br/>stuff, 15 s"])
   SS --> RS(["6 raw sausages"])
   RS -->|"cookware"| CS["6 cooked sausages"]
   RS -->|"Drying Rack 90 min"| DS["Dry Sausage"]
   RS -->|"Smoker 40 min"| SM["Smoked Sausage"]
 ```
 
-### Mincing and dicing
+### Cutting the legs
+
+The three primal cuts are the only ChefZ-owned raw meat. Each one splits into two
+vanilla steaks, which is where this chain joins the rest of the mod — everything
+downstream matches vanilla `MEAT`, so a hunted animal and a butchered leg feed the
+same transforms.
+
+| Step | Input | Output | Where | Tool | Duration |
+|---|---|---|---|---|---|
+| `TR_CutBeefLeg` | 1× `ChefZ_BeefLeg` | 2× `CowSteakMeat` | *handcraft* | `CUTTING_TOOL` | 4 s |
+| `TR_CutPorkLeg` | 1× `ChefZ_PorkLeg` | 2× `PigSteakMeat` | *handcraft* | `CUTTING_TOOL` | 4 s |
+| `TR_CutVenisonLeg` | 1× `ChefZ_VenisonLeg` | 2× `DeerSteakMeat` | *handcraft* | `CUTTING_TOOL` | 4 s |
+
+### Mincing
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
@@ -238,7 +260,8 @@ graph LR
 | `TR_BearToMinced` | 1+× Bear Steak + stage Raw | Minced Bear (1:1) | Meat Grinder | — | 20 s |
 
 Since 2026-08-29 there is no dicing step: the stews take minced meat, and a raw
-vanilla steak in a pot stays vanilla cooking (invariant I2). The six mincing transforms are ordered by priority —
+vanilla steak in a pot stays vanilla cooking (invariant I2). `PROCESS_CUT_MEAT`
+survived the removal because the legs still need it. The six mincing transforms are ordered by priority —
 the generic `TR_MeatToMinced` sits at 0, the five species transforms at 20, so pork
 becomes Minced Pork rather than generic Minced Meat.
 
@@ -373,11 +396,19 @@ graph LR
 | `TR_SaltedMeatToSmoked` | 1+× Salted Meat | Smoked Meat (1:1) | Smoker | — | 30 min + heat |
 | `TR_RawSausageToDry` | 1+× *SAUSAGE* + state RAW | Dry Sausage (1:1) | Drying Rack | — | 90 min |
 | `TR_RawSausageToSmoked` | 1+× *SAUSAGE* + state RAW | Smoked Sausage (1:1) | Smoker | — | 40 min + heat |
+| `TR_CaninaBerriesToDried` | 2× `CaninaBerry` | Dried Berries (1×) | Drying Rack | — | 7 min |
+| `TR_SambucusBerriesToDried` | 2× `SambucusBerry` | Dried Berries (1×) | Drying Rack | — | 7 min |
+
+The two berry transforms are the odd pair here: they preserve nothing that came out
+of another ChefZ chain — both inputs are vanilla berries picked in the world — and
+they converge on the same output. `ChefZ_DriedBerries` is category `BERRY`, tag
+`CHEFZ_PRESERVED`, default state `DRIED`, and it is a **required** slot of Fruit
+Compote, which makes seven minutes at the rack the price of that dish.
 
 Salt curing is handcraft: no station, no tool, 6 seconds, 20 units of salt. Everything
 after it needs a station and real time — 25 to 90 minutes.
 
-All eight outputs carry the tag `CHEFZ_PRESERVED`, and the six that are meat or fish
+All nine outputs carry the tag `CHEFZ_PRESERVED`, and the six that are meat or fish
 keep their `MEAT` or `FISH` category. Smoking is the only path that skips the salt
 step for fish; meat and sausage cannot be smoked without curing or stuffing first.
 
@@ -431,7 +462,9 @@ frame is swapped in its cell for a Full Comb Frame. The fill level is stored wit
 the frame; while the server is down no time passes (assumption A1).
 
 **Out of the hive.** "Open Hive" (`PROCESS_HARVEST_HIVE`, 8 s) opens the lid for
-120 s and wakes the bees. Only a Bee Smoker in hand calms them; without it the
+120 s and wakes the bees. Only a **smoking** Bee Smoker in hand calms them - stuffed
+with two pieces of bark (`TR_FillBeeSmoker`, handcraft), lit with a lighter or
+matches (vanilla ignite action), burning ten minutes per fill; without it the
 beekeeper always takes 20 shock and one bleeding arm, plus a second arm without
 gloves and 15 more shock without a covered head. An NBC suit (jacket + trousers)
 stops the bleeding, a gas mask seals the face, suit plus gas mask is the only
@@ -466,36 +499,42 @@ nothing to serve a stew into.
 graph LR
   FW(["Firewood"]) -->|"knife, 20 s"| PL(["Empty Plate"])
   FW -->|"knife, 25 s"| BO(["Empty Bowl"])
+  BK(["Birch / Oak Bark"]) -->|"knife or axe, 30 s"| BO
+  PA(["2x Paper"]) -->|"12 s, no tool"| BX(["Empty Box"])
+  MP(["Metal Plate"]) -->|"saw, 45 s"| CN(["10x Empty Can"])
   PL --> D1["container category PLATE"]
   BO --> D2["container category BOWL"]
 ```
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_CarveWoodenPlate` | 1+× Firewood | Empty Plate (1×) | *handcraft* | `CUTTING_TOOL` | 20 s |
-| `TR_CarveWoodenBowl` | 1+× Firewood | Empty Bowl (1×) | *handcraft* | `CUTTING_TOOL` | 25 s |
+| `TR_CarveWoodenPlate` | 1× Firewood | Empty Plate (1×) | *handcraft* | `CUTTING_TOOL` | 20 s |
+| `TR_CarveWoodenBowl` | 1× Firewood | Empty Bowl (1×) | *handcraft* | `CUTTING_TOOL` | 25 s |
+| `TR_BowlFromBark` | 1× `Bark_Birch` | `Bark_Oak` | Empty Bowl (1×) | *handcraft* | `CUTTING_TOOL` or `AXE_TOOL` | 30 s |
+| `TR_BoxFromPaper` | 2× `Paper` | Empty Box (1×) | *handcraft* | — | 12 s |
+| `TR_CansFromMetalSheet` | 1× `MetalPlate` | Empty Can (**10×**) | *handcraft* | `SAWING_TOOL` | 45 s |
 
-Both are handcraft with a `CUTTING_TOOL`. The plate is marked reusable: it comes
-back when the dish is fully eaten, so it is permanent equipment rather than a
-consumable. See [Portions-and-Containers](Portions-and-Containers).
+All five are handcraft. The plate, bowl, jar and box are marked reusable: they come
+back when the dish is fully eaten, so they are permanent equipment rather than
+consumables. The can is not — it is cut open and stays open. See
+[Portions-and-Containers](Portions-and-Containers).
 
-**Gaps.** Carving Firewood is the **only** source of plates and bowls, because there
-is no `types.xml`. `ChefZ_EmptyCan`, `ChefZ_EmptyJar` and `ChefZ_EmptyBox` have no
-source at all in V1.
+**Gaps.** `ChefZ_EmptyJar` is the one container with **no source at all** in V1:
+nothing crafts it and nothing spawns it, because there is no `types.xml`. The other
+four are craftable from vanilla materials, which is why the bark bowl and the metal
+cans were added — a bowl should not depend on finding firewood alone.
 
 ---
 
 ## Chain coverage
 
-All 59 transforms are accounted for above:
-59 appear in a chain diagram, 0 do not
-(none).
+All 59 transforms are accounted for above.
 
 | | |
 |---|---|
 | Transforms | 59 |
-| Of those, at a station | 37 |
-| Of those, handcraft | 22 |
+| Of those, at a station | 39 |
+| Of those, handcraft | 20 |
 | Recipes fed by these chains | 44 |
 | Chains blocked at least in part | 3 — meat/sausage (no cargo), preservation (smoker), everything upstream of loot (no `types.xml`) |
 

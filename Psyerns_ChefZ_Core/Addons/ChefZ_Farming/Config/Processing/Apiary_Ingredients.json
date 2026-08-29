@@ -25,6 +25,24 @@
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 4,
             "decays": false
+        },
+        {
+            "id": "Bark_Oak",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 8,
+            "decays": false,
+            "_note": "Rinde als Brennstoff der Imkerpfeife (TR_FillBeeSmoker). PIECE: Vanilla fuehrt Rinde als Stapel mit Menge; 8 ist die Stapelgroesse von Slot_Bark (scripts - 1.29/config.cpp:685)."
+        },
+        {
+            "id": "Bark_Birch",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 8,
+            "decays": false,
+            "_note": "Rinde als Brennstoff der Imkerpfeife (TR_FillBeeSmoker). PIECE: Vanilla fuehrt Rinde als Stapel mit Menge; 8 ist die Stapelgroesse von Slot_Bark (scripts - 1.29/config.cpp:685)."
         }
     ]
 }

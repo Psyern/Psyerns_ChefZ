@@ -8,27 +8,39 @@
             "inputs": [
                 {
                     "slotId": "planks",
-                    "match": { "cls": "WoodenPlank" },
+                    "match": {
+                        "cls": "WoodenPlank"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
-                    "amount": { "min": 4.0 },
+                    "amount": {
+                        "min": 4.0
+                    },
                     "consume": "amount",
                     "consumeAmount": 4.0
                 },
                 {
                     "slotId": "nails",
-                    "match": { "cls": "Nail" },
+                    "match": {
+                        "cls": "Nail"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
-                    "amount": { "min": 10.0 },
+                    "amount": {
+                        "min": 10.0
+                    },
                     "consume": "amount",
                     "consumeAmount": 10.0
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_BeehiveKit", "quantity": 1, "quantityMode": "fixed" }
+                {
+                    "cls": "ChefZ_BeehiveKit",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
             ],
             "priority": 0
         },
@@ -38,14 +50,20 @@
             "inputs": [
                 {
                     "slotId": "kit",
-                    "match": { "cls": "ChefZ_BeehiveKit" },
+                    "match": {
+                        "cls": "ChefZ_BeehiveKit"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_Beehive", "quantity": 1, "quantityMode": "fixed" }
+                {
+                    "cls": "ChefZ_Beehive",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
             ],
             "priority": 0
         },
@@ -55,27 +73,37 @@
             "inputs": [
                 {
                     "slotId": "plank",
-                    "match": { "cls": "WoodenPlank" },
+                    "match": {
+                        "cls": "WoodenPlank"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
-                    "amount": { "min": 1.0 },
+                    "amount": {
+                        "min": 1.0
+                    },
                     "consume": "amount",
                     "consumeAmount": 1.0
                 },
                 {
                     "slotId": "nails",
-                    "match": { "cls": "Nail" },
+                    "match": {
+                        "cls": "Nail"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
-                    "amount": { "min": 2.0 },
+                    "amount": {
+                        "min": 2.0
+                    },
                     "consume": "amount",
                     "consumeAmount": 2.0
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_HoneycombFrameEmpty" }
+                {
+                    "cls": "ChefZ_HoneycombFrameEmpty"
+                }
             ],
             "priority": 0
         },
@@ -85,27 +113,39 @@
             "inputs": [
                 {
                     "slotId": "handle",
-                    "match": { "cls": "WoodenPlank" },
+                    "match": {
+                        "cls": "WoodenPlank"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
-                    "amount": { "min": 1.0 },
+                    "amount": {
+                        "min": 1.0
+                    },
                     "consume": "amount",
                     "consumeAmount": 1.0
                 },
                 {
                     "slotId": "tines",
-                    "match": { "cls": "Nail" },
+                    "match": {
+                        "cls": "Nail"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
-                    "amount": { "min": 4.0 },
+                    "amount": {
+                        "min": 4.0
+                    },
                     "consume": "amount",
                     "consumeAmount": 4.0
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_UncappingFork", "quantity": 1, "quantityMode": "fixed" }
+                {
+                    "cls": "ChefZ_UncappingFork",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
             ],
             "priority": 0
         },
@@ -115,14 +155,20 @@
             "inputs": [
                 {
                     "slotId": "body",
-                    "match": { "cls": "TunaCan_Opened" },
+                    "match": {
+                        "cls": "TunaCan_Opened"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_BeeSmoker", "quantity": 1, "quantityMode": "fixed" }
+                {
+                    "cls": "ChefZ_BeeSmoker",
+                    "quantity": 1,
+                    "quantityMode": "fixed"
+                }
             ],
             "priority": 0
         },
@@ -132,14 +178,18 @@
             "inputs": [
                 {
                     "slotId": "frame",
-                    "match": { "cls": "ChefZ_HoneycombFrameFull" },
+                    "match": {
+                        "cls": "ChefZ_HoneycombFrameFull"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_HoneycombFrameUncapped" }
+                {
+                    "cls": "ChefZ_HoneycombFrameUncapped"
+                }
             ],
             "priority": 0
         },
@@ -149,21 +199,75 @@
             "inputs": [
                 {
                     "slotId": "kitA",
-                    "match": { "cls": "ChefZ_BeehiveKit" },
+                    "match": {
+                        "cls": "ChefZ_BeehiveKit"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 },
                 {
                     "slotId": "kitB",
-                    "match": { "cls": "ChefZ_BeehiveKit" },
+                    "match": {
+                        "cls": "ChefZ_BeehiveKit"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_BeehiveDouble" }
+                {
+                    "cls": "ChefZ_BeehiveDouble"
+                }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_FillBeeSmoker",
+            "process": "PROCESS_FILL_SMOKER",
+            "_note": "Pfeife stopfen (29.08.2026): eine hoechstens halbvolle Pfeife plus zwei Stueck Rinde ergibt eine volle. Die Pfeife wird als Ganzes ersetzt - eine neue mit voller Fuellung; deshalb die Obergrenze 0.5, damit niemand aus Versehen eine fast volle Pfeife gegen Rinde tauscht.",
+            "inputs": [
+                {
+                    "slotId": "smoker",
+                    "match": {
+                        "cls": "ChefZ_BeeSmoker",
+                        "quantityPct": {
+                            "max": 0.5
+                        }
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "bark",
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "Bark_Oak"
+                            },
+                            {
+                                "cls": "Bark_Birch"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": {
+                        "min": 2.0
+                    },
+                    "consume": "amount",
+                    "consumeAmount": 2.0
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_BeeSmoker",
+                    "quantity": 100,
+                    "quantityMode": "fixed"
+                }
             ],
             "priority": 0
         }

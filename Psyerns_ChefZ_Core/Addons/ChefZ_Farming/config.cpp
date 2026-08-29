@@ -1020,6 +1020,19 @@ class CfgVehicles
         weight = 900;
         repairableWithKits[] = {};
         lifetime = 43200;
+
+        // BRENNSTOFF (29.08.2026): varQuantity 0..100 ist die Rindenfuellung.
+        // Leer geliefert; TR_FillBeeSmoker (Pfeife + 2 Rinde) macht sie voll,
+        // ein Feuerzeug oder Streichholz zuendet sie an (ChefZ_BeeSmoker.
+        // CanBeIgnitedBy), und brennend sinkt der Balken in zehn Minuten auf
+        // null. Nur eine BRENNENDE Pfeife beruhigt das Volk - eine kalte ist
+        // eine Blechdose. quantityShow = 0: der Balken genuegt.
+        varQuantityInit = 0;
+        varQuantityMin = 0;
+        varQuantityMax = 100;
+        varQuantityDestroyOnMin = 0;
+        quantityBar = 1;
+        quantityShow = 0;
     };
 };
 
@@ -1070,7 +1083,8 @@ class CfgChefZ
 
     // ### SLICE apiary ### Imkerei - Honig ernten.
     //
-    // handcraftRecipeSlots = 7. Die Zahl ist eine RESERVIERUNG in Vanillas
+    // handcraftRecipeSlots = 8 (seit dem 29.08.2026 mit dem Stopfen der
+    // Pfeife, vorher 7). Die Zahl ist eine RESERVIERUNG in Vanillas
     // Rezeptliste und muss VOR dem Laden feststehen; wird sie vergessen,
     // erscheint kein einziges der Rezepte, und zwar OHNE Fehlermeldung an der
     // Stelle, an der man sucht (Kopf von ChefZ_HandcraftBridge.c).
@@ -1101,7 +1115,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 217;
-        handcraftRecipeSlots = 7;
+        handcraftRecipeSlots = 8;
         dataFiles[] =
         {
             "ChefZ_Farming/Config/Processing/Apiary_Ingredients.json",
@@ -1374,6 +1388,24 @@ class CfgChefZProcesses
         animationLength = 2.0;
         specialty = 0.02;
         toolDamage = 1;
+    };
+
+    // ------------------------------------------------------------------
+    // 5. PFEIFE STOPFEN (29.08.2026): Imkerpfeife + Rinde -> volle Pfeife.
+    //
+    // Zwei Zutaten, kein Werkzeug - beide Plaetze von Vanillas RecipeBase
+    // sind belegt (01 V12), deshalb KEINE toolGroups-Zeile. Das Anzuenden
+    // ist kein Prozess: es laeuft ueber Vanillas ActionLightItemOnFire, der
+    // an jedem Item CanBeIgnitedBy fragt (ChefZ_BeeSmoker beantwortet es).
+    // ------------------------------------------------------------------
+    class PROCESS_FILL_SMOKER
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_FILL_SMOKER";
+        baseDurationSec = 6.0;
+        animationLength = 2.0;
+        specialty = 0.01;
+        toolDamage = 0;
     };
 };
 

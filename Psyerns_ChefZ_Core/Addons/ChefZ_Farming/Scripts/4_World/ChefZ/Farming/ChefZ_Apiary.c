@@ -851,7 +851,14 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         if (!ChefZ_SymbolTable.IsValid(classSym))
             return false;
 
-        return tools.IsToolOfGroup(classSym, group);
+        if (!tools.IsToolOfGroup(classSym, group))
+            return false;
+
+        // Seit dem 29.08.2026 zaehlt nur eine BRENNENDE Pfeife: Vanillas
+        // IsIgnited (EntityAI.c:558), das ChefZ_BeeSmoker mit seinem
+        // Brennzustand beantwortet - und das jede fremde Pfeife aus der
+        // Gruppe BEE_SMOKER genauso beantworten muss.
+        return item.IsIgnited();
     }
 
     //! Die Spur des Stichs. Hinter der Kanalwache, weil die Zeichenkette sonst
@@ -928,4 +935,174 @@ class ChefZ_UncappingFork extends ItemBase {}
 //!
 //! NICHT zu verwechseln mit ChefZ_Smoker aus ChefZ_Processing - das ist der
 //! Raeucherschrank der Konservierungskette.
-class ChefZ_BeeSmoker extends ItemBase {}
+//==============================================================================
+// ChefZ_BeeSmoker - die Imkerpfeife, die man stopfen und anzuenden muss
+// (29.08.2026).
+//
+// ZWEI ZUSTAENDE, beide am Item:
+//   Fuellung  = varQuantity 0..100 (config), gefuellt durch TR_FillBeeSmoker.
+//               Persistiert die Engine von selbst.
+//   Brennt    = m_ChefZ_Lit, netzsynchron. NICHT persistiert - nach einem
+//               Neustart ist jede Pfeife aus. Das ist gewollt: eine Glut, die
+//               eine Serverpause ueberlebt, waere die einzige im Spiel.
+//
+// ANZUENDEN geht ueber Vanillas ActionLightItemOnFire (scripts - 1.29/
+// 4_World/.../Continuous/ActionLightItemOnFire.c:77): Feuerzeug oder
+// Streichholz in der Hand, Pfeife als Ziel. Die Aktion fragt am Ziel
+// CanBeIgnitedBy, IsThisIgnitionSuccessful und ruft OnIgnitedThis - alle
+// drei in EntityAI.c:546-618 als leere Vorgaben, hier gefuellt. Vorbild in
+// jeder Zeile: Torch.c:141-208 (Fackel), nur ohne Energiemanager.
+//
+// ABBRENNEN: ein Server-Timer alle 5 s, volle Fuellung haelt zehn Minuten.
+// Bei null geht sie aus. Der Rauch ist Vanillas kleines Lagerfeuer-Partikel
+// (ParticleList.CAMP_SMALL_SMOKE), clientseitig aus OnVariablesSynchronized.
+//
+// Layer: 4_World.
+//==============================================================================
+class ChefZ_BeeSmoker extends ItemBase
+{
+    //! Sekunden, die eine VOLLE Fuellung raucht.
+    static const float CHEFZ_BURN_SECONDS_FULL = 600.0;
+    static const float CHEFZ_BURN_TICK_SEC     = 5.0;
+    //! Unter dieser Fuellung faengt sie kein Feuer - ein Kruemel Rinde reicht
+    //! nicht fuer eine Glut.
+    static const float CHEFZ_MIN_FUEL_TO_LIGHT = 10.0;
+
+    protected bool      m_ChefZ_Lit;
+    protected ref Timer m_ChefZ_BurnTimer;
+    protected Particle  m_ChefZ_Smoke;
+
+    void ChefZ_BeeSmoker()
+    {
+        m_ChefZ_Lit = false;
+        RegisterNetSyncVariableBool("m_ChefZ_Lit");
+    }
+
+    void ~ChefZ_BeeSmoker()
+    {
+        if (m_ChefZ_BurnTimer)
+        {
+            m_ChefZ_BurnTimer.Stop();
+            m_ChefZ_BurnTimer = null;
+        }
+        ChefZ_StopSmoke();
+    }
+
+    //! Raucht sie? Das ist die Frage, die der Bienenstock stellt.
+    bool ChefZ_IsSmoking()
+    {
+        return m_ChefZ_Lit;
+    }
+
+    // ---- Vanillas Anzuend-Schnittstelle (EntityAI.c:540-618) --------------
+
+    override bool HasFlammableMaterial()
+    {
+        return GetQuantity() >= CHEFZ_MIN_FUEL_TO_LIGHT;
+    }
+
+    override bool IsIgnited()
+    {
+        return m_ChefZ_Lit;
+    }
+
+    //! Torch.c:157-180, ohne Energiemanager: nicht schon brennend, genug
+    //! Rinde, nicht nass, und in der Hand - nicht aus dem Rucksack heraus.
+    override bool CanBeIgnitedBy(EntityAI igniter = NULL)
+    {
+        if (m_ChefZ_Lit)
+            return false;
+        if (GetQuantity() < CHEFZ_MIN_FUEL_TO_LIGHT)
+            return false;
+        if (GetWet() >= GameConstants.STATE_DAMP)
+            return false;
+
+        PlayerBase player = PlayerBase.Cast(GetHierarchyRootPlayer());
+        if (player && this != player.GetItemInHands())
+            return false;
+
+        return true;
+    }
+
+    override bool IsThisIgnitionSuccessful(EntityAI item_source = NULL)
+    {
+        return CanBeIgnitedBy(item_source);
+    }
+
+    override void OnIgnitedThis(EntityAI fire_source)
+    {
+        super.OnIgnitedThis(fire_source);
+        ChefZ_SetLit(true);
+    }
+
+    // ---- Brennen ------------------------------------------------------------
+
+    protected void ChefZ_SetLit(bool lit)
+    {
+        if (!g_Game || !g_Game.IsServer())
+            return;
+        if (m_ChefZ_Lit == lit)
+            return;
+
+        m_ChefZ_Lit = lit;
+        SetSynchDirty();
+
+        if (lit)
+        {
+            if (!m_ChefZ_BurnTimer)
+                m_ChefZ_BurnTimer = new Timer(CALL_CATEGORY_SYSTEM);
+            m_ChefZ_BurnTimer.Run(CHEFZ_BURN_TICK_SEC, this, "ChefZ_OnBurnTick", null, true);
+            return;
+        }
+
+        if (m_ChefZ_BurnTimer)
+            m_ChefZ_BurnTimer.Stop();
+    }
+
+    //! Timer-Rueckruf, deshalb oeffentlich.
+    void ChefZ_OnBurnTick()
+    {
+        if (!g_Game || !g_Game.IsServer())
+            return;
+        if (!m_ChefZ_Lit)
+            return;
+
+        float step = GetQuantityMax() * CHEFZ_BURN_TICK_SEC / CHEFZ_BURN_SECONDS_FULL;
+        if (GetQuantity() <= step)
+        {
+            SetQuantity(0.0);
+            ChefZ_SetLit(false);
+            return;
+        }
+        AddQuantity(-step);
+    }
+
+    // ---- Rauch (Client) -----------------------------------------------------
+
+    override void OnVariablesSynchronized()
+    {
+        super.OnVariablesSynchronized();
+        ChefZ_UpdateSmoke();
+    }
+
+    protected void ChefZ_UpdateSmoke()
+    {
+        if (!g_Game || g_Game.IsDedicatedServer())
+            return;
+        if (m_ChefZ_Lit)
+        {
+            if (!m_ChefZ_Smoke)
+                m_ChefZ_Smoke = ParticleManager.GetInstance().PlayOnObject(ParticleList.CAMP_SMALL_SMOKE, this, Vector(0, 0.15, 0));
+            return;
+        }
+        ChefZ_StopSmoke();
+    }
+
+    protected void ChefZ_StopSmoke()
+    {
+        if (!m_ChefZ_Smoke)
+            return;
+        m_ChefZ_Smoke.Stop();
+        m_ChefZ_Smoke = null;
+    }
+}
