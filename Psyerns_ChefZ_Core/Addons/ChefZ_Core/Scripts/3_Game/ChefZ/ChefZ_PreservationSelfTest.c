@@ -142,6 +142,25 @@ class ChefZ_PreservationSelfTest
     // Produktion gibt.
     private static ref array<ref ChefZ_Registry<ChefZ_PreservationDef>> s_AliveRegistries;
 
+    // Eigentuemer fuer alles, was ein Manager nur SCHWACH haelt.
+    //
+    // Kategoriebaum, Ordinaltabelle und Fremdmanager stehen in den Managern
+    // bewusst ohne ref - in Produktion haelt sie der Config Manager, der
+    // laenger lebt als jeder von ihnen. Ein Fixture, das als Temporaeres
+    // direkt in SetXForTest() oder Build() wandert, ist nach dieser Zeile
+    // schon abgeraeumt; der Manager faellt dann still auf den echten
+    // Singleton zurueck oder antwortet mit dem Rueckfallwert. Dieselbe Falle
+    // wie bei s_AliveRegistries, nur eine Ebene hoeher.
+    private static ref array<ref Managed> s_AliveFixtures;
+
+    private static void Keep(Managed o)
+    {
+        if (!s_AliveFixtures)
+            s_AliveFixtures = new array<ref Managed>();
+        if (o)
+            s_AliveFixtures.Insert(o);
+    }
+
     private static ChefZ_Registry<ChefZ_PreservationDef> NewRegistry()
     {
         if (!s_AliveRegistries)
@@ -230,9 +249,16 @@ class ChefZ_PreservationSelfTest
         AddState(reg, "CHEFZ_PR_STATE_PLAIN", 1.0, ChefZ_Undefined.FLOAT);
         AddState(reg, "CHEFZ_PR_STATE_KEEP",  0.5, 1000.0);
 
+        // Die Registry ist Eigentuemerin der Defs, der Manager haelt sie nur
+        // schwach - stirbt sie hier, antwortet GetSpoilageMultiplier mit dem
+        // Rueckfall 1.0, und die Produktkette verliert ihren Faktor.
+        Keep(reg);
+        ChefZ_CategoryManager cats = NewCats();
+        Keep(cats);
+
         ChefZ_StateManager mgr = new ChefZ_StateManager();
         mgr.SetQuietForTest(true);
-        mgr.SetCategoryManagerForTest(NewCats());
+        mgr.SetCategoryManagerForTest(cats);
         mgr.Build(reg, null, null);
         return mgr;
     }
@@ -259,9 +285,13 @@ class ChefZ_PreservationSelfTest
         AddTier(reg, "CHEFZ_PR_TIER_PLAIN", 0, 1.0);
         AddTier(reg, "CHEFZ_PR_TIER_GOOD",  1, 0.5);
 
+        Keep(reg);
+        ChefZ_CategoryManager cats = NewCats();
+        Keep(cats);
+
         ChefZ_QualityManager mgr = new ChefZ_QualityManager();
         mgr.SetQuietForTest(true);
-        mgr.SetCategoryManagerForTest(NewCats());
+        mgr.SetCategoryManagerForTest(cats);
         mgr.Build(reg, null, null, null);
         return mgr;
     }
@@ -284,6 +314,15 @@ class ChefZ_PreservationSelfTest
 
     private static ChefZ_PreservationManager NewManager(ChefZ_CategoryManager cats, ChefZ_StateManager states, ChefZ_QualityManager quality)
     {
+        // SetManagersForTest haelt die drei ohne ref. Als Temporaere
+        // uebergeben - NewManager(NewCats(), NewStates(), NewQuality()) -
+        // waeren sie nach dieser Zeile weg, und der Preservation Manager
+        // fiele auf die noch ungebauten Singletons zurueck: der Zielabgleich
+        // beim Build waere stumm, RejectCheck saehe 1 statt 4 Abweisungen.
+        Keep(cats);
+        Keep(states);
+        Keep(quality);
+
         ChefZ_PreservationManager mgr = new ChefZ_PreservationManager();
         mgr.SetQuietForTest(true);
         mgr.SetManagersForTest(cats, states, quality);

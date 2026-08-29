@@ -105,6 +105,25 @@ class ChefZ_StateSelfTest
     // Produktion gibt.
     private static ref array<ref ChefZ_Registry<ChefZ_StateDef>> s_AliveRegistries;
 
+    // Eigentuemer fuer alles, was ein Manager nur SCHWACH haelt.
+    //
+    // Kategoriebaum, Ordinaltabelle und Fremdmanager stehen in den Managern
+    // bewusst ohne ref - in Produktion haelt sie der Config Manager, der
+    // laenger lebt als jeder von ihnen. Ein Fixture, das als Temporaeres
+    // direkt in SetXForTest() oder Build() wandert, ist nach dieser Zeile
+    // schon abgeraeumt; der Manager faellt dann still auf den echten
+    // Singleton zurueck oder antwortet mit dem Rueckfallwert. Dieselbe Falle
+    // wie bei s_AliveRegistries, nur eine Ebene hoeher.
+    private static ref array<ref Managed> s_AliveFixtures;
+
+    private static void Keep(Managed o)
+    {
+        if (!s_AliveFixtures)
+            s_AliveFixtures = new array<ref Managed>();
+        if (o)
+            s_AliveFixtures.Insert(o);
+    }
+
     private static ChefZ_Registry<ChefZ_StateDef> NewRegistry()
     {
         if (!s_AliveRegistries)
@@ -156,6 +175,8 @@ class ChefZ_StateSelfTest
         ChefZ_CategoryManager cats = new ChefZ_CategoryManager();
         cats.SetQuietForTest(true);
         cats.Build(null, tags, null);
+        Keep(tags);
+        Keep(cats);
         return cats;
     }
 
@@ -164,6 +185,7 @@ class ChefZ_StateSelfTest
         ChefZ_IdentityMap ids = new ChefZ_IdentityMap();
         ids.SetRegistryName("Selbsttest-States");
         ids.Build(reg.SortedIds(), null, ChefZ_SyncLimits.STATE_ORDINAL_MAX);
+        Keep(ids);
         return ids;
     }
 

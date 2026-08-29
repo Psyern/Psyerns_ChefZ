@@ -295,6 +295,7 @@ class ChefZ_ApplicatorSelfTest
         never.cls = existing;
         never.ResolveDefaults();
         never.chance = 0.0;
+        never.MarkExplicit("chance");   // 0.0 ist der Sentinel; erst die Markierung macht daraus "nie"
         recipe.byproducts.Insert(never);
 
         if (!ChefZ_Applicator.PlanOutputs(recipe, res, planned, why))

@@ -291,12 +291,17 @@ class ChefZ_JsonText
 /**
  * Baut aus einem JSON-Text die Recordliste einer Art.
  *
- * Zwei Parsedurchgaenge je Dokument, mit umgekehrter Bool-Polaritaet. Der
- * erste Durchgang liefert die Records, der zweite nur den Vergleichswert fuer
- * die Bool-Sonde (ChefZ_Record, Kopfkommentar). Schlaegt der ZWEITE Durchgang
- * fehl, obwohl der erste lief, wird das nicht zum Fehler erklaert - dann
- * fehlen lediglich die automatisch erkannten bool-Felder, und ein
- * handgeschriebenes explicitFields[] wirkt weiterhin.
+ * EIN Parsedurchgang je Dokument. Frueher waren es zwei, mit umgekehrter
+ * Bool-Polaritaet (die Bool-Sonde, ChefZ_RecordProbe): ein Feld, das in
+ * beiden Durchgaengen gleich war, galt als geschrieben. Das setzte voraus,
+ * dass der Konstruktor die Polaritaet in den Record traegt - und genau den
+ * ruft der Serializer nie (Kopf von ChefZ_JsonExplicit). Beide Durchgaenge
+ * lieferten deshalb dasselbe, und die Sonde markierte JEDES abwesende bool
+ * als ausdrueckliches false: jeder "Default true"-Schalter in Slots und
+ * Ergebnissen (allowPartial, inheritState, inheritFreshness, ...) kippte
+ * still auf false, und das Rang-3-Overlay { "id": "CORE" } patchte enabled
+ * auf false. Die Explizitheit kommt jetzt fuer alle Felder, bool
+ * eingeschlossen, aus dem Text - auf jeder Tiefe.
  */
 /**
  * Traegt in jeden Record ein, welche Schluessel im JSON WIRKLICH geschrieben
@@ -339,6 +344,25 @@ class ChefZ_JsonExplicit
      * ist die vorsichtige Wahl: ein falsch zugeordnetes explicitFields[] waere
      * schlimmer als keines, weil es einen fremden Wert durch die Rangordnung
      * traegt.
+     *
+     * -----------------------------------------------------------------------
+     * Pfade statt Namen
+     * -----------------------------------------------------------------------
+     * Ein Schluessel auf Recordebene wird unter seinem Namen eingetragen
+     * ("minCount"). Ein Schluessel in einem Unterobjekt unter seinem PFAD:
+     * "slots[2].minCount", "outputs[0].inheritState", "priorityWeights.wTag",
+     * "slots[0].match.category". Der Record verteilt die Pfade danach an
+     * seine Kinder (ChefZ_Record.DistributeExplicitPaths) - ein Slot fragt
+     * dann sein eigenes explicitFields[] nach "minCount", wie bisher.
+     *
+     * Ohne die Pfade galt Mittel 3 nur fuer die oberste Ebene, und jedes
+     * Unterobjekt musste eine geschriebene 0 oder ein geschriebenes false am
+     * Wert erraten - was seit ChefZ_Undefined.FLOAT == 0.0 nicht mehr geht.
+     *
+     * Der Laeufer fuehrt einen Rahmenkeller: je offener Klammer ein Rahmen.
+     * Ein Objektrahmen kennt seinen Pfad, ein Arrayrahmen seinen Pfad und den
+     * laufenden Index. Drei parallele Listen statt einer Rahmenklasse, weil es
+     * genau drei Werte sind und die Klasse nur Zeilen kostete.
      */
     static void Apply(string text, notnull array<ref ChefZ_Record> records)
     {
@@ -358,16 +382,23 @@ class ChefZ_JsonExplicit
 
         i++;                        // hinter die oeffnende Klammer
 
-        int square    = 1;          // Tiefe eckiger Klammern ab records[
-        int curly     = 0;          // Tiefe geschweifter Klammern im Record
-        int recIndex  = 0;
-        bool inStr    = false;
-        bool esc      = false;
-        string token  = "";
+        // Rahmen 0 ist records[] selbst: Pfad "", Index = laufender Record.
+        array<string> framePath    = new array<string>();
+        array<bool>   frameIsArray = new array<bool>();
+        array<int>    frameIndex   = new array<int>();
+        framePath.Insert("");
+        frameIsArray.Insert(true);
+        frameIndex.Insert(0);
+
+        string lastKey = "";
+        bool inStr     = false;
+        bool esc       = false;
+        string token   = "";
 
         while (i < len)
         {
             string c = text.Get(i);
+            int top = framePath.Count() - 1;
 
             if (inStr)
             {
@@ -387,18 +418,23 @@ class ChefZ_JsonExplicit
                 if (c == "\"")
                 {
                     inStr = false;
-                    // Ein String auf Objektebene 1, dem ein ":" folgt, ist ein
-                    // Feldname dieses Records. Alles andere ist ein Wert.
-                    if (curly == 1 && recIndex < records.Count())
+                    // Ein String in einem Objektrahmen, dem ein ":" folgt, ist
+                    // ein Schluessel. Alles andere ist ein Wert.
+                    if (!frameIsArray.Get(top))
                     {
                         int j = i + 1;
                         while (j < len && IsSpace(text.Get(j)))
                             j++;
                         if (j < len && text.Get(j) == ":")
                         {
-                            ChefZ_Record rec = records.Get(recIndex);
-                            if (rec)
-                                rec.MarkExplicit(token);
+                            lastKey = token;
+                            int recIndex = frameIndex.Get(0);
+                            if (recIndex < records.Count())
+                            {
+                                ChefZ_Record rec = records.Get(recIndex);
+                                if (rec)
+                                    rec.MarkExplicit(JoinPath(framePath.Get(top), token));
+                            }
                         }
                     }
                     token = "";
@@ -411,26 +447,52 @@ class ChefZ_JsonExplicit
             }
 
             if (c == "\"")      { inStr = true; token = ""; i++; continue; }
-            if (c == "{")       { curly++; i++; continue; }
-            if (c == "}")
+
+            if (c == "{" || c == "[")
             {
-                curly--;
-                if (curly == 0)
-                    recIndex++;
+                framePath.Insert(ChildPath(framePath.Get(top), frameIsArray.Get(top), frameIndex.Get(top), lastKey));
+                frameIsArray.Insert(c == "[");
+                frameIndex.Insert(0);
                 i++;
                 continue;
             }
-            if (c == "[")       { square++; i++; continue; }
-            if (c == "]")
+
+            if (c == "}" || c == "]")
             {
-                square--;
-                if (square == 0)
+                framePath.Remove(top);
+                frameIsArray.Remove(top);
+                frameIndex.Remove(top);
+                if (framePath.Count() == 0)
                     return;         // records[] ist zu Ende
                 i++;
                 continue;
             }
+
+            if (c == "," && frameIsArray.Get(top))
+                frameIndex.Set(top, frameIndex.Get(top) + 1);
+
             i++;
         }
+    }
+
+    //! Pfad des Kindes, das im Rahmen (parentPath, parentIsArray, parentIndex)
+    //! gerade beginnt. Unter records[] hat der Record selbst den Pfad "".
+    private static string ChildPath(string parentPath, bool parentIsArray, int parentIndex, string lastKey)
+    {
+        if (parentIsArray)
+        {
+            if (parentPath == "")
+                return "";
+            return parentPath + "[" + parentIndex.ToString() + "]";
+        }
+        return JoinPath(parentPath, lastKey);
+    }
+
+    private static string JoinPath(string path, string key)
+    {
+        if (path == "")
+            return key;
+        return path + "." + key;
     }
 
     private static bool IsSpace(string c)
@@ -494,14 +556,18 @@ class ChefZ_JsonRecordReader
         ChefZ_JsonExplicit.Apply(text, outRecords);
 
         for (int i = 0; i < outRecords.Count(); i++)
-            outRecords.Get(i).SetOrigin(sourceRef, rank);
+        {
+            ChefZ_Record r = outRecords.Get(i);
+            r.DistributeExplicitPaths();
+            r.SetOrigin(sourceRef, rank);
+        }
 
         return true;
     }
 
     //--------------------------------------------------------------------------
-    // Je Art: Durchgang A (Polaritaet false) liefert die Records, Durchgang B
-    // (Polaritaet true) nur den Vergleich fuer die Bool-Sonde.
+    // Je Art ein Durchgang. Fuenfzehn Vierzeiler, weil JsonFileLoader<T> je
+    // Dokumentart einen konkreten Typ braucht (Kopf dieser Datei).
     //--------------------------------------------------------------------------
 
     private static bool ReadCoreSettings(string text, out array<ref ChefZ_Record> outRecords, out string errorOut)
@@ -512,16 +578,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_CoreSettingsDoc b = new ChefZ_CoreSettingsDoc();
-        bool probeOk = JsonFileLoader<ChefZ_CoreSettingsDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_CoreSettingsDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -535,16 +594,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_CategoryDoc b = new ChefZ_CategoryDoc();
-        bool probeOk = JsonFileLoader<ChefZ_CategoryDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_CategoryDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -558,16 +610,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_TagDoc b = new ChefZ_TagDoc();
-        bool probeOk = JsonFileLoader<ChefZ_TagDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_TagDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -581,16 +626,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_StateDoc b = new ChefZ_StateDoc();
-        bool probeOk = JsonFileLoader<ChefZ_StateDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_StateDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -604,16 +642,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_QualityTierDoc b = new ChefZ_QualityTierDoc();
-        bool probeOk = JsonFileLoader<ChefZ_QualityTierDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_QualityTierDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -627,16 +658,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_ToolGroupDoc b = new ChefZ_ToolGroupDoc();
-        bool probeOk = JsonFileLoader<ChefZ_ToolGroupDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_ToolGroupDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -650,16 +674,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_DeviceDoc b = new ChefZ_DeviceDoc();
-        bool probeOk = JsonFileLoader<ChefZ_DeviceDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_DeviceDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -673,16 +690,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_ContainerDoc b = new ChefZ_ContainerDoc();
-        bool probeOk = JsonFileLoader<ChefZ_ContainerDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_ContainerDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -696,16 +706,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_IngredientDoc b = new ChefZ_IngredientDoc();
-        bool probeOk = JsonFileLoader<ChefZ_IngredientDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_IngredientDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -719,16 +722,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_NutritionDoc b = new ChefZ_NutritionDoc();
-        bool probeOk = JsonFileLoader<ChefZ_NutritionDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_NutritionDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -742,16 +738,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_PreservationDoc b = new ChefZ_PreservationDoc();
-        bool probeOk = JsonFileLoader<ChefZ_PreservationDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_PreservationDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -765,16 +754,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_ProcessDoc b = new ChefZ_ProcessDoc();
-        bool probeOk = JsonFileLoader<ChefZ_ProcessDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_ProcessDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -788,16 +770,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_StationDoc b = new ChefZ_StationDoc();
-        bool probeOk = JsonFileLoader<ChefZ_StationDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_StationDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -810,7 +785,7 @@ class ChefZ_JsonRecordReader
         // Aufrufkeller, nur einen beendeten Serverprozess. Ohne diese Zeilen
         // sieht man am 28.08.2026 nur, dass irgendwo zwischen zwei Dateien
         // Schluss war.
-        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 1 (Werte) beginnt");
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 1 beginnt");
 
         ChefZ_TransformDoc a = new ChefZ_TransformDoc();
         if (!JsonFileLoader<ChefZ_TransformDoc>.LoadData(text, a, errorOut))
@@ -818,20 +793,11 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 1 ok, " + a.records.Count().ToString() + " Records - Durchgang 2 (Sonde) beginnt");
-
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_TransformDoc b = new ChefZ_TransformDoc();
-        bool probeOk = JsonFileLoader<ChefZ_TransformDoc>.LoadData(text, b, ignored);
-
-        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 2 beendet, probeOk=" + probeOk.ToString());
+        ChefZ_Log.Trace(ChefZ_LogChannel.CONFIG, "ReadTransform: Durchgang 1 ok, " + a.records.Count().ToString() + " Records");
 
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_TransformDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -845,16 +811,9 @@ class ChefZ_JsonRecordReader
         if (!a.records)
             return true;
 
-        ChefZ_RecordProbe.Set(true);
-        string ignored;
-        ChefZ_RecipeDoc b = new ChefZ_RecipeDoc();
-        bool probeOk = JsonFileLoader<ChefZ_RecipeDoc>.LoadData(text, b, ignored);
-
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_RecipeDef rec = a.records.Get(i);
-            if (probeOk && b.records && i < b.records.Count())
-                rec.CaptureExplicitBools(b.records.Get(i));
             outRecords.Insert(rec);
         }
         return true;
@@ -900,6 +859,34 @@ class ChefZ_JsonRecordReader
         if (!contDef || !unset)                                     return false;
         if (!contDef.HasExplicit("reusable"))                       return false;
         if (unset.HasExplicit("reusable"))                      return false;
+
+        // 4. Unterobjekte: der Laeufer traegt Pfade ein, der Record verteilt
+        //    sie an seine Kinder - erst dann kann ein Slot eine geschriebene
+        //    0 von einer fehlenden unterscheiden, und ein Ergebnis ein
+        //    geschriebenes false von einem weggelassenen.
+        array<ref ChefZ_Record> nested = new array<ref ChefZ_Record>();
+        string err4;
+        string rdoc = "{ \"kind\": \"recipe\", \"records\": [ { \"id\": \"CHEFZ_ST_REZ\", " + "\"slots\": [ { \"slotId\": \"a\", \"minCount\": 0, \"match\": { \"cls\": \"CHEFZ_ST_X\" } } ], " + "\"outputs\": [ { \"cls\": \"CHEFZ_ST_Y\", \"inheritState\": false } ] } ] }";
+        if (!Read(ChefZ_RecordKind.RECIPE, rdoc, "Selbsttest", ChefZ_SourceRank.ADDON_JSON, nested, err4))
+            return false;
+        if (nested.Count() != 1)                                return false;
+        ChefZ_RecipeDef rez = ChefZ_RecipeDef.Cast(nested.Get(0));
+        if (!rez)                                               return false;
+        if (!rez.HasExplicit("slots[0].minCount"))              return false;
+        if (!rez.HasExplicit("outputs[0].inheritState"))        return false;
+        if (rez.HasExplicit("outputs[0].inheritFreshness"))     return false;
+        if (!rez.slots || rez.slots.Count() != 1)               return false;
+        if (!rez.outputs || rez.outputs.Count() != 1)           return false;
+        ChefZ_SlotDef   slotA = rez.slots.Get(0);
+        ChefZ_OutputDef outY  = rez.outputs.Get(0);
+        if (!slotA || !outY)                                    return false;
+        if (!slotA.HasExplicit("minCount"))                     return false;
+        if (!outY.HasExplicit("inheritState"))                  return false;
+        if (outY.HasExplicit("inheritFreshness"))               return false;
+        rez.ResolveDefaults();
+        if (slotA.minCount != 0)                                return false;
+        if (outY.inheritState)                                  return false;
+        if (!outY.inheritFreshness)                             return false;
 
         return true;
     }

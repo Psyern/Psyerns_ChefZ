@@ -271,6 +271,14 @@ class ChefZ_TransformDef extends ChefZ_Record
      * hier "MIN" eingesetzt, waere im Log nicht mehr zu sehen, ob der Autor
      * sich entschieden oder nichts geschrieben hat.
      */
+    override void DistributeExplicitPaths()
+    {
+        super.DistributeExplicitPaths();
+        PushExplicitToSlots("inputs", inputs);
+        PushExplicitToOutputs("outputs", outputs);
+        PushExplicitToOutputs("byproducts", byproducts);
+    }
+
     override void ResolveDefaults()
     {
         super.ResolveDefaults();

@@ -549,7 +549,14 @@ class ChefZ_Applicator
             // ein Ergebnis stillschweigend ausfallen zu lassen - der Autor
             // saehe ein Rezept, das manchmal nichts erzeugt, und faende die
             // Ursache nie.
-            if (!ChefZ_Undefined.IsFloatUndefined(def.chance) && def.chance < 1.0)
+            //
+            // Erst explicitFields[], dann der Wert - wie HasTakeDuration: seit
+            // ChefZ_Undefined.FLOAT == 0.0 ist eine geschriebene 0 ("faellt
+            // nie") am Wert allein nicht vom Sentinel zu unterscheiden. Aus
+            // einer Datei kommt die Markierung ueber die Pfade des
+            // ChefZ_JsonExplicit, von Hand ueber MarkExplicit("chance").
+            bool chanceKnown = def.HasExplicit("chance") || !ChefZ_Undefined.IsFloatUndefined(def.chance);
+            if (chanceKnown && def.chance < 1.0)
             {
                 if (def.chance <= 0.0)
                     continue;

@@ -583,7 +583,14 @@ class ChefZ_RecipeSelfTest
         ChefZ_CookContext  cook   = MakeCookContext();
 
         ChefZ_MatchResult result;
-        if (!engine.EvaluateBest(cook, snap, null, result))         return false;
+        if (!engine.EvaluateBest(cook, snap, null, result))
+        {
+            // Die Engine weiss, WARUM sie nicht gebunden hat - ohne diese
+            // Zeile ginge das in einem nackten false unter, und der naechste
+            // Serverlauf sagte wieder nur "Auswahl FEHLGESCHLAGEN".
+            ChefZ_Log.Warn(ChefZ_LogChannel.MATCH, "Selbsttest S6 Auswahl: EvaluateBest(R3, 4 Items) " + result.ToDebugString());
+            return false;
+        }
         if (result.recipeId != "CHEFZ_RT_R3")                       return false;
         if (result.boundItemCount != 4)                             return false;
         if (result.itemsInVessel != 4)                              return false;
@@ -679,7 +686,11 @@ class ChefZ_RecipeSelfTest
 
         // Ohne den Fremdkoerper bindet dasselbe Rezept.
         ChefZ_MatchResult clean;
-        if (!engine.EvaluateBest(cook, MakeSnapshot(false), null, clean))    return false;
+        if (!engine.EvaluateBest(cook, MakeSnapshot(false), null, clean))
+        {
+            ChefZ_Log.Warn(ChefZ_LogChannel.MATCH, "Selbsttest S6 Fremdkoerper: EvaluateBest(ohne Spezialitem) " + clean.ToDebugString());
+            return false;
+        }
 
         // Mit "ignore" bindet es auch mit Fremdkoerper - und laesst ihn liegen.
         ChefZ_RecipeEngine tolerant = BuildEngineWith(Recipe3(ChefZ_ExtraItemsMode.IGNORE_NAME));
@@ -718,7 +729,11 @@ class ChefZ_RecipeSelfTest
         // Alle Items "Boiled" -> ON_STAGE ist erfuellt.
         ChefZ_FactSnapshot done = MakeSnapshot(false);
         ChefZ_MatchResult ready;
-        if (!engine.EvaluateBest(cook, done, null, ready))          return false;
+        if (!engine.EvaluateBest(cook, done, null, ready))
+        {
+            ChefZ_Log.Warn(ChefZ_LogChannel.MATCH, "Selbsttest S6 Abschluss: EvaluateBest(fertig) " + ready.ToDebugString());
+            return false;
+        }
         if (!ready.ready)                                           return false;
 
         // Ein rohes Item haelt das Rezept offen - und genau so soll es sein:

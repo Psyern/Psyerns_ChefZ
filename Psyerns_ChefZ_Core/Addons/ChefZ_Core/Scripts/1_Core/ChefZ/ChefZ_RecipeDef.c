@@ -946,6 +946,14 @@ class ChefZ_RecipeDef extends ChefZ_Record
      * verlangen ein WARN, und beides gehoert in den Compiler, der einen
      * Ladebericht hat. Ein Record hat keinen.
      */
+    override void DistributeExplicitPaths()
+    {
+        super.DistributeExplicitPaths();
+        PushExplicitToSlots("slots", slots);
+        PushExplicitToOutputs("outputs", outputs);
+        PushExplicitToOutputs("byproducts", byproducts);
+    }
+
     override void ResolveDefaults()
     {
         super.ResolveDefaults();

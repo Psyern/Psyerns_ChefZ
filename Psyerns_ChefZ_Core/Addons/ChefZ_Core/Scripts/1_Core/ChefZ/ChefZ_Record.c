@@ -26,17 +26,22 @@
 // legitime Nutzdaten. 02 E3 verweist solche Felder auf Mittel 3. Das ist
 // korrekt, aber fuer den haeufigsten Overlay-Fall ("enabled": false) unbequem.
 //
-// Deshalb hier eine VERFEINERUNG von Mittel 3, keine Abweichung von ihm:
-// die Bool-Sonde (ChefZ_RecordProbe). Dasselbe Dokument wird zweimal
-// deserialisiert - einmal mit Bool-Default false, einmal mit true. Ein Feld,
-// das in beiden Durchgaengen denselben Wert hat, stand im JSON; eines, das sich
-// unterscheidet, fehlte. Der Reader traegt die tatsaechlich gesetzten Felder
-// automatisch in explicitFields[] nach. Ein handgeschriebenes explicitFields[]
-// bleibt weiterhin gueltig und wirkt genauso.
+// Mittel 3 wird deshalb nicht von Hand, sondern aus dem TEXT befuellt:
+// ChefZ_JsonExplicit (3_Game) liest die Rohdatei und traegt jeden wirklich
+// geschriebenen Schluessel ein - auf Recordebene unter seinem Namen, in
+// Unterobjekten unter seinem Pfad ("slots[2].minCount"). Der Record verteilt
+// die Pfade in DistributeExplicitPaths() an seine Kinder. Ein
+// handgeschriebenes explicitFields[] bleibt gueltig und wirkt genauso.
 //
-// Kosten: ein zweiter Parsedurchgang je Datei, einmal beim Boot.
+// Die Bool-Sonde (ChefZ_RecordProbe), die dasselbe Dokument zweimal mit
+// umgekehrter Bool-Vorbelegung las, gibt es im Ladepfad nicht mehr: ihre
+// Vorbelegung sass im Konstruktor, und den ruft der Serializer nie. Sie
+// lebt nur noch in Selbsttests mit handgebauten Objekten weiter, wo der
+// Konstruktor laeuft.
+//
 // Gewinn: der Betreiber schreibt "enabled": false und es wirkt - ohne dass er
-// die Sentinelmechanik verstehen muss.
+// die Sentinelmechanik verstehen muss. Und ein Autor laesst inheritState weg
+// und bekommt das dokumentierte true, statt eines stillen false.
 //
 // Layer: 1_Core. Reine Datenverarbeitung, kein Engine-Typ.
 //==============================================================================
@@ -609,6 +614,72 @@ class ChefZ_Record : Managed
             explicitFields = new array<string>();
         if (explicitFields.Find(field) < 0)
             explicitFields.Insert(field);
+    }
+
+    /**
+     * Pfade an die Unterobjekte verteilen (Kopf von ChefZ_JsonExplicit).
+     *
+     * Die Basis hat keine Unterobjekte mit eigenem explicitFields[] und tut
+     * nichts. Records, die welche haben (Rezept, Transform, CoreSettings),
+     * ueberschreiben das und rufen super zuerst. Laeuft einmal je Record,
+     * direkt nach dem Lesen - VOR dem Merge, damit ein Unterobjekt seine
+     * Markierungen aus seinem eigenen Dokument traegt und sie beim
+     * Ganzersatz durch ein Overlay mitnimmt.
+     */
+    void DistributeExplicitPaths()
+    {
+    }
+
+    //! Alle Eintraege, die mit prefix beginnen, ohne den Praefix. Fuer
+    //! "slots[2]." liefert "slots[2].minCount" also "minCount".
+    void CollectExplicitUnder(string prefix, notnull array<string> outSuffixes)
+    {
+        if (!explicitFields)
+            return;
+        int n = prefix.Length();
+        for (int i = 0; i < explicitFields.Count(); i++)
+        {
+            string f = explicitFields.Get(i);
+            if (f.Length() <= n)
+                continue;
+            if (f.Substring(0, n) != prefix)
+                continue;
+            outSuffixes.Insert(f.Substring(n, f.Length() - n));
+        }
+    }
+
+    //! Die Pfade unter key[i]. an die Slots der Liste. Slots und Ergebnisse
+    //! haben keine gemeinsame Basis mit MarkExplicit, deshalb zwei Helfer.
+    protected void PushExplicitToSlots(string key, array<ref ChefZ_SlotDef> list)
+    {
+        if (!list)
+            return;
+        for (int i = 0; i < list.Count(); i++)
+        {
+            ChefZ_SlotDef s = list.Get(i);
+            if (!s)
+                continue;
+            array<string> sub = new array<string>();
+            CollectExplicitUnder(key + "[" + i.ToString() + "].", sub);
+            for (int k = 0; k < sub.Count(); k++)
+                s.MarkExplicit(sub.Get(k));
+        }
+    }
+
+    protected void PushExplicitToOutputs(string key, array<ref ChefZ_OutputDef> list)
+    {
+        if (!list)
+            return;
+        for (int i = 0; i < list.Count(); i++)
+        {
+            ChefZ_OutputDef o = list.Get(i);
+            if (!o)
+                continue;
+            array<string> sub = new array<string>();
+            CollectExplicitUnder(key + "[" + i.ToString() + "].", sub);
+            for (int k = 0; k < sub.Count(); k++)
+                o.MarkExplicit(sub.Get(k));
+        }
     }
 
     /**

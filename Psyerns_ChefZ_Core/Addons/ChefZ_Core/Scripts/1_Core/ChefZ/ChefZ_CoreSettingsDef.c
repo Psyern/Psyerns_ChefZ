@@ -512,6 +512,27 @@ class ChefZ_CoreSettingsDef extends ChefZ_Record
      * JSON nicht vorhanden - es bekommt hier seinen Code-Default und nicht den
      * Wert, den die Sonde zufaellig hinterlassen hat.
      */
+    override void DistributeExplicitPaths()
+    {
+        super.DistributeExplicitPaths();
+
+        array<string> sub = new array<string>();
+        int k;
+        if (priorityWeights)
+        {
+            CollectExplicitUnder("priorityWeights.", sub);
+            for (k = 0; k < sub.Count(); k++)
+                priorityWeights.MarkExplicit(sub.Get(k));
+        }
+        sub.Clear();
+        if (qualityScoring)
+        {
+            CollectExplicitUnder("qualityScoring.", sub);
+            for (k = 0; k < sub.Count(); k++)
+                qualityScoring.MarkExplicit(sub.Get(k));
+        }
+    }
+
     override void ResolveDefaults()
     {
         super.ResolveDefaults();

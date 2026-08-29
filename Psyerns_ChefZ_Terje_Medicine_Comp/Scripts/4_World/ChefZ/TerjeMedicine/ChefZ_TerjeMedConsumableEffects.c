@@ -59,8 +59,8 @@ modded class TerjeConsumableEffects
 
         float timeModifier = GetChefZTerjeMedRegistry().GetPharmacologistTimeModifier(player);
 
-        ApplyImmunityGain(player, effectPath, servings, timeModifier);
-        ApplyHealthRegen(player, effectPath, servings, timeModifier);
+        ChefZ_ApplyImmunityGain(player, effectPath, servings, timeModifier);
+        ChefZ_ApplyHealthRegen(player, effectPath, servings, timeModifier);
     }
 
     // Immunity Gain. Rechnung und Reihenfolge sind absichtlich identisch zu
@@ -71,7 +71,10 @@ modded class TerjeConsumableEffects
     // VitaminBottle verliert der Tee diesen Vergleich immer und tut dann gar
     // nichts. Umgekehrt hebt das Medikament den Tee sofort an. Diese Rangordnung
     // ist der ganze Sinn kleiner Force-Werte.
-    protected void ApplyImmunityGain(PlayerBase player, string effectPath, float servings, float timeModifier)
+    // ChefZ_-Praefix, weil die Klasse Terje gehoert: bekaeme TerjeConsumableEffects
+    // je eine Methode dieses Namens, hiesse es "Multiple declaration" und das
+    // ganze Comp-PBO bliebe beim Start liegen.
+    protected void ChefZ_ApplyImmunityGain(PlayerBase player, string effectPath, float servings, float timeModifier)
     {
         float force = GetTerjeGameConfig().ConfigGetFloat(effectPath + " medImmunityGainForce");
         if (force <= 0)
@@ -111,7 +114,7 @@ modded class TerjeConsumableEffects
     // Gesundheitsregeneration, nach demselben Vorbild
     // (TerjeConsumableEffects.c:56-69). Kein Force-Vergleich - Terje kennt hier
     // nur einen Timer, der bis zum Deckel aufaddiert wird.
-    protected void ApplyHealthRegen(PlayerBase player, string effectPath, float servings, float timeModifier)
+    protected void ChefZ_ApplyHealthRegen(PlayerBase player, string effectPath, float servings, float timeModifier)
     {
         float timeSec = GetTerjeGameConfig().ConfigGetFloat(effectPath + " medHealthgainTimeSec");
         if (timeSec <= 0)
