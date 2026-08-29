@@ -18,7 +18,7 @@
                 },
                 {
                     "slotId": "nails",
-                    "match": { "cls": "Nails" },
+                    "match": { "cls": "Nail" },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
@@ -65,7 +65,7 @@
                 },
                 {
                     "slotId": "nails",
-                    "match": { "cls": "Nails" },
+                    "match": { "cls": "Nail" },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
@@ -75,7 +75,7 @@
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_HoneycombFrameEmpty", "quantity": 1, "quantityMode": "fixed" }
+                { "cls": "ChefZ_HoneycombFrameEmpty" }
             ],
             "priority": 0
         },
@@ -95,7 +95,7 @@
                 },
                 {
                     "slotId": "tines",
-                    "match": { "cls": "Nails" },
+                    "match": { "cls": "Nail" },
                     "minCount": 1,
                     "maxCount": 1,
                     "unit": "PIECE",
@@ -139,7 +139,31 @@
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_HoneycombFrameUncapped", "quantity": 1, "quantityMode": "fixed" }
+                { "cls": "ChefZ_HoneycombFrameUncapped" }
+            ],
+            "priority": 0
+        },
+        {
+            "id": "TR_ExtendBeehive",
+            "process": "PROCESS_EXTEND_HIVE",
+            "inputs": [
+                {
+                    "slotId": "kitA",
+                    "match": { "cls": "ChefZ_BeehiveKit" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "kitB",
+                    "match": { "cls": "ChefZ_BeehiveKit" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_BeehiveDouble" }
             ],
             "priority": 0
         }

@@ -14,6 +14,7 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 | [Fish](#fish) | 3 transforms | Drying Rack, Smoker | `FISH`, preserved fish |
 | [Preservation](#preservation) | 5 transforms, plus the 3 fish steps above | Drying Rack, Smoker | `CHEFZ_PRESERVED` |
 | [Tableware](#tableware) | 2 transforms | none — handcraft | Empty Plate, Empty Bowl |
+| [Honey](#honey) | 7 handcraft transforms + 1 station transform + the hive script | Beehive, Honey Extractor | vanilla `Honey` |
 
 **Read the diagrams like this:** rounded boxes are items, the label on an arrow is
 the station or the tool, and `[]` boxes are the dishes a chain feeds into.
@@ -392,6 +393,67 @@ heat nor fuel. See [Known-Limitations](Known-Limitations).
 
 ---
 
+## Honey
+
+The only chain whose middle step is not a transform. Bees fill the frames by
+script inside the hive; everything before and after is handcraft or a station.
+Reworked 2026-08-29 — the earlier sealed-frame step and the hive's timed
+process are gone.
+
+```mermaid
+graph LR
+  P(["Wooden Plank<br/>+ Nail"]) -->|"handcraft 25 s"| K(["Beehive Kit"])
+  K -->|"handcraft 30 s"| H(["Beehive<br/>10 frames"])
+  K -->|"2 kits, handcraft 30 s"| H2(["Double Beehive<br/>20 frames"])
+  P -->|"handcraft 12 s"| E(["Empty Comb Frame<br/>bar 0 %"])
+  E -->|"in the hive<br/>4 h each, one after another"| F(["Full Comb Frame"])
+  F -->|"Uncapping Fork<br/>handcraft 18 s"| U(["Uncapped Comb Frame<br/>3 jars"])
+  U -->|"Honey Extractor<br/>+ Empty Jar, 90 s per jar"| HO(["Honey<br/>vanilla"])
+  HO --> D["Milk Rice<br/>Honey Bread Platter"]
+```
+
+| Step | Input | Output | Where | Tool | Duration |
+|---|---|---|---|---|---|
+| `TR_BuildBeehiveKit` | 4× Wooden Plank + 10× Nail | Beehive Kit | handcraft | — | 25 s |
+| `TR_RaiseBeehive` | 1× Beehive Kit | Beehive | handcraft | — | 30 s |
+| `TR_ExtendBeehive` | 2× Beehive Kit | Double Beehive | handcraft | — | 30 s |
+| `TR_BuildHoneycombFrame` | 1× Wooden Plank + 2× Nail | Empty Comb Frame | handcraft | — | 12 s |
+| `TR_BuildUncappingFork` | 1× Wooden Plank + 4× Nail | Uncapping Fork | handcraft | — | 15 s |
+| `TR_BuildBeeSmoker` | 1× opened Tuna Can | Bee Smoker | handcraft | — | 20 s |
+| *(script, no transform)* | Empty Comb Frame in hive cargo | Full Comb Frame | Beehive | — | 4 h per frame |
+| `TR_UncapHoneycombFrame` | 1× Full Comb Frame | Uncapped Comb Frame (3 jars) | handcraft | Uncapping Fork | 18 s |
+| `TR_SpinHoney` | 1 jar's worth of an Uncapped Comb Frame + 1× Empty Jar | Honey (vanilla) | Honey Extractor | — | 90 s per jar |
+
+**In the hive.** Up to 10 empty frames (20 in the double hive) sit in the cargo.
+A server timer fills the *first* not-full frame — 4 h per frame, so a full hive
+takes 40 h — and the frame's `quantityBar` rises like an apple's falls. A full
+frame is swapped in its cell for a Full Comb Frame. The fill level is stored with
+the frame; while the server is down no time passes (assumption A1).
+
+**Out of the hive.** "Open Hive" (`PROCESS_HARVEST_HIVE`, 8 s) opens the lid for
+120 s and stings the beekeeper unless gloves, a covered head or a Bee Smoker in
+hand absorb it (assumption A4). While the lid is open, and only then, a **Full**
+frame can be dragged out; empty frames stay put.
+
+**At the extractor.** Up to 5 uncapped frames and 15 empty jars
+(`ChefZ_EmptyJar`, ~500 ml) go in. The player cranks once; after that the drum
+runs a 90-second job per jar on its own until frames or jars run out
+(assumption A3). Each job takes one unit off the frame (it carries 4: three
+jars plus one reserve unit the core would otherwise delete the frame over),
+consumes the jar and creates vanilla `Honey` in the cargo. A frame down to its
+reserve unit becomes an Empty Comb Frame again — the chain loops. If the drum
+stops (no jar, no frame, cargo full) it stays stopped until someone cranks again.
+
+**Where it feeds in.** `Honey` is required by Milk Rice and Honey Bread Platter
+and was vanilla loot only until this chain existed.
+
+**Gaps.** `Honey` is a vanilla item whose config is not in the repository: its
+size in the cargo and whether it takes the jar's exact cell cannot be promised.
+The nail ingredient is vanilla `Nail` (`Nails` is a script-only class,
+assumption A5).
+
+---
+
 ## Tableware
 
 Not food, but the chain everything portioned depends on: without a bowl there is
@@ -433,6 +495,11 @@ All 58 transforms are accounted for above:
 | Of those, handcraft | 21 |
 | Recipes fed by these chains | 44 |
 | Chains blocked at least in part | 3 — meat/sausage (no cargo), preservation (smoker), everything upstream of loot (no `types.xml`) |
+
+The transform totals above predate the honey chain (recounted 2026-08-29: 59
+transforms in the repository, 8 of them in the apiary). The honey chain is the
+one chain that is not blocked upstream: planks, nails and tuna cans are vanilla
+loot.
 
 ## See also
 

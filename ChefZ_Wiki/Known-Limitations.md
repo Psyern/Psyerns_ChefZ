@@ -162,6 +162,23 @@ Consequences, both real:
 Filling it is cheap — a class dump from a server is enough — and it closes the
 single largest gap in the checking net. See [Validation](Validation).
 
+### The apiary rework is untested in-game
+
+The 2026-08-29 honey chain (frames filling one after another inside the hive,
+the extractor restarting itself per jar) rests on engine behaviour the static
+checkers cannot confirm. Open until the in-game gate: whether the cargo grid
+draws a frame's `quantityBar` (the vanilla UI code only proves it for the
+vicinity view); whether `TurnItemIntoItemLambda` swaps a frame in its own cargo
+cell (watch the log for `lambda cannot be executed, skipping!` and `Step D)
+ABORT`; on failure the frame stays at 100 % as the first frame and every next
+tick retries — nothing is lost, and the hive bypasses its own `CanReleaseCargo`
+during the swap); whether the extractor's `CallLater` continuation and the
+"cargo full → `RUN_FAILED` without consumption, chain stops until cranked
+again" path behave as read from the source; and
+whether a handcraft transform with two inputs of the same class
+(`TR_ExtendBeehive`, two Beehive Kits) binds. The chain's assumptions A1–A5 are
+listed on [Processing Stations](Processing-Stations#beehive-and-double-beehive).
+
 ### What the checkers cannot see at all
 
 Runtime behaviour, cooking logic under load, whether the balance feels right,

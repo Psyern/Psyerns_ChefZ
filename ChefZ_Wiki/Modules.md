@@ -119,7 +119,10 @@ classes, no seeds and no growth stages. Where they spawn is the server's `types.
 
 - **item classes**: wheat, the four ChefZ vegetables (`ChefZ_Onion`,
   `ChefZ_Garlic`, `ChefZ_Carrot`, `ChefZ_Cabbage`), six fresh herbs and spices,
-  plus the apiary.
+  plus the apiary: `ChefZ_Beehive`, `ChefZ_BeehiveDouble`, `ChefZ_BeehiveKit`,
+  three comb frames (empty, full, uncapped), `ChefZ_UncappingFork`,
+  `ChefZ_BeeSmoker`. The two hives are the only stations outside
+  `ChefZ_Processing`; see [Processing Stations](Processing-Stations#beehive-and-double-beehive).
 - **Script files**: `ChefZ_FarmingItems.c`, `ChefZ_HerbItems.c`,
   `ChefZ_ProduceFarming.c`, `ChefZ_Apiary.c`.
 - **Rank 1**: 5 ingredient bindings (`ChefZ_ProduceIngredient` and the four
@@ -127,7 +130,8 @@ classes, no seeds and no growth stages. Where they spawn is the server's `types.
 - **Rank 2**: ingredient records in `Config/GrainIngredients.json` and
   `Config/Ingredients/Herbs.json`.
 - **`CfgChefZ` slices**: `ChefZ_GrainFarming` (210, 0 slots),
-  `ChefZ_HerbFarming` (215, 0 slots).
+  `ChefZ_HerbFarming` (215, 0 slots), `ChefZ_Apiary` (7 handcraft slots:
+  five build steps, uncapping, and the double hive).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Cultivation`, `DZ_Gear_Food`, `ChefZ_Core`.
 
 `ChefZ_FreshHerbBase` is the only ChefZ class extended by `modded class` from a
@@ -140,13 +144,14 @@ comp mod (see [Terje Compatibility](Terje-Compatibility)).
 Stations and tools. Every processing station in ChefZ lives here, regardless of
 which chain it belongs to.
 
-- **11 item classes**, including all 8 stations: `ChefZ_GrainMill`,
+- **item classes** including 9 stations: `ChefZ_GrainMill`,
   `ChefZ_Mortar`, `ChefZ_DryingRack`, `ChefZ_ButterChurn`, `ChefZ_CheesePress`,
-  `ChefZ_Smoker`, `ChefZ_SaltPan`, `ChefZ_MeatGrinder`. The cutting board is
-  gone — cutting is "ingredient + knife".
-- **6 script files**, each of which is a list of empty derivations from
-  `ChefZ_ProcessingStation_Base` — the station behaviour is entirely in the core
-  and in data.
+  `ChefZ_Smoker`, `ChefZ_SaltPan`, `ChefZ_MeatGrinder`, `ChefZ_HoneyExtractor`.
+  The cutting board is gone — cutting is "ingredient + knife".
+- **6 script files**, mostly empty derivations from
+  `ChefZ_ProcessingStation_Base` — the station behaviour is in the core and in
+  data. The exception is `ChefZ_HoneyExtractor.c`, which restarts its own job
+  after every jar and limits the cargo to 5 frames and 15 jars.
 - **Rank 1**: 14 processes and 2 tool groups (`CUTTING_TOOL` with eight vanilla
   knives, `ROLLING_PIN`). Tool group classes are deliberately *not* checked
   against `CfgVehicles`: a knife from an optional module may be named without

@@ -1,10 +1,12 @@
 # Processing Stations
 
-ChefZ ships **9 processing stations**. They run *transforms*,
+ChefZ ships **11 processing stations**. They run *transforms*,
 not recipes: a transform takes items out of the station's cargo and puts different
-items back. All 9 station records live in
-`Psyerns_ChefZ_Core/Addons/ChefZ_Processing/Config/`, and all nine `CfgVehicles`
-classes live in that module's `config.cpp`.
+items back. Nine station records live in
+`Psyerns_ChefZ_Core/Addons/ChefZ_Processing/Config/` with their `CfgVehicles`
+classes in that module's `config.cpp`; the two beehives live in
+`ChefZ_Farming` (`Config/Processing/Apiary_Stations.json`) and are the one
+exception to "a station runs transforms" — see [Beehive](#beehive-and-double-beehive).
 
 ## Stations are deliberately not cookware
 
@@ -24,7 +26,7 @@ fireplace.
 `Inventory_Base` closes both paths. **No station appears in any recipe context, and
 nothing can be cooked inside one.**
 
-## The nine stations
+## The eleven stations
 
 | Station | Class | Category | Processes | Parallel slots | Cargo | Needs fuel | Weight | Proxy model |
 |---|---|---|---|---|---|---|---|---|
@@ -36,8 +38,11 @@ nothing can be cooked inside one.**
 | Butter Churn | `ChefZ_ButterChurn` | `CHURN` | 2 | 1 | 4×4 | no | 4200 g | `wooden_case.p3d` |
 | Cheese Press | `ChefZ_CheesePress` | `PRESS` | 1 | 1 | 6×4 | no | 6800 g | `wooden_case.p3d` |
 | Meat Grinder | `ChefZ_MeatGrinder` | `GRINDER` | 2 | 1 | **none** | no | 3200 g | `Cauldron.p3d` |
+| Honey Extractor | `ChefZ_HoneyExtractor` | `EXTRACTOR` | 1 | 1 | 10×10 | no | 9500 g | `Cauldron.p3d` |
+| Beehive | `ChefZ_Beehive` | `APIARY` | 1 | 1 | 10×9 | no | 14000 g | `wooden_case.p3d` |
+| Double Beehive | `ChefZ_BeehiveDouble` | `APIARY` | 1 | 1 | 10×15 | no | 26000 g | `wooden_case.p3d` |
 
-All eight run at `speedMultiplier` 1.0. Every model is a vanilla proxy — no station
+All eleven run at `speedMultiplier` 1.0. Every model is a vanilla proxy — no station
 has its own geometry yet.
 
 The cargo area **is** the input side: `ChefZ_ProcessingStation_Base` reads its
@@ -49,8 +54,11 @@ calls `inventory.GetCargo()` and returns immediately if the result is null.
 | Kind | Meaning | Processes |
 |---|---|---|
 | `STATION_ACTION` | The player stands at the station and performs the action. Seconds. | 6 |
-| `STATION_TIMED` | The job ticks on without the player. Minutes. If the environment stops matching, the job **pauses** — it never rolls back and never destroys the input. | 7 |
-| `HANDCRAFT` | Not a station at all. Runs through the vanilla crafting menu with an item in hand. | 8 |
+| `STATION_TIMED` | The job ticks on without the player. Minutes. If the environment stops matching, the job **pauses** — it never rolls back and never destroys the input. | 8 |
+| `HANDCRAFT` | Not a station at all. Runs through the vanilla crafting menu with an item in hand. | 17 |
+
+(Counted 2026-08-29 over every `CfgChefZProcesses` class and JSON process
+record, after the apiary rework.)
 
 ## Tool groups
 
@@ -300,6 +308,110 @@ Mince raw meat, then stuff the mince into casing. Twelve transforms — six minc
 
 ---
 
+## Honey Extractor
+
+`ChefZ_HoneyExtractor` · category `EXTRACTOR` · 1 parallel slot · cargo 10×10
+
+Spins honey out of uncapped comb frames into empty jars. The cargo holds up to
+**5 uncapped frames** and **15 empty jars** (`ChefZ_EmptyJar`, ~500 ml each);
+the station script counts them in `CanReceiveItemIntoCargo`, the rest of the
+grid is left for the honey that comes out. One frame yields **three jars**: the
+frame carries its remaining jars as `varQuantity` (4 → 1, shown as a quantity bar),
+and every run takes one unit off the frame and consumes one jar whole. The
+fourth unit is a reserve that is never drawn: the core deletes an item whose
+last unit would be taken (`ChefZ_SlotEvaluator.PlanAmountDraw` sets
+`destroyWhole`), so `TR_SpinHoney` requires at least 2 units and the frame
+survives its third jar with one unit left.
+
+### Processes
+
+| Process | Kind | Base duration | Heat | Tool |
+|---|---|---|---|---|
+| `PROCESS_SPIN_HONEY` | STATION_TIMED | 90 s | no | none |
+
+### Transforms (1)
+
+| Transform | Input | Output | Ratio | Duration | Sets state |
+|---|---|---|---|---|---|
+| `TR_SpinHoney` | 1× Uncapped Comb Frame (1 unit, at least 2 present) + 1× Empty Jar | vanilla `Honey` | 1× | 90 s | — |
+
+**The player only starts it.** `PROCESS_SPIN_HONEY` is `STATION_TIMED`: the
+crank action begins the first 90-second job, and `ChefZ_HoneyExtractor` overrides
+`ChefZ_CompleteJob` to start the next one itself (via `CallLater`, one frame
+later, because the base class stops its job timer on completion) as long as a
+frame with at least 2 units and an empty jar are in the cargo. A frame below 2
+units is replaced in place by an Empty Comb Frame. The running job is saved by
+the base class, so a restart resumes the chain. (Assumption A3 — the user was not reachable to confirm
+that the drum should keep going on its own.)
+
+The output is vanilla `Honey`, created in the cargo — not necessarily in the jar's
+former cell, because vanilla's item config is not part of the repository and ChefZ
+never overrides it. The empty jar itself is unchanged and belongs to
+`ChefZ_Cooking`. If the cargo is full the job ends `RUN_FAILED` without consuming
+anything and the chain **stops**: taking honey out or adding jars does not restart
+it — the player has to crank again. The same applies whenever a follow-up job
+cannot start (no jar, no frame with 2 units left).
+
+---
+
+## Beehive and Double Beehive
+
+`ChefZ_Beehive` · category `APIARY` · 1 parallel slot · cargo 10×9 · **10 frames** · lifetime 604800 s
+`ChefZ_BeehiveDouble` · category `APIARY` · 1 parallel slot · cargo 10×15 · **20 frames** · lifetime 1209600 s
+
+The cargo grid has spare cells on purpose: the frame limit (10 / 20) is counted by
+script, and a rotated or shifted frame must not lock the last one out. The config
+`lifetime` sits well above the fill time (40 h / 80 h) because the CE clock runs in
+the same server time as the bees; a `types.xml` entry overrides it, so keep it at
+least that high there.
+
+The one station that runs **no transform**. Its single process exists to give the
+player an action; the actual work — bees filling frames — is script in
+`ChefZ_Apiary.c`, not a station job.
+
+### Processes
+
+| Process | Kind | Base duration | Heat | Tool |
+|---|---|---|---|---|
+| `PROCESS_HARVEST_HIVE` | STATION_ACTION | 8 s | no | none (a Bee Smoker in hand prevents the sting) |
+
+### Transforms (0)
+
+None, on purpose. `ChefZ_ActionProcessAtStation.IsProcessUsable` skips the
+transform check when a process has none, `RunImmediate` reports `NO_MATCH`, and
+`NotifyStation` still fires — that is the hook the hive uses.
+
+**How the frames fill.** Only Empty and Full Comb Frames go into the cargo, at most
+10 (20 in the double hive). A server-side timer on the hive ticks every 10 s and
+raises `varQuantity` on the **first** not-yet-full Empty Comb Frame in cargo order —
+one frame after another, **4 h per frame**, so ten frames take 40 h and twenty take
+80 h. The frame's bar is vanilla's `quantityBar`, the same one an apple shows, only
+rising. At 100 the frame is replaced in its cell by a Full Comb Frame
+(`TurnItemIntoItemLambda`, no variable transfer). The fill level is saved with the
+frame by the engine's variable block; while the server is down no time passes
+(assumption A1, like vanilla plants).
+
+**How the frames come out.** `CanReleaseCargo` allows only a **Full** Comb Frame,
+and only while the lid is open. "Open Hive" (`PROCESS_HARVEST_HIVE`) opens the lid
+for 120 s (server-side, not persisted) and triggers the bee sting exactly as
+before — light forearm damage, absorbed by gloves, a Bee Smoker in hand or a
+covered head (assumption A4). Taking the frame is an inventory drag.
+
+**Double Beehive.** `ChefZ_BeehiveDouble` inherits config and script from the
+hive and only raises the capacity to 20. It is built from **two** Beehive Kits
+(`TR_ExtendBeehive`, `PROCESS_EXTEND_HIVE`, handcraft), not from a placed hive —
+a handcraft step consumes its ingredient with everything in its cargo, and a
+stocked hive would lose its frames. (Assumption A2; the name `ChefZ_Beehive_Double`
+was not possible because the naming checker rejects the second underscore.)
+
+**Removed 2026-08-29:** the Sealed Comb Frame, `PROCESS_TEND_HIVE`,
+`Apiary_Hive.json` with `TR_BeesFillFrame` and `TR_HarvestSealedFrame`, and the
+glass bottle as extractor input (it is the empty jar now). The kits' nail
+ingredient is vanilla `Nail` — `Nails` is a script-only class without a config
+entry (assumption A5).
+
+---
+
 ## Handcraft transforms — no station needed
 
 21 of the 58 transforms need no station at all. They run
@@ -314,6 +426,13 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 | `PROCESS_CARVE_BOWL` | 25 s | `CUTTING_TOOL` | 0 | 1 |
 | `PROCESS_CUT_MEAT` | 4 s | `CUTTING_TOOL` | 2 | 1 |
 | `PROCESS_SALT_CURE` | 6 s | none | 0 | 2 |
+| `PROCESS_BUILD_HIVE_KIT` | 25 s | none | 0 | 1 |
+| `PROCESS_RAISE_HIVE` | 30 s | none | 0 | 1 |
+| `PROCESS_EXTEND_HIVE` | 30 s | none | 0 | 1 |
+| `PROCESS_BUILD_FRAME` | 12 s | none | 0 | 1 |
+| `PROCESS_BUILD_UNCAPPING_FORK` | 15 s | none | 0 | 1 |
+| `PROCESS_BUILD_BEE_SMOKER` | 20 s | none | 0 | 1 |
+| `PROCESS_UNCAP_COMB` | 18 s | none | 0 | 1 |
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
@@ -323,16 +442,27 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 | `TR_CarveWoodenBowl` | 1+× Firewood | Empty Bowl | 1× | 25 s | — |
 | `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat | 1× | 6 s | SALTED |
 | `TR_SaltFish` | 1× *FISH* + state RAW + 1× *SALT* (20) | Salted Fish | 1× | 6 s | SALTED |
+| `TR_BuildBeehiveKit` | 4× Wooden Plank + 10× Nail | Beehive Kit | 1× | 25 s | — |
+| `TR_RaiseBeehive` | 1× Beehive Kit | Beehive | 1× | 30 s | — |
+| `TR_ExtendBeehive` | 2× Beehive Kit | Double Beehive | 1× | 30 s | — |
+| `TR_BuildHoneycombFrame` | 1× Wooden Plank + 2× Nail | Empty Comb Frame (bar at 0 %) | 1× | 12 s | — |
+| `TR_BuildUncappingFork` | 1× Wooden Plank + 4× Nail | Uncapping Fork | 1× | 15 s | — |
+| `TR_BuildBeeSmoker` | 1× opened Tuna Can | Bee Smoker | 1× | 20 s | — |
+| `TR_UncapHoneycombFrame` | 1× Full Comb Frame + Uncapping Fork | Uncapped Comb Frame (3 jars) | 1× | 18 s | — |
+
+The apiary rows come from `ChefZ_Farming/Config/Processing/Apiary_Crafts.json`
+(details in its `README_Apiary.md`). `ChefZ_Apiary` reserves **7** handcraft
+slots for them.
 
 ## Counts
 
 | | |
 |---|---|
-| Stations | 9 |
-| Station categories | 9 |
-| Processes | 21 — 8 handcraft, 6 station action, 7 station timed |
-| Transforms | 58 — 37 at stations, 21 handcraft |
-| Processes with no transform | 0 |
+| Stations | 11 (9 in `ChefZ_Processing`, 2 beehives in `ChefZ_Farming`) |
+| Station categories | 11 |
+| Processes | 31 — 17 handcraft, 6 station action, 8 station timed (recounted 2026-08-29) |
+| Transforms | 59 (recounted 2026-08-29; the per-chain split above predates the apiary) |
+| Processes with no transform | 1 — `PROCESS_HARVEST_HIVE`, by design |
 | Transforms naming an undeclared process | 0 |
 | Transforms naming an unknown station | 0 |
 | Stations without cargo | 3 (Grain Mill, Cutting Board, Meat Grinder) |

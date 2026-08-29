@@ -64,7 +64,7 @@ built around, and [Adding Content](Adding-Content) walks through it.
 ChefZ_Core          systems, no content
 ChefZ_Registry      the merged vocabulary from all modules
 ChefZ_Ingredients   base ingredients, intermediates, spices
-ChefZ_Farming       plants, herbs, seeds, harvesting
+ChefZ_Farming       found plants and herbs, beekeeping
 ChefZ_Processing    stations, tools, processing steps
 ChefZ_Meat          minced meat, sausages, meat products
 ChefZ_Preservation  salting, drying, smoking

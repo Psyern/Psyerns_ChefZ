@@ -3,20 +3,20 @@
   "processes": [
     { "id": "PROCESS_BUILD_HIVE_KIT", "durationSec": 25 },
     { "id": "PROCESS_RAISE_HIVE", "durationSec": 30 },
+    { "id": "PROCESS_EXTEND_HIVE", "durationSec": 30 },
     { "id": "PROCESS_BUILD_FRAME", "durationSec": 12 },
     { "id": "PROCESS_BUILD_UNCAPPING_FORK", "durationSec": 15 },
     { "id": "PROCESS_BUILD_BEE_SMOKER", "durationSec": 20 },
-    { "id": "PROCESS_TEND_HIVE", "station": "ChefZ_Beehive", "durationSec": 3600 },
-    { "id": "PROCESS_HARVEST_HIVE", "station": "ChefZ_Beehive", "durationSec": 25 },
+    { "id": "PROCESS_HARVEST_HIVE", "station": "ChefZ_Beehive", "durationSec": 8 },
     { "id": "PROCESS_UNCAP_COMB", "durationSec": 18 },
-    { "id": "PROCESS_SPIN_HONEY", "station": "ChefZ_HoneyExtractor", "durationSec": 40 }
+    { "id": "PROCESS_SPIN_HONEY", "station": "ChefZ_HoneyExtractor", "durationSec": 90 }
   ],
   "classes": [
     "ChefZ_Beehive",
+    "ChefZ_BeehiveDouble",
     "ChefZ_BeehiveKit",
     "ChefZ_HoneycombFrame_Base",
     "ChefZ_HoneycombFrameEmpty",
-    "ChefZ_HoneycombFrameSealed",
     "ChefZ_HoneycombFrameFull",
     "ChefZ_HoneycombFrameUncapped",
     "ChefZ_UncappingFork",

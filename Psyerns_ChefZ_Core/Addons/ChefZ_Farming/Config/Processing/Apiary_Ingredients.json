@@ -11,11 +11,19 @@
             "decays": false
         },
         {
-            "id": "Nails",
+            "id": "Nail",
             "categories": [],
             "tags": [],
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 99,
+            "decays": false
+        },
+        {
+            "id": "ChefZ_HoneycombFrameUncapped",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 4,
             "decays": false
         }
     ]

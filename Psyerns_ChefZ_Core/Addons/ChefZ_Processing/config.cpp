@@ -70,23 +70,22 @@ class CfgPatches
         //                 als Eingang des Mahlvorgangs.
         // DZ_Gear_*:      die Proxy-Modelle.
         // ### SLICE apiary ###
-        // DZ_Gear_Consumables: GlassBottle, das leere Honigglas des Auftrags.
-        //                      TR_SpinHoney nennt die Klasse; ohne das PBO
-        //                      gibt es sie nicht und der Transform matcht nie.
+        // DZ_Gear_Food:        Honey, das fertige Honigglas - TR_SpinHoney
+        //                      erzeugt es, sonst nichts. Steht schon oben.
         // ChefZ_Farming:       steht schon oben - liefert ausserdem
-        //                      ChefZ_HoneycombFrameUncapped und
-        //                      ChefZ_HoneycombFrameEmpty, die beiden
-        //                      Wabenklassen von TR_SpinHoney.
+        //                      ChefZ_HoneycombFrameUncapped, den Eingang von
+        //                      TR_SpinHoney, und ChefZ_HoneycombFrameEmpty,
+        //                      wozu ein leergeschleuderter Rahmen wird.
         // DZ_Gear_Cooking:     steht schon oben - Cauldron.p3d, der Proxy der
         //                      Schleuder.
         //
-        // KEIN ChefZ_Cooking, obwohl dieses Modul dessen ChefZ_EmptyJar als
-        // leeres Glas benutzen koennte: ChefZ_Cooking fuehrt ChefZ_Processing
-        // bereits in seinem requiredAddons, die Gegenrichtung waere ein
-        // Ladezyklus. Deshalb Vanillas GlassBottle - und die ist ohnehin die
-        // Vorgabe des Projekts ("Vanilla wird bevorzugt"; ChefZ_Vanilla_
-        // Assets §18 nennt sie als Kandidat fuer das ChefZ-Einmachglas).
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "DZ_Gear_Cooking", "DZ_Gear_Consumables"};
+        // KEIN ChefZ_Cooking, obwohl TR_SpinHoney dessen ChefZ_EmptyJar als
+        // leeres Glas nennt: ChefZ_Cooking fuehrt ChefZ_Processing bereits in
+        // seinem requiredAddons, die Gegenrichtung waere ein Ladezyklus. Der
+        // Transform nennt die Klasse nur als NAMEN und bindet zur Laufzeit;
+        // das Skript der Schleuder prueft sie ueber IsKindOf, nie ueber einen
+        // Klassenbezug. Fehlt ChefZ_Cooking, matcht der Transform schlicht nie.
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "DZ_Gear_Cooking"};
     };
 };
 
@@ -623,17 +622,26 @@ class CfgVehicles
     // ChefZ_SaltPan weiter oben ("Salzwasser IM Topf ist Fluessigkeit, kein
     // Item ... ChefZ_RecipeDef.Validate weist ein Rezept ohne slots
     // ausdruecklich ab"). Ein eigener Zwischenstand als ITEM waere eine
-    // fuenfte Wabenklasse ohne eigene Aussage.
+    // vierte Wabenklasse ohne eigene Aussage.
     //
-    // Als EIN Schritt an der Station ist es dagegen glatt: Rahmen und leeres
-    // Glas liegen zusammen im Cargo, der Spieler kurbelt, heraus kommt das
-    // gefuellte Glas und der leere Rahmen. Zwei Eingaenge sind an einer
-    // Station folgenlos - die Grenze von zwei Zutaten gilt nur fuer HANDCRAFT
-    // (01 V12), und dort waere die Kette gar nicht abbildbar: zwei Eingaenge
-    // liessen keinen Platz fuer ein Werkzeug, und die Schleuder IST das
-    // Werkzeug.
+    // Als EIN Schritt an der Station ist es dagegen glatt: entdeckelte Rahmen
+    // und leere Glaeser (ChefZ_EmptyJar) liegen zusammen im Cargo, der Spieler
+    // kurbelt an, und je Glas wird EIN leeres Glas sofort durch Vanillas Honey
+    // ersetzt - das Glas verschwindet, das Honigglas entsteht im Cargo
+    // (Auftrag 12). Der Rahmen gibt je Glas eine Einheit Vorrat her (Auftrag
+    // 4: drei Glaeser) und wird danach im Skript zum Leerrahmen; warum er dafuer
+    // vier Einheiten traegt und eine davon stehen bleibt, steht an der Klasse
+    // in ChefZ_Farming und im Kopf von ChefZ_HoneyExtractor.c. Zwei Eingaenge sind an
+    // einer Station folgenlos - die Grenze von zwei Zutaten gilt nur fuer
+    // HANDCRAFT (01 V12), und dort waere die Kette gar nicht abbildbar: zwei
+    // Eingaenge liessen keinen Platz fuer ein Werkzeug, und die Schleuder IST
+    // das Werkzeug.
     //
-    // STATION_ACTION und nicht STATION_TIMED: der Spieler dreht die Kurbel.
+    // STATION_TIMED, nicht STATION_ACTION: der Spieler kurbelt nur AN. Danach
+    // arbeitet die Schleuder selbst, 90 s je Glas, und ihr Skript startet nach
+    // jedem Abschluss den naechsten Job, solange Rahmen mit Vorrat und Glaeser
+    // liegen (Annahme A3). Ein Spieler, der fuenfzehn Glaeser lang kurbelt,
+    // waere die Alternative - und nicht der Auftrag.
     //
     // --------------------------------------------------------------------
     // class Cargo IST die Eingangsseite
@@ -641,8 +649,14 @@ class CfgVehicles
     // ChefZ_ProcessingStation_Base liest seine Zutaten ueber
     // ChefZ_FactCollector.CollectFromCargo aus genau diesem Bereich. Ohne ihn
     // faende ein Job nie eine Zutat - der Fehler, an dem das fruehere
-    // Schneidebrett gescheitert ist. 4x3 fasst ein Raehmchen (2x3) und ein Glas
-    // nebeneinander, mit Luft fuer ein zweites Paar.
+    // Schneidebrett gescheitert ist. 10x10 = 100 Zellen: fuenf Rahmen a 2x3
+    // (30) und fuenfzehn Glaeser a 1x2 (30) sind der Auftrag, die Kapazitaet
+    // zaehlt das Skript ueber CanReceiveItemIntoCargo. Der Rest ist Platz fuer
+    // das erzeugte Honey, dessen Groesse ohne die Vanilla-Itemconfig nicht
+    // belegbar ist. Ist das Cargo voll, endet ein Job ohne Verbrauch
+    // (RUN_FAILED in der Basis), und die Schleuder steht, bis ein Spieler
+    // Honig entnimmt UND erneut ankurbelt - das Entnehmen allein startet
+    // nichts.
     //
     // KEIN Pot und KEIN Cauldron als Basis, obwohl eine Schleuder ein
     // Metallkessel ist: beide stehen in CfgChefZDevices und wuerden die
@@ -672,7 +686,7 @@ class CfgVehicles
 
         class Cargo
         {
-            itemsCargoSize[] = {4, 3};
+            itemsCargoSize[] = {10, 10};
             openable = 0;
         };
     };
@@ -831,8 +845,8 @@ class CfgChefZ
     // Eingangsklassen kommen.
     //
     // handcraftRecipeSlots = 0: der einzige Prozess dieses Knotens
-    // (PROCESS_SPIN_HONEY) ist STATION_ACTION und fasst Vanillas Rezeptliste
-    // nicht an. Die sechs HANDCRAFT-Plaetze des Slice sind in ChefZ_Farming
+    // (PROCESS_SPIN_HONEY) ist STATION_TIMED und fasst Vanillas Rezeptliste
+    // nicht an. Die sieben HANDCRAFT-Plaetze des Slice sind in ChefZ_Farming
     // unter ChefZ_Apiary reserviert, dort wo die Transforms liegen.
     class ChefZ_HoneyProcessing
     {
@@ -1120,9 +1134,11 @@ class CfgChefZProcesses
     // Fluessigkeit im Gefaess waere - die vollstaendige Begruendung steht an
     // ChefZ_HoneyExtractor.
     //
-    // STATION_ACTION und nicht STATION_TIMED: der Spieler dreht die Kurbel,
-    // und der Fortschritt braucht einen Anker (11 §3). Dieselbe Wahl wie bei
-    // PROCESS_GRIND_MEAT am Fleischwolf.
+    // STATION_TIMED und nicht STATION_ACTION: der Spieler kurbelt AN
+    // (JOB_STARTED), danach gehoert der Takt der Station. baseDurationSec ist
+    // die Zeit JE GLAS (Auftrag 13: rund 90 Sekunden); die Fortsetzung Glas
+    // fuer Glas steht im Skript der Schleuder, nicht hier. Ein Spieler, der
+    // die ganze Charge lang kurbelt, waere der falsche Anker.
     //
     // KEINE toolGroups: an einer Station arbeitet die Station, nicht das
     // Werkzeug. Der Transform hat ausserdem ZWEI Eingaenge - an einer Station
@@ -1133,9 +1149,9 @@ class CfgChefZProcesses
     //--------------------------------------------------------------------------
     class PROCESS_SPIN_HONEY
     {
-        exec = "STATION_ACTION";
+        exec = "STATION_TIMED";
         displayName = "#STR_CHEFZ_PROC_SPIN_HONEY";
-        baseDurationSec = 40.0;
+        baseDurationSec = 90.0;
         requiresHeat = 0;
     };
 };

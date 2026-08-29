@@ -121,6 +121,7 @@ MacrolepiotaMushroom
 Marmalade
 MeatTenderizer
 MediumGasCanister
+Nail
 OrientalMachete
 OvenIndoor
 Pajka

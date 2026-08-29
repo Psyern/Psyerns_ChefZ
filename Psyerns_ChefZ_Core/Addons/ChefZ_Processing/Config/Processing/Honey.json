@@ -12,21 +12,21 @@
                     "match": { "cls": "ChefZ_HoneycombFrameUncapped" },
                     "minCount": 1,
                     "maxCount": 1,
-                    "consume": "whole"
+                    "unit": "PIECE",
+                    "amount": { "min": 2.0 },
+                    "consume": "amount",
+                    "consumeAmount": 1.0
                 },
                 {
                     "slotId": "jar",
-                    "match": { "cls": "GlassBottle" },
+                    "match": { "cls": "ChefZ_EmptyJar" },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
                 }
             ],
             "outputs": [
-                { "cls": "Honey", "quantity": 1, "quantityMode": "fixed" }
-            ],
-            "byproducts": [
-                { "cls": "ChefZ_HoneycombFrameEmpty", "quantity": 1, "quantityMode": "fixed" }
+                { "cls": "Honey" }
             ],
             "priority": 0
         }

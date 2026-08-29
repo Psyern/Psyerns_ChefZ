@@ -70,9 +70,9 @@ class CfgPatches
             "ChefZ_Parsley", "ChefZ_Dill", "ChefZ_Thyme", "ChefZ_Rosemary",
             "ChefZ_WildGarlic", "ChefZ_PepperBerries",
             // ### SLICE apiary ###
-            "ChefZ_Beehive", "ChefZ_BeehiveKit",
+            "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_BeehiveKit",
             "ChefZ_HoneycombFrame_Base",
-            "ChefZ_HoneycombFrameEmpty", "ChefZ_HoneycombFrameSealed",
+            "ChefZ_HoneycombFrameEmpty",
             "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
             "ChefZ_UncappingFork", "ChefZ_BeeSmoker"
         };
@@ -89,7 +89,7 @@ class CfgPatches
         //                      Bausatz (### SLICE apiary ###).
         // DZ_Gear_Tools:       Meat_Tenderizer.p3d - Proxy der
         //                      Entdeckelungsgabel (### SLICE apiary ###).
-        // DZ_Gear_Consumables: birch_bark.p3d - Proxy der vier Raehmchen
+        // DZ_Gear_Consumables: birch_bark.p3d - Proxy der drei Raehmchen
         //                      (### SLICE apiary ###).
         //
         // KEIN ChefZ_Processing: dieses Modul steht in dessen requiredAddons.
@@ -620,15 +620,15 @@ class CfgVehicles
     // Auftragsnamen -> Klassennamen (DME-Plan §53, ChefZ_PascalCase):
     //
     //   Bienenstock            ChefZ_Beehive
+    //   Bienenstock, doppelt   ChefZ_BeehiveDouble
     //   Beehive_Kit            ChefZ_BeehiveKit
     //   Honigwabe_Leer         ChefZ_HoneycombFrameEmpty
-    //   (ohne Auftragsnamen)   ChefZ_HoneycombFrameSealed   - Begruendung unten
     //   Honigwabe_Voll         ChefZ_HoneycombFrameFull
     //   Frame_Ready_To_Spin    ChefZ_HoneycombFrameUncapped
     //   Uncapping_Fork         ChefZ_UncappingFork
     //   Smoker                 ChefZ_BeeSmoker
     //   Honey_Extractor        ChefZ_HoneyExtractor  (in ChefZ_Processing)
-    //   Honey_Jar_Empty        GlassBottle           (VANILLA, siehe unten)
+    //   Honey_Jar_Empty        ChefZ_EmptyJar        (ChefZ_Cooking)
     //   Honigglas befuellt     Honey                 (VANILLA)
     //
     // WAS VANILLA SCHON MITBRINGT UND DESHALB HIER FEHLT
@@ -636,10 +636,17 @@ class CfgVehicles
     //   Honey            das gefuellte Honigglas. ChefZ_Vanilla_Assets §16
     //                    fuehrt es mit nominal 60 in Farm/Town/Village/School.
     //                    Es ist das ERGEBNIS der Kette, keine neue Klasse.
-    //   GlassBottle      das leere Glas. ChefZ_Vanilla_Assets §18 nennt es
-    //                    ausdruecklich "Kandidat fuer das ChefZ-Einmachglas".
     //   WoodenPlank      die Bretter des Auftrags - und der Griff der Gabel.
-    //   Nails            die Naegel des Auftrags - und die Zinken der Gabel.
+    //   Nail             die Naegel des Auftrags - und die Zinken der Gabel.
+    //                    "Nail" und nicht "Nails": die CONFIG-Klasse heisst
+    //                    Nail (types.xml der COT-Mission fuehrt nur
+    //                    name="Nail"; Skriptklasse 4_World/DayZ/Entities/
+    //                    ItemBase/Nail.c:1). "Nails" ist eine reine
+    //                    Skriptklasse ohne CfgVehicles-Eintrag
+    //                    (Inventory_Base/Nail.c:1), und Slot_Material_Nails
+    //                    ist ein Slotname. Das Serverlog hatte es gesagt:
+    //                    'Die Klasse "Nails" existiert in keiner geladenen
+    //                    Config'.
     //   TunaCan_Opened   der Blechkoerper der Imkerpfeife.
     //   Hammer/Hatchet/Pliers/Screwdriver   HAND_TOOL beim Aufstellen des
     //                    Stocks und beim Formen der Imkerpfeife.
@@ -648,7 +655,7 @@ class CfgVehicles
     // aus. Der erste Entwurf benutzte zusaetzlich WoodenStick und Rag; beide
     // sind Stapel mit Menge, und ihr varQuantityMax liegt dem Projekt nicht
     // vor (die Item-Configs von DayZ fehlen, refindex fuehrt nur Namen). Eine
-    // Mengenangabe darauf waere geraten gewesen. Fuer WoodenPlank und Nails
+    // Mengenangabe darauf waere geraten gewesen. Fuer WoodenPlank und Nail
     // gibt es einen Beleg - siehe Config/Processing/README_Apiary.md.
     //
     // Vanilla hat KEINE Imkerpfeife, KEINE Entdeckelungsgabel, KEINEN
@@ -657,24 +664,24 @@ class CfgVehicles
     // "fork". Der einzige Treffer auf "fork" ist Pitchfork, eine Mistgabel.
     // Diese fuenf Klassen bringt ChefZ deshalb selbst mit.
     //
-    // WARUM ES VIER RAEHMCHEN GIBT UND NICHT DREI
-    // -------------------------------------------
-    // Der Auftrag nennt drei Zustaende. Ein vierter steht dazwischen, und er
-    // ist der Grund, aus dem der Stock ueberhaupt geoeffnet werden muss - und
-    // damit der Grund, aus dem die Imkerpfeife im Spiel etwas bedeutet:
+    // DIE DREI RAEHMCHEN, und was zwischen ihnen passiert
+    // ----------------------------------------------------
+    // Der Auftrag nennt drei Zustaende, und es sind drei Klassen:
     //
-    //   Empty     leer, vom Spieler gebaut, wird in den Stock gehaengt
-    //   Sealed    von den Bienen ausgebaut und VERDECKELT - im Stock, voller
-    //             Bienen. Kein Eingang irgendeines weiteren Schrittes.
-    //   Full      geerntet: aus dem Stock genommen, von Bienen befreit. NUR
-    //             PROCESS_HARVEST_HIVE erzeugt es, und genau dabei stechen
-    //             die Bienen, wenn niemand die Pfeife haelt.
-    //   Uncapped  entdeckelt, schleuderfertig (Frame_Ready_To_Spin)
+    //   Empty     leer, vom Spieler gebaut, liegt im Stock. Traegt den
+    //             steigenden Balken (varQuantity 0..100): das Volk fuellt
+    //             die Raehmchen EINES NACH DEM ANDEREN, vier Stunden je
+    //             Raehmchen. Bei 100 ersetzt der Stock es in seiner
+    //             Cargo-Zelle durch Full.
+    //   Full      voll und verdeckelt. Nur bei geoeffnetem Stock entnehmbar
+    //             - und Oeffnen ist der Moment, in dem gestochen wird.
+    //   Uncapped  entdeckelt, schleuderfertig (Frame_Ready_To_Spin). Traegt
+    //             drei Glaeser Vorrat plus eine Reserve-Einheit
+    //             (varQuantity 4..1, Begruendung an der Klasse).
     //
-    // Ohne "Sealed" gaebe es keinen Schritt, an dem der Stich haengen
-    // koennte: der Cargo-Bereich einer Station ist fuer den Spieler frei
-    // zugaenglich, ein fertiges Raehmchen koennte er einfach herausnehmen.
-    // Die Ernte MUSS deshalb ein eigener Vorgang an der Station sein.
+    // Der Balken ist Vanillas quantityBar - dieselbe Anzeige, mit der ein
+    // Apfel beim Essen leerer wird, hier andersherum. Wie der Stock ihn
+    // fortschreibt, steht in Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c.
     //
     // 3D
     // --
@@ -702,9 +709,27 @@ class CfgVehicles
     // Cargo koennte nichts aufnehmen; im Projekt sind Stationen genau daran
     // schon gescheitert (das fruehere Schneidebrett in ChefZ_Processing).
     //
-    // class Cargo IST die Eingangsseite. 4x3 fasst vier Raehmchen nebeneinander
-    // - dieselbe Groessenordnung wie der Trockenrahmen, und sie deckt sich mit
-    // parallelSlots = 4 im Stationsdatensatz.
+    // class Cargo IST der Innenraum - die Zargen. 10x9 sind neunzig Zellen
+    // fuer zehn Raehmchen zu 2x3 - mit Reserve, nicht auf den Punkt: Vanilla
+    // darf ein Item gedreht ablegen, und der Spieler darf Raehmchen im Gitter
+    // verschieben; ein einziges versetztes Raehmchen liesse in einem Gitter
+    // ohne Luft das zehnte nicht mehr hinein. Dass es nicht mehr als zehn
+    // werden und nichts anderes hineinkommt, zaehlt das Skript ueber
+    // CanReceiveItemIntoCargo, nicht das Gitter.
+    //
+    // lifetime deutlich ueber der Fuellzeit: zehn Raehmchen brauchen vierzig
+    // Stunden Serverlaufzeit, und die CE-Lebensdauer laeuft in derselben Zeit
+    // ab. Ein Stock, der frueher verschwaende als sein Honig fertig ist, waere
+    // sinnlos. Sieben Tage geben dem Betreiber Luft; die types.xml des
+    // Servers darf das ueberschreiben (siehe README_Apiary.md).
+    //
+    // DER FUELLSTAND IST KEIN STATIONSJOB. Ein Job kennt einen Fortschritt
+    // je Job, nicht je Item, und er verbraucht am Ende seinen Eingang. Hier
+    // soll jedes Raehmchen seinen eigenen, stetig steigenden Balken tragen -
+    // das ist varQuantity am Raehmchen, fortgeschrieben von einem eigenen
+    // Timer des Stocks (Skript). parallelSlots im Stationsdatensatz steht
+    // deshalb auf 1: der einzige Stationsvorgang, PROCESS_HARVEST_HIVE, legt
+    // nie einen Job an.
     //
     // KEIN Pot, KEIN Cauldron, KEIN FireplaceBase als Basis: alle drei sind
     // Vanillas Kochgeschirr bzw. Feuerstellen und wuerden den Stock in Vanillas
@@ -713,12 +738,14 @@ class CfgVehicles
     //
     // KEIN ChefZ_HasHeat: Bienen brauchen kein Feuer. needsFuel bleibt false.
     //
-    // DER BIENENSTICH steht nicht hier, sondern im Skript: ChefZ_Beehive
-    // ueberschreibt ChefZ_OnStationActionFinished() und laesst das Volk sich
-    // wehren, wenn jemand PROCESS_HARVEST_HIVE ohne Imkerpfeife in der Hand
-    // abschliesst (Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c). Das ist
-    // gewoehnliche Vererbung - kein modded class, keine eigene Action, keine
-    // Zeile im Core.
+    // DER DECKEL UND DER BIENENSTICH stehen nicht hier, sondern im Skript:
+    // ChefZ_Beehive ueberschreibt ChefZ_OnStationActionFinished(), oeffnet
+    // den Stock fuer zwei Minuten - erst dann laesst sich ein volles
+    // Raehmchen herausnehmen, und nur ein volles - und laesst das Volk sich
+    // wehren, wenn jemand ohne Imkerpfeife in der Hand oeffnet
+    // (Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c). Das ist gewoehnliche
+    // Vererbung - kein modded class, keine eigene Action, keine Zeile im
+    // Core.
     //
     // PROXY: wooden_case.p3d - eine Holzkiste. Eine Magazinbeute IST eine
     // Holzkiste; von allen im Projekt belegten Pfaden ist das der einzige, der
@@ -736,11 +763,44 @@ class CfgVehicles
         absorbency = 0.0;
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
-        lifetime = 172800;
+        lifetime = 604800;
 
         class Cargo
         {
-            itemsCargoSize[] = {4, 3};
+            itemsCargoSize[] = {10, 9};
+            openable = 0;
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Die Doppelbeute: zwei Zargen uebereinander.
+    //
+    // Zwanzig Raehmchen, achtzig Stunden, sonst in allem der Stock - sie erbt
+    // config UND Skript von ChefZ_Beehive und aendert nur Fassungsvermoegen,
+    // Groesse, Gewicht und Lebensdauer. 10x15 sind zwanzig Raehmchen zu 2x3
+    // mit derselben Reserve wie beim Stock; die Lebensdauer ist verdoppelt,
+    // weil auch die Fuellzeit (achtzig Stunden) die doppelte ist.
+    //
+    // Sie entsteht aus ZWEI Bausaetzen (TR_ExtendBeehive), nicht aus einem
+    // aufgestellten Stock plus Bausatz: ein Handwerksschritt verbraucht seine
+    // Zutat samt Cargo, und ein bestueckter Stock verloere dabei seine
+    // Raehmchen.
+    //
+    // PROXY: dieselbe Holzkiste wie der Stock. Eigenes Mesh mit zwei Zargen
+    // ist gemeldet.
+    //--------------------------------------------------------------------------
+    class ChefZ_BeehiveDouble : ChefZ_Beehive
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BEEHIVE_DOUBLE";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DOUBLE_DESC";
+        itemSize[] = {6, 8};
+        weight = 26000;
+        lifetime = 1209600;
+
+        class Cargo
+        {
+            itemsCargoSize[] = {10, 15};
             openable = 0;
         };
     };
@@ -778,13 +838,18 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
-    // Die vier Raehmchen.
+    // Die drei Raehmchen.
     //
     // Eine gemeinsame Basis mit scope = 0: sie unterscheiden sich in Name,
-    // Beschreibung und Gewicht, in nichts sonst. Die Basis steht einmal da,
-    // weil configcpp.mjs Klassennamen projektweit auf Eindeutigkeit prueft und
-    // vier gleichlautende Bloecke vier Gelegenheiten waeren, sie
+    // Beschreibung, Gewicht und Mengenblock, in nichts sonst. Die Basis steht
+    // einmal da, weil configcpp.mjs Klassennamen projektweit auf Eindeutigkeit
+    // prueft und drei gleichlautende Bloecke drei Gelegenheiten waeren, sie
     // auseinanderlaufen zu lassen.
+    //
+    // canBeSplit = 0 an der Basis: zwei der drei Raehmchen tragen eine
+    // varQuantity (Fuellgrad, Glaservorrat), und ohne dieses Verbot deutete
+    // Vanilla die Menge als Stapel, den man teilen kann - ein halbes
+    // Raehmchen gibt es nicht.
     //
     // KEINE Nahrung: weder Nutrition noch Food noch FoodStages. Eine volle
     // Wabe waere essbar, und genau deshalb steht hier die Entscheidung: das
@@ -796,8 +861,8 @@ class CfgVehicles
     // PROXY: birch_bark.p3d - ein flaches, plattenfoermiges Objekt in der
     // richtigen Groessenordnung. UNPLAUSIBEL im Sinne von Asset-Backlog §10.3:
     // Birkenrinde ist gewellt, ein Raehmchen ist ein rechteckiger Holzrahmen.
-    // Es ist der beste im Projekt belegte Pfad, mehr nicht - und alle vier
-    // Zustaende sehen damit gleich aus. Eigene Geometrie mit vier sichtbar
+    // Es ist der beste im Projekt belegte Pfad, mehr nicht - und alle drei
+    // Zustaende sehen damit gleich aus. Eigene Geometrie mit drei sichtbar
     // verschiedenen Fuellgraden ist als Asset-Bedarf gemeldet.
     //--------------------------------------------------------------------------
     class ChefZ_HoneycombFrame_Base : Inventory_Base
@@ -808,34 +873,42 @@ class CfgVehicles
         absorbency = 0.0;
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
+        canBeSplit = 0;
         lifetime = 43200;
         repairableWithKits[] = {};
     };
 
-    //! Auftrag: "Honigwabe_Leer". Ergebnis von TR_BuildHoneycombFrame,
-    //! Eingang von PROCESS_TEND_HIVE - und Nebenprodukt des Schleuderns, das
-    //! es leer zurueckgibt. Damit ist die Kette ein Kreis, kein Strahl.
+    //! Auftrag: "Honigwabe_Leer". Ergebnis von TR_BuildHoneycombFrame und
+    //! das, was die Schleuder zurueckgibt, wenn ein entdeckeltes Raehmchen
+    //! leergeschleudert ist. Damit ist die Kette ein Kreis, kein Strahl.
+    //!
+    //! DER BALKEN, der sich fuellt (Auftrag 5): varQuantity 0..100 mit
+    //! quantityBar = 1 - dieselbe Anzeige wie beim Apfel, der beim Essen
+    //! leerer wird, nur steigend. Der Stock zaehlt serverseitig per
+    //! AddQuantity hoch (ItemBase.c:3413); die Engine registriert
+    //! m_VarQuantity selbst zum Sync (ItemBase.c:254) und speichert und laedt
+    //! sie mit dem Variablenblock (ItemBase.c:3045-3056, 3258-3261). Deshalb
+    //! ueberlebt der Fuellstand den Serverneustart ohne eine Zeile eigener
+    //! Persistenz. quantityShow = 0: der Balken genuegt, eine Prozentzahl am
+    //! Raehmchen waere Laerm. Init 0, weil ein frisch gebautes Raehmchen leer
+    //! ist - TR_BuildHoneycombFrame setzt deshalb KEINE quantity.
     class ChefZ_HoneycombFrameEmpty : ChefZ_HoneycombFrame_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_COMBFRAME_EMPTY";
         descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_EMPTY_DESC";
         weight = 400;
+        varQuantityInit = 0;
+        varQuantityMin = 0;
+        varQuantityMax = 100;
+        quantityBar = 1;
+        quantityShow = 0;
     };
 
-    //! Verdeckelt, im Stock, voller Bienen. Es gibt fuer diesen Zustand
-    //! ABSICHTLICH keinen weiteren Verwendungszweck: wer ihn aus dem Cargo
-    //! nimmt, hat ein schweres Stueck Wachs und sonst nichts. Der Weg nach
-    //! vorn fuehrt ausschliesslich ueber PROCESS_HARVEST_HIVE.
-    class ChefZ_HoneycombFrameSealed : ChefZ_HoneycombFrame_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_COMBFRAME_SEALED";
-        descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_SEALED_DESC";
-        weight = 2200;
-    };
-
-    //! Auftrag: "Honigwabe_Voll" / "Honeycomb_Frame_Full".
+    //! Auftrag: "Honigwabe_Voll" / "Honeycomb_Frame_Full". Entsteht im
+    //! Stock, wenn der Balken des Leerraehmchens voll ist, in derselben
+    //! Cargo-Zelle. KEINE varQuantity: voll ist voll. Entnehmbar nur bei
+    //! geoeffnetem Stock (Skript, CanReleaseCargo).
     class ChefZ_HoneycombFrameFull : ChefZ_HoneycombFrame_Base
     {
         scope = 2;
@@ -845,12 +918,37 @@ class CfgVehicles
     };
 
     //! Auftrag: "Frame_Ready_To_Spin". Eingang der Honigschleuder.
+    //!
+    //! varQuantity 4..1 = DREI GLAESER VORRAT plus eine Reserve-Einheit
+    //! (Auftrag 4: ein Rahmen ergibt drei Glaeser). Die Schleuder zieht je
+    //! Glas eine Einheit ab (Zutatendatensatz: unitsPerWholeItem 4, Verbrauch
+    //! 1.0 je Durchlauf, Untergrenze 2.0); unterhalb von zwei gibt sie das
+    //! Raehmchen leer zurueck.
+    //!
+    //! WARUM VIER UND NICHT DREI: der Core loescht ein Item, sobald ein
+    //! Mengenabzug seine letzte Einheit traefe (ChefZ_SlotEvaluator.
+    //! PlanAmountDraw setzt destroyWhole, der Applicator ruft Delete). Mit
+    //! drei Einheiten waere der Rahmen nach dem dritten Glas weg - kein
+    //! Leerrahmen, ein Brett und zwei Naegel je Durchlauf verloren. Die
+    //! vierte Einheit wird nie gezogen; sie ist der Boden, auf dem der Rahmen
+    //! die Schleuder ueberlebt. Init 4, weil ein frisch entdeckeltes Raehmchen
+    //! voll ist - TR_UncapHoneycombFrame setzt deshalb KEINE quantity.
+    //!
+    //! quantityShow = 0: die Zahl "4" hiesse fuer den Spieler vier Glaeser,
+    //! und das waere gelogen. Der Balken sinkt in Vierteln und reicht als
+    //! Anzeige. Das Ergebnis, Honey, ist Vanilla und bekommt keine Menge
+    //! gesetzt.
     class ChefZ_HoneycombFrameUncapped : ChefZ_HoneycombFrame_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_COMBFRAME_UNCAPPED";
         descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_UNCAPPED_DESC";
         weight = 2100;
+        varQuantityInit = 4;
+        varQuantityMin = 0;
+        varQuantityMax = 4;
+        quantityBar = 1;
+        quantityShow = 0;
     };
 
     //--------------------------------------------------------------------------
@@ -972,27 +1070,26 @@ class CfgChefZ
 
     // ### SLICE apiary ### Imkerei - Honig ernten.
     //
-    // handcraftRecipeSlots = 6. Die Zahl ist eine RESERVIERUNG in Vanillas
+    // handcraftRecipeSlots = 7. Die Zahl ist eine RESERVIERUNG in Vanillas
     // Rezeptliste und muss VOR dem Laden feststehen; wird sie vergessen,
     // erscheint kein einziges der Rezepte, und zwar OHNE Fehlermeldung an der
     // Stelle, an der man sucht (Kopf von ChefZ_HandcraftBridge.c).
     //
-    // Die sechs, einer je HANDCRAFT-Transform dieses Slice:
+    // Die sieben, einer je HANDCRAFT-Transform dieses Slice:
     //
     //   TR_BuildBeehiveKit      PROCESS_BUILD_HIVE_KIT
     //   TR_RaiseBeehive         PROCESS_RAISE_HIVE
+    //   TR_ExtendBeehive        PROCESS_EXTEND_HIVE
     //   TR_BuildHoneycombFrame  PROCESS_BUILD_FRAME
     //   TR_BuildUncappingFork   PROCESS_BUILD_UNCAPPING_FORK
     //   TR_BuildBeeSmoker       PROCESS_BUILD_BEE_SMOKER
     //   TR_UncapHoneycombFrame  PROCESS_UNCAP_COMB
     //
-    // Die drei Stationsvorgaenge (PROCESS_TEND_HIVE, PROCESS_HARVEST_HIVE,
-    // PROCESS_SPIN_HONEY) brauchen KEINEN Platz - sie laufen ueber
-    // ChefZ_ActionProcessAtStation und fassen Vanillas Rezeptliste nicht an.
-    // Deshalb hat der Wegfall der Werkzeuggruppe an PROCESS_HARVEST_HIVE die
-    // Sechs auch nicht angetastet: ChefZ_HandcraftBridge zieht seine Liste
-    // ueber GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT), und dieser
-    // Prozess war dort nie dabei.
+    // Die beiden Stationsvorgaenge (PROCESS_HARVEST_HIVE, PROCESS_SPIN_HONEY)
+    // brauchen KEINEN Platz - sie laufen ueber ChefZ_ActionProcessAtStation
+    // und fassen Vanillas Rezeptliste nicht an: ChefZ_HandcraftBridge zieht
+    // seine Liste ueber GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT), und
+    // ein Stationsprozess ist dort nie dabei.
     //
     // Die beiden aelteren Knoten dieses Moduls bleiben bei 0: massgeblich ist
     // die projektweite SUMME, die ChefZ_HandcraftBridge.Reserve() ueber
@@ -1004,13 +1101,12 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 217;
-        handcraftRecipeSlots = 6;
+        handcraftRecipeSlots = 7;
         dataFiles[] =
         {
             "ChefZ_Farming/Config/Processing/Apiary_Ingredients.json",
             "ChefZ_Farming/Config/Processing/Apiary_Stations.json",
-            "ChefZ_Farming/Config/Processing/Apiary_Crafts.json",
-            "ChefZ_Farming/Config/Processing/Apiary_Hive.json"
+            "ChefZ_Farming/Config/Processing/Apiary_Crafts.json"
         };
     };
 };
@@ -1053,6 +1149,9 @@ class CfgChefZProcesses
     //--------------------------------------------------------------------------
     // ### SLICE apiary ###   Die acht Verben der Imkerei
     //
+    // Sieben davon sind HANDCRAFT, eines ist eine Stationsaktion (Oeffnen des
+    // Stocks). Das Schleudern steht in ChefZ_Processing bei seiner Station.
+    //
     // Rang 1 und nicht JSON, aus demselben Grund, den ChefZ_Processing an
     // seinen Prozessen ausschreibt: ChefZ_ActionProcessAtStation.
     // ActionCondition() laeuft auch auf dem CLIENT und braucht dort
@@ -1069,7 +1168,7 @@ class CfgChefZProcesses
     //
     // Solange sich ihre Eingaenge unterscheiden, ist das folgenlos. Hier ist
     // es NICHT folgenlos: Bausatz, Raehmchen UND
-    // Entdeckelungsgabel entstehen alle drei aus WoodenPlank + Nails und
+    // Entdeckelungsgabel entstehen alle drei aus WoodenPlank + Nail und
     // unterscheiden sich nur in der Menge. An einem gemeinsamen Prozess
     // stuenden drei gleichnamige Eintraege im Kontextmenue, und der Spieler
     // haette keine Moeglichkeit, den richtigen zu treffen.
@@ -1174,41 +1273,46 @@ class CfgChefZProcesses
         toolDamage = 3;
     };
 
-    // ------------------------------------------------------------------
-    // 3. DER STOCK - die beiden Vorgaenge an der Station.
-    // ------------------------------------------------------------------
-
-    //! Die Antwort auf "wie werden Raehmchen voll".
-    //!
-    //! STATION_TIMED und nicht STATION_ACTION: ein Volk baut aus, waehrend
-    //! der Spieler nicht da ist. Genau dafuer ist diese Ausfuehrungsform da
-    //! (11 §7: "Spieler verlaesst den Server waehrend STATION_TIMED ->
-    //! irrelevant, der Timer gehoert der Station").
-    //!
-    //! WIE DER SPIELER DEN FORTSCHRITT SIEHT: ueber dieselbe Anzeige, die
-    //! Trockenrahmen und Raeucherschrank benutzen.
-    //! ChefZ_ProcessingStation_Base synchronisiert Progress01 und den
-    //! Ordinal des laufenden Prozesses selbst (11 §6). Dieser Slice baut
-    //! dafuer KEIN eigenes HUD und kein eigenes Sync-Feld - es gibt beides
-    //! schon, und ein zweites waere ein neues Core-System.
-    //!
-    //! 3600 Sekunden - eine Stunde je Raehmchen. Der Stock traegt vier
-    //! Parallelplaetze (Stationsdatensatz), also vier Raehmchen in einer
-    //! Stunde. Das ist die laengste Wartezeit des Projekts und soll es
-    //! sein: Honig ist der einzige Suessstoff der Kette.
-    //!
-    //! KEIN requiresHeat. Bienen brauchen kein Feuer.
-    class PROCESS_TEND_HIVE
+    //! Die Doppelbeute aus ZWEI Bausaetzen. Zwei Eingaenge, deshalb KEINE
+    //! toolGroups - beide Zutatenplaetze sind belegt (01 V12), dieselbe
+    //! Form wie PROCESS_BUILD_HIVE_KIT. Nicht Stock plus Bausatz: ein
+    //! Handwerksschritt verbraucht die Zutat samt Cargo, ein bestueckter
+    //! Stock verloere seine Raehmchen.
+    class PROCESS_EXTEND_HIVE
     {
-        exec = "STATION_TIMED";
-        displayName = "#STR_CHEFZ_PROC_TEND_HIVE";
-        baseDurationSec = 3600.0;
-        requiresHeat = 0;
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_EXTEND_HIVE";
+        baseDurationSec = 30.0;
+        animationLength = 4.0;
+        specialty = 0.03;
+        toolDamage = 0;
     };
 
+    // ------------------------------------------------------------------
+    // 3. DER STOCK - ein Vorgang an der Station: Oeffnen.
+    //
+    // Wie Raehmchen voll werden, ist KEIN Prozess. Das Volk fuellt sie
+    // eines nach dem anderen, vier Stunden je Raehmchen, als varQuantity am
+    // Leerraehmchen - fortgeschrieben von einem eigenen Timer des Stocks
+    // (Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c). Ein Stationsjob
+    // kennt einen Fortschritt je Job, nicht je Item, und verbraucht seinen
+    // Eingang; hier soll jedes Raehmchen seinen eigenen Balken tragen.
+    // ------------------------------------------------------------------
+
     //! Auftrag: "[Bienenstock oeffnen] -> (Smoker in der Hand haelt Schaden
-    //! ab)" und "[Vollen Rahmen entnehmen]". Beides ist EIN Vorgang, und
-    //! das ist er.
+    //! ab)". Die Entnahme des vollen Rahmens ist danach der gewoehnliche
+    //! Inventar-Drag - und nur der volle laesst sich ziehen, nur solange
+    //! der Deckel offen ist (Skript, CanReleaseCargo).
+    //!
+    //! DIESER PROZESS HAT ABSICHTLICH KEINEN TRANSFORM. Er verbraucht nichts
+    //! und erzeugt nichts; er ist der Moment, in dem der Deckel abgeht.
+    //! ChefZ_ActionProcessAtStation.IsProcessUsable() ueberspringt die
+    //! Transformpruefung, wenn zu einem Prozess kein Transform bekannt ist
+    //! (ChefZ_ActionProcessAtStation.c:321-324), RunImmediate meldet dann
+    //! NO_MATCH (Z.627-630), und NotifyStation ruft den Haken trotzdem
+    //! (Z.662, 687). Der Haken - ChefZ_Beehive.ChefZ_OnStationActionFinished
+    //! - oeffnet den Deckel fuer zwei Minuten und loest den Stich aus.
+    //! NO_MATCH ist hier der gewollte Ausgang, kein Fehler.
     //!
     //! KEINE toolGroups - und das ist der Kern des Auftrags, nicht eine
     //! Auslassung. Hier stand einmal toolGroups[] = {"BEE_SMOKER"}, weil die
@@ -1219,20 +1323,18 @@ class CfgChefZProcesses
     //!
     //! Die Stelle gibt es jetzt: ChefZ_ProcessingStation_Base.
     //! ChefZ_OnStationActionFinished(PlayerBase, ItemBase, ChefZ_Sym, int).
-    //! Die Pfeife ist damit vom Zwang zum SCHUTZ geworden - die Ernte gelingt
-    //! auch ohne sie, sie kostet dann nur Blut und Schock. Die Regel steht
-    //! vollstaendig in Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c an
-    //! ChefZ_Beehive.ChefZ_OnStationActionFinished(); die Werkzeuggruppe
-    //! BEE_SMOKER bleibt bestehen und ist dort die Adresse, unter der die
-    //! Pfeife erkannt wird.
+    //! Die Pfeife ist damit vom Zwang zum SCHUTZ geworden - das Oeffnen
+    //! gelingt auch ohne sie, es kostet dann nur Blut und Schock. Die Regel
+    //! steht vollstaendig in Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c;
+    //! die Werkzeuggruppe BEE_SMOKER bleibt bestehen und ist dort die
+    //! Adresse, unter der die Pfeife erkannt wird.
     //!
-    //! WAS DER WEGFALL NICHT BERUEHRT: handcraftRecipeSlots. Vanillas
-    //! Rezeptplaetze reserviert ChefZ_HandcraftBridge ausschliesslich fuer
-    //! exec = HANDCRAFT (GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT));
-    //! dieser Prozess ist STATION_ACTION und hat nie einen Platz belegt. Die
-    //! Sechs am CfgChefZ-Knoten ChefZ_Apiary bleibt die Sechs.
-    //! Auch die 01-V12-Grenze "zwei Zutatenplaetze" gilt nur fuer HANDCRAFT -
-    //! eine Station kennt sie nicht (11 E1).
+    //! WAS DAS NICHT BERUEHRT: handcraftRecipeSlots. Vanillas Rezeptplaetze
+    //! reserviert ChefZ_HandcraftBridge ausschliesslich fuer exec = HANDCRAFT
+    //! (GetProcessesForExec(ChefZ_ProcessExec.HANDCRAFT)); dieser Prozess ist
+    //! STATION_ACTION und belegt keinen Platz. Auch die 01-V12-Grenze "zwei
+    //! Zutatenplaetze" gilt nur fuer HANDCRAFT - eine Station kennt sie
+    //! nicht (11 E1).
     //!
     //! toolDamage = 0, und das ist zwingend, nicht kosmetisch.
     //! ChefZ_ActionProcessAtStation.ApplyToolDamage() beschaedigt
@@ -1244,13 +1346,14 @@ class CfgChefZProcesses
     //! deshalb in den Haken, wo geprueft ist, dass es wirklich die Pfeife
     //! ist.
     //!
-    //! STATION_ACTION und nicht STATION_TIMED: der Spieler steht am Stock
-    //! und arbeitet.
+    //! Acht Sekunden: einen Deckel abnehmen dauert nicht laenger. Frueher
+    //! standen hier 25, weil die Aktion auch die Ernte war - die macht jetzt
+    //! der Inventar-Drag.
     class PROCESS_HARVEST_HIVE
     {
         exec = "STATION_ACTION";
         displayName = "#STR_CHEFZ_PROC_HARVEST_HIVE";
-        baseDurationSec = 25.0;
+        baseDurationSec = 8.0;
         toolDamage = 0;
     };
 
