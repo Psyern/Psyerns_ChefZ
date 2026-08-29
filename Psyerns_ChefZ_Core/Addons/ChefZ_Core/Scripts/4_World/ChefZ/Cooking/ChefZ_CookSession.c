@@ -351,20 +351,20 @@ class ChefZ_CookSession : Managed
     static bool SelfCheck()
     {
         ChefZ_CookSession s = new ChefZ_CookSession();
-        if (s.state != ChefZ_ESessionState.IDLE)        return false;
-        if (s.HasBinding())                             return false;
-        if (s.IsInert())                                return false;
-        if (s.signature.IsMeasured())                   return false;
-        if (s.ticksSinceMatch != LONG_AGO)              return false;
+        if (s.state != ChefZ_ESessionState.IDLE) return ChefZ_SelfTestTrace.Fail("CookSession", 354, "s.state != ChefZ_ESessionState.IDLE");
+        if (s.HasBinding()) return ChefZ_SelfTestTrace.Fail("CookSession", 355, "s.HasBinding()");
+        if (s.IsInert()) return ChefZ_SelfTestTrace.Fail("CookSession", 356, "s.IsInert()");
+        if (s.signature.IsMeasured()) return ChefZ_SelfTestTrace.Fail("CookSession", 357, "s.signature.IsMeasured()");
+        if (s.ticksSinceMatch != LONG_AGO) return ChefZ_SelfTestTrace.Fail("CookSession", 358, "s.ticksSinceMatch != LONG_AGO");
 
         // Touch zaehlt, laeuft aber nicht ueber.
         s.ticksSinceMatch = 0;
         s.Touch(1000);
         s.Touch(2000);
-        if (s.ticksSinceMatch != 2)                     return false;
-        if (s.lastTouchedTick != 2000)                  return false;
-        if (s.AgeMillis(2500) != 500)                   return false;
-        if (s.AgeMillis(1000) != 0)                     return false;   // Uhr umgeschlagen
+        if (s.ticksSinceMatch != 2) return ChefZ_SelfTestTrace.Fail("CookSession", 364, "s.ticksSinceMatch != 2");
+        if (s.lastTouchedTick != 2000) return ChefZ_SelfTestTrace.Fail("CookSession", 365, "s.lastTouchedTick != 2000");
+        if (s.AgeMillis(2500) != 500) return ChefZ_SelfTestTrace.Fail("CookSession", 366, "s.AgeMillis(2500) != 500");
+        if (s.AgeMillis(1000) != 0) return ChefZ_SelfTestTrace.Fail("CookSession", 367, "s.AgeMillis(1000) != 0");   // Uhr umgeschlagen
 
         // Neuer Inhalt: Bindung faellt, ticksSinceMatch bleibt.
         ChefZ_VesselSignature sig = new ChefZ_VesselSignature();
@@ -374,90 +374,90 @@ class ChefZ_CookSession : Managed
         s.failCount = 2;
         s.elapsedSec = 12.0;
         s.AdoptNewContent(sig);
-        if (s.state != ChefZ_ESessionState.IDLE)        return false;
-        if (s.failCount != 0)                           return false;
-        if (s.elapsedSec != 0.0)                        return false;
-        if (s.ticksSinceMatch != 2)                     return false;
-        if (!s.signature.Equals(sig))                   return false;
+        if (s.state != ChefZ_ESessionState.IDLE) return ChefZ_SelfTestTrace.Fail("CookSession", 377, "s.state != ChefZ_ESessionState.IDLE");
+        if (s.failCount != 0) return ChefZ_SelfTestTrace.Fail("CookSession", 378, "s.failCount != 0");
+        if (s.elapsedSec != 0.0) return ChefZ_SelfTestTrace.Fail("CookSession", 379, "s.elapsedSec != 0.0");
+        if (s.ticksSinceMatch != 2) return ChefZ_SelfTestTrace.Fail("CookSession", 380, "s.ticksSinceMatch != 2");
+        if (!s.signature.Equals(sig)) return ChefZ_SelfTestTrace.Fail("CookSession", 381, "!s.signature.Equals(sig)");
 
         // Die Signatur ist eine KOPIE, keine geteilte Instanz.
         sig.AddItem(9, 2, -1);
-        if (s.signature.Equals(sig))                    return false;
+        if (s.signature.Equals(sig)) return ChefZ_SelfTestTrace.Fail("CookSession", 385, "s.signature.Equals(sig)");
 
         // Drei Fehlschlaege sperren, ein Signaturwechsel entsperrt.
-        if (s.Fail(3))                                  return false;
-        if (s.Fail(3))                                  return false;
-        if (!s.Fail(3))                                 return false;
-        if (s.state != ChefZ_ESessionState.SUPPRESSED)  return false;
-        if (!s.IsInert())                               return false;
+        if (s.Fail(3)) return ChefZ_SelfTestTrace.Fail("CookSession", 388, "s.Fail(3)");
+        if (s.Fail(3)) return ChefZ_SelfTestTrace.Fail("CookSession", 389, "s.Fail(3)");
+        if (!s.Fail(3)) return ChefZ_SelfTestTrace.Fail("CookSession", 390, "!s.Fail(3)");
+        if (s.state != ChefZ_ESessionState.SUPPRESSED) return ChefZ_SelfTestTrace.Fail("CookSession", 391, "s.state != ChefZ_ESessionState.SUPPRESSED");
+        if (!s.IsInert()) return ChefZ_SelfTestTrace.Fail("CookSession", 392, "!s.IsInert()");
         s.AdoptNewContent(sig);
-        if (s.IsInert())                                return false;
+        if (s.IsInert()) return ChefZ_SelfTestTrace.Fail("CookSession", 394, "s.IsInert()");
 
         s.ResetAll();
-        if (s.signature.IsMeasured())                   return false;
-        if (s.ticksSinceMatch != LONG_AGO)              return false;
+        if (s.signature.IsMeasured()) return ChefZ_SelfTestTrace.Fail("CookSession", 397, "s.signature.IsMeasured()");
+        if (s.ticksSinceMatch != LONG_AGO) return ChefZ_SelfTestTrace.Fail("CookSession", 398, "s.ticksSinceMatch != LONG_AGO");
 
         //--- Zuschreibung -----------------------------------------------------
         ChefZ_CookSession t = new ChefZ_CookSession();
-        if (t.actorIdentityId != 0)                     return false;
-        if (t.claimItemCount != COUNT_UNMEASURED)       return false;
-        if (t.claimSelfInflicted)                       return false;
+        if (t.actorIdentityId != 0) return ChefZ_SelfTestTrace.Fail("CookSession", 402, "t.actorIdentityId != 0");
+        if (t.claimItemCount != COUNT_UNMEASURED) return ChefZ_SelfTestTrace.Fail("CookSession", 403, "t.claimItemCount != COUNT_UNMEASURED");
+        if (t.claimSelfInflicted) return ChefZ_SelfTestTrace.Fail("CookSession", 404, "t.claimSelfInflicted");
 
         // Ein leeres Gefaess ist KEIN Zuwachs - sonst bekaeme, wer neben
         // einem leeren Topf steht, einen Anspruch auf nichts.
-        if (t.ObserveItemCount(0))                      return false;
-        if (t.claimItemCount != 0)                      return false;
+        if (t.ObserveItemCount(0)) return ChefZ_SelfTestTrace.Fail("CookSession", 408, "t.ObserveItemCount(0)");
+        if (t.claimItemCount != 0) return ChefZ_SelfTestTrace.Fail("CookSession", 409, "t.claimItemCount != 0");
 
         // Der erste echte Inhalt ist ein Zuwachs.
-        if (!t.ObserveItemCount(3))                     return false;
+        if (!t.ObserveItemCount(3)) return ChefZ_SelfTestTrace.Fail("CookSession", 412, "!t.ObserveItemCount(3)");
 
         // Derselbe Bestand ist keiner - das ist der Normalfall ueber viele
         // Ticks, waehrend das Essen gart.
-        if (t.ObserveItemCount(3))                      return false;
+        if (t.ObserveItemCount(3)) return ChefZ_SelfTestTrace.Fail("CookSession", 416, "t.ObserveItemCount(3)");
 
         // Ein SCHRUMPFENDER Bestand ist keiner. Vanilla laesst Zutaten bei
         // Quantity 0 verschwinden; das darf keinen Anspruch eroeffnen.
-        if (t.ObserveItemCount(2))                      return false;
-        if (t.claimItemCount != 2)                      return false;
+        if (t.ObserveItemCount(2)) return ChefZ_SelfTestTrace.Fail("CookSession", 420, "t.ObserveItemCount(2)");
+        if (t.claimItemCount != 2) return ChefZ_SelfTestTrace.Fail("CookSession", 421, "t.claimItemCount != 2");
 
         // Danach zaehlt gegen den GESCHRUMPFTEN Bestand, nicht gegen den
         // hoechsten je gesehenen.
-        if (!t.ObserveItemCount(3))                     return false;
+        if (!t.ObserveItemCount(3)) return ChefZ_SelfTestTrace.Fail("CookSession", 425, "!t.ObserveItemCount(3)");
 
         // Die Sperre nach einem Abschluss schluckt genau einen Tick.
         t.claimSelfInflicted = true;
-        if (t.ObserveItemCount(9))                      return false;   // geschluckt
-        if (t.claimSelfInflicted)                       return false;   // und verbraucht
-        if (t.claimItemCount != 9)                      return false;   // aber mitgezaehlt
-        if (!t.ObserveItemCount(10))                    return false;   // danach wieder scharf
+        if (t.ObserveItemCount(9)) return ChefZ_SelfTestTrace.Fail("CookSession", 429, "t.ObserveItemCount(9)");   // geschluckt
+        if (t.claimSelfInflicted) return ChefZ_SelfTestTrace.Fail("CookSession", 430, "t.claimSelfInflicted");   // und verbraucht
+        if (t.claimItemCount != 9) return ChefZ_SelfTestTrace.Fail("CookSession", 431, "t.claimItemCount != 9");   // aber mitgezaehlt
+        if (!t.ObserveItemCount(10)) return ChefZ_SelfTestTrace.Fail("CookSession", 432, "!t.ObserveItemCount(10)");   // danach wieder scharf
 
         // Die Sperre wird auch dann verbraucht, wenn nichts gewachsen ist -
         // sonst bliebe sie liegen und traefe einen spaeteren echten Zuwachs.
         t.claimSelfInflicted = true;
-        if (t.ObserveItemCount(4))                      return false;
-        if (t.claimSelfInflicted)                       return false;
-        if (!t.ObserveItemCount(5))                     return false;
+        if (t.ObserveItemCount(4)) return ChefZ_SelfTestTrace.Fail("CookSession", 437, "t.ObserveItemCount(4)");
+        if (t.claimSelfInflicted) return ChefZ_SelfTestTrace.Fail("CookSession", 438, "t.claimSelfInflicted");
+        if (!t.ObserveItemCount(5)) return ChefZ_SelfTestTrace.Fail("CookSession", 439, "!t.ObserveItemCount(5)");
 
         // Der Anspruch ueberlebt einen Inhaltswechsel ...
         t.actorIdentityId = 4711;
         t.AdoptNewContent(sig);
-        if (t.actorIdentityId != 4711)                  return false;
-        if (t.claimItemCount != 5)                      return false;
+        if (t.actorIdentityId != 4711) return ChefZ_SelfTestTrace.Fail("CookSession", 444, "t.actorIdentityId != 4711");
+        if (t.claimItemCount != 5) return ChefZ_SelfTestTrace.Fail("CookSession", 445, "t.claimItemCount != 5");
 
         // ... und faellt bei ForgetClaim. Danach ist der naechste Bestand,
         // wie klein auch immer, wieder ein Zuwachs - genau das schliesst die
         // Uebernahme eines fremden Anspruchs an einem geleerten Gefaess aus.
         t.claimItemCount = 12;
         t.ForgetClaim();
-        if (t.actorIdentityId != 0)                     return false;
-        if (t.claimItemCount != COUNT_UNMEASURED)       return false;
-        if (!t.ObserveItemCount(1))                     return false;
+        if (t.actorIdentityId != 0) return ChefZ_SelfTestTrace.Fail("CookSession", 452, "t.actorIdentityId != 0");
+        if (t.claimItemCount != COUNT_UNMEASURED) return ChefZ_SelfTestTrace.Fail("CookSession", 453, "t.claimItemCount != COUNT_UNMEASURED");
+        if (!t.ObserveItemCount(1)) return ChefZ_SelfTestTrace.Fail("CookSession", 454, "!t.ObserveItemCount(1)");
 
         // ResetAll schliesst ForgetClaim ein.
         t.actorIdentityId = 4711;
         t.ResetAll();
-        if (t.actorIdentityId != 0)                     return false;
-        if (t.claimItemCount != COUNT_UNMEASURED)       return false;
+        if (t.actorIdentityId != 0) return ChefZ_SelfTestTrace.Fail("CookSession", 459, "t.actorIdentityId != 0");
+        if (t.claimItemCount != COUNT_UNMEASURED) return ChefZ_SelfTestTrace.Fail("CookSession", 460, "t.claimItemCount != COUNT_UNMEASURED");
 
         return true;
     }

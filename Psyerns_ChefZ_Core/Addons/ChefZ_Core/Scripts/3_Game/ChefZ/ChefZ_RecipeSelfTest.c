@@ -101,7 +101,7 @@ class ChefZ_RecipeSelfTest
     {
         if (ok)
         {
-            s_Passed++;
+            s_Passed++; ChefZ_SelfTestTrace.Reset();
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.MATCH, ChefZ_LogLevel.DEBUG))
                 ChefZ_Log.Debug(ChefZ_LogChannel.MATCH, "Selbsttest S6 " + name + ": ok");
             return;
@@ -109,7 +109,7 @@ class ChefZ_RecipeSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.MATCH, "Selbsttest S6 " + name + " FEHLGESCHLAGEN. Die Recipe Engine verhaelt sich " + "nicht wie entworfen - welches Gericht ein Kessel ergibt, ist damit " + "unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.MATCH, "Selbsttest S6 " + name + " FEHLGESCHLAGEN. Die Recipe Engine verhaelt sich " + "nicht wie entworfen - welches Gericht ein Kessel ergibt, ist damit " + "unzuverlaessig." + ChefZ_SelfTestTrace.Take());
     }
 
     static int PassedCount() { return s_Passed; }
@@ -398,13 +398,13 @@ class ChefZ_RecipeSelfTest
 
         // Ein sauberes Rezept muss durchgehen - sonst prueft der Rest nichts.
         ChefZ_RecipeDef good = Recipe1(ChefZ_ExtraItemsMode.FORBID_NAME);
-        if (!CompileOne(compiler, good))                            return false;
+        if (!CompileOne(compiler, good)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 401, "!CompileOne(compiler, good)");
 
         // Unbekannte Kategorie -> Slot ungueltig -> GANZES Rezept abgewiesen
         // (07 §7, 08 §8).
         ChefZ_RecipeDef badCategory = MakeRecipe("CHEFZ_RT_BAD_KAT", "");
         AddCategorySlot(badCategory, "s1", "CHEFZ_RT_GIBTS_NICHT");
-        if (CompileOne(compiler, badCategory))                      return false;
+        if (CompileOne(compiler, badCategory)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 407, "CompileOne(compiler, badCategory)");
 
         // Nur optionale Slots -> wuerde bei jedem Inhalt zuenden.
         ChefZ_RecipeDef allOptional = MakeRecipe("CHEFZ_RT_NUR_OPTIONAL", "");
@@ -412,13 +412,13 @@ class ChefZ_RecipeSelfTest
         optionalSlot.optional = true;
         optionalSlot.MarkExplicit("optional");
         allOptional.slots.Insert(optionalSlot);
-        if (CompileOne(compiler, allOptional))                      return false;
+        if (CompileOne(compiler, allOptional)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 415, "CompileOne(compiler, allOptional)");
 
         // TIMED ohne cookSeconds.
         ChefZ_RecipeDef timed = Recipe1("");
         timed.id         = "CHEFZ_RT_TIMED_OHNE_ZEIT";
         timed.completion = ChefZ_Completion.TIMED_NAME;
-        if (CompileOne(compiler, timed))                            return false;
+        if (CompileOne(compiler, timed)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 421, "CompileOne(compiler, timed)");
 
         // TIMED mit cookSeconds geht.
         ChefZ_RecipeDef timedOk = Recipe1("");
@@ -426,43 +426,43 @@ class ChefZ_RecipeSelfTest
         timedOk.completion  = ChefZ_Completion.TIMED_NAME;
         timedOk.cookSeconds = 30.0;
         ChefZ_CompiledRecipe timedRec = CompileOne(compiler, timedOk);
-        if (!timedRec)                                              return false;
-        if (timedRec.completion != ChefZ_Completion.TIMED)          return false;
+        if (!timedRec) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 429, "!timedRec");
+        if (timedRec.completion != ChefZ_Completion.TIMED) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 430, "timedRec.completion != ChefZ_Completion.TIMED");
 
         // Unbekannte Vanilla-Endstufe -> abgewiesen.
         ChefZ_RecipeDef badStage = Recipe1("");
         badStage.id = "CHEFZ_RT_BAD_STAGE";
         badStage.doneStages = new array<string>();
         badStage.doneStages.Insert("Verkohlt");
-        if (CompileOne(compiler, badStage))                         return false;
+        if (CompileOne(compiler, badStage)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 437, "CompileOne(compiler, badStage)");
 
         // Ergebnis ohne "cls" -> abgewiesen.
         ChefZ_RecipeDef badOutput = Recipe1("");
         badOutput.id = "CHEFZ_RT_BAD_OUT";
         badOutput.outputs.Get(0).cls = "";
-        if (CompileOne(compiler, badOutput))                        return false;
+        if (CompileOne(compiler, badOutput)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 443, "CompileOne(compiler, badOutput)");
 
         // priority ausserhalb [-1000, 1000] wird geklemmt, NICHT abgewiesen.
         ChefZ_RecipeDef loud = Recipe1("");
         loud.id       = "CHEFZ_RT_LAUT";
         loud.priority = 999999;
         ChefZ_CompiledRecipe loudRec = CompileOne(compiler, loud);
-        if (!loudRec)                                               return false;
-        if (loudRec.priority != 1000)                               return false;
+        if (!loudRec) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 450, "!loudRec");
+        if (loudRec.priority != 1000) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 451, "loudRec.priority != 1000");
 
         // ON_STAGE ohne doneStages bekommt den Default (08 §8).
         ChefZ_CompiledRecipe defaults = CompileOne(compiler, Recipe2(""));
-        if (!defaults)                                              return false;
-        if (defaults.completion != ChefZ_Completion.ON_STAGE)       return false;
-        if (defaults.doneStages.Count() != 3)                       return false;
+        if (!defaults) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 455, "!defaults");
+        if (defaults.completion != ChefZ_Completion.ON_STAGE) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 456, "defaults.completion != ChefZ_Completion.ON_STAGE");
+        if (defaults.doneStages.Count() != 3) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 457, "defaults.doneStages.Count() != 3");
 
         // Der Default fuer extraItems ist "forbid" (OF-03 / V-B §3).
-        if (!defaults.policy)                                       return false;
+        if (!defaults.policy) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 460, "!defaults.policy");
         if (defaults.policy.extraItemsMode != ChefZ_ExtraItemsMode.FORBID)
-            return false;
+            return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 462, "defaults.policy.extraItemsMode != ChefZ_ExtraItemsMode.FORBID");
 
         // Jede Abweisung hat gemeldet. Ohne Meldung waere sie unauffindbar.
-        if (report.ErrorCount() < 5)                                return false;
+        if (report.ErrorCount() < 5) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 465, "report.ErrorCount() < 5");
 
         return true;
     }
@@ -483,12 +483,12 @@ class ChefZ_RecipeSelfTest
         ChefZ_CompiledRecipe r3 = CompileOne(compiler, Recipe3(""));
         ChefZ_CompiledRecipe r4 = CompileOne(compiler, Recipe4(""));
 
-        if (!r1 || !r2 || !r3 || !r4)                   return false;
+        if (!r1 || !r2 || !r3 || !r4) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 486, "!r1 || !r2 || !r3 || !r4");
 
-        if (!Near(r1.specificity, 2.00))                return false;
-        if (!Near(r2.specificity, 3.00))                return false;
-        if (!Near(r3.specificity, 5.00))                return false;
-        if (!Near(r4.specificity, 8.25))                return false;
+        if (!Near(r1.specificity, 2.00)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 488, "!Near(r1.specificity, 2.00)");
+        if (!Near(r2.specificity, 3.00)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 489, "!Near(r2.specificity, 3.00)");
+        if (!Near(r3.specificity, 5.00)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 490, "!Near(r3.specificity, 5.00)");
+        if (!Near(r4.specificity, 8.25)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 491, "!Near(r4.specificity, 8.25)");
 
         // Die Reihenfolge muss auch mit den ECHTEN Defaults stimmen - sonst
         // waere die Tabelle oben nur eine Eigenschaft der Testgewichte.
@@ -499,11 +499,11 @@ class ChefZ_RecipeSelfTest
         ChefZ_CompiledRecipe d2 = CompileOne(realCompiler, Recipe2(""));
         ChefZ_CompiledRecipe d3 = CompileOne(realCompiler, Recipe3(""));
         ChefZ_CompiledRecipe d4 = CompileOne(realCompiler, Recipe4(""));
-        if (!d1 || !d2 || !d3 || !d4)                   return false;
+        if (!d1 || !d2 || !d3 || !d4) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 502, "!d1 || !d2 || !d3 || !d4");
 
-        if (!(d1.specificity < d2.specificity))         return false;
-        if (!(d2.specificity < d3.specificity))         return false;
-        if (!(d3.specificity < d4.specificity))         return false;
+        if (!(d1.specificity < d2.specificity)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 504, "!(d1.specificity < d2.specificity)");
+        if (!(d2.specificity < d3.specificity)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 505, "!(d2.specificity < d3.specificity)");
+        if (!(d3.specificity < d4.specificity)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 506, "!(d3.specificity < d4.specificity)");
 
         // amountCap deckelt den Mengenfaktor (09 §4.1): ein Slot mit minCount 8
         // zaehlt hoechstens dreifach.
@@ -513,8 +513,8 @@ class ChefZ_RecipeSelfTest
         bulkSlot.maxCount = 8;
         bulk.slots.Insert(bulkSlot);
         ChefZ_CompiledRecipe bulkRec = CompileOne(compiler, bulk);
-        if (!bulkRec)                                   return false;
-        if (!Near(bulkRec.specificity, 3.00))           return false;   // 1.0 * min(8,3)
+        if (!bulkRec) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 516, "!bulkRec");
+        if (!Near(bulkRec.specificity, 3.00)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 517, "!Near(bulkRec.specificity, 3.00)");   // 1.0 * min(8,3)
 
         return true;
     }
@@ -526,8 +526,8 @@ class ChefZ_RecipeSelfTest
     private static bool TestIndex()
     {
         ChefZ_RecipeEngine engine = BuildEngine(true, false);
-        if (!engine.IsReady())                                      return false;
-        if (engine.GetRecipeCount() != 4)                           return false;
+        if (!engine.IsReady()) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 529, "!engine.IsReady()");
+        if (engine.GetRecipeCount() != 4) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 530, "engine.GetRecipeCount() != 4");
 
         ChefZ_Sym deviceSym  = ChefZ_SymbolTable.Intern(GERAET);
         ChefZ_Sym unknownSym = ChefZ_SymbolTable.Intern("CHEFZ_RT_FREMDGERAET");
@@ -535,26 +535,26 @@ class ChefZ_RecipeSelfTest
         // Die Geraeteklasse steht nur ueber ihre KATEGORIE im Index - genau
         // das ist 08 E4, und genau deshalb ist HasAnyRecipeFor() trotzdem ein
         // einziger Lookup.
-        if (!engine.HasAnyRecipeFor(deviceSym, ChefZ_SymbolTable.INVALID))   return false;
-        if (engine.HasAnyRecipeFor(unknownSym, ChefZ_SymbolTable.INVALID))   return false;
+        if (!engine.HasAnyRecipeFor(deviceSym, ChefZ_SymbolTable.INVALID)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 538, "!engine.HasAnyRecipeFor(deviceSym, ChefZ_SymbolTable.INVALID)");
+        if (engine.HasAnyRecipeFor(unknownSym, ChefZ_SymbolTable.INVALID)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 539, "engine.HasAnyRecipeFor(unknownSym, ChefZ_SymbolTable.INVALID)");
 
         // minItemCount ist das Minimum ueber alle Rezepte dieses Geraets - R1
         // hat zwei Pflichtslots.
-        if (engine.GetMinItemCountFor(deviceSym) != 2)              return false;
+        if (engine.GetMinItemCountFor(deviceSym) != 2) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 543, "engine.GetMinItemCountFor(deviceSym) != 2");
 
         // Rangreihenfolge: der Bestand liegt absteigend nach Spezifitaet.
         ChefZ_CompiledRecipe first = engine.GetRecipeAt(0);
         ChefZ_CompiledRecipe last  = engine.GetRecipeAt(3);
-        if (!first || !last)                                        return false;
-        if (first.id != "CHEFZ_RT_R4")                              return false;
-        if (last.id != "CHEFZ_RT_R1")                               return false;
+        if (!first || !last) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 548, "!first || !last");
+        if (first.id != "CHEFZ_RT_R4") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 549, "first.id != 'CHEFZ_RT_R4'");
+        if (last.id != "CHEFZ_RT_R1") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 550, "last.id != 'CHEFZ_RT_R1'");
 
         // Das Torsymbol: R3 verlangt vier Kategorien, die engste davon ist
         // KAT_E mit einer einzigen Klasse.
         ChefZ_CompiledRecipe r3 = engine.FindRecipe(ChefZ_SymbolTable.Intern("CHEFZ_RT_R3"));
-        if (!r3)                                                    return false;
-        if (r3.gateKind != ChefZ_GateKind.CATEGORY)                 return false;
-        if (r3.gateBit != BIT_E)                                    return false;
+        if (!r3) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 555, "!r3");
+        if (r3.gateKind != ChefZ_GateKind.CATEGORY) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 556, "r3.gateKind != ChefZ_GateKind.CATEGORY");
+        if (r3.gateBit != BIT_E) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 557, "r3.gateBit != BIT_E");
 
         // Ohne ein Item aus KAT_E kann R3 nicht binden - der Vorfilter muss
         // das ohne einen einzigen Matcher-Knoten erkennen.
@@ -565,7 +565,7 @@ class ChefZ_RecipeSelfTest
 
         ChefZ_VesselKeys keys = new ChefZ_VesselKeys();
         keys.Build(thin);
-        if (keys.Admits(r3.gateKind, r3.gateSym, r3.gateBit))       return false;
+        if (keys.Admits(r3.gateKind, r3.gateSym, r3.gateBit)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 568, "keys.Admits(r3.gateKind, r3.gateSym, r3.gateBit)");
 
         return true;
     }
@@ -589,45 +589,45 @@ class ChefZ_RecipeSelfTest
             // Zeile ginge das in einem nackten false unter, und der naechste
             // Serverlauf sagte wieder nur "Auswahl FEHLGESCHLAGEN".
             ChefZ_Log.Warn(ChefZ_LogChannel.MATCH, "Selbsttest S6 Auswahl: EvaluateBest(R3, 4 Items) " + result.ToDebugString());
-            return false;
+            return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 592, "");
         }
-        if (result.recipeId != "CHEFZ_RT_R3")                       return false;
-        if (result.boundItemCount != 4)                             return false;
-        if (result.itemsInVessel != 4)                              return false;
-        if (result.extraHandles.Count() != 0)                       return false;
+        if (result.recipeId != "CHEFZ_RT_R3") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 594, "result.recipeId != 'CHEFZ_RT_R3'");
+        if (result.boundItemCount != 4) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 595, "result.boundItemCount != 4");
+        if (result.itemsInVessel != 4) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 596, "result.itemsInVessel != 4");
+        if (result.extraHandles.Count() != 0) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 597, "result.extraHandles.Count() != 0");
 
         // 09 §4.5: 5.00 Spezifitaet + 0.50 voller Abdeckungsbonus = 5.50.
-        if (!Near(result.score, 5.50))                              return false;
+        if (!Near(result.score, 5.50)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 600, "!Near(result.score, 5.50)");
 
         // ON_STAGE mit Default-doneStages, alle Items sind "Boiled".
-        if (!result.ready)                                          return false;
+        if (!result.ready) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 603, "!result.ready");
 
         // Jeder Pflichtslot hat genau ein Item, und der Verbrauchsplan
         // umfasst sie alle.
-        if (!result.IsSlotFilled("s1"))                             return false;
-        if (!result.IsSlotFilled("s4"))                             return false;
-        if (result.consumePlan.Count() != 4)                        return false;
+        if (!result.IsSlotFilled("s1")) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 607, "!result.IsSlotFilled('s1')");
+        if (!result.IsSlotFilled("s4")) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 608, "!result.IsSlotFilled('s4')");
+        if (result.consumePlan.Count() != 4) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 609, "result.consumePlan.Count() != 4");
 
         // Mit dem Spezialitem gewinnt R4: 8.25 + 0.50 = 8.75.
         ChefZ_FactSnapshot rich = MakeSnapshot(true);
         ChefZ_MatchResult richResult;
-        if (!engine.EvaluateBest(cook, rich, null, richResult))     return false;
-        if (richResult.recipeId != "CHEFZ_RT_R4")                   return false;
-        if (richResult.boundItemCount != 5)                         return false;
-        if (!Near(richResult.score, 8.75))                          return false;
+        if (!engine.EvaluateBest(cook, rich, null, richResult)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 614, "!engine.EvaluateBest(cook, rich, null, richResult)");
+        if (richResult.recipeId != "CHEFZ_RT_R4") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 615, "richResult.recipeId != 'CHEFZ_RT_R4'");
+        if (richResult.boundItemCount != 5) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 616, "richResult.boundItemCount != 5");
+        if (!Near(richResult.score, 8.75)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 617, "!Near(richResult.score, 8.75)");
 
         // Fremdes Geraet: kein Kandidat, kein Treffer, und ausdruecklich kein
         // Fehler - Vanilla kocht weiter (08 §8).
         ChefZ_CookContext alien = new ChefZ_CookContext();
         alien.deviceClass = ChefZ_SymbolTable.Intern("CHEFZ_RT_FREMDGERAET");
         ChefZ_MatchResult none;
-        if (engine.EvaluateBest(alien, snap, null, none))           return false;
-        if (none.matched)                                           return false;
+        if (engine.EvaluateBest(alien, snap, null, none)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 624, "engine.EvaluateBest(alien, snap, null, none)");
+        if (none.matched) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 625, "none.matched");
 
         // Leeres Gefaess: dasselbe.
         ChefZ_FactSnapshot empty = new ChefZ_FactSnapshot();
         ChefZ_MatchResult nothing;
-        if (engine.EvaluateBest(cook, empty, null, nothing))        return false;
+        if (engine.EvaluateBest(cook, empty, null, nothing)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 630, "engine.EvaluateBest(cook, empty, null, nothing)");
 
         return true;
     }
@@ -646,25 +646,25 @@ class ChefZ_RecipeSelfTest
         int n = engine.EvaluateAll(cook, snap, results, 0);
 
         // R4 bindet nicht (kein Spezialitem), die anderen drei schon.
-        if (n != 3)                                                 return false;
-        if (results.Get(0).recipeId != "CHEFZ_RT_R3")               return false;
-        if (results.Get(1).recipeId != "CHEFZ_RT_R2")               return false;
-        if (results.Get(2).recipeId != "CHEFZ_RT_R1")               return false;
+        if (n != 3) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 649, "n != 3");
+        if (results.Get(0).recipeId != "CHEFZ_RT_R3") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 650, "results.Get(0).recipeId != 'CHEFZ_RT_R3'");
+        if (results.Get(1).recipeId != "CHEFZ_RT_R2") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 651, "results.Get(1).recipeId != 'CHEFZ_RT_R2'");
+        if (results.Get(2).recipeId != "CHEFZ_RT_R1") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 652, "results.Get(2).recipeId != 'CHEFZ_RT_R1'");
 
         // Die Scores muessen absteigen - das ist die Aussage von 09 §4.2.
-        if (!(results.Get(0).score > results.Get(1).score))         return false;
-        if (!(results.Get(1).score > results.Get(2).score))         return false;
+        if (!(results.Get(0).score > results.Get(1).score)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 655, "!(results.Get(0).score > results.Get(1).score)");
+        if (!(results.Get(1).score > results.Get(2).score)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 656, "!(results.Get(1).score > results.Get(2).score)");
 
         // Deckelung.
         array<ref ChefZ_MatchResult> capped;
-        if (engine.EvaluateAll(cook, snap, capped, 1) != 1)         return false;
-        if (capped.Get(0).recipeId != "CHEFZ_RT_R3")                return false;
+        if (engine.EvaluateAll(cook, snap, capped, 1) != 1) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 660, "engine.EvaluateAll(cook, snap, capped, 1) != 1");
+        if (capped.Get(0).recipeId != "CHEFZ_RT_R3") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 661, "capped.Get(0).recipeId != 'CHEFZ_RT_R3'");
 
         // Teilbericht: was fehlt R4 noch?
         ChefZ_PartialMatchReport partial;
-        if (!engine.EvaluatePartial(cook, snap, ChefZ_SymbolTable.Intern("CHEFZ_RT_R4"), partial))  return false;
-        if (!partial.contextOk)                                     return false;
-        if (partial.AllSlotsSatisfied())                            return false;   // s5 fehlt
+        if (!engine.EvaluatePartial(cook, snap, ChefZ_SymbolTable.Intern("CHEFZ_RT_R4"), partial)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 665, "!engine.EvaluatePartial(cook, snap, ChefZ_SymbolTable.Intern('CHEFZ_RT_R4'), partial)");
+        if (!partial.contextOk) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 666, "!partial.contextOk");
+        if (partial.AllSlotsSatisfied()) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 667, "partial.AllSlotsSatisfied()");   // s5 fehlt
 
         return true;
     }
@@ -681,29 +681,29 @@ class ChefZ_RecipeSelfTest
         ChefZ_CookContext  cook   = MakeCookContext();
 
         ChefZ_MatchResult blocked;
-        if (engine.EvaluateBest(cook, MakeSnapshot(true), null, blocked))    return false;
-        if (blocked.matched)                                                 return false;
+        if (engine.EvaluateBest(cook, MakeSnapshot(true), null, blocked)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 684, "engine.EvaluateBest(cook, MakeSnapshot(true), null, blocked)");
+        if (blocked.matched) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 685, "blocked.matched");
 
         // Ohne den Fremdkoerper bindet dasselbe Rezept.
         ChefZ_MatchResult clean;
         if (!engine.EvaluateBest(cook, MakeSnapshot(false), null, clean))
         {
             ChefZ_Log.Warn(ChefZ_LogChannel.MATCH, "Selbsttest S6 Fremdkoerper: EvaluateBest(ohne Spezialitem) " + clean.ToDebugString());
-            return false;
+            return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 692, "");
         }
 
         // Mit "ignore" bindet es auch mit Fremdkoerper - und laesst ihn liegen.
         ChefZ_RecipeEngine tolerant = BuildEngineWith(Recipe3(ChefZ_ExtraItemsMode.IGNORE_NAME));
         ChefZ_MatchResult tolerated;
-        if (!tolerant.EvaluateBest(cook, MakeSnapshot(true), null, tolerated)) return false;
-        if (tolerated.extraHandles.Count() != 1)                             return false;
-        if (tolerated.consumePlan.Count() != 4)                              return false;
+        if (!tolerant.EvaluateBest(cook, MakeSnapshot(true), null, tolerated)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 698, "!tolerant.EvaluateBest(cook, MakeSnapshot(true), null, tolerated)");
+        if (tolerated.extraHandles.Count() != 1) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 699, "tolerated.extraHandles.Count() != 1");
+        if (tolerated.consumePlan.Count() != 4) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 700, "tolerated.consumePlan.Count() != 4");
 
         // Mit "consume" wandert der Fremdkoerper in den Verbrauchsplan.
         ChefZ_RecipeEngine hungry = BuildEngineWith(Recipe3(ChefZ_ExtraItemsMode.CONSUME_NAME));
         ChefZ_MatchResult consumed;
-        if (!hungry.EvaluateBest(cook, MakeSnapshot(true), null, consumed))  return false;
-        if (consumed.consumePlan.Count() != 5)                               return false;
+        if (!hungry.EvaluateBest(cook, MakeSnapshot(true), null, consumed)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 705, "!hungry.EvaluateBest(cook, MakeSnapshot(true), null, consumed)");
+        if (consumed.consumePlan.Count() != 5) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 706, "consumed.consumePlan.Count() != 5");
 
         // Das Ventil aus 08 E2: ein Rezept darf einen bestimmten Fremdkoerper
         // dulden, ohne dass der Default sich aendert.
@@ -711,8 +711,8 @@ class ChefZ_RecipeSelfTest
         valve.policy.extraItemsAllowedIf = ClassSelector(CLS_SPEZIAL);
         ChefZ_RecipeEngine valved = BuildEngineWith(valve);
         ChefZ_MatchResult allowed;
-        if (!valved.EvaluateBest(cook, MakeSnapshot(true), null, allowed))   return false;
-        if (allowed.extraHandles.Count() != 1)                               return false;
+        if (!valved.EvaluateBest(cook, MakeSnapshot(true), null, allowed)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 714, "!valved.EvaluateBest(cook, MakeSnapshot(true), null, allowed)");
+        if (allowed.extraHandles.Count() != 1) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 715, "allowed.extraHandles.Count() != 1");
 
         return true;
     }
@@ -732,33 +732,33 @@ class ChefZ_RecipeSelfTest
         if (!engine.EvaluateBest(cook, done, null, ready))
         {
             ChefZ_Log.Warn(ChefZ_LogChannel.MATCH, "Selbsttest S6 Abschluss: EvaluateBest(fertig) " + ready.ToDebugString());
-            return false;
+            return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 735, "");
         }
-        if (!ready.ready)                                           return false;
+        if (!ready.ready) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 737, "!ready.ready");
 
         // Ein rohes Item haelt das Rezept offen - und genau so soll es sein:
         // Vanilla kocht weiter, ChefZ wartet (08 E5).
         ChefZ_FactSnapshot raw = MakeSnapshot(false);
         raw.Get(0).vanillaFoodStage = ChefZ_VanillaStage.FromName("Raw");
         ChefZ_MatchResult pending;
-        if (!engine.EvaluateBest(cook, raw, null, pending))         return false;
-        if (pending.ready)                                          return false;
-        if (pending.notReadyReason == "")                           return false;
+        if (!engine.EvaluateBest(cook, raw, null, pending)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 744, "!engine.EvaluateBest(cook, raw, null, pending)");
+        if (pending.ready) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 745, "pending.ready");
+        if (pending.notReadyReason == "") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 746, "pending.notReadyReason == ''");
 
         // CheckReady() liefert dieselbe Antwort wie EvaluateBest - sonst
         // koennte der Adapter (10 §5, Stufe C) etwas anderes sehen als der
         // Erstmatch.
         string reason;
-        if (engine.CheckReady(pending, raw, cook, reason))          return false;
-        if (!engine.CheckReady(ready, done, cook, reason))          return false;
+        if (engine.CheckReady(pending, raw, cook, reason)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 752, "engine.CheckReady(pending, raw, cook, reason)");
+        if (!engine.CheckReady(ready, done, cook, reason)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 753, "!engine.CheckReady(ready, done, cook, reason)");
 
         // INSTANT ist immer fertig.
         ChefZ_RecipeDef instant = Recipe3(ChefZ_ExtraItemsMode.FORBID_NAME);
         instant.completion = ChefZ_Completion.INSTANT_NAME;
         ChefZ_RecipeEngine instantEngine = BuildEngineWith(instant);
         ChefZ_MatchResult instantResult;
-        if (!instantEngine.EvaluateBest(cook, raw, null, instantResult))     return false;
-        if (!instantResult.ready)                                            return false;
+        if (!instantEngine.EvaluateBest(cook, raw, null, instantResult)) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 760, "!instantEngine.EvaluateBest(cook, raw, null, instantResult)");
+        if (!instantResult.ready) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 761, "!instantResult.ready");
 
         return true;
     }
@@ -788,9 +788,9 @@ class ChefZ_RecipeSelfTest
         engine.SetVerifyOutputClasses(false);
         engine.Build(reg, MakeDeviceRegistry(), MakeContextWith(report, true), null, report);
 
-        if (engine.GetRecipeCount() != 2)                           return false;
-        if (report.WarnCount() < 1)                                 return false;
-        if (report.ErrorCount() != 0)                               return false;
+        if (engine.GetRecipeCount() != 2) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 791, "engine.GetRecipeCount() != 2");
+        if (report.WarnCount() < 1) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 792, "report.WarnCount() < 1");
+        if (report.ErrorCount() != 0) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 793, "report.ErrorCount() != 0");
 
         // ---------------------------------------------------------------
         // Verdeckung (09 §5, zweiter Fall)
@@ -831,15 +831,15 @@ class ChefZ_RecipeSelfTest
         shadowEngine.SetVerifyOutputClasses(false);
         shadowEngine.Build(shadowReg, MakeDeviceRegistry(), MakeShadowContext(shadowReport), null, shadowReport);
 
-        if (shadowReport.WarnCount() < 1)                           return false;
-        if (shadowReport.ErrorCount() != 0)                         return false;
+        if (shadowReport.WarnCount() < 1) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 834, "shadowReport.WarnCount() < 1");
+        if (shadowReport.ErrorCount() != 0) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 835, "shadowReport.ErrorCount() != 0");
 
         // Das verdeckte Rezept BLEIBT geladen (09 §7): bei anderem Geraet oder
         // anderer Menge kann die Verdeckung aufgehoben sein.
-        if (shadowEngine.GetRecipeCount() != 2)                     return false;
+        if (shadowEngine.GetRecipeCount() != 2) return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 839, "shadowEngine.GetRecipeCount() != 2");
 
         // Und die Ordnung ist wirklich die behauptete: das schmale zuerst.
-        if (shadowEngine.GetRecipeAt(0).id != "CHEFZ_RT_SCHMAL")    return false;
+        if (shadowEngine.GetRecipeAt(0).id != "CHEFZ_RT_SCHMAL") return ChefZ_SelfTestTrace.Fail("RecipeSelfTest", 842, "shadowEngine.GetRecipeAt(0).id != 'CHEFZ_RT_SCHMAL'");
 
         return true;
     }

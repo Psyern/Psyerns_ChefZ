@@ -123,17 +123,17 @@ class ChefZ_PreservationScope
     //! Nur fuer den Selbsttest (S11).
     static bool SelfCheck()
     {
-        if (FromName("state")    != STATE)      return false;
-        if (FromName("  State ") != STATE)      return false;   // Trim + Case
-        if (FromName("CLASS")    != CLASS)      return false;
-        if (FromName("category") != CATEGORY)   return false;
-        if (FromName("tag")      != TAG)        return false;
-        if (FromName("quality")  != QUALITY)    return false;
-        if (FromName("")         != UNKNOWN)    return false;
-        if (FromName("zustand")  != UNKNOWN)    return false;
-        if (!IsKnown(STATE))                    return false;
-        if (IsKnown(UNKNOWN))                   return false;
-        if (Name(TAG) != NAME_TAG)              return false;
+        if (FromName("state")    != STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 126, "FromName('state') != STATE");
+        if (FromName("  State ") != STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 127, "FromName(' State ') != STATE");   // Trim + Case
+        if (FromName("CLASS")    != CLASS) return ChefZ_SelfTestTrace.Fail("PreservationDef", 128, "FromName('CLASS') != CLASS");
+        if (FromName("category") != CATEGORY) return ChefZ_SelfTestTrace.Fail("PreservationDef", 129, "FromName('category') != CATEGORY");
+        if (FromName("tag")      != TAG) return ChefZ_SelfTestTrace.Fail("PreservationDef", 130, "FromName('tag') != TAG");
+        if (FromName("quality")  != QUALITY) return ChefZ_SelfTestTrace.Fail("PreservationDef", 131, "FromName('quality') != QUALITY");
+        if (FromName("")         != UNKNOWN) return ChefZ_SelfTestTrace.Fail("PreservationDef", 132, "FromName('') != UNKNOWN");
+        if (FromName("zustand")  != UNKNOWN) return ChefZ_SelfTestTrace.Fail("PreservationDef", 133, "FromName('zustand') != UNKNOWN");
+        if (!IsKnown(STATE)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 134, "!IsKnown(STATE)");
+        if (IsKnown(UNKNOWN)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 135, "IsKnown(UNKNOWN)");
+        if (Name(TAG) != NAME_TAG) return ChefZ_SelfTestTrace.Fail("PreservationDef", 136, "Name(TAG) != NAME_TAG");
         return true;
     }
 }
@@ -456,22 +456,22 @@ class ChefZ_PreservationDef extends ChefZ_Record
         ChefZ_PreservationDef bare = new ChefZ_PreservationDef();
         bare.id = "CHEFZ_SELFTEST_PRES_A";
         bare.ResolveDefaults();
-        if (bare.scope != ChefZ_PreservationScope.NAME_STATE)   return false;
-        if (bare.spoilageMultiplier != 1.0)                     return false;
-        if (bare.stopsDecay)                                    return false;
-        if (bare.preventsRotten)                                return false;
-        if (bare.HasOnPlayerMultiplier())                       return false;
-        if (bare.HasTemperatureGate())                          return false;
-        if (!bare.Validate(ctx))                                return false;
+        if (bare.scope != ChefZ_PreservationScope.NAME_STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 459, "bare.scope != ChefZ_PreservationScope.NAME_STATE");
+        if (bare.spoilageMultiplier != 1.0) return ChefZ_SelfTestTrace.Fail("PreservationDef", 460, "bare.spoilageMultiplier != 1.0");
+        if (bare.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 461, "bare.stopsDecay");
+        if (bare.preventsRotten) return ChefZ_SelfTestTrace.Fail("PreservationDef", 462, "bare.preventsRotten");
+        if (bare.HasOnPlayerMultiplier()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 463, "bare.HasOnPlayerMultiplier()");
+        if (bare.HasTemperatureGate()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 464, "bare.HasTemperatureGate()");
+        if (!bare.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 465, "!bare.Validate(ctx)");
         bare.Compile(null);
-        if (bare.scopeKind != ChefZ_PreservationScope.STATE)    return false;
+        if (bare.scopeKind != ChefZ_PreservationScope.STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 467, "bare.scopeKind != ChefZ_PreservationScope.STATE");
 
         // 2. Unbekannter scope: abgewiesen, nicht stillschweigend "state".
         ChefZ_PreservationDef bad = new ChefZ_PreservationDef();
         bad.id    = "CHEFZ_SELFTEST_PRES_B";
         bad.scope = "zustand";
         bad.ResolveDefaults();
-        if (bad.Validate(ctx))                                  return false;
+        if (bad.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 474, "bad.Validate(ctx)");
 
         // 3. Nicht positiver Multiplikator wird geklemmt, nicht abgewiesen.
         //    In der Reihenfolge des Config Managers: ResolveDefaults ZUERST.
@@ -485,10 +485,10 @@ class ChefZ_PreservationDef extends ChefZ_Record
         // ChefZ_JsonExplicit den Schluessel ein - hier tut es der Test.
         zero.MarkExplicit("spoilageMultiplier");
         zero.ResolveDefaults();
-        if (!zero.Validate(ctx))                                return false;
-        if (zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER) return false;
+        if (!zero.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 488, "!zero.Validate(ctx)");
+        if (zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER) return ChefZ_SelfTestTrace.Fail("PreservationDef", 489, "zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER");
         zero.Compile(null);
-        if (zero.scopeKind != ChefZ_PreservationScope.TAG)      return false;
+        if (zero.scopeKind != ChefZ_PreservationScope.TAG) return ChefZ_SelfTestTrace.Fail("PreservationDef", 491, "zero.scopeKind != ChefZ_PreservationScope.TAG");
 
         // 4. Temperaturbereich: greift innerhalb, nicht ausserhalb, und bei
         //    unbekannter Temperatur ausdruecklich NICHT.
@@ -498,11 +498,11 @@ class ChefZ_PreservationDef extends ChefZ_Record
         cold.environmentTemperature = new ChefZ_Range();
         cold.environmentTemperature.Init(-50.0, 5.0);
         cold.ResolveDefaults();
-        if (!cold.Validate(ctx))                                return false;
-        if (!cold.HasTemperatureGate())                         return false;
-        if (!cold.AppliesAt(0.0))                               return false;
-        if (cold.AppliesAt(20.0))                               return false;
-        if (cold.AppliesAt(ChefZ_Undefined.FLOAT))              return false;
+        if (!cold.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 501, "!cold.Validate(ctx)");
+        if (!cold.HasTemperatureGate()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 502, "!cold.HasTemperatureGate()");
+        if (!cold.AppliesAt(0.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 503, "!cold.AppliesAt(0.0)");
+        if (cold.AppliesAt(20.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 504, "cold.AppliesAt(20.0)");
+        if (cold.AppliesAt(ChefZ_Undefined.FLOAT)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 505, "cold.AppliesAt(ChefZ_Undefined.FLOAT)");
 
         // 5. Leerer Temperaturbereich (min > max) wird verworfen, der Record
         //    bleibt gueltig und gilt danach wieder immer.
@@ -512,23 +512,23 @@ class ChefZ_PreservationDef extends ChefZ_Record
         swapped.environmentTemperature = new ChefZ_Range();
         swapped.environmentTemperature.Init(30.0, 10.0);
         swapped.ResolveDefaults();
-        if (!swapped.Validate(ctx))                             return false;
-        if (swapped.environmentTemperature)                     return false;
-        if (!swapped.AppliesAt(999.0))                          return false;
+        if (!swapped.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 515, "!swapped.Validate(ctx)");
+        if (swapped.environmentTemperature) return ChefZ_SelfTestTrace.Fail("PreservationDef", 516, "swapped.environmentTemperature");
+        if (!swapped.AppliesAt(999.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 517, "!swapped.AppliesAt(999.0)");
 
         // 6. bool ohne explicitFields wirkt nicht, mit wirkt es (02 E3).
         ChefZ_PreservationDef ex = new ChefZ_PreservationDef();
         ex.id         = "CHEFZ_SELFTEST_PRES_F";
         ex.stopsDecay = true;
         ex.ResolveDefaults();
-        if (ex.stopsDecay)                                      return false;
+        if (ex.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 524, "ex.stopsDecay");
 
         ChefZ_PreservationDef ex2 = new ChefZ_PreservationDef();
         ex2.id         = "CHEFZ_SELFTEST_PRES_G";
         ex2.stopsDecay = true;
         ex2.MarkExplicit("stopsDecay");
         ex2.ResolveDefaults();
-        if (!ex2.stopsDecay)                                    return false;
+        if (!ex2.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 531, "!ex2.stopsDecay");
 
         // 7. Patch: nur gesetzte Felder wandern, der Rest bleibt.
         ChefZ_PreservationDef basis = new ChefZ_PreservationDef();
@@ -540,8 +540,8 @@ class ChefZ_PreservationDef extends ChefZ_Record
         overlay.id                 = "CHEFZ_SELFTEST_PRES_H";
         overlay.spoilageMultiplier = 0.5;
         basis.PatchFrom(overlay);
-        if (basis.spoilageMultiplier != 0.5)                    return false;
-        if (basis.scope != ChefZ_PreservationScope.NAME_STATE)  return false;
+        if (basis.spoilageMultiplier != 0.5) return ChefZ_SelfTestTrace.Fail("PreservationDef", 543, "basis.spoilageMultiplier != 0.5");
+        if (basis.scope != ChefZ_PreservationScope.NAME_STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 544, "basis.scope != ChefZ_PreservationScope.NAME_STATE");
 
         return ChefZ_PreservationScope.SelfCheck();
     }

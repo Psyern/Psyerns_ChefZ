@@ -101,7 +101,7 @@ class ChefZ_IngredientSelfTest
     {
         if (ok)
         {
-            s_Passed++;
+            s_Passed++; ChefZ_SelfTestTrace.Reset();
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.CONFIG, ChefZ_LogLevel.DEBUG))
                 ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG, "Selbsttest " + name + ": ok");
             return;
@@ -109,7 +109,7 @@ class ChefZ_IngredientSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Zutatenaufloesung verhaelt sich nicht " + "wie entworfen - jede Faktenerhebung und damit jede Rezeptauswahl ist ab hier " + "unzuverlaessig.");
+        ChefZ_Log.Error(ChefZ_LogChannel.CONFIG, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Zutatenaufloesung verhaelt sich nicht " + "wie entworfen - jede Faktenerhebung und damit jede Rezeptauswahl ist ab hier " + "unzuverlaessig." + ChefZ_SelfTestTrace.Take());
     }
 
     static int PassedCount() { return s_Passed; }
@@ -277,61 +277,61 @@ class ChefZ_IngredientSelfTest
         ChefZ_IngredientProbe mgr = NewManager(cats);
         mgr.Build(defs, report, NewStates());
 
-        if (!mgr.IsReady())                                     return false;
-        if (mgr.GetKnownCount() != 2)                           return false;
-        if (mgr.GetRejectedCount() != 0)                        return false;
-        if (report.ErrorCount() != 0)                           return false;
-        if (report.WarnCount() != 0)                            return false;
+        if (!mgr.IsReady()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 280, "!mgr.IsReady()");
+        if (mgr.GetKnownCount() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 281, "mgr.GetKnownCount() != 2");
+        if (mgr.GetRejectedCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 282, "mgr.GetRejectedCount() != 0");
+        if (report.ErrorCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 283, "report.ErrorCount() != 0");
+        if (report.WarnCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 284, "report.WarnCount() != 0");
 
         // --- vollstaendig deklarierte Klasse --------------------------------
         ChefZ_IngredientInfo a = mgr.ResolveByName("CHEFZ_ST_I_FULL");
-        if (!a)                                                 return false;
-        if (!a.isChefZManaged)                                  return false;
-        if (a.classSym != Sym("CHEFZ_ST_I_FULL"))               return false;
+        if (!a) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 288, "!a");
+        if (!a.isChefZManaged) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 289, "!a.isChefZManaged");
+        if (a.classSym != Sym("CHEFZ_ST_I_FULL")) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 290, "a.classSym != Sym('CHEFZ_ST_I_FULL')");
 
-        if (a.categories.Count() != 1)                          return false;
-        if (a.categories.Get(0) != Sym(C_KAT_A))                 return false;
+        if (a.categories.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 292, "a.categories.Count() != 1");
+        if (a.categories.Get(0) != Sym(C_KAT_A)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 293, "a.categories.Get(0) != Sym(C_KAT_A)");
 
         // Closure ist self-or-ancestor: MEAT und FOOD, aber nicht WILD.
-        if (!cats.IsInCategory(a.closure, Sym(C_KAT_A)))         return false;
-        if (!cats.IsInCategory(a.closure, Sym(C_FOOD)))         return false;
-        if (cats.IsInCategory(a.closure, Sym(C_WILD)))          return false;
-        if (a.closure.CountBits() != 2)                         return false;
+        if (!cats.IsInCategory(a.closure, Sym(C_KAT_A))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 296, "!cats.IsInCategory(a.closure, Sym(C_KAT_A))");
+        if (!cats.IsInCategory(a.closure, Sym(C_FOOD))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 297, "!cats.IsInCategory(a.closure, Sym(C_FOOD))");
+        if (cats.IsInCategory(a.closure, Sym(C_WILD))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 298, "cats.IsInCategory(a.closure, Sym(C_WILD))");
+        if (a.closure.CountBits() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 299, "a.closure.CountBits() != 2");
 
-        if (a.staticTags.Count() != 2)                          return false;
-        if (!a.HasTag(Sym(T_A)))                                return false;
-        if (!a.HasTag(Sym(T_B)))                                return false;
+        if (a.staticTags.Count() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 301, "a.staticTags.Count() != 2");
+        if (!a.HasTag(Sym(T_A))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 302, "!a.HasTag(Sym(T_A))");
+        if (!a.HasTag(Sym(T_B))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 303, "!a.HasTag(Sym(T_B))");
 
-        if (a.defaultState != Sym(S_KNOWN))                     return false;
-        if (a.quantityUnit != Sym(U_BULK))                      return false;
-        if (a.unitsPerWholeItem != 100.0)                       return false;
-        if (!a.decays)                                          return false;
-        if (a.containerCategory != Sym("CHEFZ_ST_ICO_BOWL"))    return false;
-        if (a.returnContainer != Sym("AUTO"))                   return false;
+        if (a.defaultState != Sym(S_KNOWN)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 305, "a.defaultState != Sym(S_KNOWN)");
+        if (a.quantityUnit != Sym(U_BULK)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 306, "a.quantityUnit != Sym(U_BULK)");
+        if (a.unitsPerWholeItem != 100.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 307, "a.unitsPerWholeItem != 100.0");
+        if (!a.decays) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 308, "!a.decays");
+        if (a.containerCategory != Sym("CHEFZ_ST_ICO_BOWL")) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 309, "a.containerCategory != Sym('CHEFZ_ST_ICO_BOWL')");
+        if (a.returnContainer != Sym("AUTO")) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 310, "a.returnContainer != Sym('AUTO')");
 
         // --- Klasse ohne jede Angabe -----------------------------------------
         ChefZ_IngredientInfo b = mgr.ResolveByName("CHEFZ_ST_I_PLAIN");
-        if (!b)                                                 return false;
-        if (!b.isChefZManaged)                                  return false;
-        if (b.categories.Count() != 0)                          return false;
-        if (!b.closure.IsEmpty())                               return false;
-        if (b.staticTags.Count() != 0)                          return false;
-        if (b.defaultState != ChefZ_SymbolTable.INVALID)        return false;
-        if (b.quantityUnit != ChefZ_IngredientManager.DefaultUnitSym())  return false;
-        if (b.unitsPerWholeItem != 1.0)                         return false;
-        if (b.decays)                                           return false;   // 01 V9
+        if (!b) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 314, "!b");
+        if (!b.isChefZManaged) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 315, "!b.isChefZManaged");
+        if (b.categories.Count() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 316, "b.categories.Count() != 0");
+        if (!b.closure.IsEmpty()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 317, "!b.closure.IsEmpty()");
+        if (b.staticTags.Count() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 318, "b.staticTags.Count() != 0");
+        if (b.defaultState != ChefZ_SymbolTable.INVALID) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 319, "b.defaultState != ChefZ_SymbolTable.INVALID");
+        if (b.quantityUnit != ChefZ_IngredientManager.DefaultUnitSym()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 320, "b.quantityUnit != ChefZ_IngredientManager.DefaultUnitSym()");
+        if (b.unitsPerWholeItem != 1.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 321, "b.unitsPerWholeItem != 1.0");
+        if (b.decays) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 322, "b.decays");   // 01 V9
 
         // --- Nachschlagen -----------------------------------------------------
-        if (!mgr.IsKnown(Sym("CHEFZ_ST_I_FULL")))               return false;
-        if (mgr.IsKnown(ChefZ_SymbolTable.Intern("CHEFZ_ST_I_NEVER")))   return false;
-        if (mgr.Resolve(Sym("CHEFZ_ST_I_NEVER")))               return false;
-        if (mgr.ResolveByName("gibtsNicht"))                    return false;
-        if (mgr.Resolve(ChefZ_SymbolTable.INVALID))             return false;
+        if (!mgr.IsKnown(Sym("CHEFZ_ST_I_FULL"))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 325, "!mgr.IsKnown(Sym('CHEFZ_ST_I_FULL'))");
+        if (mgr.IsKnown(ChefZ_SymbolTable.Intern("CHEFZ_ST_I_NEVER"))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 326, "mgr.IsKnown(ChefZ_SymbolTable.Intern('CHEFZ_ST_I_NEVER'))");
+        if (mgr.Resolve(Sym("CHEFZ_ST_I_NEVER"))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 327, "mgr.Resolve(Sym('CHEFZ_ST_I_NEVER'))");
+        if (mgr.ResolveByName("gibtsNicht")) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 328, "mgr.ResolveByName('gibtsNicht')");
+        if (mgr.Resolve(ChefZ_SymbolTable.INVALID)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 329, "mgr.Resolve(ChefZ_SymbolTable.INVALID)");
 
         // --- Auszug laeuft -----------------------------------------------------
         array<string> lines;
         mgr.DumpIngredients(lines);
-        if (lines.Count() < 3)                                  return false;
+        if (lines.Count() < 3) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 334, "lines.Count() < 3");
 
         return true;
     }
@@ -386,49 +386,49 @@ class ChefZ_IngredientSelfTest
         ChefZ_LoadReport report = NewReport();
         mgr.Build(defs, report, NewStates());
 
-        if (report.ErrorCount() != 0)                           return false;
-        if (mgr.GetKnownCount() != 4)                           return false;
+        if (report.ErrorCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 389, "report.ErrorCount() != 0");
+        if (mgr.GetKnownCount() != 4) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 390, "mgr.GetKnownCount() != 4");
 
         // --- das Kind erbt ueber die undeklarierte Zwischenklasse hinweg ----
         ChefZ_IngredientInfo k = mgr.ResolveByName("CHEFZ_ST_I_KID");
-        if (!k)                                                 return false;
+        if (!k) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 394, "!k");
 
         // Eigene Kategorienliste ERSETZT die geerbte (Ganzersatz).
-        if (k.categories.Count() != 1)                          return false;
-        if (k.categories.Get(0) != Sym(C_WILD))                 return false;
-        if (!cats.IsInCategory(k.closure, Sym(C_WILD)))         return false;
-        if (!cats.IsInCategory(k.closure, Sym(C_KAT_A)))         return false;   // ueber den Baum
-        if (!cats.IsInCategory(k.closure, Sym(C_FOOD)))         return false;
+        if (k.categories.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 397, "k.categories.Count() != 1");
+        if (k.categories.Get(0) != Sym(C_WILD)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 398, "k.categories.Get(0) != Sym(C_WILD)");
+        if (!cats.IsInCategory(k.closure, Sym(C_WILD))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 399, "!cats.IsInCategory(k.closure, Sym(C_WILD))");
+        if (!cats.IsInCategory(k.closure, Sym(C_KAT_A))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 400, "!cats.IsInCategory(k.closure, Sym(C_KAT_A))");   // ueber den Baum
+        if (!cats.IsInCategory(k.closure, Sym(C_FOOD))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 401, "!cats.IsInCategory(k.closure, Sym(C_FOOD))");
 
         // Alles Uebrige stammt aus der Basis.
-        if (k.staticTags.Count() != 1)                          return false;
-        if (!k.HasTag(Sym(T_A)))                                return false;
-        if (k.defaultState != Sym(S_KNOWN))                     return false;
-        if (k.quantityUnit != Sym(U_BULK))                      return false;
-        if (k.unitsPerWholeItem != 100.0)                       return false;
-        if (!k.decays)                                          return false;
+        if (k.staticTags.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 404, "k.staticTags.Count() != 1");
+        if (!k.HasTag(Sym(T_A))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 405, "!k.HasTag(Sym(T_A))");
+        if (k.defaultState != Sym(S_KNOWN)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 406, "k.defaultState != Sym(S_KNOWN)");
+        if (k.quantityUnit != Sym(U_BULK)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 407, "k.quantityUnit != Sym(U_BULK)");
+        if (k.unitsPerWholeItem != 100.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 408, "k.unitsPerWholeItem != 100.0");
+        if (!k.decays) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 409, "!k.decays");
 
         // --- eigene Angaben schlagen die geerbten ----------------------------
         ChefZ_IngredientInfo o = mgr.ResolveByName("CHEFZ_ST_I_OWN");
-        if (!o)                                                 return false;
-        if (o.staticTags.Count() != 1)                          return false;
-        if (!o.HasTag(Sym(T_B)))                                return false;
-        if (o.HasTag(Sym(T_A)))                                 return false;
-        if (o.unitsPerWholeItem != 2.0)                         return false;
-        if (o.decays)                                           return false;
+        if (!o) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 413, "!o");
+        if (o.staticTags.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 414, "o.staticTags.Count() != 1");
+        if (!o.HasTag(Sym(T_B))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 415, "!o.HasTag(Sym(T_B))");
+        if (o.HasTag(Sym(T_A))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 416, "o.HasTag(Sym(T_A))");
+        if (o.unitsPerWholeItem != 2.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 417, "o.unitsPerWholeItem != 2.0");
+        if (o.decays) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 418, "o.decays");
         // quantityUnit hat OWN nicht genannt -> geerbt.
-        if (o.quantityUnit != Sym(U_BULK))                      return false;
+        if (o.quantityUnit != Sym(U_BULK)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 420, "o.quantityUnit != Sym(U_BULK)");
 
         // --- die Basis selbst bleibt unveraendert ----------------------------
         ChefZ_IngredientInfo bs = mgr.ResolveByName("CHEFZ_ST_I_BASE");
-        if (!bs)                                                return false;
-        if (bs.categories.Get(0) != Sym(C_KAT_A))                return false;
-        if (bs.unitsPerWholeItem != 100.0)                      return false;
+        if (!bs) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 424, "!bs");
+        if (bs.categories.Get(0) != Sym(C_KAT_A)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 425, "bs.categories.Get(0) != Sym(C_KAT_A)");
+        if (bs.unitsPerWholeItem != 100.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 426, "bs.unitsPerWholeItem != 100.0");
 
         // --- eine im Kreis zeigende Elternkette haengt nicht ------------------
         ChefZ_IngredientInfo r = mgr.ResolveByName("CHEFZ_ST_I_RING");
-        if (!r)                                                 return false;
-        if (r.unitsPerWholeItem != 1.0)                         return false;
+        if (!r) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 430, "!r");
+        if (r.unitsPerWholeItem != 1.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 431, "r.unitsPerWholeItem != 1.0");
 
         return true;
     }
@@ -460,40 +460,40 @@ class ChefZ_IngredientSelfTest
         // Oberkategorie zaehlt die Kinder MIT - sonst waere die Schaetzung
         // systematisch zu klein und der Matcher sortierte falsch.
         mgr.GetClassesInCategory(Sym(C_FOOD), found);
-        if (found.Count() != 2)                                 return false;
+        if (found.Count() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 463, "found.Count() != 2");
 
         mgr.GetClassesInCategory(Sym(C_KAT_A), found);
-        if (found.Count() != 2)                                 return false;
+        if (found.Count() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 466, "found.Count() != 2");
 
         mgr.GetClassesInCategory(Sym(C_WILD), found);
-        if (found.Count() != 1)                                 return false;
-        if (found.Get(0) != Sym("CHEFZ_ST_I_X_WILD"))           return false;
+        if (found.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 469, "found.Count() != 1");
+        if (found.Get(0) != Sym("CHEFZ_ST_I_X_WILD")) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 470, "found.Get(0) != Sym('CHEFZ_ST_I_X_WILD')");
 
         mgr.GetClassesInCategory(Sym(C_NOPE), found);
-        if (found.Count() != 0)                                 return false;
+        if (found.Count() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 473, "found.Count() != 0");
 
         mgr.GetClassesWithTag(Sym(T_A), found);
-        if (found.Count() != 2)                                 return false;
+        if (found.Count() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 476, "found.Count() != 2");
         mgr.GetClassesWithTag(Sym(T_B), found);
-        if (found.Count() != 1)                                 return false;
+        if (found.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 478, "found.Count() != 1");
         mgr.GetClassesWithTag(Sym(T_NOPE), found);
-        if (found.Count() != 0)                                 return false;
+        if (found.Count() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 480, "found.Count() != 0");
 
-        if (mgr.EstimateCandidateCount(Sym(C_FOOD)) != 2)       return false;
-        if (mgr.EstimateCandidateCount(Sym(C_WILD)) != 1)       return false;
-        if (mgr.EstimateCandidateCount(Sym(T_B)) != 1)          return false;
-        if (mgr.EstimateCandidateCount(Sym(C_NOPE)) != 0)       return false;
-        if (mgr.EstimateCandidateCount(ChefZ_SymbolTable.INVALID) != 0)  return false;
+        if (mgr.EstimateCandidateCount(Sym(C_FOOD)) != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 482, "mgr.EstimateCandidateCount(Sym(C_FOOD)) != 2");
+        if (mgr.EstimateCandidateCount(Sym(C_WILD)) != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 483, "mgr.EstimateCandidateCount(Sym(C_WILD)) != 1");
+        if (mgr.EstimateCandidateCount(Sym(T_B)) != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 484, "mgr.EstimateCandidateCount(Sym(T_B)) != 1");
+        if (mgr.EstimateCandidateCount(Sym(C_NOPE)) != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 485, "mgr.EstimateCandidateCount(Sym(C_NOPE)) != 0");
+        if (mgr.EstimateCandidateCount(ChefZ_SymbolTable.INVALID) != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 486, "mgr.EstimateCandidateCount(ChefZ_SymbolTable.INVALID) != 0");
 
         // Die zurueckgegebene Liste ist eine Kopie: sie zu leeren darf den
         // Index nicht anfassen.
         mgr.GetClassesInCategory(Sym(C_FOOD), found);
         found.Clear();
-        if (mgr.EstimateCandidateCount(Sym(C_FOOD)) != 2)       return false;
+        if (mgr.EstimateCandidateCount(Sym(C_FOOD)) != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 492, "mgr.EstimateCandidateCount(Sym(C_FOOD)) != 2");
 
         // Eine Klasse ohne Kategorien und Tags taucht nirgends auf, ist aber
         // ueber ihre Klasse ansprechbar (05 E3).
-        if (!mgr.IsKnown(Sym("CHEFZ_ST_I_X_BARE")))             return false;
+        if (!mgr.IsKnown(Sym("CHEFZ_ST_I_X_BARE"))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 496, "!mgr.IsKnown(Sym('CHEFZ_ST_I_X_BARE'))");
 
         return true;
     }
@@ -529,21 +529,21 @@ class ChefZ_IngredientSelfTest
         ChefZ_IngredientProbe mgr = NewManager(cats);
         mgr.Build(defs, report, null);
 
-        if (mgr.GetKnownCount() != 2)                           return false;
-        if (mgr.GetRejectedCount() != 1)                        return false;
-        if (report.ErrorCount() != 1)                           return false;
-        if (report.WarnCount() != 2)                            return false;
+        if (mgr.GetKnownCount() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 532, "mgr.GetKnownCount() != 2");
+        if (mgr.GetRejectedCount() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 533, "mgr.GetRejectedCount() != 1");
+        if (report.ErrorCount() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 534, "report.ErrorCount() != 1");
+        if (report.WarnCount() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 535, "report.WarnCount() != 2");
 
-        if (mgr.ResolveByName("CHEFZ_ST_I_U_BAD"))              return false;
+        if (mgr.ResolveByName("CHEFZ_ST_I_U_BAD")) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 537, "mgr.ResolveByName('CHEFZ_ST_I_U_BAD')");
 
         ChefZ_IngredientInfo c = mgr.ResolveByName("CHEFZ_ST_I_U_CLAMP");
-        if (!c)                                                 return false;
-        if (c.unitsPerWholeItem != 1.0)                         return false;
-        if (c.quantityUnit != ChefZ_IngredientManager.DefaultUnitSym())   return false;
+        if (!c) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 540, "!c");
+        if (c.unitsPerWholeItem != 1.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 541, "c.unitsPerWholeItem != 1.0");
+        if (c.quantityUnit != ChefZ_IngredientManager.DefaultUnitSym()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 542, "c.quantityUnit != ChefZ_IngredientManager.DefaultUnitSym()");
 
         ChefZ_IngredientInfo n = mgr.ResolveByName("CHEFZ_ST_I_U_NEG");
-        if (!n)                                                 return false;
-        if (n.unitsPerWholeItem != 1.0)                         return false;
+        if (!n) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 545, "!n");
+        if (n.unitsPerWholeItem != 1.0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 546, "n.unitsPerWholeItem != 1.0");
 
         return true;
     }
@@ -571,23 +571,23 @@ class ChefZ_IngredientSelfTest
         mgr.Build(defs, report, NewStates());
 
         // Drei Warnungen, kein Fehler, Record bleibt geladen.
-        if (report.ErrorCount() != 0)                           return false;
-        if (report.WarnCount() != 3)                            return false;
-        if (mgr.GetKnownCount() != 1)                           return false;
+        if (report.ErrorCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 574, "report.ErrorCount() != 0");
+        if (report.WarnCount() != 3) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 575, "report.WarnCount() != 3");
+        if (mgr.GetKnownCount() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 576, "mgr.GetKnownCount() != 1");
 
         ChefZ_IngredientInfo info = mgr.ResolveByName("CHEFZ_ST_I_R_MIX");
-        if (!info)                                              return false;
+        if (!info) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 579, "!info");
 
-        if (info.categories.Count() != 1)                       return false;
-        if (info.categories.Get(0) != Sym(C_KAT_A))              return false;
-        if (!cats.IsInCategory(info.closure, Sym(C_KAT_A)))      return false;
-        if (cats.IsInCategory(info.closure, Sym(C_NOPE)))       return false;
+        if (info.categories.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 581, "info.categories.Count() != 1");
+        if (info.categories.Get(0) != Sym(C_KAT_A)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 582, "info.categories.Get(0) != Sym(C_KAT_A)");
+        if (!cats.IsInCategory(info.closure, Sym(C_KAT_A))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 583, "!cats.IsInCategory(info.closure, Sym(C_KAT_A))");
+        if (cats.IsInCategory(info.closure, Sym(C_NOPE))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 584, "cats.IsInCategory(info.closure, Sym(C_NOPE))");
 
-        if (info.staticTags.Count() != 1)                       return false;
-        if (!info.HasTag(Sym(T_B)))                             return false;
+        if (info.staticTags.Count() != 1) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 586, "info.staticTags.Count() != 1");
+        if (!info.HasTag(Sym(T_B))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 587, "!info.HasTag(Sym(T_B))");
 
         // Ein unbekannter Zustand wird verworfen, nicht uebernommen.
-        if (info.defaultState != ChefZ_SymbolTable.INVALID)     return false;
+        if (info.defaultState != ChefZ_SymbolTable.INVALID) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 590, "info.defaultState != ChefZ_SymbolTable.INVALID");
 
         // Ohne Zustandsregistry gibt es keine Zustandspruefung - dann bleibt
         // die Angabe stehen, und der Fehler faellt spaeter im Matching auf.
@@ -595,9 +595,9 @@ class ChefZ_IngredientSelfTest
         ChefZ_IngredientProbe mgr2 = NewManager(cats);
         mgr2.Build(defs, report2, null);
         ChefZ_IngredientInfo info2 = mgr2.ResolveByName("CHEFZ_ST_I_R_MIX");
-        if (!info2)                                             return false;
-        if (info2.defaultState != Sym(S_NOPE))                  return false;
-        if (report2.WarnCount() != 2)                           return false;
+        if (!info2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 598, "!info2");
+        if (info2.defaultState != Sym(S_NOPE)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 599, "info2.defaultState != Sym(S_NOPE)");
+        if (report2.WarnCount() != 2) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 600, "report2.WarnCount() != 2");
 
         return true;
     }
@@ -617,26 +617,26 @@ class ChefZ_IngredientSelfTest
         ChefZ_IngredientProbe mgr = NewManager(cats);
         mgr.Build(NewIngredients(), report, null);
 
-        if (!mgr.IsReady())                                     return false;
-        if (report.ErrorCount() != 0)                           return false;
-        if (report.WarnCount() != 0)                            return false;
-        if (mgr.GetKnownCount() != 0)                           return false;
+        if (!mgr.IsReady()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 620, "!mgr.IsReady()");
+        if (report.ErrorCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 621, "report.ErrorCount() != 0");
+        if (report.WarnCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 622, "report.WarnCount() != 0");
+        if (mgr.GetKnownCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 623, "mgr.GetKnownCount() != 0");
 
         ChefZ_Sym any = ChefZ_SymbolTable.Intern("CHEFZ_ST_I_E_ANY");
-        if (mgr.IsKnown(any))                                   return false;
-        if (mgr.Resolve(any))                                   return false;
-        if (mgr.EstimateCandidateCount(any) != 0)               return false;
+        if (mgr.IsKnown(any)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 626, "mgr.IsKnown(any)");
+        if (mgr.Resolve(any)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 627, "mgr.Resolve(any)");
+        if (mgr.EstimateCandidateCount(any) != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 628, "mgr.EstimateCandidateCount(any) != 0");
 
         array<ChefZ_Sym> found;
         mgr.GetClassesInCategory(any, found);
-        if (!found)                                             return false;
-        if (found.Count() != 0)                                 return false;
+        if (!found) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 632, "!found");
+        if (found.Count() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 633, "found.Count() != 0");
 
         // Auch mit null-Registry: kein Nullzugriff, "bereit und leer".
         ChefZ_IngredientProbe mgr2 = NewManager(cats);
         mgr2.Build(null, null, null);
-        if (!mgr2.IsReady())                                    return false;
-        if (mgr2.GetKnownCount() != 0)                          return false;
+        if (!mgr2.IsReady()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 638, "!mgr2.IsReady()");
+        if (mgr2.GetKnownCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 639, "mgr2.GetKnownCount() != 0");
 
         return true;
     }
@@ -648,19 +648,19 @@ class ChefZ_IngredientSelfTest
     private static bool NotReadyCheck()
     {
         ChefZ_IngredientProbe mgr = new ChefZ_IngredientProbe();
-        if (mgr.IsReady())                                      return false;
+        if (mgr.IsReady()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 651, "mgr.IsReady()");
 
         ChefZ_Sym any = ChefZ_SymbolTable.Intern("CHEFZ_ST_I_N_ANY");
-        if (mgr.IsKnown(any))                                   return false;
-        if (mgr.Resolve(any))                                   return false;
-        if (mgr.ResolveByName("CHEFZ_ST_I_N_ANY"))              return false;
-        if (mgr.EstimateCandidateCount(any) != 0)               return false;
-        if (mgr.GetKnownCount() != 0)                           return false;
+        if (mgr.IsKnown(any)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 654, "mgr.IsKnown(any)");
+        if (mgr.Resolve(any)) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 655, "mgr.Resolve(any)");
+        if (mgr.ResolveByName("CHEFZ_ST_I_N_ANY")) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 656, "mgr.ResolveByName('CHEFZ_ST_I_N_ANY')");
+        if (mgr.EstimateCandidateCount(any) != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 657, "mgr.EstimateCandidateCount(any) != 0");
+        if (mgr.GetKnownCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 658, "mgr.GetKnownCount() != 0");
 
         array<ChefZ_Sym> found;
         mgr.GetClassesWithTag(any, found);
-        if (!found)                                             return false;
-        if (found.Count() != 0)                                 return false;
+        if (!found) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 662, "!found");
+        if (found.Count() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 663, "found.Count() != 0");
 
         // Nach Reset() ist der Manager wieder "nicht gebaut".
         ChefZ_CategoryManager cats = NewCategories();
@@ -668,13 +668,13 @@ class ChefZ_IngredientSelfTest
         ChefZ_Registry<ChefZ_IngredientDef> defs = NewIngredients();
         NewIng(defs, "CHEFZ_ST_I_N_ONE");
         mgr.Build(defs, NewReport(), null);
-        if (!mgr.IsReady())                                     return false;
-        if (!mgr.IsKnown(Sym("CHEFZ_ST_I_N_ONE")))              return false;
+        if (!mgr.IsReady()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 671, "!mgr.IsReady()");
+        if (!mgr.IsKnown(Sym("CHEFZ_ST_I_N_ONE"))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 672, "!mgr.IsKnown(Sym('CHEFZ_ST_I_N_ONE'))");
 
         mgr.Reset();
-        if (mgr.IsReady())                                      return false;
-        if (mgr.IsKnown(Sym("CHEFZ_ST_I_N_ONE")))               return false;
-        if (mgr.GetKnownCount() != 0)                           return false;
+        if (mgr.IsReady()) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 675, "mgr.IsReady()");
+        if (mgr.IsKnown(Sym("CHEFZ_ST_I_N_ONE"))) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 676, "mgr.IsKnown(Sym('CHEFZ_ST_I_N_ONE'))");
+        if (mgr.GetKnownCount() != 0) return ChefZ_SelfTestTrace.Fail("IngredientSelfTest", 677, "mgr.GetKnownCount() != 0");
 
         return true;
     }

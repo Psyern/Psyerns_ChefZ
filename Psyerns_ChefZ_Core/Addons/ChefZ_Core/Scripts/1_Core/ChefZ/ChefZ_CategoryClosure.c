@@ -232,68 +232,68 @@ class ChefZ_CategoryClosure : Managed
     {
         ChefZ_CategoryClosure a = new ChefZ_CategoryClosure();
 
-        if (!a.IsEmpty())                       return false;
-        if (a.HasBit(0))                        return false;
-        if (a.HasBit(-1))                       return false;
-        if (a.CountBits() != 0)                 return false;
+        if (!a.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 235, "!a.IsEmpty()");
+        if (a.HasBit(0)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 236, "a.HasBit(0)");
+        if (a.HasBit(-1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 237, "a.HasBit(-1)");
+        if (a.CountBits() != 0) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 238, "a.CountBits() != 0");
 
         a.SetBit(0);
         a.SetBit(31);       // Wortgrenze, Vorzeichenbit
         a.SetBit(32);       // erstes Bit des zweiten Wortes
         a.SetBit(200);
 
-        if (!a.HasBit(0))                       return false;
-        if (!a.HasBit(31))                      return false;
-        if (!a.HasBit(32))                      return false;
-        if (!a.HasBit(200))                     return false;
-        if (a.HasBit(1))                        return false;
-        if (a.HasBit(33))                       return false;
-        if (a.HasBit(9999))                     return false;
-        if (a.IsEmpty())                        return false;
-        if (a.CountBits() != 4)                 return false;
+        if (!a.HasBit(0)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 245, "!a.HasBit(0)");
+        if (!a.HasBit(31)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 246, "!a.HasBit(31)");
+        if (!a.HasBit(32)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 247, "!a.HasBit(32)");
+        if (!a.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 248, "!a.HasBit(200)");
+        if (a.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 249, "a.HasBit(1)");
+        if (a.HasBit(33)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 250, "a.HasBit(33)");
+        if (a.HasBit(9999)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 251, "a.HasBit(9999)");
+        if (a.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 252, "a.IsEmpty()");
+        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 253, "a.CountBits() != 4");
 
         // Idempotenz: dasselbe Bit zweimal setzen aendert nichts.
         a.SetBit(31);
-        if (a.CountBits() != 4)                 return false;
+        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 257, "a.CountBits() != 4");
 
         // Vereinigung
         ChefZ_CategoryClosure b = new ChefZ_CategoryClosure();
         b.SetBit(1);
         b.OrWith(a);
-        if (!b.HasBit(1))                       return false;
-        if (!b.HasBit(200))                     return false;
-        if (b.CountBits() != 5)                 return false;
+        if (!b.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 263, "!b.HasBit(1)");
+        if (!b.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 264, "!b.HasBit(200)");
+        if (b.CountBits() != 5) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 265, "b.CountBits() != 5");
 
         // a darf sich durch das Vereinigen in b NICHT veraendert haben.
-        if (a.HasBit(1))                        return false;
-        if (a.CountBits() != 4)                 return false;
+        if (a.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 268, "a.HasBit(1)");
+        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 269, "a.CountBits() != 4");
 
         // Kopie ist unabhaengig
         ChefZ_CategoryClosure c = new ChefZ_CategoryClosure();
         c.CopyFrom(b);
-        if (c.CountBits() != 5)                 return false;
+        if (c.CountBits() != 5) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 274, "c.CountBits() != 5");
         c.SetBit(300);
-        if (b.HasBit(300))                      return false;
+        if (b.HasBit(300)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 276, "b.HasBit(300)");
 
         // Leeren
         c.Clear();
-        if (!c.IsEmpty())                       return false;
-        if (c.CountBits() != 0)                 return false;
-        if (c.HasBit(200))                      return false;
+        if (!c.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 280, "!c.IsEmpty()");
+        if (c.CountBits() != 0) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 281, "c.CountBits() != 0");
+        if (c.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 282, "c.HasBit(200)");
 
         // Ungueltige Indizes bleiben folgenlos.
         ChefZ_CategoryClosure d = new ChefZ_CategoryClosure();
         d.SetBit(-5);
         d.SetBit(MAX_BITS);
         d.SetBit(MAX_BITS + 1000);
-        if (!d.IsEmpty())                       return false;
+        if (!d.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 289, "!d.IsEmpty()");
 
         // OrWith mit einer leeren Closure aendert nichts.
         ChefZ_CategoryClosure e = new ChefZ_CategoryClosure();
         e.SetBit(5);
         e.OrWith(d);
-        if (e.CountBits() != 1)                 return false;
-        if (!e.HasBit(5))                       return false;
+        if (e.CountBits() != 1) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 295, "e.CountBits() != 1");
+        if (!e.HasBit(5)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 296, "!e.HasBit(5)");
 
         return true;
     }

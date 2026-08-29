@@ -275,7 +275,7 @@ class ChefZ_EventSelfTest
     {
         if (ok)
         {
-            s_Passed++;
+            s_Passed++; ChefZ_SelfTestTrace.Reset();
             if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))
                 ChefZ_Log.Debug(ChefZ_LogChannel.EVENT, "Selbsttest " + name + ": ok");
             return;
@@ -283,7 +283,7 @@ class ChefZ_EventSelfTest
 
         s_Failed++;
         s_FailedNames.Insert(name);
-        ChefZ_Log.Error(ChefZ_LogChannel.EVENT, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Ereignisschicht verhaelt sich nicht " + "wie entworfen - Comp-Module bekommen ab hier falsche oder gar keine Meldungen. " + "Kochen und Vanilla sind davon unberuehrt.");
+        ChefZ_Log.Error(ChefZ_LogChannel.EVENT, "Selbsttest " + name + " FEHLGESCHLAGEN. Die Ereignisschicht verhaelt sich nicht " + "wie entworfen - Comp-Module bekommen ab hier falsche oder gar keine Meldungen. " + "Kochen und Vanilla sind davon unberuehrt." + ChefZ_SelfTestTrace.Take());
     }
 
     static int PassedCount() { return s_Passed; }
@@ -339,37 +339,37 @@ class ChefZ_EventSelfTest
         ChefZ_EventBus bus = NewBus();
         ChefZ_EventTestSubscriber a = new ChefZ_EventTestSubscriber("A");
 
-        if (bus.HasSubscribers(ChefZ_EventNames.RECIPE_COMPLETED))    return false;
-        if (bus.GetSubscriberCount(ChefZ_EventNames.RECIPE_COMPLETED) != 0) return false;
+        if (bus.HasSubscribers(ChefZ_EventNames.RECIPE_COMPLETED)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 342, "bus.HasSubscribers(ChefZ_EventNames.RECIPE_COMPLETED)");
+        if (bus.GetSubscriberCount(ChefZ_EventNames.RECIPE_COMPLETED) != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 343, "bus.GetSubscriberCount(ChefZ_EventNames.RECIPE_COMPLETED) != 0");
 
         int id = Sub(bus, ChefZ_EventNames.RECIPE_COMPLETED, a);
-        if (id <= 0)                                                  return false;
-        if (!bus.HasSubscribers(ChefZ_EventNames.RECIPE_COMPLETED))   return false;
+        if (id <= 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 346, "id <= 0");
+        if (!bus.HasSubscribers(ChefZ_EventNames.RECIPE_COMPLETED)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 347, "!bus.HasSubscribers(ChefZ_EventNames.RECIPE_COMPLETED)");
 
         // Ein anderes Ereignis bleibt unberuehrt - der Bus liefert nach Namen.
-        if (bus.HasSubscribers(ChefZ_EventNames.RECIPE_FAILED))       return false;
+        if (bus.HasSubscribers(ChefZ_EventNames.RECIPE_FAILED)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 350, "bus.HasSubscribers(ChefZ_EventNames.RECIPE_FAILED)");
 
         ChefZ_EventArgs args = bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED);
         args.amount = 7;
         bus.Raise(args);
 
-        if (a.count != 1)                                             return false;
-        if (a.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED)       return false;
-        if (a.lastAmount != 7)                                        return false;
+        if (a.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 356, "a.count != 1");
+        if (a.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 357, "a.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED");
+        if (a.lastAmount != 7) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 358, "a.lastAmount != 7");
 
         // Ein Abonnement ohne ScriptCaller wird abgewiesen, nicht angenommen -
         // sonst stuende eine Anmeldung in der Liste, die nie etwas bekaeme.
-        if (bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, null, "leer") != 0) return false;
-        if (bus.Subscribe("", a, ScriptCaller.Create(a.OnEvent), "leer") != 0)      return false;
+        if (bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, null, "leer") != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 362, "bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, null, 'leer') != 0");
+        if (bus.Subscribe("", a, ScriptCaller.Create(a.OnEvent), "leer") != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 363, "bus.Subscribe('', a, ScriptCaller.Create(a.OnEvent), 'leer') != 0");
 
         // Ein unbekannter Ereignisname wird ANGENOMMEN (17 §9): Content loest
         // ueber emitEvents eigene Ereignisse aus.
         ChefZ_EventTestSubscriber b = new ChefZ_EventTestSubscriber("B");
-        if (Sub(bus, "ChefZTest_EigenesEreignis", b) <= 0)            return false;
+        if (Sub(bus, "ChefZTest_EigenesEreignis", b) <= 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 368, "Sub(bus, 'ChefZTest_EigenesEreignis', b) <= 0");
 
         ChefZ_EventArgs custom = bus.Acquire("ChefZTest_EigenesEreignis");
         bus.Raise(custom);
-        if (b.count != 1)                                             return false;
+        if (b.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 372, "b.count != 1");
 
         return true;
     }
@@ -396,11 +396,11 @@ class ChefZ_EventSelfTest
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_CONSUMED));
 
-        if (order.Count() != 4)         return false;
-        if (order.Get(0) != "high")     return false;
-        if (order.Get(1) != "mid1")     return false;   // Gleichstand: zuerst angemeldet
-        if (order.Get(2) != "mid2")     return false;
-        if (order.Get(3) != "low")      return false;
+        if (order.Count() != 4) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 399, "order.Count() != 4");
+        if (order.Get(0) != "high") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 400, "order.Get(0) != 'high'");
+        if (order.Get(1) != "mid1") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 401, "order.Get(1) != 'mid1'");   // Gleichstand: zuerst angemeldet
+        if (order.Get(2) != "mid2") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 402, "order.Get(2) != 'mid2'");
+        if (order.Get(3) != "low") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 403, "order.Get(3) != 'low'");
 
         return true;
     }
@@ -413,14 +413,14 @@ class ChefZ_EventSelfTest
 
         int idA = Sub(bus, ChefZ_EventNames.FOOD_SPOILED, a);
         Sub(bus, ChefZ_EventNames.FOOD_SPOILED, b);
-        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 2) return false;
+        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 416, "bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 2");
 
         bus.Unsubscribe(idA);
-        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 1) return false;
+        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 419, "bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 1");
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_SPOILED));
-        if (a.count != 0)   return false;
-        if (b.count != 1)   return false;
+        if (a.count != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 422, "a.count != 0");
+        if (b.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 423, "b.count != 1");
 
         // Zweimal abmelden ist kein Fehler, sondern ein No-op.
         bus.Unsubscribe(idA);
@@ -429,10 +429,10 @@ class ChefZ_EventSelfTest
 
         // Massenabmeldung ueber den Besitzer.
         bus.UnsubscribeOwner(b);
-        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 0) return false;
+        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 432, "bus.GetSubscriberCount(ChefZ_EventNames.FOOD_SPOILED) != 0");
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_SPOILED));
-        if (b.count != 1)   return false;
+        if (b.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 435, "b.count != 1");
 
         return true;
     }
@@ -465,16 +465,16 @@ class ChefZ_EventSelfTest
         string who;
         bool cancelled = bus.RaiseCancellable(bus.Acquire(ChefZ_EventNames.RECIPE_MATCHED), reason, who);
 
-        if (!cancelled)                         return false;
-        if (reason != "kein Skill")             return false;
-        if (who == "")                          return false;
-        if (blocker.count != 1)                 return false;
+        if (!cancelled) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 468, "!cancelled");
+        if (reason != "kein Skill") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 469, "reason != 'kein Skill'");
+        if (who == "") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 470, "who == ''");
+        if (blocker.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 471, "blocker.count != 1");
 
         // Nach einer Stornierung wird nicht weiter zugestellt: die Wirkung
         // findet nicht statt, und ein weiterer Abonnent koennte sie weder
         // zurueckholen noch sinnvoll darauf reagieren.
-        if (later.count != 0)                   return false;
-        if (bus.GetCancelledCount() != 1)       return false;
+        if (later.count != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 476, "later.count != 0");
+        if (bus.GetCancelledCount() != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 477, "bus.GetCancelledCount() != 1");
 
         // Ohne Abbrecher kommt sauber false zurueck.
         ChefZ_EventBus clean = NewBus();
@@ -484,8 +484,8 @@ class ChefZ_EventSelfTest
         string r2;
         string w2;
         if (clean.RaiseCancellable(clean.Acquire(ChefZ_EventNames.RECIPE_MATCHED), r2, w2))
-            return false;
-        if (quiet.count != 1)                   return false;
+            return ChefZ_SelfTestTrace.Fail("EventSelfTest", 487, "clean.RaiseCancellable(clean.Acquire(ChefZ_EventNames.RECIPE_MATCHED), r2, w2)");
+        if (quiet.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 488, "quiet.count != 1");
 
         return true;
     }
@@ -513,13 +513,13 @@ class ChefZ_EventSelfTest
         string who;
         bool cancelled = bus.RaiseCancellable(bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED), reason, who);
 
-        if (cancelled)              return false;      // die Stornierung wurde verworfen
-        if (reason != "")           return false;
-        if (blocker.count != 1)     return false;
-        if (later.count != 1)       return false;      // die Zustellung lief weiter
+        if (cancelled) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 516, "cancelled");   // die Stornierung wurde verworfen
+        if (reason != "") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 517, "reason != ''");
+        if (blocker.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 518, "blocker.count != 1");
+        if (later.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 519, "later.count != 1");   // die Zustellung lief weiter
 
-        if (!bus.IsCancellable(ChefZ_EventNames.RECIPE_MATCHED))   return false;
-        if (bus.IsCancellable(ChefZ_EventNames.RECIPE_COMPLETED))  return false;
+        if (!bus.IsCancellable(ChefZ_EventNames.RECIPE_MATCHED)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 521, "!bus.IsCancellable(ChefZ_EventNames.RECIPE_MATCHED)");
+        if (bus.IsCancellable(ChefZ_EventNames.RECIPE_COMPLETED)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 522, "bus.IsCancellable(ChefZ_EventNames.RECIPE_COMPLETED)");
 
         return true;
     }
@@ -542,9 +542,9 @@ class ChefZ_EventSelfTest
 
         // Additiv: beide tragen bei, keiner loescht den anderen.
         float sum = bus.RaiseQuery(bus.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0);
-        if (sum < 1.24 || sum > 1.26)   return false;
-        if (a.count != 1)               return false;
-        if (b.count != 1)               return false;
+        if (sum < 1.24 || sum > 1.26) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 545, "sum < 1.24 || sum > 1.26");
+        if (a.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 546, "a.count != 1");
+        if (b.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 547, "b.count != 1");
 
         // Geklemmt: kein Abonnent kann die Qualitaetslogik uebernehmen.
         ChefZ_EventBus greedy = NewBus();
@@ -553,25 +553,25 @@ class ChefZ_EventSelfTest
         greedy.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, hog, ScriptCaller.Create(hog.OnBonus), hog.name);
 
         float clamped = greedy.RaiseQuery(greedy.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0);
-        if (clamped != 2.0)             return false;
+        if (clamped != 2.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 556, "clamped != 2.0");
 
         // Symmetrisch nach unten - ein Abonnent darf auch nicht beliebig
         // abwerten.
         hog.bonus = -999.0;
         float low = greedy.RaiseQuery(greedy.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0);
-        if (low != -2.0)                return false;
+        if (low != -2.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 562, "low != -2.0");
 
         // maxBonus 0 heisst "kein externer Bonus" und ist eine gueltige
         // Einstellung.
         hog.bonus = 5.0;
         if (greedy.RaiseQuery(greedy.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 0.0) != 0.0)
-            return false;
+            return ChefZ_SelfTestTrace.Fail("EventSelfTest", 568, "greedy.RaiseQuery(greedy.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 0.0) != 0.0");
 
         // Ohne Abonnenten: 0.0, und die Nutzlast wird gar nicht erst gebaut.
         ChefZ_EventBus empty = NewBus();
-        if (empty.HasSubscribers(ChefZ_EventNames.QUALITY_BONUS_QUERY))  return false;
+        if (empty.HasSubscribers(ChefZ_EventNames.QUALITY_BONUS_QUERY)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 572, "empty.HasSubscribers(ChefZ_EventNames.QUALITY_BONUS_QUERY)");
         if (empty.RaiseQuery(empty.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0) != 0.0)
-            return false;
+            return ChefZ_SelfTestTrace.Fail("EventSelfTest", 574, "empty.RaiseQuery(empty.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0) != 0.0");
 
         return true;
     }
@@ -591,8 +591,8 @@ class ChefZ_EventSelfTest
         ChefZ_EventArgs args = bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED);
         bus.RaiseKeep(args);
 
-        if (a.count != 1)               return false;
-        if (args.bonusPoints != 0.0)    return false;   // zurueckgesetzt
+        if (a.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 594, "a.count != 1");
+        if (args.bonusPoints != 0.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 595, "args.bonusPoints != 0.0");   // zurueckgesetzt
 
         bus.Release(args);
         return true;
@@ -620,8 +620,8 @@ class ChefZ_EventSelfTest
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_STATE_CHANGED));
 
-        if (loop.count != 2)        return false;
-        if (bus.GetDepth() != 0)    return false;   // sauber abgebaut
+        if (loop.count != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 623, "loop.count != 2");
+        if (bus.GetDepth() != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 624, "bus.GetDepth() != 0");   // sauber abgebaut
 
         return true;
     }
@@ -655,17 +655,17 @@ class ChefZ_EventSelfTest
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_PRESERVED));
 
-        if (order.Count() != 3)     return false;
-        if (first.count != 1)       return false;
-        if (leaver.count != 1)      return false;
-        if (last.count != 1)        return false;
-        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_PRESERVED) != 2) return false;
+        if (order.Count() != 3) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 658, "order.Count() != 3");
+        if (first.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 659, "first.count != 1");
+        if (leaver.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 660, "leaver.count != 1");
+        if (last.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 661, "last.count != 1");
+        if (bus.GetSubscriberCount(ChefZ_EventNames.FOOD_PRESERVED) != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 662, "bus.GetSubscriberCount(ChefZ_EventNames.FOOD_PRESERVED) != 2");
 
         // Zweiter Durchlauf: der Abgemeldete bekommt nichts mehr.
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_PRESERVED));
-        if (leaver.count != 1)      return false;
-        if (first.count != 2)       return false;
-        if (last.count != 2)        return false;
+        if (leaver.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 666, "leaver.count != 1");
+        if (first.count != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 667, "first.count != 2");
+        if (last.count != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 668, "last.count != 2");
 
         return true;
     }
@@ -681,22 +681,22 @@ class ChefZ_EventSelfTest
     {
         ChefZ_EventBus bus = NewBus();
 
-        if (bus.GetInFlightCount() != 0)        return false;
+        if (bus.GetInFlightCount() != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 684, "bus.GetInFlightCount() != 0");
 
         ChefZ_EventArgs a = bus.Acquire(ChefZ_EventNames.CONFIG_LOADED);
-        if (a.eventId != ChefZ_EventNames.CONFIG_LOADED) return false;
-        if (bus.GetInFlightCount() != 1)        return false;
+        if (a.eventId != ChefZ_EventNames.CONFIG_LOADED) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 687, "a.eventId != ChefZ_EventNames.CONFIG_LOADED");
+        if (bus.GetInFlightCount() != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 688, "bus.GetInFlightCount() != 1");
 
         // Ohne Abonnent kehrt Raise sofort zurueck - und gibt trotzdem zurueck.
         bus.Raise(a);
-        if (bus.GetInFlightCount() != 0)        return false;
+        if (bus.GetInFlightCount() != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 692, "bus.GetInFlightCount() != 0");
 
         // Wiederverwendet und sauber: kein Rest der vorherigen Benutzung.
         ChefZ_EventArgs b = bus.Acquire(ChefZ_EventNames.FOOD_CONSUMED);
-        if (b.eventId != ChefZ_EventNames.FOOD_CONSUMED) return false;
-        if (b.amount != 0)                      return false;
-        if (b.cancelled)                        return false;
-        if (b.consumedClasses.Count() != 0)     return false;
+        if (b.eventId != ChefZ_EventNames.FOOD_CONSUMED) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 696, "b.eventId != ChefZ_EventNames.FOOD_CONSUMED");
+        if (b.amount != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 697, "b.amount != 0");
+        if (b.cancelled) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 698, "b.cancelled");
+        if (b.consumedClasses.Count() != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 699, "b.consumedClasses.Count() != 0");
         bus.Release(b);
 
         return true;
@@ -724,40 +724,40 @@ class ChefZ_EventSelfTest
     {
         ChefZ_EventBus bus = NewBus();
 
-        if (ChefZ_ProgressRegistry.HasSinks())          return false;
-        if (ChefZ_ProgressRegistry.GetSinkCount() != 0) return false;
+        if (ChefZ_ProgressRegistry.HasSinks()) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 727, "ChefZ_ProgressRegistry.HasSinks()");
+        if (ChefZ_ProgressRegistry.GetSinkCount() != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 728, "ChefZ_ProgressRegistry.GetSinkCount() != 0");
 
         // Ohne Empfaenger ist Report ein No-op - und darf keinen Fehler geben.
         ChefZ_EventArgs warmup = bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED);
         ChefZ_ProgressRegistry.Report(ChefZ_ProgressKind.COOK, warmup);
-        if (ChefZ_ProgressRegistry.GetReportedCount() != 0) return false;
+        if (ChefZ_ProgressRegistry.GetReportedCount() != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 733, "ChefZ_ProgressRegistry.GetReportedCount() != 0");
         bus.Release(warmup);
 
         ChefZ_EventTestSink sink = new ChefZ_EventTestSink();
         ChefZ_ProgressRegistry.RegisterSink(sink);
-        if (!ChefZ_ProgressRegistry.HasSinks())         return false;
+        if (!ChefZ_ProgressRegistry.HasSinks()) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 738, "!ChefZ_ProgressRegistry.HasSinks()");
 
         // Doppelanmeldung wird verworfen - sonst bekaeme er jeden Abschluss
         // zweimal, und ein Comp-Modul vergaebe doppeltes XP.
         ChefZ_ProgressRegistry.RegisterSink(sink);
-        if (ChefZ_ProgressRegistry.GetSinkCount() != 1) return false;
+        if (ChefZ_ProgressRegistry.GetSinkCount() != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 743, "ChefZ_ProgressRegistry.GetSinkCount() != 1");
 
         ChefZ_EventArgs args = bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED);
         ChefZ_ProgressRegistry.Report(ChefZ_ProgressKind.COOK, args);
         bus.Release(args);
 
-        if (sink.count != 1)                                    return false;
-        if (sink.lastKind != ChefZ_ProgressKind.COOK)           return false;
-        if (sink.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED) return false;
-        if (ChefZ_ProgressRegistry.GetDeliveredCount() != 1)    return false;
+        if (sink.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 749, "sink.count != 1");
+        if (sink.lastKind != ChefZ_ProgressKind.COOK) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 750, "sink.lastKind != ChefZ_ProgressKind.COOK");
+        if (sink.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 751, "sink.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED");
+        if (ChefZ_ProgressRegistry.GetDeliveredCount() != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 752, "ChefZ_ProgressRegistry.GetDeliveredCount() != 1");
 
         ChefZ_ProgressRegistry.UnregisterSink(sink);
-        if (ChefZ_ProgressRegistry.HasSinks())                  return false;
+        if (ChefZ_ProgressRegistry.HasSinks()) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 755, "ChefZ_ProgressRegistry.HasSinks()");
 
         ChefZ_EventArgs after = bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED);
         ChefZ_ProgressRegistry.Report(ChefZ_ProgressKind.COOK, after);
         bus.Release(after);
-        if (sink.count != 1)                                    return false;
+        if (sink.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 760, "sink.count != 1");
 
         return true;
     }
@@ -810,17 +810,17 @@ class ChefZ_EventSelfTest
     {
         ChefZ_Sym cap = ChefZ_SymbolTable.Intern("CHEFZ_EVTEST_CAP");
 
-        if (reg.GetProviderCount() != 0)                return false;
-        if (reg.GetCapability(42, cap) != 1.5)          return false;
-        if (reg.GetCapabilityByName(42, "CHEFZ_EVTEST_CAP") != 1.5) return false;
+        if (reg.GetProviderCount() != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 813, "reg.GetProviderCount() != 0");
+        if (reg.GetCapability(42, cap) != 1.5) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 814, "reg.GetCapability(42, cap) != 1.5");
+        if (reg.GetCapabilityByName(42, "CHEFZ_EVTEST_CAP") != 1.5) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 815, "reg.GetCapabilityByName(42, 'CHEFZ_EVTEST_CAP') != 1.5");
 
         // Der zweite Vertrag: niemand hat GEANTWORTET.
         float value;
-        if (reg.TryQuery(42, cap, value))               return false;
+        if (reg.TryQuery(42, cap, value)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 819, "reg.TryQuery(42, cap, value)");
 
         ChefZ_RegistryCapabilityProbe probe = new ChefZ_RegistryCapabilityProbe();
         float probeValue;
-        if (probe.TryGetValue("CHEFZ_EVTEST_CAP", 42, probeValue)) return false;
+        if (probe.TryGetValue("CHEFZ_EVTEST_CAP", 42, probeValue)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 823, "probe.TryGetValue('CHEFZ_EVTEST_CAP', 42, probeValue)");
 
         // Anforderung unter dem Default: erfuellt. Darueber: nicht erfuellt,
         // aber mit Grund und Stufenzahl - und ohne Fehler.
@@ -831,31 +831,31 @@ class ChefZ_EventSelfTest
 
         string why;
         int    steps;
-        if (!reg.MeetsRequirement(42, easy, why, steps))    return false;
+        if (!reg.MeetsRequirement(42, easy, why, steps)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 834, "!reg.MeetsRequirement(42, easy, why, steps)");
 
         ChefZ_CapabilityReq hard = new ChefZ_CapabilityReq();
         hard.capability = "CHEFZ_EVTEST_CAP";
         hard.ResolveDefaults();
         hard.min = 5.0;
 
-        if (reg.MeetsRequirement(42, hard, why, steps))     return false;
-        if (why == "")                                      return false;
-        if (steps != 1)                                     return false;   // Default aus 17 §3.3
+        if (reg.MeetsRequirement(42, hard, why, steps)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 841, "reg.MeetsRequirement(42, hard, why, steps)");
+        if (why == "") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 842, "why == ''");
+        if (steps != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 843, "steps != 1");   // Default aus 17 §3.3
 
         // Der Default aus 17 §3.3 ist "degrade" - ohne Skillmod wird also
         // abgewertet und NICHT gesperrt. Das ist die Zeile, an der haengt, ob
         // ein Server ohne Skillmod spielbar ist.
-        if (reg.EffectiveOnFail(hard) != ChefZ_CapabilityRegistry.ON_FAIL_DEGRADE) return false;
+        if (reg.EffectiveOnFail(hard) != ChefZ_CapabilityRegistry.ON_FAIL_DEGRADE) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 848, "reg.EffectiveOnFail(hard) != ChefZ_CapabilityRegistry.ON_FAIL_DEGRADE");
 
         array<ref ChefZ_CapabilityReq> reqs = new array<ref ChefZ_CapabilityReq>();
         reqs.Insert(hard);
 
         string blockWhy;
-        if (reg.BlocksAny(reqs, 42, blockWhy))              return false;
+        if (reg.BlocksAny(reqs, 42, blockWhy)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 854, "reg.BlocksAny(reqs, 42, blockWhy)");
 
         string degradeWhy;
-        if (reg.DegradeStepsFor(reqs, 42, degradeWhy) != 1) return false;
-        if (reg.YieldFactorFor(reqs, 42) != 1.0)            return false;
+        if (reg.DegradeStepsFor(reqs, 42, degradeWhy) != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 857, "reg.DegradeStepsFor(reqs, 42, degradeWhy) != 1");
+        if (reg.YieldFactorFor(reqs, 42) != 1.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 858, "reg.YieldFactorFor(reqs, 42) != 1.0");
 
         return true;
     }
@@ -878,35 +878,35 @@ class ChefZ_EventSelfTest
         ChefZ_EventTestProvider strong = new ChefZ_EventTestProvider("Stark", 99, cap, 7.0);
 
         reg.RegisterProvider(weak);
-        if (reg.GetProviderCount() != 1)            return false;
-        if (reg.GetCapability(1, cap) != 2.0)       return false;
+        if (reg.GetProviderCount() != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 881, "reg.GetProviderCount() != 1");
+        if (reg.GetCapability(1, cap) != 2.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 882, "reg.GetCapability(1, cap) != 2.0");
 
         // Hoechste Prioritaet gewinnt, unabhaengig von der Anmeldereihenfolge.
         reg.RegisterProvider(strong);
-        if (reg.GetProviderCount() != 2)            return false;
-        if (reg.GetCapability(1, cap) != 7.0)       return false;
+        if (reg.GetProviderCount() != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 886, "reg.GetProviderCount() != 2");
+        if (reg.GetCapability(1, cap) != 7.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 887, "reg.GetCapability(1, cap) != 7.0");
 
         // Doppelanmeldung derselben Instanz wird verworfen.
         reg.RegisterProvider(strong);
-        if (reg.GetProviderCount() != 2)            return false;
+        if (reg.GetProviderCount() != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 891, "reg.GetProviderCount() != 2");
 
         // Wozu niemand etwas sagt, gilt der Default.
-        if (reg.GetCapability(1, other) != 0.0)     return false;
+        if (reg.GetCapability(1, other) != 0.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 894, "reg.GetCapability(1, other) != 0.0");
         float dummy;
-        if (reg.TryQuery(1, other, dummy))          return false;
+        if (reg.TryQuery(1, other, dummy)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 896, "reg.TryQuery(1, other, dummy)");
 
         // Der Anbieter mit der hoeheren Prioritaet faellt weg - der naechste
         // antwortet, und zwar ohne Umbau der Reihenfolge.
         reg.UnregisterProvider(strong);
-        if (reg.GetProviderCount() != 1)            return false;
-        if (reg.GetCapability(1, cap) != 2.0)       return false;
+        if (reg.GetProviderCount() != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 901, "reg.GetProviderCount() != 1");
+        if (reg.GetCapability(1, cap) != 2.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 902, "reg.GetCapability(1, cap) != 2.0");
 
         // Die Sonde fuer Qualitaetsregeln antwortet jetzt SEHR WOHL - es gibt
         // ja einen Anbieter.
         ChefZ_RegistryCapabilityProbe probe = new ChefZ_RegistryCapabilityProbe();
         float probeValue;
-        if (!probe.TryGetValue("CHEFZ_EVTEST_CAP", 1, probeValue)) return false;
-        if (probeValue != 2.0)                                     return false;
+        if (!probe.TryGetValue("CHEFZ_EVTEST_CAP", 1, probeValue)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 908, "!probe.TryGetValue('CHEFZ_EVTEST_CAP', 1, probeValue)");
+        if (probeValue != 2.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 909, "probeValue != 2.0");
 
         return true;
     }
@@ -930,18 +930,18 @@ class ChefZ_EventSelfTest
 
         ChefZ_EventTestProvider tooHigh = new ChefZ_EventTestProvider("ZuHoch", 5, cap, 900.0);
         reg.RegisterProvider(tooHigh);
-        if (reg.GetCapability(1, cap) != 5.0)       return false;
+        if (reg.GetCapability(1, cap) != 5.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 933, "reg.GetCapability(1, cap) != 5.0");
 
         tooHigh.value = -900.0;
-        if (reg.GetCapability(1, cap) != 0.0)       return false;
+        if (reg.GetCapability(1, cap) != 0.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 936, "reg.GetCapability(1, cap) != 0.0");
 
         tooHigh.value = 3.0;
-        if (reg.GetCapability(1, cap) != 3.0)       return false;
-        if (reg.GetClampedCount() != 2)             return false;
+        if (reg.GetCapability(1, cap) != 3.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 939, "reg.GetCapability(1, cap) != 3.0");
+        if (reg.GetClampedCount() != 2) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 940, "reg.GetClampedCount() != 2");
 
         // Ein Anbieter, der zu gar nichts etwas sagt, blockiert niemanden.
         tooHigh.silent = true;
-        if (reg.GetCapability(1, cap) != 0.0)       return false;   // Default
+        if (reg.GetCapability(1, cap) != 0.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 944, "reg.GetCapability(1, cap) != 0.0");   // Default
 
         return true;
     }
@@ -975,24 +975,24 @@ class ChefZ_EventSelfTest
 
         // asAuthored: "block" sperrt.
         ChefZ_CapabilityRegistry reg = FreshRegistry( ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 10.0);
-        if (reg.EffectiveOnFail(blocker) != ChefZ_CapabilityRegistry.ON_FAIL_BLOCK) return false;
-        if (!reg.BlocksAny(reqs, 1, why))       return false;
-        if (why == "")                          return false;
+        if (reg.EffectiveOnFail(blocker) != ChefZ_CapabilityRegistry.ON_FAIL_BLOCK) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 978, "reg.EffectiveOnFail(blocker) != ChefZ_CapabilityRegistry.ON_FAIL_BLOCK");
+        if (!reg.BlocksAny(reqs, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 979, "!reg.BlocksAny(reqs, 1, why)");
+        if (why == "") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 980, "why == ''");
 
         // neverBlock: aus "block" wird "degrade" - nichts wird gesperrt.
         reg = FreshRegistry(ChefZ_CapabilityRegistry.MODE_NEVER_BLOCK, 0.0, 0.0, 10.0);
-        if (reg.EffectiveOnFail(blocker) != ChefZ_CapabilityRegistry.ON_FAIL_DEGRADE) return false;
-        if (reg.BlocksAny(reqs, 1, why))        return false;
-        if (reg.DegradeStepsFor(reqs, 1, why) != 1) return false;
+        if (reg.EffectiveOnFail(blocker) != ChefZ_CapabilityRegistry.ON_FAIL_DEGRADE) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 984, "reg.EffectiveOnFail(blocker) != ChefZ_CapabilityRegistry.ON_FAIL_DEGRADE");
+        if (reg.BlocksAny(reqs, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 985, "reg.BlocksAny(reqs, 1, why)");
+        if (reg.DegradeStepsFor(reqs, 1, why) != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 986, "reg.DegradeStepsFor(reqs, 1, why) != 1");
 
         // ignore: alle requires[] gelten als erfuellt.
         reg = FreshRegistry(ChefZ_CapabilityRegistry.MODE_IGNORE, 0.0, 0.0, 10.0);
         string ignoreWhy;
         int    ignoreSteps;
-        if (!reg.MeetsRequirement(1, blocker, ignoreWhy, ignoreSteps)) return false;
-        if (reg.BlocksAny(reqs, 1, why))            return false;
-        if (reg.DegradeStepsFor(reqs, 1, why) != 0) return false;
-        if (reg.YieldFactorFor(reqs, 1) != 1.0)     return false;
+        if (!reg.MeetsRequirement(1, blocker, ignoreWhy, ignoreSteps)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 992, "!reg.MeetsRequirement(1, blocker, ignoreWhy, ignoreSteps)");
+        if (reg.BlocksAny(reqs, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 993, "reg.BlocksAny(reqs, 1, why)");
+        if (reg.DegradeStepsFor(reqs, 1, why) != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 994, "reg.DegradeStepsFor(reqs, 1, why) != 0");
+        if (reg.YieldFactorFor(reqs, 1) != 1.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 995, "reg.YieldFactorFor(reqs, 1) != 1.0");
 
         // reduceYield: Produkt, nie Summe - und nie negativ.
         ChefZ_CapabilityReq yield = new ChefZ_CapabilityReq();
@@ -1008,7 +1008,7 @@ class ChefZ_EventSelfTest
 
         reg = FreshRegistry(ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 10.0);
         float f = reg.YieldFactorFor(two, 1);
-        if (f < 0.24 || f > 0.26)               return false;
+        if (f < 0.24 || f > 0.26) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1011, "f < 0.24 || f > 0.26");
 
         return true;
     }
@@ -1049,28 +1049,28 @@ class ChefZ_EventSelfTest
 
         // Ohne Gate: nichts blockiert. Das ist der Zustand bis S12 und der
         // Zustand jedes Servers, dessen Config nicht geladen hat.
-        if (ChefZ_CapabilityGate.HasActive())               return false;
-        if (ChefZ_CapabilityGate.Denies(reqs, 1, why))      return false;
+        if (ChefZ_CapabilityGate.HasActive()) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1052, "ChefZ_CapabilityGate.HasActive()");
+        if (ChefZ_CapabilityGate.Denies(reqs, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1053, "ChefZ_CapabilityGate.Denies(reqs, 1, why)");
 
         // Mit Gate und ohne Anbieter: der Default (0) unterschreitet min (5),
         // also sperrt "block".
         FreshRegistry(ChefZ_CapabilityRegistry.MODE_AS_AUTHORED, 0.0, 0.0, 10.0);
         ChefZ_CapabilityGate.SetActive(new ChefZ_RegistryCapabilityGate());
 
-        if (!ChefZ_CapabilityGate.HasActive())              return false;
-        if (!ChefZ_CapabilityGate.Denies(reqs, 1, why))     return false;
-        if (why == "")                                      return false;
+        if (!ChefZ_CapabilityGate.HasActive()) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1060, "!ChefZ_CapabilityGate.HasActive()");
+        if (!ChefZ_CapabilityGate.Denies(reqs, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1061, "!ChefZ_CapabilityGate.Denies(reqs, 1, why)");
+        if (why == "") return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1062, "why == ''");
 
         // Leere und fehlende Anforderungsliste sperren nie - der Normalfall
         // fuer JEDES Rezept ohne requires[].
         array<ref ChefZ_CapabilityReq> none = new array<ref ChefZ_CapabilityReq>();
-        if (ChefZ_CapabilityGate.Denies(none, 1, why))      return false;
-        if (ChefZ_CapabilityGate.Denies(null, 1, why))      return false;
+        if (ChefZ_CapabilityGate.Denies(none, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1067, "ChefZ_CapabilityGate.Denies(none, 1, why)");
+        if (ChefZ_CapabilityGate.Denies(null, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1068, "ChefZ_CapabilityGate.Denies(null, 1, why)");
 
         // Mit einem Anbieter, der die Faehigkeit liefert: nichts sperrt mehr.
         ChefZ_Sym cap = ChefZ_SymbolTable.Intern("CHEFZ_EVTEST_CAP");
         ChefZ_CapabilityRegistry.Get().RegisterProvider( new ChefZ_EventTestProvider("Koennen", 1, cap, 9.0));
-        if (ChefZ_CapabilityGate.Denies(reqs, 1, why))      return false;
+        if (ChefZ_CapabilityGate.Denies(reqs, 1, why)) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 1073, "ChefZ_CapabilityGate.Denies(reqs, 1, why)");
 
         return true;
     }
