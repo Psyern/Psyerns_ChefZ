@@ -989,7 +989,8 @@ class CfgVehicles
         weight = 480;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1028,7 +1029,8 @@ class CfgVehicles
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1067,7 +1069,8 @@ class CfgVehicles
         weight = 620;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
@@ -1105,7 +1108,8 @@ class CfgVehicles
         weight = 380;
         lifetime = 21600;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1144,7 +1148,8 @@ class CfgVehicles
         weight = 520;
         lifetime = 18000;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1183,7 +1188,8 @@ class CfgVehicles
         weight = 420;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1221,7 +1227,8 @@ class CfgVehicles
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1261,7 +1268,8 @@ class CfgVehicles
         weight = 460;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
@@ -1300,7 +1308,8 @@ class CfgVehicles
         weight = 540;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1338,7 +1347,8 @@ class CfgVehicles
         weight = 360;
         lifetime = 21600;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1431,7 +1441,8 @@ class CfgVehicles
         weight = 480;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 1200;
         varQuantityMax = 1200;
 
@@ -1470,7 +1481,8 @@ class CfgVehicles
         weight = 470;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 1200;
         varQuantityMax = 1200;
 
@@ -1512,7 +1524,8 @@ class CfgVehicles
         weight = 450;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 1200;
         varQuantityMax = 1200;
 
@@ -1554,7 +1567,8 @@ class CfgVehicles
         weight = 500;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 1200;
         varQuantityMax = 1200;
 
@@ -1605,7 +1619,8 @@ class CfgVehicles
         weight = 520;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 1200;
         varQuantityMax = 1200;
 
@@ -1669,7 +1684,8 @@ class CfgVehicles
         weight = 480;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
@@ -1702,7 +1718,8 @@ class CfgVehicles
         weight = 400;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1735,7 +1752,8 @@ class CfgVehicles
         weight = 420;
         lifetime = 7200;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
@@ -1800,7 +1818,8 @@ class CfgVehicles
         weight = 470;
         lifetime = 14400;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1836,7 +1855,8 @@ class CfgVehicles
         weight = 490;
         lifetime = 14400;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1872,7 +1892,8 @@ class CfgVehicles
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1907,7 +1928,8 @@ class CfgVehicles
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1944,7 +1966,8 @@ class CfgVehicles
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -1979,7 +2002,8 @@ class CfgVehicles
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -2014,7 +2038,8 @@ class CfgVehicles
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -2050,7 +2075,8 @@ class CfgVehicles
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -2085,7 +2111,8 @@ class CfgVehicles
         weight = 470;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
@@ -2122,7 +2149,8 @@ class CfgVehicles
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
+        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
