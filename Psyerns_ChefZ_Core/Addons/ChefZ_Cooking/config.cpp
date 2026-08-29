@@ -96,91 +96,55 @@ class CfgPatches
 
             // ### SLICE dishes-b ###   Tellergerichte 11-20 (Production Map §61)
             //
-            // Je Gericht ZWEI Klassen, und das ist kein Wildwuchs, sondern das
-            // Muster aus Config/Recipes/README_Serving.md §1: das Bulk entsteht
-            // im Kochgeraet und traegt den Portionszaehler, die servierte
-            // Portion ist das, was der Spieler vom Teller isst. Der Name der
-            // Portion ist der Name aus Production Map §72 und DME-Plan §53 -
-            // sie ist das Gericht, das Bulk ist die Pfanne davor.
-            "ChefZ_TacticalBreakfastBulk",
+            // Je Gericht EINE Klasse (seit 29.08.2026): das Rezept liefert das
+            // Gericht direkt, ohne Zwischenstufe im Kochgeraet. Der Name ist der
+            // aus Production Map §72 und DME-Plan §53.
             "ChefZ_TacticalBreakfast",
-            "ChefZ_ScrambledEggSausageBulk",
             "ChefZ_ScrambledEggSausage",
-            "ChefZ_FarmersBreakfastBulk",
             "ChefZ_FarmersBreakfast",
-            "ChefZ_CheeseFlatbreadBulk",
             "ChefZ_CheeseFlatbread",
-            "ChefZ_SausageBreadPlateBulk",
             "ChefZ_SausageBreadPlate",
-            "ChefZ_MushroomPanBulk",
             "ChefZ_MushroomPan",
-            "ChefZ_PotatoPancakesBulk",
             "ChefZ_PotatoPancakes",
-            "ChefZ_MeatDumplingsBulk",
             "ChefZ_MeatDumplings",
-            "ChefZ_MilkRiceBulk",
             "ChefZ_MilkRice",
-            "ChefZ_HoneyBreadPlateBulk",
             "ChefZ_HoneyBreadPlate",
 
             // ### SLICE dishes-c ###   Suppen und Eintoepfe (Production Map §62)
             //
-            // Je Gericht ZWEI Klassen, nach dem Muster aus 15 §2:
-            //   ...Bulk   das, was im Topf oder Kessel entsteht und den
-            //             Portionszaehler traegt
-            //   ...Bowl   die entnommene Schuessel, die gegessen wird
+            // Je Gericht EINE Klasse (seit 29.08.2026): ...Bowl ist die
+            // Schuessel, die im Topf entsteht und gegessen wird.
             //
-            // Die Endung "Bowl" statt des blossen Gerichtsnamens ist Absicht
-            // und folgt der Schreibweise, die 15 §2 woertlich verwendet
-            // (ChefZ_HunterStewBulk / ChefZ_HunterStewBowl). Bei einem
-            // Bowl-Gericht ist der Behaelter Teil der Identitaet - das
-            // Tellergericht heisst zu Recht anders.
-            "ChefZ_HunterStewBulk",
+            // Die Endung "Bowl" statt des blossen Gerichtsnamens ist Absicht:
+            // bei einem Bowl-Gericht ist der Behaelter Teil der Identitaet -
+            // das Tellergericht heisst zu Recht anders.
             "ChefZ_HunterStewBowl",
-            "ChefZ_FishermanStewBulk",
             "ChefZ_FishermanStewBowl",
-            "ChefZ_VegetableSoupBulk",
             "ChefZ_VegetableSoupBowl",
-            "ChefZ_BoneBrothSoupBulk",
             "ChefZ_BoneBrothSoupBowl",
-            "ChefZ_ChernarusChiliBulk",
             "ChefZ_ChernarusChiliBowl",
 
             // ### SLICE dishes-a ###   Tellergerichte 1-10 (Production Map §61)
             //
-            // Dasselbe Paar je Gericht wie in dishes-b: ...Bulk ist das, was im
-            // Kochgeraet entsteht und den Portionszaehler traegt, der blosse
-            // Gerichtsname ist die servierte Portion vom Teller
+            // Dieselbe Bauform wie in dishes-b: eine Klasse je Gericht, der
+            // blosse Gerichtsname ist der servierte Teller
             // (Config/Recipes/README_Serving.md §1, DME-Plan §53).
-            "ChefZ_SurvivorSpaghettiBulk",
             "ChefZ_SurvivorSpaghetti",
-            "ChefZ_SausagePastaBulk",
             "ChefZ_SausagePasta",
-            "ChefZ_HunterPastaBulk",
             "ChefZ_HunterPasta",
-            "ChefZ_CreamMushroomPastaBulk",
             "ChefZ_CreamMushroomPasta",
-            "ChefZ_MacAndCheeseBulk",
             "ChefZ_MacAndCheese",
-            "ChefZ_SausagePotatoesBulk",
             "ChefZ_SausagePotatoes",
-            "ChefZ_HunterPlateBulk",
             "ChefZ_HunterPlate",
-            "ChefZ_BloodSausagePlateBulk",
             "ChefZ_BloodSausagePlate",
-            "ChefZ_FishPotatoPlateBulk",
             "ChefZ_FishPotatoPlate",
-            "ChefZ_BeanSausagePlateBulk",
             "ChefZ_BeanSausagePlate",
 
             // ### SLICE dishes-vanilla ###   drei Gerichte aus den bisher
             // ungenutzten Vanilla-Assets (Vanilla-Audit §3). Dasselbe Paar je
             // Gericht wie in dishes-a bis dishes-c.
-            "ChefZ_PumpkinSoupBulk",
             "ChefZ_PumpkinSoupBowl",
-            "ChefZ_SmallFishPanBulk",
             "ChefZ_SmallFishPan",
-            "ChefZ_FruitCompoteBulk",
             "ChefZ_FruitCompoteBowl"
         };
         weapons[] = {};
@@ -747,10 +711,16 @@ class CfgVehicles
     };
 
     // ------------------------------------------------------------------------
-    // Das Bulk-Gericht im Kochgefaess (15 §2).
+    // Die Basis eines Bulk-Gerichts im Kochgefaess (15 §2).
     //
-    //     config.cpp   class ChefZ_HunterStewBulk : ChefZ_PortionedDish_Base
-    //     script       class ChefZ_HunterStewBulk extends ChefZ_PortionedDish_Base {}
+    // OHNE CONTENT seit 29.08.2026: die Rezepte liefern das Gericht direkt,
+    // es gibt keine Zwischenstufe mehr (Entscheidung des Auftraggebers,
+    // "Portionsgebinde wird nicht noetig sein"). Die Basis bleibt als
+    // Faehigkeit des Core stehen - ein Modul, das sie braucht, findet sie
+    // vor; die 28 Gerichte dieses Moduls benutzen sie nicht.
+    //
+    //     config.cpp   class ChefZ_<Name>Bulk : ChefZ_PortionedDish_Base
+    //     script       class ChefZ_<Name>Bulk extends ChefZ_PortionedDish_Base {}
     //     Rezept       outputs[0] traegt portions, portionClass,
     //                  amountPerPortion, containerCategory, returnContainer
     //
@@ -923,32 +893,28 @@ class CfgVehicles
     // §42 (Gerichtsnutzen), §43 (Food-Buffs), §53 (Namenskonvention).
     //
     // --------------------------------------------------------------------------
-    // Warum je Gericht ZWEI Klassen und keine einzige mehr
+    // Warum je Gericht EINE Klasse (seit 29.08.2026)
     // --------------------------------------------------------------------------
-    // Config/Recipes/README_Serving.md §1, woertlich: ein Bulk-Gericht (das, was
-    // im Kochgeraet entsteht und den Portionszaehler traegt) und eine servierte
-    // Portion (das, was auf dem Teller liegt und gegessen wird). Einzelgerichte
-    // sind Portionsgerichte mit kleiner Portionszahl (15 E7) - es gibt genau
-    // EINEN Mechanismus, auch fuer Tellergerichte.
+    // Das Rezept liefert das servierte Gericht direkt im Kochgeraet - ohne
+    // Zwischenstufe (Bulk) und ohne Entnahmeaktion. Mehrere Portionen sind
+    // MENGE am einen Item: PlayerStomach.c:92 rechnet die Naehrwerte je 100
+    // Einheiten, das Rezept setzt quantity = 100 x Portionen, und die Klasse
+    // traegt varQuantityMax fuer ihr groesstes Rezept. Wer aus dem Topf isst,
+    // isst Portion fuer Portion vom selben Item.
     //
-    // Die Portion traegt den Namen aus Production Map §72 / DME-Plan §53
-    // (ChefZ_TacticalBreakfast); das Bulk haengt "Bulk" an. Qualitaetsvarianten
+    // Die Klasse traegt den Namen aus Production Map §72 / DME-Plan §53
+    // (ChefZ_TacticalBreakfast). Qualitaetsvarianten
     // je Stufe gibt es bewusst NICHT: OF-05 ist als B entschieden (Ausbeute
     // statt eigener Klasse je Stufe), und 25 Gerichte x 4 Stufen waeren 100
     // Klassen mit Modell, Stringtable und Loot-Eintrag.
     //
     // --------------------------------------------------------------------------
-    // Warum das Bulk einen Food-Knoten hat und die Portion keinen
+    // Warum das Gericht keinen Food-Knoten hat
     // --------------------------------------------------------------------------
-    // Das Bulk steht im Topf, waehrend Vanilla weiterkocht. ChefZ_PortionedDish_Base
-    // bringt FoodStages UND FoodStageTransitions mit (01 V4) - ohne die Uebergaenge
-    // wuerde jedes Bulk beim ersten Garstufenwechsel zu Kohle. Die Klassen hier
-    // ergaenzen in denselben Stufenknoten nur ihre nutrition_properties[]; visual_
-    // und cooking_properties bleiben geerbt.
-    //
-    // Die servierte Portion erbt von ChefZ_ServedDish_Base, das bewusst KEINEN
-    // Food-Knoten hat: sie liegt auf dem Teller und nicht mehr im Feuer, also
-    // liefert HasFoodStage() false (ItemBase.c:2654) und sie kann nicht verbrennen.
+    // Das Gericht erbt von ChefZ_ServedDish_Base, das bewusst KEINEN Food-Knoten
+    // hat: HasFoodStage() liefert false (ItemBase.c:2654), Vanillas Cooking
+    // fragt CanBeCooked() und laesst es liegen (Cooking.c:47) - ein fertiges
+    // Gericht kann im Topf nicht mehr verbrennen, es wird nur warm gehalten.
     // Sie braucht deshalb "class Nutrition" - und zwar eine EIGENE, weil beide
     // Basen absichtlich keine vererben (01 V7: eine geerbte Naehrwertzeile liesse
     // ein Gericht, das seinen eigenen vergessen hat, im Validator gruen aussehen).
@@ -963,10 +929,9 @@ class CfgVehicles
     // --------------------------------------------------------------------------
     // 3D-Assets
     // --------------------------------------------------------------------------
-    // Es gibt fuer KEINES dieser zwanzig Items ein eigenes Mesh. Alle tragen ein
-    // Vanilla-Proxy: das Bulk CookingPot.p3d (es steht im Kochgeraet), die Portion
-    // FryingPan.p3d (flach, liest sich als Teller), der Milchreis in der Schuessel
-    // CookingPot.p3d. Sobald eigene Geometrie existiert, wird genau diese eine
+    // Es gibt fuer KEINES dieser zehn Items ein eigenes Mesh. Alle tragen ein
+    // Vanilla-Proxy: FryingPan.p3d (flach, liest sich als Teller), der Milchreis
+    // in der Schuessel CookingPot.p3d. Sobald eigene Geometrie existiert, wird genau diese eine
     // Zeile je Klasse getauscht - sonst nichts.
     //
     // --------------------------------------------------------------------------
@@ -1011,44 +976,10 @@ class CfgVehicles
     //    Tactical Bacon (~550/20/90) + 1 Ei (90/40/12) + 1 Brot (500/20/45)
     //    = 1140 Energie, 80 Wasser, 147 Saettigung auf ZWEI Portionen.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_TacticalBreakfastBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_TACTICALBREAKFAST_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_TACTICALBREAKFAST_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 900;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 75;
-            energy = 570;
-            water = 40;
-            nutritionalIndex = 55;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {75, 570, 40, 55, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {75, 570, 36, 55, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {75, 570, 40, 55, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {19, 142, 6, 11, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {30, 228, 32, 11, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_TacticalBreakfast : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1057,6 +988,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 480;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1080,44 +1015,10 @@ class CfgVehicles
     //    = 960 Energie, 537 Wasser, 206 Saettigung auf ZWEI Portionen.
     //    Die Milch macht das Gericht auffaellig wasserreich - das ist gewollt.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_ScrambledEggSausageBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SCRAMBLEDEGGSAUSAGE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_SCRAMBLEDEGGSAUSAGE_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 900;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 103;
-            energy = 480;
-            water = 268;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {103, 480, 268, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {103, 480, 241, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {103, 480, 268, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {26, 120, 40, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {41, 192, 214, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_ScrambledEggSausage : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1126,6 +1027,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1149,44 +1054,10 @@ class CfgVehicles
     //    + 1 Zwiebel (90/55/25) = 1300 Energie auf ZWEI der drei Portionen.
     //    Mais (180/40/60) ist optional und zaehlt nicht in die Summe.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_FarmersBreakfastBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_FARMERSBREAKFAST_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_FARMERSBREAKFAST_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 1000;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 154;
-            energy = 650;
-            water = 136;
-            nutritionalIndex = 65;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {154, 650, 136, 65, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {154, 650, 122, 65, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {154, 650, 136, 65, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {38, 162, 20, 13, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {62, 260, 109, 13, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_FarmersBreakfast : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1195,6 +1066,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 620;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 300;
+        varQuantityMax = 300;
 
         class Nutrition
         {
@@ -1217,44 +1092,10 @@ class CfgVehicles
     //    1 Teig (300/90/35) + 1 Kaese (450/60/35) = 750 Energie, 150 Wasser,
     //    70 Saettigung auf ZWEI Portionen.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_CheeseFlatbreadBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHEESEFLATBREAD_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHEESEFLATBREAD_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 820;
-        lifetime = 21600;
-
-        class Nutrition
-        {
-            fullnessIndex = 35;
-            energy = 375;
-            water = 75;
-            nutritionalIndex = 50;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {35, 375, 75, 50, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {35, 375, 68, 50, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {35, 375, 75, 50, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {9, 94, 11, 10, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {14, 150, 60, 10, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_CheeseFlatbread : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1263,6 +1104,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 380;
         lifetime = 21600;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1286,44 +1131,10 @@ class CfgVehicles
     //    mal nutritionModifier 0.95 (kalt angerichtet, kein Garverlust und kein
     //    Garzugewinn), auf ZWEI Portionen.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_SausageBreadPlateBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SAUSAGEBREADPLATE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEBREADPLATE_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 900;
-        lifetime = 18000;
-
-        class Nutrition
-        {
-            fullnessIndex = 110;
-            energy = 690;
-            water = 50;
-            nutritionalIndex = 55;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {110, 690, 50, 55, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {110, 690, 45, 55, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {110, 690, 50, 55, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {28, 172, 8, 11, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {44, 276, 40, 11, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_SausageBreadPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1332,6 +1143,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 520;
         lifetime = 18000;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1355,44 +1170,10 @@ class CfgVehicles
     //    Portionen. Hoher nutritionalIndex, weil DME-Plan §42 Gemuesegerichten
     //    ausdruecklich gute Vitaminwerte zuschreibt.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_MushroomPanBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_MUSHROOMPAN_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMPAN_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 860;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 58;
-            energy = 480;
-            water = 80;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {58, 480, 80, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {58, 480, 72, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {58, 480, 80, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {14, 120, 12, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {23, 192, 64, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_MushroomPan : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1401,6 +1182,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 420;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1423,44 +1208,10 @@ class CfgVehicles
     //    3 Kartoffeln (540/120/120) + 100 g Mehl (~200/1/15) + 1 Ei (90/40/12)
     //    + 1 Fett (300/5/40) = 1130 Energie auf ZWEI Portionen.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_PotatoPancakesBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_POTATOPANCAKES_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_POTATOPANCAKES_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 900;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 93;
-            energy = 565;
-            water = 83;
-            nutritionalIndex = 55;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {93, 565, 83, 55, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {93, 565, 75, 55, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {93, 565, 83, 55, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {23, 141, 12, 11, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {37, 226, 66, 11, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_PotatoPancakes : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1469,6 +1220,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1493,44 +1248,10 @@ class CfgVehicles
     //    Wenig Energie, viel Saettigung - genau das Profil eines Fleischgerichts
     //    nach DME-Plan §42.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_MeatDumplingsBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_MEATDUMPLINGS_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_MEATDUMPLINGS_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 900;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 140;
-            energy = 360;
-            water = 115;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {140, 360, 115, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {140, 360, 104, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {140, 360, 115, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {35, 90, 17, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {56, 144, 92, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_MeatDumplings : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1539,6 +1260,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 460;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 300;
+        varQuantityMax = 300;
 
         class Nutrition
         {
@@ -1562,44 +1287,10 @@ class CfgVehicles
     //    ZWEI Portionen. Die Saettigung liegt ueber der Rohsumme, weil der Reis
     //    in der Milch quillt.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_MilkRiceBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_MILKRICE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_MILKRICE_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 950;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 55;
-            energy = 280;
-            water = 205;
-            nutritionalIndex = 50;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {55, 280, 205, 50, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {55, 280, 184, 50, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {55, 280, 205, 50, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {14, 70, 31, 10, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {22, 112, 164, 10, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_MilkRice : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1608,6 +1299,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
         weight = 540;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1630,44 +1325,10 @@ class CfgVehicles
     //    1 Brot (500/20/45) + 1 Honig (~300/10/12) = 800 Energie, 30 Wasser auf
     //    ZWEI Portionen. Kaum Wasser, dafuer schnelle Energie.
     //
-    // Das Bulk traegt dieselben Werte wie EINE Portion. Der Naehrwert eines
-    // Bissens haengt in DayZ an Klasse x Foodstage, nie an der Restmenge
-    // (01 V6, 13 §2) - wer direkt aus dem Geraet isst, bekommt damit genau eine
-    // Portion und keinen Vorteil gegenueber dem, der einen Teller benutzt.
+    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
+    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
+    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
     //--------------------------------------------------------------------------
-    class ChefZ_HoneyBreadPlateBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_HONEYBREADPLATE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_HONEYBREADPLATE_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 820;
-        lifetime = 21600;
-
-        class Nutrition
-        {
-            fullnessIndex = 30;
-            energy = 400;
-            water = 20;
-            nutritionalIndex = 45;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {30, 400, 20, 45, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {30, 400, 18, 45, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {30, 400, 20, 45, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {8, 100, 3, 9, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {12, 160, 16, 9, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_HoneyBreadPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1676,6 +1337,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 360;
         lifetime = 21600;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -1692,10 +1357,10 @@ class CfgVehicles
     //==========================================================================
     // ### SLICE dishes-c ###   DIE FUENF BOWL-GERICHTE (Production Map §62)
     //
-    // Je Gericht zwei Klassen nach dem Muster aus 15 §2:
+    // Je Gericht EINE Klasse (seit 29.08.2026):
     //
-    //     ChefZ_<Name>Bulk : ChefZ_PortionedDish_Base    im Topf, mit Zaehler
-    //     ChefZ_<Name>Bowl : ChefZ_ServedDish_Base       in der Hand, essbar
+    //     ChefZ_<Name>Bowl : ChefZ_ServedDish_Base    entsteht im Topf, essbar;
+    //                                                 Menge = 100 x Portionen
     //
     // WOHER DIE NAEHRWERTE KOMMEN (13, Architekturplan §10):
     // Sie sind aus den Zutaten ABGELEITET, nicht gesetzt. Ueber jeder Klasse
@@ -1735,8 +1400,7 @@ class CfgVehicles
     // machen aus demselben Kessel mehr Portionen. Vier Stufen mal fuenf
     // Gerichte waeren sonst zwanzig weitere Klassen gewesen.
     //
-    // 3D-ASSETS: alle zehn Klassen tragen ein VANILLA-PROXY.
-    //     Bulk -> \dz\gear\cooking\CookingPot.p3d
+    // 3D-ASSETS: alle fuenf Klassen tragen ein VANILLA-PROXY.
     //     Bowl -> \dz\gear\cooking\FryingPan.p3d
     // Vanilla hat keine Schuessel; die Pfanne ist der naechste Traeger mit
     // Inhalt und ist bereits die Wahl von ChefZ_ServedDish_Base. Beides ist
@@ -1757,40 +1421,6 @@ class CfgVehicles
     //   Summe                                   985 / 642 / 355
     //   x 1.10 nutritionModifier / 4 Portionen -> 270 / 160 /  90
     //--------------------------------------------------------------------------
-    class ChefZ_HunterStewBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_HUNTERSTEW_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_HUNTERSTEW_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";
-        itemSize[] = {3, 2};
-        weight = 1200;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 90;
-            energy = 270;
-            water = 160;
-            nutritionalIndex = 55;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {90, 270, 160, 55, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {90, 284, 141, 55, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {90, 270, 160, 55, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {23, 68, 40, 10, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {36, 108, 64, 11, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_HunterStewBowl : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1800,6 +1430,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 480;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 1200;
+        varQuantityMax = 1200;
 
         class Nutrition
         {
@@ -1826,40 +1460,6 @@ class CfgVehicles
     //   Summe                                   795 / 642 / 305
     //   x 1.10 / 4 Portionen                 -> 220 / 160 /  75
     //--------------------------------------------------------------------------
-    class ChefZ_FishermanStewBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_FISHERMANSTEW_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_FISHERMANSTEW_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";
-        itemSize[] = {3, 2};
-        weight = 1150;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 75;
-            energy = 220;
-            water = 160;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {75, 220, 160, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {75, 231, 141, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {75, 220, 160, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {19, 55, 40, 11, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {30, 88, 64, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_FishermanStewBowl : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1869,6 +1469,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 470;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 1200;
+        varQuantityMax = 1200;
 
         class Nutrition
         {
@@ -1898,40 +1502,6 @@ class CfgVehicles
     //   Summe                                   660 / 785 / 180
     //   x 1.00 / 4 Portionen                 -> 165 / 195 /  45
     //--------------------------------------------------------------------------
-    class ChefZ_VegetableSoupBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_VEGETABLESOUP_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_VEGETABLESOUP_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";
-        itemSize[] = {3, 2};
-        weight = 1100;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 45;
-            energy = 165;
-            water = 195;
-            nutritionalIndex = 65;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {45, 165, 195, 65, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {45, 173, 172, 65, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {45, 165, 195, 65, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {11, 41, 49, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {18, 66, 78, 13, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_VegetableSoupBowl : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -1941,6 +1511,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 450;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 1200;
+        varQuantityMax = 1200;
 
         class Nutrition
         {
@@ -1970,40 +1544,6 @@ class CfgVehicles
     //   Summe                                   685 / 812 / 220
     //   x 1.05 / 4 Portionen                 -> 180 / 200 /  55
     //--------------------------------------------------------------------------
-    class ChefZ_BoneBrothSoupBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_BONEBROTHSOUP_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_BONEBROTHSOUP_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";
-        itemSize[] = {3, 2};
-        weight = 1250;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 55;
-            energy = 180;
-            water = 200;
-            nutritionalIndex = 70;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {55, 180, 200, 70, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {55, 189, 176, 70, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {55, 180, 200, 70, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {14, 45, 50, 13, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {22, 72, 80, 14, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_BoneBrothSoupBowl : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2013,6 +1553,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 500;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 1200;
+        varQuantityMax = 1200;
 
         class Nutrition
         {
@@ -2051,40 +1595,6 @@ class CfgVehicles
     // massgebliche Wert. Wer die Summe neu ziehen will, braucht zuerst
     // GreenBellPeppers Vanilla-Werte; geraten wird hier nichts.
     //--------------------------------------------------------------------------
-    class ChefZ_ChernarusChiliBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CHERNARUSCHILI_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_CHERNARUSCHILI_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";
-        itemSize[] = {3, 2};
-        weight = 1300;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 105;
-            energy = 325;
-            water = 85;
-            nutritionalIndex = 50;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {105, 325, 85, 50, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {105, 341, 75, 50, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {105, 325, 85, 50, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {26, 81, 21, 9, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {42, 130, 34, 10, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_ChernarusChiliBowl : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2094,6 +1604,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 520;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 1200;
+        varQuantityMax = 1200;
 
         class Nutrition
         {
@@ -2122,20 +1636,18 @@ class CfgVehicles
     //   Obstkompott       Apple, Pear, Plum, die zwei Waldbeeren und der Honig -
     //                     das erste suesse Gericht des Mods ueberhaupt.
     //
-    // BAUFORM: dieselbe wie in dishes-a, dishes-b und dishes-c, und aus
-    // demselben Grund - ZWEI Klassen je Gericht. Das Bulk entsteht im
-    // Kochgeraet und traegt den Portionszaehler, die servierte Portion ist
-    // das, was der Spieler isst (Config/Recipes/README_Serving.md §1). Suppe
-    // und Kompott geben in eine Schuessel und heissen deshalb ...Bowl, die
+    // BAUFORM: dieselbe wie in dishes-a, dishes-b und dishes-c - EINE Klasse
+    // je Gericht, das Rezept liefert sie direkt (seit 29.08.2026). Suppe und
+    // Kompott geben in eine Schuessel und heissen deshalb ...Bowl, die
     // Fischpfanne auf einen Teller und heisst nur nach dem Gericht.
     //
     // NAEHRWERT: die Zahl unter jeder Klasse ist die Summe EINER Portion aus
-    // den Zutatenwerten der Registry, mal nutritionModifier des Rezepts. Bulk
-    // und Portion tragen dieselben Werte - der Naehrwert eines Bissens haengt
-    // an Klasse x Foodstage und nie an der Restmenge (01 V6).
+    // den Zutatenwerten der Registry, mal nutritionModifier des Rezepts. Sie
+    // gilt je 100 Einheiten Menge (PlayerStomach.c:92); das Rezept setzt
+    // 100 x Portionen.
     //
-    // MODELLE: kein Gericht hat ein eigenes Mesh. Bulk = CookingPot.p3d,
-    // Portion = FryingPan.p3d (flach, liest sich als Teller). Der Bedarf steht
+    // MODELLE: kein Gericht hat ein eigenes Mesh. Alle tragen FryingPan.p3d
+    // (flach, liest sich als Teller). Der Bedarf steht
     // im Slice-Bericht; kein Item wartet auf ein Modell.
     //==========================================================================
 
@@ -2147,40 +1659,6 @@ class CfgVehicles
     // Wenig Energie, viel Wasser - eine Suppe saettigt und traenkt, sie mistet
     // keinen Tagesbedarf ab.
     //--------------------------------------------------------------------------
-    class ChefZ_PumpkinSoupBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_PUMPKINSOUP_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_PUMPKINSOUP_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        itemSize[] = {3, 2};
-        weight = 1150;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 58;
-            energy = 285;
-            water = 115;
-            nutritionalIndex = 45;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {58, 285, 115, 45, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {58, 299, 92, 45, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {58, 285, 115, 45, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {14, 71, 28, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {23, 114, 46, 9, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_PumpkinSoupBowl : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2190,6 +1668,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 480;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 300;
+        varQuantityMax = 300;
 
         class Nutrition
         {
@@ -2210,40 +1692,6 @@ class CfgVehicles
     // (Lard 300 / ChefZ_Butter 600) + 1 Knoblauch (40) auf ZWEI Portionen,
     // mal 1.1. Hoher Proteinanteil, wenig Wasser - eine Pfanne, kein Eintopf.
     //--------------------------------------------------------------------------
-    class ChefZ_SmallFishPanBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SMALLFISHPAN_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_SMALLFISHPAN_BULK_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
-        itemSize[] = {3, 2};
-        weight = 780;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 72;
-            energy = 430;
-            water = 35;
-            nutritionalIndex = 55;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {72, 430, 35, 55, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {72, 452, 28, 55, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {72, 430, 42, 50, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {18, 107, 8, 11, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {28, 172, 14, 11, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_SmallFishPan : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2253,6 +1701,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 400;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2273,40 +1725,6 @@ class CfgVehicles
     // (130) auf DREI Portionen, mal 1.05. Der Zucker steckt im optionalen
     // Honigslot und nicht in der Grundrechnung - ohne ihn ist es SIMPLE.
     //--------------------------------------------------------------------------
-    class ChefZ_FruitCompoteBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_FRUITCOMPOTE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_FRUITCOMPOTE_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        itemSize[] = {3, 2};
-        weight = 980;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 40;
-            energy = 145;
-            water = 95;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {40, 145, 95, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {40, 152, 76, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {40, 145, 95, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {10, 36, 23, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {16, 58, 38, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_FruitCompoteBowl : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2316,6 +1734,10 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 420;
         lifetime = 7200;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 300;
+        varQuantityMax = 300;
 
         class Nutrition
         {
@@ -2336,19 +1758,16 @@ class CfgVehicles
     // §42 (Gerichtsnutzen), §43 (Food-Buffs), §53 (Namenskonvention).
     //
     // Aufbau, Begruendung und Namensregel stehen vollstaendig im Banner des
-    // Slice dishes-b weiter oben - beide Slices bauen dieselben zwei Klassen je
-    // Gericht (Bulk + servierte Portion, Config/Recipes/README_Serving.md §1),
-    // und eine zweite Abschrift derselben Begruendung waere eine zweite Stelle,
+    // Slice dishes-b weiter oben - beide Slices bauen dieselbe eine Klasse je
+    // Gericht (Config/Recipes/README_Serving.md §1), und eine zweite Abschrift derselben Begruendung waere eine zweite Stelle,
     // an der sie veralten kann. Hier steht nur, was fuer DIESE zehn Gerichte
     // eigens gilt:
     //
     //   1. NAEHRWERT JE GERICHT: die Zahl unter jeder Klasse ist die Summe
     //      EINER Portion aus den Zutatenwerten der Registry, mal
-    //      nutritionModifier des Rezepts. Bulk und Portion tragen DIESELBEN
-    //      Werte - der Naehrwert eines Bissens haengt an Klasse x Foodstage und
-    //      nie an der Restmenge (01 V6). Wer direkt aus der Pfanne isst,
-    //      bekommt damit genau eine Portion und keinen Vorteil gegenueber dem,
-    //      der einen Teller benutzt. Dieselbe Regel wie in dishes-b.
+    //      nutritionModifier des Rezepts. Sie gilt je 100 Einheiten Menge
+    //      (PlayerStomach.c:92); das Rezept setzt 100 x Portionen. Dieselbe
+    //      Regel wie in dishes-b.
     //
     //   2. amountPerPortion = 2.0 in jedem Rezept: eine Portion kostet rund
     //      zwei Zutateneinheiten, und genau so ist die Naehrwertrechnung
@@ -2356,8 +1775,7 @@ class CfgVehicles
     //      zwei). Optionale Slots zaehlen dabei nicht mit (15 §5.2) - Gewuerze
     //      koennen die Ausbeute also nicht hochkaufen.
     //
-    //   3. MODELLE: kein Gericht hat ein eigenes Mesh. Bulk = CookingPot.p3d
-    //      oder FryingPan.p3d (je nachdem, worin es entsteht), Portion =
+    //   3. MODELLE: kein Gericht hat ein eigenes Mesh. Alle tragen
     //      FryingPan.p3d (flach, liest sich als Teller). Der Bedarf steht im
     //      Slice-Bericht; kein Item wartet auf ein Modell.
     //==========================================================================
@@ -2373,39 +1791,6 @@ class CfgVehicles
     //    73 Saettigung. x nutritionModifier 1.10 = 561/121/80. Das Wasser ist auf 120
     //    gerundet: gekochte Pasta zieht Kochwasser, das die Trockenwerte nicht kennen.
     //--------------------------------------------------------------------------
-    class ChefZ_SurvivorSpaghettiBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SURVIVORSPAGHETTI_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_SURVIVORSPAGHETTI_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 900;
-        lifetime = 14400;
-
-        class Nutrition
-        {
-            fullnessIndex = 80;
-            energy = 560;
-            water = 120;
-            nutritionalIndex = 50;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {80, 560, 120, 50, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {80, 560, 108, 50, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {80, 560, 120, 50, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {20, 140, 18, 10, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {32, 224, 48, 10, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_SurvivorSpaghetti : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2414,6 +1799,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 470;
         lifetime = 14400;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2438,39 +1827,6 @@ class CfgVehicles
     //    28 Wasser, 208 Saettigung. x 1.10 = 1265/31/229. Wasser auf 70 angehoben
     //    (Kochwasser der Pasta). Sehr hohe Energie ist DME §42 fuer Pastagerichte.
     //--------------------------------------------------------------------------
-    class ChefZ_SausagePastaBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SAUSAGEPASTA_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEPASTA_BULK_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
-        weight = 920;
-        lifetime = 14400;
-
-        class Nutrition
-        {
-            fullnessIndex = 230;
-            energy = 1270;
-            water = 70;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {230, 1270, 70, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {230, 1270, 63, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {230, 1270, 70, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {58, 318, 11, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {92, 508, 28, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_SausagePasta : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2479,6 +1835,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 14400;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2503,39 +1863,6 @@ class CfgVehicles
     //    + 1 Kraut (15/12/5) = 705/92/163. x 1.15 = 811/106/187. Wasser auf 145
     //    angehoben (Kochwasser). Sahne ist optionaler Slot und zaehlt hier nicht mit.
     //--------------------------------------------------------------------------
-    class ChefZ_HunterPastaBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_HUNTERPASTA_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_HUNTERPASTA_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 920;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 185;
-            energy = 810;
-            water = 145;
-            nutritionalIndex = 70;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {185, 810, 145, 70, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {185, 810, 131, 70, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {185, 810, 145, 70, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {46, 203, 22, 14, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {74, 324, 58, 14, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_HunterPasta : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2544,6 +1871,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2567,39 +1898,6 @@ class CfgVehicles
     //    1 Pasta (380/5/28) + 2 Pilze (120/60/40) + 1 Sahne (350/150/20)
     //    + 1 Kraut (15/12/5) = 865/227/93. x 1.10 = 952/250/102.
     //--------------------------------------------------------------------------
-    class ChefZ_CreamMushroomPastaBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_CREAMMUSHROOMPASTA_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_CREAMMUSHROOMPASTA_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 920;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 100;
-            energy = 950;
-            water = 250;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {100, 950, 250, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {100, 950, 225, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {100, 950, 250, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {25, 238, 38, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {40, 380, 100, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_CreamMushroomPasta : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2608,6 +1906,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2633,39 +1935,6 @@ class CfgVehicles
     //    und zaehlt deshalb nicht in die Grundrechnung - sonst laege das Gericht bei
     //    ueber 1800 Energie und waere das staerkste Nahrungsmittel des Mods.
     //--------------------------------------------------------------------------
-    class ChefZ_MacAndCheeseBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_MACANDCHEESE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_MACANDCHEESE_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 940;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 100;
-            energy = 1130;
-            water = 510;
-            nutritionalIndex = 55;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {100, 1130, 510, 55, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {100, 1130, 459, 55, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {100, 1130, 510, 55, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {25, 283, 77, 11, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {40, 452, 204, 11, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_MacAndCheese : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2674,6 +1943,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2697,39 +1970,6 @@ class CfgVehicles
     //    1 Kartoffel (180/40/40) + 1 Wurst (470/18/140) + 1 Fett (300/5/40) = 950/63/220.
     //    x 1.05 = 998/66/231. Hohe Saettigung ist DME §42 fuer Fleischgerichte.
     //--------------------------------------------------------------------------
-    class ChefZ_SausagePotatoesBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SAUSAGEPOTATOES_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEPOTATOES_BULK_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
-        weight = 920;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 230;
-            energy = 1000;
-            water = 65;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {230, 1000, 65, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {230, 1000, 59, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {230, 1000, 65, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {58, 250, 10, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {92, 400, 26, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_SausagePotatoes : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2738,6 +1978,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2761,39 +2005,6 @@ class CfgVehicles
     //    1 Wildfleisch (250/45/110) + 1 Kartoffel (180/40/40) + 1 Pilz (60/30/20)
     //    + 1 Kraut (15/12/5) = 505/127/175. x 1.15 = 581/146/201.
     //--------------------------------------------------------------------------
-    class ChefZ_HunterPlateBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_HUNTERPLATE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_HUNTERPLATE_BULK_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
-        weight = 920;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 200;
-            energy = 580;
-            water = 145;
-            nutritionalIndex = 70;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {200, 580, 145, 70, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {200, 580, 131, 70, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {200, 580, 145, 70, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {50, 145, 22, 14, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {80, 232, 58, 14, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_HunterPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2802,6 +2013,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2826,39 +2041,6 @@ class CfgVehicles
     //    x 1.05 = 777/119/215. Gerechnet mit der allgemeinen Wurst: ChefZ_BloodSausage
     //    gibt es in V1 nicht (Production Map §61.8, "kann optional V1.1 werden").
     //--------------------------------------------------------------------------
-    class ChefZ_BloodSausagePlateBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_BLOODSAUSAGEPLATE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_BLOODSAUSAGEPLATE_BULK_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
-        weight = 920;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 215;
-            energy = 780;
-            water = 120;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {215, 780, 120, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {215, 780, 108, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {215, 780, 120, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {54, 195, 18, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {86, 312, 48, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_BloodSausagePlate : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2867,6 +2049,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2890,39 +2076,6 @@ class CfgVehicles
     //    1 Fischfilet (200/50/90) + 1 Kartoffel (180/40/40) + 1 Kraut (15/12/5) = 395/102/135.
     //    x 1.10 = 435/112/149. Ausgewogene Werte sind DME §42 fuer Fischgerichte.
     //--------------------------------------------------------------------------
-    class ChefZ_FishPotatoPlateBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_FISHPOTATOPLATE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_FISHPOTATOPLATE_BULK_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
-        weight = 900;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 150;
-            energy = 435;
-            water = 110;
-            nutritionalIndex = 65;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {150, 435, 110, 65, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {150, 435, 99, 65, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {150, 435, 110, 65, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {38, 109, 17, 13, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {60, 174, 44, 13, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_FishPotatoPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2931,6 +2084,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 470;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -2956,39 +2113,6 @@ class CfgVehicles
     //    hat keinen ChefZ-Naehrwertdatensatz; die Werte sind aus der Groessenordnung
     //    einer Vanilla-Bohnendose geschaetzt und im Slice-Bericht als solche benannt.
     //--------------------------------------------------------------------------
-    class ChefZ_BeanSausagePlateBulk : ChefZ_PortionedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_BEANSAUSAGEPLATE_BULK";
-        descriptionShort = "#STR_CHEFZ_ITEM_BEANSAUSAGEPLATE_BULK_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
-        weight = 940;
-        lifetime = 10800;
-
-        class Nutrition
-        {
-            fullnessIndex = 300;
-            energy = 1220;
-            water = 235;
-            nutritionalIndex = 60;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {300, 1220, 235, 60, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {300, 1220, 212, 60, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {300, 1220, 235, 60, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {75, 305, 35, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {120, 488, 94, 12, 20, 16, 1}; };
-            };
-        };
-    };
-
     class ChefZ_BeanSausagePlate : ChefZ_ServedDish_Base
     {
         scope = 2;
@@ -2997,6 +2121,10 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
+        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
+        // einmal die Naehrwerte); das Rezept setzt 100 x Portionen.
+        varQuantityInit = 200;
+        varQuantityMax = 200;
 
         class Nutrition
         {
@@ -3534,16 +2662,14 @@ class CfgChefZIngredients
     // (README_Serving.md §4). Ohne den Record hier gaebe ein solcher Teller beim
     // Leeressen nichts zurueck - und niemand faende den Grund.
     //
-    // Zwei Sorten Records, mit Absicht unterschiedlich:
+    // Ein Basisrecord je Slice:
     //
-    //   ChefZ_DishesBBulk    das, was im Kochgeraet steht. KEIN
-    //                        containerCategory: ein Bulk liegt in Topf oder
-    //                        Pfanne, nicht auf einem Teller, und es soll beim
-    //                        Aufessen nichts zurueckgeben.
-    //   ChefZ_DishesBPlate   die servierte Portion. containerCategory sagt,
-    //                        WORAUF sie liegt; returnContainer "AUTO" gibt beim
-    //                        letzten Bissen genau den Behaelter zurueck, der
-    //                        benutzt wurde (16 §4, OF-04: reusable).
+    //   ChefZ_DishesBPlate   das Gericht. containerCategory sagt, WORAUF es
+    //                        liegt; returnContainer nennt die FESTE Klasse, die
+    //                        beim letzten Bissen zurueckkommt. "AUTO" ginge
+    //                        nicht mehr: es loest ueber den beim Servieren
+    //                        benutzten Behaelter auf, und seit 29.08.2026 wird
+    //                        keiner mehr benutzt - das Gericht entsteht direkt.
     //
     // Die Basisknoten heissen slice-eindeutig (ChefZ_DishesB...), weil dieses
     // Modul ein GETEILTER Ordner ist: dishes-a und dishes-c legen ihre Gerichte
@@ -3561,13 +2687,6 @@ class CfgChefZIngredients
     // dort ausdruecklich PREPARED; dieser Wert hier ist nur die Rueckfallebene
     // der Zustandsprojektion (06 §3, Stufe 2) fuer Exemplare ohne Variable.
     //==========================================================================
-    class ChefZ_DishesBBulk
-    {
-        defaultState      = "COOKED";
-        quantityUnit      = "PIECE";
-        unitsPerWholeItem = 1;
-        decays            = 1;
-    };
 
     class ChefZ_DishesBPlate
     {
@@ -3575,44 +2694,34 @@ class CfgChefZIngredients
         quantityUnit      = "PIECE";
         unitsPerWholeItem = 1;
         containerCategory = "PLATE";
-        returnContainer   = "AUTO";
+        returnContainer   = "ChefZ_EmptyPlate";
         decays            = 1;
     };
 
-    class ChefZ_TacticalBreakfastBulk : ChefZ_DishesBBulk {};
     class ChefZ_TacticalBreakfast : ChefZ_DishesBPlate {};
-    class ChefZ_ScrambledEggSausageBulk : ChefZ_DishesBBulk {};
     class ChefZ_ScrambledEggSausage : ChefZ_DishesBPlate {};
-    class ChefZ_FarmersBreakfastBulk : ChefZ_DishesBBulk {};
     class ChefZ_FarmersBreakfast : ChefZ_DishesBPlate {};
-    class ChefZ_CheeseFlatbreadBulk : ChefZ_DishesBBulk {};
     class ChefZ_CheeseFlatbread : ChefZ_DishesBPlate {};
-    class ChefZ_SausageBreadPlateBulk : ChefZ_DishesBBulk {};
     class ChefZ_SausageBreadPlate : ChefZ_DishesBPlate {};
-    class ChefZ_MushroomPanBulk : ChefZ_DishesBBulk {};
     class ChefZ_MushroomPan : ChefZ_DishesBPlate {};
-    class ChefZ_PotatoPancakesBulk : ChefZ_DishesBBulk {};
     class ChefZ_PotatoPancakes : ChefZ_DishesBPlate {};
-    class ChefZ_MeatDumplingsBulk : ChefZ_DishesBBulk {};
     class ChefZ_MeatDumplings : ChefZ_DishesBPlate {};
-    class ChefZ_MilkRiceBulk : ChefZ_DishesBBulk {};
     // §61.19 ist das einzige Gericht dieses Slice in der SCHUESSEL: Milchreis
     // ist ein Brei und kein Teller (Production Map §60 kennt beide Behaelter).
     class ChefZ_MilkRice : ChefZ_DishesBPlate
     {
         containerCategory = "BOWL";
+        returnContainer   = "ChefZ_EmptyBowl";
     };
-    class ChefZ_HoneyBreadPlateBulk : ChefZ_DishesBBulk {};
     class ChefZ_HoneyBreadPlate : ChefZ_DishesBPlate {};
 
     //--------------------------------------------------------------------------
     // ### SLICE dishes-c ###   Zutatenbindung der fuenf Bowl-Gerichte
     //
-    // Nur die SERVIERTEN Schuesseln stehen hier, nicht die Bulk-Klassen. Der
-    // Grund ist 16 §3.2: "Die Rueckgabeklasse steht am Gericht, nicht im
-    // Rezept." containerCategory und returnContainer gehoeren also an das
-    // Item, das gegessen wird. Das Bulk wird nicht gegessen, es wird
-    // portioniert - was dabei entsteht, sagt outputs[].portionClass im Rezept.
+    // 16 §3.2: "Die Rueckgabeklasse steht am Gericht, nicht im Rezept."
+    // containerCategory und returnContainer gehoeren also an das Item, das
+    // gegessen wird - und das ist seit 29.08.2026 das Ergebnis des Rezepts
+    // selbst.
     //
     // categories[] ist LEER, und das ist Absicht. Ein fertiges Gericht ist
     // keine Zutat. Truege es eine Kategorie, koennte ein anderes Rezept es als
@@ -3676,13 +2785,6 @@ class CfgChefZIngredients
     // der Behaelter, der benutzt wurde (16 §4). Ein spaeter hinzugefuegter
     // Holzteller funktioniert damit sofort, ohne dass hier eine Zeile faellt.
     //==========================================================================
-    class ChefZ_DishesABulk
-    {
-        defaultState      = "COOKED";
-        quantityUnit      = "PIECE";
-        unitsPerWholeItem = 1;
-        decays            = 1;
-    };
 
     class ChefZ_DishesAPlate
     {
@@ -3691,28 +2793,18 @@ class CfgChefZIngredients
         unitsPerWholeItem = 1;
         decays            = 1;
         containerCategory = "PLATE";
-        returnContainer   = "AUTO";
+        returnContainer   = "ChefZ_EmptyPlate";
     };
 
-    class ChefZ_SurvivorSpaghettiBulk : ChefZ_DishesABulk {};
     class ChefZ_SurvivorSpaghetti : ChefZ_DishesAPlate {};
-    class ChefZ_SausagePastaBulk : ChefZ_DishesABulk {};
     class ChefZ_SausagePasta : ChefZ_DishesAPlate {};
-    class ChefZ_HunterPastaBulk : ChefZ_DishesABulk {};
     class ChefZ_HunterPasta : ChefZ_DishesAPlate {};
-    class ChefZ_CreamMushroomPastaBulk : ChefZ_DishesABulk {};
     class ChefZ_CreamMushroomPasta : ChefZ_DishesAPlate {};
-    class ChefZ_MacAndCheeseBulk : ChefZ_DishesABulk {};
     class ChefZ_MacAndCheese : ChefZ_DishesAPlate {};
-    class ChefZ_SausagePotatoesBulk : ChefZ_DishesABulk {};
     class ChefZ_SausagePotatoes : ChefZ_DishesAPlate {};
-    class ChefZ_HunterPlateBulk : ChefZ_DishesABulk {};
     class ChefZ_HunterPlate : ChefZ_DishesAPlate {};
-    class ChefZ_BloodSausagePlateBulk : ChefZ_DishesABulk {};
     class ChefZ_BloodSausagePlate : ChefZ_DishesAPlate {};
-    class ChefZ_FishPotatoPlateBulk : ChefZ_DishesABulk {};
     class ChefZ_FishPotatoPlate : ChefZ_DishesAPlate {};
-    class ChefZ_BeanSausagePlateBulk : ChefZ_DishesABulk {};
     class ChefZ_BeanSausagePlate : ChefZ_DishesAPlate {};
 
     //==========================================================================
@@ -3734,13 +2826,6 @@ class CfgChefZIngredients
     // KEINE categories[] und KEINE tags[] ausser CHEFZ_HOT_MEAL: ein fertiges
     // Gericht ist Endprodukt und nie wieder Zutat.
     //==========================================================================
-    class ChefZ_DishesVanillaBulk
-    {
-        defaultState      = "COOKED";
-        quantityUnit      = "PIECE";
-        unitsPerWholeItem = 1;
-        decays            = 1;
-    };
 
     class ChefZ_DishesVanillaBowl
     {
@@ -3750,7 +2835,7 @@ class CfgChefZIngredients
         unitsPerWholeItem = 1;
         decays            = 1;
         containerCategory = "BOWL";
-        returnContainer   = "AUTO";
+        returnContainer   = "ChefZ_EmptyBowl";
     };
 
     class ChefZ_DishesVanillaPlate
@@ -3761,14 +2846,11 @@ class CfgChefZIngredients
         unitsPerWholeItem = 1;
         decays            = 1;
         containerCategory = "PLATE";
-        returnContainer   = "AUTO";
+        returnContainer   = "ChefZ_EmptyPlate";
     };
 
-    class ChefZ_PumpkinSoupBulk : ChefZ_DishesVanillaBulk {};
     class ChefZ_PumpkinSoupBowl : ChefZ_DishesVanillaBowl {};
-    class ChefZ_SmallFishPanBulk : ChefZ_DishesVanillaBulk {};
     class ChefZ_SmallFishPan : ChefZ_DishesVanillaPlate {};
-    class ChefZ_FruitCompoteBulk : ChefZ_DishesVanillaBulk {};
     class ChefZ_FruitCompoteBowl : ChefZ_DishesVanillaBowl {};
 };
 

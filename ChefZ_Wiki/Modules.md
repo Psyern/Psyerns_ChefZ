@@ -255,9 +255,9 @@ each of them implies the tag `CHEFZ_PRESERVED`.
 The largest module. Sauces, broths, tableware and all 28 dishes — 20 plates,
 5 bowls and 3 built from vanilla produce alone.
 
-- **72 item classes**: 56 dish classes — every dish is **two** classes, a `*Bulk`
-  that forms in the cooking vessel and carries the portion counter, and a served
-  portion that the player eats — plus 4 sauces and broths with
+- **44 item classes**: 28 dish classes — one class per dish since 2026-08-29,
+  the served dish that forms in the cooking vessel and is eaten; portions are
+  vanilla quantity — plus 4 sauces and broths with
   `ChefZ_SauceItemBase`, 5 empty containers with `ChefZ_ContainerItemBase`, the
   two dish base classes (`ChefZ_PortionedDish_Base`, `ChefZ_ServedDish_Base`,
   both `scope = 0`), and 3 forward declarations of vanilla classes.

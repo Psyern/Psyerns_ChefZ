@@ -48,60 +48,26 @@ node tools/chefz-validate/index.mjs
 Worked example: **`ChefZ_SausagePasta`**, an existing dish in the `dishes-a`
 slice of `ChefZ_Cooking`. Every file below is a real file in the repository.
 
-A dish is **two** classes: a `*Bulk` that forms in the cooking vessel and
-carries the portion counter, and a served portion that the player eats. Single
-dishes are portion dishes with a small portion count — there is exactly one
-mechanism.
+A dish is **one** class (since 2026-08-29): the served dish that forms in the
+cooking vessel and is eaten. Portions are vanilla quantity — the recipe sets
+`quantity = 100 × portions`, and `PlayerStomach` rates nutrition per 100 units.
 
 ### Files touched
 
 | File | What goes in |
 |---|---|
-| `ChefZ_Cooking/config.cpp` → `CfgPatches units[]` | both class names |
-| `ChefZ_Cooking/config.cpp` → `CfgVehicles` | both classes, with `Nutrition` and (bulk only) `Food` |
-| `ChefZ_Cooking/config.cpp` → `CfgChefZIngredients` | both classes, as ingredient bindings |
+| `ChefZ_Cooking/config.cpp` → `CfgPatches units[]` | the class name |
+| `ChefZ_Cooking/config.cpp` → `CfgVehicles` | the class, with `Nutrition` and its quantity block |
+| `ChefZ_Cooking/config.cpp` → `CfgChefZIngredients` | the class, as ingredient binding |
 | `ChefZ_Cooking/config.cpp` → `CfgChefZ` | the `dataFiles[]` entry, if the recipe file is new |
 | `ChefZ_Cooking/Config/Recipes/Dishes_A.json` | the recipe record |
-| `ChefZ_Cooking/stringtable.csv` | 4 keys: name and description, bulk and portion |
-| `Psyerns_ChefZ_Core/_deltas/dishes-a.json` | both class names in `classes` |
+| `ChefZ_Cooking/stringtable.csv` | 2 keys: name and description |
+| `Psyerns_ChefZ_Core/_deltas/dishes-a.json` | the class name in `classes` |
 | *(optional)* a script file | empty derivations, see below |
 
-### Step 1 — the two config classes
+### Step 1 — the config class
 
 ```cpp
-class ChefZ_SausagePastaBulk : ChefZ_PortionedDish_Base
-{
-    scope = 2;
-    displayName = "#STR_CHEFZ_ITEM_SAUSAGEPASTA_BULK";
-    descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEPASTA_BULK_DESC";
-    model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, no own mesh
-    weight = 920;
-    lifetime = 14400;
-
-    class Nutrition
-    {
-        fullnessIndex = 230;
-        energy = 1270;
-        water = 70;
-        nutritionalIndex = 60;
-        toxicity = 0;
-        agents = 0;
-        digestibility = 1;
-    };
-
-    class Food
-    {
-        class FoodStages
-        {
-            class Raw    { nutrition_properties[] = {230, 1270, 70, 60, 0, 0, 1}; };
-            class Baked  { nutrition_properties[] = {230, 1270, 63, 60, 0, 0, 1}; };
-            class Boiled { nutrition_properties[] = {230, 1270, 70, 60, 0, 0, 1}; };
-            class Burned { nutrition_properties[] = {58, 318, 11, 12, 0, 0, 1}; };
-            class Rotten { nutrition_properties[] = {92, 508, 28, 12, 20, 16, 1}; };
-        };
-    };
-};
-
 class ChefZ_SausagePasta : ChefZ_ServedDish_Base
 {
     scope = 2;
@@ -110,6 +76,8 @@ class ChefZ_SausagePasta : ChefZ_ServedDish_Base
     model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, no own mesh
     weight = 490;
     lifetime = 14400;
+    varQuantityInit = 200;   // 100 per portion; largest recipe has 2
+    varQuantityMax = 200;
 
     class Nutrition { fullnessIndex = 230; energy = 1270; water = 70;
                       nutritionalIndex = 60; toxicity = 0; agents = 0;
@@ -119,42 +87,28 @@ class ChefZ_SausagePasta : ChefZ_ServedDish_Base
 
 Note what is **not** here:
 
-- The bulk class has **no `FoodStageTransitions` of its own.** It inherits them
-  from `ChefZ_PortionedDish_Base`, which declares them once for every dish in
-  the mod. It only adds `nutrition_properties[]` per stage; `visual_properties`
-  and `cooking_properties` stay inherited.
-- The served portion has **no `Food` node at all**, deliberately. Without
-  `Food > FoodStages`, `ItemBase.HasFoodStage()` is false, no `FoodStage` object
-  exists, and the portion on the plate cannot burn.
-- `ChefZ_ServedDish_Base` also carries **no `Nutrition` block**. If it did, a
+- The dish has **no `Food` node at all**, deliberately. Without
+  `Food > FoodStages`, `ItemBase.HasFoodStage()` is false, vanilla's
+  `Cooking.ProcessItemToCook` skips it (`Cooking.c:47`), and the finished dish
+  cannot burn while it sits in the pot.
+- `ChefZ_ServedDish_Base` carries **no `Nutrition` block**. If it did, a
   dish that forgot its own would inherit one and look green in the validator —
   and `PlayerStomach` only registers classes with their own nutrition data, so
   the failure would be silent.
+- `Nutrition` is **per 100 units** of quantity (`PlayerStomach.c:92`), i.e. per
+  portion. Two portions in the pot are `quantity = 200` of the same item.
 
-`nutrition_properties[]` order is fixed by `FoodStage.c`:
-`fullnessIndex, energy, water, nutritionalIndex, toxicity, agents, digestibility`.
-`agents = 16` is `eAgents.FOOD_POISON`; only `Rotten` should carry it.
-
-### Step 2 — the ingredient bindings
+### Step 2 — the ingredient binding
 
 In `CfgChefZIngredients` of the same `config.cpp`:
 
 ```cpp
-class ChefZ_SausagePastaBulk : ChefZ_DishesABulk {};
 class ChefZ_SausagePasta : ChefZ_DishesAPlate {};
 ```
 
-where the two bases in the same block are:
+where the base in the same block is:
 
 ```cpp
-class ChefZ_DishesABulk
-{
-    defaultState      = "COOKED";
-    quantityUnit      = "PIECE";
-    unitsPerWholeItem = 1;
-    decays            = 1;
-};
-
 class ChefZ_DishesAPlate
 {
     defaultState      = "COOKED";
@@ -162,14 +116,14 @@ class ChefZ_DishesAPlate
     unitsPerWholeItem = 1;
     decays            = 1;
     containerCategory = "PLATE";
-    returnContainer   = "AUTO";
+    returnContainer   = "ChefZ_EmptyPlate";
 };
 ```
 
-`containerCategory` is what makes the served portion require a plate, and
-`returnContainer = "AUTO"` is what gives the plate back on the last bite. Change
-`"PLATE"` to `"BOWL"` and the dish needs a bowl instead — `ChefZ_MilkRice` does
-exactly that.
+`returnContainer` is what leaves the empty plate behind on the last bite; it is a
+fixed class, never `"AUTO"` (nothing is served any more, so there is no "used
+container" to resolve). Change it to `"ChefZ_EmptyBowl"` and the dish leaves a
+bowl instead — `ChefZ_MilkRice` does exactly that.
 
 ### Step 3 — the recipe
 
@@ -202,13 +156,10 @@ eight slots and two grade rules):
   "qualityTierSet": "DISH_DEFAULT",
   "outputs": [
     {
-      "cls": "ChefZ_SausagePastaBulk",
-      "quantity": 1.0, "quantityMode": "fixed",
-      "portions": 2, "portionClass": "ChefZ_SausagePasta",
-      "containerCategory": "PLATE", "consumesContainer": true,
-      "returnContainer": "AUTO",
-      "scaleWithDevice": true, "inheritQuality": true, "inheritState": true,
-      "takeDisplayName": "#STR_CHEFZ_TAKE_PLATE",
+      "cls": "ChefZ_SausagePasta",
+      "quantity": 200, "quantityMode": "fixed",
+      "returnContainer": "ChefZ_EmptyPlate",
+      "inheritQuality": true, "inheritState": true,
       "setState": "COOKED"
     }
   ],
@@ -272,13 +223,11 @@ unless it introduces a new category, tag or nutrition record — see
 ### Step 7 — the script class (optional, but be consistent)
 
 ```c
-class ChefZ_SausagePastaBulk extends ChefZ_PortionedDish_Base {}
 class ChefZ_SausagePasta extends ChefZ_ServedDish_Base {}
 ```
 
-Both would be empty. The counter, the take-portion action, persistence, sync,
-the `1 / 2` tooltip, the container check and the container return all come from
-the core.
+It would be empty. The eat actions, persistence, sync and the container return
+all come from the core.
 
 The engine walks the *config* parent chain up to `ChefZ_PortionedDish_Base` /
 `ChefZ_ServedDish_Base` when a config class has no script class of its own, so

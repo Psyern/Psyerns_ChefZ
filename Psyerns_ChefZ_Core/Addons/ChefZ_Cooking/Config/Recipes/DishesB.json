@@ -137,19 +137,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_TacticalBreakfastBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_TacticalBreakfast",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "COOKED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_TacticalBreakfast",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.5,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -293,19 +285,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_ScrambledEggSausageBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_ScrambledEggSausage",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "COOKED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_ScrambledEggSausage",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 2,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -340,7 +324,9 @@
             "slots": [
                 {
                     "slotId": "potato",
-                    "match": { "cls": "Potato" },
+                    "match": {
+                        "cls": "Potato"
+                    },
                     "minCount": 2,
                     "maxCount": 4,
                     "consume": "whole"
@@ -365,14 +351,18 @@
                 },
                 {
                     "slotId": "onion",
-                    "match": { "cls": "ChefZ_Onion" },
+                    "match": {
+                        "cls": "ChefZ_Onion"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole"
                 },
                 {
                     "slotId": "corn",
-                    "match": { "cls": "ChefZ_Corn" },
+                    "match": {
+                        "cls": "ChefZ_Corn"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "optional": true,
@@ -477,19 +467,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_FarmersBreakfastBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_FarmersBreakfast",
+                    "quantity": 300,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "COOKED",
-                    "portions": 3,
-                    "portionClass": "ChefZ_FarmersBreakfast",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 2.5,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -634,19 +616,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_CheeseFlatbreadBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_CheeseFlatbread",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "BAKED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_CheeseFlatbread",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -788,19 +762,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_SausageBreadPlateBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_SausageBreadPlate",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "PREPARED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_SausageBreadPlate",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.5,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": true,
                     "inheritTemperature": false
@@ -973,19 +939,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_MushroomPanBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_MushroomPan",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "COOKED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_MushroomPan",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 2,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -1019,7 +977,9 @@
             "slots": [
                 {
                     "slotId": "potato",
-                    "match": { "cls": "Potato" },
+                    "match": {
+                        "cls": "Potato"
+                    },
                     "minCount": 2,
                     "maxCount": 4,
                     "consume": "whole"
@@ -1079,7 +1039,9 @@
                 },
                 {
                     "slotId": "onion",
-                    "match": { "cls": "ChefZ_Onion" },
+                    "match": {
+                        "cls": "ChefZ_Onion"
+                    },
                     "optional": true,
                     "minCount": 1,
                     "maxCount": 1,
@@ -1135,19 +1097,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_PotatoPancakesBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_PotatoPancakes",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "COOKED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_PotatoPancakes",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 2,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -1202,7 +1156,9 @@
                 },
                 {
                     "slotId": "onion",
-                    "match": { "cls": "ChefZ_Onion" },
+                    "match": {
+                        "cls": "ChefZ_Onion"
+                    },
                     "minCount": 1,
                     "maxCount": 1,
                     "consume": "whole"
@@ -1310,19 +1266,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_MeatDumplingsBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_MeatDumplings",
+                    "quantity": 300,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "COOKED",
-                    "portions": 3,
-                    "portionClass": "ChefZ_MeatDumplings",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.2,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -1350,7 +1298,7 @@
                 }
             ],
             "completion": "TIMED",
-            "cookSeconds": 240.0,
+            "cookSeconds": 240,
             "slots": [
                 {
                     "slotId": "rice",
@@ -1443,19 +1391,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_MilkRiceBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_MilkRice",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_MilkRice",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -1573,19 +1513,11 @@
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_HoneyBreadPlateBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_HoneyBreadPlate",
+                    "quantity": 200,
                     "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "PREPARED",
-                    "portions": 2,
-                    "portionClass": "ChefZ_HoneyBreadPlate",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1,
-                    "containerCategory": "PLATE",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
                     "inheritQuality": true,
                     "inheritFreshness": true,
                     "inheritTemperature": false

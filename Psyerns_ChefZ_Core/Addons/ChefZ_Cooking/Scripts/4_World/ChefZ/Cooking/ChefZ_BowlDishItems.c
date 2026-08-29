@@ -46,19 +46,14 @@
 //------------------------------------------------------------------------------
 
 //! §62 Hunter Stew - Wildfleisch, Wurzelgemuese, Pilze, Thymian.
-class ChefZ_HunterStewBulk extends ChefZ_PortionedDish_Base {}
 
 //! §62 Fisherman's Stew - Fisch, Kartoffel, Karotte, Petersilie.
-class ChefZ_FishermanStewBulk extends ChefZ_PortionedDish_Base {}
 
 //! §62 Vegetable Soup - das Basic-Rezept aus DME §37, ohne Fleisch.
-class ChefZ_VegetableSoupBulk extends ChefZ_PortionedDish_Base {}
 
 //! §62 Bone Broth Soup - Knochenbruehe als Traeger (§55).
-class ChefZ_BoneBrothSoupBulk extends ChefZ_PortionedDish_Base {}
 
 //! §62 Chernarus Chili - Fleisch, Bohnen, Tomate, Paprika.
-class ChefZ_ChernarusChiliBulk extends ChefZ_PortionedDish_Base {}
 
 //------------------------------------------------------------------------------
 // 2. Die servierten Portionen - was der Spieler in der Hand haelt (15 §2)

@@ -10,64 +10,49 @@ die Toleranz des Enforce-Serializers gegenüber unbekannten JSON-Feldern **nicht
 belegt** ist. Ist er intolerant, wird eine Datei mit Kommentarfeld komplett
 verworfen.
 
-## 1. Die zwei Zeilen, mit denen ein Gericht fertig angeschlossen ist
+## 1. Die eine Zeile, mit der ein Gericht fertig angeschlossen ist
 
-Ein **Bulk-Gericht** (das, was im Topf entsteht):
-
-```cpp
-class ChefZ_HunterStewBulk : ChefZ_PortionedDish_Base { scope = 2; ... };
-```
-```c
-class ChefZ_HunterStewBulk extends ChefZ_PortionedDish_Base {}
-```
-
-Eine **servierte Portion** (das, was der Spieler isst):
+**Seit 29.08.2026 gibt es keine Zwischenstufe mehr.** Das Rezept liefert das
+Gericht direkt im Kochgerät; die Bulk-Klassen (`ChefZ_<Name>Bulk :
+ChefZ_PortionedDish_Base`) und die Entnahmeaktion sind aus dem Content
+gestrichen. Die Basen `ChefZ_PortionedDish_Base` / `ChefZ_PortionedFood_Base`
+bleiben als Fähigkeit des Core stehen, kein ausgeliefertes Gericht benutzt sie.
 
 ```cpp
-class ChefZ_HunterStewBowl : ChefZ_ServedDish_Base { scope = 2; ... };
+class ChefZ_HunterStewBowl : ChefZ_ServedDish_Base { scope = 2; ... varQuantityMax = 1200; };
 ```
 ```c
 class ChefZ_HunterStewBowl extends ChefZ_ServedDish_Base {}
 ```
 
-Zähler, Entnahmeaktion, Persistenz, Tooltip „3 / 8", Behälterprüfung und
-Behälterrückgabe kommen aus dem Core. Es gibt dafür **keine** neue Aktion und
-**keine** Core-Änderung (15 E5).
+`class Nutrition` gehört an die **eigene** Gerichtklasse. Die Basis trägt bewusst
+keine — eine geerbte Nährwertzeile wäre ein stiller Default, und `PlayerStomach`
+registriert nur Klassen mit eigenem Nährwert (`01` V7).
 
-`class Nutrition` und die `nutrition_properties[]` gehören an die **eigene**
-Gerichtklasse. Die Basen tragen bewusst keine — eine geerbte Nährwertzeile wäre
-ein stiller Default, und `PlayerStomach` registriert nur Klassen mit eigenem
-Nährwert (`01` V7).
-
-## 2. Der Output-Block eines Portionsgerichts
+## 2. Der Output-Block eines Gerichts
 
 ```json
 "outputs": [{
-  "cls":               "ChefZ_HunterStewBulk",
-  "portions":          8,
-  "portionClass":      "ChefZ_HunterStewBowl",
-  "portionQuantity":   200,
-  "amountPerPortion":  1.0,
-  "containerCategory": "BOWL",
-  "consumesContainer": true,
-  "returnContainer":   "AUTO",
-  "emptyOnLastPortion": "",
-  "scaleWithDevice":   true,
-  "inheritQuality":    true
+  "cls":             "ChefZ_HunterStewBowl",
+  "quantity":        400,
+  "quantityMode":    "fixed",
+  "returnContainer": "ChefZ_EmptyBowl",
+  "setState":        "COOKED",
+  "inheritQuality":  true
 }]
 ```
 
-**`amountPerPortion` ist keine Kür.** Es ist der zweite Deckel aus `15` §5.2:
-`floor(verbrauchte Zutatenmenge / amountPerPortion)`. Ohne ihn ergibt eine
-Minimalfüllung im Kessel zwölf Portionen — der offensichtlichste Nahrungsexploit
-des Mods. Der erste Deckel (`portionCapacity` je Gerät) steht in
-`CfgChefZDevices` in der `config.cpp` dieses Moduls: FryingPan 2, Pot 4,
-Cauldron 12 (Planungsschritte §11).
+**Portionen sind Menge.** `PlayerStomach.GetNutritions` (`PlayerStomach.c:92`)
+rechnet `energy / 100` je verzehrter Einheit — 100 Einheiten sind also genau die
+Nährwerte der Klasse, eine Portion. Ein Rezept mit vier Portionen setzt
+`quantity = 400`, und die Klasse trägt `varQuantityMax` für ihr größtes Rezept
+(Eintopf: Basis 4, Gruppenkessel 12 → 1200). Wer aus dem Topf isst, isst Portion
+für Portion vom selben Item; geteilt wird, indem man es weiterreicht.
 
-**Einzelgerichte sind Portionsgerichte mit `portions = 1`** (`15` E7). Es gibt
-genau einen Mechanismus, auch für Tellergerichte — `containerCategory: "PLATE"`,
-sonst identisch. `takeDurationSec = 0` macht den zusätzlichen Klick fast
-unsichtbar.
+Die früheren Deckel (`portionCapacity` je Gerät in `CfgChefZDevices`,
+`amountPerPortion`) greifen bei einem direkten Ergebnis nicht mehr — die
+Portionszahl steht fest im Rezept, und ein Gruppenrezept ist ein eigenes Rezept
+mit mehr Zutaten.
 
 ## 3. Behälterkategorien
 
@@ -78,10 +63,11 @@ der Zutatenkategorien. Eine Behälterkategorie existiert genau dann, wenn ein
 Behälter sich in `CfgChefZContainers` zu ihr bekennt (`16` E2). Deklariert sind
 sie in der `config.cpp` dieses Moduls.
 
-Ein Rezept fordert immer die **Kategorie**, nie eine Klasse. `returnContainer:
-"AUTO"` gibt genau den Behälter zurück, der benutzt wurde — ein später
-hinzugefügter Holznapf funktioniert damit sofort mit allen bestehenden
-Schüsselgerichten, ohne dass ein Rezept angefasst wird.
+Beim Kochen wird kein Behälter verlangt (16 §2, unverändert). `returnContainer`
+nennt seit 29.08.2026 eine **feste Klasse** (`ChefZ_EmptyBowl`, `ChefZ_EmptyPlate`):
+`"AUTO"` löst über den beim Servieren benutzten Behälter auf, und serviert wird
+nicht mehr — das Gericht entsteht direkt. Die leere Schüssel bleibt nach dem
+letzten Bissen zurück.
 
 `CAN` ist der Konservenfall: `reusable = 0`, es kommt nichts zurück.
 

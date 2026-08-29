@@ -38,21 +38,7 @@
             "fullness": 55
         },
         {
-            "id": "ChefZ_BoneBrothSoupBulk",
-            "scope": "class",
-            "energy": 180,
-            "water": 200,
-            "fullness": 55
-        },
-        {
             "id": "ChefZ_ChernarusChiliBowl",
-            "scope": "class",
-            "energy": 325,
-            "water": 85,
-            "fullness": 105
-        },
-        {
-            "id": "ChefZ_ChernarusChiliBulk",
             "scope": "class",
             "energy": 325,
             "water": 85,
@@ -66,13 +52,6 @@
             "fullness": 75
         },
         {
-            "id": "ChefZ_FishermanStewBulk",
-            "scope": "class",
-            "energy": 220,
-            "water": 160,
-            "fullness": 75
-        },
-        {
             "id": "ChefZ_HunterStewBowl",
             "scope": "class",
             "energy": 270,
@@ -80,21 +59,7 @@
             "fullness": 90
         },
         {
-            "id": "ChefZ_HunterStewBulk",
-            "scope": "class",
-            "energy": 270,
-            "water": 160,
-            "fullness": 90
-        },
-        {
             "id": "ChefZ_VegetableSoupBowl",
-            "scope": "class",
-            "energy": 165,
-            "water": 195,
-            "fullness": 45
-        },
-        {
-            "id": "ChefZ_VegetableSoupBulk",
             "scope": "class",
             "energy": 165,
             "water": 195,

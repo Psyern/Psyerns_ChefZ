@@ -6,11 +6,8 @@
     "nutrition": [],
     "preservation": [],
     "classes": [
-        "ChefZ_PumpkinSoupBulk",
         "ChefZ_PumpkinSoupBowl",
-        "ChefZ_SmallFishPanBulk",
         "ChefZ_SmallFishPan",
-        "ChefZ_FruitCompoteBulk",
         "ChefZ_FruitCompoteBowl"
     ]
 }

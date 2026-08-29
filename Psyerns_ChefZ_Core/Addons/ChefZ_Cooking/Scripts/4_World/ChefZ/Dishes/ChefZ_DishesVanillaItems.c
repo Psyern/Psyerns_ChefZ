@@ -26,13 +26,10 @@
 //------------------------------------------------------------------------------
 
 //! Kuerbissuppe aus Vanillas SlicedPumpkin - Topf, gekocht, Schuessel.
-class ChefZ_PumpkinSoupBulk extends ChefZ_PortionedDish_Base {}
 
 //! Kleinfischpfanne aus Sardines und Bitterlings - Pfanne, gebacken, Teller.
-class ChefZ_SmallFishPanBulk extends ChefZ_PortionedDish_Base {}
 
 //! Obstkompott - Topf, gekocht, Schuessel. Das erste suesse Gericht des Mods.
-class ChefZ_FruitCompoteBulk extends ChefZ_PortionedDish_Base {}
 
 //------------------------------------------------------------------------------
 // 2. Die servierten Portionen - das, was der Spieler isst (15 §2, 16 §5)

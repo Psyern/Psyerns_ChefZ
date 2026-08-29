@@ -41,35 +41,25 @@
 //------------------------------------------------------------------------------
 
 //! §61.11 Tactical Bacon Breakfast - Pfanne, gebacken.
-class ChefZ_TacticalBreakfastBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.12 Ruehrei mit Wurst.
-class ChefZ_ScrambledEggSausageBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.13 Bauernfruehstueck - das ergiebigste Gericht dieses Slice (3 Portionen).
-class ChefZ_FarmersBreakfastBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.14 Kaese-Fladenbrot.
-class ChefZ_CheeseFlatbreadBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.15 Wurstbrot-Teller - kalt angerichtet, completion INSTANT.
-class ChefZ_SausageBreadPlateBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.16 Pilzpfanne.
-class ChefZ_MushroomPanBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.17 Kartoffelpuffer.
-class ChefZ_PotatoPancakesBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.18 Fleisch-Teigtaschen - das einzige Gericht dieses Slice, das auch
 //! gekocht statt gebraten fertig wird (doneStages Boiled UND Baked).
-class ChefZ_MeatDumplingsBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.19 Milchreis - Topf, gekocht, Schuessel.
-class ChefZ_MilkRiceBulk extends ChefZ_PortionedDish_Base {}
 
 //! §61.20 Honigbrot-Platte - kalt angerichtet, completion INSTANT.
-class ChefZ_HoneyBreadPlateBulk extends ChefZ_PortionedDish_Base {}
 
 //------------------------------------------------------------------------------
 // 2. Die servierten Portionen - das, was der Spieler isst (15 §2, 16 §5)

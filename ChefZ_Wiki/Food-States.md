@@ -120,7 +120,7 @@ State changes therefore come from exactly three places:
 ### a) Recipe outputs — `outputs[].setState`
 
 ```json
-"outputs": [ { "cls": "ChefZ_HunterStewBulk", "setState": "COOKED", ... } ]
+"outputs": [ { "cls": "ChefZ_HunterStewBowl", "setState": "COOKED", ... } ]
 ```
 
 Applied by `ChefZ_Applicator.ApplyChefZState()`. An unknown name is a WARN; the

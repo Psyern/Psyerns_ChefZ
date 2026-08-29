@@ -8,45 +8,31 @@ Related pages: [Recipes](Recipes), [Food-States](Food-States),
 [Adding-Content](Adding-Content), [Known-Limitations](Known-Limitations),
 [Troubleshooting](Troubleshooting).
 
-## 1. Bulk dish vs. served portion
+> **Status since 2026-08-29:** the shipped dishes **no longer use the bulk /
+> portion step.** A recipe produces the served dish directly in the cooking
+> vessel — one item, `quantity = 100 × portions` (`PlayerStomach.c:92` rates
+> nutrition per 100 units, so 100 units are one serving). The bulk classes,
+> the take-portion action and `amountPerPortion` are gone from the content.
+> Sections 2–5 below describe the portion system that remains **in the Core as a
+> capability** for a module that wants it; section 6 (containers) and 7 (what is
+> left over) still apply. `returnContainer` on a dish is now a fixed class
+> (`ChefZ_EmptyBowl` / `ChefZ_EmptyPlate`), never `"AUTO"`.
 
-This is the distinction the whole subsystem is built on. **Two classes per dish,
-never one:**
+## 1. One class per dish
 
-| | Bulk dish | Served portion |
-|---|---|---|
-| Example class | `ChefZ_HunterStewBulk` | `ChefZ_HunterStewBowl` |
-| Script base | `ChefZ_PortionedFood_Base` | `ChefZ_ServedDish_Base` |
-| Where it is | in the cooking device (or carried, see §7) | in the player's hands |
-| Carries a portion counter | **yes** | no |
-| Has a vanilla `Food` node | **yes** (stages **and** transitions) | **no** |
-| Can burn | yes — it sits in the pot while vanilla keeps cooking | no |
-| Is eaten | **no — it is portioned out** | yes |
-| Costs a container on take | possibly (`containerCategory`) | — |
-| Returns a container when finished | — | possibly (`returnContainer`) |
+| | Served dish |
+|---|---|
+| Example class | `ChefZ_HunterStewBowl` |
+| Script base | `ChefZ_ServedDish_Base` |
+| Where it is | in the cooking vessel, then in the player's hands |
+| Vanilla `Food` node | **no** — `HasFoodStage()` is false, it cannot burn in the pot |
+| Portions | vanilla `quantity`; the class `varQuantityMax` covers its largest recipe |
+| Is eaten | yes, serving by serving from the same item |
+| Returns a container when finished | `returnContainer`, a fixed class |
 
-The bulk dish is **not** food you consume. It is a stock with a counter. Taking
-from it produces the thing that is eaten.
-
-The `Food`-node asymmetry is deliberate and documented in
-`Psyerns_ChefZ_Core/Addons/ChefZ_Cooking/config.cpp` (line ~851):
-
-* The bulk stands in the pot while vanilla keeps cooking, so it needs
-  `FoodStages` **and** `FoodStageTransitions` — without the transitions every
-  bulk would turn to charcoal at its first stage change (see
-  [Food-States](Food-States)).
-* `ChefZ_ServedDish_Base` deliberately has **no** `Food` node. Without
-  `Food FoodStages`, `ItemBase.HasFoodStage()` returns false, no `FoodStage`
-  object is created at all, and the portion therefore cannot burn on the plate.
-* `ChefZ_ServedDish_Base` also carries **no** `Nutrition` block, and that is the
-  same decision from the other side: it would be inherited and would make a dish
-  that forgot its own look green in the validator. `PlayerStomach` only registers
-  classes with their own nutrition (see
-  [Quality-and-Nutrition](Quality-and-Nutrition)).
-
-Single-plate dishes are portioned dishes with a small portion count — there is
-exactly one mechanism, also for plate food. `RCP_ChefZ_SurvivorSpaghetti` has
-`"portions": 2`.
+`ChefZ_ServedDish_Base` carries **no** `Nutrition` block; every dish declares its
+own (`PlayerStomach` only registers classes with their own nutrition, see
+[Quality-and-Nutrition](Quality-and-Nutrition)).
 
 ## 2. Why a separate counter and not vanilla `quantity`
 
@@ -440,23 +426,17 @@ Return placement follows hands → inventory → the dish's former position. If 
 three fail, the return lapses with a WARN. Never a crash — the dish was consumed
 either way; only the container is lost.
 
-## 8. Checklist for a new portioned dish
+## 8. Checklist for a new dish
 
-1. Two `CfgVehicles` classes: `ChefZ_<Name>Bulk : ChefZ_PortionedDish_Base` and
-   `ChefZ_<Name> : ChefZ_ServedDish_Base` (or `...Bowl` for bowl dishes).
-2. Two script classes, one line each:
-   `class ChefZ_<Name>Bulk extends ChefZ_PortionedFood_Base {}` and
-   `class ChefZ_<Name> extends ChefZ_ServedDish_Base {}`.
-3. Both classes need their **own** `class Nutrition` — nothing is inherited from
-   `ChefZ_ServedDish_Base`, deliberately. See
-   [Quality-and-Nutrition](Quality-and-Nutrition).
-4. The bulk needs `Food > FoodStages` **and** `FoodStageTransitions`; the portion
-   needs neither. See [Food-States](Food-States).
-5. In the recipe output: `portions`, `portionClass`, and **`amountPerPortion`**.
-   Forgetting the last one is the exploit.
-6. `containerCategory` only if you actually want it to cost a container, and only
-   with a category that is declared somewhere.
-7. `returnContainer: "AUTO"` for a reusable container; a fixed class name if the
-   dish should always give back the same thing; `""` if nothing comes back.
-8. Check the boot log: portion specs with unknown container categories are
-   reported there once, with the recipe ID.
+1. One `CfgVehicles` class: `ChefZ_<Name> : ChefZ_ServedDish_Base` (or
+   `...Bowl` for bowl dishes), with its **own** `class Nutrition` and
+   `varQuantityInit` / `varQuantityMax` = 100 × the largest portion count of its
+   recipes.
+2. One script class: `class ChefZ_<Name> extends ChefZ_ServedDish_Base {}`.
+3. In the recipe output: `cls`, `quantity = 100 × portions`,
+   `quantityMode: "fixed"`, `returnContainer` as a fixed class name (or `""`).
+4. An ingredient binding in `CfgChefZIngredients` with `containerCategory` and the
+   same fixed `returnContainer`, for dishes that never ran through a recipe
+   (admin spawn, loot).
+5. Never `"AUTO"`: it resolves against the container used at serving, and
+   nothing is served any more — the boot log reports it once per class.

@@ -398,13 +398,9 @@ from the real `RCP_ChefZ_SausagePasta` — optional slots and grade rules remove
   "qualityTierSet": "DISH_DEFAULT",
   "outputs": [
     {
-      "cls": "ChefZ_SausagePastaBulk",
-      "portions": 2,
-      "portionClass": "ChefZ_SausagePasta",
-      "containerCategory": "PLATE",
-      "consumesContainer": true,
-      "returnContainer": "AUTO",
-      "scaleWithDevice": true,
+      "cls": "ChefZ_SausagePasta",
+      "quantity": 200, "quantityMode": "fixed",
+      "returnContainer": "ChefZ_EmptyPlate",
       "setState": "COOKED"
     }
   ],
@@ -759,8 +755,8 @@ ChefZ_SausagePotatoes     ChefZ_ScrambledEggSausage   ChefZ_MeatDumplings
                                                       ChefZ_HoneyBreadPlate
 ```
 
-Every dish exists twice: a `…Bulk` class that comes out of the pot, and the portion class
-listed above that a player takes off it.
+Every dish is one class, listed above: it comes out of the pot ready to eat, with
+`quantity = 100 × portions` (vanilla rates nutrition per 100 units).
 
 ## Roadmap
 

@@ -134,7 +134,7 @@ them arrived after these lists were written:
 | The whole apiary | `ChefZ_Beehive`, `ChefZ_BeehiveDouble`, `ChefZ_BeehiveKit`, `ChefZ_HoneycombFrameEmpty`, `ChefZ_HoneycombFrameFull`, `ChefZ_HoneycombFrameUncapped`, `ChefZ_UncappingFork`, `ChefZ_BeeSmoker` | Beekeeping, then V2 |
 | Honey Extractor | `ChefZ_HoneyExtractor` | Beekeeping |
 | The three primal cuts | `ChefZ_BeefLeg`, `ChefZ_PorkLeg`, `ChefZ_VenisonLeg` | Butchering legs |
-| The vanilla-produce dishes | `ChefZ_PumpkinSoupBulk` / `Bowl`, `ChefZ_SmallFishPanBulk` / `ChefZ_SmallFishPan`, `ChefZ_FruitCompoteBulk` / `Bowl` | Dishes from vanilla ingredients |
+| The vanilla-produce dishes | `ChefZ_PumpkinSoupBowl`, `ChefZ_SmallFishPan`, `ChefZ_FruitCompoteBowl` | Dishes from vanilla ingredients |
 | Dried berries | `ChefZ_DriedBerries` | The berry drying pair |
 | Diced meat | `ChefZ_DicedMeat` | Its return on 29.08.2026 |
 | The cookbook | `ChefZ_CookbookItem` | Milestone 5.1 |
@@ -257,48 +257,45 @@ The only category with nothing edible in it, and in daily operation the most use
 one: a station a player has lost is something the admin replaces, and to replace it
 he has to find it. See [Processing-Stations](Processing-Stations).
 
-### 7. Dishes (50)
+### 7. Dishes (25)
 
-25 dishes, each in two forms — the `*Bulk` class that forms in the cooking vessel
-and the served portion the player eats.
+25 dishes, one class each since 2026-08-29 — the served dish that forms in the
+cooking vessel and is eaten.
 
 The mod has **28** dishes. The three built from vanilla produce — Pumpkin Soup,
 Small Fish Pan, Fruit Compote — are missing from this list, which is six of the
-twenty classes named under [What COT cannot spawn](#what-cot-cannot-spawn).
+ten classes named under [What COT cannot spawn](#what-cot-cannot-spawn).
 
 ```
-ChefZ_TacticalBreakfastBulk     ChefZ_TacticalBreakfast
-ChefZ_ScrambledEggSausageBulk   ChefZ_ScrambledEggSausage
-ChefZ_FarmersBreakfastBulk      ChefZ_FarmersBreakfast
-ChefZ_CheeseFlatbreadBulk       ChefZ_CheeseFlatbread
-ChefZ_SausageBreadPlateBulk     ChefZ_SausageBreadPlate
-ChefZ_MushroomPanBulk           ChefZ_MushroomPan
-ChefZ_PotatoPancakesBulk        ChefZ_PotatoPancakes
-ChefZ_MeatDumplingsBulk         ChefZ_MeatDumplings
-ChefZ_MilkRiceBulk              ChefZ_MilkRice
-ChefZ_HoneyBreadPlateBulk       ChefZ_HoneyBreadPlate
-ChefZ_HunterStewBulk            ChefZ_HunterStewBowl
-ChefZ_FishermanStewBulk         ChefZ_FishermanStewBowl
-ChefZ_VegetableSoupBulk         ChefZ_VegetableSoupBowl
-ChefZ_BoneBrothSoupBulk         ChefZ_BoneBrothSoupBowl
-ChefZ_ChernarusChiliBulk        ChefZ_ChernarusChiliBowl
-ChefZ_SurvivorSpaghettiBulk     ChefZ_SurvivorSpaghetti
-ChefZ_SausagePastaBulk          ChefZ_SausagePasta
-ChefZ_HunterPastaBulk           ChefZ_HunterPasta
-ChefZ_CreamMushroomPastaBulk    ChefZ_CreamMushroomPasta
-ChefZ_MacAndCheeseBulk          ChefZ_MacAndCheese
-ChefZ_SausagePotatoesBulk       ChefZ_SausagePotatoes
-ChefZ_HunterPlateBulk           ChefZ_HunterPlate
-ChefZ_BloodSausagePlateBulk     ChefZ_BloodSausagePlate
-ChefZ_FishPotatoPlateBulk       ChefZ_FishPotatoPlate
-ChefZ_BeanSausagePlateBulk      ChefZ_BeanSausagePlate
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
+$2
 ```
 
-**Both forms are listed on purpose.** `...Bulk` is the batch inside the cooking
-device (`ChefZ_PortionedDish_Base`); the other is a plated serving
-(`ChefZ_ServedDish_Base`). They are different items with different behaviour, and
-offering only one would be wrong half the time. They are listed in pairs so the
-list shows them next to each other. See
+The bulk form (`...Bulk`, `ChefZ_PortionedDish_Base`) is gone since 2026-08-29:
+a recipe produces the dish directly. See
 [Portions-and-Containers](Portions-and-Containers).
 
 ### 8. Containers (5)

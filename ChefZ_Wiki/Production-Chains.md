@@ -20,7 +20,7 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 the station or the tool, and `[]` boxes are the dishes a chain feeds into.
 
 > **Nothing in this mod spawns by itself.** ChefZ ships no `types.xml`. Every chain
-> head below — wheat, the five vegetables, the five herbs, eggs, the three legs —
+> head below — wheat, the five vegetables, the four herbs, eggs, the three legs —
 > needs an admin spawn until a loot table exists. Since 29.08.2026 they are *found*
 > items rather than crops, which makes the missing loot table the only thing between
 > them and the world. Milk is vanilla `PowderedMilk` and spawns on its own.

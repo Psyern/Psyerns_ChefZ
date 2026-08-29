@@ -118,7 +118,9 @@
             "slots": [
                 {
                     "slotId": "meat",
-                    "match": { "category": "MINCED_MEAT" },
+                    "match": {
+                        "category": "MINCED_MEAT"
+                    },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",
@@ -236,20 +238,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_HunterStewBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_HunterStewBowl",
+                    "quantity": 400,
                     "quantityMode": "fixed",
-                    "portions": 4,
-                    "portionClass": "ChefZ_HunterStewBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.5,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -297,7 +291,9 @@
                 },
                 {
                     "slotId": "meat",
-                    "match": { "category": "MINCED_MEAT" },
+                    "match": {
+                        "category": "MINCED_MEAT"
+                    },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",
@@ -414,20 +410,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_HunterStewBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_HunterStewBowl",
+                    "quantity": 500,
                     "quantityMode": "fixed",
-                    "portions": 5,
-                    "portionClass": "ChefZ_HunterStewBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.5,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -470,7 +458,9 @@
             "slots": [
                 {
                     "slotId": "meat",
-                    "match": { "category": "MINCED_MEAT" },
+                    "match": {
+                        "category": "MINCED_MEAT"
+                    },
                     "minCount": 4,
                     "maxCount": 6,
                     "consume": "whole",
@@ -599,20 +589,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_HunterStewBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_HunterStewBowl",
+                    "quantity": 1200,
                     "quantityMode": "fixed",
-                    "portions": 12,
-                    "portionClass": "ChefZ_HunterStewBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.25,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -675,7 +657,9 @@
                 },
                 {
                     "slotId": "carrot",
-                    "match": { "cls": "ChefZ_Carrot" },
+                    "match": {
+                        "cls": "ChefZ_Carrot"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole",
@@ -782,20 +766,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_FishermanStewBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_FishermanStewBowl",
+                    "quantity": 400,
                     "quantityMode": "fixed",
-                    "portions": 4,
-                    "portionClass": "ChefZ_FishermanStewBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.25,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -862,7 +838,9 @@
                 },
                 {
                     "slotId": "carrot",
-                    "match": { "cls": "ChefZ_Carrot" },
+                    "match": {
+                        "cls": "ChefZ_Carrot"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole",
@@ -951,20 +929,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_FishermanStewBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_FishermanStewBowl",
+                    "quantity": 500,
                     "quantityMode": "fixed",
-                    "portions": 5,
-                    "portionClass": "ChefZ_FishermanStewBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.25,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -1026,7 +996,9 @@
                 },
                 {
                     "slotId": "carrot",
-                    "match": { "cls": "ChefZ_Carrot" },
+                    "match": {
+                        "cls": "ChefZ_Carrot"
+                    },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",
@@ -1116,20 +1088,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_FishermanStewBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_FishermanStewBowl",
+                    "quantity": 1200,
                     "quantityMode": "fixed",
-                    "portions": 12,
-                    "portionClass": "ChefZ_FishermanStewBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.25,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -1191,7 +1155,9 @@
                 },
                 {
                     "slotId": "corn",
-                    "match": { "cls": "ChefZ_Corn" },
+                    "match": {
+                        "cls": "ChefZ_Corn"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "optional": true,
@@ -1302,20 +1268,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_VegetableSoupBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_VegetableSoupBowl",
+                    "quantity": 400,
                     "quantityMode": "fixed",
-                    "portions": 4,
-                    "portionClass": "ChefZ_VegetableSoupBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -1378,7 +1336,9 @@
                 },
                 {
                     "slotId": "corn",
-                    "match": { "cls": "ChefZ_Corn" },
+                    "match": {
+                        "cls": "ChefZ_Corn"
+                    },
                     "minCount": 1,
                     "maxCount": 3,
                     "optional": true,
@@ -1472,20 +1432,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_VegetableSoupBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_VegetableSoupBowl",
+                    "quantity": 1200,
                     "quantityMode": "fixed",
-                    "portions": 12,
-                    "portionClass": "ChefZ_VegetableSoupBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -1634,20 +1586,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_BoneBrothSoupBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_BoneBrothSoupBowl",
+                    "quantity": 400,
                     "quantityMode": "fixed",
-                    "portions": 4,
-                    "portionClass": "ChefZ_BoneBrothSoupBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.25,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -1785,20 +1729,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_BoneBrothSoupBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_BoneBrothSoupBowl",
+                    "quantity": 1200,
                     "quantityMode": "fixed",
-                    "portions": 12,
-                    "portionClass": "ChefZ_BoneBrothSoupBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.5,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -1817,7 +1753,7 @@
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
             "completion": "TIMED",
-            "cookSeconds": 300.0,
+            "cookSeconds": 300,
             "contexts": [
                 {
                     "deviceClasses": [
@@ -1863,7 +1799,9 @@
                 },
                 {
                     "slotId": "paprika",
-                    "match": { "cls": "GreenBellPepper" },
+                    "match": {
+                        "cls": "GreenBellPepper"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "consume": "whole",
@@ -1881,7 +1819,9 @@
                 },
                 {
                     "slotId": "corn",
-                    "match": { "cls": "ChefZ_Corn" },
+                    "match": {
+                        "cls": "ChefZ_Corn"
+                    },
                     "minCount": 1,
                     "maxCount": 2,
                     "optional": true,
@@ -1970,20 +1910,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_ChernarusChiliBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_ChernarusChiliBowl",
+                    "quantity": 400,
                     "quantityMode": "fixed",
-                    "portions": 4,
-                    "portionClass": "ChefZ_ChernarusChiliBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.75,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
@@ -2002,7 +1934,7 @@
             "qualityTierSet": "DISH_DEFAULT",
             "nutritionModifier": 1.1,
             "completion": "TIMED",
-            "cookSeconds": 300.0,
+            "cookSeconds": 300,
             "contexts": [
                 {
                     "deviceClasses": [
@@ -2048,7 +1980,9 @@
                 },
                 {
                     "slotId": "paprika",
-                    "match": { "cls": "GreenBellPepper" },
+                    "match": {
+                        "cls": "GreenBellPepper"
+                    },
                     "minCount": 2,
                     "maxCount": 3,
                     "consume": "whole",
@@ -2066,7 +2000,9 @@
                 },
                 {
                     "slotId": "corn",
-                    "match": { "cls": "ChefZ_Corn" },
+                    "match": {
+                        "cls": "ChefZ_Corn"
+                    },
                     "minCount": 1,
                     "maxCount": 3,
                     "optional": true,
@@ -2155,20 +2091,12 @@
             },
             "outputs": [
                 {
-                    "cls": "ChefZ_ChernarusChiliBulk",
-                    "quantity": 1,
+                    "cls": "ChefZ_ChernarusChiliBowl",
+                    "quantity": 1200,
                     "quantityMode": "fixed",
-                    "portions": 12,
-                    "portionClass": "ChefZ_ChernarusChiliBowl",
-                    "portionQuantity": 100,
-                    "amountPerPortion": 1.75,
-                    "containerCategory": "BOWL",
-                    "consumesContainer": true,
-                    "returnContainer": "AUTO",
-                    "emptyOnLastPortion": "",
-                    "scaleWithDevice": true,
-                    "inheritQuality": true,
+                    "returnContainer": "ChefZ_EmptyBowl",
                     "setState": "COOKED",
+                    "inheritQuality": true,
                     "inheritFreshness": true,
                     "freshnessCarry": 0.9,
                     "inheritTemperature": true,
