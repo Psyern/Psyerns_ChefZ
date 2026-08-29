@@ -395,7 +395,11 @@ frame by the engine's variable block; while the server is down no time passes
 and only while the lid is open. "Open Hive" (`PROCESS_HARVEST_HIVE`) opens the lid
 for 120 s (server-side, not persisted) and triggers the bee sting exactly as
 before — light forearm damage, absorbed by gloves, a Bee Smoker in hand or a
-covered head (assumption A4). Taking the frame is an inventory drag.
+covered head (assumption A4). Since 2026-08-29 an **NBC suit** (jacket and
+trousers, neither ruined) seals hands and body without taking wear, and a **gas
+mask** (`IsGasMask()`, so GasMask, GP5GasMask, AirborneMask) seals the face; suit
+plus gas mask is full protection — nothing is damaged, nobody bleeds. Taking the
+frame is an inventory drag.
 
 **Double Beehive.** `ChefZ_BeehiveDouble` inherits config and script from the
 hive and only raises the capacity to 20. It is built from **two** Beehive Kits
@@ -414,7 +418,7 @@ entry (assumption A5).
 
 ## Handcraft transforms — no station needed
 
-21 of the 58 transforms need no station at all. They run
+22 of the 59 transforms need no station at all. They run
 through the vanilla crafting menu; each module reserves places in that list up front
 with `handcraftRecipeSlots` in its `CfgChefZ` node.
 

@@ -177,6 +177,13 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     static const string CHEFZ_SLOT_GLOVES   = "Gloves";
     static const string CHEFZ_SLOT_HEADGEAR = "Headgear";
     static const string CHEFZ_SLOT_MASK     = "Mask";
+    //! Der Schutzanzug (Auftrag vom 29.08.2026): Slot_Body Zeile 90 und
+    //! Slot_Legs Zeile 108 derselben CfgSlots. Jacke und Hose sind die
+    //! Skriptklassen NBCJacketBase / NBCPantsBase (scripts - 1.29/4_World/
+    //! DayZ/Entities/ItemBase/Clothing/NBCJacketBase.c, NBCPantsBase.c) -
+    //! geprueft per Cast, nicht per Klassenname.
+    static const string CHEFZ_SLOT_BODY     = "Body";
+    static const string CHEFZ_SLOT_LEGS     = "Legs";
 
     //==========================================================================
     // Lebenszyklus
@@ -624,8 +631,26 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
             return;
         }
 
+        // -----------------------------------------------------------------
+        // DER SCHUTZANZUG (29.08.2026): "Wenn der Spieler einen NBC-Anzug
+        // traegt, ist er geschuetzt vor Bienenangriffen. Fuer vollstaendigen
+        // Schutz muss er auch eine Gasmaske tragen."
+        //
+        // Jacke + Hose aus Gummi: durch die kommt kein Stachel, und sie
+        // nehmen dabei keinen Schaden - anders als Handschuhe aus Stoff, die
+        // den Stich abfangen und ihn spueren. Haende und Koerper sind damit
+        // dicht. Das Gesicht nicht: dafuer braucht es die Gasmaske (unten).
+        // Vollstaendiger Schutz = Anzug UND Gasmaske; dann nimmt nichts
+        // Schaden und niemand blutet.
+        // -----------------------------------------------------------------
+        bool nbcSuit = ChefZ_WearsNbcSuit(actor);
+
         // Schritt 2 und 3, je Region getrennt.
-        bool stungHands = !ChefZ_AbsorbSting(actor, CHEFZ_SLOT_GLOVES);
+        bool stungHands = true;
+        if (nbcSuit)
+            stungHands = false;
+        else if (ChefZ_AbsorbSting(actor, CHEFZ_SLOT_GLOVES))
+            stungHands = false;
 
         // Kopf: erst die Kopfbedeckung, dann die Maske - und ausgeschrieben
         // statt als &&-Ausdruck. Beide Aufrufe haben eine WIRKUNG, sie
@@ -633,8 +658,16 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         // bei kurzgeschlossener Auswertung noch anfasst, soll an dieser Stelle
         // niemand nachschlagen muessen. Genau eines der beiden Stuecke nimmt
         // Schaden, nie beide.
+        //
+        // Die Gasmaske zuerst: sie schliesst das Gesicht ab und nimmt keinen
+        // Schaden (Gummi, wie der Anzug). Vanilla kennt sie selbst -
+        // InventoryItem.IsGasMask() (scripts - 1.29/4_World/DayZ/Entities/
+        // Core/Inherited/InventoryItem.c:995), ueberschrieben in MaskBase.c:6
+        // fuer GasMask, GP5GasMask und AirborneMask.
         bool stungHead = true;
-        if (ChefZ_AbsorbSting(actor, CHEFZ_SLOT_HEADGEAR))
+        if (ChefZ_WearsGasMask(actor))
+            stungHead = false;
+        else if (ChefZ_AbsorbSting(actor, CHEFZ_SLOT_HEADGEAR))
             stungHead = false;
         else if (ChefZ_AbsorbSting(actor, CHEFZ_SLOT_MASK))
             stungHead = false;
@@ -652,7 +685,45 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
             actor.AddHealth("", "Shock", -shock);
         }
 
-        ChefZ_LogSting("Ohne Pfeife geoeffnet: haende=" + ChefZ_YesNo(stungHands) + " kopf=" + ChefZ_YesNo(stungHead) + ".");
+        ChefZ_LogSting("Ohne Pfeife geoeffnet: anzug=" + ChefZ_YesNo(nbcSuit) + " haende=" + ChefZ_YesNo(stungHands) + " kopf=" + ChefZ_YesNo(stungHead) + ".");
+    }
+
+    /**
+     * Traegt der Spieler Jacke UND Hose eines Schutzanzugs, beide nicht
+     * ruiniert? Ein ruiniertes Stueck ist aufgerissen und schuetzt nicht -
+     * dieselbe Pruefung wie an den Handschuhen.
+     *
+     * Beide Stuecke, nicht eines: eine Gummijacke ueber nackten Beinen ist
+     * kein Anzug. Haube, Stiefel und NBC-Handschuhe sind NICHT Bedingung -
+     * die Haende deckt der Anzug ohnehin (Auftrag), das Gesicht deckt nur
+     * die Gasmaske.
+     */
+    protected bool ChefZ_WearsNbcSuit(notnull PlayerBase actor)
+    {
+        ItemBase body = ItemBase.Cast(actor.FindAttachmentBySlotName(CHEFZ_SLOT_BODY));
+        if (!body || body.IsDamageDestroyed())
+            return false;
+        if (!NBCJacketBase.Cast(body))
+            return false;
+
+        ItemBase legs = ItemBase.Cast(actor.FindAttachmentBySlotName(CHEFZ_SLOT_LEGS));
+        if (!legs || legs.IsDamageDestroyed())
+            return false;
+        if (!NBCPantsBase.Cast(legs))
+            return false;
+
+        return true;
+    }
+
+    //! Sitzt im Maskenslot eine unzerstoerte Gasmaske? Vanillas eigene
+    //! Antwort (IsGasMask), keine Klassenliste - eine fremde Maske, die sich
+    //! als Gasmaske ausgibt, schuetzt damit ebenfalls.
+    protected bool ChefZ_WearsGasMask(notnull PlayerBase actor)
+    {
+        ItemBase mask = ItemBase.Cast(actor.FindAttachmentBySlotName(CHEFZ_SLOT_MASK));
+        if (!mask || mask.IsDamageDestroyed())
+            return false;
+        return mask.IsGasMask();
     }
 
     /**

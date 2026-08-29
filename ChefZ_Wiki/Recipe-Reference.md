@@ -2,17 +2,18 @@
 
 Every cooking recipe ChefZ ships, read straight out of the shipped JSON.
 
-**Totals: 44 recipes** in 6 files across 3 modules.
+**Totals: 47 recipes** in 7 files across 3 modules.
 
 | Group | File | Module | Recipes |
 |---|---|---|---|
 | Bowl dishes | `BowlDishes.json` | `ChefZ_Cooking` | 12 |
 | Plate dishes A — pasta and plates | `Dishes_A.json` | `ChefZ_Cooking` | 10 |
 | Plate dishes B — pan and breakfast | `DishesB.json` | `ChefZ_Cooking` | 10 |
+| Plate dishes from vanilla produce | `DishesVanilla.json` | `ChefZ_Cooking` | 3 |
 | Sauces and broth | `Sauces.json` | `ChefZ_Cooking` | 4 |
 | Sausage — cooking the raw sausages | `Sausage.json` | `ChefZ_Meat` | 6 |
 | Bread | `GrainRecipes.json` | `ChefZ_Baking` | 2 |
-| **Total** | | | **44** |
+| **Total** | | | **47** |
 
 > A **recipe** runs inside cookware — Pot, Cauldron, Frying Pan, Oven.
 > Everything that happens at a workbench (milling, grinding, drying, smoking,
@@ -164,6 +165,27 @@ The `ON_STAGE` half of the plate dishes. Two of them, Sausage and Bread Plate an
 | Milk Rice | `RCP_ChefZ_MilkRice` | BOILING | ON_STAGE | Boiled | — | — |
 | Honey Bread Platter | `RCP_ChefZ_HoneyBreadPlate` | NONE, BAKING | INSTANT | — | — | — |
 
+## Plate dishes from vanilla produce
+
+Three dishes whose required slots are carried mostly by vanilla items — sliced
+pumpkin, small fish, fruit. They still cannot be satisfied by vanilla alone:
+`chefzvanilla.mjs` refuses any recipe that could be, so each one holds at least one
+ChefZ ingredient in a required slot (butter, garlic, dried berries). All three
+complete `ON_STAGE`, not on a timer.
+
+**3 recipes** · `ChefZ_Cooking/Config/Recipes/DishesVanilla.json`
+
+| Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
+|---|---|---|---|---|---|---|
+| Pumpkin Soup | `RCP_ChefZ_PumpkinSoup` | Pot, Cauldron | 3–5× `SlicedPumpkin`<br>1× *BUTTER*<br>250 ml water | 1–3× *ROOT_VEGETABLE* **+1**<br>1× *CREAM* **+2**<br>1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* (6 g) **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Pumpkin Soup | 3 · BOWL |
+| Small Fish Pan | `RCP_ChefZ_SmallFishPan` | FryingPan | 4–6× `Sardines` \| `Bitterlings`<br>1× *FAT* \| *BUTTER*<br>1–2× `ChefZ_Garlic` | 1–2× *CHEFZ_HERB* **+3**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1** | Small Fish Pan | 2 · PLATE |
+| Fruit Compote | `RCP_ChefZ_FruitCompote` | Pot, Cauldron | 4–6× *FRUIT* (not *CHEFZ_PRESERVED*)<br>1–2× `ChefZ_DriedBerries`<br>200 ml water | 1× *SWEETENER* **+3**<br>1× *CANNED_FRUIT* **+1**<br>1× *CREAM* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Fruit Compote | 3 · BOWL |
+
+The fruit slot is one of two slot matches in the mod built on a negated selector:
+`allOf` `FRUIT` **and** `not` `CHEFZ_PRESERVED` — dried berries go in their own
+slot, and putting them in twice is not a compote. The other is the `dairy` slot of
+Milk Rice (*DAIRY* and not *BUTTER*).
+
 ## Sauces and broth
 
 Sauces are not meals. They are intermediates that other recipes consume through the categories `TOMATO_SAUCE`, `CREAM_SAUCE`, `SAUCE` and `BROTH`. None of them is portioned, and none of them uses the `DISH_DEFAULT` tier set.
@@ -232,18 +254,17 @@ Both bread recipes take a dough and bake it. The doughs come from handcraft tran
 
 ## Effect IDs
 
-32 of the
-44 recipes attach opaque effect IDs to their output. ChefZ Core
+23 of the 47 recipes attach opaque effect IDs to their output. ChefZ Core
 never evaluates them; they exist so an effect module can pick them up later.
 
 | Effect ID | Recipes carrying it |
 |---|---|
-| `CHEFZ_ENERGIZED` | 6 |
-| `CHEFZ_HEALTHY_MEAL` | 6 |
-| `CHEFZ_HEARTY_MEAL` | 11 |
-| `CHEFZ_HUNTERS_MEAL` | 5 |
-| `CHEFZ_HYDRATED` | 10 |
-| `CHEFZ_WARM_MEAL` | 30 |
+| `CHEFZ_WARM_MEAL` | 21 |
+| `CHEFZ_HEARTY_MEAL` | 9 |
+| `CHEFZ_ENERGIZED` | 8 |
+| `CHEFZ_HEALTHY_MEAL` | 2 |
+| `CHEFZ_HUNTERS_MEAL` | 2 |
+| `CHEFZ_HYDRATED` | 1 |
 
 ## Contradictions and gaps found while compiling this page
 

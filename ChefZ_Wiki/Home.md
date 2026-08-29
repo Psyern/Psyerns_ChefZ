@@ -4,8 +4,8 @@ A cooking and food-production overhaul for DayZ.
 
 ChefZ turns eating from a pickup into a production chain: grow and gather, process
 at a station, season, cook, preserve, serve. It adds farming, herbs, milling,
-butchery, sausage-making, dairy, drying, smoking and salting, and 44 recipes that
-turn the results into actual meals.
+butchery, sausage-making, dairy, drying, smoking, salting and beekeeping, and
+47 recipes that turn the results into actual meals.
 
 **It extends vanilla cooking. It never takes it over.** If no ChefZ recipe matches
 what is in the pot, DayZ cooks the way it always did. That rule runs both ways: a
@@ -39,16 +39,16 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 
 | | |
 |---|---:|
-| Addons | 9 |
+| Addons | 10 |
 | Optional compatibility mods | 3 |
-| Recipes | 44 |
-| Ingredients and intermediates | 92 |
-| Processing transforms | 58 |
-| Processing stations | 9 |
-| Ingredient categories | 34 |
-| Food tags | 21 |
-| Script files | 167 |
-| Translated strings | 434 keys × 13 languages |
+| Recipes | 47 |
+| Ingredient records | 112 — 60 ChefZ classes, 52 vanilla items mapped in |
+| Processing transforms | 59 |
+| Processing stations | 11 |
+| Ingredient categories | 41 |
+| Food tags | 19 |
+| Script files | 171 in the mod, 22 in the comp mods |
+| Translated strings | 398 keys × 13 languages |
 
 ## How it is organised
 
@@ -68,8 +68,9 @@ ChefZ_Farming       found plants and herbs, beekeeping
 ChefZ_Processing    stations, tools, processing steps
 ChefZ_Meat          minced meat, sausages, meat products
 ChefZ_Preservation  salting, drying, smoking
-ChefZ_Baking        dough, bread, pasta
+ChefZ_Baking        dough, bread, flatbread, pasta
 ChefZ_Cooking       plates, bowls, stews, breakfasts, sauces
+ChefZ_Cookbook      recipe knowledge and RPC - no UI yet
 ```
 
 Three optional mods hook ChefZ into other systems. **ChefZ runs fully without all
@@ -83,8 +84,8 @@ reference to any of them.
 ## Compatibility
 
 Built and checked against DayZ 1.29. Class names are checked against Terje,
-Expansion, Community Framework, Community Online Tools and Dabs Framework — about
-16,000 foreign class names — with one gap noted in
+Expansion, Community Framework, Community Online Tools and Dabs Framework — 16,352
+foreign class names — with one gap noted in
 [Known Limitations](Known-Limitations).
 
 ## Contributing
@@ -99,5 +100,5 @@ Before opening a pull request, run the validation:
 node tools/chefz-validate/index.mjs
 ```
 
-Fourteen checkers, zero errors expected. [Validation](Validation) explains what each
+Nineteen checkers, zero errors expected. [Validation](Validation) explains what each
 one covers — and, just as usefully, what none of them can see.

@@ -1,6 +1,6 @@
 # Validation
 
-ChefZ ships a static validator: **eighteen checkers**, no dependencies, Node 18
+ChefZ ships a static validator: **nineteen checkers**, no dependencies, Node 18
 or newer. It reads the project on disk and reports what is wrong before a server
 ever sees it.
 
@@ -125,7 +125,7 @@ Each item carries `severity`, `summary`, and where applicable `file` and `line`.
 
 ---
 
-## 4. The eighteen checkers
+## 4. The nineteen checkers
 
 ### Form of the files
 
@@ -171,6 +171,7 @@ build-and-start cycle before it existed.
 | `chefzbase.mjs` | A parent class must be resolvable inside its own `config.cpp` — with a body or as a forward declaration. Otherwise DayZ aborts with *Undefined base class*, in a modal window nobody on a server ever clicks away. |
 | `chefzmanaged.mjs` | Anything held by `ref` must be `Managed`, including plain members where the compiler says nothing at all. Without it nothing counts references and the object is freed under the pointer. |
 | `chefzswitch.mjs` | A `case` label must be a literal. `static const int FLAG = 1 << 3;` compiles and then matches nothing at runtime — silently. |
+| `chefzaction.mjs` | An action class must be registered in `ActionConstructor.RegisterActions()`. That list is maintained by hand; `ConstructActions()` instantiates only what stands in it, so an unregistered action compiles cleanly, appears in no log, and never exists in the game. Found on 28.08.2026: `ChefZ_ActionTakePortion` and `ChefZ_ActionProcessAtStation` had been missing since they were written. |
 
 
 `chefzcookable` exists because of a blocker that walked past every other
@@ -227,83 +228,68 @@ Output:
 S19 - Selbstpruefung der Validatoren am Wegwerf-Modul
 ────────────────────────────────────────────────────────────────────────
 zuendet  chefzsym    unbekannte Kategorie in einem Selektor
-zuendet  chefzsym    unbekannter Zustand in setStateAfter
-zuendet  chefzsym    Wert ausserhalb der geschlossenen Liste
-zuendet  chefzsym    keine Vanilla-Garstufe
-zuendet  chefzsym    CoreSettings gegen die geschlossene Liste
 zuendet  chefzcore   I4: Fremdsystemname im Code
-zuendet  chefzcore   I4: Fremdsystemname im Kommentar (Warnung)
-zuendet  chefzcore   I3: Content-Wort im Core
-zuendet  chefzcore   I3: ID eines Content-Moduls im Core
-zuendet  chefzcore   I3: Aufzaehlung ueber eine Content-Dimension
-zuendet  chefzcore   I3: Item im Core
 zuendet  chefznut    01 V7: Ergebnis ohne Nutrition
-zuendet  chefznut    01 V7: scope 0
 zuendet  chefzstage  01 V4: kochbar ohne Uebergaenge
 zuendet  chefzproc   01 V12: HANDCRAFT mit mehr als zwei Eingaengen
 zuendet  chefzlog    18 E2: Wache fehlt
+zuendet  naming      Item-Klasse verletzt die Namenskonvention
+zuendet  schema      Rezept ohne id - und Erkennung am Dokumenttyp, nicht am Pfad
+zuendet  deltas      zwei Slices definieren dieselbe Kategorie unterschiedlich
+zuendet  deltas      Preservation zeigt auf einen undeklarierten Zustand
 ────────────────────────────────────────────────────────────────────────
-Wegwerf-Modul: Exit-Code 1 (erwartet 1), 19 Fehler, 10 Warnungen.
-ERGEBNIS: BESTANDEN - jede Regel hat mindestens einmal gezuendet.
+Wegwerf-Modul: Exit-Code 1 (erwartet 1), 33 Fehler, 7 Warnungen.
+
+Abdeckung: 18 von 19 Pruefern werden vom Wegwerf-Modul ausgeloest.
+Nicht ausgeloest: chefzaction
+
+ERGEBNIS: BESTANDEN - jede der 18 abgedeckten Pruefergruppen hat gezuendet.
 ────────────────────────────────────────────────────────────────────────
 ```
 
 A `BLIND` line means the rule did not fire on a case that was built to trigger
 it. Treat it as a broken checker, not as a passing project.
 
-> **Coverage gap.** The self-test covers **16 rules across 6 checkers**:
-> `chefzsym`, `chefzcore`, `chefznut`, `chefzstage`, `chefzproc`, `chefzlog`.
-> The other eight — `schema`, `configcpp`, `classrefs`, `naming`,
-> `stringtable`, `deltas`, `chefzvanilla`, `chefzcookable` — are **not**
-> exercised by the throwaway module. If one of them silently stops finding
-> things, nothing here will say so.
+> **Coverage gap.** The throwaway module triggers **18 of the 19 checkers**. The
+> one it does not reach is **`chefzaction`** — it needs an action class that no
+> `RegisterActions()` mentions, and the throwaway module does not build one. Until
+> it does, `chefzaction` could stop finding things without anything here saying so.
+> The self-test names the uncovered checker in its own output, so the gap cannot
+> quietly widen.
 
 ---
 
-## 6. The reference index and the known gap
+## 6. The reference index and the remaining gap
 
 `refindex/*.txt` — one class per line, `#` starts a comment. Built automatically
 from the neighbouring mod repositories.
 
-| File | Lines |
-|---|---|
-| `expansion-classes.txt` | 7789 |
-| `vanilla-scripts-classes.txt` | 6537 |
-| `terje-classes.txt` | 802 |
-| `cot-classes.txt` | 582 |
-| `dabs-classes.txt` | 280 |
-| `cf-classes.txt` | 196 |
-| **`vanilla-classes.txt`** | **0 (header comment only)** |
+| File | Entries |
+|---|---:|
+| `expansion-classes.txt` | 7,786 |
+| `vanilla-scripts-classes.txt` | 6,534 |
+| `terje-classes.txt` | 799 |
+| `cot-classes.txt` | 579 |
+| `dabs-classes.txt` | 277 |
+| `cf-classes.txt` | 193 |
+| `vanilla-classes.txt` | 184 |
+| **total** | **16,352** |
 
-### The gap
+### The gap, and what closed most of it
 
-**`refindex/vanilla-classes.txt` is empty.** DayZ's vanilla *item* classes live
-in the game configs, not in `scripts - 1.29` — that source contains script
-classes, not config classes. As long as the file is empty:
+Through Milestone 1 `vanilla-classes.txt` was an empty stub, and it cost the two
+checkers that need it their teeth: `classrefs.mjs` could not verify a reference to
+a vanilla class, and `naming.mjs` could not tell a legitimate vanilla sub-class
+from a genuine name collision. That was 57 warnings the reader had to ignore.
 
-- `classrefs.mjs` cannot verify a reference to a vanilla class. It reports one
-  project-wide warning instead:
-  ```
-  Referenzindex enthaelt 14947 Mod-Klassen, aber keine Vanilla-Item-Klassen.
-  Referenzen auf Vanilla (CookingPot, Edible_Base ...) bleiben ungeprueft.
-  Abhilfe: refindex/vanilla-classes.txt befuellen.
-  ```
-- `naming.mjs` cannot detect a **name collision with a vanilla item class**.
-  Today it emits 56 warnings of the form:
-  ```
-  Klasse "Baked" ohne ChefZ_-Praefix - Erweiterung einer Vanilla-Klasse?
-  Nicht pruefbar, vanilla-classes.txt ist leer
-  ```
-  Most of those are legitimate — `Food`, `Baked`, `Boiled`, `Burned`, `Rotten`,
-  `FoodStageTransitions` are vanilla config sub-classes. But a genuine collision
-  would look exactly the same, and that is the risk.
+The file now carries **184 vanilla item classes**, derived from the project's own
+asset list, which in turn came from `types.xml` (1,924 entries). Both checkers are
+back at **zero warnings**.
 
-Unknown `ChefZ_`-prefixed classes are unaffected by the gap and are **always**
-an error.
-
-### Closing the gap
-
-Either build the index from unpacked game data:
+What is still missing: the list covers the slice of vanilla that ChefZ touches, not
+all of vanilla. A class ChefZ never mentions is still not in there, so a future
+content module can still reference a vanilla item the index does not know. The
+symptom is the same warning as before, and the fix is the same:
 
 ```bash
 node tools/chefz-validate/build-refindex.mjs "D:/path/to/unpacked/dayz/data"
@@ -311,13 +297,11 @@ node tools/chefz-validate/build-refindex.mjs "D:/path/to/unpacked/dayz/data"
 
 The extra argument is added as a source and written to
 `refindex/<foldername>-classes.txt`; move or merge its entries into
-`vanilla-classes.txt`.
+`vanilla-classes.txt`. A server-side class dump works just as well — one class per
+line, `#` for comments.
 
-Or produce a class dump on a test server and paste the names into
-`refindex/vanilla-classes.txt` by hand — one class per line, `#` for comments.
-
-Once the file has content, the 56 `naming` warnings and the one `classrefs`
-warning either disappear or turn into real findings. Both outcomes are progress.
+Unknown `ChefZ_`-prefixed classes were never affected by the gap. They are **always**
+an error.
 
 ---
 
@@ -359,34 +343,32 @@ Last full run:
 
 ```
 node tools/chefz-validate/index.mjs    -> Exit 0
-                                          0 errors, 55 warnings, 18/18 checkers green,
+                                          0 errors, 55 warnings, 19/19 checkers green,
                                           0 tool failures
-node tools/chefz-validate/selftest.mjs -> Exit 0, 16/16 rules fire
+node tools/chefz-validate/selftest.mjs -> Exit 0, 18 of 19 checkers covered
 ```
 
-Where the 90 warnings sit:
+Where the 55 warnings sit:
 
 | Checker | Errors | Warnings | What they are |
-|---|---|---|---|
-| `schema` | 0 | 0 | |
-| `configcpp` | 0 | 24 | classes not listed in `units[]` of `CfgPatches` |
-| `classrefs` | 0 | 1 | the empty `vanilla-classes.txt` |
-| `naming` | 0 | 56 | non-`ChefZ_` classes, not checkable without the vanilla index |
-| `stringtable` | 0 | 0 | |
+|---|---:|---:|---|
+| `configcpp` | 0 | 37 | classes not listed in `units[]` of `CfgPatches` |
+| `chefznut` | 0 | 14 | result classes without `Nutrition`/`Food` — tools, empty containers, salt, hive parts |
+| `chefzcore` | 0 | 3 | a foreign-system name in a **comment** in the core — proof, not a hook |
 | `deltas` | 0 | 1 | category `DRIED_HERB` differs only in `parent` between two slices |
-| `chefzsym` | 0 | 0 | |
-| `chefzcore` | 0 | 0 | |
-| `chefznut` | 0 | 8 | result classes without `Nutrition`/`Food` — seeds, empty plates, salt |
-| `chefzstage` | 0 | 0 | |
-| `chefzproc` | 0 | 0 | |
-| `chefzlog` | 0 | 0 | |
-| `chefzvanilla` | 0 | 0 | |
-| `chefzcookable` | 0 | 0 | |
+| every other checker | 0 | 0 | |
 
-The eight `chefznut` warnings are the honest kind: the checker cannot decide
-statically whether `ChefZ_RawSalt` or `ChefZ_EmptyPlate` is *supposed* to be
-edible, so it names the consequence and leaves the decision to a human. If the
-class should be edible, add a `Nutrition` block. If not, the warning may stand.
+`classrefs` and `naming` used to carry 57 warnings between them. They are at zero
+since `vanilla-classes.txt` was filled — see section 6.
+
+The 14 `chefznut` warnings are the honest kind: the checker cannot decide statically
+whether `ChefZ_RawSalt`, `ChefZ_EmptyPlate` or `ChefZ_UncappingFork` is *supposed* to
+be edible, so it names the consequence and leaves the decision to a human. If the class
+should be edible, add a `Nutrition` block. If not, the warning may stand.
+
+**What a green run does not mean.** Nothing on this page has ever been confirmed by a
+running game. The suite reads files; the mod has never survived server startup. See
+[Known Limitations](Known-Limitations).
 
 ---
 
@@ -404,7 +386,7 @@ refindex/        known foreign classes, one per line
 
 Adding a checker means adding a `.mjs` file with a default export returning
 `{ items: [...] }` and registering its name in the `CHECKS` array in
-`index.mjs`. Add a case to `selftest.mjs` in the same commit, or the new checker
+`lib.mjs`. Add a case to `selftest.mjs` in the same commit, or the new checker
 is unverifiable by construction.
 
 ---

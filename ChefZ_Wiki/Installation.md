@@ -2,18 +2,21 @@
 
 This page describes what a server operator has to do to run ChefZ.
 
-> **Read this first.** No PBOs have been built yet. Nothing in this repository
-> has ever been packed, signed, or loaded by a DayZ server. The steps below
-> describe the path through DayZ Tools that *has to be walked*, not one that
-> somebody already walked successfully. See [Known Limitations](Known-Limitations).
+> **Read this first.** The PBOs have been built and the server has been started —
+> `tools/chefz-pack/pack.mjs` packs all thirteen, unsigned and unbinarised, and
+> `tools/chefz-pack/testrun.ps1` launches the test server. What has never happened
+> is a server that *stays up*: it registers every addon, loads its config, and then
+> dies in the mission's `OnInit` chain. Nothing here has been signed or binarised,
+> and no gate checklist has been run in a live game.
+> See [Known Limitations](Known-Limitations).
 
 ---
 
 ## 1. What ChefZ consists of
 
-ChefZ is shipped as **four mod folders**, which pack into **twelve PBOs**.
+ChefZ is shipped as **four mod folders**, which pack into **thirteen PBOs**.
 
-### `Psyerns_ChefZ_Core` — the main mod (9 PBOs)
+### `Psyerns_ChefZ_Core` — the main mod (10 PBOs)
 
 One PBO per subfolder of `Psyerns_ChefZ_Core/Addons/`. Each subfolder carries a
 `$PREFIX$` file whose content is the PBO prefix, and the prefix is the root of
@@ -30,6 +33,7 @@ every runtime path inside that PBO.
 | `ChefZ_Baking` | `ChefZ_Baking` | yes | `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Farming`, `ChefZ_Processing` |
 | `ChefZ_Preservation` | `ChefZ_Preservation` | yes | `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Processing`, `ChefZ_Meat` |
 | `ChefZ_Cooking` | `ChefZ_Cooking` | yes | `DZ_Data`, `DZ_Gear_Food`, `DZ_Gear_Cooking`, `ChefZ_Core`, `ChefZ_Ingredients`, `ChefZ_Farming`, `ChefZ_Meat`, `ChefZ_Processing`, `ChefZ_Baking`, `ChefZ_Preservation` |
+| `ChefZ_Cookbook` | `ChefZ_Cookbook` | yes | `DZ_Data`, `DZ_Gear_Books`, `ChefZ_Core` |
 
 "Mandatory" here means: the dependency graph above is closed. `ChefZ_Cooking`
 requires seven other ChefZ addons; `ChefZ_Registry` requires eight. You cannot

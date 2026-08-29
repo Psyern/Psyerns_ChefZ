@@ -159,8 +159,14 @@ Keyed on the **process ID**, resolved from the reported transform via
 | `PROCESS_SMOKE` | 3 | step 2 of smoked sausage |
 | `PROCESS_STUFF_SAUSAGE` | 5 | |
 
-All 21 process IDs that exist in the ChefZ data set are listed. `defaultXp = 1`
-covers any process a future content module adds.
+Eighteen of the **31** process IDs in the ChefZ data set are listed. `defaultXp = 1`
+covers the rest — the five beekeeping build steps, `PROCESS_RAISE_HIVE`,
+`PROCESS_EXTEND_HIVE`, `PROCESS_HARVEST_HIVE`, `PROCESS_UNCAP_COMB`,
+`PROCESS_SPIN_HONEY`, `PROCESS_CARVE_BOWL_BARK`, `PROCESS_CUT_CANS`,
+`PROCESS_FOLD_BOX` and `PROCESS_ASSEMBLE` — and any process a future content
+module adds. Those thirteen arrived with Beekeeping V2 and the container crafts,
+after this table was written. The fallback works; it just means raising a hive
+pays the same as folding a box.
 
 Per-transform overrides in `ChefZ_Xp > ChefZ_Process > ChefZ_Transforms` beat the
 process value. Two entries exist:

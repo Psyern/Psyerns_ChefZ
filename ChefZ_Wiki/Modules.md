@@ -1,6 +1,6 @@
 # Modules
 
-ChefZ is one mod folder containing nine addons, plus three separate
+ChefZ is one mod folder containing ten addons, plus three separate
 compatibility mods that ship as their own PBOs. This page lists what each one
 contains, what it depends on and how many classes and records it contributes.
 
@@ -15,32 +15,37 @@ For the reasoning behind the split, see [Architecture](Architecture).
 
 | Addon | Item classes | Script files | Rank 1 records | Rank 2 records | Stringtable keys |
 |---|---:|---:|---:|---:|---:|
-| `ChefZ_Core` | 0 | 133 | — | 1 | 4 |
-| `ChefZ_Registry` | 0 | 0 | — | 148 | — |
-| `ChefZ_Farming` | 43 | 4 | 6 | 12 | 73 |
-| `ChefZ_Processing` | 12 | 6 | 16 | 28 | 40 |
-| `ChefZ_Ingredients` | 28 | 3 | 9 | 36 | 63 |
-| `ChefZ_Meat` | 22 | 1 | — | 54 | 52 |
-| `ChefZ_Baking` | 8 | 1 | — | 17 | 22 |
-| `ChefZ_Preservation` | 9 | 1 | 10 | 20 | 28 |
-| `ChefZ_Cooking` | 63 | 4 | 70 | 39 | 139 |
-| **total** | **185** | **153** | **111** | **355** | **421** |
+| `ChefZ_Core` | 0 | 137 | — | 2 | 4 |
+| `ChefZ_Registry` | 0 | 0 | — | 142 | — |
+| `ChefZ_Farming` | 27 | 4 | 16 | 19 | 46 |
+| `ChefZ_Processing` | 14 | 7 | 18 | 30 | 41 |
+| `ChefZ_Ingredients` | 25 | 3 | 1 | 50 | 54 |
+| `ChefZ_Meat` | 31 | 1 | — | 56 | 53 |
+| `ChefZ_Baking` | 6 | 1 | — | 12 | 16 |
+| `ChefZ_Preservation` | 10 | 1 | 10 | 20 | 28 |
+| `ChefZ_Cooking` | 72 | 5 | 84 | 45 | 153 |
+| `ChefZ_Cookbook` | 2 | 11 | — | — | 3 |
+| **total** | **187** | **170** | **129** | **376** | **398** |
 
 | Comp mod | Item classes | Script files | Stringtable keys |
 |---|---:|---:|---:|
-| `Psyerns_ChefZ_COT_Comp` | 0 | 2 | 10 |
-| `Psyerns_ChefZ_Terje_Skills_Comp` | 0 | 9 | 2 |
-| `Psyerns_ChefZ_Terje_Medicine_Comp` | 0 | 3 | 1 |
+| `Psyerns_ChefZ_COT_Comp` | 0 | 5 | 10 |
+| `Psyerns_ChefZ_Terje_Skills_Comp` | 0 | 11 | 2 |
+| `Psyerns_ChefZ_Terje_Medicine_Comp` | 0 | 6 | 1 |
 
 "Item classes" counts top-level `class` definitions inside `CfgVehicles`,
 including the `scope = 0` base classes. "Rank 1" counts records declared in
 `CfgChefZ*` config trees; "rank 2" counts records inside JSON documents. The
 two ranks are explained on [Architecture](Architecture#3-where-configuration-comes-from-three-ranks).
 
-Across all modules that adds up to **44 recipes**, **58 transforms**,
-**21 processes**, **9 stations**, **160 ingredient bindings**, **5 containers**,
+The script-file total counts what ships. `ChefZ_Core` carries one more —
+`Tests/V_A_PboJsonSmoke/.../ChefZ_PboProbe.c`, the PBO-JSON smoke probe — which
+brings the repository to 171 `.c` files.
+
+Across all modules that adds up to **47 recipes**, **59 transforms**,
+**31 processes**, **11 stations**, **182 ingredient bindings**, **5 containers**,
 **3 cooking devices**, **10 food states**, **5 quality tiers** and
-**2 tool groups**.
+**8 tool groups**.
 
 ---
 
@@ -49,9 +54,9 @@ Across all modules that adds up to **44 recipes**, **58 transforms**,
 The rule engine. It contains no item, no ingredient, no dish and no station —
 `units[]` and `weapons[]` are empty and stay that way.
 
-- **133 script files** across four layers: 57 in `1_Core`, 40 in `3_Game`, 30 in
-  `4_World`, 5 in `5_Mission`, plus one PBO-JSON smoke probe under `Tests/`.
-  18 of them are self-tests.
+- **137 script files** across four layers: 60 in `1_Core`, 40 in `3_Game`, 31 in
+  `4_World`, 6 in `5_Mission`, plus one PBO-JSON smoke probe under `Tests/`.
+  19 of them are self-tests.
 - **Data**: `Config/Core.json` (one `coreSettings` record — the default
   settings, described on [Configuration](Configuration)) and
   `Config/Templates/Core.overlay.json`, the template copied to
@@ -69,11 +74,11 @@ Everything else is documented on [Architecture](Architecture).
 The merged shared vocabulary, and nothing else. No script, no model, no
 `CfgVehicles` entry — `units[]` is empty and that is not a forgotten line.
 
-- **148 records** in four documents:
-  - `Config/Categories.json` — 34 categories
-  - `Config/Tags.json` — 21 tags
-  - `Config/Nutrition.json` — 87 nutrition records
-  - `Config/Preservation.json` — 6 preservation rules
+- **142 records** in four documents:
+  - `Config/Categories.json` — 41 categories (23 roots, 18 children)
+  - `Config/Tags.json` — 19 tags
+  - `Config/Nutrition.json` — 76 nutrition records
+  - `Config/Preservation.json` — 6 preservation rules (4 by state, 2 by category)
 - **`CfgChefZ` node**: `ChefZ_MergedRegistry`, `loadOrder = 150`,
   `handcraftRecipeSlots = 0`. The node is deliberately *not* named like the
   addon: a node with the same name next to the `CfgPatches` entry counts as a
@@ -125,10 +130,11 @@ classes, no seeds and no growth stages. Where they spawn is the server's `types.
   `ChefZ_Processing`; see [Processing Stations](Processing-Stations#beehive-and-double-beehive).
 - **Script files**: `ChefZ_FarmingItems.c`, `ChefZ_HerbItems.c`,
   `ChefZ_ProduceFarming.c`, `ChefZ_Apiary.c`.
-- **Rank 1**: 5 ingredient bindings (`ChefZ_ProduceIngredient` and the four
-  vegetables).
-- **Rank 2**: ingredient records in `Config/GrainIngredients.json` and
-  `Config/Ingredients/Herbs.json`.
+- **Rank 1**: **16 records** — 5 ingredient bindings (`ChefZ_ProduceIngredient`
+  and the four vegetables), 8 processes and 3 tool groups (`HAND_TOOL`,
+  `UNCAPPING_TOOL`, `BEE_SMOKER`).
+- **Rank 2**: **19 records** across 5 documents — 10 ingredients, 7 transforms
+  and the 2 hive stations.
 - **`CfgChefZ` slices**: `ChefZ_GrainFarming` (210, 0 slots),
   `ChefZ_HerbFarming` (215, 0 slots), `ChefZ_Apiary` (7 handcraft slots:
   five build steps, uncapping, and the double hive).
@@ -141,23 +147,24 @@ comp mod (see [Terje Compatibility](Terje-Compatibility)).
 
 ## `ChefZ_Processing`
 
-Stations and tools. Every processing station in ChefZ lives here, regardless of
-which chain it belongs to.
+Stations and tools. Nine of the mod's eleven stations live here, regardless of
+which chain they belong to; the two hives sit in `ChefZ_Farming` because they are
+the thing that is kept, not a station somebody builds a workflow around.
 
 - **item classes** including 9 stations: `ChefZ_GrainMill`,
   `ChefZ_Mortar`, `ChefZ_DryingRack`, `ChefZ_ButterChurn`, `ChefZ_CheesePress`,
   `ChefZ_Smoker`, `ChefZ_SaltPan`, `ChefZ_MeatGrinder`, `ChefZ_HoneyExtractor`.
   The cutting board is gone — cutting is "ingredient + knife".
-- **6 script files**, mostly empty derivations from
+- **7 script files**, mostly empty derivations from
   `ChefZ_ProcessingStation_Base` — the station behaviour is in the core and in
   data. The exception is `ChefZ_HoneyExtractor.c`, which restarts its own job
   after every jar and limits the cargo to 5 frames and 15 jars.
-- **Rank 1**: 14 processes and 2 tool groups (`CUTTING_TOOL` with eight vanilla
-  knives, `ROLLING_PIN`). Tool group classes are deliberately *not* checked
+- **Rank 1**: **18 records** — 15 processes and 3 tool groups (`CUTTING_TOOL`
+  with eight vanilla knives, `ROLLING_PIN`, `METALWORK_TOOL`). Tool group classes are deliberately *not* checked
   against `CfgVehicles`: a knife from an optional module may be named without
   being loaded.
-- **Rank 2**: 9 stations, 17 transforms, 1 process, 1 ingredient across 13 JSON
-  documents.
+- **Rank 2**: **30 records** — 9 stations, 19 transforms, 1 process, 1 ingredient
+  across 15 JSON documents.
 - **`CfgChefZ` slices**: six, all with `handcraftRecipeSlots = 0` —
   `ChefZ_SaltChain` (155), `ChefZ_MeatProcessing` (190), `ChefZ_GrainProcessing`
   (220), `ChefZ_HerbProcessing` (230), `ChefZ_DairyProcessing` (260),
@@ -171,15 +178,19 @@ See [Processing Stations](Processing-Stations).
 
 ## `ChefZ_Ingredients`
 
-Cut produce, dairy, salt, spices and mushrooms — the intermediate goods that sit
-between raw produce and a dish.
+Dairy, salt, spices, mushrooms and the vanilla foodstuffs — the intermediate
+goods that sit between a raw ingredient and a dish, plus the vanilla items ChefZ
+files into its own categories without cloning them.
 
 - **item classes**: dairy (`ChefZ_Butter`, `ChefZ_Cheese`, `ChefZ_Cream`, …),
   `ChefZ_Salt` and `ChefZ_RawSalt`, dried herbs and spices, dried berries. The
   knife-cut vegetables (`Chopped*`, `ChefZ_SlicedPotato`) were removed on
   2026-08-29 — recipes take the whole vegetable.
-- **2 script files**.
-- **Rank 2**: ingredient records and the drying transforms.
+- **3 script files**.
+- **Rank 1**: 1 ingredient binding.
+- **Rank 2**: **50 records** across 7 documents — 48 ingredients and 2 transforms.
+  20 of those ingredient records are vanilla foodstuffs and 3 are vanilla produce:
+  they carry no new class, only a category and a tag.
 - **`CfgChefZ` slices**: five — `ChefZ_SaltIngredients` (205),
   `ChefZ_Produce` (220, no handcraft slots), `ChefZ_HerbIngredients` (220),
   `ChefZ_SauceIngredients` (230), `ChefZ_DairyIngredients` (260).
@@ -195,12 +206,12 @@ between raw produce and a dish.
 
 Butchery products and the sausage chain.
 
-- **20 item classes**: the three primal cuts, the `Minced*` classes, the raw
+- **31 item classes**: the three primal cuts, the `Minced*` classes, the raw
   and cooked sausages. (Diced meat and the sausage casing are gone since
   2026-08-29 — the steak goes in whole, vanilla `Guts`/`SmallGuts` are the casing.)
 - **1 script file** (`ChefZ_MeatItemBase.c`).
 - **Rank 1**: none.
-- **Rank 2**: **54 records** — 34 ingredient bindings, 14 transforms, 6 recipes.
+- **Rank 2**: **56 records** — 35 ingredient bindings, 15 transforms, 6 recipes.
   The ingredient count is the highest in the mod because this module also
   classifies *vanilla* meat: `PigSteakMeat` through `BearSteakMeat`, plus
   `Lard`, `Bone` and `Guts`. ChefZ creates no own class for those — that would
@@ -212,12 +223,13 @@ Butchery products and the sausage chain.
 
 ## `ChefZ_Baking`
 
-Yeast, doughs, pasta, bread.
+One dough, pasta, bread. Yeast was removed on 2026-08-29 — a single dough covers
+bread, flatbread and pasta.
 
-- **8 item classes**.
+- **6 item classes**.
 - **1 script file** (`ChefZ_BakingItems.c`).
 - **Rank 1**: none.
-- **Rank 2**: 8 ingredient records, 5 transforms, 2 processes
+- **Rank 2**: **12 records** — 5 ingredients, 3 transforms, 2 processes
   (`PROCESS_KNEAD`, `PROCESS_ROLL`), 2 recipes.
 - **`CfgChefZ` slice**: `ChefZ_GrainBaking` (230, **4 handcraft slots**).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Farming`,
@@ -229,14 +241,14 @@ Yeast, doughs, pasta, bread.
 
 Salting, drying, smoking — and the food-state vocabulary of the whole mod.
 
-- **9 item classes**: `ChefZ_SaltedMeat`, `ChefZ_DriedMeat`, `ChefZ_SmokedMeat`,
+- **10 item classes**: `ChefZ_SaltedMeat`, `ChefZ_DriedMeat`, `ChefZ_SmokedMeat`,
   the fish equivalents, `ChefZ_SmokedSausage`, `ChefZ_DrySausage`.
 - **1 script file** (`ChefZ_PreservedFood_Base.c`).
 - **Rank 1**: **all 10 food states** — `RAW`, `PREPARED`, `COOKED`, `BAKED`,
   `FRIED`, `SALTED`, `SMOKED`, `DRIED`, `BURNT`, `ROTTEN`. States are
   sync-relevant, so rank 1 is not a choice; see
   [Architecture](Architecture#how-the-ranks-merge) and [Food States](Food-States).
-- **Rank 2**: 12 ingredient records, 8 transforms.
+- **Rank 2**: **20 records** — 12 ingredients, 8 transforms.
 - **`CfgChefZ` slice**: `ChefZ_Preservation` (280, **2 handcraft slots**).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Processing`,
   `ChefZ_Meat`.
@@ -249,21 +261,24 @@ each of them implies the tag `CHEFZ_PRESERVED`.
 
 ## `ChefZ_Cooking`
 
-The largest module. Sauces, broths, tableware and all 25 plated and bowl dishes.
+The largest module. Sauces, broths, tableware and all 28 dishes — 20 plates,
+5 bowls and 3 built from vanilla produce alone.
 
-- **63 item classes**: 4 sauces and broths, 5 empty containers plus
-  `ChefZ_ContainerItemBase`, the two dish base classes
-  (`ChefZ_PortionedDish_Base`, `ChefZ_ServedDish_Base`, both `scope = 0`), and
-  50 dish classes — every dish is **two** classes, a `*Bulk` that forms in the
-  cooking vessel and carries the portion counter, and a served portion that the
-  player eats.
-- **4 script files**: `ChefZ_SauceItems.c`, `ChefZ_ServingItems.c`,
-  `ChefZ_BowlDishItems.c`, `ChefZ_DishesBItems.c`.
-- **Rank 1**: **70 records** — 55 ingredient bindings, 5 quality tiers
+- **72 item classes**: 56 dish classes — every dish is **two** classes, a `*Bulk`
+  that forms in the cooking vessel and carries the portion counter, and a served
+  portion that the player eats — plus 4 sauces and broths with
+  `ChefZ_SauceItemBase`, 5 empty containers with `ChefZ_ContainerItemBase`, the
+  two dish base classes (`ChefZ_PortionedDish_Base`, `ChefZ_ServedDish_Base`,
+  both `scope = 0`), and 3 forward declarations of vanilla classes.
+- **5 script files**, among them `ChefZ_SauceItems.c`, `ChefZ_ServingItems.c`,
+  `ChefZ_BowlDishItems.c` and `ChefZ_DishesBItems.c`.
+- **Rank 1**: **84 records** — 64 ingredient bindings, 5 quality tiers
   (`POOR`/`SIMPLE`/`PREPARED`/`SEASONED`/`PREMIUM`, tier set `DISH_DEFAULT`),
   5 containers (`PLATE`, `BOWL`, `CAN`, `JAR`, `BOX`), 3 cooking devices
-  (`FryingPan` 2 portions, `Pot` 4, `Cauldron` 12), 2 processes.
-- **Rank 2**: **36 of the mod's 44 recipes**, plus 2 transforms and 1 ingredient.
+  (`FryingPan` 2 portions, `Pot` 4, `Cauldron` 12), 5 processes and 2 tool
+  groups (`AXE_TOOL`, `SAWING_TOOL`).
+- **Rank 2**: **45 records** — 39 of the mod's 47 recipes, plus 5 transforms and
+  1 ingredient.
 - **`CfgChefZ` slices**: five — `ChefZ_Sauces` (300), `ChefZ_Serving`
   (310, **2 handcraft slots**), `ChefZ_DishesA` (330), `ChefZ_DishesB` (330),
   `ChefZ_DishesC` (340).
@@ -288,12 +303,42 @@ See [Portions and Containers](Portions-and-Containers) and
 
 ---
 
+## `ChefZ_Cookbook`
+
+Recipe knowledge — which recipes a player has met, and how much of one they know.
+Added as Milestone 5.1. **There is no UI yet**: the state, the persistence and the
+RPC that would feed a screen all exist, and nothing draws them.
+
+- **2 item classes**: `ChefZ_CookbookItem` and its base. The model is vanilla's
+  `book_kniga.p3d` — own geometry for the cookbook is an open item in the asset
+  backlog, which is why `DZ_Gear_Books` is a dependency at all.
+- **11 script files**: `ChefZ_KnowledgeManager.c`, `ChefZ_KnowledgeState.c`,
+  `ChefZ_RecipeStatus.c` and `ChefZ_CookbookRPC.c` in `3_Game`; the item, the
+  opener, the server side, the player knowledge, the action and its registration
+  in `4_World`.
+- **Rank 1**: `CfgChefZCookbook > partialMinKnownSlots = 1` — the threshold at
+  which a recipe counts as *partially known*. That is a balancing decision of this
+  milestone, not a system parameter, which is why it lives here and not in the
+  core.
+- **No content of its own.** The module names not one recipe and not one
+  ingredient; it asks the core's registry at runtime. Adding a dish does not touch
+  it.
+- **Depends on**: `DZ_Data`, `DZ_Gear_Books`, `ChefZ_Core` — exactly three, and no
+  content module among them.
+
+`ChefZ_ActionOpenCookbook` is registered in `ChefZ_ActionRegistration.c`. That file
+exists because of what `chefzaction.mjs` found: an action class nobody registers
+compiles cleanly and never appears in the game. See [Validation](Validation).
+
+---
+
 ## Dependency order
 
 Read top to bottom; each module only depends on modules above it.
 
 ```
 ChefZ_Core
+  ChefZ_Cookbook               (depends on the core alone)
   ChefZ_Farming
     ChefZ_Processing
       ChefZ_Ingredients

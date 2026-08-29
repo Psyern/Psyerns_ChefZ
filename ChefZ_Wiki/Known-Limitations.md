@@ -14,9 +14,14 @@ If you are deciding whether to run ChefZ on a live server, read this page first.
 ChefZ compiles and the mod boots. It does not yet keep a server running.
 
 As of 28.08.2026 all five script modules compile with zero errors and zero
-warnings, the server binds its port, and all twelve addons register. The config
-load then reads 551 records, 550 of them good. After that the process still dies,
-and the core comes up inert.
+warnings, the server binds its port, and all twelve addons of the time register.
+The config load then reads 551 records, 550 of them good. After that the process
+still dies, and the core comes up inert.
+
+**That measurement is older than the code.** `ChefZ_Cookbook` (Milestone 5.1), the
+self-test trace and Beekeeping V2 all landed on 29.08.2026, after this run. There
+are thirteen PBOs now, not twelve, and none of the changes since have been through
+a compiler or a server start. The static suite is green; that is a different claim.
 
 Two properties of the engine's JSON layer caused most of this. One is fixed, one
 is not. Both are described below, because neither is visible from the code and
@@ -54,7 +59,7 @@ machinery works.
 
 ### No signatures, no binarisation
 
-`tools/chefz-pack/pack.mjs` packs all twelve PBOs, unsigned and unbinarised, and
+`tools/chefz-pack/pack.mjs` packs all thirteen PBOs, unsigned and unbinarised, and
 `tools/chefz-pack/testrun.ps1` starts the test server and reads its verdict.
 Neither signing nor binarising has been done. See [Installation](Installation).
 

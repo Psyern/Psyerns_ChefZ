@@ -10,7 +10,7 @@ Nothing on this page has ever been compiled or executed. See
 
 ## 1. The shape of the mod
 
-ChefZ ships as one mod folder with nine addons inside it, plus three separate
+ChefZ ships as one mod folder with ten addons inside it, plus three separate
 compatibility mods:
 
 ```
@@ -416,7 +416,7 @@ A slot whose satisfier set is empty aborts the check for that context rather
 than asserting anything — the checker never claims a violation it cannot back
 up. It judges only whether a recipe *is* vanilla-satisfiable; whether that
 happens often in play is a human decision, and the rule has no threshold. It
-currently reports zero findings across all 44 recipes.
+currently reports zero findings across all 47 recipes.
 
 `chefzcookable.mjs` covers the complementary trap: a class that declares
 `Food > FoodStages` and `FoodStageTransitions` but whose script chain never
@@ -527,5 +527,5 @@ See [Terje Compatibility](Terje-Compatibility) and
 - [Recipes](Recipes) and [Recipe Reference](Recipe-Reference) — the recipe format
 - [Food States](Food-States), [Quality and Nutrition](Quality-and-Nutrition),
   [Portions and Containers](Portions-and-Containers)
-- [Validation](Validation) — the eighteen static checkers
+- [Validation](Validation) — the nineteen static checkers
 - [Known Limitations](Known-Limitations) — what has not been verified

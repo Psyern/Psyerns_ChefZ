@@ -101,7 +101,7 @@ The heat requirement is a proximity check, not a temperature threshold:
 If the fire goes out the job **pauses**; it never rolls back and never loses the
 brine. Drying does not need heat, so the fire may go out for the second half.
 
-**Where it feeds in.** `SALT` appears in 33 of the 44 recipes — almost always as
+**Where it feeds in.** `SALT` appears in 35 of the 47 recipes — almost always as
 an optional slot worth +1 or +2 grade points, at 3 to 12 g per dish. It is also a
 hard requirement of the three sauces and of both salt-curing transforms in the
 [preservation chain](#preservation), which take 20 units each.
@@ -431,7 +431,7 @@ frame is swapped in its cell for a Full Comb Frame. The fill level is stored wit
 the frame; while the server is down no time passes (assumption A1).
 
 **Out of the hive.** "Open Hive" (`PROCESS_HARVEST_HIVE`, 8 s) opens the lid for
-120 s and stings the beekeeper unless gloves, a covered head or a Bee Smoker in
+120 s and stings the beekeeper unless gloves, a covered head, an NBC suit (jacket + trousers: hands and body sealed, no wear), a gas mask (face sealed) or a Bee Smoker in
 hand absorb it (assumption A4). While the lid is open, and only then, a **Full**
 frame can be dragged out; empty frames stay put.
 
@@ -484,15 +484,15 @@ source at all in V1.
 
 ## Chain coverage
 
-All 58 transforms are accounted for above:
-58 appear in a chain diagram, 0 do not
+All 59 transforms are accounted for above:
+59 appear in a chain diagram, 0 do not
 (none).
 
 | | |
 |---|---|
-| Transforms | 58 |
+| Transforms | 59 |
 | Of those, at a station | 37 |
-| Of those, handcraft | 21 |
+| Of those, handcraft | 22 |
 | Recipes fed by these chains | 44 |
 | Chains blocked at least in part | 3 — meat/sausage (no cargo), preservation (smoker), everything upstream of loot (no `types.xml`) |
 
