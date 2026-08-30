@@ -135,4 +135,139 @@ class CfgVehicles
 			};
 		};
     };
+	class Edible_Base;
+	class ChefZ_Food_Base: Edible_Base
+	{
+        scope=0;
+		debug_ItemCategory=6;
+		rotationFlags=1;
+		weight=250;
+		varTemperatureFreezePoint=-60;
+		varTemperatureThawPoint=-60;
+		varTemperatureFreezeTime=7920;
+		varTemperatureThawTime=7920;
+		varQuantityInit=200;
+		varQuantityMin=0;
+		varQuantityMax=200;
+		varTemperatureMax=100;
+		temperaturePerQuantityWeight=2;
+		class DamageSystem
+		{
+			class GlobalHealth
+			{
+				class Health
+				{
+					hitpoints=200;
+					healthLevels[]=
+					{
+						
+						{
+							1,
+							
+							{
+								"DZ\gear\food\data\tycinky.rvmat",
+								"DZ\gear\food\data\tycinky_wrapping.rvmat"
+							}
+						},
+						
+						{
+							0.69999999,
+							
+							{
+								"DZ\gear\food\data\tycinky.rvmat",
+								"DZ\gear\food\data\tycinky_wrapping.rvmat"
+							}
+						},
+						
+						{
+							0.5,
+							
+							{
+								"DZ\gear\food\data\tycinky_damage.rvmat",
+								"DZ\gear\food\data\tycinky_wrapping_damage.rvmat"
+							}
+						},
+						
+						{
+							0.30000001,
+							
+							{
+								"DZ\gear\food\data\tycinky_damage.rvmat",
+								"DZ\gear\food\data\tycinky_wrapping_damage.rvmat"
+							}
+						},
+						
+						{
+							0,
+							
+							{
+								"DZ\gear\food\data\tycinky_destruct.rvmat",
+								"DZ\gear\food\data\tycinky_wrapping_destruct.rvmat"
+							}
+						}
+					};
+				};
+			};
+		};
+		soundImpactType="plastic";
+		class AnimEvents
+		{
+			class SoundWeapon
+			{
+				class openTunaCan
+				{
+					soundSet="openTunaCan_SoundSet";
+					id=204;
+				};
+				class pickUpItem
+				{
+					soundSet="pickUpBloodBag_SoundSet";
+					id=797;
+				};
+				class Eating_TakeFood
+				{
+					soundSet="Eating_TakeFood_Soundset";
+					id=889;
+				};
+				class Eating_BoxOpen
+				{
+					soundSet="Eating_BoxOpen_Soundset";
+					id=893;
+				};
+				class Eating_BoxShake
+				{
+					soundSet="Eating_BoxShake_Soundset";
+					id=894;
+				};
+				class Eating_BoxEnd
+				{
+					soundSet="Eating_BoxEnd_Soundset";
+					id=895;
+				};
+				class drop
+				{
+					soundset="bloodbag_drop_SoundSet";
+					id=898;
+				};
+			};
+		};
+		class InventorySlotsOffsets
+		{
+			class DirectCookingA
+			{
+				position[]={0.059999999,0.015,0};
+				orientation[]={0,90,0};
+			};
+			class DirectCookingB
+			{
+				position[]={0.059999999,0.015,0};
+				orientation[]={45,90,0};
+			};
+			class DirectCookingC
+			{
+				position[]={0.059999999,0.015,0};
+				orientation[]={0,90,0};
+			};
+		};
+	};
 };

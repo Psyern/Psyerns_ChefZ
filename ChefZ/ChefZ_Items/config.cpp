@@ -91,28 +91,45 @@ class CfgVehicles
 		descriptionShort="#STR_CHEFZ_BeeSmoker_DESC";
 		itemSize[]={2,2};
 	};
-	class ChefZ_Item_BeefCubes : ChefZ_Item_Base
+///	class ChefZ_Item_Jar : ChefZ_Item_Base
+///	{
+///		scope=2;
+///		displayName="#STR_CHEFZ_Jar";
+///		model="\ChefZ\ChefZ_Items\models\Jar.p3d";
+///		descriptionShort="#STR_CHEFZ_Jar_DESC";
+///		itemSize[]={1,1};
+///	};
+/// NEED TO BE FIXED!
+	class ChefZ_Item_HandRake : ChefZ_Item_Base
 	{
 		scope=2;
-		displayName="#STR_CHEFZ_BeefCubes";
-		model="\ChefZ\ChefZ_Items\models\beefcubes.p3d";
-		descriptionShort="#STR_CHEFZ_BeefCubes_DESC";
-		itemSize[]={1,1};
+		displayName="#STR_CHEFZ_HandRake";
+		model="\ChefZ\ChefZ_Items\models\handrake.p3d";
+		descriptionShort="#STR_CHEFZ_HandRake_DESC";
+		itemSize[]={3,1};
 	};
-	class ChefZ_Item_Carrot : ChefZ_Item_Base
+	class ChefZ_Item_MilkCan : ChefZ_Item_Base
 	{
 		scope=2;
-		displayName="#STR_CHEFZ_Carrot";
-		model="\ChefZ\ChefZ_Items\models\Carrot.p3d";
-		descriptionShort="#STR_CHEFZ_Carrot_DESC";
-		itemSize[]={1,2};
+		displayName="#STR_CHEFZ_MilkCan";
+		model="\ChefZ\ChefZ_Items\models\MilkCan.p3d";
+		descriptionShort="#STR_CHEFZ_MilkCan_DESC";
+		itemSize[]={3,2};
 	};
-	class ChefZ_Item_Jar : ChefZ_Item_Base
+	class ChefZ_Item_Box : ChefZ_Item_Base
 	{
 		scope=2;
-		displayName="#STR_CHEFZ_Jar";
-		model="\ChefZ\ChefZ_Items\models\Jar.p3d";
-		descriptionShort="#STR_CHEFZ_Jar_DESC";
-		itemSize[]={1,1};
+		displayName="#STR_CHEFZ_Box";
+		model="\ChefZ\ChefZ_Items\models\Box.p3d";
+		descriptionShort="#STR_CHEFZ_Box_DESC";
+		itemSize[]={2,2};
+	};
+	class ChefZ_Item_Box_Open : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Box_Open";
+		model="\ChefZ\ChefZ_Items\models\Box_Open.p3d";
+		descriptionShort="#STR_CHEFZ_Box_Open_DESC";
+		itemSize[]={2,2};
 	};
 };

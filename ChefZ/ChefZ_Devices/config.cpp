@@ -51,11 +51,6 @@ class CfgVehicles
 		scope=2;
 		displayName="#STR_CHEFZ_BEEHIVE - #STR_CHEFZ_KIT";
 	};
-	class ChefZ_Device_BeeKeeper_Kit : ChefZ_Base_Kit
-	{
-		scope=2;
-		displayName="#STR_CHEFZ_BEEKEEPER - #STR_CHEFZ_KIT";
-	};
 	class ChefZ_Device_BeeHive : ChefZ_Deployed_Base
 	{
 		scope=2;
@@ -88,6 +83,11 @@ class CfgVehicles
 			"ChefZ_Honeycomb_Frame20"
 		};
 	};
+	class ChefZ_Device_BeeKeeper_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_BEEKEEPER - #STR_CHEFZ_KIT";
+	};
 	class ChefZ_Device_BeeKeeper : ChefZ_Deployed_Base
 	{
 		scope=2;
@@ -109,5 +109,89 @@ class CfgVehicles
 			"ChefZ_Honeycomb_Frame09",
 			"ChefZ_Honeycomb_Frame10"
 		};
+	};
+	class ChefZ_Device_ButterChurn_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_ButterChurn - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_ButterChurn : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_ButterChurn";
+		model="\ChefZ\ChefZ_Devices\models\ButterChurn.p3d";
+		descriptionShort="#STR_CHEFZ_ButterChurn_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+	};
+	class ChefZ_Device_CheesePress_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_CheesePress - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_CheesePress : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_CheesePress";
+		model="\ChefZ\ChefZ_Devices\models\CheesePress.p3d";
+		descriptionShort="#STR_CHEFZ_CheesePress_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+	};
+	class ChefZ_Device_GrainMill_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_GrainMill - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_GrainMill : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_GrainMill";
+		model="\ChefZ\ChefZ_Devices\models\GrainMill.p3d";
+		descriptionShort="#STR_CHEFZ_GrainMill_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+	};
+	class ChefZ_Device_MeatGrinder_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_MeatGrinder - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_MeatGrinder : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_MeatGrinder";
+		model="\ChefZ\ChefZ_Devices\models\MeatGrinder.p3d";
+		descriptionShort="#STR_CHEFZ_MeatGrinder_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+	};
+	class ChefZ_Device_Mortar_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Mortar - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_Mortar : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Mortar";
+		model="\ChefZ\ChefZ_Devices\models\Mortar.p3d";
+		descriptionShort="#STR_CHEFZ_Mortar_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+	};
+	class ChefZ_Device_Smoker_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Smoker - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_Smoker : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Smoker";
+		model="\ChefZ\ChefZ_Devices\models\Smoker.p3d";
+		descriptionShort="#STR_CHEFZ_Smoker_DESC";
+		weight=25000;
+		itemSize[]={10,10};
 	};
 };
