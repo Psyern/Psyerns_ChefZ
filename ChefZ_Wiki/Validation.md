@@ -218,10 +218,10 @@ greppable:
 grep -rn "SCOUT-GEPRUEFT" --include=*.c .
 ```
 
-The 20 remaining `configcpp` warnings are exactly this group — `modded class`
+The remaining `configcpp` warnings are exactly this group — `modded class`
 declarations nobody has reviewed yet. Twenty identical warnings on every run would
 have swallowed the twenty-first, which is the point of letting a reviewed one fall
-silent.
+silent. After the review of 30.08.2026 two are left.
 
 ## 5. The self-test
 
@@ -354,16 +354,16 @@ Last full run:
 
 ```
 node tools/chefz-validate/index.mjs    -> Exit 0
-                                          0 errors, 20 warnings, 19/19 checkers green,
+                                          0 errors, 2 warnings, 19/19 checkers green,
                                           0 tool failures
 node tools/chefz-validate/selftest.mjs -> Exit 0, 18 of 19 checkers covered
 ```
 
-Where the 20 warnings sit:
+Where the 2 warnings sit:
 
 | Checker | Errors | Warnings | What they are |
 |---|---:|---:|---|
-| `configcpp` | 0 | 20 | `modded class` declarations and their collision surface against other mods |
+| `configcpp` | 0 | 2 | two `modded class` declarations on `MissionServer` that no review has cleared yet |
 | every other checker | 0 | 0 | |
 
 **Of the 59 warnings, 39 were the checkers' own noise and 4 were real**, worked
@@ -387,8 +387,9 @@ the core say `I4-BELEG` — and one was a real data defect: `DRIED_HERB` had par
 `classrefs` and `naming` had already dropped 57 warnings between them when
 `vanilla-classes.txt` was filled — see section 6.
 
-What remains is one real group: 20 `modded class` declarations whose collision surface
-against other mods is worth knowing about, and cannot be decided by a checker.
+On 30.08.2026 the conflict scout reviewed all twenty `modded class` sites and marked
+them `SCOUT-GEPRUEFT`, which took the group from 20 warnings to 2. The review was not
+a formality: it found a live exploit in the cookbook — see below.
 
 **What a green run does not mean.** Nothing on this page has ever been confirmed by a
 running game. The suite reads files; the mod has never survived server startup. See

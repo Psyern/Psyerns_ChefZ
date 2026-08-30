@@ -57,7 +57,7 @@ design questions — is kept internally and is not part of this repository.
 | **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 47 recipes · 61 transforms · 11 stations |
 | **Cookbook** | Implemented as knowledge state and RPC — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
-| **Validation** | 19 checkers · **exit code 0 · 0 errors · 20 warnings** |
+| **Validation** | 19 checkers · **exit code 0 · 0 errors · 2 warnings** |
 | **Validator self-test** | 18 of 19 checkers provably fire · `chefzaction` not yet covered |
 | **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
@@ -541,7 +541,7 @@ Nineteen checkers plus a runner under `tools/chefz-validate/` — Node, no depen
 non-zero exit code on failure.
 
 ```bash
-node tools/chefz-validate/index.mjs       # 0 errors, 20 warnings, 19/19 green
+node tools/chefz-validate/index.mjs       # 0 errors, 2 warnings, 19/19 green
 node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 ```
 

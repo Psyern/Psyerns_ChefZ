@@ -318,6 +318,21 @@ RPC that would feed a screen all exist, and nothing draws them.
 - **Depends on**: `DZ_Data`, `DZ_Gear_Books`, `ChefZ_Core` — exactly three, and no
   content module among them.
 
+**The RPC guard, and the exploit that made it necessary.** `OnRPC` runs on both the
+server and the client, and which object an RPC reaches is decided by whoever sent it.
+Until 30.08.2026 a client could send a `FULL_STATE` message to the **server**, aimed at
+their own player: `ChefZ_ReceiveFullState` calls `Clear()` and then writes whatever
+lists came with the message — every recipe marked as mastered, or the knowledge wiped —
+and `OnStoreSave` would persist it. `FULL_STATE` only ever travels server to client, so
+one arriving at the server is forged by definition and is now discarded. Vanilla
+brackets its own server-to-client branches in `PlayerBase.OnRPC` for the same reason.
+
+The module's RPC numbers are 10000–10002, chosen clear of COT (from 10100), Terje
+(negative), Dabs and CF.
+
+The exploit was found by the conflict scout while reviewing the twenty `modded class`
+sites, not by a checker — see [Validation](Validation).
+
 `ChefZ_ActionOpenCookbook` is registered in `ChefZ_ActionRegistration.c`. That file
 exists because of what `chefzaction.mjs` found: an action class nobody registers
 compiles cleanly and never appears in the game. See [Validation](Validation).
