@@ -1,1 +1,1 @@
-*.p3d;*.paa;*.rvmat;*.txt
+*.p3d;*.paa;*.rvmat;*.txt;*.cfg

@@ -61,18 +61,23 @@ it.
 
 ## The delivery folder is back in the tree
 
-`ChefZ/` was removed on 29.08.2026 and restored the same evening (`cf8efa5`,
-"exactly as uploaded"). It is the asset delivery in its original shape: 30 files,
-8 models, 8 textures, 9 scripts, three `CfgPatches` classes.
+`ChefZ/` was removed on 29.08.2026 and restored the same evening ("exactly as
+uploaded"). It is the asset delivery in its original shape, and it keeps growing: a
+second batch on 30.08. brought the plant models. It now holds **129 files** — 50
+models, 52 textures, 17 scripts — in five folders: `ChefZ_Core`, `ChefZ_Devices`,
+`ChefZ_Food`, `ChefZ_Items`, `ChefZ_Plants`.
 
-Nothing consumes it. The models it carries were copied into `ChefZ_Devices` and
-`ChefZ_Items` under `Addons/`, and those are what the content addons point at. The
-folder is kept as the record of what arrived, not as a second source.
+Nothing consumes it directly. Eight of its models were copied into `ChefZ_Devices` and
+`ChefZ_Items` under `Addons/`, and those copies are what the content addons point at.
+The rest — including every plant model from the 30.08. batch — is delivered but not
+bound to any class yet. The folder is the record of what arrived, not a second source.
 
-**It must not be packed as it stands.** All three of its `CfgPatches` names —
-`ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Items` — are now the names of real addons under
-`Addons/`. When it was first uploaded only `ChefZ_Core` collided; the asset
-integration added the other two. Two addons of one name cannot both load.
+**It must not be packed as it stands.** Three of its five `CfgPatches` names —
+`ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Items` — are also the names of real addons under
+`Addons/`. When it was first uploaded only `ChefZ_Core` collided; the asset integration
+added the other two. `ChefZ_Food` and `ChefZ_Plants` are unique so far, but that holds
+only until their contents are integrated the same way. Two addons of one name cannot
+both load.
 
 Three checks keep it harmless today, and all three are checkable:
 

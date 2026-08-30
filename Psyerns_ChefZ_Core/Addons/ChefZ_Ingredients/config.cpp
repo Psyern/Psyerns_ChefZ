@@ -32,6 +32,7 @@ class CfgPatches
         units[] = {
             // ### SLICE dairy ###
             "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese", "ChefZ_Egg",
+            "ChefZ_MilkCan",
             // ### SLICE salt ###
             "ChefZ_RawSalt",
             "ChefZ_Salt",
@@ -64,7 +65,7 @@ class CfgPatches
         //                     treten dort ein.
         // Keine Zirkularitaet: weder ChefZ_Meat noch ChefZ_Preservation nennt
         // ChefZ_Ingredients in seinem requiredAddons[].
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "ChefZ_Processing", "DZ_Gear_Consumables", "ChefZ_Meat", "ChefZ_Preservation"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "ChefZ_Processing", "DZ_Gear_Consumables", "ChefZ_Meat", "ChefZ_Preservation", "ChefZ_Items", "ChefZ_Food"};
     };
 };
 
@@ -105,6 +106,7 @@ class CfgMods
 
 class CfgVehicles
 {
+    class Inventory_Base;
     class GardenLime;   // ### SLICE salt ###
 
     // ### SLICE dairy ### Proxy-Basen
@@ -451,6 +453,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHEESE";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESE_DESC";
+        model = "\ChefZ\ChefZ_Food\models\cheese.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 220;
         itemSize[] = {2, 2};
         varQuantityInit = 100;
@@ -529,6 +532,25 @@ class CfgVehicles
                 };
             };
         };
+    };
+
+    //--------------------------------------------------------------------------
+    // Die Milchkanne (Lieferung c09900f). Traggut der Milchkette; noch ohne
+    // eigenen Prozess - Milch ist in V1 Vanillas PowderedMilk
+    // (Config/Ingredients/Dairy.json). Die Kanne existiert, damit das
+    // gelieferte Modell im Spiel ist und ein spaeterer Melk-Slice sie fuellt.
+    //--------------------------------------------------------------------------
+    class ChefZ_MilkCan : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MILKCAN";
+        descriptionShort = "#STR_CHEFZ_ITEM_MILKCAN_DESC";
+        model = "\ChefZ\ChefZ_Items\models\milkcan.p3d";   // EIGENES MODELL (30.08.2026)
+        rotationFlags = 2;
+        itemSize[] = {3, 2};
+        weight = 1800;
+        lifetime = 43200;
+        repairableWithKits[] = {};
     };
 
     // §51: Ei. Quelle ist Loot, Nest, Farmgebaeude - kein Huhn-System in V1.

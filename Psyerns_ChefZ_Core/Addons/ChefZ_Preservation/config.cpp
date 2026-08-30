@@ -104,7 +104,7 @@ class CfgPatches
         // KATEGORIE "SALT" gebunden, nicht ueber eine Klasse. Eine Kategorie ist
         // Daten und kein Addon - der Transform greift, sobald irgendein Modul
         // etwas in diese Kategorie legt, und faellt sonst still aus.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Processing", "ChefZ_Meat"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Processing", "ChefZ_Meat", "ChefZ_Food"};
     };
 };
 
@@ -536,7 +536,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SMOKEDSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_SMOKEDSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_smoked.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 260;
 
@@ -572,7 +572,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_DRYSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_DRYSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_dry.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 200;
 

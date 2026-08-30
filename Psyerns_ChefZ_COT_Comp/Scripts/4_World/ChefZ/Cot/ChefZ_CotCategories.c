@@ -215,7 +215,7 @@ class ChefZ_CotCategories
 			"ChefZ_Garlic", 
 			"ChefZ_Carrot", 
 			"ChefZ_Cabbage", 
-			"ChefZ_Corn",
+			"ChefZ_Corn", "ChefZ_CornPlant",
 			"ChefZ_Egg",
 			"ChefZ_RawSalt", "ChefZ_Salt", "ChefZ_BoneBroth",
 			"ChefZ_TomatoSauce", "ChefZ_CreamSauce", "ChefZ_MushroomCreamSauce"
@@ -305,7 +305,7 @@ class ChefZ_CotCategories
 			"ChefZ_GrainMill", "ChefZ_PastaMachine", "ChefZ_Mortar",
 			"ChefZ_DryingRack", "ChefZ_ButterChurn", "ChefZ_CheesePress",
 			"ChefZ_FryingPan", "ChefZ_MeatGrinder",
-			"ChefZ_Smoker"
+			"ChefZ_Smoker", "ChefZ_HandRake"
 		});
 
 		// ChefZ / Gerichte - die fertigen Speisen, 25 Stueck in je zwei
@@ -354,7 +354,7 @@ class ChefZ_CotCategories
 		Add("chefz_cot_containers", "#STR_CHEFZ_COT_CAT_CONTAINERS",
 		{
 			"ChefZ_EmptyPlate", "ChefZ_EmptyBowl", "ChefZ_EmptyCan",
-			"ChefZ_EmptyJar", "ChefZ_EmptyBox"
+			"ChefZ_EmptyJar", "ChefZ_EmptyBox", "ChefZ_MilkCan"
 		});
 	}
 }

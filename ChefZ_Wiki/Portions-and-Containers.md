@@ -15,7 +15,18 @@ Related pages: [Recipes](Recipes), [Food-States](Food-States),
 > the take-portion action and `amountPerPortion` are gone from the content.
 > Sections 2–5 below describe the portion system that remains **in the Core as a
 > capability** for a module that wants it; section 6 (containers) and 7 (what is
-> left over) still apply. `returnContainer` on a dish is now a fixed class
+> left over) still apply.
+>
+> **What a dish holds when it is spawned, not cooked** (29.08.2026): a class
+> carries `varQuantityInit = 100 × its smallest recipe` and
+> `varQuantityMax = 100 × its largest`. For 23 of the 28 dishes both are the same
+> number, because one recipe makes them. The five stews and soups have a group
+> variant as well, so they sit at `init = 400`, `max = 1200` — an admin-spawned
+> Hunter Stew arrives as the normal four servings and can still hold the twelve a
+> cauldron produces. Before this it spawned full at 1200, which handed out three
+> pots' worth for free.
+>
+> `returnContainer` on a dish is now a fixed class
 > (`ChefZ_EmptyBowl` / `ChefZ_EmptyPlate`), never `"AUTO"`.
 
 ## 1. One class per dish
@@ -77,8 +88,11 @@ Transforms carry the same `ChefZ_OutputDef` and are read along with them;
 otherwise a bulk dish created at a station would be an item with a counter that
 nobody can take from.
 
-From `RCP_ChefZ_HunterStew`
-(`.../ChefZ_Cooking/Config/Recipes/BowlDishes.json`):
+A worked example of the fields — **not shipped data any more.** `RCP_ChefZ_HunterStew`
+looked like this until 29.08.2026. Today it writes a single output —
+`{"cls": "ChefZ_HunterStewBowl", "quantity": 400, "returnContainer": "ChefZ_EmptyBowl"}`,
+and the group variant the same with 1200. The shape below is what a module would write
+if it wanted the portion system the Core still offers:
 
 ```json
 "outputs": [

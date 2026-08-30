@@ -69,7 +69,7 @@ class CfgPatches
         // ChefZ_Processing: ChefZ_Flour als Eingang und die Werkzeuggruppe
         //                   ROLLING_PIN, auf die PROCESS_ROLL zeigt.
         // DZ_Gear_Food:     die Proxy-Modelle.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "ChefZ_Processing"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "ChefZ_Processing", "ChefZ_Food"};
     };
 };
 
@@ -200,7 +200,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_BREAD";
         descriptionShort = "#STR_CHEFZ_BREAD_DESC";
-        model = "\dz\gear\food\BoxCereal.p3d";
+        model = "\ChefZ\ChefZ_Food\models\bread.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 700;
         itemSize[] = {3, 2};
         varQuantityInit = 1;

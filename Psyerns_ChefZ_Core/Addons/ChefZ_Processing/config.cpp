@@ -85,7 +85,7 @@ class CfgPatches
         // Transform nennt die Klasse nur als NAMEN und bindet zur Laufzeit;
         // das Skript der Schleuder prueft sie ueber IsKindOf, nie ueber einen
         // Klassenbezug. Fehlt ChefZ_Cooking, matcht der Transform schlicht nie.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "DZ_Gear_Cooking"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "DZ_Gear_Cooking", "ChefZ_Devices"};
     };
 };
 
@@ -159,7 +159,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_GRAINMILL";
         descriptionShort = "#STR_CHEFZ_GRAINMILL_DESC";
-        model = "\DZ\gear\camping\wooden_case.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\grainmill.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 9000;
         itemSize[] = {6, 4};
         canBeDigged = 0;
@@ -292,7 +292,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MORTAR";
         descriptionShort = "#STR_CHEFZ_ITEM_MORTAR_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\mortar.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {3, 2};
         weight = 1800;
     };
@@ -411,7 +411,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BUTTERCHURN";
         descriptionShort = "#STR_CHEFZ_ITEM_BUTTERCHURN_DESC";
-        model = "\DZ\gear\camping\wooden_case.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\butterchurn.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         rotationFlags = 17;
         itemSize[] = {4, 4};
         weight = 4200;
@@ -433,7 +433,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHEESEPRESS";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESEPRESS_DESC";
-        model = "\DZ\gear\camping\wooden_case.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\cheesepress.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         rotationFlags = 17;
         itemSize[] = {5, 4};
         weight = 6800;
@@ -534,7 +534,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MEATGRINDER0";
         descriptionShort = "#STR_CHEFZ_ITEM_MEATGRINDER1";
-        model = "\dz\gear\cooking\Cauldron.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\meatgrinder.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         rotationFlags = 17;
         itemSize[] = {4, 4};
         weight = 3200;
@@ -583,7 +583,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SMOKER0";
         descriptionShort = "#STR_CHEFZ_ITEM_SMOKER1";
-        model = "\DZ\gear\camping\wooden_case.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\smoker.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         rotationFlags = 2;
         itemSize[] = {6, 5};
         weight = 11000;

@@ -149,6 +149,7 @@ class CfgPatches
             "DZ_Gear_Food",
             "ChefZ_Core",
             "ChefZ_Items",
+            "ChefZ_Food",
             "ChefZ_Processing",
             "DZ_Animals_bos_taurus",
             "DZ_Animals_bos_taurus_fem",
@@ -371,7 +372,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BEEFLEG0";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEFLEG1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\leg_beef.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 700;
 
@@ -406,7 +407,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PORKLEG0";
         descriptionShort = "#STR_CHEFZ_ITEM_PORKLEG1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\leg_pork.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 700;
 
@@ -443,7 +444,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_VENISONLEG0";
         descriptionShort = "#STR_CHEFZ_ITEM_VENISONLEG1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\leg_venison.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 620;
 
@@ -481,7 +482,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_DICEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_DICEDMEAT1";
-        model = "\ChefZ\ChefZ_Items\models\beefcubes.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 260;
 
@@ -728,7 +729,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAWSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_raw.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -762,7 +763,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAWPORKSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWPORKSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_raw_pork.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -796,7 +797,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAWVENISONSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWVENISONSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_raw_venison.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -830,7 +831,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAWBOARSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWBOARSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_raw_boar.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -864,7 +865,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAWHUNTERSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWHUNTERSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_raw_hunter.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -898,7 +899,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAWSPICYSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWSPICYSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_raw_spicy.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -932,7 +933,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_COOKEDSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_COOKEDSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -966,7 +967,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PORKSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_PORKSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1000,7 +1001,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_VENISONSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_VENISONSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1034,7 +1035,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BOARSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_BOARSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1068,7 +1069,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HUNTERSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1102,7 +1103,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SPICYSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_SPICYSAUSAGE1";
-        model = "\dz\gear\food\sausage.p3d";
+        model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
         itemSize[] = {2, 1};
         weight = 300;
 

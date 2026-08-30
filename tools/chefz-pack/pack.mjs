@@ -82,7 +82,10 @@ for (const src of sources()) {
     failed.push(`${name}: keine Datei "$PREFIX$" - ohne Praefix laedt DayZ die Skripte nicht`);
     continue;
   }
-  if (prefix !== name) {
+  // Asset-Pakete tragen den Laufzeitpfad "ChefZ\<Name>" als Praefix, weil
+  // die Texturpfade so in den gelieferten .p3d stehen; alles andere muss der
+  // Ordnername selbst sein.
+  if (prefix !== name && prefix !== 'ChefZ\\' + name) {
     failed.push(`${name}: Praefix "${prefix}" weicht vom Ordnernamen ab - `
       + 'die Laufzeitpfade der Skriptmodule zeigen dann ins Leere');
     continue;

@@ -20,8 +20,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const PAIRS = [
   ['ChefZ/ChefZ_Items',   'Psyerns_ChefZ_Core/Addons/ChefZ_Items'],
   ['ChefZ/ChefZ_Devices', 'Psyerns_ChefZ_Core/Addons/ChefZ_Devices'],
+  ['ChefZ/ChefZ_Food',    'Psyerns_ChefZ_Core/Addons/ChefZ_Food'],
+  ['ChefZ/ChefZ_Plants',  'Psyerns_ChefZ_Core/Addons/ChefZ_Plants'],
 ];
-const SUBDIRS = ['models', 'data'];
+const SUBDIRS = ['models', 'data', 'cultivation/data'];
 
 let copied = 0;
 let same = 0;

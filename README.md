@@ -36,9 +36,9 @@
 
 **The mod is written. It has never kept a DayZ server running.**
 
-Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 188 `CfgVehicles`
-classes (`scope = 0` base classes included), 171 script files, 512 data records and
-401 stringtable keys in 13 languages. The static validator suite runs green. What
+Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 159 `CfgVehicles`
+classes (`scope = 0` base classes included), 171 script files, 480 data records and
+343 stringtable keys in 13 languages. The static validator suite runs green. What
 has not happened is a server that survives startup — the process registers every
 addon, loads its config, and then dies with an access violation in the mission's
 `OnInit` chain while the core sits in safe mode with empty registries.
@@ -108,13 +108,17 @@ Psyerns_ChefZ/                              ← repository root (this README)
 compatibility mods are optional consumers; ChefZ runs unchanged without any of them.
 
 **About `ChefZ/`.** The asset delivery as it was handed over, kept in the repository
-unchanged on purpose (`cf8efa5`). Its models and textures already live in
-`ChefZ_Devices` and `ChefZ_Items` under `Addons/`; this folder is the original, not a
-second copy in use. It is **not part of the build** — `pack.mjs` collects
+unchanged on purpose. It has grown to **129 files** — 50 models, 52 textures and 17
+scripts across `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items` and
+`ChefZ_Plants`. Only part of it is in use: the beekeeping and item models were copied
+into `ChefZ_Devices`, `ChefZ_Items`, `ChefZ_Food` and `ChefZ_Plants` under `Addons/`
+and are bound to their classes since 30.08. This folder is the original, not a second copy
+in use. It is **not part of the build** — `pack.mjs` collects
 `Psyerns_ChefZ_Core/Addons/*` and root folders matching `Psyerns_ChefZ_*_Comp`, and
-`ChefZ/` is neither — and the validator never reads it. Worth knowing: its three
-`CfgPatches` names, `ChefZ_Core`, `ChefZ_Devices` and `ChefZ_Items`, are now all three
-in use by real addons, so it must never be packed as it stands.
+`ChefZ/` is neither — and the validator never reads it. Worth knowing: three of its five
+`CfgPatches` names — `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Items` — are also the names
+of real addons, so it must never be packed as it stands. `ChefZ_Food` and
+`ChefZ_Plants` are so far unique.
 
 `ChefZ_Registry` is the one addon allowed to hold the merged category, tag, nutrition
 and preservation tables. Content modules never write them — they hand in a delta, and a

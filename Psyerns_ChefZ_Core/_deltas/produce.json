@@ -33,6 +33,8 @@
         "ChefZ_Garlic",
         "ChefZ_Carrot",
         "ChefZ_Cabbage",
-        "ChefZ_Corn"
+        "ChefZ_Corn",
+        "ChefZ_CornPlant",
+        "ChefZ_HandRake"
     ]
 }

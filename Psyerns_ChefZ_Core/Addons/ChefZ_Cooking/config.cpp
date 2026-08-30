@@ -216,6 +216,7 @@ class CfgPatches
             "DZ_Gear_Cooking",
             "ChefZ_Core",
             "ChefZ_Items",
+            "ChefZ_Food",
             "ChefZ_Ingredients",
             "ChefZ_Farming",
             "ChefZ_Meat",
@@ -688,7 +689,7 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_EMPTYJAR0";
         descriptionShort = "#STR_CHEFZ_ITEM_EMPTYJAR1";
         // EIGENES MODELL (29.08.2026): das leere Glas aus ChefZ_Items.
-        model = "\ChefZ\ChefZ_Items\models\jar.p3d";
+        model = "\ChefZ\ChefZ_Items\models\glass_jar.p3d";   // EIGENES MODELL (30.08.2026): glass_jar ersetzt jar
         itemSize[] = {1, 2};
         weight = 210;
     };
@@ -705,7 +706,7 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_EMPTYBOX0";
         descriptionShort = "#STR_CHEFZ_ITEM_EMPTYBOX1";
         // PROXY: Kartonsilhouette. Bedarf: eigenes Boxmesh (P3, V2).
-        model = "\dz\gear\food\BoxCereal.p3d";
+        model = "\ChefZ\ChefZ_Items\models\box_open.p3d";   // EIGENES MODELL (30.08.2026): die offene Box; box.p3d (zu) bleibt Reserve
         itemSize[] = {2, 2};
         weight = 110;
     };
@@ -1065,7 +1066,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_FARMERSBREAKFAST";
         descriptionShort = "#STR_CHEFZ_ITEM_FARMERSBREAKFAST_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\farmersbreakfast.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 620;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
@@ -1144,7 +1145,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SAUSAGEBREADPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEBREADPLATE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\sausage_breadplate.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 520;
         lifetime = 18000;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
@@ -1264,7 +1265,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MEATDUMPLINGS";
         descriptionShort = "#STR_CHEFZ_ITEM_MEATDUMPLINGS_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\meatdumplings.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 460;
         lifetime = 10800;
         // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
@@ -1436,7 +1437,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HUNTERSTEW";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERSTEW_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";
+        model = "\ChefZ\ChefZ_Food\models\stew_hunter.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 480;
         lifetime = 7200;
@@ -1476,7 +1477,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_FISHERMANSTEW";
         descriptionShort = "#STR_CHEFZ_ITEM_FISHERMANSTEW_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";
+        model = "\ChefZ\ChefZ_Food\models\stew_fisherman.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 470;
         lifetime = 7200;
@@ -1519,7 +1520,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_VEGETABLESOUP";
         descriptionShort = "#STR_CHEFZ_ITEM_VEGETABLESOUP_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";
+        model = "\ChefZ\ChefZ_Food\models\soup_vegetables.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 450;
         lifetime = 7200;
@@ -1562,7 +1563,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BONEBROTHSOUP";
         descriptionShort = "#STR_CHEFZ_ITEM_BONEBROTHSOUP_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";
+        model = "\ChefZ\ChefZ_Food\models\soup_bonebroth.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 500;
         lifetime = 7200;
@@ -1614,7 +1615,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHERNARUSCHILI";
         descriptionShort = "#STR_CHEFZ_ITEM_CHERNARUSCHILI_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";
+        model = "\ChefZ\ChefZ_Food\models\soup_chernaruschili.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 2};
         weight = 520;
         lifetime = 7200;
@@ -1679,7 +1680,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PUMPKINSOUP";
         descriptionShort = "#STR_CHEFZ_ITEM_PUMPKINSOUP_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\soup.p3d";   // EIGENES MODELL (30.08.2026): die namenlose Suppenschuessel der Lieferung
         itemSize[] = {2, 2};
         weight = 480;
         lifetime = 7200;

@@ -6,9 +6,10 @@ Everything on this page is read from
 `ChefZ_Core/Config/Core.json` and resolved by
 `ChefZ_CoreSettingsDef` / `ChefZ_ConfigManager`.
 
-**Count:** 44 top-level keys, of which 42 are plain settings and 2 are nested
+**Count:** 45 top-level keys, of which 43 are plain settings and 2 are nested
 blocks. The blocks contribute 19 (`priorityWeights`) and 5 (`qualityScoring`)
-further keys. **66 individual settings in total.**
+further keys. **67 individual settings in total.** Every one of them is described
+below; recount from `ChefZ_Core/Config/Core.json` before quoting these numbers.
 
 ## 1. Where settings come from
 

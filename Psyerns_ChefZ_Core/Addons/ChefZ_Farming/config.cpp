@@ -62,6 +62,7 @@ class CfgPatches
             "ChefZ_VegetableFood_Base", 
             
             "ChefZ_Onion", "ChefZ_Garlic", "ChefZ_Carrot", "ChefZ_Cabbage", "ChefZ_Corn",
+            "ChefZ_CornPlant",
             // ### SLICE herbs ###
             "ChefZ_FreshHerbBase",
             
@@ -74,7 +75,8 @@ class CfgPatches
             "ChefZ_HoneycombFrame_Base",
             "ChefZ_HoneycombFrameEmpty",
             "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
-            "ChefZ_UncappingFork", "ChefZ_BeeSmoker"
+            "ChefZ_UncappingFork", "ChefZ_BeeSmoker",
+            "ChefZ_HandRake"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -96,7 +98,7 @@ class CfgPatches
         // Die Gegenrichtung waere ein Zyklus. Der Slice apiary fuehrt deshalb
         // seine drei Werkzeuggruppen selbst (CfgChefZTools weiter unten),
         // statt METALWORK_TOOL aus ChefZ_Processing zu benutzen.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices", "ChefZ_Plants"};
     };
 };
 
@@ -360,7 +362,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_ONION";
         descriptionShort = "#STR_CHEFZ_ITEM_ONION_DESC";
-        model = "\dz\gear\food\apple.p3d";
+        model = "\ChefZ\ChefZ_Plants\models\redonion.p3d";   // EIGENES MODELL (30.08.2026): redonion
         weight = 160;
         class Nutrition
         {
@@ -395,7 +397,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_GARLIC";
         descriptionShort = "#STR_CHEFZ_ITEM_GARLIC_DESC";
-        model = "\dz\gear\food\mushroom_agaricus.p3d";
+        model = "\ChefZ\ChefZ_Plants\models\garlic.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 60;
         class Nutrition
         {
@@ -431,7 +433,7 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_CARROT";
         descriptionShort = "#STR_CHEFZ_ITEM_CARROT_DESC";
         // EIGENES MODELL (29.08.2026) statt der geerbten Zucchini.
-        model = "\ChefZ\ChefZ_Items\models\carrot.p3d";
+        model = "\ChefZ\ChefZ_Plants\models\carrot.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 120;
         class Nutrition
         {
@@ -461,7 +463,11 @@ class CfgVehicles
 
     // --- Mais (29.08.2026, loest Dill ab) --------------------------------------
     //
-    // Fundpflanze wie die Karotte: kein Saatgut, keine Pflanze. Staerkehaltig,
+    // Seit 30.08.2026 ANBAUBAR: die Lieferung c09900f bringt Kolben, Pflanze
+    // (7 Wachstumsstufen, 2 Kolben Ertrag) und Textur. Der Kolben selbst ist
+    // das Saatgut - GardenBase liest "Horticulture PlantType" aus der Config
+    // des gepflanzten Items (GardenBase.c:386), eine SeedBase-Ableitung ist
+    // dafuer nicht noetig; der Kolben bleibt damit essbare Zutat. Staerkehaltig,
     // deshalb energiereicher und saettigender als Wurzelgemuese, aber trocken.
     // Referenz ist Vanillas Kartoffel (180 / 45 / 40): ein Kolben traegt mehr
     // Masse, aber nicht das Doppelte an Saettigung.
@@ -477,7 +483,14 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CORN";
         descriptionShort = "#STR_CHEFZ_ITEM_CORN_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\corn_cob.p3d";   // EIGENES MODELL (30.08.2026)
         weight = 250;
+
+        // Der Kolben ist das Saatgut (siehe Bannerkommentar oben).
+        class Horticulture
+        {
+            PlantType = "ChefZ_CornPlant";
+        };
         class Nutrition
         {
             fullnessIndex = 60;
@@ -511,7 +524,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CABBAGE";
         descriptionShort = "#STR_CHEFZ_ITEM_CABBAGE_DESC";
-        model = "\dz\gear\food\Pumpkin_fresh.p3d";
+        model = "\ChefZ\ChefZ_Plants\models\cabbage.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 900;
         itemSize[] = {2, 2};
         class Nutrition
@@ -601,6 +614,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PARSLEY";
         descriptionShort = "#STR_CHEFZ_ITEM_PARSLEY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\parsley.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
     };
 
     class ChefZ_Thyme : ChefZ_FreshHerbBase
@@ -615,6 +629,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_ROSEMARY";
         descriptionShort = "#STR_CHEFZ_ITEM_ROSEMARY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\rosmary.p3d";   // EIGENES MODELL (30.08.2026); Dateiname der Lieferung ohne e
     };
 
     class ChefZ_WildGarlic : ChefZ_FreshHerbBase
@@ -1085,6 +1100,58 @@ class CfgVehicles
         varQuantityDestroyOnMin = 0;
         quantityBar = 1;
         quantityShow = 0;
+    };
+
+    //--------------------------------------------------------------------------
+    // Der Handrechen (Lieferung c09900f). Gartengeraet; noch ohne eigenen
+    // Prozess - er existiert, damit das gelieferte Modell im Spiel ist und
+    // ein spaeterer Beet-Slice ihn als Werkzeug fassen kann.
+    //--------------------------------------------------------------------------
+    class ChefZ_HandRake : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_HANDRAKE";
+        descriptionShort = "#STR_CHEFZ_ITEM_HANDRAKE_DESC";
+        model = "\ChefZ\ChefZ_Items\models\handrake.p3d";   // EIGENES MODELL (30.08.2026)
+        rotationFlags = 17;
+        itemSize[] = {3, 1};
+        weight = 700;
+        lifetime = 43200;
+        repairableWithKits[] = {};
+    };
+
+    //--------------------------------------------------------------------------
+    // Die Maispflanze im Beet (Lieferung c09900f). Vanillas Anbau uebernimmt
+    // alles: GardenBase erzeugt sie als Attachment aus dem PlantType des
+    // gepflanzten Kolbens (GardenBase.c:484), PlantBase laesst sie wachsen.
+    // 7 Stufen und 2 Kolben Ertrag sind die Werte der Lieferung.
+    //--------------------------------------------------------------------------
+    class ChefZ_CornPlant : PlantBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CORNPLANT";
+        descriptionShort = "#STR_CHEFZ_ITEM_CORNPLANT_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\corn_plant.p3d";
+        class Horticulture
+        {
+            GrowthStagesCount = 7;
+            CropsCount = 2;
+            CropsType = "ChefZ_Corn";
+        };
+    };
+};
+
+// Anbau-Registrierung der Maispflanze: Textur und Material der gesunden
+// Pflanze, wie die Lieferung sie mitbringt (cultivation/config.cpp).
+class CfgHorticulture
+{
+    class Plants
+    {
+        class ChefZ_CornPlant
+        {
+            healthyTex = "ChefZ\ChefZ_Plants\data\corn_plant_co.paa";
+            healthyMat = "ChefZ\ChefZ_Plants\cultivation\data\corn_plant.rvmat";
+        };
     };
 };
 

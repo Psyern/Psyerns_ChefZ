@@ -21,11 +21,11 @@ For the reasoning behind the split, see [Architecture](Architecture).
 | `ChefZ_Meat` | 32 | 1 | — | 58 | 55 |
 | `ChefZ_Baking` | 6 | 1 | — | 12 | 16 |
 | `ChefZ_Preservation` | 10 | 1 | 10 | 20 | 28 |
-| `ChefZ_Cooking` | 72 | 5 | 84 | 45 | 153 |
+| `ChefZ_Cooking` | 44 | 5 | 58 | 45 | 96 |
 | `ChefZ_Cookbook` | 2 | 11 | — | — | 3 |
 | `ChefZ_Devices` | 0 | 0 | — | — | — |
 | `ChefZ_Items` | 0 | 0 | — | — | — |
-| **total** | **188** | **170** | **130** | **382** | **401** |
+| **total** | **159** | **170** | **106** | **374** | **343** |
 
 | Comp mod | Item classes | Script files | Stringtable keys |
 |---|---:|---:|---:|
@@ -263,11 +263,12 @@ The largest module. Sauces, broths, tableware and all 28 dishes — 20 plates,
   both `scope = 0`), and 3 forward declarations of vanilla classes.
 - **5 script files**, among them `ChefZ_SauceItems.c`, `ChefZ_ServingItems.c`,
   `ChefZ_BowlDishItems.c` and `ChefZ_DishesBItems.c`.
-- **Rank 1**: **84 records** — 64 ingredient bindings, 5 quality tiers
+- **Rank 1**: **58 records** — 38 ingredient bindings, 5 quality tiers
   (`POOR`/`SIMPLE`/`PREPARED`/`SEASONED`/`PREMIUM`, tier set `DISH_DEFAULT`),
   5 containers (`PLATE`, `BOWL`, `CAN`, `JAR`, `BOX`), 3 cooking devices
   (`FryingPan` 2 portions, `Pot` 4, `Cauldron` 12), 5 processes and 2 tool
-  groups (`AXE_TOOL`, `SAWING_TOOL`).
+  groups (`AXE_TOOL`, `SAWING_TOOL`). The bindings dropped from 64 with the bulk
+  step: a dish that no longer exists twice needs one binding, not two.
 - **Rank 2**: **45 records** — 39 of the mod's 47 recipes, plus 5 transforms and
   1 ingredient.
 - **`CfgChefZ` slices**: five — `ChefZ_Sauces` (300), `ChefZ_Serving`

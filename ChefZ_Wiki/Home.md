@@ -40,13 +40,13 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 | Addons | 12 — ten with content, two assets only |
 | Optional compatibility mods | 3 |
 | Recipes | 47 |
-| Ingredient records | 112 — 60 ChefZ classes, 52 vanilla items mapped in |
+| Ingredient records | 113 — 59 ChefZ classes, 54 vanilla items mapped in |
 | Processing transforms | 61 |
 | Processing stations | 11 |
 | Ingredient categories | 41 |
 | Food tags | 19 |
 | Script files | 171 in the mod, 22 in the comp mods |
-| Translated strings | 401 keys × 13 languages |
+| Translated strings | 343 keys × 13 languages |
 
 ## How it is organised
 
