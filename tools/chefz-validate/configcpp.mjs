@@ -102,13 +102,30 @@ export default function run() {
   }
 
   // --- modded class: jede Stelle benennen, damit sie bewusst bleibt ---
+  //
+  // Der Zweck dieser Regel ist nicht, modded class zu verhindern - ohne sie
+  // gaebe es diesen Mod nicht -, sondern dass keine Stelle UNGEPRUEFT bleibt.
+  // Genau das kann sie erst, seit eine geprueft Stelle das sagen darf:
+  // "SCOUT-GEPRUEFT" im Kommentar bis zwoelf Zeilen davor schweigt sie, alles
+  // andere meldet sie weiter. Zwanzig Dauerwarnungen, die bei jedem Lauf
+  // gleich aussehen, haetten die einundzwanzigste - die neue, ungepruefte -
+  // verschluckt.
+  //
+  // Der Marker traegt das Datum der Pruefung. Er ist keine Absolution: wer
+  // die Klasse spaeter umbaut, laesst ihn stehen und luegt damit - deshalb
+  // nennt er den Pruefer und den Tag, und deshalb steht er direkt ueber der
+  // Zeile, die er betrifft, wo ihn jede Aenderung sieht.
   for (const dir of modules) {
     for (const file of walk(dir, (_p, n) => n.endsWith('.c'))) {
       const txt = readText(file);
       if (!txt) continue;
-      txt.split(/\r?\n/).forEach((l, i) => {
+      const lines = txt.split(/\r?\n/);
+      lines.forEach((l, i) => {
         const m = l.match(/^\s*modded\s+class\s+([A-Za-z_]\w*)/);
-        if (m) f.warn(file, i + 1, `modded class ${m[1]} - Kollisionsflaeche gegenueber anderen Mods, im Conflict-Scout pruefen`);
+        if (!m) return;
+        const window = lines.slice(Math.max(0, i - 12), i).join('\n');
+        if (/SCOUT-GEPRUEFT/.test(window)) return;
+        f.warn(file, i + 1, `modded class ${m[1]} - Kollisionsflaeche gegenueber anderen Mods, im Conflict-Scout pruefen. Ist sie geprueft: "SCOUT-GEPRUEFT <Datum>" in den Kommentar darueber.`);
       });
     }
   }

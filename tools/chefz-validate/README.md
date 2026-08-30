@@ -84,11 +84,20 @@ Quelltext: bewusst, sichtbar und mit `grep` zu finden.
 |---|---|---|
 | `I4-BELEG` | in den Kommentar davor (bis zwoelf Zeilen) | `chefzcore`: „ein Fremdmodname steht im Core" – ja, als Beleg einer Beobachtung, nicht als Anbindung. |
 | `ASSET-PBO` | irgendwo in die `config.cpp` des Moduls, ueblich im Kopf | `configcpp`: „dieses Modul nennt `ChefZ_Core` nicht in `requiredAddons`" – ja, es ist ein reines Dateipaket; eine `.p3d` haengt von keinem Skriptmodul ab. |
+| `SCOUT-GEPRUEFT <Datum>` | in den Kommentar ueber der `modded class` (bis zwoelf Zeilen) | `configcpp`: „diese Klassenerweiterung ist eine Kollisionsflaeche" – ja, und sie wurde am genannten Tag vom `chefz-conflict-scout` geprueft. |
 
-Beide sind absichtlich eng: sie unterdruecken genau eine Meldung an genau
+Alle drei sind absichtlich eng: sie unterdruecken genau eine Meldung an genau
 einer Stelle, und wer sie setzt, hinterlaesst ein Wort, nach dem der naechste
 Leser suchen kann. Ein Marker, der einen ganzen Pruefer stumm schaltet, waere
 das Gegenteil davon.
+
+`SCOUT-GEPRUEFT` traegt zusaetzlich ein Datum, weil er eine Aussage ueber einen
+Zeitpunkt macht und keine ueber die Ewigkeit: wer die Klasse spaeter umbaut,
+muss ihn neu verdienen. Suchen laesst sich der Bestand mit
+
+```bash
+grep -rn "SCOUT-GEPRUEFT" --include=*.c .
+```
 
 ## Selbstpruefung
 

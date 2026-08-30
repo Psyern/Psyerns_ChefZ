@@ -326,28 +326,41 @@ Last full run:
 
 ```
 node tools/chefz-validate/index.mjs    -> Exit 0
-                                          0 errors, 55 warnings, 19/19 checkers green,
+                                          0 errors, 20 warnings, 19/19 checkers green,
                                           0 tool failures
 node tools/chefz-validate/selftest.mjs -> Exit 0, 18 of 19 checkers covered
 ```
 
-Where the 55 warnings sit:
+Where the 20 warnings sit:
 
 | Checker | Errors | Warnings | What they are |
 |---|---:|---:|---|
-| `configcpp` | 0 | 37 | classes not listed in `units[]` of `CfgPatches` |
-| `chefznut` | 0 | 14 | result classes without `Nutrition`/`Food` — tools, empty containers, salt, hive parts |
-| `chefzcore` | 0 | 3 | a foreign-system name in a **comment** in the core — proof, not a hook |
-| `deltas` | 0 | 1 | category `DRIED_HERB` differs only in `parent` between two slices |
+| `configcpp` | 0 | 20 | `modded class` declarations and their collision surface against other mods |
 | every other checker | 0 | 0 | |
 
-`classrefs` and `naming` used to carry 57 warnings between them. They are at zero
-since `vanilla-classes.txt` was filled — see section 6.
+**Of the 59 warnings, 39 were the checkers' own noise and 4 were real**, worked
+through on 30.08.2026.
 
-The 14 `chefznut` warnings are the honest kind: the checker cannot decide statically
-whether `ChefZ_RawSalt`, `ChefZ_EmptyPlate` or `ChefZ_UncappingFork` is *supposed* to
-be edible, so it names the consequence and leaves the decision to a human. If the class
-should be edible, add a `Nutrition` block. If not, the warning may stand.
+`configcpp` counted every class with `scope[0] == CfgVehicles` as an item and so
+demanded `units[]` entries for nested nodes: `ChefZ_BeefLegYield` (a skinning yield
+under `Animal_BosTaurus > Skinning`) and `ChefZ_RawToBaked` (a food stage transition).
+Nineteen such nodes hid the two entries that really were missing —
+`ChefZ_MeatItemBase` and `ChefZ_PreservedFood_Base`, both now listed. The rule counts
+only the first level under `CfgVehicles`.
+
+`chefznut` knew only evidence *for* edibility; finding none it left the question open,
+fourteen times, for hive parts, plates, bowls, the pasta machine and salt. The other
+direction is just as provable: a class whose config chain ends at `Inventory_Base` or
+`GardenLime` instead of `Edible_Base` is not food. Two more were answered rather than
+silenced — the four asset addons now say `ASSET-PBO`, the three foreign-mod names in
+the core say `I4-BELEG` — and one was a real data defect: `DRIED_HERB` had parent
+`HERB` in one slice and `null` in another.
+
+`classrefs` and `naming` had already dropped 57 warnings between them when
+`vanilla-classes.txt` was filled — see section 6.
+
+What remains is one real group: 20 `modded class` declarations whose collision surface
+against other mods is worth knowing about, and cannot be decided by a checker.
 
 **What a green run does not mean.** Nothing on this page has ever been confirmed by a
 running game. The suite reads files; the mod has never survived server startup. See
