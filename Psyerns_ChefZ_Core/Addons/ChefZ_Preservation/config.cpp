@@ -80,6 +80,8 @@ class CfgPatches
     {
         units[] =
         {
+            // Die Basis der acht haltbar gemachten Waren.
+            "ChefZ_PreservedFood_Base",
             "ChefZ_SaltedMeat",
             "ChefZ_DriedMeat",
             "ChefZ_SmokedMeat",

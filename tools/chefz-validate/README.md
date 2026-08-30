@@ -19,7 +19,7 @@ Form der Dateien:
 | Datei | Prueft |
 |---|---|
 | `schema.mjs` | Form aller ChefZ-JSONs: Rezepte, Zutaten, Deltas. Pflichtfelder, Typen, doppelte RecipeIDs, unbekannte Felder (Tippfehler). |
-| `configcpp.mjs` | `config.cpp` und `$PREFIX$` je Modul, `CfgPatches` vorhanden und eindeutig, `requiredAddons` gesetzt, `units[]` vollstaendig, keine Klasse doppelt definiert, jede `modded class` benannt. |
+| `configcpp.mjs` | `config.cpp` und `$PREFIX$` je Modul, `CfgPatches` vorhanden und eindeutig, `requiredAddons` gesetzt, `units[]` vollstaendig (nur Klassen **direkt** unter `CfgVehicles` – tiefer liegen Unterknoten wie Skinning-Ertraege und Garstufenuebergaenge), keine Klasse doppelt definiert, jede `modded class` benannt. Ein Asset-Paket ohne `ChefZ_Core` schweigt mit dem Marker `ASSET-PBO`. |
 | `classrefs.mjs` | Jede in JSON referenzierte Klasse und jede Elternklasse existiert – im Projekt, in einem Delta oder im Referenzindex. Seit S19 auch `cls`, `portionClass`, `emptyClass`, `emptyOnLastPortion`, `returnContainer`, `deviceClasses[]`. |
 | `naming.mjs` | `ChefZ_PascalCase`, keine Kollision mit Fremdklassen. |
 | `stringtable.mjs` | Jeder `#STR_CHEFZ_*` ist definiert; keine Doppelten; verwaiste Schluessel als Warnung. |
@@ -31,7 +31,7 @@ Bedeutung des Inhalts (S19, Entwurf `19` §3):
 |---|---|---|
 | `chefzsym.mjs` | Jede Symbolreferenz in JSON und `CfgChefZ*` existiert in den gemergten Registries; geschlossene Wertelisten (`completion`, `exec`, `scope`, Garstufen, Kochmethoden ...) werden mitgeprueft. | **Auflage zu `03` E1 / OF-11** |
 | `chefzcore.mjs` | In `Addons/ChefZ_Core/**` kein Fremdsystemname, kein Content-Bezeichner, keine Content-Aufzaehlung, kein eigener Content-Datensatz. | **Auflage zu I3 und I4** |
-| `chefznut.mjs` | Jede essbare Ergebnis- und Portionsklasse hat `class Nutrition` oder `class Food` **und** `scope != 0`. | `01` V7 |
+| `chefznut.mjs` | Jede essbare Ergebnis- und Portionsklasse hat `class Nutrition` oder `class Food` **und** `scope != 0`. Klassen, deren Config-Kette bei einer Nicht-Nahrungsbasis endet (`Inventory_Base`, `GardenLime`), sind entschieden und melden nichts. | `01` V7 |
 | `chefzstage.mjs` | Jede kochbare ChefZ-Klasse deklariert `FoodStageTransitions` – sonst verbrennt sie im Topf. | `01` V4 |
 | `chefzproc.mjs` | `HANDCRAFT`-Transforms: 1 bis 2 Eingaenge, Werkzeug nur bei einem Eingang, hoechstens 10 Ergebnisse. | `01` V12 |
 | `chefzlog.mjs` | Kein ungewachter `ChefZ_Log.Debug/Trace`-Aufruf innerhalb einer Schleife. | `18` E2 |
@@ -73,6 +73,22 @@ Bericht. Das ist die einzige Tuer, sie ist eng, und sie ist greppbar:
 ```bash
 grep -rn "I4-BELEG" Psyerns_ChefZ_Core/Addons/ChefZ_Core
 ```
+
+## Die zwei Marker
+
+Zwei Befunde dieses Prueferbestands sind Fragen, keine Fehler – und eine Frage
+braucht einen Ort fuer die Antwort. Beide Marker stehen als Wort im
+Quelltext: bewusst, sichtbar und mit `grep` zu finden.
+
+| Marker | Wohin | Beantwortet |
+|---|---|---|
+| `I4-BELEG` | in den Kommentar davor (bis zwoelf Zeilen) | `chefzcore`: „ein Fremdmodname steht im Core" – ja, als Beleg einer Beobachtung, nicht als Anbindung. |
+| `ASSET-PBO` | irgendwo in die `config.cpp` des Moduls, ueblich im Kopf | `configcpp`: „dieses Modul nennt `ChefZ_Core` nicht in `requiredAddons`" – ja, es ist ein reines Dateipaket; eine `.p3d` haengt von keinem Skriptmodul ab. |
+
+Beide sind absichtlich eng: sie unterdruecken genau eine Meldung an genau
+einer Stelle, und wer sie setzt, hinterlaesst ein Wort, nach dem der naechste
+Leser suchen kann. Ein Marker, der einen ganzen Pruefer stumm schaltet, waere
+das Gegenteil davon.
 
 ## Selbstpruefung
 

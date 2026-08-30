@@ -37,6 +37,40 @@ export const EDIBLE_CONFIG_BASES = new Set([
   'Edible_Base', 'Bottle_Base', 'ChefZ_Edible_Base', 'ChefZ_PortionedFood_Base',
 ]);
 
+/**
+ * Config-Basen, an denen man das GEGENTEIL erkennt: sicher keine Nahrung.
+ *
+ * Beide Vanillaklassen erben im Skript direkt von ItemBase, nicht von
+ * Edible_Base (GardenLime.c:1) - Vanillas Gartenkalk ist so wenig ein
+ * Nahrungsmittel wie eine Holzkiste. Landet configChain bei einem dieser
+ * Namen, ist die letzte projekteigene Klasse DIREKT davon abgeleitet und
+ * lief nirgends ueber Edible_Base; sonst stuende hier "Edible_Base" als
+ * external, so wie bei jeder essbaren Klasse des Projekts.
+ *
+ * Die Liste ist so kurz wie die essbare Gegenliste und aus demselben Grund:
+ * was hier fehlt, kostet eine Warnung, die stehen bleiben darf. Was hier zu
+ * viel steht, verschweigt einen echten Befund.
+ */
+export const INEDIBLE_CONFIG_BASES = new Set([
+  'Inventory_Base', 'GardenLime',
+]);
+
+/**
+ * Warum eine Klasse sicher KEINE Nahrung ist - oder null.
+ *
+ * Spiegelbild zu edibleEvidence(). Nur wenn beide null liefern, ist die
+ * Frage wirklich offen, und nur dann lohnt eine Warnung.
+ */
+export function inedibleEvidence(className) {
+  const { chain, external } = configChain(className);
+  if (external && INEDIBLE_CONFIG_BASES.has(external)) {
+    const last = chain.length > 0 ? chain[chain.length - 1].name : className;
+    if (last === className) return `erbt in der config.cpp direkt von ${external} (keine Nahrungsbasis)`;
+    return `config.cpp-Kette laeuft ueber ${last} nach ${external} (keine Nahrungsbasis)`;
+  }
+  return null;
+}
+
 /** Skript-Vererbungskette, solange sie im Projekt liegt. */
 export function scriptChainOf(name, classes = scriptClasses()) {
   const chain = [];

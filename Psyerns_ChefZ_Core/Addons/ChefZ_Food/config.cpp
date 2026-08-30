@@ -15,6 +15,11 @@
 //
 // KEIN CfgMods, KEIN Skript: nichts zu laden ausser Dateien. Und KEIN
 // ChefZ_Core in requiredAddons - Dateien brauchen keinen Code.
+// ASSET-PBO: reines Dateipaket - keine Klasse, kein Skript, kein Code.
+// Deshalb steht ChefZ_Core NICHT in requiredAddons: eine .p3d haengt von
+// keinem Skriptmodul ab, und eine Ladereihenfolge gegenueber dem Core gibt
+// es fuer sie nicht. Der Validator fragt an dieser Stelle nach; dieses Wort
+// ist die Antwort.
 class CfgPatches
 {
     class ChefZ_Food

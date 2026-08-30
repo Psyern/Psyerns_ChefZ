@@ -20,6 +20,10 @@
 // ChefZ_ToolGroupDef und ChefZ_ProcessingManager namentlich berufen. Sie waren
 // im Spiel nie ausloesbar. Der Validator "chefzaction" prueft es seither.
 //
+// I4-BELEG: die beiden folgenden Absaetze nennen Fremdmods als Beleg - einmal
+// als Vorbild fuer ein Vanilla-Muster, einmal als ausdrueckliche Absage. Kein
+// Aufruf, keine Klasse, keine Abhaengigkeit.
+//
 // Das Muster ist von zehn Expansion-Modulen uebernommen, die dieselbe Klasse
 // auf demselben Server erweitern (DayZExpansion/*/Classes/.../ActionConstructor.c).
 //

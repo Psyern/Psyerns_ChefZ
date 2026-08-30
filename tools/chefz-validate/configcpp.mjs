@@ -46,14 +46,32 @@ export default function run() {
     if (!isCore && required.length === 0 && parsed.patches.length > 0) {
       f.error(cfg, parsed.patches[0].line, `"${path.basename(dir)}" deklariert keine requiredAddons - die Ladereihenfolge ist damit undefiniert`);
     }
-    if (!isCore && required.length > 0 && !required.some(r => /ChefZ_Core/i.test(r))) {
-      f.warn(cfg, parsed.patches[0]?.line ?? 0, `"${path.basename(dir)}" nennt ChefZ_Core nicht in requiredAddons - beabsichtigt?`);
+    // Ein reines Asset-Paket (nur models/ und data/, keine Klasse, kein
+    // Skript) braucht ChefZ_Core NICHT: Dateien haengen von keinem Code ab.
+    // Wer das so meint, schreibt "ASSET-PBO" in den Kopf seiner config.cpp -
+    // dieselbe Tuer, die chefzcore mit "I4-BELEG" oeffnet, und aus demselben
+    // Grund: eine bewusste Entscheidung soll in der Datei stehen, nicht im
+    // Gedaechtnis dessen, der den Report liest.
+    const assetPbo = /ASSET-PBO/.test(readText(cfg) || '');
+    if (!isCore && !assetPbo && required.length > 0 && !required.some(r => /ChefZ_Core/i.test(r))) {
+      f.warn(cfg, parsed.patches[0]?.line ?? 0, `"${path.basename(dir)}" nennt ChefZ_Core nicht in requiredAddons - beabsichtigt? Wenn es ein reines Asset-Paket ist: "ASSET-PBO" in den Kopf der config.cpp schreiben.`);
     }
 
-    // units[] sollte die im Modul definierten Item-Klassen nennen
+    // units[] sollte die im Modul definierten Item-Klassen nennen.
+    //
+    // scope.length === 1 ist die ganze Praezision dieser Regel: nur eine
+    // Klasse DIREKT unter CfgVehicles ist ein Item. Tiefer liegen
+    // Unterknoten, die zufaellig einen ChefZ-Namen tragen und in units[]
+    // nichts verloren haben - der Skinning-Ertrag
+    // (CfgVehicles > Animal_BosTaurus > Skinning > ChefZ_BeefLegYield) und
+    // der Garstufenuebergang
+    // (CfgVehicles > <Item> > Food > FoodStageTransitions > Raw >
+    // ChefZ_RawToBaked). Ohne diese Bedingung meldete der Pruefer neunzehn
+    // solcher Knoten, und die echten zwei Luecken gingen darin unter.
     const units = new Set(parsed.arrays.units || []);
     const own = parsed.classes.filter(c =>
-      c.declaredBody && c.scope[0] === 'CfgVehicles' && c.name.startsWith('ChefZ_'));
+      c.declaredBody && c.scope.length === 1 && c.scope[0] === 'CfgVehicles'
+      && c.name.startsWith('ChefZ_'));
     for (const c of own) {
       if (units.size > 0 && !units.has(c.name)) {
         f.warn(cfg, c.line, `Klasse "${c.name}" steht nicht in units[] von CfgPatches`);

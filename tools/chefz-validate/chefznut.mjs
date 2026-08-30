@@ -33,7 +33,7 @@
 
 import { Findings } from './lib.mjs';
 import { configItemIndex, moduleOf } from './chefzdata.mjs';
-import { foodContext, edibleEvidence, hasNode, resolveProp } from './chefzfood.mjs';
+import { foodContext, edibleEvidence, inedibleEvidence, hasNode, resolveProp } from './chefzfood.mjs';
 
 export default function run() {
   const f = new Findings('chefznut');
@@ -87,6 +87,9 @@ export default function run() {
         + 'GetIDFromClassname liefert -1 und AddToStomach kehrt still zurueck - der Bissen ist wirkungslos.';
       if (evidence) {
         f.error(entry.file, entry.node.line, `${base} Essbar, weil: ${evidence}.`);
+      } else if (inedibleEvidence(cls)) {
+        // Die Frage ist entschieden, nur andersherum: ein Bienenstock, ein
+        // Teller und ein Sack Salz brauchen keinen Naehrwert. Kein Befund.
       } else {
         f.warn(entry.file, entry.node.line,
           `${base} Ob die Klasse ueberhaupt gegessen werden soll, ist statisch nicht entscheidbar `

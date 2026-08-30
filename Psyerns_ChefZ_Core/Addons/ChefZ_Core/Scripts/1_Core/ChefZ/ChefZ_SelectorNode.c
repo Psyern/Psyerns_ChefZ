@@ -23,6 +23,9 @@
 //   - Der Gegenbeweis: eine kuenstlich selbstbezuegliche Sonde an
 //     ChefZ_PreservationDef gehaengt - und Preservation.json stuerzte ab,
 //     obwohl es bis dahin fehlerfrei gelesen wurde.
+//   - I4-BELEG: die folgende Zeile nennt Fremdmods als BEFUND einer
+//     Serverbeobachtung, nicht als Anbindung. Der Core ruft keinen von
+//     ihnen, kennt keine ihrer Klassen und haengt von keinem ab.
 //   - Unter den rund 35 Mods dieses Servers - Expansion, Community Framework,
 //     Terje, Ninjins, LBmaster, DME - gibt es KEINE einzige selbstbezuegliche
 //     Klasse. ChefZ war die einzige, und ChefZ war die einzige, die abstuerzte.

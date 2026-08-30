@@ -100,6 +100,8 @@ class CfgPatches
     {
         units[] =
         {
+            // Die Skript- und Configbasis aller Fleischwaren dieses Moduls.
+            "ChefZ_MeatItemBase",
             "ChefZ_BeefLeg",
             "ChefZ_PorkLeg",
             "ChefZ_VenisonLeg",

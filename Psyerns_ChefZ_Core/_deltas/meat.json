@@ -63,7 +63,7 @@
     },
     {
       "id": "DRIED_HERB",
-      "parent": null,
+      "parent": "HERB",
       "displayName": "#STR_CHEFZ_CAT_DRIED_HERB"
     },
     {
