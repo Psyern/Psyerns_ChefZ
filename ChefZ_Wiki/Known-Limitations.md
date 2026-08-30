@@ -25,12 +25,13 @@ Two properties of the engine's JSON layer caused most of this. One is fixed, one
 is not. Both are described below, because neither is visible from the code and
 neither produces an error message.
 
-## Two asset addons that never reach a PBO
+## Four asset addons that never reach a PBO
 
-The first delivered models landed on 29.08.2026: **8 `.p3d` and 8 `.paa` files** in
-two new addons, `ChefZ_Devices` (hive, beekeeper) and `ChefZ_Items` (comb frames,
-jar, carrot, bee smoker, beef cubes). Seven classes were rebound from vanilla proxies
-to their own geometry. Both addons are assets only — no class, no script, no record.
+Two deliveries landed on 29. and 30.08.2026, together **50 `.p3d` and 52 `.paa` files**
+in four addons: `ChefZ_Devices` (hive and the stations), `ChefZ_Items` (tools and
+containers), `ChefZ_Plants` (crops and herbs) and `ChefZ_Food` (prepared food).
+**45 classes** now stand on their own geometry instead of a vanilla proxy. All four
+addons are assets only — no class, no script, no record.
 
 **They are not packed.** `pack.mjs` reads each addon's `$PREFIX$` and skips the addon
 when it differs from the folder name:
@@ -42,15 +43,16 @@ if (prefix !== name) {
 }
 ```
 
-The two carry `ChefZ\ChefZ_Devices` and `ChefZ\ChefZ_Items` — two levels, inherited
-from the prototype layout they came from. That prefix is **not a mistake in itself**:
+All four carry two-level prefixes of the form `ChefZ\<name>`, inherited from the
+delivery layout they came from. That prefix is **not a mistake in itself**:
 the model paths written into `ChefZ_Farming` point at exactly those roots
 (`ChefZ\ChefZ_Items\models\carrot.p3d`), so config and prefix agree. What disagrees
 is the packer's rule.
 
-Counted through: **15 sources collected, 13 packed, 2 skipped.** And
-`ChefZ_Farming` now names both in its `requiredAddons[]`, so a build made today ships
-an addon whose dependencies were never built — the mod would not load at all.
+Counted through: **17 sources collected, 13 packed, 4 skipped.** The content addons
+name them in their `requiredAddons[]`, so a build made today ships addons whose
+dependencies were never built — the mod would not load at all. The problem started at
+two addons and doubled with the second delivery; it does not shrink on its own.
 
 The header comment in `pack.mjs` was updated in the same commit to say "fuenfzehn
 Paketen"; the rule underneath it was not. That is the whole of the defect.

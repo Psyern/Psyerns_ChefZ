@@ -37,7 +37,7 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 
 | | |
 |---|---:|
-| Addons | 12 — ten with content, two assets only |
+| Addons | 14 — ten with content, four assets only |
 | Optional compatibility mods | 3 |
 | Recipes | 47 |
 | Ingredient records | 113 — 59 ChefZ classes, 54 vanilla items mapped in |
@@ -46,7 +46,7 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 | Ingredient categories | 41 |
 | Food tags | 19 |
 | Script files | 171 in the mod, 22 in the comp mods |
-| Translated strings | 343 keys × 13 languages |
+| Translated strings | 349 keys × 13 languages |
 
 ## How it is organised
 
@@ -69,8 +69,10 @@ ChefZ_Preservation  salting, drying, smoking
 ChefZ_Baking        dough, bread, flatbread, pasta
 ChefZ_Cooking       plates, bowls, stews, breakfasts, sauces
 ChefZ_Cookbook      recipe knowledge and RPC - no UI yet
-ChefZ_Devices       models and textures only - hive, beekeeper
-ChefZ_Items         models and textures only - frames, jar, carrot, smoker
+ChefZ_Devices       models and textures only - hive, stations
+ChefZ_Food          models and textures only - prepared food
+ChefZ_Items         models and textures only - tools, containers
+ChefZ_Plants        models and textures only - crops and herbs
 ```
 
 Three optional mods hook ChefZ into other systems. **ChefZ runs fully without all

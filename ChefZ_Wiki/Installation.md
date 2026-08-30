@@ -12,10 +12,10 @@ This page describes what a server operator has to do to run ChefZ.
 
 ## 1. What ChefZ consists of
 
-ChefZ is shipped as **four mod folders**, which pack into **fifteen PBOs** — of which
-two do not build today, see [Known Limitations](Known-Limitations#two-asset-addons-that-never-reach-a-pbo).
+ChefZ is shipped as **four mod folders**, which pack into **seventeen PBOs** — of which
+four do not build today, see [Known Limitations](Known-Limitations#four-asset-addons-that-never-reach-a-pbo).
 
-### `Psyerns_ChefZ_Core` — the main mod (12 PBOs)
+### `Psyerns_ChefZ_Core` — the main mod (14 PBOs)
 
 One PBO per subfolder of `Psyerns_ChefZ_Core/Addons/`. Each subfolder carries a
 `$PREFIX$` file whose content is the PBO prefix, and the prefix is the root of
@@ -35,6 +35,8 @@ every runtime path inside that PBO.
 | `ChefZ_Cookbook` | `ChefZ_Cookbook` | yes | `DZ_Data`, `DZ_Gear_Books`, `ChefZ_Core` |
 | `ChefZ_Devices` | `ChefZ\ChefZ_Devices` | yes | `DZ_Data` |
 | `ChefZ_Items` | `ChefZ\ChefZ_Items` | yes | `DZ_Data` |
+| `ChefZ_Food` | `ChefZ\ChefZ_Food` | yes | `DZ_Data` |
+| `ChefZ_Plants` | `ChefZ\ChefZ_Plants` | yes | `DZ_Data` |
 
 "Mandatory" here means: the dependency graph above is closed. `ChefZ_Cooking`
 requires seven other ChefZ addons; `ChefZ_Registry` requires eight. You cannot

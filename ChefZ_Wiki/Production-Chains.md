@@ -35,7 +35,7 @@ longest chain in the mod: three steps from the found grain to dried pasta. (Sinc
 ```mermaid
 graph LR
   W(["Wheat<br/>found"]) -->|Grain Mill<br/>25 s| F(["Flour"])
-  CO(["Corn<br/>found"]) -->|"Grain Mill 25 s<br/>120 g flour per cob"| F
+  CO(["Corn<br/>grown from a cob"]) -->|"Grain Mill 25 s<br/>120 g flour per cob"| F
   F -->|"knead + water<br/>8 s"| SD(["Simple Dough"])
   SD -->|"knead + yeast<br/>8 s"| YD(["Yeast Dough"])
   YD -->|"bake"| B["Bread"]
@@ -179,9 +179,14 @@ sausage transforms require one to three `SPICE` items (Venison and Boar swap the
 
 Five ChefZ crops (onion, garlic, carrot, cabbage, corn) plus one spice crop (paprika),
 alongside vanilla potato, tomato and green bell pepper. The chain is a closed loop:
-the five ChefZ vegetables are found in the world, like mushrooms (no seeds since
-2026-08-29). Corn (`ChefZ_Corn`, since 29.08.2026, in place of dill) is a found
-vegetable like the carrot and doubles as a mill input — see [Grain](#grain).
+four of the five ChefZ vegetables are found in the world, like mushrooms (no seeds
+since 2026-08-29).
+
+**Corn is the exception, and the only ChefZ crop that is grown.** Since 30.08.2026
+`ChefZ_Corn` carries a `Horticulture` block naming `PlantType = "ChefZ_CornPlant"`: the
+cob is its own seed, and `ChefZ_CornPlant : PlantBase` grows in a garden plot with its
+own model. Everything else in this chain is still picked up off the ground. Corn also
+doubles as a mill input — see [Grain](#grain).
 
 Where corn goes: it has its own optional slot in Chernarus Chili, Vegetable Soup
 and Farmer's Breakfast (each also in the group version where one exists). Because

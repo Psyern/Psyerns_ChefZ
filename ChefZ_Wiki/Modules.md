@@ -1,6 +1,6 @@
 # Modules
 
-ChefZ is one mod folder containing twelve addons, plus three separate
+ChefZ is one mod folder containing fourteen addons, plus three separate
 compatibility mods that ship as their own PBOs. This page lists what each one
 contains, what it depends on and how many classes and records it contributes.
 
@@ -14,18 +14,20 @@ For the reasoning behind the split, see [Architecture](Architecture).
 | Addon | Item classes | Script files | Rank 1 records | Rank 2 records | Stringtable keys |
 |---|---:|---:|---:|---:|---:|
 | `ChefZ_Core` | 0 | 137 | — | 2 | 4 |
-| `ChefZ_Registry` | 0 | 0 | — | 142 | — |
-| `ChefZ_Farming` | 27 | 4 | 17 | 22 | 47 |
+| `ChefZ_Registry` | 0 | 0 | — | 137 | — |
+| `ChefZ_Farming` | 29 | 4 | 19 | 21 | 52 |
 | `ChefZ_Processing` | 14 | 7 | 18 | 30 | 41 |
-| `ChefZ_Ingredients` | 25 | 3 | 1 | 50 | 54 |
+| `ChefZ_Ingredients` | 26 | 3 | 1 | 49 | 54 |
 | `ChefZ_Meat` | 32 | 1 | — | 58 | 55 |
 | `ChefZ_Baking` | 6 | 1 | — | 12 | 16 |
 | `ChefZ_Preservation` | 10 | 1 | 10 | 20 | 28 |
 | `ChefZ_Cooking` | 44 | 5 | 58 | 45 | 96 |
 | `ChefZ_Cookbook` | 2 | 11 | — | — | 3 |
 | `ChefZ_Devices` | 0 | 0 | — | — | — |
+| `ChefZ_Food` | 0 | 0 | — | — | — |
 | `ChefZ_Items` | 0 | 0 | — | — | — |
-| **total** | **159** | **170** | **106** | **374** | **343** |
+| `ChefZ_Plants` | 0 | 0 | — | — | — |
+| **total** | **163** | **170** | **106** | **374** | **349** |
 
 | Comp mod | Item classes | Script files | Stringtable keys |
 |---|---:|---:|---:|
@@ -320,17 +322,22 @@ RPC that would feed a screen all exist, and nothing draws them.
 exists because of what `chefzaction.mjs` found: an action class nobody registers
 compiles cleanly and never appears in the game. See [Validation](Validation).
 
-## `ChefZ_Devices` and `ChefZ_Items`
+## The four asset addons
 
-The first delivered geometry, and the only two addons in the mod that contain **no
-code at all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key.
-Each is a `models/` folder, a `data/` folder and a three-line `CfgPatches`. Both
-depend on `DZ_Data` alone.
+The delivered geometry, and the only addons in the mod that contain **no code at
+all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key. Each is a
+`models/` folder, a `data/` folder and a three-line `CfgPatches`, and each depends on
+`DZ_Data` alone. Two arrived on 29.08.2026, two more with the second delivery on 30.08.
 
-| Addon | Models | Textures | Contents |
-|---|---:|---:|---|
-| `ChefZ_Devices` | 2 | 2 | `beehive.p3d`, `beekeeper.p3d` |
-| `ChefZ_Items` | 6 | 6 | `honeycomb_frame.p3d`, `wooden_frame.p3d`, `jar.p3d`, `carrot.p3d`, `beesmoker.p3d`, `beefcubes.p3d` |
+| Addon | Contents |
+|---|---|
+| `ChefZ_Devices` | the two hives and the processing stations — butter churn, cheese press, drying rack, grain mill, meat grinder, mortar, smoker |
+| `ChefZ_Items` | tools and containers — frames, jar, bee smoker |
+| `ChefZ_Plants` | the crops and herbs — cabbage, carrot, corn cob and plant, garlic, parsley, red onion, rosemary, thyme |
+| `ChefZ_Food` | prepared food |
+
+Together **50 models and 52 textures**, and **45 classes** now stand on their own
+geometry rather than a vanilla proxy.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
 about categories, recipes or states — it is a shape a content class points at. Keeping
@@ -363,7 +370,7 @@ files has to swap the two `model =` lines with them.
 
 **Neither addon packs today.** Their `$PREFIX$` files carry two-level prefixes and
 `pack.mjs` refuses those; the model paths in `ChefZ_Farming` depend on exactly those
-prefixes. See [Known Limitations](Known-Limitations#two-asset-addons-that-never-reach-a-pbo).
+prefixes. See [Known Limitations](Known-Limitations#four-asset-addons-that-never-reach-a-pbo).
 
 ## Dependency order
 

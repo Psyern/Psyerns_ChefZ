@@ -36,9 +36,9 @@
 
 **The mod is written. It has never kept a DayZ server running.**
 
-Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 159 `CfgVehicles`
+Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 163 `CfgVehicles`
 classes (`scope = 0` base classes included), 171 script files, 480 data records and
-343 stringtable keys in 13 languages. The static validator suite runs green. What
+349 stringtable keys in 13 languages. The static validator suite runs green. What
 has not happened is a server that survives startup — the process registers every
 addon, loads its config, and then dies with an access violation in the mission's
 `OnInit` chain while the core sits in safe mode with empty registries.
@@ -54,19 +54,19 @@ design questions — is kept internally and is not part of this repository.
 | | |
 |---|---|
 | **`ChefZ_Core`** | Implemented — 137 script files, zero content classes |
-| **Content modules** | Implemented — 7 content addons, the merged registry and 2 asset packages · 47 recipes · 61 transforms · 11 stations |
+| **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 47 recipes · 61 transforms · 11 stations |
 | **Cookbook** | Implemented as knowledge state and RPC — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
 | **Validation** | 19 checkers · **exit code 0 · 0 errors · 55 warnings** |
 | **Validator self-test** | 18 of 19 checkers provably fire · `chefzaction` not yet covered |
-| **Packing** | 15 sources, **13 packed** — the two asset addons are skipped, see [Packing](#packing) |
+| **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | First delivery in — 8 models, 8 textures, 7 classes rebound; the rest still vanilla proxies |
+| **3D assets** | Two deliveries in — 50 models, 52 textures, 45 classes on their own geometry |
 
 ## Repository Layout
 
-One Steam Workshop item (`Psyerns_ChefZ_Core`) containing twelve PBOs, plus three
+One Steam Workshop item (`Psyerns_ChefZ_Core`) containing fourteen PBOs, plus three
 independent compatibility mods that are only needed if you run Terje or COT.
 
 ```text
@@ -75,8 +75,8 @@ Psyerns_ChefZ/                              ← repository root (this README)
 ├── data/                                   ← banner, screenshots
 ├── ChefZ_Wiki/                             ← the full wiki, published from here
 │
-├── Psyerns_ChefZ_Core/                     ← THE mod (one workshop item, 12 PBOs)
-│   ├── Addons/                             12 addons, two of them assets only
+├── Psyerns_ChefZ_Core/                     ← THE mod (one workshop item, 14 PBOs)
+│   ├── Addons/                             14 addons, four of them assets only
 │   │   ├── ChefZ_Core/                     systems only — no content
 │   │   ├── ChefZ_Registry/                 the merged vocabulary, no scripts, no items
 │   │   ├── ChefZ_Farming/                  found plants, herbs, beekeeping
@@ -87,8 +87,10 @@ Psyerns_ChefZ/                              ← repository root (this README)
 │   │   ├── ChefZ_Baking/                   dough, bread, flatbread, pasta
 │   │   ├── ChefZ_Cooking/                  plates, bowls, stews, breakfasts, sauces
 │   │   ├── ChefZ_Cookbook/                 recipe knowledge and RPC — no UI yet
-│   │   ├── ChefZ_Devices/                  models and textures — hive, beekeeper
-│   │   └── ChefZ_Items/                    models and textures — frames, jar, carrot …
+│   │   ├── ChefZ_Devices/                  models and textures — hive, stations
+│   │   ├── ChefZ_Food/                     models and textures — prepared food
+│   │   ├── ChefZ_Items/                    models and textures — tools, containers
+│   │   └── ChefZ_Plants/                   models and textures — crops and herbs
 │   ├── Keys/
 │   └── _deltas/                            registry deltas from the content slices
 │
@@ -802,14 +804,15 @@ node tools/chefz-pack/pack.mjs            # 15 sources, unsigned and unbinarised
 powershell tools/chefz-pack/testrun.ps1   # start the test server, read its verdict, stop it
 ```
 
-> **The two asset addons do not pack today.** `pack.mjs` requires `$PREFIX$` to equal
-> the folder name and skips the addon otherwise (`pack.mjs:85`). `ChefZ_Devices` and
-> `ChefZ_Items` carry the two-level prefix `ChefZ\ChefZ_Devices` and
-> `ChefZ\ChefZ_Items`, which is what their model paths in `ChefZ_Farming` point at —
-> config and prefix agree, the packer's rule does not. The result is 13 PBOs out of
-> 15 sources, with `ChefZ_Farming` requiring two addons that were never built. Either
-> the prefixes and the model paths move to one level, or the rule learns about
-> multi-level prefixes while still proving that prefix and paths match.
+> **The four asset addons do not pack today.** `pack.mjs` requires `$PREFIX$` to equal
+> the folder name and skips the addon otherwise (`pack.mjs:85`). `ChefZ_Devices`,
+> `ChefZ_Food`, `ChefZ_Items` and `ChefZ_Plants` all carry two-level prefixes of the
+> form `ChefZ<name>`, which is exactly what the model paths in the content addons
+> point at — config and prefix agree, the packer's rule does not. The result is 13 PBOs
+> out of 17 sources, and the content addons require four addons that were never built.
+> It started as two addons on 29.08. and doubled with the second delivery. Either the
+> prefixes and the model paths move to one level, or the rule learns about multi-level
+> prefixes while still proving that prefix and paths match.
 
 `Psyerns_ChefZ_Core` packs to twelve PBOs, one per addon folder; the three compatibility
 mods pack to one each. The dependency graph inside the main mod is closed — `ChefZ_Cooking`

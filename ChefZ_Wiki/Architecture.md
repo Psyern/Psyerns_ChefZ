@@ -8,7 +8,7 @@ Nothing on this page has ever been compiled or executed. See
 
 ## 1. The shape of the mod
 
-ChefZ ships as one mod folder with twelve addons inside it, plus three separate
+ChefZ ships as one mod folder with fourteen addons inside it, plus three separate
 compatibility mods:
 
 ```
