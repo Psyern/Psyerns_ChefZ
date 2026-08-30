@@ -195,6 +195,34 @@ grep -rn "I4-BELEG" Psyerns_ChefZ_Core/Addons/ChefZ_Core
 String literals prefixed `CHEFZ_` are self-test markers and are exempt: the
 prefix is reserved and cannot name content.
 
+### The three markers that silence one finding
+
+A checker that cannot be quietened produces warnings nobody reads. Three markers
+exist for that, and each suppresses **exactly one finding at exactly one place**:
+
+| Marker | Where it goes | What it answers |
+|---|---|---|
+| `I4-BELEG` | in the comment block above, up to twelve lines | `chefzcore`: "a foreign mod name appears in the core" — yes, as evidence for an observation, not as a hook. Drops the finding to `info`. |
+| `ASSET-PBO` | anywhere in the module's `config.cpp`, usually the header | `configcpp`: "this module does not name `ChefZ_Core` in `requiredAddons`" — yes, it is a pure file package. A `.p3d` depends on no script module. |
+| `SCOUT-GEPRUEFT <date>` | in the comment above the `modded class`, up to twelve lines | `configcpp`: "this class extension is a collision surface" — yes, and `chefz-conflict-scout` reviewed it on the date given. |
+
+All three are deliberately narrow. They silence one message in one spot and leave a
+word behind that the next reader can search for. A marker that muted a whole checker
+would be the opposite of that.
+
+`SCOUT-GEPRUEFT` carries a date because it is a statement about a moment, not about
+eternity: rebuild the class and it has to be earned again. The standing set is
+greppable:
+
+```bash
+grep -rn "SCOUT-GEPRUEFT" --include=*.c .
+```
+
+The 20 remaining `configcpp` warnings are exactly this group — `modded class`
+declarations nobody has reviewed yet. Twenty identical warnings on every run would
+have swallowed the twenty-first, which is the point of letting a reviewed one fall
+silent.
+
 ## 5. The self-test
 
 A checker that never finds anything is indistinguishable from a broken

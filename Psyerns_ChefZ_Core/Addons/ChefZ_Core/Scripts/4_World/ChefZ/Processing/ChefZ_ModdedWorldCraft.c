@@ -84,6 +84,9 @@
  * der Einzelspielerpfad braucht - und diese Erweiterung besteht aus einer
  * einzigen Felddeklaration.
  */
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// Genau ein Feld m_ChefZ_Intent, praefixiert, kein override, kein
+// Konstruktor.
 modded class WorldCraftActionData
 {
     int m_ChefZ_Intent;
@@ -92,11 +95,19 @@ modded class WorldCraftActionData
 //! Dasselbe Feld auf der Empfangsseite. Vanillas eigenes Muster: jedes Feld,
 //! das ueber das Netz kommt, existiert einmal hier und einmal oben, und
 //! HandleReciveData kopiert es hinueber.
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// Dasselbe eine praefixierte Feld wie oben, kein override, kein Konstruktor.
 modded class WorldCraftActionReciveData
 {
     int m_ChefZ_Intent;
 }
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super in WriteToContext/ReadFromContext/HandleReciveData zuerst; ein
+// fehlgeschlagenes ctx.Read gibt nie false zurueck. Einziger fremder
+// Modder ist Expansion AI auf Post_SetupAction - keine Ueberschneidung.
+// Dass OnFinishProgressServer bei Widerspruch kein super ruft, ist im Kopf
+// begruendet; Vanillas eigene Fassung ruft dort ebenfalls keines.
 modded class ActionWorldCraft
 {
     /**

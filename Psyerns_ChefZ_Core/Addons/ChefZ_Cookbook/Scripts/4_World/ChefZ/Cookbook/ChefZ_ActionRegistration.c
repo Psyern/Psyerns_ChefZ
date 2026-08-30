@@ -17,6 +17,9 @@
 // Layer: 4_World. Keine Dabs-Referenz.
 //==============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super zuerst, danach nur Insert; kein eigenes Member. 16 Expansion- und
+// 4 Terje-Module ketten additiv auf derselben Klasse.
 modded class ActionConstructor
 {
     override void RegisterActions(TTypenameArray actions)

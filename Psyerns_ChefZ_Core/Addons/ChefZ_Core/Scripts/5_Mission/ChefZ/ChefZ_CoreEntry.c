@@ -81,6 +81,9 @@ class ChefZ_CoreEntry
 // super zuerst, danach nur Lesen und Loggen; der Rueckgabewert von Vanilla
 // wird nicht angefasst. Das ist die EINZIGE Stelle, an der ChefZ_Core
 // MissionServer erweitert.
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super zuerst, danach nur Lesen, Loggen und ChefZ_CompNotice.EmitAll().
+// Genau ein Einstiegspunkt je Seite.
 modded class MissionServer
 {
     override void OnInit()
@@ -108,6 +111,8 @@ modded class MissionServer
 // Begruendung: der Client braucht dieselbe Seitenmeldung ans Log, damit
 // Ladefehler im Client-RPT sichtbar bleiben (18 §4). Rein beobachtend.
 // Das ist die EINZIGE Stelle, an der ChefZ_Core MissionGameplay erweitert.
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super zuerst, danach nur Lesen und Loggen.
 modded class MissionGameplay
 {
     override void OnInit()

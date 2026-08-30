@@ -60,6 +60,14 @@
 // Layer: 4_World.
 //==============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// I4-BELEG: der Fremdmodname unten ist das Ergebnis der Kollisionspruefung -
+// welche Methoden ein Nachbarmod auf derselben Klasse anfasst. Kein Aufruf,
+// keine Abhaengigkeit; der Core kennt keine Klasse dieses Mods.
+// super.CookWithEquipment unbedingt und als erste Anweisung, Rueckgabewert
+// unveraendert weitergereicht - Regel 3 ist damit strukturell und nicht
+// bloss beabsichtigt. Terje moddet UpdateCookingStateOnStick und
+// ProcessItemToCook, keine Ueberschneidung.
 modded class Cooking
 {
     override int CookWithEquipment(ItemBase cooking_equipment, float cooking_time_coef = 1)

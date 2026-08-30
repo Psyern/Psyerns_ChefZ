@@ -30,6 +30,11 @@
 // Layer: 4_World.
 //==============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super in EEDelete und OnTerjeClientUpdate; IsTerjeClientUpdateRequired
+// ist ein konstanter Bool-Getter und ruft absichtlich keines (Vorbild
+// TerjeSkills/MushroomBase.c). ShouldHighlight wurde am selben Tag zu
+// ChefZ_ShouldHighlight praefixiert.
 modded class ChefZ_FreshHerbBase
 {
     private Particle m_ChefZTerjeHighlight;
@@ -57,7 +62,7 @@ modded class ChefZ_FreshHerbBase
         if (!g_Game || !g_Game.IsClient())
             return;
 
-        bool show = ShouldHighlight();
+        bool show = ChefZ_ShouldHighlight();
 
         if (show)
         {
@@ -74,7 +79,7 @@ modded class ChefZ_FreshHerbBase
         }
     }
 
-    protected bool ShouldHighlight()
+    protected bool ChefZ_ShouldHighlight()
     {
         if (!ChefZ_TerjeSkillsConfig.HighlightEnabled())
             return false;

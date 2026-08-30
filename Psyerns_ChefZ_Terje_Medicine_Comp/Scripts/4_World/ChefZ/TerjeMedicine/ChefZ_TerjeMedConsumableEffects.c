@@ -29,6 +29,10 @@
 // zweiten Einstiegspunkt - kein Action-Hook, kein Modifier, kein Recipe-Hook.
 // ============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super.Apply und super.Describe zuerst, Describe baut auf dem
+// super-Ergebnis auf. Beide Zusatzmethoden praefixiert. TerjeRadiation
+// haengt in derselben Kette, kein Namensueberschnitt.
 modded class TerjeConsumableEffects
 {
     override void Apply(EntityAI entity, string classname, PlayerBase player, float amount)

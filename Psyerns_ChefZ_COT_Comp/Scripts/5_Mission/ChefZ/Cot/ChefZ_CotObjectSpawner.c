@@ -85,6 +85,12 @@
 // wird. Die Kategorien machen Items auffindbar, nicht spawnbar; wer sie ohne
 // Recht anwaehlt, sieht eine Liste und bekommt beim Spawnen dieselbe Absage
 // wie zuvor.
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super in OnInit und SetListType; UpdateList faellt in zwei von drei
+// Zweigen auf super zurueck und geht nur bei einer der acht
+// ChefZ-Kategorien eigene Wege. TerjeCompatibilityCOT moddet dieselbe
+// Klasse auf OnInit und UpdateItemStateType - keine Feld- oder
+// Methodenueberschneidung.
 modded class JMObjectSpawnerForm
 {
 	// Die zusaetzliche Auswahlbox. NULL, solange OnInit nicht gelaufen ist -

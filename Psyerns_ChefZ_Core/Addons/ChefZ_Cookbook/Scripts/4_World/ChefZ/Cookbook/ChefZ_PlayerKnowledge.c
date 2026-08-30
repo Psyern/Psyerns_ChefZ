@@ -26,6 +26,12 @@
 // Layer: 4_World. Keine Dabs-Referenz (Regel 3).
 //==============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// Alle Member und Methoden praefixiert, super in
+// EEInit/OnStoreSave/OnStoreLoad/OnRPC zuerst, RPC-Nummern 10000-10002
+// kollisionsfrei gegen COT (ab 10100), Terje (negativ), Dabs und CF. Der
+// am selben Tag gefundene FULL_STATE-Exploit ist behoben - siehe die Wache
+// im Zweig.
 modded class PlayerBase
 {
     //! Version DIESES Blocks, nicht die von DayZ.
@@ -229,6 +235,24 @@ modded class PlayerBase
 
         if (rpc_type == ChefZ_CookbookRPC.FULL_STATE)
         {
+            // NUR DER CLIENT NIMMT EINEN STAND ENTGEGEN.
+            //
+            // OnRPC laeuft auf BEIDEN Seiten, und welches Objekt ein RPC
+            // erreicht, bestimmt der Absender. Ohne diese Zeile koennte ein
+            // Client dem Server ein FULL_STATE an seinen eigenen Spieler
+            // schicken: ChefZ_ReceiveFullState ruft stand.Clear() und
+            // schreibt danach die mitgelieferten Listen - jedes Rezept als
+            // gemeistert, oder der Stand geloescht. OnStoreSave schreibt das
+            // anschliessend in den Spielstand.
+            //
+            // FULL_STATE ist Server->Client (ChefZ_SendFullState), also ist
+            // ein FULL_STATE AM SERVER immer gefaelscht und wird verworfen.
+            // Dasselbe Muster wie im Zweig darunter, nur andersherum -
+            // Vanilla klammert seine Server->Client-Zweige in PlayerBase.OnRPC
+            // aus demselben Grund mit #ifndef SERVER.
+            if (g_Game && g_Game.IsDedicatedServer())
+                return;
+
             ChefZ_ReceiveFullState(ctx);
             return;
         }

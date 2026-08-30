@@ -31,6 +31,9 @@
 // Registrierung ist beides nicht.
 //==============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super zuerst, zwei Insert, kein eigenes Member. Zwei
+// ActionConstructor-Erweiterungen aus zwei ChefZ-PBOs ketten problemlos.
 modded class ActionConstructor
 {
     override void RegisterActions(TTypenameArray actions)

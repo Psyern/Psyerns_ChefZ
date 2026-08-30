@@ -94,6 +94,15 @@
 // Layer: 4_World.
 //==============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// I4-BELEG: der genannte Fremdmod ist der BEFUND der Kollisionspruefung - der
+// eine Nachbar, der vor super registriert und damit die Vanilla-IDs
+// verschiebt. Belegt, dass ChefZ das ueberlebt; kein Aufruf, keine
+// Abhaengigkeit.
+// super zuerst, kein UnregisterRecipe. Expansion Weapons registriert VOR
+// super (ExpansionCraftStickySmoke.c:96) und verschiebt damit jede
+// Vanilla-ID - ChefZ ueberlebt das, weil ChefZ_HandcraftBridge die
+// Ankerposition misst (GetID) statt sie zu rechnen.
 modded class PluginRecipesManagerBase
 {
     override void RegisterRecipies()

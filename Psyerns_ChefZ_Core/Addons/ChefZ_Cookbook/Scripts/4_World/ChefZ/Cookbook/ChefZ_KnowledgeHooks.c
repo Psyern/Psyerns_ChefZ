@@ -27,6 +27,9 @@
 // Layer: 4_World. Keine Dabs-Referenz (Regel 3).
 //==============================================================================
 
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super zuerst, Zusatzmethode private und praefixiert. Die Reihenfolge der
+// Wachen wurde am selben Tag umgedreht (billige Pruefung zuerst).
 modded class ItemBase
 {
     override void EEItemLocationChanged(notnull InventoryLocation oldLoc, notnull InventoryLocation newLoc)
@@ -51,14 +54,21 @@ modded class ItemBase
         if (!eltern)
             return;
 
-        PlayerBase spieler = PlayerBase.Cast(eltern.GetHierarchyRootPlayer());
-        if (!spieler)
-            return;
-
         // Nur was der Core als Zutat kennt. Ein Vorschlaghammer im Rucksack
         // erzeugt keinen Kochbucheintrag.
+        //
+        // DIESE PRUEFUNG STEHT ZUERST, und das ist kein Zufall: der Haken
+        // laeuft bei jedem Ortswechsel jedes Items auf dem Server, auch beim
+        // Loot-Spawn der CE. Der Managertest ist ein Zeigervergleich und ein
+        // Bool; GetHierarchyRootPlayer() laeuft die ganze Besitzkette hoch.
+        // Die billige Frage zuerst zu stellen kostet nichts und spart den
+        // Hierarchielauf fuer jede Kiste, die die CE irgendwo fuellt.
         ChefZ_IngredientManager zutaten = ChefZ_IngredientManager.Get();
         if (!zutaten || !zutaten.IsReady())
+            return;
+
+        PlayerBase spieler = PlayerBase.Cast(eltern.GetHierarchyRootPlayer());
+        if (!spieler)
             return;
 
         ChefZ_Sym klasse = ChefZ_SymbolTable.Lookup(GetType());

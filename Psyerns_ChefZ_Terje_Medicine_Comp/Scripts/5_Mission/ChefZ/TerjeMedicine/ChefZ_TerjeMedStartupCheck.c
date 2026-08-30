@@ -33,6 +33,10 @@
 // eigenen MissionServer-Override haben den Server am 28.08.2026 beendet, jedes
 // einzeln lief. Siehe ChefZ_CompNotice. An der Pruefung selbst aendert sich
 // nichts - sie laeuft weiterhin genau einmal beim Serverstart, nach dem Boot.
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super.Emit() zuerst; Zusatzmethoden tragen zusaetzlich den Modulnamen
+// (ChefZ_TerjeMed_*) und sind auch gegen ein viertes Comp-Modul
+// kollisionsfrei.
 modded class ChefZ_CompNotice
 {
     override void Emit()

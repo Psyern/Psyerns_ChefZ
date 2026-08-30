@@ -42,6 +42,10 @@
 // einem eigenen Override haben den Server am 28.08.2026 mit einer
 // Zugriffsverletzung beendet, jedes einzeln lief. Der Core stellt dafuer genau
 // einen Haken bereit - siehe ChefZ_CompNotice.
+// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
+// super.Emit() als erste Anweisung, am Kettenende der leere Core-Rumpf.
+// Die vier CompNotice-Erweiterungen aus drei Comp-Mods ergaenzen sich;
+// innerhalb eines PBOs schliessen sich #ifdef und #ifndef gegenseitig aus.
 modded class ChefZ_CompNotice
 {
     override void Emit()
