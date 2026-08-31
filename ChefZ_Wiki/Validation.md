@@ -348,6 +348,24 @@ One more, worth knowing before you trust a green run:
 - **`schema.mjs` validates against the documented form.** The *form* of the real
   shipped data files is not covered by it.
 
+### A reference nobody wrote is a reference nobody checks
+
+`chefzsym` resolves every symbol a record names — but only the ones it *does*
+name. `ref()` returns immediately when the value is not a string, `refList()` when
+it is not an array (`chefzsym.mjs:118-119`, `:125-126`). A `transform` that simply
+omits `process` or `stationsAllowed` therefore names nothing, nothing gets checked,
+and the run stays green.
+
+Not hypothetical: on 31.08.2026 `TR_SaltedMeatToSmoked` sat in `Smoking.json`
+without either field, while its two siblings in the same file carried both. It
+could never have bound to the smoker. Probed after the fix by deleting the two
+lines again — **0 errors, 0 warnings, exit 0**. The suite has no opinion on a
+transform that can never fire.
+
+Required-field checking for data records is the missing piece. Until it exists, a
+new transform is worth reading beside its neighbours rather than trusting the
+green line.
+
 ## 8. Current state of this repository
 
 Last full run:

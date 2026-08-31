@@ -4,6 +4,8 @@
     "records": [
         {
             "id": "TR_SaltedMeatToSmoked",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": ["ChefZ_Smoker"],
             "_note": "durationOverrideSec 31.08.2026 von 1800 auf 300 (Vorgabe Alex: 'vollstaendig raeuchern dauert 5 Minuten' - einheitlich fuer alle drei Transforms dieser Datei, vorher 1800/1500/2400). Der Preis des Raeucherns ist seither nicht mehr die Wartezeit, sondern der Brennstoff: der Raeucherschrank hat seit demselben Tag einen eigenen Brennzustand und verbrennt Rinde aus seinem Cargo (ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c). Fuenf Minuten Vollbrand kosten zwei Stueck Rinde. PROCESS_SMOKE.baseDurationSec steht ebenfalls auf 300 (ChefZ_Processing/config.cpp).",
             "durationOverrideSec": 300,
             "inputs": [
