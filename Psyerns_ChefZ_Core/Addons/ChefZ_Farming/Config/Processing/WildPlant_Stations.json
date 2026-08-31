@@ -1,0 +1,38 @@
+{
+    "kind": "station",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_WildCorn",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        },
+        {
+            "id": "ChefZ_WildThyme",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        },
+        {
+            "id": "ChefZ_WildRosemary",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        },
+        {
+            "id": "ChefZ_WildParsley",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        }
+    ]
+}

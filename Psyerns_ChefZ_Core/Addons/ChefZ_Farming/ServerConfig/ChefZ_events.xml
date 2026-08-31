@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+    ChefZ Wildwuchs - CE-Events der vier Wildpflanzen.
+
+    VORLAGE. Diese Datei wird NICHT ins PBO gepackt und vom Mod nicht gelesen.
+    Sie gehoert in die Mission des Servers; die Einbauanleitung steht in
+    README_ServerConfig.md daneben.
+
+    Bauform woertlich nach Vanillas Pilz- und Obstevents (db/events.xml,
+    TrajectoryHumus/Coniferous/Deciduous/Apple, Z.1024-1145): position=player,
+    limit=mixed, Ring saferadius 25 bis distanceradius 100 um jeden Spieler,
+    lifetime 180, cleanupradius 25.
+
+    Die Kinder tragen min/max = 0 - genau wie die Vanilla-Trajectories. Bei
+    einem position=player-Event ist ein Kind EIN Objekt; die Zahlen dienen dort
+    der Gewichtung zwischen mehreren Kindern, nicht einer Stueckzahl. Die
+    GRUPPE, in der Mais waechst, entsteht deshalb im Skript
+    (ChefZ_WildCorn.EEOnCECreate) und nicht hier - die Begruendung steht in
+    README_ServerConfig.md unter "Warum die Maisgruppe nicht hier steht".
+-->
+<events>
+    <event name="ChefZTrajectoryCorn">
+        <nominal>120</nominal>
+        <min>2</min>
+        <max>4</max>
+        <lifetime>180</lifetime>
+        <restock>0</restock>
+        <saferadius>25</saferadius>
+        <distanceradius>100</distanceradius>
+        <cleanupradius>25</cleanupradius>
+        <flags deletable="0" init_random="0" remove_damaged="0"/>
+        <position>player</position>
+        <limit>mixed</limit>
+        <active>1</active>
+        <children>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildCorn"/>
+        </children>
+    </event>
+    <event name="ChefZTrajectoryHerbs">
+        <nominal>140</nominal>
+        <min>2</min>
+        <max>4</max>
+        <lifetime>180</lifetime>
+        <restock>0</restock>
+        <saferadius>25</saferadius>
+        <distanceradius>100</distanceradius>
+        <cleanupradius>25</cleanupradius>
+        <flags deletable="0" init_random="0" remove_damaged="0"/>
+        <position>player</position>
+        <limit>mixed</limit>
+        <active>1</active>
+        <children>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildThyme"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildRosemary"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildParsley"/>
+        </children>
+    </event>
+</events>

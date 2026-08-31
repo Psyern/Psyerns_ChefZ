@@ -1,1 +1,1 @@
-*.c;*.json;*.csv;*.xml;*.layout;*.txt;*.ogg
+*.c;*.json;*.csv;*.layout;*.txt;*.ogg

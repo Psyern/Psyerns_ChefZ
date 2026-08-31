@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+    ChefZ Wildwuchs - CE-Typen der vier Wildpflanzen.
+
+    VORLAGE. Diese Datei wird NICHT ins PBO gepackt und vom Mod nicht gelesen.
+    Sie gehoert in die Mission des Servers; die Einbauanleitung steht in
+    README_ServerConfig.md daneben.
+
+    Bauform woertlich nach Vanillas Pilzen (db/types.xml, AgaricusMushroom
+    Z.584-594 und BoletusMushroom Z.3718-3728):
+
+      nominal 0    Diese Zeile SPAWNT NICHTS. Sie ist ein Limit-Container -
+                   die Menge in der Welt bestimmt das Event, hier steht nur,
+                   wie lange ein Stueck liegen bleibt und wie es gezaehlt wird.
+                   Wer hier ein nominal setzt, bekommt Wildpflanzen zusaetzlich
+                   im normalen Loot der Gebaeude.
+      lifetime 900 fuenfzehn Minuten. Dieselbe Zahl wie am Pilz.
+      crafted="1"  nimmt das Stueck aus der Respawn-Buchhaltung des normalen
+                   Loots heraus.
+      count_in_map="1", alles andere 0 - gezaehlt wird nur, was in der Welt
+                   steht. Eine Wildpflanze kann ohnehin in keinem Inventar
+                   liegen (ChefZ_WildPlant_Base.IsTakeable() -> false).
+
+    KEINE usage, KEINE tag, KEINE value: die Pflanzen kommen ueber das Event,
+    nicht ueber die Loot-Verteilung der Gebaeude.
+-->
+<types>
+    <type name="ChefZ_WildCorn">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+    <type name="ChefZ_WildThyme">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+    <type name="ChefZ_WildRosemary">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+    <type name="ChefZ_WildParsley">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+</types>

@@ -1,0 +1,13 @@
+{
+  "slice": "wildplants",
+  "processes": [
+    { "id": "PROCESS_HARVEST_WILD", "station": "ChefZ_WildCorn", "durationSec": 5 }
+  ],
+  "classes": [
+    "ChefZ_WildPlant_Base",
+    "ChefZ_WildCorn",
+    "ChefZ_WildThyme",
+    "ChefZ_WildRosemary",
+    "ChefZ_WildParsley"
+  ]
+}

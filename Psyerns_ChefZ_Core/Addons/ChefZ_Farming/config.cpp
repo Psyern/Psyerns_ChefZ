@@ -78,7 +78,10 @@ class CfgPatches
             "ChefZ_HoneycombFrameEmpty",
             "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
             "ChefZ_UncappingFork", "ChefZ_BeeSmoker",
-            "ChefZ_HandRake"
+            "ChefZ_HandRake",
+            // ### SLICE wildplants ###
+            "ChefZ_WildPlant_Base",
+            "ChefZ_WildCorn", "ChefZ_WildThyme", "ChefZ_WildRosemary", "ChefZ_WildParsley"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -1548,6 +1551,180 @@ class CfgVehicles
             CropsType = "ChefZ_Corn";
         };
     };
+
+    //==========================================================================
+    // ### SLICE wildplants ###   Die vier Fundpflanzen der Wildnis
+    //
+    // Spec: Psyerns_ChefZ_Docs/ChefZ_Wildwuchs_Spawn_Plan.md (freigegeben
+    // 31.08.2026). Sie loest den Gate-2-Befund G2-B9 - Mais, Thymian,
+    // Rosmarin und Petersilie hatten bis dahin keine einzige Quelle in der
+    // Welt.
+    //
+    // WAS SIE SIND: stehende Weltobjekte, die die CE spielerzentriert
+    // verteilt (position=player, wie Vanillas Pilze), mit einer Ernteaktion
+    // und ohne jede Inventarbeziehung. Wer sie erntet, bekommt den Ertrag vor
+    // die Fuesse gelegt; die Pflanze verschwindet.
+    //
+    // WARUM STATIONEN UND NICHT PlantBase: PlantBase haengt am Gartenbeet
+    // (GardenBase erzeugt sie als Attachment, GardenBase.c:484) und bringt
+    // Wachstum, Bewaesserung und Schaedlinge mit - alles Dinge, die eine
+    // Wildpflanze nicht hat. Vanillas Busch-Ernte (ActionPickBerry) ist seit
+    // 1.29 toter Code. Eine Mini-Station nach dem Muster des Bienenstocks ist
+    // der EINZIGE Weg, der ohne eine Zeile Core-Code auskommt (Regel 4) -
+    // die Ernte ist der Stationsvorgang PROCESS_HARVEST_WILD, und was dabei
+    // geschieht, steht im Haken ChefZ_OnStationActionFinished
+    // (Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c).
+    //
+    // KEIN class Cargo und KEIN Transform. Der Vorgang veraendert nicht den
+    // Inhalt der Station, sondern die Station selbst - dieselbe Bauform wie
+    // PROCESS_PACK_HIVE. Die drei Belege dafuer, dass ein Transform hier
+    // ueberhaupt nicht ginge, stehen im Kopf von ChefZ_WildPlants.c.
+    //
+    // NICHT AUFNEHMBAR. canBeDigged = 0 unten leistet das NICHT (der
+    // Schluessel betreibt vergrabene Verstecke); es leistet die
+    // Skriptueberschreibung IsTakeable() -> false nach dem Vorbild von
+    // GardenPlot.c:113-131. Beides steht da, weil beides gemeint ist.
+    //
+    // lifetime 900 wie die Pilze (db/types.xml, AgaricusMushroom Z.586). Die
+    // types.xml des Servers ueberschreibt das; der Wert hier ist der, mit dem
+    // eine per Admin gespawnte Pflanze lebt.
+    //==========================================================================
+
+    //--------------------------------------------------------------------------
+    // Die gemeinsame Basis. scope = 0 - sie ist eine BASIS, kein Fund.
+    //--------------------------------------------------------------------------
+    class ChefZ_WildPlant_Base : Inventory_Base
+    {
+        scope = 0;
+        // Bewusst KEIN Modell an der Basis: jede der vier traegt ein anderes,
+        // und ein geerbtes Vorgabemodell waere die stille Rueckfallebene,
+        // wenn eine Erbin ihres vergisst.
+        rotationFlags = 2;
+        itemSize[] = {3, 3};
+        weight = 400;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        varQuantityDestroyOnMin = 0;
+        lifetime = 900;
+    };
+
+    //--------------------------------------------------------------------------
+    // Mais. Die einzige der vier mit einem eigenen, stehenden Modell - und die
+    // einzige, die in Gruppen von 1 bis 3 waechst (Auftrag).
+    //
+    // DAS MODELL HAT SECHS WUCHSSTUFEN UEBEREINANDER (Befund Asset-Tracker,
+    // 31.08.2026). corn_plant.p3d haengt an PlantBaseSkeleton;
+    // ChefZ_Plants/models/model.cfg fuehrt vierzehn Animationen vom Typ
+    // "hide" mit source "user" - Pile_01/02, PlantStage_01..06 und deren
+    // _crops. Eine solche Auswahl ist SICHTBAR, solange ihre Phase 0 ist.
+    // Sichtbar geschaltet werden sie in Vanilla ausschliesslich von
+    // PlantBase.UpdatePlant() (scripts - 1.29, PlantBase.c:448-479, ueber
+    // ShowSelection/HideSelection). Eine Wildpflanze ist kein PlantBase und
+    // ruft das nie.
+    //
+    // class AnimationSources unten ist die Antwort darauf, und sie ist die
+    // richtige Stelle: initPhase setzt die Phase beim Erzeugen des Modells,
+    // ohne jedes Skript und auf jedem Client, der das Objekt hereinstreamt.
+    // Die Form ist belegt an DayZExpansion/Objects/Airdrop/config.cpp:23-35
+    // und .../SupplyCrates/config.cpp:66-74. Sie ist zugleich VORAUSSETZUNG
+    // fuer den Skriptweg: EntityAI.HideAllSelections traegt den Hinweis
+    // "These selections must also be defined in the entity's config class in
+    // 'AnimationSources'" (EntityAI.c:3354).
+    //
+    //   initPhase = 1  verborgen (SetAnimationPhase(..., 1), EntityAI.c:3360)
+    //   initPhase = 0  sichtbar
+    //
+    // Sichtbar bleibt genau die reife Stufe samt ihren Kolben. animPeriod ist
+    // ueberall 0.01: die Phase soll SOFORT stehen und nicht hineinblenden -
+    // dieselbe Groessenordnung, die Expansion an seinem Airdrop-Fahrwerk
+    // benutzt.
+    //
+    // ChefZ_WildCorn.ChefZ_ApplyModelStage() im Skript setzt dieselben
+    // vierzehn Phasen beim Erscheinen noch einmal. Die Doppelung ist Absicht;
+    // die Begruendung steht dort.
+    //--------------------------------------------------------------------------
+    class ChefZ_WildCorn : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDCORN";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDCORN_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\corn_plant.p3d";
+        itemSize[] = {4, 4};
+        weight = 900;
+
+        class AnimationSources
+        {
+            class Pile_01           { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class Pile_02           { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_01     { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_02     { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_03     { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_04     { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_05     { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            // Die reife Stufe - die einzige, die stehen bleibt.
+            class PlantStage_06     { source = "user"; animPeriod = 0.01; initPhase = 0; };
+            class PlantStage_01_crops { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_02_crops { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_03_crops { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_04_crops { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            class PlantStage_05_crops { source = "user"; animPeriod = 0.01; initPhase = 1; };
+            // Die Kolben der reifen Stufe. Ohne sie waere es eine Maispflanze,
+            // an der die Ernteaktion luegt.
+            class PlantStage_06_crops { source = "user"; animPeriod = 0.01; initPhase = 0; };
+        };
+    };
+
+    //==========================================================================
+    // Die drei Kraeuter - PROXY-MODELLE, und warum ausgerechnet diese
+    //
+    // Es gibt kein stehendes Kraeuterbueschel im Projekt und keines in
+    // Vanilla, das ChefZ ohne neues requiredAddons erreicht (Spec Kap. 2:
+    // "Es existiert genau EIN stehendes Pflanzenmodell: corn_plant.p3d").
+    // Drei Bueschel plus ein Thymian-Item-Mesh sind als Asset-Bedarf
+    // gemeldet.
+    //
+    // NICHT genommen wurden Vanillas Clutter-Modelle (\dz\plants\clutter\
+    // c_*.p3d), obwohl sie am huebschesten aussaehen: Clutter ist
+    // Bodenbewuchs und traegt moeglicherweise KEINE Geometry-LOD. Ohne die
+    // trifft der Raycast der Aktionszielsuche nichts, und die Ernteaktion
+    // erschiene nie - ein Fehler, der wie "die Pflanze ist kaputt" aussieht
+    // und in keinem Log steht. Der Versuch steht als Gate-Experiment im
+    // Backlog; hier stehen die sicheren Meshes.
+    //
+    // Sicher heisst: Meshes, die im Projekt bereits als Item in der Hand und
+    // am Boden benutzt werden, also nachweislich eine Geometrie haben.
+    // Sie sind zu klein fuer eine stehende Pflanze - das ist der bewusst in
+    // Kauf genommene Preis, und er kostet keine Spielbarkeit, nur Optik.
+    //==========================================================================
+
+    //! Thymian. Das einzige der vier Kraeuter ohne eigenes Mesh im Projekt
+    //! (Spec Kap. 2) - deshalb Vanillas Pflanzenmaterial, dasselbe, das
+    //! ChefZ_FreshHerbBase traegt. Haesslich, aber getroffen.
+    class ChefZ_WildThyme : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDTHYME";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDTHYME_DESC";
+        model = "\dz\gear\cultivation\plant_material.p3d";
+    };
+
+    //! Rosmarin auf dem Item-Mesh der Ernte (Dateiname der Lieferung ohne e).
+    class ChefZ_WildRosemary : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDROSEMARY";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDROSEMARY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\rosmary.p3d";
+    };
+
+    //! Petersilie auf dem Item-Mesh der Ernte.
+    class ChefZ_WildParsley : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDPARSLEY";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDPARSLEY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\parsley.p3d";
+    };
 };
 
 // Anbau-Registrierung der Maispflanze: Textur und Material der gesunden
@@ -1653,6 +1830,28 @@ class CfgChefZ
             "ChefZ_Farming/Config/Processing/Apiary_Ingredients.json",
             "ChefZ_Farming/Config/Processing/Apiary_Stations.json",
             "ChefZ_Farming/Config/Processing/Apiary_Crafts.json"
+        };
+    };
+
+    // ### SLICE wildplants ### Die vier Wildpflanzen als Mini-Stationen.
+    //
+    // GENAU EINE Datei: der Stationsdatensatz. Es gibt keine
+    // Zutatenbindung (eine Pflanze ist keine Zutat, sie wird nie verarbeitet)
+    // und keinen Transform - PROCESS_HARVEST_WILD traegt keinen, aus den
+    // Gruenden, die im Kopf von ChefZ_WildPlants.c stehen.
+    //
+    // handcraftRecipeSlots = 0: kein HANDCRAFT-Transform, keine Reservierung
+    // in Vanillas Rezeptliste. PROCESS_HARVEST_WILD ist STATION_ACTION und
+    // laeuft ueber ChefZ_ActionProcessAtStation, das Vanillas Rezeptliste
+    // nicht anfasst.
+    class ChefZ_WildPlants
+    {
+        chefzApiVersion = 1;
+        loadOrder = 219;
+        handcraftRecipeSlots = 0;
+        dataFiles[] =
+        {
+            "ChefZ_Farming/Config/Processing/WildPlant_Stations.json"
         };
     };
 };
@@ -1975,6 +2174,48 @@ class CfgChefZProcesses
         toolGroups[] = {"HAND_TOOL"};
         baseDurationSec = 20.0;
         toolDamage = 2;
+    };
+
+    //--------------------------------------------------------------------------
+    // ### SLICE wildplants ###   Der eine Vorgang der Wildnis
+    //
+    // STATION_ACTION, weil die Pflanze im Boden steht: ein Handwerksschritt
+    // braeuchte sie in der Hand, und dorthin kommt sie nie
+    // (ChefZ_WildPlant_Base.IsTakeable() -> false).
+    //
+    // KEIN Transform, und das ist keine Auslassung. ChefZ_TransformDef.
+    // Validate() weist einen Transform ohne "inputs" ausdruecklich ab
+    // (ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_TransformDef.c:173-178), eine
+    // Wildpflanze hat aber kein Cargo, aus dem ein Eingang binden koennte
+    // (ChefZ_FactCollector.c:191-196), und der Applicator legt Ergebnisse
+    // "ausschliesslich in den CARGO EINES GEFAESSES" ab
+    // (ChefZ_ProcessRunner.c:165-166). Der Ertrag entsteht deshalb im Haken
+    // ChefZ_OnStationActionFinished und faellt zu Boden - dieselbe Bauform
+    // wie PROCESS_HARVEST_HIVE und PROCESS_PACK_HIVE.
+    //
+    // ChefZ_ActionProcessAtStation.IsProcessUsable() ueberspringt die
+    // Transformpruefung, wenn zu einem Prozess kein Transform bekannt ist
+    // (ChefZ_ActionProcessAtStation.c:321-324); RunImmediate meldet dann
+    // NO_MATCH, und NotifyStation ruft den Haken trotzdem. NO_MATCH ist hier
+    // der gewollte Ausgang.
+    //
+    // KEINE toolGroups - "HAND" laut Spec Kap. 3, kein Werkzeugzwang. Ein
+    // Kolben bricht man mit der Hand ab.
+    //
+    // toolDamage = 0, und das ist zwingend: ChefZ_ActionProcessAtStation.
+    // ApplyToolDamage() beschaedigt action_data.m_MainItem - was auch immer
+    // in der Hand liegt, ohne jede Pruefung gegen toolGroups. Bei einem
+    // Vorgang ohne Pflichtwerkzeug fraesse die Pflanze sonst am Gewehr des
+    // Spielers. Dieselbe Anmerkung steht an PROCESS_HARVEST_HIVE.
+    //
+    // Fuenf Sekunden (Spec Kap. 3): ein Kolben abbrechen, ein Bund abreissen.
+    //--------------------------------------------------------------------------
+    class PROCESS_HARVEST_WILD
+    {
+        exec = "STATION_ACTION";
+        displayName = "#STR_CHEFZ_PROC_HARVEST_WILD";
+        baseDurationSec = 5.0;
+        toolDamage = 0;
     };
 };
 
