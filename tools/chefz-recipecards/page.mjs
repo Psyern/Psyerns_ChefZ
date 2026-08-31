@@ -6,8 +6,47 @@
 // damit konfigurierbar, ohne diese Datei anzufassen.
 //==============================================================================
 
-import { PAGE, COLOR, FONT } from './style.mjs';
+import { PAGE, COLOR, FONT, CARD } from './style.mjs';
 import { renderCard, esc } from './card.mjs';
+import { familyOf, renderGlyph, FAMILY_NAMES } from './icons.mjs';
+
+// Die Legende. Ohne sie muss der Leser raten, ob ein kleines Gefaess Salz,
+// Gewuerz oder Mehl ist - drei Symbole, die sich in 40 Pixeln aehneln. Sie
+// steht im Fussraum, der sonst leer bliebe, und zeigt NUR die Familien, die
+// auf dieser Seite wirklich vorkommen.
+function collectFamilies(recipes) {
+  const found = new Set();
+  for (const r of recipes) {
+    for (const c of r.cells) {
+      const f = familyOf(c.imageKey, c.what);
+      if (f) found.add(f);
+    }
+    const rf = familyOf(r.result.cls, r.name);
+    if (rf) found.add(rf);
+  }
+  return [...found]
+    .map(f => [f, FAMILY_NAMES[f] || f])
+    .sort((a, b) => a[1].localeCompare(b[1]));
+}
+
+function renderLegend(fams, x, y, w) {
+  if (!fams.length) return '';
+  const s = [];
+  const size = 15, pad = 6;
+  // Breite je Eintrag aus dem laengsten Text, damit die Zeile nicht kollidiert.
+  const each = Math.floor(w / fams.length);
+  const chars = Math.max(4, Math.floor((each - size - pad - 4) / 4.6));
+  s.push('<path d="M ' + x + ' ' + (y - 12) + ' H ' + (x + w) + '" stroke="' + COLOR.borderSoft + '" stroke-width="1"/>');
+  fams.forEach(([fam, label], i) => {
+    const ex = x + i * each;
+    s.push(renderGlyph(fam, ex, y - 2, size, COLOR.glyph));
+    const txt = label.length > chars ? label.slice(0, chars - 1) + '…' : label;
+    s.push('<text x="' + (ex + size + 4) + '" y="' + (y + 10) +
+           '" font-family="' + FONT.stack + '" font-size="9" fill="' + COLOR.textDim + '">' +
+           esc(txt.toUpperCase()) + '</text>');
+  });
+  return s.join('');
+}
 
 /**
  * @param {Array} recipes - die Rezepte GENAU dieser Seite (hoechstens perPage)
@@ -21,7 +60,8 @@ export function renderPage(recipes, pageNo, pageMax, images, cfg = PAGE) {
   const cols = cfg.cols, rows = cfg.rows;
 
   const gridW = W - cfg.padX * 2;
-  const gridH = H - cfg.padTop - cfg.padBottom;
+  const legendH = 26;
+  const gridH = H - cfg.padTop - cfg.padBottom - legendH;
   const cardW = (gridW - (cols - 1) * cfg.gapX) / cols;
   const cardH = (gridH - (rows - 1) * cfg.gapY) / rows;
 
@@ -45,6 +85,9 @@ export function renderPage(recipes, pageNo, pageMax, images, cfg = PAGE) {
     const y = cfg.padTop + row * (cardH + cfg.gapY);
     s.push(renderCard(r, x, y, cardW, cardH, images));
   });
+
+  // --- Legende im Fussraum -------------------------------------------------
+  s.push(renderLegend(collectFamilies(recipes), cfg.padX, H - cfg.padBottom + 2, gridW));
 
   s.push('</svg>');
   return s.join('\n');

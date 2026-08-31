@@ -23,6 +23,7 @@
 //==============================================================================
 
 import { COLOR, CARD, FONT, LABEL } from './style.mjs';
+import { familyOf, renderGlyph } from './icons.mjs';
 
 export function esc(s) {
   return String(s == null ? '' : s)
@@ -103,10 +104,16 @@ export function renderCard(recipe, x, y, w, h, images) {
          '" fill="' + COLOR.headerBg + '" stroke="' + COLOR.border + '" stroke-width="1"/>');
   const title = recipe.variant ? recipe.name.toUpperCase() + ' · ' + recipe.variant
                                : recipe.name.toUpperCase();
+  // Lange Titel werden GESTAUCHT, nicht abgeschnitten: ein Name mit "..." am
+  // Ende ist fuer den Leser wertlos, ein schmalerer Schriftzug nicht.
+  const maxTitleW = w - 16;
+  const estW = title.length * CARD.headerFont * 0.55;
+  const fit = estW > maxTitleW
+    ? ' textLength="' + maxTitleW.toFixed(1) + '" lengthAdjust="spacingAndGlyphs"'
+    : ' letter-spacing="1.1"';
   s.push('<text x="' + (x + w / 2) + '" y="' + (y + CARD.headerH - 8) +
          '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + CARD.headerFont +
-         '" fill="' + COLOR.text + '" letter-spacing="1.1">' +
-         esc(clip(title, 38)) + '</text>');
+         '" fill="' + COLOR.text + '"' + fit + '>' + esc(title) + '</text>');
 
   // --- Aufteilung des Rumpfes ----------------------------------------------
   const bodyY = y + CARD.headerH + 6;
@@ -140,13 +147,21 @@ export function renderCard(recipe, x, y, w, h, images) {
       s.push('<image x="' + (cx - off) + '" y="' + (cy - off) + '" width="' + size +
              '" height="' + size + '" href="' + img.href + '" preserveAspectRatio="xMidYMid meet"/>');
     } else {
-      s.push('<rect x="' + (cx + 3) + '" y="' + (cy + 3) + '" width="' + (cell - 6) +
-             '" height="' + (cell - 6) + '" fill="none" stroke="' + COLOR.missing +
-             '" stroke-width="1" stroke-dasharray="3 2"/>');
-      const fs = Math.max(7, Math.min(11, Math.round(cell / 4)));
-      s.push('<text x="' + (cx + cell / 2) + '" y="' + (cy + cell / 2 + fs / 3) +
-             '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + fs +
-             '" fill="' + COLOR.textDim + '">' + esc(token(c.what)) + '</text>');
+      const fam = familyOf(c.imageKey, c.what);
+      if (fam) {
+        images.noteGlyph(c.imageKey, fam);
+        const pad = cell * 0.10;
+        s.push(renderGlyph(fam, cx + pad, cy + pad, cell - pad * 2, COLOR.glyph));
+      } else {
+        images.noteBlank(c.imageKey);
+        s.push('<rect x="' + (cx + 3) + '" y="' + (cy + 3) + '" width="' + (cell - 6) +
+               '" height="' + (cell - 6) + '" fill="none" stroke="' + COLOR.missing +
+               '" stroke-width="1" stroke-dasharray="3 2"/>');
+        const fs = Math.max(7, Math.min(11, Math.round(cell / 4)));
+        s.push('<text x="' + (cx + cell / 2) + '" y="' + (cy + cell / 2 + fs / 3) +
+               '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + fs +
+               '" fill="' + COLOR.textDim + '">' + esc(token(c.what)) + '</text>');
+      }
     }
 
     // Kleines farbiges Label ueber der Zelle - nie breiter als sie.
@@ -185,12 +200,20 @@ export function renderCard(recipe, x, y, w, h, images) {
     s.push('<image x="' + (resX - off) + '" y="' + (resY - off) + '" width="' + size +
            '" height="' + size + '" href="' + rimg.href + '" preserveAspectRatio="xMidYMid meet"/>');
   } else {
-    s.push('<rect x="' + (resX + 4) + '" y="' + (resY + 4) + '" width="' + (rs - 8) +
-           '" height="' + (rs - 8) + '" fill="none" stroke="' + COLOR.missing +
-           '" stroke-width="1" stroke-dasharray="3 2"/>');
-    s.push('<text x="' + (resX + rs / 2) + '" y="' + (resY + rs / 2 + 5) +
-           '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="14" fill="' +
-           COLOR.textDim + '">' + esc(token(recipe.name)) + '</text>');
+    const rfam = familyOf(recipe.result.cls, recipe.name);
+    if (rfam) {
+      images.noteGlyph(recipe.result.cls, rfam);
+      const pad = rs * 0.10;
+      s.push(renderGlyph(rfam, resX + pad, resY + pad, rs - pad * 2, COLOR.glyphResult));
+    } else {
+      images.noteBlank(recipe.result.cls);
+      s.push('<rect x="' + (resX + 4) + '" y="' + (resY + 4) + '" width="' + (rs - 8) +
+             '" height="' + (rs - 8) + '" fill="none" stroke="' + COLOR.missing +
+             '" stroke-width="1" stroke-dasharray="3 2"/>');
+      s.push('<text x="' + (resX + rs / 2) + '" y="' + (resY + rs / 2 + 5) +
+             '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="14" fill="' +
+             COLOR.textDim + '">' + esc(token(recipe.name)) + '</text>');
+    }
   }
   if (recipe.result.quantity) {
     s.push('<text x="' + (resX + rs - 4) + '" y="' + (resY + rs - 5) +

@@ -29,9 +29,11 @@ export class ItemImages {
   constructor(mapPath = path.join(HERE, 'item-images.json')) {
     this.mapPath = mapPath;
     this.map = {};
-    this.missing = new Map();   // className -> Anzahl Verwendungen
-    this.broken = new Map();    // className -> Pfad, der nicht existiert
+    this.missing = new Map();   // Schluessel -> Anzahl Verwendungen (kein Eintrag)
+    this.broken = new Map();    // Schluessel -> Pfad, der nicht existiert
     this.used = new Set();
+    this.glyphs = new Map();    // Schluessel -> Familie, als Vektorsymbol gezeichnet
+    this.blank = new Map();     // Schluessel -> Anzahl, weder Bild noch Familie
 
     if (fs.existsSync(mapPath)) {
       try {
@@ -80,23 +82,42 @@ export class ItemImages {
     return { href: `data:${mime};base64,${b64}` };
   }
 
+  /** Eine Zelle wurde als Vektorsymbol gezeichnet - Ersatz, kein Itemfoto. */
+  noteGlyph(key, family) { if (key) this.glyphs.set(key, family); }
+
+  /** Weder Bild noch passende Familie - der rote Kasten. */
+  noteBlank(key) { if (key) this.blank.set(key, (this.blank.get(key) || 0) + 1); }
+
   /** Der Bericht. Wird IMMER gedruckt, auch wenn nichts fehlt. */
   report() {
     const lines = [];
     const miss = [...this.missing.entries()].sort((a, b) => b[1] - a[1]);
     const brk = [...this.broken.entries()].sort();
 
-    lines.push(`Itembilder: ${this.used.size} zugeordnet, ${miss.length} ohne Eintrag, ${brk.length} mit totem Pfad.`);
+    lines.push(`Itembilder: ${this.used.size} echte Bilder, ` +
+               `${this.glyphs.size} als Vektorsymbol gezeichnet, ` +
+               `${this.blank.size} ganz ohne Darstellung, ${brk.length} mit totem Pfad.`);
 
     if (brk.length) {
       lines.push('');
       lines.push('PFAD ZEIGT INS LEERE (Eintrag da, Datei nicht):');
       for (const [cls, p] of brk) lines.push(`  ${cls.padEnd(34)} ${p}`);
     }
+    if (this.blank.size) {
+      lines.push('');
+      lines.push('WEDER BILD NOCH SYMBOL (roter Kasten - hier fehlt am meisten):');
+      for (const [cls, n] of [...this.blank.entries()].sort((a, b) => b[1] - a[1])) {
+        lines.push(`  ${cls.padEnd(34)} ${n}x verwendet`);
+      }
+    }
     if (miss.length) {
       lines.push('');
-      lines.push(`KEIN EINTRAG in ${path.basename(this.mapPath)} (Platzhalter gezeichnet, sichtbar rot):`);
-      for (const [cls, n] of miss) lines.push(`  ${cls.padEnd(34)} ${n}x verwendet`);
+      lines.push(`KEIN EINTRAG in ${path.basename(this.mapPath)} - ein Vektorsymbol steht ` +
+                 `stellvertretend, es ist KEIN Itemfoto:`);
+      for (const [cls, n] of miss) {
+        const fam = this.glyphs.get(cls);
+        lines.push(`  ${cls.padEnd(34)} ${String(n + 'x').padEnd(6)} ${fam ? 'Symbol: ' + fam : '(kein Symbol)'}`);
+      }
     }
     return lines.join('\n');
   }

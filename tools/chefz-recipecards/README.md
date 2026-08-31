@@ -61,10 +61,33 @@ Keys are stable identifiers, never display text:
 * `tag:CHEFZ_HERB` — a tag slot
 
 **The repository ships no item images.** The 52 `.paa` files are model textures,
-not inventory icons, and no browser opens a `.paa`. So every cell currently draws
-a dashed red placeholder with a short token, and the run lists every missing key
-with its usage count. That is the brief's rule — a gap must never look like a
-picture. Add PNGs under `assets/items/`, enter them here, and they appear on the
+not inventory icons, and no browser opens a `.paa`.
+
+So a cell falls back through three stages:
+
+1. the real picture from `item-images.json`
+2. a **vector glyph** from `icons.mjs` — a carrot, a fish, a bowl
+3. a dashed red box, only if no family matches either
+
+The glyphs exist because a page of empty boxes is not an infographic; a drawn
+carrot says more in one cell than the word `ROOT`. They do **not** buy silence:
+every glyph-drawn key is still counted and listed as *"a vector symbol stands in,
+it is NOT an item photo"*. Today that is all 96 keys, and none falls through to
+stage 3.
+
+`icons.mjs` holds about forty drawings and a family rule, not one picture per
+class — a new dish that asks for carrots gets its symbol without a line of work.
+Two things it learned the hard way:
+
+* The **form sits at the end** of a class name. `ChefZ_BoneBrothSoupBowl` is a
+  bowl, not a bone, and `ChefZ_CheeseFlatbread` is bread, not a cheese wedge. The
+  suffix pass therefore runs before the ingredient rules; the first draft drew
+  both wrong.
+* The display text is read **last, and only up to the first exclusion**. A slot
+  reading `Dairy −Butter −Cream` is dairy — matching on the excluded word painted
+  three butter blocks onto the cheese card.
+
+Add PNGs under `assets/items/`, enter them here, and they take precedence on the
 next run.
 
 ## PNG
@@ -126,4 +149,5 @@ exists, and should stay unused.
 | `page.mjs` | one page: title, grid of cards |
 | `style.mjs` | every colour and every measurement |
 | `items.mjs` | class → image, and the bookkeeping of what is missing |
+| `icons.mjs` | the vector glyphs, the family rule and the legend names |
 | `item-images.json` | the mapping itself |

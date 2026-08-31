@@ -34,7 +34,9 @@ export const COLOR = {
   accent:     '#6b7f4a',   // entsaettigtes Militaergruen
   slotBg:     '#050705',
   arrow:      '#6b7f4a',
-  missing:    '#7a2f2f',   // fehlendes Bild: sichtbar, nie still
+  missing:    '#7a2f2f',   // weder Bild noch Symbol: sichtbar, nie still
+  glyph:      '#7d9159',   // Vektorsymbol einer Zutat
+  glyphResult:'#a8bf7a',   // Vektorsymbol des Ergebnisses - heller, es fuehrt
 };
 
 // Kleine farbige Labels ueber Zutaten. Der Brief nennt hellblau/beige/gruen.
