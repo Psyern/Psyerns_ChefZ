@@ -194,8 +194,10 @@ Since 2026-08-29 the herbs are **found**, like vanilla mushrooms: there are no h
 plants, no seeds and no `Harvest()` to hook. The harvest XP and the yield bonus that
 used to live in `modded class ChefZ_HerbPlantBase` are gone with the plant; the
 `harvestTags[]` / `ChefZ_Harvest` config nodes remain as inert configuration. What
-survives of the herbalist is the highlight on herbs lying in the world
-(`modded class ChefZ_FreshHerbBase`, see below).
+survives of the herbalist is the highlight on herbs lying in the world and, since
+31.08.2026, on the three standing wild herbs (`modded class ChefZ_FreshHerbBase`,
+`ChefZ_WildThyme`, `ChefZ_WildRosemary`, `ChefZ_WildParsley` — `ChefZ_WildCorn` is
+left out, corn is not a herb; see below).
 
 #### What gives no XP at all
 
@@ -346,10 +348,14 @@ over and over in quick succession pays progressively less:
 | `repeatMinPercent` | 25 | floor — never below 25 % |
 | `repeatWindowSec` | 900 | after 15 minutes without *that* action, the counter resets |
 
-The counter key is the recipe or transform ID, so **different actions do not damp
-each other**: alternating between baking bread and stuffing sausage is not punished.
-Herb harvesting uses its own key space (`HARVEST:<cropsType>`) so a harvest never
-damps a same-named processing step.
+The counter key is the recipe ID when cooking and, since 31.08.2026, the **process**
+ID when processing (`ChefZ_TerjeProgressSink.ProcessDamperKey()`, falling back to the
+transform ID if the process cannot be resolved). **Different actions still do not damp
+each other** — alternating between baking bread and stuffing sausage is not punished
+— but every transform of one process now shares a single counter: drying thyme, then
+rosemary, then parsley damps as one repeated activity, not three separate ones.
+Harvesting has no key space of its own any more — the Core knows no `harvest`
+progress kind, so a harvest never reaches the damper at all.
 
 A damped-but-successful action never drops to zero XP as long as the damping factor
 is above 0 %: the result is floored at 1.

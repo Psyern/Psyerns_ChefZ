@@ -142,6 +142,10 @@ window first and the logs second.
 All four milestone gates stand at **NOT READY**. Each gate report carries a
 numbered in-game checklist — together roughly 150 steps with concrete ingredients,
 quantities, durations and expected RPT lines — and not one step has been executed.
+A fifth list joined them on 31.08.2026:
+`Psyerns_ChefZ_Docs/GATE_WILDWUCHS_CHECKLISTE.md`, 22 steps for the wild plants and
+the CE fragment, including a server-side step nobody has had to do before — installing
+central-economy files into the mission.
 
 Gate 4 in particular requires two server configurations: one **without** Terje and
 one with. The run without Terje is the more important of the two, because it tests
@@ -214,21 +218,26 @@ unnecessary.
 
 ## Verified only as far as static analysis reaches
 
-### Vanilla class collisions are unchecked
+### Vanilla class collisions are checked only against a slice
 
-`tools/chefz-validate/refindex/vanilla-classes.txt` is empty. The reference index
-holds roughly 16,000 class names from Terje, Expansion, COT, CF, Dabs and the
-vanilla *script* sources — but the vanilla *item* classes live in the game configs,
-which are not in this repository.
+`tools/chefz-validate/refindex/vanilla-classes.txt` is no longer empty: it holds
+**184** vanilla item class names, taken from `ChefZ_Vanilla_Assets.md`, which was
+itself built from a `types.xml` of 1,924 entries. Together with the ~16,000 names from
+Terje, Expansion, COT, CF, Dabs and the vanilla *script* sources, that is what `naming`
+and `classrefs` compare against — and it is why both report zero warnings today
+(measured 31.08.2026).
 
-Consequences, both real:
+What remains true: the vanilla *item* classes live in the game configs, which are not
+in this repository, and 184 names are the ChefZ-relevant excerpt rather than the set.
 
-- A ChefZ class name that collides with a vanilla item name would not be reported.
-- Several findings in the gate reports are marked *plausible* rather than
-  *confirmed* purely because this index is missing.
+Consequences, both still real:
 
-Filling it is cheap — a class dump from a server is enough — and it closes the
-single largest gap in the checking net. See [Validation](Validation).
+- A ChefZ name colliding with a vanilla item **outside that excerpt** is not reported.
+- Findings in the older gate reports are marked *plausible* rather than *confirmed*
+  because they were written while the index was empty; they have not been revisited.
+
+A class dump from a running server is still the better source. See
+[Validation](Validation).
 
 ### The apiary rework is untested in-game
 
@@ -246,6 +255,45 @@ again" path behave as read from the source; and
 whether a handcraft transform with two inputs of the same class
 (`TR_ExtendBeehive`, two Beehive Kits) binds. The chain's assumptions A1–A5 are
 listed on [Processing Stations](Processing-Stations#beehive-and-double-beehive).
+
+### Wild plants (Wildwuchs) — 31.08.2026
+
+The four wild plants, the harvest action, the companion roll and the CE fragment
+(three events) were all written on 31.08.2026 and **not one of them has been seen
+running**. The static suite passes on them, which says only that the records parse
+and the names resolve. Four questions were left open on purpose, because guessing
+them would have been cheaper than measuring them and worth less:
+
+| | Question | What rides on it |
+|---|---|---|
+| **M1** | Does an **MLOD** model load at runtime, and does `corn_plant.p3d` then show *one* growth stage? | Every `.p3d` in the mod begins with the magic `MLOD` — unbinarised. The corn plant additionally carries fourteen `hide` selections on `PlantBaseSkeleton`, which in vanilla only `PlantBase.UpdatePlant()` ever switches. A wild plant is not a `PlantBase`. The countermeasures are a `class AnimationSources` with `initPhase` and a script pass from `EEInit`; **that a non-`PlantBase` may switch those selections is plausible from the sources and proven by no running example.** Failure looks like an invisible plant or six stages inside each other — a model/config question, not a script one |
+| **M2** | Do script-spawned companions obey the `types.xml` lifetime (300 s) or the event lifetime (180 s)? | The whole corn population. A companion belongs to no event, so on paper only `types` applies — hence 300 rather than the 900 the other four carry. If that reading is wrong, the stock runs to roughly six times `nominal` instead of the intended band. The measurement is 15 minutes standing still, then 10 minutes away and back |
+| **M3** | Does the world hold **160–220** corn plants and **~140** herbs after 30 minutes? | The equilibrium formula behind `nominal 60` is **calculated, not measured**. If the count comes out elsewhere, `nominal` in `ChefZTrajectoryCorn` is what gets adjusted — never the lifetime, which carries the companion logic |
+| **M4** | Is `CALL_CATEGORY_SYSTEM` the right queue for the deferred companion spawn? | Vanilla's only comparable case (`Wreck_SantasSleigh`) uses `CALL_CATEGORY_GAMEPLAY`. This module runs all its server work in `SYSTEM` and a CE spawn is server work — a named deviation, not an oversight, but if the queue does not run, corn never grows in groups and there is no log line saying so |
+
+Two more things nobody has watched yet: whether the three herb **proxy** meshes
+(`plant_material.p3d`, `rosmary.p3d`, `parsley.p3d`) are hit by the action raycast at
+all — the reason vanilla's prettier clutter models were *not* used is that they may
+carry no geometry LOD — and whether a harvest that produces nothing correctly leaves
+the plant standing.
+
+The step-by-step measurement is `Psyerns_ChefZ_Docs/GATE_WILDWUCHS_CHECKLISTE.md`
+in the repository — 22 steps, each with an expected value and a named failure mode.
+
+### The test deployment holds two copies of the mod
+
+`D:\Agent\deployments\DME-Test` contains **both** `@ChefZ\Addons` (17 PBOs, the
+output of `pack.mjs`, unsigned) and `@3786176249\Addons` (the same PBOs, signed with
+`DeadmansEchoCore.bikey`, `meta.cpp` name `DeadmansEcho-TOW-Test`). Both are listed
+in the mod line of `tools/chefz-pack/start-DME-Test.cmd` and
+`tools/chefz-pack/testrun.ps1`: `…;@3786176249;@ChefZ;`.
+
+Two folders whose PBOs carry the same `CfgPatches` names are not a defined state, and
+nothing in the repository says which one wins. Nobody has been bitten by it yet
+because nothing has run — but every finding of the next test run is unattributable
+until one of the two is removed from the list. Deciding it is step 1 of the wild-plant
+checklist; whichever way it goes, both files have to be changed, or the next
+`testrun.ps1` loads both again.
 
 ### What the checkers cannot see at all
 
@@ -375,6 +423,21 @@ oversight rather than a decision.
 **Chain XP is per step, not per result.** Skipping a step pays only the steps you
 actually performed — smoking meat without curing it first pays 3 rather than 5.
 
+**The corn plot is a fourfold multiplier with no external input.** `CropsCount` went
+from 2 to 4 on 31.08.2026 because wild corn had made the plot pointless: a plant used
+to return one cob net after the seed went back in. The cob is its own seed
+(`class Horticulture` on `ChefZ_Corn`), so one cob in now means four out — a loop, and
+§22 of the production map forbids loops. It stands because vanilla runs exactly the
+same loop for potato and tomato, and because at 2 it was already a loop, only a
+quieter one. **Subject to gate review**; it is one number to turn back.
+
+**Drying herbs is not needed for quality.** Fresh herbs reach up to 4 grade points
+with no processing at all, because 19 recipes pay an extra point for freshness at or
+above 0.8 and only an unprocessed ingredient reaches that. Since 31.08.2026 the CE
+hands out fresh herbs by the plant, which makes the drying rack a shelf-life and XP
+device rather than a quality one. Documented and deliberately not changed — it is a
+recipe-design decision, not a build one.
+
 ## Open decisions
 
 ### Flour, yeast and spice powders are food
@@ -433,21 +496,26 @@ than broken, but it reads as authoritative and is not.
 
 ### Standing warnings
 
-The validation passes with zero errors and 90 warnings. They are not noise to be
-suppressed, and none is a defect:
+Measured 31.08.2026, `node tools/chefz-validate/index.mjs`: **zero errors, two
+warnings, exit code 0.** Both are `configcpp` naming the two `modded class` entries in
+`ChefZ_TerjeSkillsEntry.c:102/138` (`MissionServer`, `MissionGameplay`) — they stay
+listed on purpose, and the decision behind them belongs to the operator (see above).
 
-| Checker | Warnings | What they are |
-|---|---:|---|
-| `naming` | 56 | Vanilla name collisions unverifiable — the empty reference index |
-| `configcpp` | 24 | Every `modded class`, listed on purpose so it stays visible |
-| `chefznut` | 8 | Seeds, containers and salt without a nutrition block, correctly so |
-| `classrefs` | 1 | Foreign classes unverifiable — same missing index |
-| `deltas` | 1 | Two slices define one category with different parents; the concrete one wins |
+The count used to be 90. What removed the other 88 was not suppression: 20 `modded
+class` sites were reviewed and marked `SCOUT-GEPRUEFT`, the nutrition and `units[]`
+rules were narrowed after 39 of 59 warnings turned out to be the checker's own noise,
+and `refindex/vanilla-classes.txt` is no longer empty — it now carries 184 vanilla item
+class names harvested from `ChefZ_Vanilla_Assets.md`. **That list is a slice, not a
+dump:** it covers the classes the asset audit names, so a collision with a vanilla item
+outside that slice would still go unreported. A class dump from a running server
+remains the better source.
 
 ## What to do first
 
 1. Compile. Nothing below this matters until the code builds.
-2. Fill `vanilla-classes.txt`. Cheap, and it upgrades a whole class of findings
-   from *plausible* to decided.
+2. Decide which of the two mod folders the test server loads — `@ChefZ` or
+   `@3786176249`. Until then no test result can be attributed to a build.
 3. Walk Gate 1's checklist on a server without Terje.
 4. Decide the `hiddenSelections` name before commissioning any mesh.
+5. Replace the 184-name vanilla excerpt with a class dump from a running server;
+   that upgrades a whole class of older findings from *plausible* to decided.

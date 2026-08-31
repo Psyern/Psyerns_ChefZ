@@ -19,20 +19,28 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 **Read the diagrams like this:** rounded boxes are items, the label on an arrow is
 the station or the tool, and `[]` boxes are the dishes a chain feeds into.
 
-> **Almost nothing in this mod spawns by itself.** No `types.xml` is packed into the
-> PBO. Every chain head below — wheat, the five vegetables, the four herbs, eggs, the
-> three legs — needs an admin spawn until a loot table exists. Since 29.08.2026 they
-> are *found* items rather than crops, which makes the missing loot table the only
-> thing between them and the world. Milk is vanilla `PowderedMilk` and spawns on its
-> own.
+> **What spawns by itself, and what does not** — the honest split, updated 31.08.2026.
 >
-> **The one exception, since 31.08.2026:** corn, thyme, rosemary and parsley also grow
-> wild. `ChefZ_Farming/ServerConfig/` ships `ChefZ_events.xml` and `ChefZ_types.xml`
-> as **templates** — not packed into the PBO, never read by the mod — which spawn the
-> four wild-plant harvest points and let a player harvest `ChefZ_Corn`, `ChefZ_Thyme`,
-> `ChefZ_Rosemary` and `ChefZ_Parsley` with no admin. Nothing changes until someone
-> installs that fragment into the mission (`README_ServerConfig.md`).
-> See [Known-Limitations](Known-Limitations).
+> The mod still packs **no `types.xml`**: a PBO cannot carry central-economy data,
+> only the classes it points at. What changed is that five of the chain heads now
+> have a **world source on paper**. `ChefZ_Farming/ServerConfig/` ships
+> `ChefZ_events.xml`, `ChefZ_types.xml` and `README_ServerConfig.md` as **templates** —
+> not packed into the PBO, never read by the mod.
+>
+> | Chain head | Source |
+> |---|---|
+> | Wheat | `ChefZTrajectoryWheat`, nominal 40 — the sheaf lies on the ground and is picked up |
+> | Corn | `ChefZTrajectoryCorn`, nominal 60 — a standing `ChefZ_WildCorn` harvested for `ChefZ_Corn`; the garden plot is the second source |
+> | Thyme, rosemary, parsley | `ChefZTrajectoryHerbs`, nominal 140 across the three — standing plants, harvested for the fresh bunch |
+> | Milk, fresh paprika | vanilla `PowderedMilk` and `GreenBellPepper` — vanilla loot, spawn on their own |
+> | Beef, pork and venison leg | skinning, not loot: `ChefZ_Meat/config.cpp`, `class Skinning` — see [From Meat to Sausage](From-Meat-to-Sausage) |
+> | Onion, garlic, carrot, cabbage, wild garlic, pepper berries, eggs | **still nothing** — admin spawn until a loot table exists |
+>
+> **The fragment does nothing until a human installs it** into the mission
+> (`README_ServerConfig.md`): copy two files, add one `<ce folder="ChefZ">` block to
+> `cfgeconomycore.xml`, restart. Nobody has done that on a running server yet, and
+> none of the numbers above has been measured in game — see
+> [Known-Limitations](Known-Limitations#wild-plants-wildwuchs--31082026).
 
 ## Grain
 
@@ -40,10 +48,21 @@ Wheat is the only crop ChefZ adds that is not a vegetable. It is the head of the
 longest chain in the mod: three steps from the found grain to dried pasta. (Since
 2026-08-29 wheat is found in the world, like mushrooms — no seeds, no garden plot.)
 
+**Since 31.08.2026 wheat has a world source of its own**, and it is the chain that
+needed one most: `ChefZ_Wheat` had no event, no `types.xml` line and no transform
+that produces it, so the whole mill → flour → dough → bread/pasta chain was dead
+without an admin. `ChefZTrajectoryWheat` (nominal 40) drops the sheaf on the ground
+like a mushroom — it is picked up, not harvested, because there is no wheat plant
+model. Forty sheaves are 31,200 g of flour and **125 loaves**; the 162 corn cobs the
+wild-corn event yields are 19,440 g and **78**. Wheat leads, corn contributes — that
+is the intended split, and turning the `nominal` turns the server's bread supply
+directly. The event lives in the wild-plant CE template
+(`ChefZ_Farming/ServerConfig/`) because that is the mod's only CE fragment.
+
 ```mermaid
 graph LR
-  W(["Wheat<br/>found"]) -->|Grain Mill<br/>25 s| F(["Flour"])
-  CO(["Corn<br/>grown from a cob"]) -->|"Grain Mill 25 s<br/>120 g flour per cob"| F
+  W(["Wheat<br/>found, CE event"]) -->|Grain Mill<br/>25 s| F(["Flour"])
+  CO(["Corn<br/>wild plant or garden plot"]) -->|"Grain Mill 25 s<br/>120 g flour per cob"| F
   F -->|"knead + water<br/>8 s"| SD(["Simple Dough"])
   SD -->|"knead + yeast<br/>8 s"| YD(["Yeast Dough"])
   YD -->|"bake"| B["Bread"]
@@ -88,7 +107,8 @@ Sausage Pasta, Hunter Pasta, Creamy Mushroom Pasta, Chernarus Mac and Cheese).
 Honey Bread Platter). `DOUGH` is required by 2 (Cheese Flatbread, Meat Dumplings).
 
 **Gaps.** `ChefZ_Wheat` is found in the world; without it the chain does not
-start. The knead step also needs a **water container**: `TR_FlourWaterToDough`
+start, and until the CE fragment is installed in the mission it is found only where
+an admin puts it. The knead step also needs a **water container**: `TR_FlourWaterToDough`
 matches `isLiquidContainer` with `liquidType: "Water"` and takes 150 units.
 
 ## Salt
@@ -125,12 +145,19 @@ hard requirement of the three sauces and of both salt-curing transforms in the
 Four fresh herbs, two spice crops, and four ground products. Everything dries on the
 rack and everything grinds in the mortar.
 
+**Where the fresh herbs come from, since 31.08.2026.** Thyme, rosemary and parsley
+grow wild: `ChefZTrajectoryHerbs` (nominal 140 across the three) puts standing plants
+into the 25–100 m ring around each player, and one harvest action — five seconds, no
+tool — yields one bunch, plus a second on a 25 % roll. That is roughly 58 bunches per
+herb server-wide. There are no seeds and no garden plot for them. Wild garlic and
+pepper berries have **no** world source and still need an admin spawn.
+
 ```mermaid
 graph LR
-  PS(["Parsley Seeds"]) --> PL(["Fresh Parsley"])
-  TS(["Thyme Seeds"]) --> TH(["Fresh Thyme"])
-  RS(["Rosemary Seeds"]) --> RO(["Fresh Rosemary"])
-  WS(["Wild Garlic Seeds"]) --> WG(["Fresh Wild Garlic"])
+  WT(["Wild Thyme plant<br/>CE, harvest 5 s"]) --> TH(["Fresh Thyme"])
+  WR(["Wild Rosemary plant<br/>CE, harvest 5 s"]) --> RO(["Fresh Rosemary"])
+  WP(["Wild Parsley plant<br/>CE, harvest 5 s"]) --> PL(["Fresh Parsley"])
+  WGA(["admin spawn"]) --> WG(["Fresh Wild Garlic"])
   PL -->|"Rack 8 min"| DPa(["Dried Parsley"])
   TH -->|"Rack 8 min"| DTh(["Dried Thyme"])
   RO -->|"Rack 10 min"| DRo(["Dried Rosemary"])
@@ -195,6 +222,20 @@ since 2026-08-29).
 cob is its own seed, and `ChefZ_CornPlant : PlantBase` grows in a garden plot with its
 own model. Everything else in this chain is still picked up off the ground. Corn also
 doubles as a mill input — see [Grain](#grain).
+
+**Corn is also the only one with two sources.** Since 31.08.2026 `ChefZTrajectoryCorn`
+(nominal 60) puts standing `ChefZ_WildCorn` plants into the world; harvesting one takes
+five seconds and yields one cob, two on a 25 % roll and three on a 5 % roll — 1.35 cobs
+on average. Wild corn spawns in groups of one to three, because each plant rolls
+0–2 companions of its own class when the economy creates it.
+
+That made the garden plot pointless, so **`ChefZ_CornPlant.CropsCount` went from 2 to 4**
+the same day: at 2 a plant returned one cob net after the seed went back into the
+ground, which was less than a free wild plant. At 4 it is +3 net per plant, +27 per
+nine-slot plot — the plot is the *scalable* source, the wild plant the *immediate* one.
+Vanilla's own band is 3–5 (potato, tomato, pepper). The cob being its own seed makes
+this a closed loop with no external input, which the production map's §22 forbids;
+the deviation is written on the class and is **subject to gate review**.
 
 Where corn goes: it has its own optional slot in Chernarus Chili, Vegetable Soup
 and Farmer's Breakfast (each also in the group version where one exists). Because
@@ -546,7 +587,8 @@ consumables. The can is not — it is cut open and stays open. See
 [Portions-and-Containers](Portions-and-Containers).
 
 **Gaps.** `ChefZ_EmptyJar` is the one container with **no source at all** in V1:
-nothing crafts it and nothing spawns it, because there is no `types.xml`. The other
+nothing crafts it and nothing spawns it — the mod's only CE template covers the wild
+plants and wheat, not containers. The other
 four are craftable from vanilla materials, which is why the bark bowl and the metal
 cans were added — a bowl should not depend on finding firewood alone.
 
@@ -560,7 +602,7 @@ All 61 transforms are accounted for above.
 | Of those, at a station | 39 |
 | Of those, handcraft | 22 |
 | Recipes fed by these chains | 47 |
-| Chains blocked at least in part | 4 — grain (mill has no cargo), meat/sausage (no cargo), preservation (smoker), everything upstream of loot (no `types.xml`) |
+| Chains blocked at least in part | 4 — grain (mill has no cargo), meat/sausage (no cargo), preservation (smoker), everything upstream of loot. The last one shrank on 31.08.2026: wheat, corn and three of the herbs now have CE events, but only as a **template a human still has to install** — see the box at the top of this page |
 
 Recounted 2026-08-29 after the apiary, the bee smoker fuel step and the return of
 diced meat: 61 transforms, 9 of them in the apiary. The honey chain is the one chain

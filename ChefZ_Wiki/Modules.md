@@ -115,22 +115,28 @@ The merge itself is described on [Delta Protocol](Delta-Protocol).
 ## `ChefZ_Farming`
 
 Grain, vegetables and herbs — the start of most production chains. Since
-2026-08-29 all of them are **found**, like vanilla mushrooms: there are no plant
-classes, no seeds and no growth stages. Where they spawn is the server's `types.xml`.
+2026-08-29 the ingredients are **found**, like vanilla mushrooms: no seeds, no
+growth stages. Where they spawn is the server's `types.xml`. Two exceptions have
+grown since: corn also grows in a garden plot (`ChefZ_CornPlant : PlantBase`,
+`CropsCount 4` since 31.08.2026), and four **wild plants** stand in the world as
+harvest points.
 
 - **item classes**: wheat, the five ChefZ vegetables (`ChefZ_Onion`,
   `ChefZ_Garlic`, `ChefZ_Carrot`, `ChefZ_Cabbage`, `ChefZ_Corn`), five fresh herbs and spices,
-  plus the apiary: `ChefZ_Beehive`, `ChefZ_BeehiveDouble`, `ChefZ_BeehiveKit`,
+  the apiary: `ChefZ_Beehive`, `ChefZ_BeehiveDouble`, `ChefZ_BeehiveKit`,
   three comb frames (empty, full, uncapped), `ChefZ_UncappingFork`,
-  `ChefZ_BeeSmoker`. The two hives are the only stations outside
-  `ChefZ_Processing`; see [Processing Stations](Processing-Stations#beehive-and-double-beehive).
+  `ChefZ_BeeSmoker` — and since 31.08.2026 the wild plants
+  `ChefZ_WildPlant_Base` (scope 0), `ChefZ_WildCorn`, `ChefZ_WildThyme`,
+  `ChefZ_WildRosemary`, `ChefZ_WildParsley`. The two hives and the four wild
+  plants are the only stations outside `ChefZ_Processing`; see
+  [Processing Stations](Processing-Stations#beehive-and-double-beehive).
 - **Script files**: `ChefZ_FarmingItems.c`, `ChefZ_HerbItems.c`,
-  `ChefZ_ProduceFarming.c`, `ChefZ_Apiary.c`.
-- **Rank 1**: **17 records** — 5 ingredient bindings (`ChefZ_ProduceIngredient`
-  and the four vegetables), 9 processes and 3 tool groups (`HAND_TOOL`,
+  `ChefZ_ProduceFarming.c`, `ChefZ_Apiary.c`, `ChefZ_WildPlants.c`.
+- **Rank 1**: **20 records** — 6 ingredient bindings (`ChefZ_ProduceIngredient`
+  and the five vegetables), 11 processes and 3 tool groups (`HAND_TOOL`,
   `UNCAPPING_TOOL`, `BEE_SMOKER`).
-- **Rank 2**: **22 records** across 5 documents — 12 ingredients, 8 transforms
-  and the 2 hive stations.
+- **Rank 2**: **25 records** across 6 documents — 11 ingredients, 8 transforms
+  and 6 stations (2 hives, 4 wild plants).
 - **The only asset folder in the mod**: `Sounds/` with `Bees_Attack.ogg` and
   `Beehive_Ambient.ogg`, bound through `CfgSoundShaders` and `CfgSoundSets`. The
   sting hook plays `ChefZ_Bees_Attack_SoundSet` **server-side** through vanilla's
@@ -139,12 +145,43 @@ classes, no seeds and no growth stages. Where they spawn is the server's `types.
   anything yet. This addon is also the only one whose `include.txt` lists `*.ogg` —
   without that line AddonBuilder drops the files from the PBO and says nothing.
 - **`CfgChefZ` slices**: `ChefZ_GrainFarming` (210, 0 slots),
-  `ChefZ_HerbFarming` (215, 0 slots), `ChefZ_Apiary` (7 handcraft slots:
-  five build steps, uncapping, and the double hive).
+  `ChefZ_HerbFarming` (215, 0 slots), `ChefZ_WildPlants` (219, 0 slots),
+  `ChefZ_Apiary` (8 handcraft slots — one per `HANDCRAFT` transform: six build
+  steps, uncapping, and filling the smoker). The wild plants reserve **no** slot:
+  a station process never reaches vanilla's recipe list.
 - **Depends on**: `DZ_Data`, `DZ_Gear_Cultivation`, `DZ_Gear_Food`, `ChefZ_Core`.
 
-`ChefZ_FreshHerbBase` is the only ChefZ class extended by `modded class` from a
-comp mod (see [Terje Compatibility](Terje-Compatibility)).
+### Wild growth, added 31.08.2026
+
+Four standing plants that the central economy scatters around players, harvested
+by hand. They are **mini-stations**, not `PlantBase`: `ChefZ_WildPlant_Base`
+extends `ChefZ_ProcessingStation_Base`, the same shape the beehive uses — which is
+why the whole slice needed **no core change**.
+
+| | |
+|---|---|
+| Process | `PROCESS_HARVEST_WILD` — `STATION_ACTION`, 5 s, no tool group, `toolDamage = 0` |
+| Transform | **none.** A transform without `inputs` is rejected, the fact collector returns empty for a container without cargo, and the applicator creates only *into* cargo. A plant has no cargo. The outcome is therefore always `NO_MATCH`; only `RUN_FAILED` counts as failure |
+| Yield | corn 1 cob, +1 at 25 %, +2 at 5 % · each herb 1 bunch, +1 at 25 %. One roll, two bands. More yield means **more items**, never more quantity |
+| After the roll | the items drop beside the plant and the plant deletes itself — but only if at least one item was created |
+| Not an item | `IsTakeable`, `CanPutInCargo`, `CanRemoveFromCargo`, `CanPutIntoHands` and `IsDeployable` all `false`; four actions removed again after `super.SetActions()` |
+| Groups | `ChefZ_WildCorn.EEOnCECreate()` queues `CallLater(…, 0)` and places 0–2 companions of the same class 1–2 m away. A `position=player` event cannot place a group itself — checked against all 75 events of the test mission |
+| Models | corn on the mod's own `corn_plant.p3d`, with an `AnimationSources` block that leaves only `PlantStage_06` and its cobs visible; the three herbs on **proxy** meshes until three standing bushels are modelled |
+
+Nothing of this appears in the world until a human installs the CE template into
+the mission. `ChefZ_Farming/ServerConfig/` holds `ChefZ_events.xml` (three events —
+corn 60, herbs 140, wheat 40), `ChefZ_types.xml` (five limit containers,
+`nominal 0`) and the install guide. **Those files are not packed:** `include.txt`
+dropped its `*.xml` pattern the same day, precisely so they cannot end up in the
+PBO. The numbers are on [Production Chains](Production-Chains#grain), what is
+untested on
+[Known-Limitations](Known-Limitations#wild-plants-wildwuchs--31082026).
+
+`ChefZ_FreshHerbBase` and, since 31.08.2026, the three wild herbs
+`ChefZ_WildThyme`, `ChefZ_WildRosemary` and `ChefZ_WildParsley` are the classes a
+comp mod extends by `modded class` — all four only for the herbalist's highlight.
+`ChefZ_WildCorn` is deliberately left out: corn is not a herb
+(see [Terje Compatibility](Terje-Compatibility)).
 
 ## `ChefZ_Processing`
 
@@ -456,8 +493,9 @@ See [COT Compatibility](COT-Compatibility).
 Hangs cooking perks into TerjeSkills' existing `surv` skill and feeds ChefZ's
 capability and progress registries.
 
-- 8 script files. One of them uses `modded class` on ChefZ's own
-  `ChefZ_FreshHerbBase` — the only ChefZ class any comp mod extends.
+- 10 script files. Two of them use `modded class` on ChefZ's own classes —
+  `ChefZ_FreshHerbBase` and the three wild herbs, the only ChefZ classes any comp
+  mod extends.
 - Depends on `DZ_Data`, `ChefZ_Core`, `ChefZ_Farming`, `TerjeCore`, `TerjeSkills`.
 - The whole XP matrix is config, not script, so an operator can override it via
   `$profile:TerjeSettings\Core\GameOverrides.xml`.

@@ -125,17 +125,42 @@ If the JSON is filtered out, the mod loads and does nothing: the config manager
 reports `slices=0 files=0 records=0` and every ChefZ recipe is absent while
 vanilla cooking keeps working. See [Troubleshooting](Troubleshooting).
 
-Eleven of the twelve addon folders ship an `include.txt` that tells Addon
-Builder what to keep:
+**Every** addon folder ships an `include.txt` that tells Addon Builder what to
+keep — the seventeen sources checked 31.08.2026. The common form is:
 
 ```
 *.c;*.json;*.csv;*.xml;*.layout;*.txt
 ```
 
-**`Psyerns_ChefZ_COT_Comp` has no `include.txt`.** Add one with the same
-content before packing it, or Addon Builder's default filter may drop its
-script files and its `stringtable.csv`, and the COT spawn categories will
-simply not exist.
+Four of them deviate, each for a reason:
+
+| Addon | `include.txt` | Why |
+|---|---|---|
+| `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items`, `ChefZ_Plants` | `*.p3d;*.paa;*.rvmat;*.txt;*.cfg` | asset-only addons — no script, no record |
+| `ChefZ_Farming` | `*.c;*.json;*.csv;*.layout;*.txt;*.ogg` | `*.ogg` for the two bee sounds, and **no `*.xml`** since 31.08.2026: the module's only XML files are the CE templates in `ServerConfig/`, which must **not** end up in the PBO |
+| `ChefZ_Ingredients`, `ChefZ_Processing`, `ChefZ_Registry` | … `;*.hpp` | they include headers |
+
+### 2.3a The CE fragment is a mission file, not a PBO file
+
+`Psyerns_ChefZ_Core/Addons/ChefZ_Farming/ServerConfig/` holds `ChefZ_events.xml`,
+`ChefZ_types.xml` and `README_ServerConfig.md`. They are **templates for the
+mission**, not mod content: the mod never reads them, and a PBO cannot carry
+central-economy data.
+
+Without them the four wild plants exist but never appear on their own; they are
+spawnable by an admin and nothing else. To install: copy both XML files into
+`mpmissions\<mission>\ChefZ\`, add one block to `cfgeconomycore.xml` —
+
+```xml
+<ce folder="ChefZ">
+    <file name="ChefZ_types.xml"  type="types"/>
+    <file name="ChefZ_events.xml" type="events"/>
+</ce>
+```
+
+— and restart the server; the economy reads that file only at start. The full
+guide, the operator dials and the expected object counts are in
+`README_ServerConfig.md`.
 
 ### 2.4 Signing
 
