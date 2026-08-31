@@ -880,9 +880,11 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         //
         // Die Gasmaske zuerst: sie schliesst das Gesicht ab und nimmt keinen
         // Schaden (Gummi, wie der Anzug). Vanilla kennt sie selbst -
-        // InventoryItem.IsGasMask() (scripts - 1.29/4_World/DayZ/Entities/
-        // Core/Inherited/InventoryItem.c:995), ueberschrieben in MaskBase.c:6
-        // fuer GasMask, GP5GasMask und AirborneMask.
+        // Clothing_Base.IsGasMask() (scripts - 1.29/4_World/DayZ/Entities/
+        // Core/Inherited/InventoryItem.c:995, Klasse ab Zeile 837),
+        // ueberschrieben in MaskBase.c:6 fuer GasMask, GP5GasMask und
+        // AirborneMask. NICHT auf ItemBase - deshalb der Clothing-Cast in
+        // ChefZ_WearsGasMask, wie Vanilla selbst in PlayerBase.c:1479/1499.
         bool stungHead = true;
         if (gasMask)
             stungHead = false;
@@ -932,10 +934,12 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
 
     //! Sitzt im Maskenslot eine unzerstoerte Gasmaske? Vanillas eigene
     //! Antwort (IsGasMask), keine Klassenliste - eine fremde Maske, die sich
-    //! als Gasmaske ausgibt, schuetzt damit ebenfalls.
+    //! als Gasmaske ausgibt, schuetzt damit ebenfalls. IsGasMask lebt auf
+    //! Clothing_Base, nicht auf ItemBase - daher der Clothing-Cast (Vanillas
+    //! eigenes Muster, PlayerBase.c:1479/1499).
     protected bool ChefZ_WearsGasMask(notnull PlayerBase actor)
     {
-        ItemBase mask = ItemBase.Cast(actor.FindAttachmentBySlotName(CHEFZ_SLOT_MASK));
+        Clothing mask = Clothing.Cast(actor.FindAttachmentBySlotName(CHEFZ_SLOT_MASK));
         if (!mask || mask.IsDamageDestroyed())
             return false;
         return mask.IsGasMask();
