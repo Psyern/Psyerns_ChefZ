@@ -10,6 +10,15 @@ import { Findings, allModuleDirs, walk, readText, rel, exists } from './lib.mjs'
 
 const STR_RE = /#(STR_CHEFZ_[A-Z0-9_]+)/g;
 
+// Inputs.xml referenziert Schluessel per Engine-Konvention OHNE Raute:
+//   <input name="UAChefZCookbookToggle" loc="STR_CHEFZ_INPUT_COOKBOOK" />
+// Belegt an den ausgelieferten Mods (DayZExpansion/Book/Scripts/Data/
+// Inputs.xml:6, JM/COT/Scripts/Data/Inputs.xml:5, VPP data/modded_Inputs.xml:5,
+// LBmaster_Core/inputsLBmaster.xml:5) - loc="#STR_..." kommt dort nirgends vor.
+// Ohne dieses Muster meldet der Pruefer solche Schluessel faelschlich als
+// unbenutzt (erstmals aufgetreten 2026-08-31 an ChefZ_Cookbook).
+const LOC_RE = /\bloc="(STR_CHEFZ_[A-Z0-9_]+)"/g;
+
 // Der Spaltensatz, den Vanilla, Terje, Expansion und COT gleichermassen fuehren.
 // Kleinschreibung ist nicht kosmetisch - so steht er in jeder Fremdquelle.
 export const COLUMNS = [
@@ -160,6 +169,16 @@ export default function run() {
           used.add(key);
           if (!defined.has(key)) {
             f.error(file, i + 1, `Stringtable-Schluessel "${key}" wird verwendet, ist aber in keiner stringtable.csv definiert - im Spiel erscheint der rohe Schluesselname`);
+          }
+        }
+        if (/\.xml$/i.test(file)) {
+          LOC_RE.lastIndex = 0;
+          while ((m = LOC_RE.exec(lines[i])) !== null) {
+            const key = m[1];
+            used.add(key);
+            if (!defined.has(key)) {
+              f.error(file, i + 1, `Stringtable-Schluessel "${key}" wird in einem loc-Attribut verwendet, ist aber in keiner stringtable.csv definiert - das Steuerungsmenue zeigt den rohen Schluesselnamen`);
+            }
           }
         }
       }

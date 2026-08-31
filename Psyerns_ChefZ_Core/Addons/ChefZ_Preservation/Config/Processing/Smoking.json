@@ -4,9 +4,8 @@
     "records": [
         {
             "id": "TR_SaltedMeatToSmoked",
-            "process": "PROCESS_SMOKE",
-            "stationsAllowed": ["ChefZ_Smoker"],
-            "durationOverrideSec": 1800,
+            "_note": "durationOverrideSec 31.08.2026 von 1800 auf 300 (Vorgabe Alex: 'vollstaendig raeuchern dauert 5 Minuten' - einheitlich fuer alle drei Transforms dieser Datei, vorher 1800/1500/2400). Der Preis des Raeucherns ist seither nicht mehr die Wartezeit, sondern der Brennstoff: der Raeucherschrank hat seit demselben Tag einen eigenen Brennzustand und verbrennt Rinde aus seinem Cargo (ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c). Fuenf Minuten Vollbrand kosten zwei Stueck Rinde. PROCESS_SMOKE.baseDurationSec steht ebenfalls auf 300 (ChefZ_Processing/config.cpp).",
+            "durationOverrideSec": 300,
             "inputs": [
                 {
                     "slotId": "meat",
@@ -31,7 +30,7 @@
             "id": "TR_FishToSmoked",
             "process": "PROCESS_SMOKE",
             "stationsAllowed": ["ChefZ_Smoker"],
-            "durationOverrideSec": 1500,
+            "durationOverrideSec": 300,
             "inputs": [
                 {
                     "slotId": "fillet",
@@ -48,7 +47,8 @@
             "outputs": [
                 {
                     "cls": "ChefZ_SmokedFish",
-                    "quantityMode": "fromInput",
+                    "quantity": 250,
+                    "quantityMode": "fixed",
                     "setState": "SMOKED",
                     "inheritFreshness": true
                 }
@@ -61,7 +61,7 @@
             "id": "TR_RawSausageToSmoked",
             "process": "PROCESS_SMOKE",
             "stationsAllowed": ["ChefZ_Smoker"],
-            "durationOverrideSec": 2400,
+            "durationOverrideSec": 300,
             "inputs": [
                 {
                     "slotId": "sausage",
@@ -78,7 +78,8 @@
             "outputs": [
                 {
                     "cls": "ChefZ_SmokedSausage",
-                    "quantityMode": "fromInput",
+                    "quantity": 250,
+                    "quantityMode": "fixed",
                     "setState": "SMOKED",
                     "inheritFreshness": true
                 }

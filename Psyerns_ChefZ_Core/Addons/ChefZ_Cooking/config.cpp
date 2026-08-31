@@ -407,7 +407,10 @@ class CfgVehicles
 
         class Nutrition
         {
-            fullnessIndex = 60;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.0 x 100 Einheiten = 300 - Sauce/Bruehe im Glas.
+            // Alt: 60 x 100 = 6000, das 3-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.0;
             energy = 150;
             water = 320;
             nutritionalIndex = 45;
@@ -420,11 +423,11 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {60, 150, 320, 45, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {60, 158, 280, 45, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {60, 150, 320, 45, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {15, 38, 40, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {24, 60, 128, 9, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {3.0, 158, 280, 45, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.75, 38, 40, 8, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {1.2, 60, 128, 9, 20, 16, 1}; };
             };
         };
     };
@@ -446,7 +449,10 @@ class CfgVehicles
 
         class Nutrition
         {
-            fullnessIndex = 45;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 2.3 x 100 Einheiten = 230 - Sauce/Bruehe im Glas.
+            // Alt: 45 x 100 = 4500, das 2-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 2.3;
             energy = 130;
             water = 105;
             nutritionalIndex = 35;
@@ -459,11 +465,11 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {45, 130, 105, 35, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {45, 135, 85, 35, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {45, 130, 125, 35, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {11, 33, 13, 7, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {18, 52, 42, 7, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {2.3, 130, 105, 35, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {2.3, 135, 85, 35, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {2.3, 130, 125, 35, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.58, 33, 13, 7, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.92, 52, 42, 7, 20, 16, 1}; };
             };
         };
     };
@@ -485,7 +491,10 @@ class CfgVehicles
 
         class Nutrition
         {
-            fullnessIndex = 40;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 2.0 x 100 Einheiten = 200 - Sauce/Bruehe im Glas.
+            // Alt: 40 x 100 = 4000, das 2-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 2.0;
             energy = 620;
             water = 90;
             nutritionalIndex = 20;
@@ -498,11 +507,11 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {40, 620, 90, 20, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {40, 635, 70, 20, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {40, 620, 100, 20, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {10, 155, 12, 4, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {16, 248, 36, 4, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {2.0, 620, 90, 20, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {2.0, 635, 70, 20, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {2.0, 620, 100, 20, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.5, 155, 12, 4, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.8, 248, 36, 4, 20, 16, 1}; };
             };
         };
     };
@@ -524,7 +533,10 @@ class CfgVehicles
 
         class Nutrition
         {
-            fullnessIndex = 45;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 2.3 x 100 Einheiten = 230 - Sauce/Bruehe im Glas.
+            // Alt: 45 x 100 = 4500, das 2-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 2.3;
             energy = 330;
             water = 130;
             nutritionalIndex = 40;
@@ -537,11 +549,11 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {45, 330, 130, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {45, 340, 110, 40, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {45, 330, 140, 40, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {11, 83, 16, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {18, 132, 52, 8, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {2.3, 330, 130, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {2.3, 340, 110, 40, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {2.3, 330, 140, 40, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.58, 83, 16, 8, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.92, 132, 52, 8, 20, 16, 1}; };
             };
         };
     };
@@ -752,11 +764,14 @@ class CfgVehicles
         absorbency = 0.7;
         // MENGE 100 UND EINE LEISTE, WIE DER APFEL (Entscheidung vom
         // 29.08.2026: der Verzehrzustand ist der Restwert auf der Leiste,
-        // keine Geometrie- oder Texturstufe). Das ist zugleich die Rechnung,
-        // die Vanilla verlangt: PlayerStomach teilt jeden Naehrwert durch 100
-        // Mengeneinheiten (PlayerStomach.c:92). Mit varQuantityMax = 1 kam von
+        // keine Geometrie- oder Texturstufe). PlayerStomach.c:92 teilt energy
+        // und water durch 100 Mengeneinheiten: mit varQuantityMax = 1 kam von
         // energy = 690 genau 6,9 im Magen an - ein Hundertstel. Ein Bissen
         // (UAQuantityConsumed.EAT_BIG = 25) ist jetzt ein Viertel der Portion.
+        //
+        // ACHTUNG, DIESELBE ZEILE GILT FUER fullnessIndex NICHT. Die
+        // Herleitung des Magenvolumens steht vollstaendig an
+        // ChefZ_ServedDish_Base, ein Stueck weiter unten in dieser Datei.
         varQuantityInit = 100;
         varQuantityMin = 0;
         varQuantityMax = 100;
@@ -872,11 +887,74 @@ class CfgVehicles
         absorbency = 0.5;
         // MENGE 100 UND EINE LEISTE, WIE DER APFEL (Entscheidung vom
         // 29.08.2026: der Verzehrzustand ist der Restwert auf der Leiste,
-        // keine Geometrie- oder Texturstufe). Das ist zugleich die Rechnung,
-        // die Vanilla verlangt: PlayerStomach teilt jeden Naehrwert durch 100
-        // Mengeneinheiten (PlayerStomach.c:92). Mit varQuantityMax = 1 kam von
+        // keine Geometrie- oder Texturstufe). PlayerStomach.c:92 teilt energy
+        // und water durch 100 Mengeneinheiten: mit varQuantityMax = 1 kam von
         // energy = 690 genau 6,9 im Magen an - ein Hundertstel. Ein Bissen
         // (UAQuantityConsumed.EAT_BIG = 25) ist jetzt ein Viertel der Portion.
+        //
+        // ------------------------------------------------------------------
+        // MAGENVOLUMEN - DIE HERLEITUNG JEDES fullnessIndex IN DIESEM MODUL
+        // ------------------------------------------------------------------
+        // Sie steht hier EINMAL; jede essbare Klasse des Moduls verweist mit
+        // einer Zeile darauf. Anlass ist ein im Spiel bestaetigter Fehler:
+        // nach JEDEM ChefZ-Gericht hat sich der Charakter uebergeben.
+        //
+        // Die Ursache ist ein Bruch in der Vanilla-Rechnung, den die alten
+        // Kommentare dieses Moduls uebersehen haben. energy und water werden
+        // je Mengeneinheit durch 100 geteilt:
+        //
+        //     PlayerStomach.c:92  float energy_per_unit = profile.GetEnergy() / 100;
+        //     PlayerStomach.c:93  float water_per_unit  = profile.GetWaterContent() / 100;
+        //
+        // fullnessIndex NICHT. Er geht als Faktor PRO Mengeneinheit direkt
+        // ins Magenvolumen, ohne jede Division:
+        //
+        //     PlayerStomach.c:86  volume = m_Profile.GetFullnessIndex() * m_Amount;
+        //
+        // (StomachItem.ProcessDigestion; PlayerStomach.c:304-317 summiert das
+        // Ergebnis ueber alle Posten in m_StomachVolume.)
+        //
+        // Daraus folgt die INVARIANTE dieses Moduls:
+        //
+        //     fullnessIndex x varQuantityMax = Magenvolumen des GANZEN Gerichts
+        //
+        // Die Grenzen dafuer setzt Vanilla, nicht der Geschmack:
+        //
+        //     PlayerConstants.c:208  VOMIT_THRESHOLD = 2000
+        //         darueber loest VomitStuffed.c aus - der Charakter kotzt.
+        //     PlayerConstants.c:200  BT_STOMACH_VOLUME_LVL3 = 1000
+        //         ab hier zeigt die HUD-Anzeige "Stuffed".
+        //
+        // Abgebaut wird nur mit PlayerConstants.DIGESTION_SPEED (rund 1,7
+        // Einheiten je Sekunde) - ein zu hoher Wert laesst sich nicht
+        // aussitzen.
+        //
+        // WARUM DER ALTE STAND KOTZEN MUSSTE: die Werte lagen bei 30 bis 300
+        // bei varQuantityMax 200 bis 1200. ChefZ_SausageBreadPlate stand auf
+        // 110; ein einziger Bissen (UAQuantityConsumed.EAT_BIG = 25,
+        // ActionConstants.c:9) ergab 110 x 25 = 2750 Volumen und damit sofort
+        // mehr als VOMIT_THRESHOLD. Es war kein Balancingfehler, sondern ein
+        // Rechenfehler um den Faktor 100.
+        //
+        // DIE ZIELBAENDER (Magenvolumen des ganzen Gerichts, nie ueber 950 -
+        // ein volles Gericht darf saettigen, aber nie allein die Schwelle
+        // reissen):
+        //
+        //     ueppiges Gericht            850 - 950
+        //     Hauptgericht-Teller         600 - 850
+        //     Pfannen-/leichtes Gericht   300 - 500
+        //     Snack                       200 - 350
+        //     Bowl (varQuantityMax 1200)  600 - 850, fullnessIndex also ~0.5-0.7
+        //     Sauce/Bruehe im Glas        200 - 300
+        //
+        // Die relative Reihenfolge der alten Werte bleibt erhalten: gerechnet
+        // wurde gegen das ALTE Gesamtvolumen (alter fullnessIndex x
+        // varQuantityMax), weil genau das die Groesse ist, die der Magen sieht.
+        //
+        // Die Zahlen liegen damit ueber dem Vanilla-Band von rund 0.75 bis 2.5,
+        // und das ist richtig: ein ChefZ-Teller ist ein Mehrportionen-Item mit
+        // varQuantityMax 200 bis 1200, ein Vanilla-Apfel ein Einzelstueck.
+        // Verglichen werden muss das Produkt, nicht der Index.
         varQuantityInit = 100;
         varQuantityMin = 0;
         varQuantityMax = 100;
@@ -898,10 +976,12 @@ class CfgVehicles
     // --------------------------------------------------------------------------
     // Das Rezept liefert das servierte Gericht direkt im Kochgeraet - ohne
     // Zwischenstufe (Bulk) und ohne Entnahmeaktion. Mehrere Portionen sind
-    // MENGE am einen Item: PlayerStomach.c:92 rechnet die Naehrwerte je 100
-    // Einheiten, das Rezept setzt quantity = 100 x Portionen, und die Klasse
-    // traegt varQuantityMax fuer ihr groesstes Rezept. Wer aus dem Topf isst,
-    // isst Portion fuer Portion vom selben Item.
+    // MENGE am einen Item: PlayerStomach.c:92 rechnet energy und water je 100
+    // Einheiten ab, das Rezept setzt quantity = 100 x Portionen, und die
+    // Klasse traegt varQuantityMax fuer ihr groesstes Rezept. Wer aus dem Topf
+    // isst, isst Portion fuer Portion vom selben Item. fullnessIndex faellt
+    // NICHT unter diese Rechnung - er wirkt mal der Menge
+    // (PlayerStomach.c:86); die Herleitung steht an ChefZ_ServedDish_Base.
     //
     // Die Klasse traegt den Namen aus Production Map §72 / DME-Plan §53
     // (ChefZ_TacticalBreakfast). Qualitaetsvarianten
@@ -977,9 +1057,14 @@ class CfgVehicles
     //    Tactical Bacon (~550/20/90) + 1 Ei (90/40/12) + 1 Brot (500/20/45)
     //    = 1140 Energie, 80 Wasser, 147 Saettigung auf ZWEI Portionen.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_TacticalBreakfast : ChefZ_ServedDish_Base
     {
@@ -989,15 +1074,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 480;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 75;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 2.35 x 200 Einheiten = 470 - Pfannen-/leichtes Gericht.
+            // Alt: 75 x 200 = 15000, das 8-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 2.35;
             energy = 570;
             water = 40;
             nutritionalIndex = 55;
@@ -1017,9 +1107,14 @@ class CfgVehicles
     //    = 960 Energie, 537 Wasser, 206 Saettigung auf ZWEI Portionen.
     //    Die Milch macht das Gericht auffaellig wasserreich - das ist gewollt.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_ScrambledEggSausage : ChefZ_ServedDish_Base
     {
@@ -1029,15 +1124,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 103;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.25 x 200 Einheiten = 650 - Hauptgericht-Teller.
+            // Alt: 103 x 200 = 20600, das 10-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.25;
             energy = 480;
             water = 268;
             nutritionalIndex = 60;
@@ -1057,9 +1157,14 @@ class CfgVehicles
     //    + 1 Zwiebel (90/55/25) = 1300 Energie auf ZWEI der drei Portionen.
     //    Mais (180/40/60) ist optional und zaehlt nicht in die Summe.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_FarmersBreakfast : ChefZ_ServedDish_Base
     {
@@ -1069,15 +1174,20 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\farmersbreakfast.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 620;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
         class Nutrition
         {
-            fullnessIndex = 154;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.0 x 300 Einheiten = 900 - ueppiges Gericht.
+            // Alt: 154 x 300 = 46200, das 23-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.0;
             energy = 650;
             water = 136;
             nutritionalIndex = 65;
@@ -1096,9 +1206,14 @@ class CfgVehicles
     //    1 Teig (300/90/35) + 1 Kaese (450/60/35) = 750 Energie, 150 Wasser,
     //    70 Saettigung auf ZWEI Portionen.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_CheeseFlatbread : ChefZ_ServedDish_Base
     {
@@ -1108,15 +1223,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 380;
         lifetime = 21600;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 35;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 1.6 x 200 Einheiten = 320 - Snack.
+            // Alt: 35 x 200 = 7000, das 4-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 1.6;
             energy = 375;
             water = 75;
             nutritionalIndex = 50;
@@ -1136,9 +1256,14 @@ class CfgVehicles
     //    mal nutritionModifier 0.95 (kalt angerichtet, kein Garverlust und kein
     //    Garzugewinn), auf ZWEI Portionen.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_SausageBreadPlate : ChefZ_ServedDish_Base
     {
@@ -1148,15 +1273,20 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\sausage_breadplate.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 520;
         lifetime = 18000;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 110;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.3 x 200 Einheiten = 660 - Hauptgericht-Teller.
+            // Alt: 110 x 200 = 22000, das 11-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.3;
             energy = 690;
             water = 50;
             nutritionalIndex = 55;
@@ -1176,9 +1306,14 @@ class CfgVehicles
     //    Portionen. Hoher nutritionalIndex, weil DME-Plan §42 Gemuesegerichten
     //    ausdruecklich gute Vitaminwerte zuschreibt.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_MushroomPan : ChefZ_ServedDish_Base
     {
@@ -1188,15 +1323,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 420;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 58;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 2.0 x 200 Einheiten = 400 - Pfannen-/leichtes Gericht.
+            // Alt: 58 x 200 = 11600, das 6-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 2.0;
             energy = 480;
             water = 80;
             nutritionalIndex = 60;
@@ -1215,9 +1355,14 @@ class CfgVehicles
     //    3 Kartoffeln (540/120/120) + 100 g Mehl (~200/1/15) + 1 Ei (90/40/12)
     //    + 1 Fett (300/5/40) = 1130 Energie auf ZWEI Portionen.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_PotatoPancakes : ChefZ_ServedDish_Base
     {
@@ -1227,15 +1372,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 93;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.1 x 200 Einheiten = 620 - Hauptgericht-Teller.
+            // Alt: 93 x 200 = 18600, das 9-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.1;
             energy = 565;
             water = 83;
             nutritionalIndex = 55;
@@ -1256,9 +1406,14 @@ class CfgVehicles
     //    Wenig Energie, viel Saettigung - genau das Profil eines Fleischgerichts
     //    nach DME-Plan §42.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_MeatDumplings : ChefZ_ServedDish_Base
     {
@@ -1268,15 +1423,20 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\meatdumplings.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 460;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
         class Nutrition
         {
-            fullnessIndex = 140;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 2.7 x 300 Einheiten = 810 - Hauptgericht-Teller.
+            // Alt: 140 x 300 = 42000, das 21-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 2.7;
             energy = 360;
             water = 115;
             nutritionalIndex = 60;
@@ -1296,9 +1456,14 @@ class CfgVehicles
     //    ZWEI Portionen. Die Saettigung liegt ueber der Rohsumme, weil der Reis
     //    in der Milch quillt.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_MilkRice : ChefZ_ServedDish_Base
     {
@@ -1308,15 +1473,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
         weight = 540;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 55;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 1.9 x 200 Einheiten = 380 - Pfannen-/leichtes Gericht.
+            // Alt: 55 x 200 = 11000, das 6-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 1.9;
             energy = 280;
             water = 205;
             nutritionalIndex = 50;
@@ -1335,9 +1505,14 @@ class CfgVehicles
     //    1 Brot (500/20/45) + 1 Honig (~300/10/12) = 800 Energie, 30 Wasser auf
     //    ZWEI Portionen. Kaum Wasser, dafuer schnelle Energie.
     //
-    // Die Werte gelten je 100 Einheiten Menge - eine Portion (PlayerStomach.c:92
-    // rechnet energy / 100 je Einheit). Das Rezept setzt quantity = 100 x
-    // Portionen; die Klasse traegt varQuantityMax fuer ihr groesstes Rezept.
+    // energy und water gelten je 100 Einheiten Menge - eine Portion
+    // (PlayerStomach.c:92 rechnet energy / 100 je Einheit). FUER
+    // fullnessIndex GILT DAS NICHT: PlayerStomach.c:86 multipliziert ihn OHNE
+    // Division mit der Menge. Die Saettigungszahl in der Herleitung oben ist
+    // deshalb eine Zutatenbilanz und NICHT der Configwert - der steht an der
+    // Klasse und ist an ChefZ_ServedDish_Base hergeleitet. Das Rezept setzt
+    // quantity = 100 x Portionen; die Klasse traegt varQuantityMax fuer ihr
+    // groesstes Rezept.
     //--------------------------------------------------------------------------
     class ChefZ_HoneyBreadPlate : ChefZ_ServedDish_Base
     {
@@ -1347,15 +1522,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 360;
         lifetime = 21600;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 30;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 1.4 x 200 Einheiten = 280 - Snack.
+            // Alt: 30 x 200 = 6000, das 3-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 1.4;
             energy = 400;
             water = 20;
             nutritionalIndex = 45;
@@ -1441,15 +1621,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 480;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 400;
         varQuantityMax = 1200;
 
         class Nutrition
         {
-            fullnessIndex = 90;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 0.67 x 1200 Einheiten = 804 - Bowl.
+            // Alt: 90 x 1200 = 108000, das 54-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 0.67;
             energy = 270;
             water = 160;
             nutritionalIndex = 55;
@@ -1481,15 +1666,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 470;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 400;
         varQuantityMax = 1200;
 
         class Nutrition
         {
-            fullnessIndex = 75;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 0.62 x 1200 Einheiten = 744 - Bowl.
+            // Alt: 75 x 1200 = 90000, das 45-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 0.62;
             energy = 220;
             water = 160;
             nutritionalIndex = 60;
@@ -1524,15 +1714,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 450;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 400;
         varQuantityMax = 1200;
 
         class Nutrition
         {
-            fullnessIndex = 45;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 0.51 x 1200 Einheiten = 612 - Bowl.
+            // Alt: 45 x 1200 = 54000, das 27-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 0.51;
             energy = 165;
             water = 195;
             nutritionalIndex = 65;
@@ -1567,15 +1762,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 500;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 400;
         varQuantityMax = 1200;
 
         class Nutrition
         {
-            fullnessIndex = 55;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 0.56 x 1200 Einheiten = 672 - Bowl.
+            // Alt: 55 x 1200 = 66000, das 33-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 0.56;
             energy = 180;
             water = 200;
             nutritionalIndex = 70;
@@ -1619,15 +1819,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 520;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 400;
         varQuantityMax = 1200;
 
         class Nutrition
         {
-            fullnessIndex = 105;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 0.70 x 1200 Einheiten = 840 - Bowl.
+            // Alt: 105 x 1200 = 126000, das 63-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 0.70;
             energy = 325;
             water = 85;
             nutritionalIndex = 50;
@@ -1657,10 +1862,12 @@ class CfgVehicles
     // Kompott geben in eine Schuessel und heissen deshalb ...Bowl, die
     // Fischpfanne auf einen Teller und heisst nur nach dem Gericht.
     //
-    // NAEHRWERT: die Zahl unter jeder Klasse ist die Summe EINER Portion aus
-    // den Zutatenwerten der Registry, mal nutritionModifier des Rezepts. Sie
-    // gilt je 100 Einheiten Menge (PlayerStomach.c:92); das Rezept setzt
-    // 100 x Portionen.
+    // NAEHRWERT: energy und water unter jeder Klasse sind die Summe EINER
+    // Portion aus den Zutatenwerten der Registry, mal nutritionModifier des
+    // Rezepts. Sie gelten je 100 Einheiten Menge (PlayerStomach.c:92); das
+    // Rezept setzt 100 x Portionen. fullnessIndex folgt einer anderen
+    // Rechnung - er wirkt ungeteilt mal der Menge (PlayerStomach.c:86) und
+    // ist an ChefZ_ServedDish_Base hergeleitet.
     //
     // MODELLE: kein Gericht hat ein eigenes Mesh. Alle tragen FryingPan.p3d
     // (flach, liest sich als Teller). Der Bedarf steht
@@ -1684,15 +1891,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 480;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
         class Nutrition
         {
-            fullnessIndex = 58;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 1.65 x 300 Einheiten = 495 - Pfannen-/leichtes Gericht.
+            // Alt: 58 x 300 = 17400, das 9-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 1.65;
             energy = 285;
             water = 115;
             nutritionalIndex = 45;
@@ -1718,15 +1930,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 400;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 72;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 2.25 x 200 Einheiten = 450 - Pfannen-/leichtes Gericht.
+            // Alt: 72 x 200 = 14400, das 7-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 2.25;
             energy = 430;
             water = 35;
             nutritionalIndex = 55;
@@ -1752,15 +1969,20 @@ class CfgVehicles
         itemSize[] = {2, 2};
         weight = 420;
         lifetime = 7200;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 300;
         varQuantityMax = 300;
 
         class Nutrition
         {
-            fullnessIndex = 40;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 1.35 x 300 Einheiten = 405 - Pfannen-/leichtes Gericht.
+            // Alt: 40 x 300 = 12000, das 6-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 1.35;
             energy = 145;
             water = 95;
             nutritionalIndex = 60;
@@ -1782,11 +2004,13 @@ class CfgVehicles
     // an der sie veralten kann. Hier steht nur, was fuer DIESE zehn Gerichte
     // eigens gilt:
     //
-    //   1. NAEHRWERT JE GERICHT: die Zahl unter jeder Klasse ist die Summe
-    //      EINER Portion aus den Zutatenwerten der Registry, mal
-    //      nutritionModifier des Rezepts. Sie gilt je 100 Einheiten Menge
+    //   1. NAEHRWERT JE GERICHT: energy und water unter jeder Klasse sind die
+    //      Summe EINER Portion aus den Zutatenwerten der Registry, mal
+    //      nutritionModifier des Rezepts. Sie gelten je 100 Einheiten Menge
     //      (PlayerStomach.c:92); das Rezept setzt 100 x Portionen. Dieselbe
-    //      Regel wie in dishes-b.
+    //      Regel wie in dishes-b. fullnessIndex faellt NICHT darunter: er
+    //      wirkt ungeteilt mal der Menge (PlayerStomach.c:86), hergeleitet an
+    //      ChefZ_ServedDish_Base.
     //
     //   2. amountPerPortion = 2.0 in jedem Rezept: eine Portion kostet rund
     //      zwei Zutateneinheiten, und genau so ist die Naehrwertrechnung
@@ -1818,15 +2042,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 470;
         lifetime = 14400;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 80;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.0 x 200 Einheiten = 600 - Hauptgericht-Teller.
+            // Alt: 80 x 200 = 16000, das 8-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.0;
             energy = 560;
             water = 120;
             nutritionalIndex = 50;
@@ -1855,15 +2084,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 14400;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 230;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 4.25 x 200 Einheiten = 850 - Hauptgericht-Teller.
+            // Alt: 230 x 200 = 46000, das 23-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 4.25;
             energy = 1270;
             water = 70;
             nutritionalIndex = 60;
@@ -1892,15 +2126,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 185;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.8 x 200 Einheiten = 760 - Hauptgericht-Teller.
+            // Alt: 185 x 200 = 37000, das 18-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.8;
             energy = 810;
             water = 145;
             nutritionalIndex = 70;
@@ -1928,15 +2167,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 100;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.15 x 200 Einheiten = 630 - Hauptgericht-Teller.
+            // Alt: 100 x 200 = 20000, das 10-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.15;
             energy = 950;
             water = 250;
             nutritionalIndex = 60;
@@ -1966,15 +2210,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 100;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.15 x 200 Einheiten = 630 - Hauptgericht-Teller.
+            // Alt: 100 x 200 = 20000, das 10-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.15;
             energy = 1130;
             water = 510;
             nutritionalIndex = 55;
@@ -2002,15 +2251,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 230;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 4.25 x 200 Einheiten = 850 - Hauptgericht-Teller.
+            // Alt: 230 x 200 = 46000, das 23-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 4.25;
             energy = 1000;
             water = 65;
             nutritionalIndex = 60;
@@ -2038,15 +2292,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 200;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.95 x 200 Einheiten = 790 - Hauptgericht-Teller.
+            // Alt: 200 x 200 = 40000, das 20-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.95;
             energy = 580;
             water = 145;
             nutritionalIndex = 70;
@@ -2075,15 +2334,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 490;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 215;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 4.1 x 200 Einheiten = 820 - Hauptgericht-Teller.
+            // Alt: 215 x 200 = 43000, das 22-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 4.1;
             energy = 780;
             water = 120;
             nutritionalIndex = 60;
@@ -2111,15 +2375,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 470;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 150;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 3.5 x 200 Einheiten = 700 - Hauptgericht-Teller.
+            // Alt: 150 x 200 = 30000, das 15-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 3.5;
             energy = 435;
             water = 110;
             nutritionalIndex = 65;
@@ -2149,15 +2418,20 @@ class CfgVehicles
         model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
         weight = 500;
         lifetime = 10800;
-        // Menge = 100 je Portion (PlayerStomach.c:92 rechnet je 100 Einheiten
-        // einmal die Naehrwerte). Init = kleinstes Rezept (Spawn ohne Rezept),
-        // Max = groesstes Rezept; das Rezept setzt 100 x Portionen.
+        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
+        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
+        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
+        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
+        // das Rezept setzt 100 x Portionen.
         varQuantityInit = 200;
         varQuantityMax = 200;
 
         class Nutrition
         {
-            fullnessIndex = 300;
+            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
+            // 4.75 x 200 Einheiten = 950 - ueppiges Gericht.
+            // Alt: 300 x 200 = 60000, das 30-fache von VOMIT_THRESHOLD 2000.
+            fullnessIndex = 4.75;
             energy = 1220;
             water = 235;
             nutritionalIndex = 60;

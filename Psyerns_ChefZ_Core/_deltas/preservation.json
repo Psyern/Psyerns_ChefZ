@@ -10,7 +10,7 @@
     ],
 
     "processes": [
-        { "id": "PROCESS_SMOKE", "station": "ChefZ_Smoker", "durationSec": 1800 },
+        { "id": "PROCESS_SMOKE", "station": "ChefZ_Smoker", "durationSec": 300 },
         { "id": "PROCESS_SALT_CURE", "durationSec": 6 }
     ],
 

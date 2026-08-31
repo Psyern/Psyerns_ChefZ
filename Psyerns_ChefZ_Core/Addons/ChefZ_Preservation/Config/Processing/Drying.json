@@ -73,7 +73,8 @@
             "outputs": [
                 {
                     "cls": "ChefZ_DrySausage",
-                    "quantityMode": "fromInput",
+                    "quantity": 250,
+                    "quantityMode": "fixed",
                     "setState": "DRIED",
                     "inheritFreshness": true
                 }

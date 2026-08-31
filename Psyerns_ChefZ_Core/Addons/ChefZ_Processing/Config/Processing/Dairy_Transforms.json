@@ -4,8 +4,10 @@
     "records": [
         {
             "id": "TR_MilkToCream",
+            "_note": "durationOverrideSec 60 seit dem 31.08.2026 (Vorgabe Alex: 'alle 60 s entsteht 1x Butter'). Das Butterfass startet sich nach jedem Abschluss selbst neu (ChefZ_DairyStations.c) und versucht dabei ZUERST das Buttern und erst danach das Abrahmen - eine Ladung Milch laeuft damit ohne weiteres Zutun im Minutentakt durch beide Stufen. Die VERHAELTNISSE bleiben unveraendert: 2 Milch -> 1 Sahne, 2 Sahne -> 1 Butter, also 4 Milch je Butter. Milch ist weiterhin Vanillas PowderedMilk; eine eigene ChefZ-Milchklasse gibt es nicht (ChefZ_MilkCan ist ein leeres Traggut ohne Zutatendatensatz, ChefZ_Ingredients/config.cpp:657).",
             "process": "PROCESS_SEPARATE_CREAM",
             "stationsAllowed": ["ChefZ_ButterChurn"],
+            "durationOverrideSec": 60,
             "inputs": [
                 {
                     "slotId": "milk",
@@ -27,8 +29,10 @@
         },
         {
             "id": "TR_CreamToButter",
+            "_note": "durationOverrideSec 60 seit dem 31.08.2026, siehe TR_MilkToCream. PROCESS_CHURN_BUTTER traegt dieselbe Zahl als baseDurationSec; der Transform nennt sie trotzdem, damit die Taktung an EINER Stelle vollstaendig lesbar ist.",
             "process": "PROCESS_CHURN_BUTTER",
             "stationsAllowed": ["ChefZ_ButterChurn"],
+            "durationOverrideSec": 60,
             "inputs": [
                 {
                     "slotId": "cream",

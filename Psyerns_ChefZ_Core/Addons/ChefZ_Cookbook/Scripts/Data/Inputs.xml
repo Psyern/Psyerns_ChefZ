@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+	ChefZ_Cookbook - Tastenbelegung
+
+	Entwurf: ChefZ_Cookbook_Workflow §6.3. Die Taste wird DATENGETRIEBEN
+	deklariert, nicht per Skript: GetUApi().RegisterInput() existiert zwar als
+	proto native (3_Game/DayZ/InputAPI/UAInput.c:194), hat aber in den
+	Vanilla-Skripten 1.29 und in DayZExpansion keinen einzigen Aufrufer. Wer
+	darauf baut, bekommt keine Fehlermeldung, sondern eine leere Gruppe.
+
+	Vorbild Zeile fuer Zeile: DayZExpansion/Book/Scripts/Data/Inputs.xml.
+
+	Drei Dinge, an denen diese Datei haengt:
+
+	  1. der Pfad in CfgMods ("inputs = ...") muss dem PBO-Prefix folgen -
+	     $PREFIX$ dieses Addons ist "ChefZ_Cookbook", also
+	     "ChefZ_Cookbook/Scripts/Data/Inputs.xml"
+	  2. loc traegt den Stringtable-Schluessel OHNE Rautenzeichen. So schreiben
+	     es Expansion (Book/Scripts/Data/Inputs.xml:6), COT
+	     (JM/COT/Scripts/Data/Inputs.xml:5), VPP und LBmaster - ausnahmslos.
+	     Steht der Schluessel nicht in der stringtable.csv, zeigt das
+	     Steuerungsmenue den rohen Namen, ohne dass irgendetwas meckert.
+	  3. sorting erzeugt die Gruppe im Steuerungsmenue. Ohne sie landet der
+	     Eintrag in der Vanillagruppe und ist nicht wiederzufinden.
+
+	Standardtaste F9 - Kollisionspruefung siehe Gate-Bericht: keine der
+	Fremdquellen unter "Mod Repositories" belegt eine Funktionstaste, und
+	Vanilla bindet F9 in keinem Skript. "kF9" ist der Buttonname der Engine
+	zum Keycode KC_F9; die Reihe kF1..kF8 steht so in Vanillas
+	3_game/effects/backlit/backlit.c.
+-->
+<modded_inputs>
+	<inputs>
+		<actions>
+			<input name="UAChefZCookbookToggle" loc="STR_CHEFZ_INPUT_COOKBOOK" />
+		</actions>
+
+		<sorting name="chefz" loc="STR_CHEFZ_INPUT_GROUP">
+			<input name="UAChefZCookbookToggle" />
+		</sorting>
+	</inputs>
+	<preset>
+		<input name="UAChefZCookbookToggle">
+			<btn name="kF9" />
+		</input>
+	</preset>
+</modded_inputs>

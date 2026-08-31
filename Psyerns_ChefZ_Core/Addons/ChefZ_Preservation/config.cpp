@@ -69,6 +69,120 @@
 // Zustaende setzen laengere Werte, weil genau das ihr Sinn ist.
 //
 // ---------------------------------------------------------------------------
+// MENGE UND MAGENVOLUMEN - die Herleitung, EINMAL, fuer alle Klassen unten
+// ---------------------------------------------------------------------------
+// Die Engine rechnet das Magenvolumen NICHT durch 100. Woertlich:
+//
+//     volume = m_Profile.GetFullnessIndex() * m_Amount;
+//                                     - PlayerStomach.c:86 (Skripte 1.29)
+//
+// m_Amount ist die GEGESSENE MENGE in Item-Mengeneinheiten, nicht ein Anteil.
+// Was durch 100 geteilt wird, sind ausschliesslich Energie und Wasser:
+//
+//     float energy_per_unit = profile.GetEnergy() / 100;
+//                                     - PlayerStomach.c:92
+//
+// Die beiden Zeilen stehen vier Zeilen auseinander und sind trotzdem zwei
+// verschiedene Rechnungen. Wer sie verwechselt, setzt fullnessIndex hundert
+// mal zu hoch. Genau das war hier der Fall: 80 bis 135, wo Vanilla zwischen
+// 0.75 und 2.5 liegt (Expansion_FoodBase z.B. 2 bei varQuantityMax = 125).
+//
+// Die Grenzen, gegen die gerechnet wird:
+//
+//     const int VOMIT_THRESHOLD = 2000;       - PlayerConstants.c:208
+//     static const int BT_STOMACH_VOLUME_LVL3 = 1000;   ("Stuffed")
+//                                             - PlayerConstants.c:200
+//
+// WELCHE ZAHL DIE ENGINE TATSAECHLICH LIEST - und es ist NICHT class Nutrition.
+// Der Block "class Nutrition" ist an diesen acht Klassen die ZWEITE Wahl:
+//
+//     static float GetFoodTotalVolume(ItemBase item, string classname = "", int food_stage = 0)
+//     {
+//         Edible_Base food_item = Edible_Base.Cast(item);
+//         if (food_item && food_item.GetFoodStage())
+//         {
+//              return FoodStage.GetFullnessIndex(food_item.GetFoodStage());
+//         }
+//         ...
+//         string class_path = string.Format("cfgVehicles %1 Nutrition", classname);
+//         return g_Game.ConfigGetFloat( class_path + " fullnessIndex" );
+//                                     - Edible_Base.c:391-405
+//
+// Sobald ein Item eine Garstufe HAT, gewinnt die Stufe. Und die Stufe liest
+// nichts anderes als das erste Feld des Arrays:
+//
+//     static float GetFullnessIndex(FoodStage stage, int stage_type = -1, string classname = "")
+//     {
+//         return GetNutritionPropertyFromIndex( 0 , stage_type, stage, classname );
+//     }
+//                                     - FoodStage.c:314-317
+//
+// Jede der acht Klassen unten fuehrt einen EIGENEN Food-Block mit sechs
+// nutrition_properties[]-Zeilen. Keine erbt ihre Naehrwerte von einer
+// Vanillaklasse - ChefZ_PreservedFood_Base deklariert die Stufen zwar, aber
+// ohne nutrition_properties (nur visual_ und cooking_properties). Es gibt hier
+// also KEINEN Fall "Vanilla ist schon richtig kalibriert, Finger weg": die
+// wirksame Zahl steht in jedem einzelnen Fall in dieser Datei.
+//
+// Deshalb ist jedes nutrition_properties[] unten mit DEMSELBEN Faktor
+// skaliert wie der Nutrition-Block seiner Klasse. Wer nur class Nutrition
+// umstellt, aendert an einem Item mit Garstufen genau nichts.
+//
+// DIE INVARIANTE DIESES MODULS:
+//
+//     fullnessIndex * varQuantityMax = Volumen des GANZEN Stuecks
+//     Zielband fuer konserviertes Fleisch, Fisch und Wurst: 300 bis 600
+//
+// 600 ist knapp ueber ein Viertel der Kotzschwelle. Wer eine Dauerwurst am
+// Stueck isst, ist danach satt und nicht krank; erst das dritte bis vierte
+// Stueck hintereinander macht "Stuffed". Das ist die Aussage, die das Band
+// treffen soll.
+//
+// varQuantityMax = 250 fuer JEDE Klasse dieses Moduls (auf der Basis gesetzt,
+// keine Klasse weicht ab). Zwei Gruende:
+//
+//   1. Erst damit passt das Zielvolumen 300-600 zu einem fullnessIndex im
+//      Vanillaband: 300/250 = 1.2 und 600/250 = 2.4.
+//   2. UAQuantityConsumed.EAT_BIG = 25 (ActionConstants.c:9). 250 / 25 sind
+//      GENAU ZEHN BISSEN je Stueck - eine Zahl, die man im Spiel nachzaehlen
+//      kann.
+//
+// Vorher stand hier varQuantityMax = 1. Das war nicht nur fuer das Volumen
+// falsch, sondern auch fuer die Energie: energy = 545 kam mit m_Amount = 1 als
+// 5.45 im Magen an, ein Hundertstel des Gemeinten. Denselben Weg ist
+// ChefZ_Cooking am 29.08.2026 bereits gegangen (dort varQuantityMax = 100).
+//
+// FOLGE FUER DIE TRANSFORMS. ChefZ_ProcessRunner.ApplyHandcraftLayer ruft
+// item.SetQuantity(def.quantity) mit der ROHEN Menge, nicht mit Einheiten
+// (ChefZ_ProcessRunner.c:335-343). Eine "quantity": 1 an einer Klasse mit
+// varQuantityMax = 250 waere ab jetzt ein Ergebnis mit einem halben Prozent
+// Inhalt. Deshalb:
+//
+//   Salting.json   "quantity": 1 -> 250 an beiden Ausgaengen.
+//   Drying.json    TR_SaltedMeatToDried und TR_SaltedFishToDried bleiben bei
+//   Smoking.json   "fromInput": Ein- und Ausgang sind beide Klassen DIESES
+//                  Moduls und teilen varQuantityMax, die Menge traegt sich
+//                  also richtig weiter (und ein angebissenes Stueck bleibt
+//                  angebissen).
+//
+//   TR_RawSausageToDry, TR_RawSausageToSmoked und TR_FishToSmoked dagegen
+//   nehmen ihren Eingang aus einem FREMDEN Modul (SAUSAGE aus ChefZ_Meat,
+//   FISH aus Vanilla). Deren varQuantityMax gehoert diesem Slice nicht, und
+//   "fromInput" wuerde eine fremde Mengenskala ungeprueft uebernehmen - genau
+//   der Fehler, der hier gerade behoben wird. Sie stehen deshalb jetzt auf
+//   "fixed" mit 250: ein ganzes Stueck hinein, ein ganzes Stueck heraus. Der
+//   Eingang wird ohnehin mit consume "whole" verbraucht.
+//
+// Die Registry (_deltas/preservation.json, Feld "stomach") ist BEWUSST
+// unveraendert geblieben: sie ist zentral zusammengefuehrt, und die
+// Entscheidung ueber ihre Einheit faellt nicht in diesem Slice.
+//
+// Die Stufen Burned und Rotten fallen rechnerisch unter 0.75. Das ist gewollt
+// und kein Bandbruch: das Band gilt fuer das essbare Lebensmittel. Kohle und
+// Faeulnis sind dasselbe Stueck, nur geschrumpft - ihr Anteil bleibt der der
+// alten Werte.
+//
+// ---------------------------------------------------------------------------
 // MODELLE
 // ---------------------------------------------------------------------------
 // Es gibt noch keine eigene Geometrie. Jede Klasse traegt ein Vanilla-Proxy;
@@ -195,10 +309,15 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 220;
         absorbency = 0.4;
-        varQuantityInit = 1;
+        // MENGE: 250 Einheiten je Stueck, siehe Dateikopf "MENGE UND
+        // MAGENVOLUMEN". Ein Bissen (UAQuantityConsumed.EAT_BIG = 25) ist ein
+        // Zehntel des Stuecks. Die Leiste zeigt den Rest an - ohne sie sieht
+        // niemand, dass ein angebissenes Doerrfleisch angebissen ist.
+        varQuantityInit = 250;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 250;
         varQuantityDestroyOnMin = 1;
+        quantityBar = 1;
         canBeSplit = 0;
         isMeleeWeapon = 0;
 
@@ -301,9 +420,13 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 240;
 
+        // VOLUMEN: 1.96 * 250 = 490. Das schwerste Stueck Fleisch der Kette,
+        // noch mit seinem Salzwasser - deshalb weit oben im Band 300-600 und
+        // ueber Doerr- wie Rauchfleisch, genau wie im alten Wert 115.
+        // Faktor auf alle Garstufen: 1.96 / 115.
         class Nutrition
         {
-            fullnessIndex = 115;
+            fullnessIndex = 1.96;
             energy = 165;
             water = 25;
             nutritionalIndex = 16;
@@ -316,12 +439,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {115, 165, 25, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {105, 330, 12, 26, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {110, 300, 40, 26, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {90, 320, 5, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {75, 85, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {95, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.96, 165, 25, 16, 0, 4, 1}; };
+                class Baked { nutrition_properties[] = {1.79, 330, 12, 26, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {1.87, 300, 40, 26, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {1.53, 320, 5, 30, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {1.28, 85, 6, 5, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {1.62, 100, 18, 5, 20, 16, 1}; };
             };
         };
     };
@@ -338,9 +461,13 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 120;
 
+        // VOLUMEN: 1.42 * 250 = 355. Doerrfleisch hat sein Wasser verloren und
+        // fuellt entsprechend weniger als das gepoekelte Stueck - der alte Wert
+        // 90 sagte dasselbe, nur in der falschen Einheit.
+        // Faktor auf alle Garstufen: 1.42 / 90.
         class Nutrition
         {
-            fullnessIndex = 90;
+            fullnessIndex = 1.42;
             energy = 320;
             water = 5;
             nutritionalIndex = 30;
@@ -353,12 +480,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {90, 320, 5, 30, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {90, 320, 5, 30, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {95, 300, 35, 30, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {90, 320, 5, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {22, 80, 1, 7, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {36, 128, 2, 6, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; };
+                class Baked { nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {1.50, 300, 35, 30, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.35, 80, 1, 7, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.57, 128, 2, 6, 20, 16, 1}; };
             };
         };
     };
@@ -375,9 +502,12 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 180;
 
+        // VOLUMEN: 1.64 * 250 = 410. Zwischen Doerr- (355) und Poekelfleisch
+        // (490), so wie der alte Wert 100 zwischen 90 und 115 stand.
+        // Faktor auf alle Garstufen: 1.64 / 100.
         class Nutrition
         {
-            fullnessIndex = 100;
+            fullnessIndex = 1.64;
             energy = 300;
             water = 12;
             nutritionalIndex = 28;
@@ -390,12 +520,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {100, 300, 12, 28, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {100, 300, 12, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {105, 285, 42, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {100, 300, 12, 28, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {25, 75, 3, 7, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {40, 120, 5, 6, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; };
+                class Baked { nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {1.72, 285, 42, 28, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.41, 75, 3, 7, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.66, 120, 5, 6, 20, 16, 1}; };
             };
         };
     };
@@ -420,9 +550,12 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 200;
 
+        // VOLUMEN: 1.52 * 250 = 380. Ein Salzfilet ist flacher als ein
+        // Poekelstueck Fleisch und fuellt weniger - alter Wert 95 gegen 115.
+        // Faktor auf alle Garstufen: 1.52 / 95 (glatt 0.016).
         class Nutrition
         {
-            fullnessIndex = 95;
+            fullnessIndex = 1.52;
             energy = 130;
             water = 22;
             nutritionalIndex = 20;
@@ -435,12 +568,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {95, 130, 22, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {88, 250, 10, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {92, 230, 38, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {80, 260, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {60, 65, 5, 6, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {78, 80, 16, 6, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.52, 130, 22, 20, 0, 4, 1}; };
+                class Baked { nutrition_properties[] = {1.41, 250, 10, 32, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {1.47, 230, 38, 32, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {1.28, 260, 4, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.96, 65, 5, 6, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {1.25, 80, 16, 6, 20, 16, 1}; };
             };
         };
     };
@@ -457,9 +590,13 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 95;
 
+        // VOLUMEN: 1.20 * 250 = 300, die UNTERE Kante des Bandes. Stockfisch ist
+        // das leichteste und trockenste Stueck der Matrix und trug schon vorher
+        // den kleinsten Wert (80).
+        // Faktor auf alle Garstufen: 1.20 / 80 (glatt 0.015).
         class Nutrition
         {
-            fullnessIndex = 80;
+            fullnessIndex = 1.20;
             energy = 260;
             water = 4;
             nutritionalIndex = 34;
@@ -472,12 +609,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {80, 260, 4, 34, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {80, 260, 4, 34, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {85, 245, 32, 34, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {80, 260, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {20, 65, 1, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {32, 104, 2, 7, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; };
+                class Baked { nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {1.28, 245, 32, 34, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.30, 65, 1, 8, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.48, 104, 2, 7, 20, 16, 1}; };
             };
         };
     };
@@ -496,9 +633,13 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 150;
 
+        // VOLUMEN: 1.38 * 250 = 345. Geraeucherter Fisch behaelt mehr Wasser als
+        // Stockfisch (300) und bleibt unter dem Salzfilet (380) - dieselbe
+        // Reihenfolge wie 88 zwischen 80 und 95.
+        // Faktor auf alle Garstufen: 1.38 / 88.
         class Nutrition
         {
-            fullnessIndex = 88;
+            fullnessIndex = 1.38;
             energy = 245;
             water = 10;
             nutritionalIndex = 32;
@@ -511,12 +652,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {88, 245, 10, 32, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {88, 245, 10, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {92, 232, 36, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {88, 245, 10, 32, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {22, 61, 2, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {35, 98, 4, 6, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; };
+                class Baked { nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {1.44, 232, 36, 32, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.35, 61, 2, 8, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.55, 98, 4, 6, 20, 16, 1}; };
             };
         };
     };
@@ -542,9 +683,14 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 260;
 
+        // VOLUMEN: 2.40 * 250 = 600, die OBERE Kante des Bandes. Die
+        // Raeucherwurst war schon vorher der groesste Wert der Matrix (135) und
+        // bleibt es. 600 ist knapp ein Drittel von VOMIT_THRESHOLD 2000: eine
+        // ganze Wurst am Stueck macht satt, drei machen "Stuffed".
+        // Faktor auf alle Garstufen: 2.40 / 135.
         class Nutrition
         {
-            fullnessIndex = 135;
+            fullnessIndex = 2.40;
             energy = 500;
             water = 14;
             nutritionalIndex = 33;
@@ -557,12 +703,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {135, 500, 14, 33, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {135, 500, 14, 33, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {138, 480, 44, 33, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {135, 500, 14, 33, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {34, 125, 4, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {54, 200, 6, 7, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; };
+                class Baked { nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {2.45, 480, 44, 33, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.60, 125, 4, 8, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.96, 200, 6, 7, 20, 16, 1}; };
             };
         };
     };
@@ -578,9 +724,12 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 200;
 
+        // VOLUMEN: 2.18 * 250 = 545. Dichter als die Raeucherwurst, aber
+        // getrocknet und damit kleiner - alter Wert 125 gegen 135.
+        // Faktor auf alle Garstufen: 2.18 / 125.
         class Nutrition
         {
-            fullnessIndex = 125;
+            fullnessIndex = 2.18;
             energy = 545;
             water = 6;
             nutritionalIndex = 35;
@@ -593,12 +742,12 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {125, 545, 6, 35, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {125, 545, 6, 35, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {130, 520, 36, 35, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {125, 545, 6, 35, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {31, 136, 2, 9, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {50, 218, 3, 7, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; };
+                class Baked { nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {2.27, 520, 36, 35, 0, 0, 1}; };
+                class Dried { nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {0.54, 136, 2, 9, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {0.87, 218, 3, 7, 20, 16, 1}; };
             };
         };
     };

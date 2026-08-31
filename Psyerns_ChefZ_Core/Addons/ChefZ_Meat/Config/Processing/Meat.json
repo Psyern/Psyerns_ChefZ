@@ -71,7 +71,12 @@
             "inputs": [
                 {
                     "slotId": "meat",
-                    "match": { "allOf": [ { "category": "MEAT" }, { "vanillaStage": "Raw" } ] },
+                    "match": { "allOf": [
+                        { "category": "MEAT" },
+                        { "vanillaStage": "Raw" },
+                        { "state": "RAW" },
+                        { "not": { "anyOf": [ { "category": "MINCED_MEAT" }, { "category": "SAUSAGE" } ] } }
+                    ] },
                     "minCount": 1,
                     "consume": "whole"
                 }
@@ -79,7 +84,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_DicedMeat",
-                    "quantity": 1,
+                    "quantity": 250,
                     "quantityMode": "fixed",
                     "setState": "PREPARED",
                     "inheritFreshness": true
@@ -91,11 +96,17 @@
         {
             "id": "TR_MeatToMinced",
             "process": "PROCESS_GRIND_MEAT",
+            "_note": "MENGENSKALA 250 seit dem 31.08.2026: quantity ist eine ROHE Menge, quantityMode fromInput ist hier gestrichen, weil der Eingang Vanilla-Fleisch mit fremder Skala ist. Begruendung in README.md, Abschnitt Mengenskala. SELEKTOR: state RAW plus not(MINCED_MEAT|SAUSAGE) schliessen das eigene Erzeugnis aus - ohne sie wolfte der Wolf sein Hack erneut. Begruendung in README.md, Abschnitt Selbstbezug.",
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 {
                     "slotId": "meat",
-                    "match": { "allOf": [ { "category": "MEAT" }, { "vanillaStage": "Raw" } ] },
+                    "match": { "allOf": [
+                        { "category": "MEAT" },
+                        { "vanillaStage": "Raw" },
+                        { "state": "RAW" },
+                        { "not": { "anyOf": [ { "category": "MINCED_MEAT" }, { "category": "SAUSAGE" } ] } }
+                    ] },
                     "minCount": 1,
                     "consume": "whole"
                 }
@@ -103,8 +114,8 @@
             "outputs": [
                 {
                     "cls": "ChefZ_MincedMeat",
-                    "quantity": 1,
-                    "quantityMode": "fromInput",
+                    "quantity": 250,
+                    "quantityMode": "fixed",
                     "setState": "PREPARED",
                     "inheritFreshness": true
                 }
@@ -112,7 +123,6 @@
             "byproducts": [
                 {
                     "cls": "Lard",
-                    "quantity": 1,
                     "quantityMode": "fixed",
                     "chance": 0.35
                 }
@@ -133,10 +143,10 @@
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_MincedPork", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+                { "cls": "ChefZ_MincedPork", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "byproducts": [
-                { "cls": "Lard", "quantity": 1, "quantityMode": "fixed", "chance": 0.5 }
+                { "cls": "Lard", "quantityMode": "fixed", "chance": 0.5 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -154,7 +164,7 @@
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_MincedVenison", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+                { "cls": "ChefZ_MincedVenison", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -172,10 +182,10 @@
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_MincedBoar", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+                { "cls": "ChefZ_MincedBoar", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "byproducts": [
-                { "cls": "Lard", "quantity": 1, "quantityMode": "fixed", "chance": 0.35 }
+                { "cls": "Lard", "quantityMode": "fixed", "chance": 0.35 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -193,7 +203,7 @@
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_MincedChicken", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+                { "cls": "ChefZ_MincedChicken", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -211,10 +221,10 @@
                 }
             ],
             "outputs": [
-                { "cls": "ChefZ_MincedBear", "quantity": 1, "quantityMode": "fromInput", "setState": "PREPARED", "inheritFreshness": true }
+                { "cls": "ChefZ_MincedBear", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
             ],
             "byproducts": [
-                { "cls": "Lard", "quantity": 1, "quantityMode": "fixed", "chance": 0.6 }
+                { "cls": "Lard", "quantityMode": "fixed", "chance": 0.6 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -231,7 +241,7 @@
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
-                { "cls": "ChefZ_RawSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+                { "cls": "ChefZ_RawSausage", "quantity": 250, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 0
@@ -247,7 +257,7 @@
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
-                { "cls": "ChefZ_RawPorkSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+                { "cls": "ChefZ_RawPorkSausage", "quantity": 250, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -263,7 +273,7 @@
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
-                { "cls": "ChefZ_RawVenisonSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+                { "cls": "ChefZ_RawVenisonSausage", "quantity": 250, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 30
@@ -279,7 +289,7 @@
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
-                { "cls": "ChefZ_RawBoarSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+                { "cls": "ChefZ_RawBoarSausage", "quantity": 250, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 30
@@ -289,13 +299,13 @@
             "process": "PROCESS_STUFF_SAUSAGE",
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
-                { "slotId": "meat",   "match": { "allOf": [ { "category": "WILD_MEAT" }, { "vanillaStage": "Raw" } ] }, "minCount": 2, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
+                { "slotId": "meat",   "match": { "allOf": [ { "category": "WILD_MEAT" }, { "vanillaStage": "Raw" }, { "state": "RAW" }, { "not": { "anyOf": [ { "category": "MINCED_MEAT" }, { "category": "SAUSAGE" } ] } } ] }, "minCount": 2, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
                 { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1, "gradePoints": 1 },
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
-                { "cls": "ChefZ_RawHunterSausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+                { "cls": "ChefZ_RawHunterSausage", "quantity": 250, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "qualityDelta": 1.0,
@@ -313,7 +323,7 @@
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
-                { "cls": "ChefZ_RawSpicySausage", "quantity": 1, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
+                { "cls": "ChefZ_RawSpicySausage", "quantity": 250, "quantityMode": "fixed", "setState": "RAW", "inheritFreshness": true }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 25

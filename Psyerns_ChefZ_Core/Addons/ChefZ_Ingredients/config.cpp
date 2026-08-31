@@ -25,6 +25,60 @@
 // Slices hat eigene Geometrie; der Bedarf steht im Slice-Bericht.
 //==============================================================================
 
+//==============================================================================
+// fullnessIndex - DIE HERLEITUNG. Gilt fuer JEDEN Nutrition- und
+// nutrition_properties-Block dieser Datei (31.08.2026).
+//
+// DIE ENGINEZEILE, um die es geht (PlayerStomach.c:86, StomachItem.
+// ProcessDigestion, scripts 1.29):
+//
+//     volume = m_Profile.GetFullnessIndex() * m_Amount;
+//
+// KEIN Nenner. Kein "/ 100". Das Magenvolumen ist das PRODUKT aus
+// fullnessIndex und der Menge, die im Magen liegt - und m_Amount ist die
+// gegessene varQuantity, nicht ein Prozentwert. Frueher stand in diesem Modul
+// (und in den Nachbarmodulen) die Begruendung, PlayerStomach teile bei :92 durch
+// 100. Das ist FALSCH und war die Ursache des In-Game-Befunds "Erbrechen nach
+// jedem Essen": PlayerStomach.c:92ff (GetNutritions) teilt energy und water
+// durch 100 - ENERGIE und WASSER, nicht das Volumen. Wer diesen Nenner auf das
+// Volumen uebertraegt, tippt Werte, die hundertfach zu gross sind.
+//
+// DIE SCHWELLEN (PlayerConstants.c:208 bzw. :200):
+//     VOMIT_THRESHOLD        = 2000   -> darueber wird erbrochen
+//     BT_STOMACH_VOLUME_LVL3 = 1000   -> Badge "Stuffed"
+//
+// EIN BISS (ActionConstants.c:8-10, UAQuantityConsumed):
+//     EAT_SMALL 10, EAT_NORMAL 15, EAT_BIG 25 Einheiten varQuantity.
+// Ein Item mit varQuantityMax = 1 (Stueckware) geht mit EINEM Biss ganz in den
+// Magen; m_Amount ist dann 1.
+//
+// DIE INVARIANTE, nach der hier jeder Wert gesetzt ist:
+//
+//     fullnessIndex * varQuantityMax = Volumen des GANZEN Items
+//
+// und dieses Volumen liegt in folgenden Baendern:
+//     rohe/essbare Zutaten            50 - 250   (Ei, getrocknete Beeren)
+//     saettigende Zwischenprodukte   200 - 400   (Sahne, Butter, Kaese)
+//     Gewuerze, Salz, Kleinstmengen  praktisch 0 (fullnessIndex <= 0.1)
+//                                    - niemand isst Salz als Mahlzeit.
+//
+// Zum Vergleich: Vanilla haelt fullnessIndex im Band 0.75 - 2.5 bei
+// varQuantityMax 100, also 75 - 250 Volumen je ganzem Item. Die
+// Zwischenprodukte dieses Moduls liegen bewusst darueber (bis 3.5): ein ganzer
+// Kaeselaib SOLL mehr fuellen als ein Apfel. Er bleibt mit 350 aber weit unter
+// "Stuffed" (1000) - man kann zwei davon essen, drei sind eine schlechte Idee.
+//
+// Was VORHER hier stand, zum Nachrechnen: ChefZ_Cheese fuehrte fullnessIndex 35
+// bei varQuantityMax 100. Ein ganzer Laib waren 3500 Volumen - das 1,75-fache
+// der Kotzschwelle, in einem Zug. Genau das hat der In-Game-Test gemeldet.
+//
+// DIE STUFENWERTE ZAEHLEN, NICHT class Nutrition. Sobald eine Klasse einen
+// Food-Block traegt, schlagen die nutrition_properties[0] den fullnessIndex aus
+// class Nutrition (Edible_Base.c:394-503). Beide sind deshalb ueberall
+// mitskaliert, und die Verhaeltnisse ZWISCHEN den Stufen (gekocht quillt,
+// verbrannt schrumpft) sind unveraendert erhalten.
+//==============================================================================
+
 class CfgPatches
 {
     class ChefZ_Ingredients
@@ -189,9 +243,21 @@ class CfgVehicles
         soundImpactType = "food";
         lifetime = 43200;
 
+        // fullnessIndex 60: STUECKWARE, varQuantityMax = 1. Ein Biss (EAT_BIG
+        // 25) nimmt die ganze Menge 1, also ist das Volumen des ganzen Glases
+        //     60 * 1 = 60
+        // - unteres Ende des Bandes 50-250 fuer essbare Zutaten. Ein Glas
+        // getrockneter Beeren ist eine Handvoll Trockenobst, kein Essen.
+        // 60 von 2000 (VOMIT_THRESHOLD) sind 3 Prozent.
+        //
+        // DER WERT STEIGT (vorher 12 -> 60), er faellt nicht: bei
+        // varQuantityMax = 1 war das alte Volumen ebenfalls 12 und damit
+        // praktisch nicht vorhanden. Nur die Klassen mit varQuantityMax = 100
+        // waren zu hoch. Das ist der Unterschied zwischen "die Invariante
+        // anwenden" und "alles durch hundert teilen".
         class Nutrition
         {
-            fullnessIndex = 12;
+            fullnessIndex = 60;
             energy = 130;
             water = 4;
             nutritionalIndex = 45;
@@ -200,6 +266,12 @@ class CfgVehicles
             digestibility = 1;
         };
 
+        // nutrition_properties[0] ist der fullnessIndex und schlaegt den Wert
+        // aus class Nutrition (Edible_Base.c:394-503) - er ist hier ueberall
+        // mitgezogen. Die Verhaeltnisse der Stufen bleiben:
+        //   Raw/Baked/Dried 12 -> 60   (Faktor 5, wie class Nutrition)
+        //   Boiled          18 -> 90   (im Kompott aufgekocht, zieht Wasser)
+        //   Burned/Rotten    3 -> 15   (ein Viertel, wie vorher)
         class Food
         {
             class FoodStages
@@ -208,37 +280,37 @@ class CfgVehicles
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {12, 130, 4, 45, 0, 0, 1};
+                    nutrition_properties[] = {60, 130, 4, 45, 0, 0, 1};
                 };
                 class Baked
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {100, 40, 200};
-                    nutrition_properties[] = {12, 130, 2, 40, 0, 0, 1};
+                    nutrition_properties[] = {60, 130, 2, 40, 0, 0, 1};
                 };
                 class Boiled
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {100, 60, 150};
-                    nutrition_properties[] = {18, 125, 55, 42, 0, 0, 1};
+                    nutrition_properties[] = {90, 125, 55, 42, 0, 0, 1};
                 };
                 class Dried
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {12, 130, 4, 45, 0, 0, 1};
+                    nutrition_properties[] = {60, 130, 4, 45, 0, 0, 1};
                 };
                 class Burned
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {200, 20, 0};
-                    nutrition_properties[] = {3, 20, 0, 0, 0, 0, 1};
+                    nutrition_properties[] = {15, 20, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {3, 20, 2, 0, 20, 16, 1};
+                    nutrition_properties[] = {15, 20, 2, 0, 20, 16, 1};
                 };
             };
 
@@ -342,9 +414,18 @@ class CfgVehicles
         varQuantityDestroyOnMin = 1;
         lifetime = 14400;
 
+        // fullnessIndex 2.5 (vorher 20): varQuantityMax = 100, also
+        //     2.5 * 100 = 250 Volumen fuer das ganze Glas
+        // - unteres Ende des Bandes 200-400 fuer saettigende Zwischenprodukte,
+        // und zugleich das obere Ende von Vanillas eigenem Band (0.75-2.5).
+        // Sahne ist fluessig und saettigt weniger als der Kaeselaib (3.5), aber
+        // mehr als Butter (2.0) - dieselbe Reihenfolge wie vorher (20 > 15).
+        //
+        // Vorher: 20 * 100 = 2000 Volumen. Das war GENAU der VOMIT_THRESHOLD.
+        // Ein ausgetrunkenes Glas Sahne loeste zuverlaessig Erbrechen aus.
         class Nutrition
         {
-            fullnessIndex = 20;
+            fullnessIndex = 2.5;
             energy = 350;
             water = 150;
             nutritionalIndex = 10;
@@ -368,9 +449,17 @@ class CfgVehicles
         varQuantityDestroyOnMin = 1;
         lifetime = 43200;
 
+        // fullnessIndex 2.0 (vorher 15): varQuantityMax = 100, also
+        //     2.0 * 100 = 200 Volumen fuer das ganze Stueck
+        // - Untergrenze des Bandes 200-400 fuer saettigende Zwischenprodukte.
+        // Butter ist ein Fettblock: viel Energie (600) auf wenig Volumen. Sie
+        // bleibt unter Sahne (2.5) und Kaese (3.5), wie vorher (15 < 20 < 35).
+        //
+        // Vorher: 15 * 100 = 1500 Volumen - drei Viertel der Kotzschwelle und
+        // anderthalbmal "Stuffed" (1000), fuer ein Stueck Butter.
         class Nutrition
         {
-            fullnessIndex = 15;
+            fullnessIndex = 2.0;
             energy = 600;
             water = 20;
             nutritionalIndex = 8;
@@ -395,6 +484,13 @@ class CfgVehicles
         // Die Skriptklasse ist Lard (dieser Slice bringt keine eigene mit),
         // und Lard.c ueberschreibt CanBeCooked() mit true - Butter ist damit
         // die eine ChefZ-Zutat, die ihre Endstufe heute schon erreicht.
+        //
+        // nutrition_properties[0] ist der fullnessIndex, er schlaegt class
+        // Nutrition und ist mitskaliert (Faktor 2.0/15 = 0.1333):
+        //   Raw          15 -> 2.0   (200 Volumen fuer das ganze Stueck)
+        //   Baked/Boiled 14 -> 1.9   (zerlassene Butter, 190)
+        //   Burned        4 -> 0.5   (verbrannt, 50 - ein Viertel, wie vorher)
+        //   Rotten        4 -> 0.5
         class Food
         {
             class FoodStages
@@ -402,27 +498,27 @@ class CfgVehicles
                 class Raw
                 {
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {15, 600, 20, 8, 0, 0, 1};
+                    nutrition_properties[] = {2.0, 600, 20, 8, 0, 0, 1};
                 };
                 class Baked
                 {
                     cooking_properties[] = {80, 30, 200};
-                    nutrition_properties[] = {14, 620, 8, 8, 0, 0, 1};
+                    nutrition_properties[] = {1.9, 620, 8, 8, 0, 0, 1};
                 };
                 class Boiled
                 {
                     cooking_properties[] = {80, 40, 150};
-                    nutrition_properties[] = {14, 610, 15, 8, 0, 0, 1};
+                    nutrition_properties[] = {1.9, 610, 15, 8, 0, 0, 1};
                 };
                 class Burned
                 {
                     cooking_properties[] = {200, 20, 0};
-                    nutrition_properties[] = {4, 90, 0, 0, 0, 0, 1};
+                    nutrition_properties[] = {0.5, 90, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {4, 90, 4, 0, 15, 0, 1};
+                    nutrition_properties[] = {0.5, 90, 4, 0, 15, 0, 1};
                 };
             };
 
@@ -462,9 +558,19 @@ class CfgVehicles
         varQuantityDestroyOnMin = 1;
         lifetime = 86400;
 
+        // fullnessIndex 3.5 (vorher 35): varQuantityMax = 100, also
+        //     3.5 * 100 = 350 Volumen fuer den ganzen Laib
+        // - oberes Drittel des Bandes 200-400 fuer saettigende
+        // Zwischenprodukte. Kaese ist das saettigendste Item dieses Moduls und
+        // bleibt es (35 war schon der Hoechstwert). 350 sind gut ein Drittel
+        // von "Stuffed" (1000): zwei Laibe gehen, drei sind zu viel.
+        //
+        // DIESE KLASSE WAR DER BEFUND. Vorher: 35 * 100 = 3500 Volumen - das
+        // 1,75-fache von VOMIT_THRESHOLD (2000). Ein ganzer Kaeselaib fuehrte
+        // in einem Zug zum Erbrechen, noch bevor die erste Kalorie ankam.
         class Nutrition
         {
-            fullnessIndex = 35;
+            fullnessIndex = 3.5;
             energy = 450;
             water = 60;
             nutritionalIndex = 25;
@@ -479,6 +585,14 @@ class CfgVehicles
         // vergisst, bekommt Kohle (FoodStage.c:472). Das ist gewollt.
         //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
         //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+        //
+        // nutrition_properties[0] ist der fullnessIndex, er schlaegt class
+        // Nutrition und ist mitskaliert (Faktor 3.5/35 = 0.1):
+        //   Raw     35 -> 3.5   (350 Volumen fuer den ganzen Laib)
+        //   Baked   32 -> 3.2   (geschmolzen, 320)
+        //   Boiled  33 -> 3.3   (330)
+        //   Burned   9 -> 0.9   (Kohle, 90)
+        //   Rotten   9 -> 0.9
         class Food
         {
             class FoodStages
@@ -487,31 +601,31 @@ class CfgVehicles
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {35, 450, 60, 25, 0, 0, 1};
+                    nutrition_properties[] = {3.5, 450, 60, 25, 0, 0, 1};
                 };
                 class Baked
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {90, 45, 200};
-                    nutrition_properties[] = {32, 470, 35, 26, 0, 0, 1};
+                    nutrition_properties[] = {3.2, 470, 35, 26, 0, 0, 1};
                 };
                 class Boiled
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {90, 60, 150};
-                    nutrition_properties[] = {33, 455, 70, 22, 0, 0, 1};
+                    nutrition_properties[] = {3.3, 455, 70, 22, 0, 0, 1};
                 };
                 class Burned
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {200, 20, 0};
-                    nutrition_properties[] = {9, 68, 0, 0, 0, 0, 1};
+                    nutrition_properties[] = {0.9, 68, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {9, 68, 12, 0, 15, 0, 1};
+                    nutrition_properties[] = {0.9, 68, 12, 0, 15, 0, 1};
                 };
             };
 
@@ -573,9 +687,18 @@ class CfgVehicles
         varQuantityDestroyOnMin = 1;
         lifetime = 21600;
 
+        // fullnessIndex 1.0 (vorher 12): varQuantityMax = 100, also
+        //     1.0 * 100 = 100 Volumen fuer das ganze Ei
+        // - Mitte des Bandes 50-250 fuer essbare Zutaten und mitten in Vanillas
+        // eigenem Band (0.75-2.5). Ein Ei ist eine Zutat, keine Mahlzeit: zwanzig
+        // davon fuellen den Magen (2000), zehn machen "Stuffed" (1000). Es bleibt
+        // unter Butter (2.0), wie vorher (12 < 15).
+        //
+        // Vorher: 12 * 100 = 1200 Volumen - ein einziges rohes Ei ueberschritt
+        // "Stuffed", zwei loesten Erbrechen aus.
         class Nutrition
         {
-            fullnessIndex = 12;
+            fullnessIndex = 1.0;
             energy = 90;
             water = 40;
             nutritionalIndex = 12;
@@ -589,6 +712,13 @@ class CfgVehicles
         // Reihenfolge woertlich aus FoodStage.GetFullnessIndex(0) /
         // GetEnergy(1) / GetWater(2) / GetNutritionalIndex(3) /
         // GetToxicity(4) / GetAgents(5) / GetDigestibility(6).
+        //
+        // Element 0 ist der fullnessIndex, er schlaegt class Nutrition und ist
+        // mitskaliert (Faktor 1.0/12 = 0.0833):
+        //   Raw           12 -> 1.0   (100 Volumen fuer das ganze Ei)
+        //   Baked/Boiled  14 -> 1.2   (gestockt, 120)
+        //   Burned         6 -> 0.5   (verkohlt, 50 - die Haelfte, wie vorher)
+        //   Rotten         6 -> 0.5
         class Food
         {
             class FoodStages
@@ -596,27 +726,27 @@ class CfgVehicles
                 class Raw
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {12, 90, 40, 12, 0, 0, 1};
+                    nutrition_properties[] = {1.0, 90, 40, 12, 0, 0, 1};
                 };
                 class Baked
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {14, 105, 25, 18, 0, 0, 1};
+                    nutrition_properties[] = {1.2, 105, 25, 18, 0, 0, 1};
                 };
                 class Boiled
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {14, 100, 35, 18, 0, 0, 1};
+                    nutrition_properties[] = {1.2, 100, 35, 18, 0, 0, 1};
                 };
                 class Burned
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {6, 20, 5, 0, 0, 0, 1};
+                    nutrition_properties[] = {0.5, 20, 5, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {6, 20, 10, 0, 15, 0, 1};
+                    nutrition_properties[] = {0.5, 20, 10, 0, 15, 0, 1};
                 };
             };
 
@@ -670,6 +800,13 @@ class CfgVehicles
     // Kein Skript, keine ChefZ-Skriptklasse: Salz traegt keinen ChefZ-Zustand,
     // verdirbt nicht und wird nicht gegart. "Kein Fehler, nur weniger"
     // (Kopf von ChefZ_Edible_Base.c).
+    //
+    // fullnessIndex: KEINER, und das ist die staerkste Form der Regel aus dem
+    // Dateikopf ("Salz: praktisch 0"). Ohne class Nutrition gibt es keinen
+    // NutritionalProfile, PlayerStomach.InitData registriert die Klasse nicht,
+    // und PlayerStomach.c:86 wird fuer sie nie ausgefuehrt. Volumen 0, nicht
+    // "nahe 0". Beide Salzklassen brauchten deshalb beim Rescale vom
+    // 31.08.2026 keine Aenderung.
     //==========================================================================
 
     // --- Rohsalz (Production Map §25, Zwischenprodukt) ----------------------
@@ -793,9 +930,22 @@ class CfgVehicles
         varQuantityMax = 1;
         lifetime = 172800;
 
+        // fullnessIndex 0.1 (vorher 2): varQuantityMax = 1 (Stueckware, ein
+        // Biss nimmt alles), also
+        //     0.1 * 1 = 0.1 Volumen fuer das ganze Buendel
+        // - das ist die Kategorie "praktisch 0" aus dem Dateikopf. Ein
+        // geloeffeltes Gewuerz IST keine Mahlzeit, und der Magen soll das nicht
+        // anders sehen: 20000 Buendel Thymian ergaeben eine Kotzschwelle. Der
+        // Wert bleibt ueber 0, damit die Klasse einen NutritionalProfile
+        // behaelt (PlayerStomach.InitData, 01 V7) - "fast nichts" und "lautlos
+        // nichts" sind zwei verschiedene Dinge.
+        //
+        // Vorher waren es 2 Volumen. Nicht dramatisch, aber falsch begruendet
+        // und in derselben verschobenen Einheit wie der Rest der Datei.
+        // Vier Klassen erben diesen Block unveraendert.
         class Nutrition
         {
-            fullnessIndex = 2;
+            fullnessIndex = 0.1;
             energy = 8;
             water = 0;
             nutritionalIndex = 15;
@@ -857,9 +1007,16 @@ class CfgVehicles
         varQuantityMax = 1;
         lifetime = 172800;
 
+        // fullnessIndex 0.1 (vorher 2): varQuantityMax = 1, also
+        //     0.1 * 1 = 0.1 Volumen fuer die ganze Tuete
+        // - dieselbe Herleitung wie bei ChefZ_DriedHerbBase daneben. Pfeffer,
+        // Paprikapulver, Kraeutermix und Jaegergewuerz saettigen nicht; sie
+        // behalten nur so viel Profil, dass PlayerStomach sie ueberhaupt kennt.
+        // Vier Klassen erben diesen Block; ChefZ_PaprikaPowder ueberschreibt
+        // ihn ueber seine FoodStages (siehe dort).
         class Nutrition
         {
-            fullnessIndex = 2;
+            fullnessIndex = 0.1;
             energy = 10;
             water = 0;
             nutritionalIndex = 10;
@@ -888,6 +1045,13 @@ class CfgVehicles
         // gibt es aus Baked und Boiled keinen Ausgang ausser BURNED.
         //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
         //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+        //
+        // Element 0 ist der fullnessIndex, mitskaliert wie die geerbte Basis
+        // (Faktor 0.1/2 = 0.05), varQuantityMax = 1:
+        //   Raw/Baked/Boiled  2 -> 0.1   (0.1 Volumen fuer die ganze Tuete)
+        //   Burned/Rotten     1 -> 0.05  (die Haelfte, wie vorher)
+        // Ein Loeffel Paprikapulver im Chili darf im Magen nichts wiegen - der
+        // Toepferinhalt ist das Gericht, nicht das Gewuerz.
         class Food
         {
             class FoodStages
@@ -896,31 +1060,31 @@ class CfgVehicles
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {2, 10, 0, 10, 0, 0, 1};
+                    nutrition_properties[] = {0.1, 10, 0, 10, 0, 0, 1};
                 };
                 class Baked
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {90, 30, 200};
-                    nutrition_properties[] = {2, 10, 0, 9, 0, 0, 1};
+                    nutrition_properties[] = {0.1, 10, 0, 9, 0, 0, 1};
                 };
                 class Boiled
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {90, 40, 150};
-                    nutrition_properties[] = {2, 10, 0, 9, 0, 0, 1};
+                    nutrition_properties[] = {0.1, 10, 0, 9, 0, 0, 1};
                 };
                 class Burned
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {200, 15, 0};
-                    nutrition_properties[] = {1, 2, 0, 0, 0, 0, 1};
+                    nutrition_properties[] = {0.05, 2, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {1, 2, 0, 0, 15, 0, 1};
+                    nutrition_properties[] = {0.05, 2, 0, 0, 15, 0, 1};
                 };
             };
 

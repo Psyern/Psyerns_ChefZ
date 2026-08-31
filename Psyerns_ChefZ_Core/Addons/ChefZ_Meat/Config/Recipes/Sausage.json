@@ -16,7 +16,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_CookedSausage",
-                    "quantity": 1,
+                    "quantity": 250,
                     "quantityMode": "fromInput",
                     "setState": "COOKED",
                     "inheritFreshness": true,
@@ -37,7 +37,7 @@
             "completion": "ON_STAGE",
             "doneStages": ["Baked", "Boiled"],
             "outputs": [
-                { "cls": "ChefZ_PorkSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+                { "cls": "ChefZ_PorkSausage", "quantity": 250, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
             ],
             "priority": 0
         },
@@ -53,7 +53,7 @@
             "completion": "ON_STAGE",
             "doneStages": ["Baked", "Boiled"],
             "outputs": [
-                { "cls": "ChefZ_VenisonSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+                { "cls": "ChefZ_VenisonSausage", "quantity": 250, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
             ],
             "priority": 0
         },
@@ -69,7 +69,7 @@
             "completion": "ON_STAGE",
             "doneStages": ["Baked", "Boiled"],
             "outputs": [
-                { "cls": "ChefZ_BoarSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+                { "cls": "ChefZ_BoarSausage", "quantity": 250, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
             ],
             "priority": 0
         },
@@ -85,7 +85,7 @@
             "completion": "ON_STAGE",
             "doneStages": ["Baked", "Boiled"],
             "outputs": [
-                { "cls": "ChefZ_HunterSausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+                { "cls": "ChefZ_HunterSausage", "quantity": 250, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
             ],
             "priority": 0
         },
@@ -101,7 +101,7 @@
             "completion": "ON_STAGE",
             "doneStages": ["Baked", "Boiled"],
             "outputs": [
-                { "cls": "ChefZ_SpicySausage", "quantity": 1, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
+                { "cls": "ChefZ_SpicySausage", "quantity": 250, "quantityMode": "fromInput", "setState": "COOKED", "inheritFreshness": true, "inheritTemperature": true }
             ],
             "priority": 0
         }

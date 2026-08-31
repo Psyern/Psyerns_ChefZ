@@ -35,7 +35,7 @@ Two properties of the engine's JSON layer caused most of this. One is fixed, one
 is not. Both are described below, because neither is visible from the code and
 neither produces an error message.
 
-## Four asset addons that never reach a PBO
+## Four asset addons — packer rule fixed, verified 31.08.2026
 
 Two deliveries landed on 29. and 30.08.2026, together **50 `.p3d` and 52 `.paa` files**
 in four addons: `ChefZ_Devices` (hive and the stations), `ChefZ_Items` (tools and
@@ -44,33 +44,28 @@ containers), `ChefZ_Plants` (crops and herbs) and `ChefZ_Food` (prepared food).
 vanilla proxy; 45 of them were rebound in the second delivery alone. All four
 addons are assets only — no class, no script, no record.
 
-**They are not packed.** `pack.mjs` reads each addon's `$PREFIX$` and skips the addon
-when it differs from the folder name:
-
-```js
-if (prefix !== name) {
-  failed.push(`${name}: Praefix "${prefix}" weicht vom Ordnernamen ab - ...`);
-  continue;
-}
-```
-
 All four carry two-level prefixes of the form `ChefZ\<name>`, inherited from the
-delivery layout they came from. That prefix is **not a mistake in itself**:
-the model paths written into `ChefZ_Farming` point at exactly those roots
-(`ChefZ\ChefZ_Items\models\carrot.p3d`), so config and prefix agree. What disagrees
-is the packer's rule.
+delivery layout they came from. That prefix is **not a mistake**: the model paths
+written into `ChefZ_Farming` point at exactly those roots
+(`ChefZ\ChefZ_Items\models\carrot.p3d`), so config and prefix agree. An earlier
+`pack.mjs` rule rejected any prefix that was not the folder name and skipped all
+four; the rule now accepts exactly the two forms that are correct
+(`pack.mjs:85-91`): the folder name itself, or `ChefZ\` plus the folder name.
 
-Counted through: **17 sources collected, 13 packed, 4 skipped.** The content addons
-name them in their `requiredAddons[]`, so a build made today ships addons whose
-dependencies were never built — the mod would not load at all. The problem started at
-two addons and doubled with the second delivery; it does not shrink on its own.
+Verified 31.08.2026: `node tools/chefz-pack/pack.mjs <target>` packs **all 17
+sources** (14 core addons + 3 comp mods), exit code 0, including a 2.9 MB
+`ChefZ_Core.pbo` and the four asset addons with their two-level prefixes.
 
-The header comment in `pack.mjs` was updated in the same commit to say "fuenfzehn
-Paketen"; the rule underneath it was not. That is the whole of the defect.
+What remains true: `chefz-validate` does not read `$PREFIX$` files, so a future
+prefix/path divergence would again be invisible to the static suite.
 
-Neither the validator nor the self-test can see this: `chefz-validate` does not read
-`$PREFIX$` files, and nothing else compares a prefix against the paths that depend on
-it.
+**Incident, same day:** the five PBOs `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`,
+`ChefZ_Items`, `ChefZ_Plants` on the test server were hand-packed from the
+delivery folder `ChefZ/` instead of `Psyerns_ChefZ_Core/Addons/` — recognizable
+by their raw filesystem-path prefixes (`Users\Administrator\...`). That replaced
+the real 2.9 MB core with the delivery's 17 KB stub, and the Game script module
+failed with `Unknown type 'ChefZ_Sym'` for every core type. The delivery folder
+must never be packed (see next section); the repair is one full `pack.mjs` run.
 
 ## The delivery folder is back in the tree
 

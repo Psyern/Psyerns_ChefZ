@@ -103,3 +103,52 @@ rohem Wildfleisch statt aus Hack — so steht es in §38 und so steht es im Prue
 §39: Minced Meat + Salz + Pfeffer + Paprikapulver + Huelle. Drei Gewuerzslots —
 das ist zugleich die Unterscheidung zur Basiswurst (ein Slot) und zur Schweinswurst
 (zwei).
+
+## Mengenskala — warum in dieser Datei 250 steht und nicht 1
+
+Stand 31.08.2026, Harmonisierung mit dem Slice `preservation`.
+
+Jede essbare Klasse dieses Moduls fuehrt seit dem Rescale
+`varQuantityMax = 250` (`ChefZ_MeatItemBase`, Begruendung im Kopf der
+`config.cpp`). Fuer die Rezeptdaten zerfaellt das in zwei Faelle, und die
+Unterscheidung ist der ganze Inhalt dieses Abschnitts.
+
+### Roh — `quantity` in `outputs` und `byproducts`
+
+`quantity` wird ohne jede Umrechnung an `SetQuantity` durchgereicht:
+
+    ChefZ_ProcessRunner.c:335-343     else if (def.HasQuantity())
+                                          value = def.quantity;
+                                      ...
+                                      if (value > 0.0) item.SetQuantity(value);
+    ChefZ_Applicator.c:975-976        dieselbe Stelle auf dem Kochweg
+
+Eine `1` an einer 250er-Klasse ergaebe ein Item mit 0,4 % Fuellung. Alle
+ChefZ-Ausgaenge dieser Datei tragen deshalb `250`.
+
+`quantityMode: "fromInput"` ist bei den sechs `TR_*ToMinced` **gestrichen**
+(jetzt `fixed` / 250). Der Eingang ist dort ein Vanilla-Steak, dessen Menge in
+einer fremden Skala steht; `fromInput` haette diese fremde Zahl in eine
+250er-Klasse geschrieben. `fromInput` bleibt nur, wo Ein- und Ausgang dieselbe
+Skala fuehren — das ist `Config/Recipes/Sausage.json`, siehe die README dort.
+
+Die drei `Lard`-Beiprodukte haben ihr `quantity`-Feld ganz verloren. `Lard` ist
+eine VANILLA-Klasse mit eigener Skala, die dieses Projekt nicht belegen kann;
+ohne das Feld bleibt `value` auf `-1` (`ChefZ_ProcessRunner.c:329`) und der
+Klassendefault steht. Genau so halten es die drei Keulen-Transforms mit `Bone`
+und den `*SteakMeat`-Ausgaengen seit jeher.
+
+### Verhaeltnis — `consumeAmount` in `inputs`
+
+Hier war **nichts** zu tun, und das ist nachgerechnet, nicht vermutet:
+
+    ChefZ_FactCollector.c:439    units = quantity / quantityMax * unitsPerWholeItem
+    ChefZ_SlotEvaluator.c:364    float perUnit = facts.quantity / facts.units;
+
+`units` ist ein Verhaeltnis. Bei `unitsPerWholeItem = 1` — und den Wert tragen
+alle Datensaetze in `../Ingredients/Meat.json` — ist ein volles Item genau eine
+Einheit, ob `quantityMax` nun 1 oder 250 heisst. `consumeAmount: 1` bedeutet
+unveraendert "ein ganzes Stueck". Das gilt auch fuer die Slots FREMDER Slices,
+die Fleisch ueber `MINCED_MEAT` verbrauchen (`ChefZ_Cooking/Config/Recipes/
+BowlDishes.json` und `DishesB.json`); an denen war deshalb nichts zu aendern,
+und es durfte auch nichts geaendert werden.

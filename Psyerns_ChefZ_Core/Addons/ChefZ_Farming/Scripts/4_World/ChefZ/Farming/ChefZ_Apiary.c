@@ -30,8 +30,27 @@
 // einem geoeffneten Stock. Oeffnen ist die Stationsaktion
 // PROCESS_HARVEST_HIVE - sie hat absichtlich keinen Transform, ihr Haken
 // oeffnet den Deckel fuer zwei Minuten und loest den Stich aus. Die
-// Entnahme selbst ist der gewoehnliche Inventar-Drag, den CanReleaseCargo
-// bewacht.
+// Entnahme selbst ist der gewoehnliche Inventar-Drag, den
+// CanReleaseAttachment bewacht.
+//
+// ------------------------------------------------------------------------
+// SLOTS STATT CARGO (31.08.2026)
+// ------------------------------------------------------------------------
+// Die Raehmchen liegen seit diesem Stand in ATTACHMENT-SLOTS
+// (ChefZ_Frame01..ChefZ_Frame20, class CfgSlots in der config.cpp), nicht
+// mehr in einem Cargo-Gitter. Die Begruendung steht in der config.cpp; was
+// sich HIER geaendert hat, ist nur der Weg zu denselben Raehmchen:
+//
+//   GetInventory().GetCargo().GetItem(i)   ->  FindAttachmentByName(slot)
+//   CanReceiveItemIntoCargo                ->  CanReceiveAttachment
+//   CanReleaseCargo                        ->  CanReleaseAttachment
+//   EECargoIn                              ->  EEItemAttached
+//
+// Die Fuelllogik selbst ist UNVERAENDERT: sequentiell, vier Stunden je
+// Raehmchen, varQuantity am Raehmchen. Der Unterschied ist, dass die
+// Reihenfolge jetzt die SLOTNUMMER ist und nicht mehr die Einlegereihenfolge
+// im Gitter - das ist die staerkere Zusage: sie haengt an der Config und
+// nicht daran, wer wann was wohin geschoben hat.
 //
 // Was hier NICHT entstanden ist: keine eigene Action, keine modded class,
 // keine Zeile im Core. Alles ist gewoehnliche Vererbung auf einer Klasse,
@@ -67,7 +86,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     //! Der Takt des Fuelltimers. Zehn Sekunden und nicht zwei wie der
     //! Job-Timer der Basis: bei vier Stunden je Raehmchen ist ein Schritt von
     //! 0.069 Prozent ohnehin unter dem, was ein Balken zeigt, und jeder Tick
-    //! laeuft ueber den ganzen Cargo.
+    //! laeuft ueber alle Raehmchenslots.
     static const float CHEFZ_FILL_TICK_SEC = 10.0;
 
     //! Wie lange der Deckel nach dem Oeffnen abbleibt. Zwei Minuten reichen,
@@ -80,6 +99,14 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     //! damit der Klassenname genau einmal im Skript steht.
     static const string CHEFZ_FRAME_FULL_CLASS = "ChefZ_HoneycombFrameFull";
 
+    //! Der gemeinsame Anfang der Slotnamen aus class CfgSlots
+    //! (ChefZ_Frame01..ChefZ_Frame20). Der Rest ist die zweistellige Nummer,
+    //! die ChefZ_FrameSlotName() anhaengt. EINMAL im Skript, wie der
+    //! Klassenname darueber: ein Tippfehler in einem Slotnamen faende bei
+    //! FindAttachmentByName still nichts, und das saehe genauso aus wie ein
+    //! leerer Platz.
+    static const string CHEFZ_FRAME_SLOT_PREFIX = "ChefZ_Frame";
+
     //! EIGENER Timer, nicht m_ChefZ_JobTimer der Basis: der Job-Timer haelt
     //! sich selbst an, sobald kein Stationsjob mehr aktiv ist
     //! (ChefZ_TickJobs und ChefZ_CompleteJob), und hier laeuft nie einer.
@@ -89,14 +116,14 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     //! Restzeit des offenen Deckels in Sekunden. Nur auf dem Server.
     protected float m_ChefZ_LidOpenSec;
 
-    //! Ob der Deckel offen ist. SYNCHRONISIERT, weil CanReleaseCargo auch
+    //! Ob der Deckel offen ist. SYNCHRONISIERT, weil CanReleaseAttachment auch
     //! auf dem Client gefragt wird - ohne Sync saehe der Spieler ein
     //! Raehmchen, das sich ziehen laesst, und der Server verweigerte es.
     protected bool m_ChefZ_LidOpen;
 
     //! Wahr nur waehrend der eigenen Ersetzung eines Raehmchens. Die Engine
-    //! fragt vor dem Entfernen aus dem Cargo den Haken CanReleaseCargo
-    //! (EntityAI.c:1602-1606, "scriptConditionExecute"; die Lambda prueft
+    //! fragt vor dem Entfernen aus dem Slot den Haken CanReleaseAttachment
+    //! (EntityAI.c:1478-1484, "scriptConditionExecute"; die Lambda prueft
     //! davor LocationCanRemoveEntity, ReplaceItemWithNewLambdaBase.c:31-37).
     //! Ohne diese Wache antwortete der Haken bei zugeklapptem Deckel fuer ein
     //! Leerraehmchen immer "nein", und kein Raehmchen wuerde je voll. Nur auf
@@ -270,69 +297,180 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         ChefZ_StartFillTimer();
     }
 
-    //! Ein Raehmchen kommt hinein - der Timer, der sich bei leerem Stock
-    //! angehalten hat, laeuft wieder an. Aufrufstelle: EntityAI.c:1208.
-    override void EECargoIn(EntityAI item)
+    /**
+     * Ein Raehmchen wird eingehaengt. Zwei Dinge geschehen hier.
+     *
+     * Vanilla-Signatur EntityAI.c:1133, Aufrufstelle derselbe Haken.
+     *
+     * -------------------------------------------------------------------------
+     * 1. DER TIMER LAEUFT WIEDER AN
+     * -------------------------------------------------------------------------
+     * Er haelt sich an, sobald kein Leerraehmchen mehr da ist (siehe
+     * ChefZ_OnFillTick); ein neues Raehmchen ist der Anlass, ihn zu wecken.
+     *
+     * -------------------------------------------------------------------------
+     * 2. DER FUELLSTAND WIRD AUF NULL GESETZT (Fehlerbehebung 31.08.2026)
+     * -------------------------------------------------------------------------
+     * DER FEHLER: ein per Admin-Werkzeug (COT) gespawntes Leerraehmchen kommt
+     * mit VOLLER Quantity in die Welt - der Spawnweg setzt die Menge auf das
+     * Maximum, nicht auf varQuantityInit. Im Stock war so ein Raehmchen beim
+     * allerersten Fuelltick sofort "voll" (IsFullQuantity) und wurde ohne eine
+     * Sekunde Wartezeit zum vollen Raehmchen. Vierzig Stunden Kette,
+     * uebersprungen.
+     *
+     * DIE BEHEBUNG: beim EINHAENGEN wird die Menge eines VOLL eintreffenden
+     * Leerraehmchens auf 0 gesetzt. Der Stock ist der einzige Ort, an dem
+     * dieser Balken ueberhaupt etwas bedeutet, und der Eintritt in den Stock
+     * ist der Anfang seiner Zaehlung.
+     *
+     * DASS DABEI NICHTS VERLORENGEHT, ist keine Hoffnung, sondern folgt aus
+     * CanReleaseAttachment: heraus darf nur ein VOLLES Raehmchen
+     * (ChefZ_HoneycombFrameFull), und das ist eine andere Klasse ohne jede
+     * Menge. Ein teilgefuelltes ChefZ_HoneycombFrameEmpty kann den Stock also
+     * gar nicht verlassen - ausser durch die eigene Ersetzung, und die
+     * loescht es. Ein Leerraehmchen AUSSERHALB eines Stocks kann folglich
+     * keinen legitim erarbeiteten Fortschritt tragen; jede Menge daran ist
+     * entweder 0 (frisch gebaut, varQuantityInit 0) oder Spawn-Rauschen.
+     *
+     * NUR AUF DEM SERVER: die Menge ist autoritativer Zustand.
+     *
+     * -------------------------------------------------------------------------
+     * DIE ZWEI WACHEN, UND WARUM ES ZWEI SIND
+     * -------------------------------------------------------------------------
+     * DIESER HAKEN FEUERT AUCH BEIM LADEN AUS DEM SPIELSTAND. Belegt an
+     * Vanillas Feuerstelle: FireplaceBase.EEItemAttached bindet dort das
+     * Kochgeschirr (FireplaceBase.c:332-339), und FireplaceBase.AfterStoreLoad
+     * (:469-483) bindet es NICHT noch einmal - ein geladener Topf haenge sonst
+     * an keiner Feuerstelle mehr. Der Haken muss also am Ladepfad feuern.
+     *
+     * Ungeschuetzt hiesse das: jeder Serverneustart setzt jedes halbvolle
+     * Raehmchen auf 0 zurueck. Das waere ein weit schlimmerer Fehler als der,
+     * der hier behoben wird. Deshalb zwei Bedingungen, und die Richtung ist
+     * mit Absicht so gewaehlt, dass ein Irrtum den FEHLER stehen laesst statt
+     * Fortschritt zu vernichten:
+     *
+     *   IsInitialized()   Der Stock muss fertig hochgelaufen sein. Der
+     *                     EntityAI-Konstruktor plant DeferredInit ueber
+     *                     CallLater(..., 34) ein (EntityAI.c:245), und erst
+     *                     die setzt m_Initialized (EntityAI.c:296-298). Das
+     *                     Laden eines Stocks samt seiner Anhaenger laeuft
+     *                     synchron innerhalb eines Frames ab - lange bevor
+     *                     die Aufrufschlange diese 34 ms abgearbeitet hat.
+     *                     Beim Laden ist die Antwort also "nein", beim
+     *                     Einhaengen durch einen Spieler laengst "ja".
+     *   IsFullQuantity()  Und selbst wenn diese Reihenfolge einmal nicht
+     *                     haelt, trifft es nur ein Raehmchen, das im
+     *                     Spielstand GENAU auf dem Maximum stand - ein
+     *                     Zustand, der im Betrieb hoechstens zehn Sekunden
+     *                     dauert, weil der naechste Fuelltick es ersetzt.
+     *                     Der schlimmste denkbare Schaden ist damit vier
+     *                     Stunden statt vierzig.
+     */
+    override void EEItemAttached(EntityAI item, string slot_name)
     {
-        super.EECargoIn(item);
+        super.EEItemAttached(item, slot_name);
+
+        ChefZ_ResetSpawnedFrame(item);
         ChefZ_StartFillTimer();
     }
 
+    //! Ein Raehmchen wird ausgehaengt. Der Timer bleibt, wie er ist - er
+    //! haelt sich beim naechsten Tick von selbst an, wenn nichts mehr zu
+    //! fuellen ist, und solange der Deckel offen steht, muss er ohnehin
+    //! weiterlaufen. Vanilla-Signatur EntityAI.c:1173.
+    override void EEItemDetached(EntityAI item, string slot_name)
+    {
+        super.EEItemDetached(item, slot_name);
+    }
+
+    //! Der Nullstellungsteil von EEItemAttached - die vollstaendige
+    //! Begruendung samt der beiden Wachen steht dort.
+    protected void ChefZ_ResetSpawnedFrame(EntityAI item)
+    {
+        if (!g_Game || !g_Game.IsServer())
+            return;
+
+        // Wache 1: nicht am Ladepfad. Siehe EEItemAttached.
+        if (!IsInitialized())
+            return;
+
+        ChefZ_HoneycombFrameEmpty frame = ChefZ_HoneycombFrameEmpty.Cast(item);
+        if (!frame)
+            return;
+
+        // Wache 2: nur ein VOLL eintreffendes Raehmchen ist Spawn-Rauschen.
+        if (!frame.IsFullQuantity())
+            return;
+
+        frame.SetQuantity(0.0);
+        ChefZ_LogHive("voll eingehaengtes Leerraehmchen auf 0 zurueckgesetzt (Spawn-Menge).");
+    }
+
     //==========================================================================
-    // Die Regeln am Cargo
+    // Die Regeln an den Slots
     //==========================================================================
 
     /**
-     * Nur Raehmchen hinein, und hoechstens so viele, wie der Stock fasst.
+     * Nur Raehmchen hinein - und nur leere oder volle.
      *
-     * Vanilla-Signatur EntityAI.c:1550. Das Cargo-Gitter (10x9, Doppelbeute
-     * 10x15) hat Luft fuer mehr als zehn bzw. zwanzig Raehmchen zu 2x3, damit
-     * ein gedrehtes oder versetztes Raehmchen das letzte nicht aussperrt -
-     * die Obergrenze zaehlt deshalb das Skript, weil ein Cargo-Gitter weder
-     * Klassen kennt noch eine Stueckzahl.
+     * Vanilla-Signatur EntityAI.c:1444. Die STUECKZAHL prueft diese Methode
+     * nicht mehr: seit dem Umbau auf Slots (31.08.2026) gibt es genau so
+     * viele Plaetze, wie der Stock fasst - zehn bzw. zwanzig, aufgezaehlt in
+     * attachments[] der Config. Was es nicht gibt, kann nicht ueberbelegt
+     * werden.
+     *
+     * WAS DIE CONFIG NICHT SAGEN KANN, steht hier: das ENTDECKELTE Raehmchen
+     * (ChefZ_HoneycombFrameUncapped) traegt dieselben inventorySlot[] wie die
+     * anderen beiden - anders bekaeme es die Ersetzung nicht durch, und drei
+     * getrennte Slotsaetze waeren drei Gelegenheiten, sie auseinanderlaufen
+     * zu lassen. In den Stock gehoert es trotzdem nicht: es ist auf dem Weg
+     * zur Schleuder, und im Stock wuerde es nur einen Platz blockieren.
      *
      * VOLLE Raehmchen sind ausdruecklich erlaubt, obwohl der Spieler sie
      * normalerweise herausnimmt: die Ersetzung eines vollen Leerraehmchens
-     * erzeugt das volle Raehmchen in derselben Cargo-Zelle, und ob die Engine
-     * dabei diese Regel fragt, ist nicht belegt. Ein "nein" hier koennte die
-     * Ersetzung scheitern lassen - das Raehmchen bliebe bei 100 Prozent
-     * stehen. Zurueckgelegte volle Raehmchen sind ausserdem nichts Schlimmes.
+     * legt das volle Raehmchen in DENSELBEN Slot, und dabei fragt die Engine
+     * diese Regel (GameInventory.LocationCreateEntity im Attachment-Zweig,
+     * ReplaceItemWithNewLambdaBase.c:150-153). Ein "nein" hier liesse die
+     * Ersetzung scheitern - das Raehmchen bliebe bei 100 Prozent stehen.
      *
-     * CanLoadItemIntoCargo (der Ladepfad, EntityAI.c:1568) wird NICHT
+     * CanLoadAttachment (der Ladepfad, EntityAI.c:1456) wird NICHT
      * ueberschrieben: der Spielstand laedt alles, was er gespeichert hat.
      */
-    override bool CanReceiveItemIntoCargo(EntityAI item)
+    override bool CanReceiveAttachment(EntityAI attachment, int slotId)
     {
-        if (!super.CanReceiveItemIntoCargo(item))
+        if (!super.CanReceiveAttachment(attachment, slotId))
             return false;
 
-        if (!item)
+        if (!attachment)
             return false;
 
-        bool isEmpty = ChefZ_HoneycombFrameEmpty.Cast(item) != null;
-        bool isFull  = ChefZ_HoneycombFrameFull.Cast(item) != null;
-        if (!isEmpty && !isFull)
-            return false;
+        bool isEmpty = ChefZ_HoneycombFrameEmpty.Cast(attachment) != null;
+        if (isEmpty)
+            return true;
 
-        return ChefZ_CountFrames() < ChefZ_FrameCapacity();
+        bool isFull = ChefZ_HoneycombFrameFull.Cast(attachment) != null;
+        return isFull;
     }
 
     /**
      * Heraus darf NUR ein volles Raehmchen, und NUR bei offenem Deckel
-     * (Auftrag 6). Vanilla-Signatur EntityAI.c:1608, Vorbild fuer die
-     * Ueberschreibung Barrel_ColorBase.c:520.
+     * (Auftrag 6). Vanilla-Signatur EntityAI.c:1484, Vorbild fuer die
+     * Ueberschreibung Barrel_ColorBase.c:520 (dort an CanReleaseCargo).
      *
      * Ein halbvolles Leerraehmchen bleibt im Stock - wer es herausnaehme,
      * naehme dem Volk die Arbeit weg, und der Balken hiesse dann nichts.
+     * Dieselbe Regel traegt ausserdem die Nullstellung in EEItemAttached:
+     * weil nur volle Raehmchen den Stock verlassen, kann draussen kein
+     * Teilfortschritt existieren.
      *
      * Die eigene Ersetzung eines vollen Leerraehmchens geht an dieser Regel
      * vorbei: sie entfernt genau das Item, das die Regel sonst festhielte,
      * und legt an seiner Stelle das volle Raehmchen an (siehe
      * m_ChefZ_ReplacingFrame).
      */
-    override bool CanReleaseCargo(EntityAI cargo)
+    override bool CanReleaseAttachment(EntityAI attachment)
     {
-        if (!super.CanReleaseCargo(cargo))
+        if (!super.CanReleaseAttachment(attachment))
             return false;
 
         if (m_ChefZ_ReplacingFrame)
@@ -341,7 +479,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         if (!m_ChefZ_LidOpen)
             return false;
 
-        return ChefZ_HoneycombFrameFull.Cast(cargo) != null;
+        return ChefZ_HoneycombFrameFull.Cast(attachment) != null;
     }
 
     //==========================================================================
@@ -354,6 +492,17 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     protected void ChefZ_StartFillTimer()
     {
         if (!g_Game || !g_Game.IsServer())
+            return;
+
+        // KEIN Timer an einer Projektion. Seit der Bausatz platzierbar ist
+        // (31.08.2026), erzeugt Vanillas Hologramm im Mehrspielerbetrieb auch
+        // SERVERSEITIG ein echtes Objekt der Projektionsklasse
+        // (Hologram.c:113-117, CreateObjectEx). Das ist zwar
+        // ChefZ_BeehivePlacing und keine Station - aber die Wache steht hier,
+        // weil ein Stock, der als Hologramm durch die Gegend schwebt und
+        // dabei Bienenvolk beherbergt, ein Fehler waere, den niemand suchen
+        // wuerde. IsHologram: ItemBase.c:995, gesetzt von Hologram.c:134-137.
+        if (IsHologram())
             return;
 
         if (m_ChefZ_FillTimer && m_ChefZ_FillTimer.IsRunning())
@@ -380,7 +529,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
      * ihren Namen ruft.
      *
      * SEQUENTIELL (Auftrag 2): nur das ERSTE Leerraehmchen in
-     * Cargo-Reihenfolge steigt, alle anderen warten. Ist es voll, wird es
+     * Slotreihenfolge steigt, alle anderen warten. Ist es voll, wird es
      * ersetzt - und erst wenn die Ersetzung gelungen ist, ist beim naechsten
      * Tick das naechste dran. Deshalb wird das erste Leerraehmchen UNGEACHTET
      * seiner Fuellung genommen: ein volles, das die Ersetzung noch nicht
@@ -439,7 +588,29 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     }
 
     /**
-     * Das erste Leerraehmchen im Cargo, voll oder nicht - oder null.
+     * Der Name des Slots mit dieser Nummer, EINS-basiert: 1 -> "ChefZ_Frame01".
+     *
+     * Zweistellig mit fuehrender Null, weil class CfgSlots die Namen so
+     * fuehrt. Ausgeschrieben mit if statt mit einem Bedingungsausdruck - die
+     * Regeln dieses Projekts kennen kein Ternary, und zwei Zeilen sind hier
+     * ohnehin lesbarer als eine.
+     */
+    static string ChefZ_FrameSlotName(int number)
+    {
+        if (number < 10)
+            return CHEFZ_FRAME_SLOT_PREFIX + "0" + number.ToString();
+        return CHEFZ_FRAME_SLOT_PREFIX + number.ToString();
+    }
+
+    /**
+     * Das erste Leerraehmchen in SLOTREIHENFOLGE, voll oder nicht - oder null.
+     *
+     * Slot 01 vor Slot 02 vor Slot 03: die Reihenfolge steht damit in der
+     * Config und nicht in der Einlegehistorie. Deshalb wird ueber die
+     * NUMMERN gelaufen und nicht ueber GetAttachmentFromIndex - jener Index
+     * ist die Anhaengereihenfolge (Inventory.c:216-220, "index is not slot")
+     * und aendert sich, sobald der Spieler ein Raehmchen umhaengt. Ein
+     * Fuellfortschritt, der davon abhinge, waere nicht erklaerbar.
      *
      * Absichtlich OHNE Fuellstandspruefung: der Tick entscheidet selbst, ob
      * er zaehlt oder ersetzt (siehe ChefZ_OnFillTick). Eine Suche nach dem
@@ -448,8 +619,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
      *
      * Je Tick neu gesucht, NIE als Member gecacht: die Ersetzung loescht das
      * alte Item (ReplaceItemWithNewLambdaBase.c:200), ein gemerkter Zeiger
-     * zeigte danach ins Leere. GetCargo Inventory.c:138, GetItemCount und
-     * GetItem Cargo.c:28 und 32.
+     * zeigte danach ins Leere. FindAttachmentByName: Inventory.c:228.
      */
     protected ItemBase ChefZ_FirstEmptyFrame()
     {
@@ -457,13 +627,11 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         if (!inv)
             return null;
 
-        CargoBase cargo = inv.GetCargo();
-        if (!cargo)
-            return null;
-
-        for (int i = 0; i < cargo.GetItemCount(); i++)
+        int capacity = ChefZ_FrameCapacity();
+        for (int i = 1; i <= capacity; i++)
         {
-            ChefZ_HoneycombFrameEmpty frame = ChefZ_HoneycombFrameEmpty.Cast(cargo.GetItem(i));
+            string slotName = ChefZ_FrameSlotName(i);
+            ChefZ_HoneycombFrameEmpty frame = ChefZ_HoneycombFrameEmpty.Cast(inv.FindAttachmentByName(slotName));
             if (frame)
                 return frame;
         }
@@ -471,36 +639,49 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         return null;
     }
 
-    //! Zaehlt alle Raehmchen im Cargo, gleich welchen Zustands.
+    /**
+     * Zaehlt alle Raehmchen in den Slots, gleich welchen Zustands.
+     *
+     * Ueber dieselbe Slotschleife und nicht ueber AttachmentCount(): die
+     * Zahl soll auch dann stimmen, wenn ein Spielstand einmal etwas anderes
+     * in einen Slot geladen hat (CanLoadAttachment ist bewusst nicht
+     * ueberschrieben). Zwanzig Durchlaeufe im Zehnsekundentakt sind nichts.
+     */
     protected int ChefZ_CountFrames()
     {
         GameInventory inv = GetInventory();
         if (!inv)
             return 0;
 
-        CargoBase cargo = inv.GetCargo();
-        if (!cargo)
-            return 0;
-
         int count = 0;
-        for (int i = 0; i < cargo.GetItemCount(); i++)
+        int capacity = ChefZ_FrameCapacity();
+        for (int i = 1; i <= capacity; i++)
         {
-            if (ChefZ_HoneycombFrame_Base.Cast(cargo.GetItem(i)))
-                count++;
+            string slotName = ChefZ_FrameSlotName(i);
+            if (ChefZ_HoneycombFrame_Base.Cast(inv.FindAttachmentByName(slotName)))
+                count = count + 1;
         }
 
         return count;
     }
 
     /**
-     * Ersetzt ein Raehmchen in Ort und Zelle durch eine andere Klasse.
+     * Ersetzt ein Raehmchen IN SEINEM SLOT durch eine andere Klasse.
      *
      * Der spielerlose Serverpfad, den Vanilla an Raedern geht
      * (InventoryItem.c:265-276): TurnItemIntoItemLambda mit player = null
      * (MiscGameplayFunctions.c:1-14), ausgefuehrt ueber
-     * GameInventory.ReplaceItemWithNew (Inventory.c:1363). Im Cargo-Zweig
-     * legt die Engine das neue Item per LocationCreateLocalEntity in
-     * dieselbe Zelle (ReplaceItemWithNewLambdaBase.c:157-158).
+     * GameInventory.ReplaceItemWithNew (Inventory.c:1363).
+     *
+     * DASS DAS AUCH FUER ATTACHMENTS GILT, ist belegt und nicht angenommen:
+     * ReplaceItemWithNewLambdaBase.CreateNewEntity() hat einen eigenen Zweig
+     * "case InventoryLocationType.ATTACHMENT"
+     * (ReplaceItemWithNewLambdaBase.c:150-153). Er setzt die neue Location
+     * ausdruecklich auf denselben Elter und denselben Slot
+     * (SetAttachment(parent, null, slot)) und legt das neue Item per
+     * GameInventory.LocationCreateEntity dort an. Das volle Raehmchen
+     * erscheint also in genau dem Platz, in dem das leere gefuellt wurde -
+     * dieselbe Zusage, die vorher fuer die Cargo-Zelle galt.
      *
      * SetTransferParams(false, false, true, true): keine Agenten, KEINE
      * Variablen - sonst wanderte varQuantity mit und das volle Raehmchen
@@ -508,7 +689,9 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
      *
      * Die Wache m_ChefZ_ReplacingFrame steht nur um den Aufruf herum: die
      * Lambda laeuft synchron (Inventory.c:1363 fuehrt sie direkt aus), und
-     * CanReleaseCargo darf nur in diesem Fenster "ja" sagen. Ein
+     * CanReleaseAttachment darf nur in diesem Fenster "ja" sagen - die Lambda
+     * prueft vorab LocationCanRemoveEntity (ReplaceItemWithNewLambdaBase.c:
+     * 31-37), und das ist im Attachment-Fall genau dieser Haken. Ein
      * Fehlschlag meldet sich im Log als "lambda cannot be executed" oder
      * "Step D) ABORT"; das Raehmchen bleibt dann bei 100 Prozent, und der
      * naechste Tick versucht es erneut.
@@ -546,18 +729,21 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     /**
      * Darf der Stock jetzt abgebaut werden? Nur leer und geschlossen.
      *
-     * Leer heisst: KEIN Item im Cargo - nicht nur kein Raehmchen. Das Cargo
-     * nimmt zwar ueber CanReceiveItemIntoCargo nichts anderes an, aber der
-     * Ladepfad (CanLoadItemIntoCargo) ist absichtlich nicht ueberschrieben,
-     * und was ein Spielstand hineingelegt hat, soll beim Abbau nicht still
-     * verschwinden. Ein offener Deckel heisst: gerade geerntet, das Volk ist
-     * aufgebracht - zwei Minuten warten. Ein laufender Job kann es an
-     * dieser Station nicht geben (parallelSlots 1, kein STATION_TIMED); die
-     * Pruefung steht trotzdem da, damit ein spaeter ergaenzter Vorgang den
-     * Abbau nicht unter sich weggezogen bekommt.
+     * Leer heisst: KEIN Item in irgendeinem Slot - nicht nur kein Raehmchen.
+     * Die Slots nehmen zwar ueber CanReceiveAttachment nichts anderes an,
+     * aber der Ladepfad (CanLoadAttachment) ist absichtlich nicht
+     * ueberschrieben, und was ein Spielstand hineingelegt hat, soll beim
+     * Abbau nicht still verschwinden. Deshalb AttachmentCount() und nicht
+     * ChefZ_CountFrames() - gezaehlt wird ALLES (Inventory.c:205).
+     *
+     * Ein offener Deckel heisst: gerade geerntet, das Volk ist aufgebracht -
+     * zwei Minuten warten. Ein laufender Job kann es an dieser Station nicht
+     * geben (parallelSlots 1, kein STATION_TIMED); die Pruefung steht
+     * trotzdem da, damit ein spaeter ergaenzter Vorgang den Abbau nicht unter
+     * sich weggezogen bekommt.
      *
      * Client UND Server rechnen dieselbe Antwort: der Deckel ist netsync,
-     * und den Cargo-Inhalt einer Station in Reichweite kennt der Client.
+     * und die Anhaenger einer Station in Reichweite kennt der Client.
      */
     protected bool ChefZ_CanPack()
     {
@@ -568,10 +754,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         GameInventory inv = GetInventory();
         if (!inv)
             return false;
-        CargoBase cargo = inv.GetCargo();
-        if (!cargo)
-            return true;
-        return cargo.GetItemCount() == 0;
+        return inv.AttachmentCount() == 0;
     }
 
     /**
@@ -666,6 +849,13 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     }
 
     protected void ChefZ_LogPack(string msg)
+    {
+        ChefZ_LogHive(msg);
+    }
+
+    //! Die eine Spur des Stocks. Hinter der Kanalwache, weil die Zeichenkette
+    //! sonst auch dann entstuende, wenn niemand sie liest (18 §2).
+    protected void ChefZ_LogHive(string msg)
     {
         if (!ChefZ_Log.Enabled(ChefZ_LogChannel.PROCESS, ChefZ_LogLevel.DEBUG))
             return;
@@ -1053,7 +1243,8 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
 //! Stock - Fuelltakt, Deckel, Stich und Regeln erbt sie unveraendert. Sie
 //! entsteht aus zwei Bausaetzen (TR_ExtendBeehive), nicht aus einem
 //! aufgestellten Stock: ein Handwerksschritt verbraucht seine Zutat samt
-//! Cargo, und ein bestueckter Stock verloere dabei seine Raehmchen.
+//! allem, was an ihr haengt, und ein bestueckter Stock verloere dabei seine
+//! Raehmchen.
 class ChefZ_BeehiveDouble extends ChefZ_Beehive
 {
     override int ChefZ_FrameCapacity()
@@ -1067,10 +1258,122 @@ class ChefZ_BeehiveDouble extends ChefZ_Beehive
     }
 }
 
-//! Der Bausatz (Auftrag: "Beehive_Kit"). Reines Traggut ohne ChefZ-Zustand;
-//! er wird von TR_RaiseBeehive und TR_ExtendBeehive verbraucht und ist bis
-//! dahin nur schwer.
-class ChefZ_BeehiveKit extends ItemBase {}
+//==============================================================================
+// ChefZ_BeehiveKit - der Bausatz (Auftrag: "Beehive_Kit").
+//
+// Er kennt seit dem 31.08.2026 ZWEI Wege zum aufgestellten Stock, und beide
+// bleiben:
+//
+//   1. PLATZIEREN wie ein Vanilla-Bausatz - Kit in die Hand, Hologramm
+//      anwerfen, hinstellen. Das ist dieser Block.
+//   2. TR_RaiseBeehive, der Handwerksschritt mit einem HAND_TOOL. Unberuehrt.
+//
+// KEINE ABLEITUNG VON KitBase, obwohl das die naechstliegende Basis waere:
+// KitBase haengt sich in EEInit ein Seil an (KitBase.c:116-122) und schaltet
+// in UpdateVisuals die Modellselektionen "Inventory" und "Placing"
+// (KitBase.c:104-114). Beides setzt ein Modell mit genau diesen Teilen und
+// einen Rope-Slot voraus; das Proxy-Modell dieses Bausatzes hat weder das
+// eine noch das andere. Uebernommen ist deshalb nur, was ohne
+// Modellzusagen auskommt - und das ist genau das, was der Deploy braucht.
+//
+// DIE VIER AUSSAGEN, die Vanilla von einem platzierbaren Item verlangt:
+//
+//   IsDeployable()        sonst waehlt ActionDeployObject.SetupAnimation die
+//                         "Placing"- statt der "Deploy"-Animation
+//                         (ActionDeployObject.c:306-326). Vorbild:
+//                         HescoBox.c:225-228.
+//   IsBasebuildingKit()   der Schalter, der den Bausatz VERBRAUCHT:
+//                         ActionDeployObject.OnEndServer loescht genau dann
+//                         das Item in der Hand (ActionDeployObject.c:
+//                         230-233). Er haelt den Bausatz ausserdem waehrend
+//                         des Aufstellens in der Hand, statt ihn selbst an
+//                         die Zielstelle zu schieben (ActionDeployBase.c:191
+//                         DropDuringPlacing, :208 MoveEntityToFinalPosition).
+//   SetActions()          ActionTogglePlaceObject (Hologramm an/aus) und
+//                         ActionDeployObject (hinstellen) - woertlich
+//                         KitBase.c:146-152.
+//   OnPlacementComplete() erzeugt den Stock. Woertlich FenceKit.c:19-33 und
+//                         TotemKit.c:32-48, bis auf den Klassennamen.
+//
+// Die Config steuert dazu itemBehaviour und projectionTypename bei; die
+// Begruendung steht dort am Bausatz.
+//
+// Bis er aufgestellt ist, ist er weiter nur schwer.
+//==============================================================================
+class ChefZ_BeehiveKit extends ItemBase
+{
+    //! Was aus dem Bausatz wird. Als Konstante, damit der Klassenname genau
+    //! einmal im Skript steht - dieselbe Regel wie an ChefZ_Beehive.
+    static const string CHEFZ_HIVE_CLASS = "ChefZ_Beehive";
+
+    override bool IsDeployable()
+    {
+        return true;
+    }
+
+    //! Vorbild KitBase.c:5-8. Siehe den Dateikopf: dieser Schalter ist es,
+    //! der den Bausatz nach dem Aufstellen verschwinden laesst.
+    override bool IsBasebuildingKit()
+    {
+        return true;
+    }
+
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionTogglePlaceObject);
+        AddAction(ActionDeployObject);
+    }
+
+    /**
+     * Der Stock entsteht. Woertlich Vanillas Bauform (FenceKit.c:19-33):
+     * Serverwache, Objekt an der Stelle des Bausatzes anlegen, dann auf
+     * Position und Ausrichtung des Hologramms setzen, zuletzt das Modell des
+     * Bausatzes ausblenden.
+     *
+     * WARUM ZWEIMAL POSITIONIERT WIRD: CreateObjectEx braucht eine Position
+     * fuer die ECE_PLACE_ON_SURFACE-Ablage; erst danach steht fest, wohin der
+     * Spieler wirklich gezielt hat. Vanilla macht es an beiden Kits genauso -
+     * nicht schoen, aber die belegte Reihenfolge.
+     *
+     * HideAllSelections() und KEIN Delete(): das Loeschen macht Vanilla
+     * selbst, und zwar erst am Ende der Aktion
+     * (ActionDeployObject.OnEndServer, Z.230-233, ueber
+     * IsBasebuildingKit()). Wer hier loeschte, zoege der laufenden Aktion ihr
+     * Hauptobjekt unter den Fuessen weg. Das Ausblenden ist der Ersatz: der
+     * Spieler sieht den Bausatz nicht mehr, obwohl er die paar Frames noch
+     * existiert - Vanillas eigener Kommentar an dieser Stelle sagt genau das.
+     *
+     * Entsteht kein Stock - ein Klassenname, den keine Config kennt -, bleibt
+     * der Bausatz sichtbar und wird trotzdem geloescht. Dagegen hilft nur,
+     * dass CHEFZ_HIVE_CLASS in derselben config.cpp steht wie dieser Bausatz.
+     */
+    override void OnPlacementComplete(Man player, vector position = "0 0 0", vector orientation = "0 0 0")
+    {
+        super.OnPlacementComplete(player, position, orientation);
+
+        if (!g_Game || !g_Game.IsServer())
+            return;
+
+        EntityAI hive = EntityAI.Cast(g_Game.CreateObjectEx(CHEFZ_HIVE_CLASS, GetPosition(), ECE_PLACE_ON_SURFACE));
+        if (!hive)
+            return;
+
+        hive.SetPosition(position);
+        hive.SetOrientation(orientation);
+
+        // Der Zustand des Bausatzes geht in den Stock ueber - derselbe
+        // anteilige Uebertrag, den ChefZ_Beehive.ChefZ_PackUp() in die
+        // Gegenrichtung macht. GetHealth01 Object.c:997, GetMaxHealth
+        // Object.c:1004, SetHealth Object.c:1011.
+        float health01 = GetHealth01("", "");
+        float maxHealth = hive.GetMaxHealth("", "");
+        hive.SetHealth("", "", maxHealth * health01);
+
+        HideAllSelections();
+    }
+}
 
 //! Gemeinsame Skriptbasis der drei Raehmchen. Sie traegt bewusst KEINEN
 //! ChefZ-Zustand: der Unterschied zwischen leer, voll und entdeckelt ist die
@@ -1120,12 +1423,49 @@ class ChefZ_UncappingFork extends ItemBase {}
 //               Neustart ist jede Pfeife aus. Das ist gewollt: eine Glut, die
 //               eine Serverpause ueberlebt, waere die einzige im Spiel.
 //
-// ANZUENDEN geht ueber Vanillas ActionLightItemOnFire (scripts - 1.29/
-// 4_World/.../Continuous/ActionLightItemOnFire.c:77): Feuerzeug oder
-// Streichholz in der Hand, Pfeife als Ziel. Die Aktion fragt am Ziel
-// CanBeIgnitedBy, IsThisIgnitionSuccessful und ruft OnIgnitedThis - alle
-// drei in EntityAI.c:546-618 als leere Vorgaben, hier gefuellt. Vorbild in
-// jeder Zeile: Torch.c:141-208 (Fackel), nur ohne Energiemanager.
+// ANZUENDEN - ZWEI WEGE, und der zweite fehlte (Fehlerbehebung 31.08.2026)
+// -------------------------------------------------------------------------
+// Alex' Befund war: "ich finde keinen Weg, Feuer in die Pfeife zu bekommen".
+// Vanillas ActionLightItemOnFire.ActionCondition (scripts - 1.29/4_World/
+// DayZ/Classes/UserActionsComponent/Actions/Continuous/
+// ActionLightItemOnFire.c:70-101) kennt genau zwei Wege, und sie sind im
+// Quelltext auch so kommentiert:
+//
+//   WEG A - Z.76-92, "when igniting item on the ground with igniter in hands"
+//           Zuender in der Hand, Pfeife als ZIEL. Gefragt wird
+//           targetItem.CanBeIgnitedBy(item) - also unser Haken an der Pfeife.
+//           Die Aktion kommt vom Zuender: Matchbox.c:37 und PetrolLighter.c:37
+//           tragen AddAction(ActionLightItemOnFire).
+//           DIESER WEG GING SCHON. Unser CanBeIgnitedBy verlangt zwar, dass
+//           die Pfeife nicht im Rucksack steckt - aber eine Pfeife AM BODEN
+//           hat gar keinen Spielerbesitzer (GetHierarchyRootPlayer() ist
+//           null), und die Bedingung trifft dann nicht zu. Auch
+//           IsItemInCargoOfSomething (Z.40-54) sperrt nicht: sie prueft
+//           loc.GetIdx() > -1, und der ist nur im CARGO gesetzt
+//           (InventoryLocation.c:72-77, "returns index of cargo").
+//
+//   WEG B - Z.93-97, "when igniting item in hands from something on ground"
+//           Pfeife IN DER HAND, brennende Feuerstelle als Ziel. Gefragt wird
+//           item.CanBeIgnitedBy(targetItem) - auch unser Haken, und auch der
+//           haette ja gesagt (die Pfeife IST in der Hand).
+//           DIESER WEG WAR TOT, und zwar aus einem Grund, der nicht in
+//           CanBeIgnitedBy steht: eine Aktion wird ueber das Item in der HAND
+//           angeboten, und ChefZ_BeeSmoker hatte keine SetActions. Die
+//           Bedingung wurde nie gefragt, weil die Aktion nie im Menue stand.
+//           Genau deshalb traegt Vanillas Fackel die Aktion an SICH SELBST:
+//           Torch.c:765, AddAction(ActionLightItemOnFire) - die Fackel wird
+//           in der Hand am Feuer entzuendet, nicht am Boden.
+//
+// DIE BEHEBUNG ist deshalb eine SetActions-Ueberschreibung nach Torchs
+// Vorbild, nicht eine Lockerung von CanBeIgnitedBy. Die Pfeife laesst sich
+// jetzt am Boden mit Streichholz oder Feuerzeug anzuenden (Weg A) UND in der
+// Hand an einem brennenden Lagerfeuer (Weg B, Fireplace.CanIgniteItem gibt
+// dort true zurueck: Fireplace.c:567-570).
+//
+// Die Aktion fragt am Ziel CanBeIgnitedBy, IsThisIgnitionSuccessful und ruft
+// OnIgnitedThis - alle drei in EntityAI.c:546-618 als leere Vorgaben, hier
+// gefuellt. Vorbild in jeder Zeile: Torch.c:141-208 (Fackel), nur ohne
+// Energiemanager.
 //
 // ABBRENNEN: ein Server-Timer alle 5 s, volle Fuellung haelt zehn Minuten.
 // Bei null geht sie aus. Der Rauch ist Vanillas kleines Lagerfeuer-Partikel
@@ -1168,6 +1508,27 @@ class ChefZ_BeeSmoker extends ItemBase
         return m_ChefZ_Lit;
     }
 
+    /**
+     * Die Pfeife bietet das Anzuenden SELBST an (Fehlerbehebung 31.08.2026).
+     *
+     * Woertlich Torch.c:763-766. Ohne diese Zeile ist Weg B aus dem
+     * Dateikopf unerreichbar: Vanilla stellt die Aktionen eines Vorgangs aus
+     * dem Item in der HAND zusammen, und ein Item ohne
+     * AddAction(ActionLightItemOnFire) wird nie zum Anzuendkandidaten, ganz
+     * gleich, was sein CanBeIgnitedBy antwortet.
+     *
+     * Weg A - Pfeife am Boden, Streichholz in der Hand - braucht das nicht;
+     * dort bringt der Zuender die Aktion mit (Matchbox.c:37). Die
+     * Ueberschreibung nimmt ihm nichts weg, sie stellt nur die zweite
+     * Richtung daneben.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionLightItemOnFire);
+    }
+
     // ---- Vanillas Anzuend-Schnittstelle (EntityAI.c:540-618) --------------
 
     override bool HasFlammableMaterial()
@@ -1180,8 +1541,20 @@ class ChefZ_BeeSmoker extends ItemBase
         return m_ChefZ_Lit;
     }
 
-    //! Torch.c:157-180, ohne Energiemanager: nicht schon brennend, genug
-    //! Rinde, nicht nass, und in der Hand - nicht aus dem Rucksack heraus.
+    /**
+     * Torch.c:157-186, ohne Energiemanager: nicht schon brennend, genug
+     * Rinde, nicht nass - und wenn sie EINEM SPIELER GEHOERT, muss sie in
+     * seiner Hand liegen, nicht im Rucksack.
+     *
+     * Die letzte Bedingung ist woertlich Torch.c:176-183 und bleibt nach der
+     * Durchsicht vom 31.08.2026 unveraendert stehen: sie sperrt nur den
+     * Rucksack, nicht den Boden. Eine Pfeife am Boden hat keinen
+     * Hierarchie-Spieler, player ist dann null, und die Pruefung greift gar
+     * nicht - Weg A aus dem Dateikopf laeuft also durch. Weg B laeuft
+     * ebenfalls durch, weil die Pfeife dort per Definition in der Hand liegt.
+     * Was hier fehlte, war nie diese Bedingung, sondern die Aktion selbst
+     * (siehe SetActions oben).
+     */
     override bool CanBeIgnitedBy(EntityAI igniter = NULL)
     {
         if (m_ChefZ_Lit)

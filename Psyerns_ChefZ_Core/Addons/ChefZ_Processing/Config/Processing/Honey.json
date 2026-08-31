@@ -4,6 +4,7 @@
     "records": [
         {
             "id": "TR_SpinHoney",
+            "_note": "VIER GLAESER JE RAHMEN, UND DER RAHMEN UEBERLEBT (31.08.2026, Auftrag 11 von Alex; vorher drei Glaeser). Alex will BEIDES - vier Glaeser UND 'entdeckelte Rahmen zu leeren Rahmen aendern'. Erreicht wird das nicht hier, sondern am RAHMEN: ChefZ_HoneycombFrameUncapped traegt seit heute FUENF Einheiten statt vier (ChefZ_Farming/config.cpp, varQuantityInit/Max 5, unitsPerWholeItem 5). Diese Datei bleibt bei amount.min 2.0, und genau das ist der Punkt: die Schwelle haelt den Applicator von der letzten Einheit fern. ChefZ_SlotEvaluator.PlanAmountDraw (Core, Z.369-376) setzt destroyWhole, sobald ein Abzug die letzte Einheit traefe, und der Applicator LOESCHT das Item dann statt es auf null zu setzen - ein geloeschter Rahmen laesst sich nicht mehr in einen Leerrahmen wandeln. Mit fuenf Einheiten und Schwelle 2.0 geschehen die Zuege bei 5, 4, 3 und 2: VIER Glaeser. Danach steht der Rahmen auf 1, faellt unter CHEFZ_FRAME_SPENT_BELOW (ebenfalls 2.0) und wird von ChefZ_HoneyExtractor.ChefZ_RetireSpentFrames zu ChefZ_HoneycombFrameEmpty gewandelt - die eine Reserveeinheit geht dabei unter. Das ist dasselbe Muster wie vorher (README_Apiary), nur eine Einheit hoeher angesetzt.",
             "process": "PROCESS_SPIN_HONEY",
             "stationsAllowed": ["ChefZ_HoneyExtractor"],
             "inputs": [

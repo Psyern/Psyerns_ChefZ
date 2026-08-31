@@ -10,7 +10,7 @@
     ],
     "processes": [
         { "id": "PROCESS_SEPARATE_CREAM", "station": "ChefZ_ButterChurn", "durationSec": 120 },
-        { "id": "PROCESS_CHURN_BUTTER", "station": "ChefZ_ButterChurn", "durationSec": 180 },
+        { "id": "PROCESS_CHURN_BUTTER", "station": "ChefZ_ButterChurn", "durationSec": 60 },
         { "id": "PROCESS_PRESS_CHEESE", "station": "ChefZ_CheesePress", "durationSec": 300 }
     ],
     "nutrition": [

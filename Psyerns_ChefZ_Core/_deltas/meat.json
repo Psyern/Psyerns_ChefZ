@@ -101,7 +101,7 @@
     {
       "id": "PROCESS_GRIND_MEAT",
       "station": "ChefZ_MeatGrinder",
-      "durationSec": 20
+      "durationSec": 30
     },
     {
       "id": "PROCESS_STUFF_SAUSAGE",

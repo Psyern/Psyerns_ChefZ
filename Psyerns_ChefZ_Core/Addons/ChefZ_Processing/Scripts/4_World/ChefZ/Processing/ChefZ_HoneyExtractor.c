@@ -19,20 +19,35 @@
 // Kapazitaeten (Auftrag: fuenf Rahmen, fuenfzehn Glaeser) zaehlt
 // CanReceiveItemIntoCargo; das Cargo-Gitter selbst ist nur der Platz dafuer.
 //
-// Der Vorrat eines entdeckelten Rahmens ist seine varQuantity: drei Glaeser
-// PLUS EINE RESERVE-EINHEIT (4..1, Klassendefault aus ChefZ_Farming). Der
-// Applicator zieht je Glas eine Einheit ab. Die Reserve ist kein Bonus,
-// sondern eine Notwendigkeit des Core: ChefZ_SlotEvaluator.PlanAmountDraw
-// setzt destroyWhole, sobald ein Abzug die letzte Einheit traefe
-// (1_Core/ChefZ/ChefZ_SlotEvaluator.c:367-373), und der Applicator LOESCHT
-// das Item dann statt es auf null zu setzen (Cooking/ChefZ_Applicator.c:
-// 1250-1253). Duerfte das dritte Glas die letzte Einheit ziehen, gaebe es
-// nach dem dritten Glas keinen Rahmen mehr, den man zum Leerrahmen machen
-// koennte. Deshalb verlangt TR_SpinHoney mindestens zwei Einheiten: die
-// Zuege geschehen bei 4, 3 und 2, die Einheit 1 bleibt stehen, und ein
-// Rahmen unterhalb der Schwelle wird hier nach dem Abschluss zum Leerrahmen
-// ersetzt - nicht in einem Mengenhaken des Rahmens, denn waehrend des
-// Verbrauchs haelt der Applicator noch Handles auf die Entities.
+// Der Vorrat eines entdeckelten Rahmens ist seine varQuantity: VIER GLAESER
+// PLUS EINE RESERVE-EINHEIT (5..1, Klassendefault aus ChefZ_Farming,
+// unitsPerWholeItem 5). Der Applicator zieht je Glas eine Einheit ab.
+//
+// Die Reserve ist kein Bonus, sondern eine Notwendigkeit des Core:
+// ChefZ_SlotEvaluator.PlanAmountDraw setzt destroyWhole, sobald ein Abzug die
+// letzte Einheit traefe (1_Core/ChefZ/ChefZ_SlotEvaluator.c:369-376), und der
+// Applicator LOESCHT das Item dann statt es auf null zu setzen (Cooking/
+// ChefZ_Applicator.c:1250-1253). Duerfte das letzte Glas die letzte Einheit
+// ziehen, gaebe es danach keinen Rahmen mehr, den man zum Leerrahmen machen
+// koennte. Deshalb verlangt TR_SpinHoney mindestens ZWEI Einheiten: die Zuege
+// geschehen bei 5, 4, 3 und 2, die Einheit 1 bleibt stehen, und ein Rahmen
+// unterhalb der Schwelle wird hier nach dem Abschluss zum Leerrahmen ersetzt -
+// nicht in einem Mengenhaken des Rahmens, denn waehrend des Verbrauchs haelt
+// der Applicator noch Handles auf die Entities.
+//
+// ### 31.08.2026 - VIER STATT DREI GLAESER (Auftrag 11 von Alex) ###
+// Alex verlangt zweierlei auf einmal: vier Glaeser je Rahmen UND "entdeckelte
+// Rahmen zu leeren Rahmen aendern". Beides zugleich geht nur ueber den
+// RAHMEN, nicht ueber die Schleuder: der Rahmen traegt jetzt FUENF Einheiten
+// statt vier (ChefZ_Farming/config.cpp).
+//
+// Der zwischenzeitlich erwogene Weg - die Untergrenze auf 1.0 senken und alle
+// vier Einheiten eines Vier-Einheiten-Rahmens ziehen - haette die vier
+// Glaeser gebracht und den Rahmen gekostet: der vierte Zug haette die letzte
+// Einheit getroffen, destroyWhole gesetzt und den Rahmen geloescht, bevor
+// ChefZ_RetireSpentFrames ihn ueberhaupt zu sehen bekommt. Das waere genau
+// die Haelfte des Auftrags gewesen. Schwelle und Reserve bleiben deshalb bei
+// 2.0; geaendert hat sich allein, wie voll ein frischer Rahmen ist.
 //
 // Steht die Schleuder - kein Rahmen mit Vorrat, kein Glas, Cargo voll -,
 // dann steht sie, bis ein Spieler erneut ankurbelt. Ein Nachlegen von Glaesern
@@ -71,7 +86,13 @@ class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
     //! Unterhalb dieser Menge gilt ein Rahmen als leergeschleudert. Zwei und
     //! nicht null: TR_SpinHoney verlangt mindestens zwei Einheiten, damit der
     //! Core nie die letzte zieht und den Rahmen loescht (siehe Dateikopf).
-    //! Nach dem dritten Glas steht der Rahmen auf 1.
+    //! Nach dem VIERTEN Glas steht der Rahmen auf 1 und faellt hier durch.
+    //!
+    //! Die Zahl 2.0 ist die einzige, die BEIDE Forderungen aus Auftrag 11
+    //! zugleich erfuellt: vier Glaeser UND ein Rahmen, der uebrig bleibt. Sie
+    //! muss mit amount.min in TR_SpinHoney uebereinstimmen - stuende sie
+    //! niedriger, zoege der Applicator die Einheit, die diese Schwelle
+    //! auffangen soll.
     static const float  CHEFZ_FRAME_SPENT_BELOW  = 2.0;
     //! Vanillas Honigglas - das Ergebnis darf liegen bleiben und zurueck.
     static const string CHEFZ_HONEY_CLASS       = "Honey";

@@ -71,11 +71,34 @@ class CfgMods
         extra = 0;
         type = "mod";
 
-        // Nur die beiden Ebenen, die auch Dateien haben. Eine gelistete Ebene,
-        // die zu nichts kompiliert, beendet den Server ohne Meldung - am
-        // 27.08.2026 zweimal nachgestellt, siehe die Anker-Klassen der
-        // Comp-Module.
-        dependencies[] = {"Game", "World"};
+        // ------------------------------------------------------------------
+        // Die Tastenbelegung - datengetrieben, weil es anders nicht geht
+        // ------------------------------------------------------------------
+        // GetUApi().RegisterInput() steht als proto native in
+        // 3_Game/DayZ/InputAPI/UAInput.c:194 und hat in den Vanilla-Skripten
+        // 1.29 wie in DayZExpansion NULL Aufrufer. Es meldet keinen Fehler, es
+        // tut nur nichts. Der einzige Weg, der im Feld traegt, ist diese Zeile
+        // plus Scripts/Data/Inputs.xml (Workflow §6.3).
+        //
+        // Der Pfad ist PBO-relativ und beginnt deshalb mit dem Inhalt von
+        // $PREFIX$ ("ChefZ_Cookbook") - nicht mit "Addons/" und nicht mit dem
+        // Ordnernamen auf der Platte. Vorbild:
+        // DayZExpansion/Book/Scripts/config.cpp:20 gegen dessen Prefix
+        // "DayZExpansion/Book".
+        //
+        // Fehlerbild bei falschem Pfad: die Gruppe "ChefZ" fehlt im
+        // Steuerungsmenue, das RPT schweigt.
+        inputs = "ChefZ_Cookbook/Scripts/Data/Inputs.xml";
+
+        // Nur die Ebenen, die auch Dateien haben. Eine gelistete Ebene, die zu
+        // nichts kompiliert, beendet den Server ohne Meldung - am 27.08.2026
+        // zweimal nachgestellt, siehe die Anker-Klassen der Comp-Module.
+        //
+        // "Mission" kam mit der Tastenabfrage dazu: der Zustand einer Taste
+        // laesst sich nur im Bildlauf der Mission lesen, und OnUpdate gibt es
+        // erst in MissionGameplay (5_Mission). Das Verzeichnis ist nicht leer -
+        // ChefZ_CookbookInput.c liegt darin.
+        dependencies[] = {"Game", "World", "Mission"};
 
         class defs
         {
@@ -99,6 +122,22 @@ class CfgMods
                 files[] =
                 {
                     "ChefZ_Cookbook/Scripts/4_World"
+                };
+            };
+
+            // 5_Mission: ausschliesslich die Tastenabfrage. Sie braucht den
+            // Bildlauf der Mission (MissionGameplay.OnUpdate) und damit die
+            // einzige Ebene, auf der es ihn gibt.
+            //
+            // Das bleibt die einzige Datei hier, solange das Kochbuch keine
+            // Oberflaeche hat: die gehoert nach ChefZ_Cookbook_UI, und dieses
+            // Addon darf Dabs nicht kennen (Workflow §3).
+            class missionScriptModule
+            {
+                value = "";
+                files[] =
+                {
+                    "ChefZ_Cookbook/Scripts/5_Mission"
                 };
             };
         };

@@ -32,7 +32,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_SaltedMeat",
-                    "quantity": 1,
+                    "quantity": 250,
                     "quantityMode": "fixed",
                     "setState": "SALTED",
                     "inheritFreshness": true
@@ -71,7 +71,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_SaltedFish",
-                    "quantity": 1,
+                    "quantity": 250,
                     "quantityMode": "fixed",
                     "setState": "SALTED",
                     "inheritFreshness": true

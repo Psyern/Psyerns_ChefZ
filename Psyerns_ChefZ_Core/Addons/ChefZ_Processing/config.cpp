@@ -79,6 +79,15 @@ class CfgPatches
         // DZ_Gear_Cooking:     steht schon oben - Cauldron.p3d, der Proxy der
         //                      Schleuder.
         //
+        // KEIN Rinden-Addon, obwohl ChefZ_Smoker seit dem 31.08.2026 Rinde
+        // verbrennt: der Schrank nennt weder Bark_Oak noch Bark_Birch. Er
+        // fragt ausschliesslich die SKRIPTBASIS Bark_ColorBase ab, und die
+        // steht in Vanillas Basisskripten (scripts - 1.29/4_World/DayZ/
+        // Entities/ItemBase/Bark_ColorBase.c) - sie ist immer uebersetzt,
+        // unabhaengig davon, welches Gear-Addon die beiden CfgVehicles-Knoten
+        // mitbringt. Ein requiredAddons-Eintrag waere hier eine Abhaengigkeit
+        // ohne Gegenstueck. Wer Rinde im Spiel hat, hat sie ohnehin.
+        //
         // KEIN ChefZ_Cooking, obwohl TR_SpinHoney dessen ChefZ_EmptyJar als
         // leeres Glas nennt: ChefZ_Cooking fuehrt ChefZ_Processing bereits in
         // seinem requiredAddons, die Gegenrichtung waere ein Ladezyklus. Der
@@ -165,6 +174,35 @@ class CfgVehicles
         canBeDigged = 0;
         rotationFlags = 2;
         lifetime = 172800;
+
+        // Der Cargo-Bereich IST die Eingangsseite (31.08.2026, Testbefund
+        // Alex "Muehle hat keine Funktion"). Bis hierher hatte die Muehle als
+        // EINZIGE Station dieses Moduls keinen Cargo-Block, und damit war die
+        // ganze Mahlkette tot: ChefZ_ProcessingStation_Base sammelt seine
+        // Zutaten ausschliesslich ueber ChefZ_FactCollector.CollectFromCargo
+        // aus GetInventory().GetCargo(). Ohne Cargo gibt es kein
+        // GetCargo() - der Job findet nie eine Zutat und meldet dabei nichts,
+        // was nach einem Fehler aussieht. GrainTransforms.json hat diesen
+        // Zustand seit dem 29.08.2026 in einer _note festgehalten; die note
+        // ist mit diesem Block hinfaellig und dort entfernt.
+        //
+        // 5x4 = 20 Zellen, gerechnet aus den beiden Transforms:
+        //   TR_CornToFlour  maxCount 5. Ein Kolben (ChefZ_Corn) ist 1x1
+        //                   (ChefZ_Farming/config.cpp:275, geerbt von
+        //                   ChefZ_VegetableFood_Base) - fuenf Kolben kosten
+        //                   fuenf Zellen.
+        //   TR_WheatToFlour maxCount 1. Eine Garbe (ChefZ_Wheat) ist 2x2
+        //                   (ChefZ_Farming/config.cpp:222) - vier Garben
+        //                   liegen in 16 Zellen und lassen vier fuer das Mehl.
+        // Das Ergebnis (ChefZ_Flour, 2x2) landet im SELBEN Cargo: getrennte
+        // Ein- und Ausgangsbereiche gibt die Engine nicht her, ein Item hat
+        // genau einen Cargo. Deshalb ist der Rand von vier Zellen kein
+        // Luxus - ist der Cargo voll, endet der Job ohne Verbrauch.
+        class Cargo
+        {
+            itemsCargoSize[] = {5, 4};
+            openable = 0;
+        };
     };
 
     //--------------------------------------------------------------------------
@@ -393,11 +431,11 @@ class CfgVehicles
     //   diesem Bereich; ohne ihn faende ein Job nie eine Zutat. Die Groessen
     //   sind aus den Transforms gerechnet und in beiden Rasterlesarten
     //   tragfaehig: der Milchkarton (PowderedMilk) ist 2x3, ChefZ_Cream 2x2.
-    //     Butterfass  4x4 - TR_MilkToCream und TR_CreamToButter verlangen je
-    //                 2 Einheiten.
+    //     Butterfass  10x14 - siehe die eigene Rechnung an der Klasse.
     //     Presse      6x4 - TR_MilkToCheese verlangt 3 Milch gleichzeitig.
     //   Ein Cargo, der groesser ist als itemSize, ist in diesem Modul kein
-    //   Sonderfall: ChefZ_HerbStationBase macht es genauso.
+    //   Sonderfall: ChefZ_HerbStationBase macht es genauso, und die
+    //   Honigschleuder traegt 10x10.
     //==========================================================================
 
     // §48/§49: Das Butterfass traegt ZWEI Prozesse - erst abrahmen, dann
@@ -406,6 +444,31 @@ class CfgVehicles
     // Processing fuer V1; zwei Stationen fuer eine dreigliedrige Kette waeren
     // eine Station zu viel. Das Fass kann beides, weil es beide Male dasselbe
     // tut: ruehren.
+    //
+    // ---------------------------------------------------------------------
+    // "20 LITER MILCH EINFUELLEN" - was das in Stueck heisst (31.08.2026)
+    // ---------------------------------------------------------------------
+    // Alex' Zielbild lautet woertlich: Milch einfuellen (20 Liter), aktiv
+    // interagieren, und alle 60 Sekunden entsteht 1x Butter. Liter gibt es in
+    // diesem Modul aber nicht - die Fluessigkeitsfuehrung ist oben
+    // ausdruecklich verworfen, Milch ist in V1 Vanillas PowderedMilk als
+    // STUECKWARE (ChefZ_Ingredients/config.cpp:389). Die Uebersetzung ist
+    // deshalb festgelegt als:
+    //
+    //     1 Milchkarton (PowderedMilk) == 1 "Liter"
+    //     Fassungsvermoegen             == 20 Karton
+    //
+    // Ein Karton ist 2x3 = 6 Zellen. 20 Karton brauchen 120 Zellen; 10x14 =
+    // 140 laesst 20 Zellen fuer das, was das Fass SELBST erzeugt - Sahne
+    // (ChefZ_Cream, 2x2) und Butter. Getrennte Ein- und Ausgangsbereiche gibt
+    // die Engine nicht her: ein Item hat genau EINEN Cargo, und die Ergebnisse
+    // landen darin. Ist er voll, endet der Job ohne Verbrauch, und das Fass
+    // steht - deshalb der Rand.
+    //
+    // Die Zahl 20 selbst steht NICHT hier, sondern im Torwaechter der
+    // Skriptklasse (ChefZ_DairyStations.c, CHEFZ_MILK_CAPACITY). Das Gitter
+    // ist nur der Platz; gezaehlt wird in CanReceiveItemIntoCargo - dasselbe
+    // Muster wie bei der Honigschleuder.
     class ChefZ_ButterChurn : Inventory_Base
     {
         scope = 2;
@@ -422,7 +485,7 @@ class CfgVehicles
 
         class Cargo
         {
-            itemsCargoSize[] = {4, 4};
+            itemsCargoSize[] = {10, 14};
             openable = 0;
         };
     };
@@ -541,6 +604,30 @@ class CfgVehicles
         absorbency = 0.0;
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
+
+        // Der Cargo-Bereich IST die Eingangsseite (31.08.2026, Testbefund
+        // Alex "Fleischwolf hat keine Funktion"). Bis hierher hatte der Wolf
+        // keinen Cargo-Block - genau der Fehler, an dem schon das entfernte
+        // Schneidebrett gescheitert ist und den der Kopf dieses Blocks als
+        // Andockregel nennt: ChefZ_ProcessingStation_Base sammelt seine
+        // Zutaten ausschliesslich ueber ChefZ_FactCollector.CollectFromCargo
+        // aus GetInventory().GetCargo(). Ohne Cargo gibt es kein GetCargo(),
+        // und ALLE ZWOELF Transforms in ChefZ_Meat/Config/Processing/Meat.json
+        // (sechs Wolf-, sechs Wurst-Transforms) waren unerreichbar - lautlos.
+        //
+        // 5x3 = 15 Zellen, Vorgabe Alex. Das ist kein Lager: ein Steak ist
+        // 2x2, ein Darm (Guts) 2x2 - drei Steaks und ein Darm fuellen den
+        // Wolf schon fast. Genau so soll es sein, denn das Ergebnis landet im
+        // SELBEN Cargo (die Engine gibt keine getrennten Ein- und
+        // Ausgangsbereiche her, ein Item hat genau einen Cargo), und ein
+        // voller Cargo laesst den Job ohne Verbrauch enden. Wer wolfen will,
+        // raeumt zwischendurch aus - das ist der Preis der Selbstnachstartung
+        // von PROCESS_GRIND_MEAT, siehe dort.
+        class Cargo
+        {
+            itemsCargoSize[] = {5, 3};
+            openable = 0;
+        };
     };
 
     //==========================================================================
@@ -565,14 +652,58 @@ class CfgVehicles
     // beide bringen die gesamte Feuerstellenmechanik mit - Brennstoffverwaltung,
     // Kochslots, Rauchslots und Cooking.ProcessItemToCook mit seinem
     // PARAM_BURN_DAMAGE_COEF. Die Wurst im Schrank ginge darin kaputt, bevor
-    // der ChefZ-Job auch nur laeuft. Die Waerme holt sich der Schrank statt
-    // dessen aus einer brennenden Feuerstelle in Reichweite - dieselbe Loesung
-    // wie bei ChefZ_FryingPan und aus demselben Grund.
+    // der ChefZ-Job auch nur laeuft. Diese Ablehnung ist im Projekt dreifach
+    // festgehalten und bleibt stehen.
+    //
+    // -----------------------------------------------------------------------
+    // 31.08.2026 - DER SCHRANK HAT SEIN EIGENES FEUER (Testbefund Alex)
+    // -----------------------------------------------------------------------
+    // Bis hierher stand hier "die Waerme holt sich der Schrank aus einer
+    // brennenden Feuerstelle in Reichweite". Das war eine Absicht, kein
+    // Zustand: es gab dafuer NIE einen Ueberschreiber. Der Schrank war damit
+    // seit seiner Anlage nicht ein einziges Mal betriebsbereit, und zwar aus
+    // zwei voneinander unabhaengigen Gruenden:
+    //
+    //   1. Config/Processing/PreservationStations.json sagt needsFuel = true.
+    //      Die Basisantwort ChefZ_ProcessingStation_Base.ChefZ_IsPowered()
+    //      lautet dann "nein" (Core, Z. 403-407) - ausdruecklich als sichere
+    //      Vorgabe, damit ein vergessener Ueberschreiber sichtbar wird. Er war
+    //      vergessen. ChefZ_CompiledProcess.MeetsEnvironment brach jeden Job
+    //      sofort ab.
+    //   2. PROCESS_SMOKE traegt requiresHeat = 1, und ChefZ_HasHeat() lieferte
+    //      die Basisantwort "nein" - der Schrank hatte keinen Ueberschreiber
+    //      wie ihn ChefZ_FryingPan hat.
+    //
+    // Alex' Zielbild: "ein Platz, wo man das Feuer reinpacken kann wie beim
+    // Vanilla-Ofen", raeuchern nur bei brennendem Feuer, Rinde als Brennstoff.
+    // Umgesetzt ist das als EIGENER BRENNZUSTAND am Schrank, nicht als
+    // Umkreisscan:
+    //
+    //   - Rinde (Bark_Oak / Bark_Birch, Skriptbasis Bark_ColorBase) liegt im
+    //     Cargo und ist der Brennstoff.
+    //   - Angezuendet wird ueber Vanillas ActionLightItemOnFire, also ohne
+    //     eine einzige eigene Action: Feuerzeug oder Streichholz in die Hand,
+    //     Schrank anvisieren. Der Schrank beantwortet dafuer die vier Fragen
+    //     der Vanilla-Schnittstelle (HasFlammableMaterial, CanBeIgnitedBy,
+    //     IsThisIgnitionSuccessful, OnIgnitedThis).
+    //   - Brennt er, liefern ChefZ_IsPowered() UND ChefZ_HasHeat() "ja".
+    //
+    // Vorbild in jeder Zeile ist ChefZ_BeeSmoker (ChefZ_Farming/Scripts/
+    // 4_World/ChefZ/Farming/ChefZ_Apiary.c:1136-1282). Die Einzelheiten und
+    // die Wahl der Brenndauer stehen an der Skriptklasse.
+    //
+    // Der Umkreisscan von ChefZ_FryingPan bleibt dort, wo er hingehoert: eine
+    // Siedepfanne STEHT auf dem Feuer, ein Raeucherschrank IST eines. Ein
+    // Schrank, der sich an einer fremden Feuerstelle bedient, haette ausserdem
+    // Alex' Punkt (1.3) - "Rinde muss als Brennstoff drin liegen" - nicht
+    // erfuellen koennen.
     //
     // Der Cargo-Bereich IST die Eingangsseite: ChefZ_ProcessingStation_Base
     // liest seine Zutaten ueber ChefZ_FactCollector.CollectFromCargo aus genau
-    // diesem Bereich. 4x3 fasst sechs Wuerste oder Filets - ein Raeuchergang
-    // soll sich lohnen, ohne ein Lager zu sein.
+    // diesem Bereich. 5x5 = 25 Zellen (Vorgabe Alex 1.1, vorher 4x3): der
+    // Cargo traegt jetzt ZWEIERLEI - das Raeuchergut und die Rinde, die den
+    // Schrank heizt. Vier Wuerste (je 2x2), zwei Stueck Rinde und Platz fuer
+    // das Ergebnis, das im selben Cargo entsteht.
     //
     // MODELL: Vanilla-Proxy wooden_case.p3d, eine Holzkiste in der richtigen
     // Groessenordnung. Ziel ist ein hoher, schmaler Holzschrank mit Rost und
@@ -594,7 +725,7 @@ class CfgVehicles
 
         class Cargo
         {
-            itemsCargoSize[] = {4, 3};
+            itemsCargoSize[] = {5, 5};
             openable = 0;
         };
     };
@@ -631,10 +762,14 @@ class CfgVehicles
     // und leere Glaeser (ChefZ_EmptyJar) liegen zusammen im Cargo, der Spieler
     // kurbelt an, und je Glas wird EIN leeres Glas sofort durch Vanillas Honey
     // ersetzt - das Glas verschwindet, das Honigglas entsteht im Cargo
-    // (Auftrag 12). Der Rahmen gibt je Glas eine Einheit Vorrat her (Auftrag
-    // 4: drei Glaeser) und wird danach im Skript zum Leerrahmen; warum er dafuer
-    // vier Einheiten traegt und eine davon stehen bleibt, steht an der Klasse
-    // in ChefZ_Farming und im Kopf von ChefZ_HoneyExtractor.c. Zwei Eingaenge sind an
+    // (Auftrag 12). Der Rahmen gibt je Glas eine Einheit Vorrat her und traegt
+    // seit dem 31.08.2026 FUENF davon: VIER GLAESER plus eine Reserveeinheit
+    // (Auftrag 11 von Alex - vier Glaeser, nicht drei, und der entdeckelte
+    // Rahmen soll danach ein LEERER Rahmen sein). Beides zugleich geht nur
+    // ueber die fuenfte Einheit: sie faengt den Zug ab, der den Rahmen sonst
+    // loeschen wuerde, und wird beim Wandeln zum Leerrahmen mit
+    // aufgegeben. Die vollstaendige Herleitung steht an der Klasse in
+    // ChefZ_Farming und im Kopf von ChefZ_HoneyExtractor.c. Zwei Eingaenge sind an
     // einer Station folgenlos - die Grenze von zwei Zutaten gilt nur fuer
     // HANDCRAFT (01 V12), und dort waere die Kette gar nicht abbildbar: zwei
     // Eingaenge liessen keinen Platz fuer ein Werkzeug, und die Schleuder IST
@@ -927,11 +1062,23 @@ class CfgChefZProcesses
     };
 
     // §49: Sahne zu Butter schlagen.
+    //
+    // 60 statt 180 Sekunden (31.08.2026, Vorgabe Alex: "alle 60 s entsteht 1x
+    // Butter"). Die Zahl ist der TAKT des Fasses, nicht die Dauer einer
+    // Charge: das Fass startet sich nach jedem Abschluss selbst neu
+    // (ChefZ_DairyStations.c), solange Material im Cargo liegt. Der Spieler
+    // kurbelt einmal an und bekommt danach im Minutentakt Butter.
+    //
+    // Die beiden Transforms tragen dieselbe Zahl als durationOverrideSec
+    // (Config/Processing/Dairy_Transforms.json). Das ist keine Dopplung,
+    // sondern der uebliche Weg: der Prozess ist das Verb und nennt die
+    // Vorgabe, der Transform ist der konkrete Vorgang und darf sie ueberschreiben
+    // - so haelt auch die Kraeuterkette es (HerbGrinding.json).
     class PROCESS_CHURN_BUTTER
     {
         exec = "STATION_TIMED";
         displayName = "#STR_CHEFZ_PROC_CHURN_BUTTER";
-        baseDurationSec = 180.0;
+        baseDurationSec = 60.0;
     };
 
     // §50: Milch dicklegen und pressen -> Kaese.
@@ -1017,13 +1164,29 @@ class CfgChefZProcesses
         toolDamage = 2;
     };
 
-    // §30/§57: Meat -> Minced Meat am Fleischwolf. STATION_ACTION: der Spieler
-    // kurbelt, und der Fortschritt braucht einen Anker (11 §3).
+    // §30/§57: Meat -> Minced Meat am Fleischwolf.
+    //
+    // STATION_TIMED seit dem 31.08.2026 (vorher STATION_ACTION, 20 s).
+    // Vorgabe Alex: "pro Einheit 30 Sekunden bis 1x Hackfleisch, solange
+    // Fleisch im Cargo liegt". Genau das ist der Unterschied der beiden
+    // Ausfuehrungsarten:
+    //
+    //   STATION_ACTION  der Spieler steht daneben, bis der Balken voll ist,
+    //                   und zwar fuer JEDES Stueck Fleisch einzeln. Fuenf
+    //                   Steaks waeren fuenf Aktionen.
+    //   STATION_TIMED   der Spieler kurbelt EINMAL an, danach gehoert der Takt
+    //                   der Station. Sie startet sich nach jedem Abschluss
+    //                   selbst neu (ChefZ_MeatStations.c) - dasselbe Muster,
+    //                   das die Honigschleuder seit dem Apiary-Slice benutzt.
+    //
+    // 30 statt 20 Sekunden, weil die Zahl jetzt eine andere Bedeutung hat: sie
+    // ist der Takt einer unbeaufsichtigten Station, nicht die Wartezeit eines
+    // anwesenden Spielers.
     class PROCESS_GRIND_MEAT
     {
-        exec = "STATION_ACTION";
+        exec = "STATION_TIMED";
         displayName = "#STR_CHEFZ_PROC_GRIND_MEAT";
-        baseDurationSec = 20.0;
+        baseDurationSec = 30.0;
     };
 
     // §34-§39: Wurst fuellen. STATION_ACTION und ausdruecklich NICHT HANDCRAFT:
@@ -1048,23 +1211,31 @@ class CfgChefZProcesses
     // ein zweiter Ort fuer dieselbe Dauer.
     //--------------------------------------------------------------------------
 
-    // §41/§46: Raeuchern. STATION_TIMED - der Schrank arbeitet stundenlang und
-    // ohne Spieler (11 §3).
+    // §41/§46: Raeuchern. STATION_TIMED - der Schrank arbeitet ohne Spieler
+    // weiter (11 §3).
     //
-    // requiresHeat = 1: §41 nennt "Raw Sausage + Smoker + FUEL". Das ist der
-    // Preis der laengsten Haltbarkeit der Matrix - 30 Minuten Feuer neben dem
-    // Schrank. Ohne diese Bedingung waere Raeuchern strikt besser als Trocknen
-    // und Trocknen damit sinnlos.
+    // 300 statt 1800 Sekunden (31.08.2026, Vorgabe Alex: "vollstaendig
+    // raeuchern dauert 5 Minuten"). Die drei Transforms in
+    // ChefZ_Preservation/Config/Processing/Smoking.json trugen bis dahin
+    // 1800/1500/2400 als durationOverrideSec und stehen jetzt einheitlich
+    // ebenfalls auf 300 - die laengste Haltbarkeit der Matrix kostet damit
+    // nicht mehr Zeit als eine halbe Stunde Realzeit, sondern Brennstoff.
+    // Genau das ist der Handel: fuenf Minuten Vollbrand sind zwei Stueck
+    // Rinde (siehe ChefZ_Smoker.c), und Rinde muss man erst haben.
     //
-    // KEIN minTemperature: die Waermebedingung haengt an einer BRENNENDEN
-    // Feuerstelle in Reichweite, nicht an der Eigentemperatur des Schranks -
-    // dieselbe Festlegung wie bei PROCESS_BOIL_BRINE und aus demselben Grund.
-    // Ein Temperaturschwellwert waere hier eine geratene Zahl.
+    // requiresHeat = 1: §41 nennt "Raw Sausage + Smoker + FUEL". Ohne diese
+    // Bedingung waere Raeuchern strikt besser als Trocknen und Trocknen damit
+    // sinnlos.
+    //
+    // KEIN minTemperature: die Waermebedingung haengt seit dem 31.08.2026 am
+    // EIGENEN Brennzustand des Schranks (ChefZ_Smoker.ChefZ_HasHeat), nicht an
+    // seiner Eigentemperatur. Ein Temperaturschwellwert waere hier eine
+    // geratene Zahl; der Brennzustand ist eine Tatsache.
     class PROCESS_SMOKE
     {
         exec = "STATION_TIMED";
         displayName = "#STR_CHEFZ_PROC_SMOKE";
-        baseDurationSec = 1800.0;
+        baseDurationSec = 300.0;
         requiresHeat = 1;
     };
 

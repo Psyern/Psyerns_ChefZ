@@ -72,6 +72,8 @@ class CfgPatches
             "ChefZ_WildGarlic", "ChefZ_PepperBerries",
             // ### SLICE apiary ###
             "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_BeehiveKit",
+            // Die Projektionshuelle des Aufstellvorgangs (31.08.2026).
+            "ChefZ_BeehivePlacing",
             "ChefZ_HoneycombFrame_Base",
             "ChefZ_HoneycombFrameEmpty",
             "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
@@ -136,6 +138,80 @@ class CfgMods
     };
 };
 
+//==============================================================================
+// ### SLICE apiary ###   Die zwanzig Raehmchenslots des Bienenstocks
+//                        (Umbau vom 31.08.2026, Testbefund Alex: "dort sollten
+//                        slots sein")
+//
+// WARUM SLOTS UND NICHT MEHR CARGO
+// --------------------------------
+// Ein Cargo-Gitter kennt weder Klassen noch Stueckzahlen: es zaehlt Zellen.
+// Deshalb musste das Skript bisher beides nachbilden - die Klassenpruefung in
+// CanReceiveItemIntoCargo, die Obergrenze ueber eine eigene Zaehlschleife, und
+// das Gitter brauchte Reserve (10x9 fuer zehn Raehmchen zu 2x3), damit ein
+// gedrehtes Raehmchen das letzte nicht aussperrt. Ein SLOT kann all das von
+// sich aus: er nimmt genau ein Item, und nur eines, dessen inventorySlot[] ihn
+// nennt. Zehn Slots sind zehn Raehmchen - keine Reserve, keine Zaehlschleife,
+// keine Zelle, in die etwas anderes rutschen koennte.
+//
+// Und der Spieler sieht die Beute so, wie eine Beute aussieht: eine Reihe
+// benannter Plaetze, nicht ein Kistenboden.
+//
+// DIE NAMEN
+// ---------
+// ChefZ_Frame01..ChefZ_Frame20, mit dem Modulpraefix nach DME-Plan §53.
+// Gegen Kollision geprueft (31.08.2026): weder Vanilla (scripts - 1.29/
+// config.cpp, class CfgSlots) noch Terje, Expansion, COT oder irgendein
+// anderes Repo unter "Mod Repositories" fuehrt einen Slot dieses Namens.
+// Der Altbaum ChefZ/ChefZ_Core/slots/config.cpp fuehrt eigene Slots
+// (ChefZ_Honeycomb_Frame01..20) - deren Namen werden BEWUSST NICHT
+// uebernommen: das Addon ist eine Nur-Referenz-Lieferung, und zwei
+// CfgSlots-Eintraege gleichen Namens waeren eine Kollision, sobald beide PBOs
+// auf einem Server liegen.
+//
+// Die Engine findet einen Slot ueber "Slot_" + name (InventorySlots.c,
+// GetSlotIdFromString: "searches for class entry Slot_##slot_name") - deshalb
+// die doppelte Schreibweise aus Klassenname und name-Feld, genau wie in
+// Vanillas eigenem CfgSlots (scripts - 1.29/config.cpp:680-705).
+//
+// ghostIcon fehlt bewusst: alle Vanilla-Icons sind Kleidungs- und
+// Werkzeugsymbole, und ein Rucksacksymbol am Raehmchenplatz waere schlechter
+// als gar keines. Ein eigenes Icon ist als Asset-Bedarf gemeldet.
+//
+// ZWANZIG UND NICHT ZWEIMAL ZEHN. Die Doppelbeute fasst zwanzig Raehmchen und
+// bekommt dafuer die Slots 11..20 ZUSAETZLICH zu 01..10 - keinen zweiten
+// Zehnersatz mit eigenen Namen. Der Grund ist die Vererbung: die Doppelbeute
+// erbt Skript und Config vom Stock, und ChefZ_Beehive.ChefZ_FirstEmptyFrame()
+// laeuft die Slots in EINER durchgehenden Reihenfolge 01..Kapazitaet ab.
+// Zwei getrennte Namensraeume haetten zwei Suchschleifen gebraucht und die
+// Raehmchen haetten zwischen beiden Beuten nicht mehr getauscht werden
+// koennen.
+//==============================================================================
+class CfgSlots
+{
+    class Slot_ChefZ_Frame01 { name = "ChefZ_Frame01"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame02 { name = "ChefZ_Frame02"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame03 { name = "ChefZ_Frame03"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame04 { name = "ChefZ_Frame04"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame05 { name = "ChefZ_Frame05"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame06 { name = "ChefZ_Frame06"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame07 { name = "ChefZ_Frame07"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame08 { name = "ChefZ_Frame08"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame09 { name = "ChefZ_Frame09"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame10 { name = "ChefZ_Frame10"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    // 11..20 nur an der Doppelbeute (ChefZ_BeehiveDouble.attachments[]).
+    class Slot_ChefZ_Frame11 { name = "ChefZ_Frame11"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame12 { name = "ChefZ_Frame12"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame13 { name = "ChefZ_Frame13"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame14 { name = "ChefZ_Frame14"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame15 { name = "ChefZ_Frame15"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame16 { name = "ChefZ_Frame16"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame17 { name = "ChefZ_Frame17"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame18 { name = "ChefZ_Frame18"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame19 { name = "ChefZ_Frame19"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+    class Slot_ChefZ_Frame20 { name = "ChefZ_Frame20"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+};
+
 class CfgVehicles
 {
     // Vorwaertsdeklarationen der Vanilla-Basen. Sie definieren nichts, sie
@@ -156,9 +232,33 @@ class CfgVehicles
     {
         scope = 0;
 
+        // FULLNESS-RESCALE (31.08.2026) - siehe den Banner "DER
+        // EINHEITENFEHLER AM fullnessIndex" weiter unten bei ChefZ_Onion.
+        // Kurz: Magenvolumen = fullnessIndex * gegessene Quantity
+        // (PlayerStomach.c:86, KEIN Teiler 100). Massgeblich fuer ein ganzes
+        // Item ist also fullnessIndex * varQuantityMax.
+        //
+        //   Rechnung: 250 (Zielvolumen) / 1000 (varQuantityMax von
+        //             ChefZ_Wheat) = 0.25
+        //
+        // Vorher stand hier 20. Das ergab 20 * 1000 = 20000 Volumen fuer ein
+        // volles Korn-Item - das Zehnfache der Kotzschwelle
+        // (PlayerConstants.VOMIT_THRESHOLD = 2000, PlayerConstants.c:208).
+        //
+        // ACHTUNG, FREMDE MODULE ERBEN DIESEN WERT. Die Ableitungen dieser
+        // Basis liegen in zwei Mengenwelten:
+        //   varQuantityMax 500..1000 (ChefZ_Flour, ChefZ_RawPasta,
+        //     ChefZ_DriedPasta) - fuer sie ist 0.25 richtig (125..250).
+        //   varQuantityMax 1 (ChefZ_Dough, ChefZ_Bread, ChefZ_Flatbread in
+        //     ChefZ_Baking) - fuer sie ist 0.25 viel zu wenig; sie brauchen
+        //     einen EIGENEN Nutrition-Block mit fullnessIndex ~300
+        //     (Zielvolumen 300 / qtyMax 1). Das ist als Uebergabe an die
+        //     Eigentuemer jener Module gemeldet; hier wird bewusst der
+        //     UNGEFAEHRLICHE Wert gesetzt - zu wenig Saettigung ist laestig,
+        //     zu viel laesst den Spieler beim ersten Bissen erbrechen.
         class Nutrition
         {
-            fullnessIndex = 20;
+            fullnessIndex = 0.25;
             energy = 200;
             water = 10;
             nutritionalIndex = 20;
@@ -168,24 +268,75 @@ class CfgVehicles
 
         class Food
         {
+            // nutrition_properties[0] IST der fullnessIndex der Stufe und
+            // SCHLAEGT class Nutrition, sobald das Item eine FoodStage traegt
+            // (Edible_Base.GetFoodTotalVolume, Edible_Base.c:391-405, ruft
+            // FoodStage.GetFullnessIndex; FoodStage.c:314-317 liest Index 0).
+            // Die Stufenwerte sind deshalb mit demselben Faktor skaliert
+            // (0.25 / 20 = 0.0125), die Verhaeltnisse der Stufen zueinander
+            // bleiben unveraendert.
             class FoodStages
             {
+                //------------------------------------------------------------
+                // DIE ROHSTUFE, die hier bis zum 31.08.2026 FEHLTE - und
+                // deren Fehlen die ganze Getreidekette im Rohzustand
+                // NAEHRWERTLOS machte.
+                //
+                // Die Kette, Schritt fuer Schritt:
+                //   1. Diese Basis fuehrt einen class Food-Block, also traegt
+                //      jedes abgeleitete Item eine FoodStage.
+                //   2. Edible_Base.GetFoodTotalVolume (Edible_Base.c:391-397)
+                //      nimmt bei vorhandener FoodStage IMMER den Stufenwert -
+                //      class Nutrition wird dann gar nicht mehr gelesen.
+                //      GetFoodEnergy (:406-419) und GetFoodWater (:421-434)
+                //      machen dasselbe.
+                //   3. FoodStage.GetNutritionPropertyFromIndex
+                //      (FoodStage.c:262-263) gibt 0 zurueck, wenn die Stufe
+                //      im Stufenbestand der Klasse fehlt.
+                //   4. FoodStageType.RAW = 1 ist der Vorgabezustand
+                //      (FoodStage.c:5, "//default").
+                //
+                // Ergebnis vor dieser Zeile: rohes ChefZ_Wheat, ChefZ_Flour,
+                // ChefZ_Dough, ChefZ_RawPasta und ChefZ_DriedPasta lieferten
+                // fullness 0, energy 0 UND water 0 - der class Nutrition-Block
+                // darueber war fuer sie tote Konfiguration. Nur Gebackenes kam
+                // je an seine Zahlen.
+                //
+                // Die Werte sind deshalb WOERTLICH aus class Nutrition
+                // gespiegelt, nicht neu erfunden: sie machen bekannt, was
+                // ohnehin dastand. Reihenfolge nach FoodStage.c:314-332 -
+                // fullness, energy, water, nutritionalIndex, toxicity, agents,
+                // digestibility.
+                //
+                // Die Gemuesebasis macht es seit jeher richtig
+                // (ChefZ_VegetableFood_Base fuehrt eine Raw-Stufe); hier war
+                // es eine Auslassung, kein Entwurf.
+                //------------------------------------------------------------
+                class Raw
+                {
+                    visual_properties[] = {0.0, 0.0, 0.0};
+                    nutrition_properties[] = {0.25, 200.0, 10.0, 20.0, 0.0, 0.0, 0.0};
+                    cooking_properties[] = {0.0, 0.0, 0.0};
+                };
                 class Baked
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {25.0, 300.0, 10.0, 25.0, 0.0, 0.0, 0.0};
+                    // 25.0 * 0.0125 = 0.31
+                    nutrition_properties[] = {0.31, 300.0, 10.0, 25.0, 0.0, 0.0, 0.0};
                     cooking_properties[] = {100.0, 40.0, 200.0};
                 };
                 class Burned
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {5.0, 20.0, 0.0, 0.0, 5.0, 0.0, 0.0};
+                    // 5.0 * 0.0125 = 0.06
+                    nutrition_properties[] = {0.06, 20.0, 0.0, 0.0, 5.0, 0.0, 0.0};
                     cooking_properties[] = {200.0, 60.0, 250.0};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {5.0, 10.0, 0.0, 0.0, 20.0, 0.0, 0.0};
+                    // 5.0 * 0.0125 = 0.06
+                    nutrition_properties[] = {0.06, 10.0, 0.0, 0.0, 20.0, 0.0, 0.0};
                 };
             };
 
@@ -355,6 +506,65 @@ class CfgVehicles
         };
     };
 
+    //==========================================================================
+    // DER EINHEITENFEHLER AM fullnessIndex (Rescale vom 31.08.2026)
+    //==========================================================================
+    //
+    // WIE DIE ENGINE RECHNET, woertlich:
+    //
+    //     volume = m_Profile.GetFullnessIndex() * m_Amount;
+    //     -- scripts - 1.29, 4_World/DayZ/Classes/PlayerStomach.c:86
+    //
+    // m_Amount ist die GEGESSENE QUANTITY, nicht ein Prozentsatz. Es gibt
+    // KEINEN Teiler 100 - anders als bei energy und water, die die Zeile
+    // darueber ausdruecklich durch 100 teilt (PlayerStomach.c:92-93). Ein
+    // fullnessIndex ist also kein "Index", sondern ein Faktor je
+    // Mengeneinheit.
+    //
+    // Die Schwellen, gegen die das Ergebnis laeuft:
+    //   2000  Erbrechen  - PlayerConstants.VOMIT_THRESHOLD (PlayerConstants.c:208)
+    //   1000  "Stuffed"  - PlayerConstants.BT_STOMACH_VOLUME_LVL3 (:200)
+    //     25  ein grosser Bissen - UAQuantityConsumed.EAT_BIG (ActionConstants.c:9)
+    //
+    // MASSGEBLICH IST DESHALB fullnessIndex * varQuantityMax - das Volumen
+    // eines ganzen Items. Fuer jede Klasse steht die Rechnung
+    // "Zielvolumen / qtyMax" als Kommentar am Wert.
+    //
+    // WARUM DIE ZAHLEN HIER SO GROSS AUSSEHEN. Vanillas eigenes Band liegt
+    // bei 0,75..2,5 (belegt an fremdem Content, der dieselbe Engine benutzt:
+    // DayZExpansion/Objects/Gear/Consumables/config.cpp:152 fuehrt Brot mit
+    // fullnessIndex 2 bei varQuantityMax 125 - Volumen 250). Dieses Band gilt
+    // fuer Items, deren Quantity in GRAMM gefuehrt wird. ChefZ-Gemuese und
+    // -Kraeuter sind STUECKWARE mit varQuantityMax = 1 (die Zutatenrechnung
+    // haengt daran: unitsPerWholeItem 1, ChefZ_FactCollector rechnet
+    // quantity / quantityMax * unitsPerWholeItem). Bei qtyMax = 1 IST der
+    // fullnessIndex das Volumen - deshalb dreistellige Werte, die dasselbe
+    // aussagen wie Vanillas 2 bei 125 Gramm. Die Quantity wird NICHT
+    // angefasst; sie umzustellen hiesse, jede Zutatenmenge des Projekts
+    // nachzuziehen.
+    //
+    // DIE RELATIVE ORDNUNG DER ALTEN WERTE BLEIBT ERHALTEN:
+    //   Pfefferbeeren 4 < Kraeuter 5 < Knoblauch 8 < Zwiebel 25 <
+    //   Karotte 30 < Kohl 45 < Mais 60
+    //   ->  50 < 55 < 70 < 120 < 140 < 180 < 220
+    //
+    // UND DIE GARSTUFEN WERDEN MITSKALIERT. nutrition_properties[0] ist der
+    // fullnessIndex der Stufe und SCHLAEGT class Nutrition, sobald das Item
+    // eine FoodStage traegt: Edible_Base.GetFoodTotalVolume
+    // (Edible_Base.c:391-405) fragt zuerst FoodStage.GetFullnessIndex, und
+    // die liest Index 0 des Stufenfeldes (FoodStage.c:314-317). Ein Rescale
+    // nur am Nutrition-Block waere an gekochtem Gemuese wirkungslos. Jede
+    // Stufe wird mit demselben Faktor multipliziert; die Verhaeltnisse der
+    // Stufen zueinander bleiben unveraendert.
+    //
+    // NICHT MITSKALIERT wird das "stomach"-Feld der Registry-Deltas. Es
+    // fliesst zur Laufzeit nirgends ein: ChefZ_NutritionDef sagt im
+    // Dateikopf woertlich "Was hier steht, wird NIE an ein Item geschrieben
+    // und NIE beim Verzehr angewandt" - es ist die Sollrechnung des
+    // Startaudits (13 E1). Ein Mitskalieren dort wuerde die Auditzahlen von
+    // den Configzahlen entkoppeln, ohne im Spiel irgendetwas zu bewirken.
+    //==========================================================================
+
     // --- §17 Zwiebel ---------------------------------------------------------
 
     class ChefZ_Onion : ChefZ_VegetableFood_Base
@@ -366,7 +576,9 @@ class CfgVehicles
         weight = 160;
         class Nutrition
         {
-            fullnessIndex = 25;
+            // 120 (Zielvolumen) / 1 (varQuantityMax) = 120. Faktor 4.8
+            // gegenueber der alten 25 (PlayerStomach.c:86).
+            fullnessIndex = 120;
             energy = 90;
             water = 55;
             nutritionalIndex = 30;
@@ -377,15 +589,18 @@ class CfgVehicles
         // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
         // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
         // Vitamine, Verbrannt und Verdorben sind Verlust.
+        //
+        // Index 0 mit Faktor 4.8 nachgezogen (FoodStage.c:314-317):
+        // 25->120, 22->106, 24->115, 6->29, 6->29.
         class Food
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {25, 90, 55, 30, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {22, 105, 25, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {24, 95, 63, 26, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {6, 14, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {6, 14, 11, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {120, 90, 55, 30, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {106, 105, 25, 32, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {115, 95, 63, 26, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {29, 14, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {29, 14, 11, 0, 15, 0, 1}; };
             };
         };
     };
@@ -401,7 +616,9 @@ class CfgVehicles
         weight = 60;
         class Nutrition
         {
-            fullnessIndex = 8;
+            // 70 (Zielvolumen) / 1 (varQuantityMax) = 70. Faktor 8.75
+            // gegenueber der alten 8 (PlayerStomach.c:86).
+            fullnessIndex = 70;
             energy = 40;
             water = 15;
             nutritionalIndex = 40;
@@ -412,15 +629,18 @@ class CfgVehicles
         // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
         // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
         // Vitamine, Verbrannt und Verdorben sind Verlust.
+        //
+        // Index 0 mit Faktor 8.75 nachgezogen (FoodStage.c:314-317):
+        // 8->70, 7->61, 8->70, 2->18, 2->18.
         class Food
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {8, 40, 15, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {7, 46, 7, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {8, 42, 17, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {2, 6, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {2, 6, 3, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {70, 40, 15, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {61, 46, 7, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {70, 42, 17, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {18, 6, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {18, 6, 3, 0, 15, 0, 1}; };
             };
         };
     };
@@ -437,7 +657,9 @@ class CfgVehicles
         weight = 120;
         class Nutrition
         {
-            fullnessIndex = 30;
+            // 140 (Zielvolumen) / 1 (varQuantityMax) = 140. Faktor 4.667
+            // gegenueber der alten 30 (PlayerStomach.c:86).
+            fullnessIndex = 140;
             energy = 100;
             water = 60;
             nutritionalIndex = 45;
@@ -448,15 +670,18 @@ class CfgVehicles
         // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
         // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
         // Vitamine, Verbrannt und Verdorben sind Verlust.
+        //
+        // Index 0 mit Faktor 4.667 nachgezogen (FoodStage.c:314-317):
+        // 30->140, 27->126, 29->135, 8->37, 8->37.
         class Food
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {30, 100, 60, 45, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {27, 115, 27, 47, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {29, 105, 69, 38, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {8, 15, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {8, 15, 12, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {140, 100, 60, 45, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {126, 115, 27, 47, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {135, 105, 69, 38, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {37, 15, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {37, 15, 12, 0, 15, 0, 1}; };
             };
         };
     };
@@ -493,7 +718,11 @@ class CfgVehicles
         };
         class Nutrition
         {
-            fullnessIndex = 60;
+            // 220 (Zielvolumen) / 1 (varQuantityMax) = 220. Faktor 3.667
+            // gegenueber der alten 60 (PlayerStomach.c:86). Der Kolben bleibt
+            // das saettigendste Fundgut dieses Moduls - die Ordnung der alten
+            // Werte ist erhalten.
+            fullnessIndex = 220;
             energy = 180;
             water = 40;
             nutritionalIndex = 40;
@@ -504,15 +733,18 @@ class CfgVehicles
         // Stufen-Naehrwerte nach demselben Muster wie die Karotte: Gebacken
         // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
         // Vitamine, Verbrannt und Verdorben sind Verlust.
+        //
+        // Index 0 mit Faktor 3.667 nachgezogen (FoodStage.c:314-317):
+        // 60->220, 54->198, 58->213, 15->55, 15->55.
         class Food
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {60, 180, 40, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {54, 205, 18, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {58, 190, 46, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {15, 27, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {15, 27, 8, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {220, 180, 40, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {198, 205, 18, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {213, 190, 46, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {55, 27, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {55, 27, 8, 0, 15, 0, 1}; };
             };
         };
     };
@@ -529,7 +761,9 @@ class CfgVehicles
         itemSize[] = {2, 2};
         class Nutrition
         {
-            fullnessIndex = 45;
+            // 180 (Zielvolumen) / 1 (varQuantityMax) = 180. Faktor 4.0
+            // gegenueber der alten 45 (PlayerStomach.c:86).
+            fullnessIndex = 180;
             energy = 110;
             water = 80;
             nutritionalIndex = 40;
@@ -540,15 +774,18 @@ class CfgVehicles
         // Stufen-Naehrwerte (01 V7). Rohwerte = class Nutrition; Gebacken
         // trocknet aus und verdichtet, Gekocht zieht Wasser und verliert
         // Vitamine, Verbrannt und Verdorben sind Verlust.
+        //
+        // Index 0 mit Faktor 4.0 nachgezogen (FoodStage.c:314-317):
+        // 45->180, 40->160, 43->172, 11->44, 11->44.
         class Food
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {45, 110, 80, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {40, 125, 36, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {43, 115, 92, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {11, 17, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {11, 17, 16, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {180, 110, 80, 40, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {160, 125, 36, 42, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {172, 115, 92, 34, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {44, 17, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {44, 17, 16, 0, 15, 0, 1}; };
             };
         };
     };
@@ -598,9 +835,15 @@ class CfgVehicles
         varQuantityMax = 1;
         lifetime = 14400;
 
+        // KEINE FoodStages an dieser Basis (siehe Bannerkommentar oben) -
+        // hier gilt deshalb class Nutrition unmittelbar, und der Rescale
+        // erschoepft sich in dieser einen Zahl.
         class Nutrition
         {
-            fullnessIndex = 5;
+            // 55 (Zielvolumen) / 1 (varQuantityMax) = 55. Faktor 11
+            // gegenueber der alten 5 (PlayerStomach.c:86). Kraeuter bleiben
+            // das leichteste Fundgut nach den Pfefferbeeren.
+            fullnessIndex = 55;
             energy = 15;
             water = 12;
             nutritionalIndex = 25;
@@ -650,7 +893,10 @@ class CfgVehicles
         model = "\dz\gear\food\Sambucus_nigra.p3d";
         class Nutrition
         {
-            fullnessIndex = 4;
+            // 50 (Zielvolumen) / 1 (varQuantityMax) = 50. Faktor 12.5
+            // gegenueber der alten 4 (PlayerStomach.c:86). Der kleinste Wert
+            // des Moduls - so war es vorher, so bleibt es.
+            fullnessIndex = 50;
             energy = 12;
             water = 8;
             nutritionalIndex = 10;
@@ -727,7 +973,7 @@ class CfgVehicles
     //             steigenden Balken (varQuantity 0..100): das Volk fuellt
     //             die Raehmchen EINES NACH DEM ANDEREN, vier Stunden je
     //             Raehmchen. Bei 100 ersetzt der Stock es in seiner
-    //             Cargo-Zelle durch Full.
+    //             Raehmchenslot durch Full.
     //   Full      voll und verdeckelt. Nur bei geoeffnetem Stock entnehmbar
     //             - und Oeffnen ist der Moment, in dem gestochen wird.
     //   Uncapped  entdeckelt, schleuderfertig (Frame_Ready_To_Spin). Traegt
@@ -758,19 +1004,27 @@ class CfgVehicles
     //
     // WARUM STATION UND NICHT ETWAS ANDERES: der Auftrag sagt "Bienenstock
     // oeffnen" und "vollen Rahmen entnehmen". Beides setzt einen Innenraum
-    // voraus, in dem Raehmchen liegen - und genau das ist der Cargo-Bereich,
-    // aus dem ChefZ_ProcessingStation_Base ueber
-    // ChefZ_FactCollector.CollectFromCargo seine Zutaten liest. Ein Item ohne
-    // Cargo koennte nichts aufnehmen; im Projekt sind Stationen genau daran
-    // schon gescheitert (das fruehere Schneidebrett in ChefZ_Processing).
+    // voraus, in dem Raehmchen liegen.
     //
-    // class Cargo IST der Innenraum - die Zargen. 10x9 sind neunzig Zellen
-    // fuer zehn Raehmchen zu 2x3 - mit Reserve, nicht auf den Punkt: Vanilla
-    // darf ein Item gedreht ablegen, und der Spieler darf Raehmchen im Gitter
-    // verschieben; ein einziges versetztes Raehmchen liesse in einem Gitter
-    // ohne Luft das zehnte nicht mehr hinein. Dass es nicht mehr als zehn
-    // werden und nichts anderes hineinkommt, zaehlt das Skript ueber
-    // CanReceiveItemIntoCargo, nicht das Gitter.
+    // SEIT DEM 31.08.2026 IST DIESER INNENRAUM EIN SATZ ATTACHMENT-SLOTS,
+    // KEIN CARGO (Testbefund Alex: "dort sollten slots sein!!"). Die zehn
+    // Zargenplaetze heissen ChefZ_Frame01..ChefZ_Frame10 und stehen oben in
+    // class CfgSlots; die vollstaendige Begruendung steht dort. Kurz: ein
+    // Slot nimmt genau ein Raehmchen und nur ein Raehmchen, waehrend ein
+    // Cargo-Gitter Zellen zaehlt und die Klassen- wie die Stueckzahlgrenze
+    // dem Skript ueberlassen musste.
+    //
+    // class Cargo ist damit ERSATZLOS ENTFALLEN. Der Stationsteil leidet
+    // nicht darunter: ChefZ_FactCollector.CollectFromCargo kehrt bei einem
+    // Behaelter ohne Cargo mit leerem Schnappschuss zurueck (Z.195-197), und
+    // die beiden Vorgaenge dieser Station - PROCESS_HARVEST_HIVE und
+    // PROCESS_PACK_HIVE - haben ohnehin keinen Transform und damit keine
+    // Zutat.
+    //
+    // SPIELSTAND: Raehmchen, die in einem gespeicherten Stock im CARGO
+    // liegen, findet die Engine nach diesem Umbau nicht mehr wieder - dort
+    // ist kein Cargo mehr. Der Punkt steht in README_Apiary.md unter
+    // "Spielstand".
     //
     // lifetime deutlich ueber der Fuellzeit: zehn Raehmchen brauchen vierzig
     // Stunden Serverlaufzeit, und die CE-Lebensdauer laeuft in derselben Zeit
@@ -825,11 +1079,64 @@ class CfgVehicles
         varQuantityDestroyOnMin = 0;
         lifetime = 604800;
 
-        class Cargo
+        // HOLOGRAMM-MATERIAL des Aufstellvorgangs (### 31.08.2026 ###).
+        // Hologram.RefreshVisual() (Hologram.c:1554-1557) liest beide
+        // Schluessel an der PROJEKTIONSKLASSE und setzt daraus einen
+        // Materialpfad. Sie stehen hier, weil ChefZ_BeehivePlacing sie erbt.
+        //
+        // BEIDE LEER, und das ist kein Vergessen: ein Geisterschimmer braucht
+        // ein .rvmat, das zum Modell gehoert, und das Beutenmodell der
+        // Lieferung bringt keines mit. Leer ist der belegte Weg fuer genau
+        // diesen Fall - DayZExpansion/Objects/Basebuilding/Safes/config.cpp:
+        // 121-122 macht es an seinen Tresoren genauso. Der Spieler sieht dann
+        // die Beute in normaler Textur schweben, statt gar nichts. Ein
+        // eigenes Hologrammaterial ist als Asset-Bedarf gemeldet.
+        hologramMaterial = "";
+        hologramMaterialPath = "";
+
+        // DIE ZEHN RAEHMCHENPLAETZE (### 31.08.2026 ###, loest class Cargo ab).
+        // Reihenfolge = Fuellreihenfolge: ChefZ_Beehive.ChefZ_FirstEmptyFrame()
+        // laeuft 01..ChefZ_FrameCapacity() ab und fuellt das erste leere.
+        attachments[] =
         {
-            itemsCargoSize[] = {10, 9};
-            openable = 0;
+            "ChefZ_Frame01", "ChefZ_Frame02", "ChefZ_Frame03", "ChefZ_Frame04",
+            "ChefZ_Frame05", "ChefZ_Frame06", "ChefZ_Frame07", "ChefZ_Frame08",
+            "ChefZ_Frame09", "ChefZ_Frame10"
         };
+    };
+
+    //--------------------------------------------------------------------------
+    // Die Projektion des Aufstellvorgangs (### 31.08.2026 ###).
+    //
+    // WOZU SIE DA IST: Vanillas Hologramm erzeugt beim Platzieren ein ECHTES
+    // Objekt der Projektionsklasse (Hologram.c:113-121, CreateObjectEx) und
+    // haengt es dem Spieler vor die Nase. Waere das ChefZ_Beehive selbst,
+    // entstuende bei jedem Aufstellversuch eine vollwertige Station mit
+    // Fuelltimer und zwanzig Slots, nur um sie gleich wieder wegzuwerfen.
+    //
+    // Deshalb eine eigene, leere Huelle: dasselbe Modell, dieselbe Silhouette
+    // fuer die Kollisionspruefung, aber ohne Slots, ohne Station, ohne Skript.
+    // Das ist Vanillas eigenes Muster - Hologram.GetProjectionName()
+    // (Hologram.c:239-243) haengt an jeden Bausatz ein "Placing" an; der
+    // Bausatz nennt diese Klasse ausdruecklich ueber projectionTypename
+    // (Hologram.c:104-109), damit der Name nicht aus einer Zeichenkette
+    // zusammengesetzt werden muss.
+    //
+    // scope = 0: sie ist nie Loot, nie handelbar, nie im Inventar.
+    //--------------------------------------------------------------------------
+    class ChefZ_BeehivePlacing : Inventory_Base
+    {
+        scope = 0;
+        displayName = "#STR_CHEFZ_ITEM_BEEHIVE";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DESC";
+        model = "\ChefZ\ChefZ_Devices\models\beekeeper.p3d";
+        rotationFlags = 2;
+        itemSize[] = {6, 5};
+        weight = 14000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        hologramMaterial = "";
+        hologramMaterialPath = "";
     };
 
     //--------------------------------------------------------------------------
@@ -837,13 +1144,19 @@ class CfgVehicles
     //
     // Zwanzig Raehmchen, achtzig Stunden, sonst in allem der Stock - sie erbt
     // config UND Skript von ChefZ_Beehive und aendert nur Fassungsvermoegen,
-    // Groesse, Gewicht und Lebensdauer. 10x15 sind zwanzig Raehmchen zu 2x3
-    // mit derselben Reserve wie beim Stock; die Lebensdauer ist verdoppelt,
-    // weil auch die Fuellzeit (achtzig Stunden) die doppelte ist.
+    // Groesse, Gewicht und Lebensdauer. Die Lebensdauer ist verdoppelt, weil
+    // auch die Fuellzeit (achtzig Stunden) die doppelte ist.
+    //
+    // Ihre attachments[]-Liste wiederholt die zehn Slots des Stocks und
+    // haengt zehn weitere an (### 31.08.2026 ###). Eine Ueberschreibung
+    // ERSETZT das geerbte Feld vollstaendig - die ersten zehn muessen deshalb
+    // noch einmal dastehen, sonst haette die Doppelbeute nur die Plaetze
+    // 11..20. Warum nicht ein zweiter, eigener Zehnersatz: siehe class
+    // CfgSlots oben, letzter Absatz.
     //
     // Sie entsteht aus ZWEI Bausaetzen (TR_ExtendBeehive), nicht aus einem
     // aufgestellten Stock plus Bausatz: ein Handwerksschritt verbraucht seine
-    // Zutat samt Cargo, und ein bestueckter Stock verloere dabei seine
+    // Zutat samt allem, was an ihr haengt, und ein bestueckter Stock verloere seine
     // Raehmchen.
     //
     // PROXY: dieselbe Holzkiste wie der Stock. Eigenes Mesh mit zwei Zargen
@@ -860,10 +1173,14 @@ class CfgVehicles
         weight = 26000;
         lifetime = 1209600;
 
-        class Cargo
+        attachments[] =
         {
-            itemsCargoSize[] = {10, 15};
-            openable = 0;
+            "ChefZ_Frame01", "ChefZ_Frame02", "ChefZ_Frame03", "ChefZ_Frame04",
+            "ChefZ_Frame05", "ChefZ_Frame06", "ChefZ_Frame07", "ChefZ_Frame08",
+            "ChefZ_Frame09", "ChefZ_Frame10",
+            "ChefZ_Frame11", "ChefZ_Frame12", "ChefZ_Frame13", "ChefZ_Frame14",
+            "ChefZ_Frame15", "ChefZ_Frame16", "ChefZ_Frame17", "ChefZ_Frame18",
+            "ChefZ_Frame19", "ChefZ_Frame20"
         };
     };
 
@@ -877,11 +1194,63 @@ class CfgVehicles
     // gepackt (3x2, 6 kg) und laesst sich tragen; der aufgestellte Stock ist
     // 6x5 und 14 kg. Gebaut wird am Lager, aufgestellt wird an der Wiese.
     //
-    // KEIN Hologramm-Deploy: das waere ein neues System (CanBePlaced,
-    // ActionPlaceObject, Hologramm-Config) und steht diesem Slice nicht zu.
-    // Der zweite Schritt laeuft als gewoehnlicher Handwerksschritt
-    // (PROCESS_RAISE_HIVE) - genauso, wie die uebrigen Stationen des Projekts
-    // entstehen.
+    // ZWEI WEGE ZUM AUFGESTELLTEN STOCK (### 31.08.2026 ###, Testbefund Alex:
+    // "das Kit soll platzierbar sein wie Vanilla-Kits").
+    //
+    //   1. PLATZIEREN wie ein Vanilla-Bausatz: Kit in die Hand, Hologramm
+    //      anwerfen, hinstellen. Neu.
+    //   2. PROCESS_RAISE_HIVE, der gewoehnliche Handwerksschritt mit einem
+    //      Werkzeug der Gruppe HAND_TOOL. BLEIBT unveraendert bestehen - er
+    //      ist der Weg, der auch ohne freie Flaeche vor dem Spieler
+    //      funktioniert, und die uebrigen Stationen des Projekts entstehen
+    //      genauso.
+    //
+    // Hier stand vorher "KEIN Hologramm-Deploy: das waere ein neues System".
+    // Das war nicht falsch, nur zu vorsichtig: ein neues SYSTEM ist es nicht.
+    // Vanilla bringt alles mit, und der Bausatz muss nur vier Aussagen
+    // machen - drei davon in dieser Config, eine im Skript:
+    //
+    //   itemBehaviour       = 2   welche Aufstellanimation. 0 schwer,
+    //                             1 einhaendig, 2 zweihaendig
+    //                             (ItemBase.c:65, ausgewertet in
+    //                             ActionDeployObject.SetupAnimation,
+    //                             ActionDeployObject.c:306-326). Ein Bausatz
+    //                             von 6 kg und 3x2 wird zweihaendig getragen.
+    //   projectionTypename        WAS im Hologramm schwebt
+    //                             (Hologram.c:104-109). Ohne diesen Eintrag
+    //                             haengt Vanilla an einen Bausatz die
+    //                             Zeichenkette "Placing" an
+    //                             (Hologram.c:239-243) und suchte nach
+    //                             "ChefZ_BeehiveKitPlacing" - ein Name, der
+    //                             nur aus einer Rechenregel entstuende.
+    //                             Ausgeschrieben ist er nachschlagbar.
+    //   hologramMaterial/-Path    stehen an der Projektionsklasse, siehe dort.
+    //
+    //   Skript (ChefZ_Apiary.c):
+    //     IsDeployable()          true - sonst bietet ActionDeployObject
+    //                             nichts an (Vorbild HescoBox.c:225-228).
+    //     IsBasebuildingKit()     true - DAS ist der Schalter, der den
+    //                             Bausatz nach dem Aufstellen verbraucht:
+    //                             ActionDeployObject.OnEndServer
+    //                             (ActionDeployObject.c:230-233) loescht
+    //                             genau dann das Item in der Hand. Er sorgt
+    //                             ausserdem dafuer, dass der Bausatz waehrend
+    //                             des Aufstellens IN DER HAND bleibt und
+    //                             nicht selbst an die Zielstelle wandert
+    //                             (ActionDeployBase.c:191, :208).
+    //     SetActions()            ActionTogglePlaceObject + ActionDeployObject
+    //                             (woertlich KitBase.c:146-152).
+    //     OnPlacementComplete()   erzeugt den ChefZ_Beehive an Position und
+    //                             Ausrichtung des Hologramms - woertlich
+    //                             FenceKit.c:19-33 und TotemKit.c:32-48.
+    //
+    // KEINE Ableitung von KitBase, obwohl das naheliegt: KitBase haengt sich
+    // in EEInit ein Seil an (KitBase.c:116-122, CreateAttachment("Rope")) und
+    // schaltet in UpdateVisuals die Modellselektionen "Inventory" und
+    // "Placing" (KitBase.c:104-114). Beides setzt ein Modell mit genau diesen
+    // Teilen voraus; wooden_case.p3d hat sie nicht, und einen Rope-Slot hat
+    // dieser Bausatz auch nicht. Uebernommen wird deshalb nur, was ohne
+    // Modellzusagen auskommt.
     //
     // PROXY: dieselbe Holzkiste, kleiner gefuehrt.
     //--------------------------------------------------------------------------
@@ -897,6 +1266,10 @@ class CfgVehicles
         absorbency = 0.0;
         canBeDigged = 0;
         lifetime = 43200;
+
+        // Aufstellen (### 31.08.2026 ###) - siehe den Bannerkommentar oben.
+        itemBehaviour = 2;
+        projectionTypename = "ChefZ_BeehivePlacing";
     };
 
     //--------------------------------------------------------------------------
@@ -940,6 +1313,29 @@ class CfgVehicles
         canBeSplit = 0;
         lifetime = 43200;
         repairableWithKits[] = {};
+
+        // IN WELCHE PLAETZE EIN RAEHMCHEN PASST (### 31.08.2026 ###). Ohne
+        // dieses Feld nimmt kein Slot es an - die Engine prueft beide
+        // Richtungen: attachments[] am Stock sagt, welche Plaetze es gibt,
+        // inventorySlot[] am Raehmchen sagt, in welche es darf.
+        //
+        // Alle ZWANZIG stehen hier, nicht nur zehn: dasselbe Raehmchen soll
+        // sich zwischen Stock (01..10) und Doppelbeute (01..20) hin- und
+        // herlegen lassen. An der Basis und nicht an jeder der drei Klassen -
+        // leer, voll und entdeckelt passen in dieselben Plaetze. Dass ein
+        // ENTDECKELTES Raehmchen nicht in den Stock zurueckdarf, ist eine
+        // Spielregel und steht deshalb im Skript
+        // (ChefZ_Beehive.CanReceiveAttachment), nicht in der Config: ein
+        // Slot kann "nur leer oder voll" nicht ausdruecken.
+        inventorySlot[] =
+        {
+            "ChefZ_Frame01", "ChefZ_Frame02", "ChefZ_Frame03", "ChefZ_Frame04",
+            "ChefZ_Frame05", "ChefZ_Frame06", "ChefZ_Frame07", "ChefZ_Frame08",
+            "ChefZ_Frame09", "ChefZ_Frame10",
+            "ChefZ_Frame11", "ChefZ_Frame12", "ChefZ_Frame13", "ChefZ_Frame14",
+            "ChefZ_Frame15", "ChefZ_Frame16", "ChefZ_Frame17", "ChefZ_Frame18",
+            "ChefZ_Frame19", "ChefZ_Frame20"
+        };
     };
 
     //! Auftrag: "Honigwabe_Leer". Ergebnis von TR_BuildHoneycombFrame und
@@ -973,8 +1369,8 @@ class CfgVehicles
 
     //! Auftrag: "Honigwabe_Voll" / "Honeycomb_Frame_Full". Entsteht im
     //! Stock, wenn der Balken des Leerraehmchens voll ist, in derselben
-    //! Cargo-Zelle. KEINE varQuantity: voll ist voll. Entnehmbar nur bei
-    //! geoeffnetem Stock (Skript, CanReleaseCargo).
+    //! Raehmchenslot. KEINE varQuantity: voll ist voll. Entnehmbar nur bei
+    //! geoeffnetem Stock (Skript, CanReleaseAttachment).
     class ChefZ_HoneycombFrameFull : ChefZ_HoneycombFrame_Base
     {
         scope = 2;
@@ -985,34 +1381,47 @@ class CfgVehicles
 
     //! Auftrag: "Frame_Ready_To_Spin". Eingang der Honigschleuder.
     //!
-    //! varQuantity 4..1 = DREI GLAESER VORRAT plus eine Reserve-Einheit
-    //! (Auftrag 4: ein Rahmen ergibt drei Glaeser). Die Schleuder zieht je
-    //! Glas eine Einheit ab (Zutatendatensatz: unitsPerWholeItem 4, Verbrauch
-    //! 1.0 je Durchlauf, Untergrenze 2.0); unterhalb von zwei gibt sie das
-    //! Raehmchen leer zurueck.
+    //! VIER GLAESER JE RAHMEN, UND DER RAHMEN KOMMT LEER ZURUECK
+    //! (### 31.08.2026 ###, Testbefund Alex: es sollen vier sein, nicht drei).
     //!
-    //! WARUM VIER UND NICHT DREI: der Core loescht ein Item, sobald ein
-    //! Mengenabzug seine letzte Einheit traefe (ChefZ_SlotEvaluator.
-    //! PlanAmountDraw setzt destroyWhole, der Applicator ruft Delete). Mit
-    //! drei Einheiten waere der Rahmen nach dem dritten Glas weg - kein
-    //! Leerrahmen, ein Brett und zwei Naegel je Durchlauf verloren. Die
-    //! vierte Einheit wird nie gezogen; sie ist der Boden, auf dem der Rahmen
-    //! die Schleuder ueberlebt. Init 4, weil ein frisch entdeckeltes Raehmchen
-    //! voll ist - TR_UncapHoneycombFrame setzt deshalb KEINE quantity.
+    //! varQuantity 5..1, unitsPerWholeItem 5 - VIER GLAESER VORRAT PLUS EINE
+    //! RESERVE-EINHEIT. Die Schleuder zieht je Durchlauf 1.0 ab und verlangt
+    //! dafuer mindestens 2.0 (Zutatendatensatz und TR_SpinHoney): die Zuege
+    //! geschehen bei 5, 4, 3 und 2 - vier Glaeser. Bei Reststand 1
+    //! unterschreitet der Rahmen die Schwelle, und das Skript der Schleuder
+    //! wandelt ihn in seinem Slot zu ChefZ_HoneycombFrameEmpty zurueck. Die
+    //! Kette ist damit ein KREIS und kein Strahl.
     //!
-    //! quantityShow = 0: die Zahl "4" hiesse fuer den Spieler vier Glaeser,
-    //! und das waere gelogen. Der Balken sinkt in Vierteln und reicht als
-    //! Anzeige. Das Ergebnis, Honey, ist Vanilla und bekommt keine Menge
-    //! gesetzt.
+    //! VORHER standen hier 4 Einheiten. Dasselbe Muster eine Stufe tiefer -
+    //! Zuege bei 4, 3 und 2, also nur DREI Glaeser. Geaendert hat sich einzig
+    //! die Stufenhoehe, nicht die Bauform.
+    //!
+    //! WARUM DIE RESERVE-EINHEIT BLEIBT und "Verbrauch bis 0" ausdruecklich
+    //! VERWORFEN wurde (Abstimmung mit dem Slice processing, 31.08.2026):
+    //! ChefZ_SlotEvaluator.PlanAmountDraw (Z.369-376) setzt destroyWhole,
+    //! sobald ein Abzug die LETZTE Einheit eines Items traefe, und der
+    //! Applicator loescht das Item dann, statt es auf 0 zu setzen. Ein Rahmen,
+    //! der bis 0 gezogen wird, ist am Ende ZERSTOERT - es kaeme kein
+    //! Leerrahmen zurueck, und genau der ist gefordert. Die fuenfte Einheit
+    //! wird nie gezogen; sie ist der Boden, auf dem der Rahmen die Schleuder
+    //! ueberlebt.
+    //!
+    //! Init 5, weil ein frisch entdeckeltes Raehmchen voll ist -
+    //! TR_UncapHoneycombFrame setzt deshalb KEINE quantity.
+    //!
+    //! quantityShow = 0: die Zahl "5" hiesse fuer den Spieler fuenf Glaeser,
+    //! und das waere gelogen - es sind vier. Der Balken sinkt in Fuenfteln und
+    //! reicht als Anzeige. Das Ergebnis, Honey, ist Vanilla und bekommt keine
+    //! Menge gesetzt.
     class ChefZ_HoneycombFrameUncapped : ChefZ_HoneycombFrame_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_COMBFRAME_UNCAPPED";
         descriptionShort = "#STR_CHEFZ_ITEM_COMBFRAME_UNCAPPED_DESC";
         weight = 2100;
-        varQuantityInit = 4;
+        varQuantityInit = 5;
         varQuantityMin = 0;
-        varQuantityMax = 4;
+        varQuantityMax = 5;
         quantityBar = 1;
         quantityShow = 0;
     };
@@ -1208,7 +1617,10 @@ class CfgChefZ
     // erscheint kein einziges der Rezepte, und zwar OHNE Fehlermeldung an der
     // Stelle, an der man sucht (Kopf von ChefZ_HandcraftBridge.c).
     //
-    // Die sieben, einer je HANDCRAFT-Transform dieses Slice:
+    // Die ACHT, einer je HANDCRAFT-Transform dieses Slice. Die Liste fuehrte
+    // bis zum 31.08.2026 nur sieben - TR_FillBeeSmoker fehlte, obwohl die
+    // Zahl darueber laengst 8 war. Ein Nachtrageversaeumnis, kein
+    // Rechenfehler; dieselbe Luecke stand im README_Apiary.md:
     //
     //   TR_BuildBeehiveKit      PROCESS_BUILD_HIVE_KIT
     //   TR_RaiseBeehive         PROCESS_RAISE_HIVE
@@ -1217,6 +1629,7 @@ class CfgChefZ
     //   TR_BuildUncappingFork   PROCESS_BUILD_UNCAPPING_FORK
     //   TR_BuildBeeSmoker       PROCESS_BUILD_BEE_SMOKER
     //   TR_UncapHoneycombFrame  PROCESS_UNCAP_COMB
+    //   TR_FillBeeSmoker        PROCESS_FILL_SMOKER
     //
     // Die drei Stationsvorgaenge (PROCESS_HARVEST_HIVE, PROCESS_PACK_HIVE,
     // PROCESS_SPIN_HONEY) brauchen KEINEN Platz - sie laufen ueber ChefZ_ActionProcessAtStation
@@ -1285,10 +1698,11 @@ class CfgChefZIngredients
 class CfgChefZProcesses
 {
     //--------------------------------------------------------------------------
-    // ### SLICE apiary ###   Die acht Verben der Imkerei
+    // ### SLICE apiary ###   Die zehn Verben der Imkerei
     //
-    // Sieben davon sind HANDCRAFT, eines ist eine Stationsaktion (Oeffnen des
-    // Stocks). Das Schleudern steht in ChefZ_Processing bei seiner Station.
+    // Acht davon sind HANDCRAFT, zwei sind Stationsaktionen (Oeffnen und
+    // Abbauen des Stocks). Das Schleudern steht in ChefZ_Processing bei seiner
+    // Station.
     //
     // Rang 1 und nicht JSON, aus demselben Grund, den ChefZ_Processing an
     // seinen Prozessen ausschreibt: ChefZ_ActionProcessAtStation.
@@ -1414,7 +1828,7 @@ class CfgChefZProcesses
     //! Die Doppelbeute aus ZWEI Bausaetzen. Zwei Eingaenge, deshalb KEINE
     //! toolGroups - beide Zutatenplaetze sind belegt (01 V12), dieselbe
     //! Form wie PROCESS_BUILD_HIVE_KIT. Nicht Stock plus Bausatz: ein
-    //! Handwerksschritt verbraucht die Zutat samt Cargo, ein bestueckter
+    //! Handwerksschritt verbraucht die Zutat samt Anhaengern, ein bestueckter
     //! Stock verloere seine Raehmchen.
     class PROCESS_EXTEND_HIVE
     {
@@ -1440,7 +1854,7 @@ class CfgChefZProcesses
     //! Auftrag: "[Bienenstock oeffnen] -> (Smoker in der Hand haelt Schaden
     //! ab)". Die Entnahme des vollen Rahmens ist danach der gewoehnliche
     //! Inventar-Drag - und nur der volle laesst sich ziehen, nur solange
-    //! der Deckel offen ist (Skript, CanReleaseCargo).
+    //! der Deckel offen ist (Skript, CanReleaseAttachment).
     //!
     //! DIESER PROZESS HAT ABSICHTLICH KEINEN TRANSFORM. Er verbraucht nichts
     //! und erzeugt nichts; er ist der Moment, in dem der Deckel abgeht.

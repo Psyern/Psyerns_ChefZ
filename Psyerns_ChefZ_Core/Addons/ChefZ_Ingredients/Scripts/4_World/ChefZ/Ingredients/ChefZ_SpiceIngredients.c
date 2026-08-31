@@ -135,9 +135,15 @@ class ChefZ_PaprikaPowder extends ChefZ_Edible_Base
 //      Nutrition- oder Food-Knoten; ohne ihn registriert PlayerStomach sie
 //      nie. Die Naehrwerte zu entfernen hiesse, diese Regel zu brechen.
 //
-// Die Zahlen sagen ohnehin, was gemeint ist: fullnessIndex 2, energy 8 bis 10.
-// Ein geloeffeltes Gewuerz saettigt nicht - es ist essbar und wertlos, und
+// Die Zahlen sagen ohnehin, was gemeint ist: fullnessIndex 0.1, energy 8 bis
+// 10. Ein geloeffeltes Gewuerz saettigt nicht - es ist essbar und wertlos, und
 // genau das soll der Spieler merken duerfen.
+//
+// (Der fullnessIndex stand hier bis zum 31.08.2026 auf 2. Er ist mit dem
+// projektweiten Rescale auf 0.1 gefallen; die Herleitung steht im Kopf von
+// config.cpp - PlayerStomach.c:86 multipliziert, es teilt nichts durch 100.
+// An der Aussage dieses Absatzes aendert das nichts: aus "fast wertlos" ist
+// "noch etwas weniger als fast wertlos" geworden.)
 //==============================================================================
 
 //! Basis der Gewuerzpulver (§71): schwarzer Pfeffer, Pfefferkoerner,

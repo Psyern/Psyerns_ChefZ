@@ -79,9 +79,9 @@ class ChefZ_SausagePasta : ChefZ_ServedDish_Base
     varQuantityInit = 200;   // 100 per portion; largest recipe has 2
     varQuantityMax = 200;
 
-    class Nutrition { fullnessIndex = 230; energy = 1270; water = 70;
+    class Nutrition { fullnessIndex = 3.5; energy = 1270; water = 70;
                       nutritionalIndex = 60; toxicity = 0; agents = 0;
-                      digestibility = 1; };
+                      digestibility = 1; };   // 3.5 x 200 qty = 700 stomach volume
 };
 ```
 
@@ -95,8 +95,15 @@ Note what is **not** here:
   dish that forgot its own would inherit one and look green in the validator —
   and `PlayerStomach` only registers classes with their own nutrition data, so
   the failure would be silent.
-- `Nutrition` is **per 100 units** of quantity (`PlayerStomach.c:92`), i.e. per
-  portion. Two portions in the pot are `quantity = 200` of the same item.
+- `energy` and `water` are **per 100 units** of quantity (`PlayerStomach.c:92-93`
+  divides by 100). **`fullnessIndex` is not**: the engine computes stomach volume
+  as `fullnessIndex * units eaten` with **no** division (`PlayerStomach.c:86`),
+  one bite eats 25 units, and the vomit threshold is a stomach volume of 2000
+  (`PlayerConstants.c:208`). So keep `fullnessIndex` in vanilla's 0.5–4 band and
+  check `fullnessIndex * varQuantityMax` — the whole item — stays below ~950
+  (the "stuffed" badge starts at 1000). A dish with `fullnessIndex = 230` makes
+  the player vomit on the first bite; that exact mistake shipped once.
+  Two portions in the pot are `quantity = 200` of the same item.
 
 ### Step 2 — the ingredient binding
 
@@ -261,8 +268,10 @@ class ChefZ_Butter : Lard
     varQuantityDestroyOnMin = 1;
     lifetime = 43200;
 
-    class Nutrition { fullnessIndex = 15; energy = 600; water = 20;
+    class Nutrition { fullnessIndex = 2; energy = 600; water = 20;
                       nutritionalIndex = 8; toxicity = 0; digestibility = 1; };
+                      // 2 x 100 qty = 200 stomach volume (see the dish note on
+                      // fullnessIndex units in section A)
 
     class Food { /* FoodStages and FoodStageTransitions */ };
 };
