@@ -62,7 +62,7 @@ design questions — is kept internally and is not part of this repository.
 | **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Two deliveries in — 50 models, 52 textures, 45 classes on their own geometry |
+| **3D assets** | Two deliveries in — 50 models, 52 textures, **53 of 123 classes** on their own geometry |
 
 ## Repository Layout
 
@@ -102,7 +102,8 @@ Psyerns_ChefZ/                              ← repository root (this README)
 │
 └── tools/
     ├── chefz-validate/                     static validators (Node, no dependencies)
-    └── chefz-pack/                         PBO packing and test-server launch
+    ├── chefz-pack/                         PBO packing and test-server launch
+    └── chefz-assets/                       holds the 3D asset list against the code
 ```
 
 
@@ -592,6 +593,13 @@ node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 suite against it, and asserts that each rule fires and the run exits `1`. Current
 coverage: **18 of 19 checkers provably fire.** `chefzaction` is not covered — it could
 go blind without anything noticing.
+
+`tools/chefz-assets/check-todo.mjs` is a third tool with a different job: it compares
+the 3D asset backlog against the classes that actually exist. It always exits `0` — a
+mirror, not a guard, because a tick saying "raw model is with the modeller" is allowed
+to run ahead of the code. It was written on 31.08.2026 after the list had drifted four
+classes, thirty-eight stale proxy entries and twenty-eight dishes that the bulk removal
+had deleted two days earlier.
 
 `refindex/` carries the class indexes for **Terje**, **Community Framework**, **COT**,
 **Dabs Framework**, **Expansion**, the **vanilla script classes** and the **vanilla item

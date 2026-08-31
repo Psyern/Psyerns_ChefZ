@@ -351,8 +351,10 @@ all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key. Ea
 | `ChefZ_Plants` | the crops and herbs — cabbage, carrot, corn cob and plant, garlic, parsley, red onion, rosemary, thyme |
 | `ChefZ_Food` | prepared food |
 
-Together **50 models and 52 textures**, and **45 classes** now stand on their own
-geometry rather than a vanilla proxy.
+Together **50 models and 52 textures**. **53 of the mod's 123 spawnable classes** now
+stand on their own geometry rather than a vanilla proxy — 45 of them rebound in the
+second delivery alone. The remaining 70 still point at a vanilla mesh; the standing
+backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
 about categories, recipes or states — it is a shape a content class points at. Keeping

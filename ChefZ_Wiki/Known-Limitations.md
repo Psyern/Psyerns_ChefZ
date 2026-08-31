@@ -30,7 +30,8 @@ neither produces an error message.
 Two deliveries landed on 29. and 30.08.2026, together **50 `.p3d` and 52 `.paa` files**
 in four addons: `ChefZ_Devices` (hive and the stations), `ChefZ_Items` (tools and
 containers), `ChefZ_Plants` (crops and herbs) and `ChefZ_Food` (prepared food).
-**45 classes** now stand on their own geometry instead of a vanilla proxy. All four
+**53 of the 123 spawnable classes** now stand on their own geometry instead of a
+vanilla proxy; 45 of them were rebound in the second delivery alone. All four
 addons are assets only — no class, no script, no record.
 
 **They are not packed.** `pack.mjs` reads each addon's `$PREFIX$` and skips the addon
