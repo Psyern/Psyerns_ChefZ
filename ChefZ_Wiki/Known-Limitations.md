@@ -108,6 +108,12 @@ The most likely link: `ChefZ_HandcraftBridge` anchors its recipe slots in the
 mission constructor and fills them only after loading. While the core is in safe
 mode they stay empty.
 
+**Outdated as of 31.08.2026:** the server stayed up for roughly 80 minutes with a
+client connected that day (`script_2026-08-31_14-44-26.log`), long enough for items
+to decay and for 1925 runtime null accesses to accumulate. Whether the access
+violation above is gone or only unhit is not written down anywhere — this entry
+needs the operator's verdict.
+
 ### The core comes up in safe mode
 
 551 records read, 550 good, none rejected — and every registry empty. Two causes,
@@ -137,7 +143,7 @@ window**, not in the RPT. On a server nobody clicks it away, so the process sits
 there with an eight-line RPT, no error and no exit. `testrun.ps1` reads that
 window first and the logs second.
 
-### No in-game test
+### No gate has been run in game
 
 All four milestone gates stand at **NOT READY**. Each gate report carries a
 numbered in-game checklist — together roughly 150 steps with concrete ingredients,
@@ -150,6 +156,14 @@ central-economy files into the mission.
 Gate 4 in particular requires two server configurations: one **without** Terje and
 one with. The run without Terje is the more important of the two, because it tests
 the project's central promise.
+
+**The mod itself has run in game since 31.08.2026** — three sessions that day,
+client and server (`script_2026-08-31_14-44-26.log` and two repeats at 16:11 and
+16:14, some 80 minutes in total). They were bug hunts, not gate runs: they produced
+the 1925 null accesses in `Edible_Base.GetFoodStageType`
+(`ChefZ_Edible_Base.c:469`), the seven per-boot warnings for ingredient templates
+(`ChefZ_ConfigCppSource.c:431`) and the Tactical Bacon slot that could never be
+filled. Not one numbered checklist step has been ticked off.
 
 ### No 3D assets
 
@@ -364,9 +378,9 @@ and the mod has not had a clean boot since 2026-08-28.
 **The fix**, two lines in `Smoking.json` copied from `TR_RawSausageToSmoked`:
 `"process": "PROCESS_SMOKE"` and `"stationsAllowed": ["ChefZ_Smoker"]`. All three
 transforms in the file now carry the same shape, so Salted Meat reaches the smoker
-in five minutes like its neighbours. Still unverified in a running game — nobody
-has had a clean boot since 2026-08-28. The checker gap that hid it is written up in
-[Validation](Validation).
+in five minutes like its neighbours. Still unverified in a running game: the three
+live tests of 31.08.2026 all predate this fix. The checker gap that hid it is
+written up in [Validation](Validation).
 
 ## Built but inert
 

@@ -555,3 +555,9 @@ value — see [Quality-and-Nutrition](Quality-and-Nutrition).
    in a cauldron yields the full portion count.
 6. Leave `priority` at `0` unless you have a concrete tie to break.
 7. Read the boot log for shadowing and tie warnings.
+
+## Next
+
+- [Recipe-Cards](Recipe-Cards) — every recipe as a card, generated from these records
+- [Recipe-Book](Recipe-Book) — the same recipes in prose
+- [Recipe-Reference](Recipe-Reference) — every field of every record

@@ -12,6 +12,7 @@
 **Cookbook**
 
 - [Recipe Book](Recipe-Book)
+- [Recipe Cards](Recipe-Cards)
 - [From Meat to Sausage](From-Meat-to-Sausage)
 - [Recipe Reference](Recipe-Reference)
 

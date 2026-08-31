@@ -410,9 +410,11 @@ On 30.08.2026 the conflict scout reviewed all twenty `modded class` sites and ma
 them `SCOUT-GEPRUEFT`, which took the group from 20 warnings to 2. The review was not
 a formality: it found a live exploit in the cookbook — see below.
 
-**What a green run does not mean.** Nothing on this page has ever been confirmed by a
-running game. The suite reads files; the mod has never survived server startup. See
-[Known Limitations](Known-Limitations).
+**What a green run does not mean.** Nothing on this page has been confirmed by a
+running game. The suite reads files, and the three live tests of 31.08.2026 were bug
+hunts, not checker runs — they found what a green suite had missed: the ingredient
+templates read as bindings, the Tactical Bacon slot that could never be filled, and
+1925 null accesses in the decay path. See [Known Limitations](Known-Limitations).
 
 ## 9. Layout of the tool
 

@@ -109,5 +109,5 @@ Before opening a pull request, run the validation:
 node tools/chefz-validate/index.mjs
 ```
 
-Nineteen checkers, zero errors expected. [Validation](Validation) explains what each
+Twenty checkers, zero errors expected. [Validation](Validation) explains what each
 one covers — and, just as usefully, what none of them can see.

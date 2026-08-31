@@ -103,7 +103,8 @@ Psyerns_ChefZ/                              ← repository root (this README)
 └── tools/
     ├── chefz-validate/                     static validators (Node, no dependencies)
     ├── chefz-pack/                         PBO packing and test-server launch
-    └── chefz-assets/                       holds the 3D asset list against the code
+    ├── chefz-assets/                       holds the 3D asset list against the code
+    └── chefz-recipecards/                  recipe infographics for the wiki
 ```
 
 
@@ -545,7 +546,7 @@ patched.
 
 ## Static Validation
 
-Nineteen checkers plus a runner under `tools/chefz-validate/` — Node, no dependencies,
+Twenty checkers plus a runner under `tools/chefz-validate/` — Node, no dependencies,
 non-zero exit code on failure.
 
 ```bash
@@ -787,7 +788,7 @@ the four gate checklists run in a live game.
 
 | Version | Contents | State |
 |---|---|---|
-| **V1 — Cooking Core** | Ingredients · 20 plate dishes · 5 stews · sauces · herbs · salt · pepper · paprika · sausage · dairy · baking · preservation · beekeeping · 15 stations | Written, not yet running |
+| **V1 — Cooking Core** | Ingredients · 20 plate dishes · 5 stews · sauces · herbs · salt · pepper · paprika · sausage · dairy · baking · preservation · beekeeping · 15 stations | Content-complete; first live tests 31.08.2026, no gate run yet |
 | **V1.1 — Cookbook UI** | The knowledge layer exists (Milestone 5.1); the UI on top of it does not | Next |
 | **V2 — Preservation depth** | Mason jars · canning · pickling · curing · deeper shelf-life model · larder economy | Planned |
 | **V3 — Progression** | Rare recipes · recipe rarities · DME signature meals · quest and event recipes | Planned |

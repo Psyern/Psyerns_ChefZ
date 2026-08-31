@@ -1,0 +1,13 @@
+{
+  "_comment": [
+    "classname -> Itembild. Pfade relativ zu diesem Verzeichnis.",
+    "",
+    "LEER MIT ABSICHT. Das Repo fuehrt keine Inventarsymbole: die 52 .paa unter",
+    "Addons/*/data sind Modelltexturen und kein Browserformat. Wer Bilder hat,",
+    "legt sie unter assets/items/ ab und traegt sie hier ein - der Generator",
+    "nimmt sie beim naechsten Lauf und streicht die Zeile aus seinem Bericht.",
+    "",
+    "Freigestellte PNG mit Alphakanal, quadratisch, mindestens 128px.",
+    "Beispiel:  \"ChefZ_Cheese\": \"assets/items/cheese.png\""
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "psyerns-chefz-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build and check tools for the ChefZ DayZ mod. The mod itself is not a Node package - this file only names the commands.",
+  "scripts": {
+    "generate:recipes": "node tools/chefz-recipecards/index.mjs --png",
+    "generate:recipes:svg": "node tools/chefz-recipecards/index.mjs",
+    "validate": "node tools/chefz-validate/index.mjs",
+    "validate:selftest": "node tools/chefz-validate/selftest.mjs",
+    "assets:check": "node tools/chefz-assets/check-todo.mjs"
+  }
+}
