@@ -38,7 +38,7 @@
 
 Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 163 `CfgVehicles`
 classes (`scope = 0` base classes included), 173 script files, 480 data records and
-352 stringtable keys in 13 languages. The static validator suite runs green. What
+356 stringtable keys in 13 languages. The static validator suite runs green. What
 has not happened is a server that survives startup — the process registers every
 addon, loads its config, and then dies with an access violation in the mission's
 `OnInit` chain while the core sits in safe mode with empty registries.

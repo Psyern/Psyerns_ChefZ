@@ -125,10 +125,10 @@ machinery works.
 
 ### No signatures, no binarisation
 
-`tools/chefz-pack/pack.mjs` packs thirteen of the fifteen sources, unsigned and
-unbinarised — the two asset addons are skipped, as described above — and
-`tools/chefz-pack/testrun.ps1` starts the test server and reads its verdict.
-Neither signing nor binarising has been done. See [Installation](Installation).
+`tools/chefz-pack/pack.mjs` packs all seventeen sources (verified 31.08.2026,
+see above), unsigned and unbinarised, and `tools/chefz-pack/testrun.ps1` starts
+the test server and reads its verdict. Neither signing nor binarising has been
+done. See [Installation](Installation).
 
 ### A config error is invisible in the logs
 

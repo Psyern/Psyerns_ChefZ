@@ -57,8 +57,24 @@
 // Transform genannt.
 //
 // Die Kaesepresse bleibt leer. Sie hat einen Cargo (6x4), einen
-// Stationsdatensatz und mit TR_MilkToCheese einen erreichbaren Transform -
+// Stationsdatensatz und mit TR_CurdToCheese einen erreichbaren Transform -
 // ihr fehlt nichts, was ein Skript geben koennte.
+//
+// ### 31.08.2026, Welle 2 ### Die Kaesekette ist jetzt zweistufig (Alex' Todo
+// 10): Milch + ChefZ_MushroomCulture werden im Kessel zu ChefZ_CheeseCurd,
+// und erst die Presse macht daraus ChefZ_Cheese. Der frueher direkte Weg
+// TR_MilkToCheese (3 Milch -> Kaese) ist ersetzt, nicht ergaenzt - die
+// Begruendung steht in der _note des neuen Transforms. Der Kesselschritt ist
+// ein KOCHREZEPT in ChefZ_Cooking und beruehrt dieses Modul nicht.
+//
+// Auch nach dieser Aenderung bekommt die Presse KEINEN Torwaechter. Der
+// Unterschied zum Butterfass ist nicht Bequemlichkeit, sondern Notwendigkeit:
+// das Fass BRAUCHT einen, weil es ein Fassungsvermoegen hat, das es zaehlen
+// muss ("20 Liter"), und weil sein Selbstnachstart sonst in fremdem Material
+// wuehlt. Die Presse hat weder das eine noch das andere - sie nimmt einen
+// Bruch, presst ihn 300 Sekunden lang und ist fertig. Ein Torwaechter waere
+// hier reine Ordnungsliebe, und jede Zeile davon ein Ort, an dem der Bruch
+// oder der fertige Laib versehentlich ausgesperrt werden kann.
 //
 // Layer: 4_World.
 //==============================================================================
@@ -221,9 +237,9 @@ class ChefZ_ButterChurn extends ChefZ_ProcessingStation_Base
 }
 
 //! Die Kaesepresse. Leer, und das ist kein Versehen: Cargo, Stationsdatensatz
-//! und TR_MilkToCheese sind vollstaendig, es gibt nichts, was ein Skript
-//! beisteuern koennte. KEIN Selbstnachstart - Kaese ist ein einzelner
-//! Vorgang, kein Takt.
+//! und TR_CurdToCheese sind vollstaendig, es gibt nichts, was ein Skript
+//! beisteuern koennte. KEIN Selbstnachstart und KEIN Torwaechter - die
+//! Begruendung fuer beides steht im Dateikopf.
 class ChefZ_CheesePress extends ChefZ_ProcessingStation_Base
 {
 }

@@ -237,7 +237,7 @@
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 { "slotId": "meat",   "match": { "category": "MINCED_MEAT" }, "minCount": 1, "consume": "whole" },
-                { "slotId": "spice",  "match": { "category": "SPICE" },       "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice",  "match": { "tag": "CHEFZ_SPICE" },       "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
@@ -252,8 +252,8 @@
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 { "slotId": "meat",   "match": { "cls": "ChefZ_MincedPork" }, "minCount": 1, "consume": "whole" },
-                { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice1", "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice2", "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
@@ -268,7 +268,7 @@
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 { "slotId": "meat",   "match": { "cls": "ChefZ_MincedVenison" }, "minCount": 1, "consume": "whole" },
-                { "slotId": "spice",  "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice",  "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "herb",   "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
@@ -284,7 +284,7 @@
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 { "slotId": "meat",   "match": { "cls": "ChefZ_MincedBoar" }, "minCount": 1, "consume": "whole" },
-                { "slotId": "spice",  "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice",  "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "herb",   "match": { "anyOf": [ { "category": "HERB" }, { "category": "DRIED_HERB" } ] }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
@@ -300,8 +300,8 @@
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 { "slotId": "meat",   "match": { "allOf": [ { "category": "WILD_MEAT" }, { "vanillaStage": "Raw" }, { "state": "RAW" }, { "not": { "anyOf": [ { "category": "MINCED_MEAT" }, { "category": "SAUSAGE" } ] } } ] }, "minCount": 2, "maxCount": 2, "consume": "whole", "gradePoints": 2 },
-                { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1, "gradePoints": 1 },
+                { "slotId": "spice1", "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice2", "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1, "gradePoints": 1 },
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [
@@ -317,9 +317,9 @@
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 { "slotId": "meat",   "match": { "category": "MINCED_MEAT" }, "minCount": 1, "consume": "whole" },
-                { "slotId": "spice1", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "spice2", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
-                { "slotId": "spice3", "match": { "category": "SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice1", "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice2", "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
+                { "slotId": "spice3", "match": { "tag": "CHEFZ_SPICE" }, "minCount": 1, "consume": "amount", "consumeAmount": 1 },
                 { "slotId": "casing", "match": { "category": "CASING" }, "minCount": 1, "consume": "whole" }
             ],
             "outputs": [

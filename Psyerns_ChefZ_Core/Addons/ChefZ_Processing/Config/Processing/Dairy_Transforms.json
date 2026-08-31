@@ -53,15 +53,16 @@
             "priority": 10
         },
         {
-            "id": "TR_MilkToCheese",
+            "id": "TR_CurdToCheese",
+            "_note": "KAESEKETTE, LETZTER SCHRITT (Welle 2, 31.08.2026, Alex' Todo 10). ERSETZT TR_MilkToCheese (3x PowderedMilk -> ChefZ_Cheese). Warum der Direktweg entfaellt: Alex' Design ist ZWEISTUFIG - Milch + ChefZ_MushroomCulture werden im Kessel zu ChefZ_CheeseCurd, und erst die Presse macht daraus einen Laib. Bliebe der Direktweg daneben stehen, waere die Kultur ueberfluessig und die Presse haette zwei Wege zum selben Ergebnis, von denen einer den anderen entwertet - die Kesselstufe waere Zierrat. Ein Transform, den niemand nimmt, ist schlimmer als keiner: er steht in jedem Kochbuch und in jeder Fehlersuche mit drin. Der Kesselschritt (Milch + Kultur -> Bruch) entsteht parallel als Kochrezept in ChefZ_Cooking, NICHT in diesem Modul - die Presse braucht davon nichts zu wissen, sie sieht nur den Bruch. consume whole und minCount/maxCount 1: ein Bruch, ein Laib. Die Menge des Ergebnisses bleibt bewusst ungesetzt (kein quantity-Feld, quantityMode faellt auf 'fixed' zurueck, ChefZ_RecipeDef.ResolveDefaults) - damit behaelt ChefZ_Cheese seinen Klassendefault, genau wie unter TR_MilkToCheese. PROCESS_PRESS_CHEESE bleibt unveraendert bei STATION_TIMED / 300 s.",
             "process": "PROCESS_PRESS_CHEESE",
             "stationsAllowed": ["ChefZ_CheesePress"],
             "inputs": [
                 {
-                    "slotId": "milk",
-                    "match": { "cls": "PowderedMilk" },
-                    "minCount": 3,
-                    "maxCount": 3,
+                    "slotId": "curd",
+                    "match": { "cls": "ChefZ_CheeseCurd" },
+                    "minCount": 1,
+                    "maxCount": 1,
                     "consume": "whole"
                 }
             ],

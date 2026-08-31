@@ -338,7 +338,14 @@ graph LR
 |---|---|---|---|---|---|
 | `TR_MilkToCream` | 2× Milk | Cream (1×, no mode given) | Butter Churn | — | 2 min |
 | `TR_CreamToButter` | 2× Cream | Butter (1×, no mode given) | Butter Churn | — | 3 min |
-| `TR_MilkToCheese` | 3× Milk | Cheese (1×, no mode given) | Cheese Press | — | 5 min |
+| `RCP_ChefZ_CheeseCurd` | 3× Milk + 1× Mushroom Culture | Cheese Curd | Pot/Cauldron, boiling ≥60° | — | 5 min |
+| `TR_CurdToCheese` | 1× Cheese Curd | Cheese (1×, no mode given) | Cheese Press | — | 5 min |
+
+The culture comes from grinding a **rotten** mushroom in the mortar
+(`TR_RottenMushroomToCulture`, 20 s). The old direct route `TR_MilkToCheese`
+(3× Milk → Cheese at the press) was replaced on 2026-08-31 by this two-stage
+chain; with the direct route in place the culture and the kettle step would
+have been decoration.
 
 Cream and cheese are **items, not liquids** in V1. None of the three transforms
 mentions `isLiquidContainer` or `liquidType`; the stations carry them in cargo like

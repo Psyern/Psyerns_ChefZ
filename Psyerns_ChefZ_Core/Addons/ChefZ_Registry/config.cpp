@@ -69,6 +69,14 @@ class CfgPatches
         // config.cpp. Diese Ungleichbehandlung ist gemeldet, nicht geheilt -
         // sie zu heilen hiesse, in fremde Slices zu schreiben.
         //
+        // Zugekommen mit dem Merge der DRITTEN WELLE (Slices dairy, apiary):
+        // ebenfalls kein neues Addon. Die zwei neuen Nutrition-Records
+        // (ChefZ_CheeseCurd, ChefZ_MushroomCulture) und der Tag CHEFZ_CULTURE
+        // nennen Klassen aus ChefZ_Ingredients, das oben bereits steht. apiary
+        // bringt ausschliesslich Prozesse und classes[] mit - und Prozesse
+        // fuehrt die Registry seit K1 nicht mehr, also erzeugt dieser Slice
+        // hier keinen einzigen Datensatz und keine Abhaengigkeit.
+        //
         // Alle sieben sind ECHTE Abhaengigkeiten der DATEN, nicht Kosmetik:
         // jeder Nutrition-Record nennt eine Klasse, und ein Record ohne seine
         // Klasse ist ein Naehrwert fuer nichts. Keines der genannten Module

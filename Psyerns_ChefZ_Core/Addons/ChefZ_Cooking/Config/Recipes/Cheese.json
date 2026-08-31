@@ -1,0 +1,73 @@
+{
+    "kind": "recipe",
+    "schemaVersion": 1,
+    "_note": "### SLICE cheese ### Der Kesselschritt der Kaesekette (Todo 10). Milch + Saeuerungsmittel -> Kaesebruch. Die Kette hat drei Glieder: ChefZ_Ingredients liefert die Klassen (ChefZ_MushroomCulture, ChefZ_CheeseCurd), DIESE Datei den Kesselschritt, und das Pressen (Bruch -> ChefZ_Cheese) gehoert dem Processing-Slice. Registriert ueber den CfgChefZ-Knoten ChefZ_CheeseChain (loadOrder 320) in der config.cpp dieses Moduls - nicht ChefZ_Cheese, denn so heisst bereits eine Itemklasse in ChefZ_Ingredients.",
+    "records": [
+        {
+            "id": "RCP_ChefZ_CheeseCurd",
+
+            "_note": "ALEX' ORIGINAL LAUTET \"1x Milch-Eimer + Saeuerungsmittel -> Kaesebruch + leerer Eimer zurueck\". Zwei Abweichungen, beide bewusst und beide geprueft: (1) ES GIBT KEINEN MILCHEIMER IN V1. Der Mod fuehrt ueberhaupt keine eigene Milchklasse - Vanillas PowderedMilk ist seit dem 29.08.2026 die Milch des Mods (ChefZ_Ingredients/Config/Ingredients/Dairy.json), und die Fluessigkeitsfuehrung ueber Behaelter ist fuer V1 ausdruecklich verworfen. Drei Einheiten Milchpulver sind der Stand-in fuer den Eimer. (2) DAMIT ENTFAELLT AUCH DIE EIMER-RUECKGABE. Kein returnContainer: eine Tuete Milchpulver ist kein Gefaess, das zurueckgegeben werden koennte - sie wird ganz verbraucht. Sobald es eine Milchklasse MIT Behaelter gibt, ist dieses Rezept die eine Stelle, an der returnContainer nachgetragen wird. GARZEIT 300 s: laenger als jede Sauce (180) und als der Milchreis (240). Das Dicklegen ist der langsamste Kesselvorgang des Moduls, und das soll man merken - die Kaesekette ist ein Vorhaben, kein Zwischendurch. PRIORITY 0 wie ueberall in diesem Modul: die Spezifitaet entscheidet, die Handzahl daempft nur (09 E1). Eine Zahl ungleich 0 waere ein Signal im Review, und dieses Rezept braucht keins - es ist das einzige, das eine Kultur verlangt, und genau dieser Pflichtslot unterscheidet es von allem anderen.",
+
+            "contexts": [
+                {
+                    "_note": "Topf und Kessel, kochend - dieselbe Bindung wie jedes andere Rezept dieses Moduls. Die Milch muss auf Temperatur kommen, damit die Kultur arbeitet.",
+                    "deviceClasses": ["Pot", "Cauldron"],
+                    "methods": ["BOILING"]
+                }
+            ],
+
+            "completion": "TIMED",
+            "cookSeconds": 300.0,
+            "minTemperature": 60.0,
+
+            "slots": [
+                {
+                    "slotId": "milk",
+                    "_note": "Gebunden ueber die KATEGORIE und nicht ueber \"cls\": PowderedMilk ist heute das einzige Mitglied, aber eine kuenftige Frischmilch soll das Rezept erben, ohne dass es angefasst wird (08 E4). Dieselbe Grundform wie RCP_ChefZ_MilkRice und RCP_ChefZ_MacAndCheese (DAIRY ohne BUTTER). ZWEI AUSSCHLUESSE MEHR ALS DORT, und beide sind noetig: CREAM, weil Sahne in den Kessel gehoert, aber nicht in DIESEN - aus Sahne wird Rahmsauce, nicht Bruch. Und ChefZ_Cheese wie ChefZ_CheeseCurd, weil beide in der Kategorie DAIRY stehen: ohne den Ausschluss wuerde der Bruch seine eigene Zutat, das Rezept liefe im Kreis, und drei Becher Bruch wuerden zu einem Becher Bruch. Kein Ausschluss ueber eine neue Kategorie MILK: Kategorien sind Registry-weit (Workflow §5), und eine Kategorie fuer einen Bestand von heute genau einer Klasse ist eine Entscheidung fuer alle Slices, nicht fuer diesen.",
+                    "match": {
+                        "allOf": [
+                            { "category": "DAIRY" },
+                            { "not": { "category": "BUTTER" } },
+                            { "not": { "category": "CREAM" } },
+                            { "not": { "cls": "ChefZ_Cheese" } },
+                            { "not": { "cls": "ChefZ_CheeseCurd" } }
+                        ]
+                    },
+                    "minCount": 3,
+                    "maxCount": 3,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "culture",
+                    "_note": "ZWINGEND UEBER DEN TAG CHEFZ_CULTURE, niemals ueber die Kategorie SPICE. ChefZ_MushroomCulture traegt beides (ChefZ_Ingredients/Config/Ingredients/Dairy.json), aber die beiden Achsen trennen Verschiedenes: SPICE sammelt \"kleine Menge, saettigt nicht, geht in etwas anderes ein\" und haelt deshalb auch Pfeffer und Salz. Ein Kulturslot ueber SPICE nimmt jedes Gewuerz an, und drei Tueten Milchpulver plus eine Prise Pfeffer waeren Kaese. Umgekehrt gilt derselbe Satz: der Tag ist auch der Grund, warum die Kultur NICHT CHEFZ_SPICE traegt - ein Gewuerzslot per Tag soll keine Bakterienkultur als Wuerze akzeptieren. Der Tag steht noch im Delta _deltas/dairy.json und wird vom chefz-registry-integrator gemergt; bis dahin weist der Selektorcompiler das Rezept bewusst ab (07 §7: unbekannter Tag -> Rezept abgewiesen, kein stiller Wegfall des Pflichtslots).",
+                    "match": { "tag": "CHEFZ_CULTURE" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+
+            "policy": {
+                "_note": "extraItems \"forbid\" wie in jedem Rezept dieses Moduls: der Kessel enthaelt Milch und Kultur und sonst nichts. Damit verdeckt das Rezept auch keines der Milchrezepte - RCP_ChefZ_MilkRice braucht zusaetzlich Reis und Butter, RCP_ChefZ_MacAndCheese Nudeln und Kaese, und beide verbieten Fremdkoerper ebenso. Wo sich zwei Zutatenmengen ueberlagern wuerden, matcht bewusst KEINES von beiden und Vanilla kocht weiter (OF-03).",
+                "extraItems": "forbid",
+                "forbiddenStates": ["BURNT", "ROTTEN"],
+                "minMatchedHealth01": 0.15
+            },
+
+            "outputs": [
+                {
+                    "_note": "quantity ist ABSOLUT - ChefZ_Applicator.ApplyQuantity gibt den Wert unveraendert an ItemBase.SetQuantity weiter (ChefZ_Applicator.c:963-997), es wird nichts durch 100 geteilt und nichts mit einer Portionszahl multipliziert. ChefZ_CheeseCurd hat varQuantityMax = 100, also ist 100 der GANZE Becher Bruch aus drei Einheiten Milch. Kein returnContainer, kein containerCategory: siehe die Notiz am Rezeptkopf. inheritFreshness false, weil der Bruch neu entsteht und seine eigene, sehr kurze lifetime von 10800 s mitbringt - die Restfrische des Milchpulvers hat damit nichts zu tun. inheritTemperature true: er kommt heiss aus dem Kessel.",
+                    "cls": "ChefZ_CheeseCurd",
+                    "quantity": 100,
+                    "quantityMode": "fixed",
+                    "setState": "COOKED",
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+
+            "nutritionModifier": 1.0,
+            "priority": 0
+        }
+    ]
+}

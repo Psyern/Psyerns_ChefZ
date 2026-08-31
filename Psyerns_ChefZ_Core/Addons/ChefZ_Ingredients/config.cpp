@@ -87,6 +87,12 @@ class CfgPatches
             // ### SLICE dairy ###
             "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese", "ChefZ_Egg",
             "ChefZ_MilkCan",
+            // Kaesekette (Todo 10, 31.08.2026): Bruch und Saeuerungsmittel.
+            // ChefZ_MushroomCulture steht in der Datei WEITER UNTEN zwischen den
+            // Gewuerzen - es erbt von ChefZ_SpiceBase und muss deshalb hinter
+            // dessen Rumpf stehen. Es gehoert trotzdem hierher: der Slice ist
+            // dairy, nicht herbs.
+            "ChefZ_CheeseCurd", "ChefZ_MushroomCulture",
             // ### SLICE salt ###
             "ChefZ_RawSalt",
             "ChefZ_Salt",
@@ -649,6 +655,143 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
+    // Kaesebruch - die Zwischenstufe der Kaesekette (Todo 10, 31.08.2026).
+    //
+    // Milch + ChefZ_MushroomCulture -> Kaesebruch -> (Kaesepresse) -> Kaese.
+    // Diesen Slice liefert nur die KLASSEN; die beiden Transforms und die
+    // Rezeptzeilen bauen die Processing- und Cooking-Agenten nach uns.
+    //
+    // ESSBAR, ABER UNATTRAKTIV - und das steht ausdruecklich in den Zahlen und
+    // nicht nur in der Beschreibung. Gegen den fertigen Laib (energy 450,
+    // nutritionalIndex 25, Volumen 350) hat der Bruch mehr Volumen JE KALORIE:
+    // 280 Volumen fuer 200 Energie. Wer ihn isst, statt ihn zu pressen, ist
+    // satt und hat nichts davon - genau der Anreiz, den die Kette braucht. Ein
+    // Verbot waere die schlechtere Loesung: nasser Quark IST essbar, und ein
+    // Hungernder soll ihn essen duerfen.
+    //
+    // FOOD-BLOCK MIT UEBERGAENGEN, analog ChefZ_Cheese: der Bruch landet in
+    // einem Pflicht-Slot, sobald das Pressrezept steht, und
+    // ChefZ_RecipeEvaluator.CheckStages verlangt von jeder gebundenen
+    // Pflichtzutat eine erlaubte Endstufe. Eine Klasse ohne FoodStage meldet
+    // Stufe 0 (NONE). Stufen OHNE Uebergaenge waeren die Falle aus 01 V4
+    // (FoodStage.c:472 faellt auf BURNED zurueck) - deshalb beides.
+    //
+    // lifetime 10800 (3 h): der kuerzeste Wert des ganzen Slice, kuerzer als
+    // Sahne (14400). Ungepresster Bruch ist die verderblichste Stufe der Kette;
+    // das ist der Grund, ihn zu pressen, und nicht nur Geschmack.
+    //
+    // PROXY: Marmalade (Schraubglas) - ein Becher weisser Bruch. Dieselbe Wahl
+    // und Begruendung wie bei Sahne und Ei: eine GEERBTE Vanillaklasse statt
+    // eines von Hand getippten p3d-Pfades. Damit teilen sich jetzt DREI Items
+    // des Moduls das Marmeladenglas (Sahne, Ei, Bruch) - gemeldet im
+    // Asset-Bedarf, aufgeloest mit einem eigenen Quarkbecher. Kein Item wartet
+    // darauf. NICHT cheese.p3d aus der Lieferung c09900f: Bruch und fertiger
+    // Laib saehen dann identisch aus, und die Kette waere im Inventar nicht
+    // mehr lesbar.
+    //--------------------------------------------------------------------------
+    class ChefZ_CheeseCurd : Marmalade
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CHEESECURD";
+        descriptionShort = "#STR_CHEFZ_ITEM_CHEESECURD_DESC";
+        weight = 240;
+        itemSize[] = {2, 2};
+        varQuantityInit = 100;
+        varQuantityMin = 0;
+        varQuantityMax = 100;
+        varQuantityDestroyOnMin = 1;
+        lifetime = 10800;
+
+        // fullnessIndex 2.8: varQuantityMax = 100 wie bei Sahne, Butter und
+        // Kaese, also
+        //     2.8 * 100 = 280 Volumen fuer den ganzen Becher
+        // - Mitte des Bandes 200-300 fuer saettigende Zwischenprodukte. Der
+        // Bruch liegt damit ueber Butter (200) und Sahne (250) und unter dem
+        // fertigen Laib (350): nasser, ungepresster Quark ist voluminoeser als
+        // das, was nach dem Pressen davon uebrig bleibt, aber ein Becher davon
+        // ist kein ganzer Laib. Herleitung im Dateikopf; die Enginezeile ist
+        // PlayerStomach.c:86 (volume = fullnessIndex * m_Amount, KEIN "/100"),
+        // die Schwellen sind VOMIT_THRESHOLD 2000 und "Stuffed" 1000
+        // (PlayerConstants.c:208 / :200). 280 sind gut ein Viertel von
+        // "Stuffed" - drei Becher gehen, vier sind eine schlechte Idee.
+        class Nutrition
+        {
+            fullnessIndex = 2.8;
+            energy = 200;
+            water = 120;
+            nutritionalIndex = 14;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+
+        // Stufen wie bei ChefZ_Cheese, auf DERSELBEN Skala: Element 0 ist der
+        // fullnessIndex und schlaegt class Nutrition (Edible_Base.c:394-503).
+        //   Raw     2.8   (280 - der Becher, wie er aus der Molke kommt)
+        //   Baked   2.6   (260 - trocknet in der Pfanne aus)
+        //   Boiled  2.7   (270)
+        //   Burned  0.7   (70 - ein Viertel, dasselbe Verhaeltnis wie Kaese)
+        //   Rotten  0.7   (70)
+        // Aus Baked und Boiled gibt es keinen Ausgang: wer den Bruch im Feuer
+        // vergisst, bekommt Kohle (FoodStage.c:472). Das ist gewollt.
+        //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
+        //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {2.8, 200, 120, 14, 0, 0, 1};
+                };
+                class Baked
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {90, 45, 200};
+                    nutrition_properties[] = {2.6, 215, 70, 15, 0, 0, 1};
+                };
+                class Boiled
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {90, 60, 150};
+                    nutrition_properties[] = {2.7, 205, 135, 13, 0, 0, 1};
+                };
+                class Burned
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {200, 20, 0};
+                    nutrition_properties[] = {0.7, 30, 0, 0, 0, 0, 1};
+                };
+                class Rotten
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {0.7, 30, 20, 0, 15, 0, 1};
+                };
+            };
+
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
+            };
+        };
+    };
+
+    //--------------------------------------------------------------------------
     // Die Milchkanne (Lieferung c09900f). Traggut der Milchkette; noch ohne
     // eigenen Prozess - Milch ist in V1 Vanillas PowderedMilk
     // (Config/Ingredients/Dairy.json). Die Kanne existiert, damit das
@@ -1136,6 +1279,87 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HUNTERSEASONING";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERSEASONING_DESC";
+    };
+
+    //==========================================================================
+    // ### SLICE dairy ###   Pilzkultur - das Saeuerungsmittel der Kaesekette
+    //
+    // WARUM SIE HIER UNTEN STEHT UND NICHT BEI DER MILCH: sie erbt von
+    // ChefZ_SpiceBase, und DayZ loest "class X : Basis" nur auf, wenn der
+    // Rumpf der Basis in DERSELBEN config.cpp WEITER OBEN steht. Eine
+    // Vorwaertsdeklaration waere hier keine Alternative - die Basis liegt in
+    // dieser Datei, nicht in einem anderen Addon. Der Slice ist trotzdem
+    // dairy: sie taucht in CfgPatches im dairy-Block auf, ihr Datensatz steht
+    // in Dairy.json, und ihr Delta ist _deltas/dairy.json.
+    //
+    // WARUM ChefZ_SpiceBase UND NICHT Edible_Base DIREKT: die Basis ist genau
+    // das, was eine Kultur baulich ist - eine kleine Tuete Pulver, essbar und
+    // wertlos, ohne Food-Knoten und ohne Garstufen. Sie bringt ausserdem die
+    // Skriptklasse mit, die die Essaktion registriert (ChefZ_SpiceBase in
+    // ChefZ_SpiceIngredients.c, ActionEatSmall + ActionForceFeedSmall). Vanilla
+    // registriert Essaktionen auf jeder Nahrungsklasse einzeln und NICHT auf
+    // Edible_Base (Potato.c:26-31); eine eigene Basis haette eine eigene
+    // Skriptklasse fuer denselben Zweizeiler gebraucht.
+    //
+    // KEIN FOOD-BLOCK, und das ist Absicht: die Kultur wird in die Milch
+    // GERUEHRT, nicht gegart. Sie liegt in keinem Kochgeraet. Stufen ohne
+    // Uebergaenge waeren die Falle aus 01 V4 (FoodStage.c:472 verbrennt das
+    // Item), Stufen mit Uebergaengen waeren Ballast fuer einen Vorgang, den es
+    // nicht gibt. Der Transform Milch + Kultur -> Bruch ist ein
+    // Klassentausch an der Station, kein Garprozess.
+    //
+    // KATEGORIE SPICE, KEINE NEUE KATEGORIE "CULTURE": eine Kategorie mit genau
+    // einem Mitglied traegt nichts, und Kategorien sind Registry-weit
+    // (Workflow §5) - sie anzulegen waere eine Entscheidung fuer alle Slices,
+    // nicht fuer diesen. SPICE ist im Mod die Sammelstelle fuer "kleine Menge,
+    // saettigt nicht, geht als Zutat in etwas anderes ein", und genau das ist
+    // eine Kultur. Getrennt bleibt sie ueber den TAG CHEFZ_CULTURE
+    // (_deltas/dairy.json), nicht ueber CHEFZ_SPICE: ein Rezept, das per Tag
+    // "irgendein Gewuerz" nimmt, soll keine Bakterienkultur als Wuerze
+    // akzeptieren. Der Restfall bleibt offen und steht im Slice-Bericht: ein
+    // Rezept, das per KATEGORIE SPICE bindet, wuerde sie mitnehmen.
+    //
+    // PROXY: \dz\gear\food\Rice.p3d - ein kleiner Beutel. NICHT das geerbte
+    // PowderedMilk.p3d der Basis: in einer KAESEkette saehe eine Tuete
+    // Milchpulver wie die Milch aus, und der Spieler haette zwei verschiedene
+    // Dinge mit demselben Bild. Der Reisbeutel kollidiert dafuer mit
+    // ChefZ_DriedPeppercorns - gemeldet im Asset-Bedarf, aufgeloest mit dem
+    // gemeinsamen Gewuerzbehaelter-Mesh aus Production Map §71 und der Textur
+    // "graues Sporenpulver". Kein Item wartet darauf.
+    //==========================================================================
+    class ChefZ_MushroomCulture : ChefZ_SpiceBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MUSHROOMCULTURE";
+        descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMCULTURE_DESC";
+        model = "\dz\gear\food\Rice.p3d";
+        weight = 30;
+
+        // fullnessIndex 0.1: varQuantityMax = 1 (Stueckware aus der Basis, ein
+        // Biss nimmt die ganze Menge 1), also
+        //     0.1 * 1 = 0.1 Volumen fuer die ganze Tuete
+        // - das Gewuerzband "praktisch 0" aus dem Dateikopf. Niemand isst eine
+        // Kultur als Mahlzeit, und der Magen soll das nicht anders sehen.
+        // Herleitung im Dateikopf: PlayerStomach.c:86 multipliziert
+        // (volume = fullnessIndex * m_Amount), es teilt nichts durch 100;
+        // VOMIT_THRESHOLD ist 2000 (PlayerConstants.c:208).
+        //
+        // Der Block steht ausgeschrieben da, obwohl er den fullnessIndex der
+        // Basis nur wiederholt: energy und nutritionalIndex sind NIEDRIGER als
+        // bei einem Gewuerz (5 statt 10, 4 statt 10), und sobald ein Feld
+        // abweicht, muessen alle danebenstehen - ein Teil-Block erbt nicht
+        // feldweise. Ueber 0 bleibt der Wert, damit die Klasse einen
+        // NutritionalProfile behaelt: PlayerStomach.InitData registriert nur
+        // Klassen mit Nutrition oder Food (01 V7).
+        class Nutrition
+        {
+            fullnessIndex = 0.1;
+            energy = 5;
+            water = 0;
+            nutritionalIndex = 4;
+            toxicity = 0;
+            digestibility = 1;
+        };
     };
 };
 

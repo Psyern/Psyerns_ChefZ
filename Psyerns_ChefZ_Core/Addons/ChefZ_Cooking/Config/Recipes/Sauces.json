@@ -1,6 +1,11 @@
 {
     "kind": "recipe",
     "schemaVersion": 1,
+
+    "_note": "MENGE AM AUSGANG - KORREKTUR VOM 31.08.2026. Alle vier Rezepte standen auf quantity 1, obwohl ChefZ_SauceItemBase varQuantityMax = 100 fuehrt: ein Kochvorgang von zwei bis sieben Minuten lieferte ein Glas mit EINEM HUNDERTSTEL Fuellung. quantity ist ABSOLUT - ChefZ_Applicator.ApplyQuantity reicht den Wert unveraendert an ItemBase.SetQuantity weiter (ChefZ_Applicator.c:963-997); es wird nichts durch 100 geteilt und nichts mit einer Portionszahl multipliziert. Es ist dieselbe Verwechslung von \"relativ\" und \"absolut\" wie beim fullnessIndex derselben vier Klassen. Alle vier stehen jetzt auf 100 = ein volles Glas, und das ist genau die Zahl, die die Zutatenbindung im selben Modul seit jeher behauptet: CfgChefZIngredients ChefZ_SauceIngredient traegt unitsPerWholeItem = 100 mit dem Kommentar \"ein volles Glas sind 100 Einheiten, und ein Gericht darf sich 25 davon nehmen\". KEINES DER VIER WAR ALS TEILFUELLUNG GEDACHT - jede Naehrwertherleitung in der config.cpp rechnet die Zutaten auf EIN Glas.",
+
+    "_comment": "EINHEITENRECHNUNG (ChefZ_SlotEvaluator.c:32): Einheiten = quantity / quantityMax * unitsPerWholeItem. Vorher 1/100 * 100 = 1 Einheit GRAM je Glas, jetzt 100/100 * 100 = 100. WAS DABEI NICHT KAPUTTGEHT: kein Gerichtsrezept verbraucht Sauce oder Bruehe ueber consumeAmount. Alle SIEBEN Slots, die eine der vier Klassen nehmen - BowlDishes.json: RCP_ChefZ_HunterStewBroth (BROTH 1-2), RCP_ChefZ_FishermanStewBroth (1-2), RCP_ChefZ_BoneBrothSoup (2-3), RCP_ChefZ_BoneBrothSoupGroup (4-6); Dishes_A.json: RCP_ChefZ_SurvivorSpaghetti (TOMATO_SAUCE 1-2), RCP_ChefZ_SausagePasta (SAUCE 1, optional), RCP_ChefZ_HunterPasta (CREAM_SAUCE 1, optional) - stehen auf consume \"whole\" und fordern weder unit noch amount. \"whole\" LOESCHT das Item (ChefZ_CompiledSlot.c:22), der Fuellstand war also nie das Nadeloehr: ein Glas traegt ein Gericht, vorher wie nachher, und kein Gerichtsrezept aendert sich. Gewirkt hat der Fehler an drei anderen Stellen: (1) am Naehrwert beim ESSEN der Sauce selbst - PlayerStomach.c:92 rechnet energy/100 JE EINHEIT, aus 150 Energie kamen bei Menge 1 genau 1.5 an; (2) an der Mengenleiste, die ein frisch gekochtes Glas als leer zeigte; (3) an der Zusage der Zutatenbindung, dass ein Gericht sich 25 der 100 Einheiten nehmen darf - die ist erst jetzt einloesbar. DIE NAEHRWERTKOMMENTARE DER VIER KLASSEN BLEIBEN UNVERAENDERT GUELTIG: der fullnessIndex-Rescale vom selben Tag rechnet bereits gegen varQuantityMax = 100 (Knochenbruehe 3.0 * 100 = 300 Magenvolumen). Diese Rechnung war vorher nur deshalb falsch, weil nie ein volles Glas entstand.",
+
     "records": [
         {
             "id": "RCP_ChefZ_TomatoSauce",
@@ -51,8 +56,9 @@
             "policy": { "extraItems": "forbid" },
             "outputs": [
                 {
+                    "_note": "100 = ein volles Glas (varQuantityMax der Klasse). Drei bis sechs Tomaten und 8 g Salz, 180 s eingekocht - die Naehrwertherleitung in der config.cpp (§52, \"Drei Tomaten und Salz, im Topf eingekocht\") rechnet auf genau ein Glas und nicht auf einen Bodensatz. Herleitung der Zahl im Kopf dieser Datei.",
                     "cls": "ChefZ_TomatoSauce",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "setState": "COOKED",
                     "inheritFreshness": false,
@@ -102,8 +108,9 @@
             "policy": { "extraItems": "forbid" },
             "outputs": [
                 {
+                    "_note": "100 = ein volles Glas. Die zutatenaermste und kuerzeste der vier (eine Sahne, eine Butter, 5 g Salz, 120 s) - trotzdem ein volles Glas, denn die Ausbeute der Kette steckt in der Zutatenzahl und nicht im Fuellstand: wer mehr Rahmsauce will, kocht zweimal und braucht zweimal Sahne und Butter. Ein halb gefuelltes Glas waere derselbe Zutatenpreis fuer die Haelfte. Herleitung im Kopf dieser Datei.",
                     "cls": "ChefZ_CreamSauce",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "setState": "COOKED",
                     "inheritFreshness": false,
@@ -174,8 +181,9 @@
             ],
             "outputs": [
                 {
+                    "_note": "100 = ein volles Glas. Drei bis sechs Pilze, eine Sahne, Kraeuter und 5 g Salz, 150 s - die zutatenreichste der drei Saucen und die einzige mit priority 20. Auch sie liefert genau ein Glas: die Stufe ueber der reinen Rahmsauce liegt in den Pilzen, nicht in der Menge. Herleitung im Kopf dieser Datei.",
                     "cls": "ChefZ_MushroomCreamSauce",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "setState": "COOKED",
                     "inheritFreshness": false,
@@ -229,8 +237,9 @@
             "policy": { "extraItems": "forbid" },
             "outputs": [
                 {
+                    "_note": "100 = ein volles Glas. Zwei bis vier Knochen, zwei bis vier Wurzelgemuese und Kraeuter, 420 s - der laengste Kochvorgang des ganzen Moduls. Hier war der alte Wert am teuersten: sieben Minuten Kessel fuer eine Einheit Bruehe. Und hier haengt am meisten daran - RCP_ChefZ_BoneBrothSoupGroup (BowlDishes.json) verlangt VIER BIS SECHS Glaeser Bruehe, also vier bis sechs volle 420-Sekunden-Durchgaenge, RCP_ChefZ_BoneBrothSoup zwei bis drei. Die Bruehe ist die \"Premium-Basis\" aus Production Map §55; ein Glas davon muss ein Glas sein. Herleitung im Kopf dieser Datei.",
                     "cls": "ChefZ_BoneBroth",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "setState": "COOKED",
                     "inheritFreshness": false,

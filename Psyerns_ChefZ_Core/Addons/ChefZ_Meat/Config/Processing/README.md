@@ -152,3 +152,107 @@ unveraendert "ein ganzes Stueck". Das gilt auch fuer die Slots FREMDER Slices,
 die Fleisch ueber `MINCED_MEAT` verbrauchen (`ChefZ_Cooking/Config/Recipes/
 BowlDishes.json` und `DishesB.json`); an denen war deshalb nichts zu aendern,
 und es durfte auch nichts geaendert werden.
+
+## Selbstbezug — warum drei Slots seit dem 31.08.2026 mehr als `category` prüfen
+
+Gemeldet aus dem Processing-Slice, bestätigt: der Slot
+
+    { "allOf": [ { "category": "MEAT" }, { "vanillaStage": "Raw" } ] }
+
+matchte das EIGENE Erzeugnis. `ChefZ_MincedMeat` trägt `MEAT` und `MINCED_MEAT`
+(`../Ingredients/Meat.json`), und seine Garstufe ist `Raw` — Kategorien sind in
+ChefZ self-or-ancestor, `MINCED_MEAT` hängt unter `MEAT`. Mit dem
+Selbstnachstart des Fleischwolfs (`STATION_TIMED`, 30 s) hätte der Wolf sein
+eigenes Hack alle 30 Sekunden neu gewolft und dabei in 35 % der Fälle `Lard`
+abgeworfen: unbegrenzter Speck aus einem Steak.
+
+Beim Nachrechnen kamen zwei weitere Wege desselben Fehlers heraus, die in der
+Meldung nicht standen:
+
+* **Rohwurst.** `ChefZ_RawSausage` trägt `MEAT` + `SAUSAGE` und Garstufe `Raw`.
+  Sie matchte denselben Slot — Wurst zurück zu Hack, wieder mit Speck.
+* **`TR_DicedMeat`.** Derselbe Selektor, dieselbe Lücke: der Würfel würfelte
+  sich selbst. Ohne Speck, aber ohne Sinn.
+* **`TR_RawHunterSausage`.** Sein Fleischslot verlangt `WILD_MEAT` + `Raw`.
+  `ChefZ_MincedVenison` und `ChefZ_RawVenisonSausage` tragen beide `WILD_MEAT` —
+  zwei Wildwürste ergaben eine Jägerwurst. Das widerspricht zudem dem, was
+  weiter oben in dieser Datei steht: die Jägerwurst ist die EINZIGE Sorte
+  direkt aus rohem Wildfleisch statt aus Hack (§38).
+
+### Was jetzt dort steht
+
+    { "allOf": [
+        { "category": "MEAT" },
+        { "vanillaStage": "Raw" },
+        { "state": "RAW" },
+        { "not": { "anyOf": [ { "category": "MINCED_MEAT" }, { "category": "SAUSAGE" } ] } }
+    ] }
+
+**Warum `state` allein NICHT gereicht hätte** — die naheliegende Lösung wäre
+gewesen, `vanillaStage` durch `state: "RAW"` zu ersetzen, weil Hack
+`defaultState: PREPARED` führt. Zwei Gründe dagegen, beide nachgelesen:
+
+1. Rohwurst führt `defaultState: RAW`. Sie hätte weiter gematcht.
+2. `state` ist für Vanilla-Fleisch KEINE Garstufe.
+   `ChefZ_ItemStateComponent.GetState()` geht in dieser Reihenfolge vor
+   (Zeilen 690-723): eigene Zustandsvariable, dann `info.defaultState`, erst
+   dann die Vanilla-Garstufe. Für ein Steak greift immer Schritt 2 und liefert
+   `RAW` — auch für ein GEBRATENES Steak. `state: "RAW"` allein hätte den
+   Fleischwolf also für gebratenes Fleisch geöffnet. `vanillaStage` bleibt
+   deshalb stehen; es liest `facts.vanillaFoodStage`
+   (`ChefZ_CompiledSelector.c:251-252`) und ist die einzige der beiden
+   Angaben, die wirklich die Garstufe meint.
+
+`not` ist ein regulärer Selektorschlüssel (`ChefZ_Selector.c:62`, Auswertung
+`ChefZ_CompiledSelector.c:281-284`: `return !negated.Test(facts)`), und die
+Schachtelung `allOf > not > anyOf > Blatt` bleibt weit innerhalb der acht
+Ebenen aus `ChefZ_SelectorLevels.c`. Jeder Knoten trägt genau ein Prädikat —
+`CountPredicates()` (`ChefZ_SelectorNode.c:186`) verlangt das.
+
+### Konservenklassen: bewusst NICHT wolfbar
+
+`ChefZ_SaltedMeat`, `ChefZ_DriedMeat` und `ChefZ_SmokedMeat` (Slice
+`preservation`) tragen `category: MEAT` und wären über `vanillaStage: Raw`
+erreichbar gewesen. Der zusätzliche `state: "RAW"` schließt sie aus, denn ihr
+Zustand ist `SALTED`, `DRIED` bzw. `SMOKED`.
+
+Das ist eine Entscheidung und keine Nebenwirkung. Der Ausgang dieses Transforms
+setzt `setState: "PREPARED"`; gewolfte Dauerware käme also als frisches Hack
+heraus und hätte ihre Haltbarkeit unterwegs verloren — eine Zustandswäsche in
+die falsche Richtung. Wer aus Dörrfleisch Hack machen können soll, braucht
+einen eigenen Transform im Slice `preservation`, der den Zustand bewusst
+weiterreicht. Dasselbe gilt für `ChefZ_SmokedSausage` und `ChefZ_DrySausage`,
+die zusätzlich schon über `SAUSAGE` ausgeschlossen sind.
+
+### Was NICHT geändert wurde
+
+Die fünf sortenreinen Transforms (`TR_PorkToMinced` … `TR_BearToMinced`) sind
+über `cls` an je eine VANILLA-Klasse gebunden. Eine ChefZ-Klasse kann dort
+nie matchen; sie brauchen die Zusätze nicht und haben sie nicht bekommen.
+`TR_RawSausage` und `TR_RawSpicySausage` nehmen `MINCED_MEAT` — das ist ihr
+Zweck, und ihr Ergebnis ist eine Wurst, also keine `MINCED_MEAT`. Kein Kreis.
+
+## Gewürzslots: `tag CHEFZ_SPICE` statt `category SPICE`
+
+Stand 31.08.2026, Nachtrag aus der Käsekette. `ChefZ_MushroomCulture`
+(`ChefZ_Ingredients/Config/Ingredients/Dairy.json`) trägt `category: SPICE`,
+aber bewusst NICHT den Tag `CHEFZ_SPICE`. Über die Kategorie hätten alle zehn
+Gewürzslots dieser Datei die Käsekultur als Wurstgewürz angenommen.
+
+Alle zehn Slots stehen deshalb jetzt auf `{ "tag": "CHEFZ_SPICE" }`.
+
+Gegengezählt, bevor umgestellt wurde: von den acht Zutaten, die in den
+Wurstrezepten gemeint sind — `ChefZ_Salt`, `ChefZ_BlackPepper`,
+`ChefZ_DriedPeppercorns`, `ChefZ_PepperBerries`, `ChefZ_PaprikaPowder`,
+`ChefZ_DriedPaprika`, `ChefZ_HunterSeasoning`, `ChefZ_HerbMix` — trägt jede den
+Tag. Einziges Item mit `SPICE`-Abstammung ohne Tag ist die Kultur. Die Slots
+sind also deckungsgleich minus Kultur.
+
+`ChefZ_Salt` bleibt zulässig, obwohl es `category: SALT` führt: `SALT` hängt
+unter `SPICE` (Kategoriekette aus den Deltas), es matchte also schon vorher —
+und es trägt `CHEFZ_SPICE`, matcht damit auch jetzt. Ohne Salz gäbe es keine
+einzige Wurst.
+
+Die beiden Kräuterslots (`TR_RawVenisonSausage`, `TR_RawBoarSausage`) bleiben
+auf `anyOf[HERB, DRIED_HERB]`. Die Kultur trägt keine dieser Kategorien; dort
+war nichts zu tun.

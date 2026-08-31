@@ -5,8 +5,9 @@
         { "id": "EGG", "parent": null, "displayName": "#STR_CHEFZ_CAT_EGG" }
     ],
     "tags": [
-        { "id": "CHEFZ_DAIRY", "appliesTo": ["PowderedMilk", "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese"] },
-        { "id": "CHEFZ_EGG", "appliesTo": ["ChefZ_Egg"] }
+        { "id": "CHEFZ_DAIRY", "appliesTo": ["PowderedMilk", "ChefZ_Cream", "ChefZ_Butter", "ChefZ_Cheese", "ChefZ_CheeseCurd"] },
+        { "id": "CHEFZ_EGG", "appliesTo": ["ChefZ_Egg"] },
+        { "id": "CHEFZ_CULTURE", "appliesTo": ["ChefZ_MushroomCulture"] }
     ],
     "processes": [
         { "id": "PROCESS_SEPARATE_CREAM", "station": "ChefZ_ButterChurn", "durationSec": 120 },
@@ -17,13 +18,17 @@
         { "class": "ChefZ_Cream", "energy": 350, "water": 150, "stomach": 20 },
         { "class": "ChefZ_Butter", "energy": 600, "water": 20, "stomach": 15 },
         { "class": "ChefZ_Cheese", "energy": 450, "water": 60, "stomach": 35 },
-        { "class": "ChefZ_Egg", "energy": 90, "water": 40, "stomach": 12 }
+        { "class": "ChefZ_Egg", "energy": 90, "water": 40, "stomach": 12 },
+        { "class": "ChefZ_CheeseCurd", "energy": 200, "water": 120, "stomach": 2.8 },
+        { "class": "ChefZ_MushroomCulture", "energy": 5, "water": 0, "stomach": 0.1 }
     ],
     "classes": [
         "ChefZ_Cream",
         "ChefZ_Butter",
         "ChefZ_Cheese",
         "ChefZ_Egg",
+        "ChefZ_CheeseCurd",
+        "ChefZ_MushroomCulture",
         "ChefZ_ButterChurn",
         "ChefZ_CheesePress",
         "ChefZ_MilkCan"

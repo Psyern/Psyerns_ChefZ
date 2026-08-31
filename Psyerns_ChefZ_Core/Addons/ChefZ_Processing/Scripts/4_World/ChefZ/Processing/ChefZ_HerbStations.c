@@ -20,6 +20,28 @@
 //
 // Beide Stationen fassen Vanillas Kochkette an keiner Stelle an (11 E6).
 //
+// ---------------------------------------------------------------------------
+// KEIN TORWAECHTER, und das ist ab jetzt eine Entscheidung (31.08.2026)
+// ---------------------------------------------------------------------------
+// Muehle, Fleischwolf, Butterfass und Raeucherschrank haben seit heute ein
+// CanReceiveItemIntoCargo, das ihren Cargo auf das Passende einengt. Moerser
+// und Trockenrahmen bekommen bewusst KEINES:
+//
+//   - Der Trockenrahmen ist laut Production Map §57 die Station, an der noch
+//     Fleisch, Fisch und Nudeln landen sollen. Was er trocknen darf, waechst
+//     also noch; ein Torwaechter waere heute eine Liste, die morgen jemand
+//     vergisst nachzuziehen, und der Fehler faellt erst im Spiel auf.
+//   - Der Moerser nimmt seit Welle 2 der Kaesekette auch VERROTTETE PILZE
+//     (TR_RottenMushroomToCulture, Config/Processing/HerbGrinding.json). Ein
+//     Kraeutertorwaechter, wie er vor dieser Zeile naheliegend gewesen waere,
+//     haette den Pilz ausgesperrt und die Kaesekette an ihrem ersten Schritt
+//     unterbrochen - lautlos, denn ein Item, das gar nicht ins Cargo kommt,
+//     erzeugt keine Meldung.
+//
+// Beide Stationen haben ausserdem keine zaehlbare Fassung und keinen
+// Selbstnachstart. Der Grund, aus dem Fass und Wolf einen Torwaechter
+// brauchen, trifft hier also gar nicht zu.
+//
 // Layer: 4_World.
 //==============================================================================
 

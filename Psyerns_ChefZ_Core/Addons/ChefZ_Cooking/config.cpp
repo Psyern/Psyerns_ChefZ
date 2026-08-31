@@ -3233,6 +3233,49 @@ class CfgChefZ
         };
     };
 
+    // ### SLICE cheese ###   Der Kesselschritt der Kaesekette (Todo 10)
+    //
+    // Eigener Knoten, weil CfgChefZ genau EINEN Knoten je SLICE traegt (02 §4) -
+    // nicht je Modul. Dieses Modul ist ein geteilter Ordner.
+    //
+    // Der Knoten heisst ChefZ_CheeseChain und NICHT ChefZ_Cheese: ChefZ_Cheese
+    // ist bereits der Name einer Itemklasse in ChefZ_Ingredients. Zwei
+    // verschiedene Configwurzeln (CfgChefZ und CfgVehicles) kollidieren
+    // technisch nicht, aber ein Leser, der "ChefZ_Cheese" sucht, faende dann
+    // zwei voellig verschiedene Dinge.
+    //
+    // loadOrder 320: nach den Saucen (300) und den Behaeltern (310), VOR den
+    // Gerichteslices (330/340/350). Der Kaesebruch ist ein Zwischenprodukt -
+    // die Gerichte lesen aus ihm, er liest aus keinem von ihnen. Der Core
+    // haengt Records nicht voneinander ab; die Reihenfolge ist Vorsorge und
+    // kostet nichts.
+    //
+    // handcraftRecipeSlots = 0: das Rezept zuendet am Kochgeraet. Dieser Slice
+    // registriert KEIN Handcraft-Rezept, Vanillas Rezeptliste bleibt um kein
+    // Bit veraendert (Regel §10.2).
+    //
+    // GENAU EINE dataFile und KEINE Zutatenbindung: dieser Slice deklariert
+    // keine einzige Klasse. Die drei Klassen der Kette - PowderedMilk,
+    // ChefZ_MushroomCulture, ChefZ_CheeseCurd - sind samt Kategorien, Tags und
+    // Zustaenden bereits von ChefZ_Ingredients in
+    // Config/Ingredients/Dairy.json gebunden, und ChefZ_Ingredients steht
+    // ohnehin in requiredAddons. Ein zweiter Datensatz derselben Klassen waere
+    // ein Doppeleintrag (05 §2, 08 E4).
+    //
+    // Das zweite Glied der Kette - Bruch pressen zu ChefZ_Cheese - ist ein
+    // Transform an einer Station und gehoert damit NICHT hierher, sondern dem
+    // Processing-Slice.
+    class ChefZ_CheeseChain
+    {
+        chefzApiVersion = 1;
+        loadOrder = 320;
+        handcraftRecipeSlots = 0;
+        dataFiles[] =
+        {
+            "ChefZ_Cooking/Config/Recipes/Cheese.json"
+        };
+    };
+
     // ### SLICE dishes-b ###
     //
     // Eigener Knoten, weil CfgChefZ genau EINEN Knoten je SLICE traegt (02 §4) -

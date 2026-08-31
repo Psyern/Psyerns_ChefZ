@@ -17,7 +17,7 @@ For the reasoning behind the split, see [Architecture](Architecture).
 | `ChefZ_Registry` | 0 | 0 | — | 137 | — |
 | `ChefZ_Farming` | 29 | 4 | 19 | 21 | 53 |
 | `ChefZ_Processing` | 14 | 8 | 18 | 30 | 41 |
-| `ChefZ_Ingredients` | 26 | 3 | 1 | 49 | 54 |
+| `ChefZ_Ingredients` | 26 | 3 | 1 | 49 | 58 |
 | `ChefZ_Meat` | 32 | 1 | — | 58 | 55 |
 | `ChefZ_Baking` | 6 | 1 | — | 12 | 16 |
 | `ChefZ_Preservation` | 10 | 1 | 10 | 20 | 28 |

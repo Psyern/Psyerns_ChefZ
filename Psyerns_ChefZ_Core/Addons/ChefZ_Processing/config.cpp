@@ -400,11 +400,14 @@ class CfgVehicles
     // BRAUCHT DIE MILCHKETTE EINE FLUESSIGKEITSFUEHRUNG? NEIN.
     // ---------------------------------------------------------------------
     // Nachgeprueft an Config/Processing/Dairy_Transforms.json: alle drei
-    // Transforms (TR_MilkToCream, TR_CreamToButter, TR_MilkToCheese) matchen
-    // ueber "cls" auf ITEM-Klassen - PowderedMilk und ChefZ_Cream. Keiner nennt
-    // isLiquidContainer oder liquidType. Sahne und Bruch sind in V1 Stueckware,
-    // keine Fluessigkeit; die Station traegt sie in ihrem Cargo, genau wie der
-    // Trockenrahmen seine Kraeuter.
+    // Transforms (TR_MilkToCream, TR_CreamToButter, TR_CurdToCheese) matchen
+    // ueber "cls" auf ITEM-Klassen - PowderedMilk, ChefZ_Cream und seit
+    // Welle 2 ChefZ_CheeseCurd. Keiner nennt isLiquidContainer oder
+    // liquidType. Sahne und Bruch sind in V1 Stueckware, keine Fluessigkeit;
+    // die Station traegt sie in ihrem Cargo, genau wie der Trockenrahmen seine
+    // Kraeuter. Der Bruch ist dabei der Beweis, dass die Entscheidung traegt:
+    // die Kaesekette hat mit Welle 2 eine Stufe DAZUBEKOMMEN, und sie kam ohne
+    // eine einzige Fluessigkeitszeile aus.
     //
     // Die einzige Stelle im Modul, die tatsaechlich mit Fluessigkeit arbeitet,
     // ist Config/Processing/Salt.json - und auch dort ist der Eingang ein
@@ -432,7 +435,15 @@ class CfgVehicles
     //   sind aus den Transforms gerechnet und in beiden Rasterlesarten
     //   tragfaehig: der Milchkarton (PowderedMilk) ist 2x3, ChefZ_Cream 2x2.
     //     Butterfass  10x14 - siehe die eigene Rechnung an der Klasse.
-    //     Presse      6x4 - TR_MilkToCheese verlangt 3 Milch gleichzeitig.
+    //     Presse      6x4 - urspruenglich gerechnet fuer TR_MilkToCheese
+    //                 (3 Milch gleichzeitig). Seit Welle 2 nimmt die Presse
+    //                 nur noch EINEN ChefZ_CheeseCurd (TR_CurdToCheese), das
+    //                 Gitter ist damit groesser als noetig. Es BLEIBT
+    //                 trotzdem: ein Cargo zu verkleinern wirft auf einem
+    //                 laufenden Server das heraus, was ueber der neuen Grenze
+    //                 liegt, und der Gewinn waere ein leeres Feld weniger.
+    //                 Der Platz traegt jetzt mehrere Brueche in Reihe und den
+    //                 Laib, der im selben Cargo entsteht.
     //   Ein Cargo, der groesser ist als itemSize, ist in diesem Modul kein
     //   Sonderfall: ChefZ_HerbStationBase macht es genauso, und die
     //   Honigschleuder traegt 10x10.

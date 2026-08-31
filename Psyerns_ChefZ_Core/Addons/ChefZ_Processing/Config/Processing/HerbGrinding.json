@@ -31,6 +31,27 @@
       "priority": 100
     },
     {
+      "id": "TR_RottenMushroomToCulture",
+      "_note": "KAESEKETTE, ERSTER SCHRITT (Welle 2, 31.08.2026, Alex' Todo 10). Alex' Spec lautet 'verschimmelten Pilz trocknen und dann moersern'. ABWEICHUNG IN V1, bewusst und hier festgehalten: (a) Der TROCKNUNGSSCHRITT entfaellt. Er braeuchte eine eigene Zwischenklasse (getrockneter Schimmelpilz) und einen zweiten Transform am Trockenrahmen; fuer die Kaesekette traegt er nichts, was der Moerser nicht schon leistet, und eine Klasse ohne eigene Aussage ist im Projekt der ausdrueckliche Nicht-Weg. Kommt der Schritt spaeter, haengt er VOR diesen Transform, ohne ihn zu aendern. (b) 'Verschimmelt' wird als Vanillas Garstufe ROTTEN abgebildet, nicht als ChefZ-Zustand. Belegt: MushroomBase erbt von Edible_Base und liefert CanDecay() = true (scripts - 1.29/4_World/DayZ/Entities/ItemBase/Gear/Food/MushroomBase.c:19-22); EEOnCECreate setzt bei rund 30 % aller Loot-Pilze direkt ChangeFoodStage(FoodStageType.ROTTEN) (ebd. Z.28-42); und der Verfallspfad fuer Fruechte, Gemuese und Pilze endet in Edible_Base.ProcessDecay ebenfalls bei ROTTEN (Edible_Base.c:754-816). Verrottete Pilze gibt es also von der ersten Minute an, ohne dass ein Spieler warten muss. Der Selektorwert 'Rotten' ist FoodStageType.ROTTEN = 6 (ChefZ_VanillaStage.c, Zahlen aus FoodStage.c:1) und wird vom ChefZ_FactCollector nullsicher gelesen (ChefZ_FactCollector.c:394-410). Ein ChefZ-Zustand ROTTEN waere der schlechtere Weg: ihn traegt nur, was ChefZ selbst verwaltet, und Vanilla-Pilze sind fremde Klassen. Kategorie MUSHROOM statt Klassenliste - damit gelten die sieben in ChefZ_Ingredients/Config/Ingredients/Mushrooms.json deklarierten Speisepilze. AmanitaMushroom und PsilocybeMushroom sind dort NICHT deklariert und fallen deshalb heraus; Gift- und Rauschpilz als Kaesekultur waeren eine Nebenwirkung, die niemand bestellt hat.",
+      "process": "PROCESS_GRIND_SPICE",
+      "stationsAllowed": ["ChefZ_Mortar"],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": { "allOf": [ { "category": "MUSHROOM" }, { "vanillaStage": "Rotten" } ] },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        { "cls": "ChefZ_MushroomCulture", "quantity": 1, "quantityMode": "fixed", "setState": "PREPARED" }
+      ],
+      "priority": 110
+    },
+    {
       "id": "TR_HerbMix",
       "process": "PROCESS_GRIND_HERB",
       "stationsAllowed": ["ChefZ_Mortar"],
@@ -48,6 +69,7 @@
     },
     {
       "id": "TR_HunterSeasoning",
+      "_note": "SALZ-SLOT AUF TAG UMGESTELLT (31.08.2026, Welle 2). Er band bis dahin auf { category: SPICE }. Mit ChefZ_MushroomCulture gibt es seit Welle 2 ein Item in der Kategorie SPICE, das KEINE Wuerze ist, sondern die Saeuerungskultur der Kaesekette - ein Kategorie-Slot haette sie als Gewuerz mitgenommen und dem Spieler seine Kultur in eine Jaegermischung gemahlen. ChefZ_Ingredients hat den Fall an der Klasse vorausgesehen ('Ein Rezept, das per KATEGORIE SPICE bindet, wuerde sie mitnehmen') und die Trennung ueber den Tag angelegt: alles Wuerzende traegt CHEFZ_SPICE, die Kultur traegt CHEFZ_CULTURE. Nachgezaehlt ueber alle Zutatendateien des Projekts ist { tag: CHEFZ_SPICE } deckungsgleich mit 'Kategorie SPICE oder SALT ohne die Kultur' - ChefZ_Salt, ChefZ_PepperBerries, ChefZ_DriedPeppercorns, ChefZ_BlackPepper, ChefZ_DriedPaprika, ChefZ_PaprikaPowder, ChefZ_HerbMix und ChefZ_HunterSeasoning tragen den Tag alle. Der Slot verliert also nichts und gewinnt die Trennschaerfe. ACHTUNG fuer fremde Module: dieselbe Falle steht in ChefZ_Meat/Config/Processing/Meat.json in allen sechs PROCESS_STUFF_SAUSAGE-Transforms (Slots spice/spice1/spice2/spice3 binden auf category SPICE) - dort gemeldet, nicht von hier aus geaendert.",
       "process": "PROCESS_GRIND_SPICE",
       "stationsAllowed": ["ChefZ_Mortar"],
       "durationOverrideSec": 35,
@@ -57,7 +79,7 @@
         { "slotId": "paprika",    "match": { "cls": "ChefZ_PaprikaPowder" },    "minCount": 1, "consume": "whole" },
         { "slotId": "thyme",      "match": { "cls": "ChefZ_DriedThyme" },       "minCount": 1, "consume": "whole" },
         { "slotId": "wildgarlic", "match": { "cls": "ChefZ_DriedWildGarlic" },  "minCount": 1, "consume": "whole" },
-        { "slotId": "salt",       "match": { "category": "SPICE" },             "minCount": 1, "consume": "whole" }
+        { "slotId": "salt",       "match": { "tag": "CHEFZ_SPICE" },            "minCount": 1, "consume": "whole" }
       ],
       "outputs": [
         { "cls": "ChefZ_HunterSeasoning", "setState": "PREPARED", "quantityMode": "fixed", "quantity": 1 }

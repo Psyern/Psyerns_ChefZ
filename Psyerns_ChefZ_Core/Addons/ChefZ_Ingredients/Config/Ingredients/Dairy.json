@@ -31,6 +31,23 @@
             "categories": ["EGG"],
             "tags": ["CHEFZ_EGG"],
             "decays": true
+        },
+        {
+            "id": "ChefZ_CheeseCurd",
+            "_note": "Kaesekette Todo 10: Milch + ChefZ_MushroomCulture -> Bruch -> Kaese. Kategorie DAIRY wie der fertige Laib - der Bruch IST ein Milchprodukt, nur ein unfertiges. decays true und die kuerzeste lifetime des Slice (10800 s): ungepresster Bruch soll verderben, das ist der Grund ihn zu pressen.",
+            "categories": ["DAIRY"],
+            "tags": ["CHEFZ_DAIRY"],
+            "decays": true
+        },
+        {
+            "id": "ChefZ_MushroomCulture",
+            "_note": "Saeuerungsmittel der Kaesekette. Steht in DIESER Datei und nicht in Spices.json, obwohl die Kategorie SPICE ist: die Datei gehoert dem SLICE (dairy, CfgChefZ-Knoten ChefZ_DairyIngredients), die Kategorie der Registry - zwei getrennte Achsen. Spices.json gehoert dem Slice herbs. Kategorie SPICE statt einer neuen Kategorie CULTURE: eine Kategorie mit einem Mitglied traegt nichts, und Kategorien sind Registry-weit (Workflow §5). Getrennt wird ueber den Tag CHEFZ_CULTURE, NICHT ueber CHEFZ_SPICE - ein Rezept, das per Tag irgendein Gewuerz nimmt, soll keine Bakterienkultur als Wuerze akzeptieren.",
+            "categories": ["SPICE"],
+            "tags": ["CHEFZ_CULTURE"],
+            "defaultState": "PREPARED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": false
         }
     ]
 }

@@ -1,13 +1,15 @@
 //==============================================================================
-// ChefZ_DairyIngredients - die Skriptseite der beiden GARBAREN Milchprodukte.
+// ChefZ_DairyIngredients - die Skriptseite der GARBAREN Milchprodukte.
 //
-// Slice "dairy". Production Map §50 (Kaese), §51 (Ei).
+// Slice "dairy". Production Map §50 (Kaese), §51 (Ei); Kaesebruch aus der
+// Kaesekette (Todo 10, 31.08.2026).
 //
 // ---------------------------------------------------------------------------
-// Warum hier nur ZWEI der fuenf Klassen des Slice stehen
+// Warum hier nur DREI der sieben Klassen des Slice stehen
 // ---------------------------------------------------------------------------
-// ChefZ_Cream und ChefZ_Butter stehen bewusst NICHT hier; die Milch ist seit
-// dem 29.08.2026 Vanillas PowderedMilk und hat ohnehin kein ChefZ-Skript.
+// ChefZ_Cream, ChefZ_Butter und ChefZ_MushroomCulture stehen bewusst NICHT
+// hier; die Milch ist seit dem 29.08.2026 Vanillas PowderedMilk und hat ohnehin
+// kein ChefZ-Skript.
 //
 //   - Sahne hat keinen Food-Knoten. Sie liegt in keinem
 //     Pflicht-Slot eines Kochgeraets, HasFoodStage() ist false, und
@@ -18,12 +20,15 @@
 //     bereits ueber die Vanilla-Skriptkette. Sie hier anzufassen hiesse, ihr
 //     Lards Bratfett-Verhalten (IsMeat, ActionEatMeat, CanDecay) wegzunehmen
 //     und danach von Hand nachzubauen - eine Aenderung ohne Gegenwert.
+//   - ChefZ_MushroomCulture erbt in der config.cpp von ChefZ_SpiceBase und
+//     damit dessen Skriptklasse samt Essaktion. Sie hat keinen Food-Knoten,
+//     liegt in keinem Kochgeraet und braucht CanBeCooked() nie.
 //
 // ---------------------------------------------------------------------------
-// Kaese und Ei: die CONFIG-Elternklasse bleibt, die SKRIPT-Kette wechselt
+// Kaese, Ei und Bruch: die CONFIG-Elternklasse bleibt, die SKRIPT-Kette wechselt
 // ---------------------------------------------------------------------------
-// Beide Configklassen erben von einer Vanilla-Klasse (BoxCerealCrunchin bzw.
-// Marmalade), und das ist weiterhin richtig so: die Vanilla-Basis liefert das
+// Alle drei Configklassen erben von einer Vanilla-Klasse (BoxCerealCrunchin
+// bzw. Marmalade), und das ist weiterhin richtig so: die Vanilla-Basis liefert das
 // Proxy-Modell samt Inventarform, ohne dass irgendwo ein p3d-Pfad geraten
 // werden muss. Ein falsch geratener Pfad faellt erst beim Packen auf, eine
 // geerbte Klasse nie. An der config.cpp aendert sich deshalb NICHTS -
@@ -88,6 +93,50 @@ class ChefZ_Cheese extends ChefZ_Edible_Base
      * ActionEatBig ist der wertgleiche Ersatz ohne diesen Nebeneffekt und die
      * Variante, die Vanilla fuer grosse Portionen nimmt (Rice.c, Marmalade.c).
      */
+    override void SetActions()
+    {
+        super.SetActions();
+
+        AddAction(ActionForceFeed);
+        AddAction(ActionEatBig);
+    }
+}
+
+//! Kaesebruch (Todo 10, 31.08.2026). Die Zwischenstufe der Kaesekette:
+//! Milch + ChefZ_MushroomCulture -> Bruch -> (Kaesepresse) -> ChefZ_Cheese.
+//!
+//! Config: ChefZ_CheeseCurd : Marmalade (Proxy-Modell Schraubglas).
+//! Skript: ChefZ_Edible_Base - AUS DEMSELBEN GRUND WIE KAESE UND EI.
+//!
+//! Der Bruch traegt einen Food-Knoten MIT FoodStageTransitions und wird in
+//! einem Pflicht-Slot stehen, sobald das Pressrezept gebaut ist. Bliebe die
+//! Skriptklasse Marmalade, liefe genau der Defekt wieder an, der im Dateikopf
+//! beschrieben ist: Marmalade erbt Edible_Base, Edible_Base.CanBeCooked()
+//! liefert false (Edible_Base.c:129), Cooking.ProcessItemToCook ginge am Item
+//! vorbei (Cooking.c:47), die Garstufe bliebe auf Raw stehen und
+//! ChefZ_RecipeEvaluator.CheckStages liesse das Rezept nie fertig werden. Die
+//! FoodStageTransitions in der config.cpp waeren toter Text.
+//!
+//! ChefZ_Edible_Base.CanBeCooked() rechnet die Antwort aus den Daten der
+//! Klasse aus - FoodStage-Objekt vorhanden UND Food > FoodStageTransitions
+//! deklariert. Beides trifft hier zu.
+//!
+//! Die beiden Folgen aus dem Dateikopf gelten hier genauso und sind gewollt:
+//! der Bruch traegt einen ChefZ-Zustand, und CanDecay() folgt dem
+//! Zutatendatensatz ("decays": true in Dairy.json). Ungepresster Bruch SOLL
+//! verderben - das ist der Grund, ihn zu pressen.
+//!
+//! ChefZ_MushroomCulture bekommt hier bewusst KEINE Skriptklasse: sie erbt in
+//! der config.cpp von ChefZ_SpiceBase und damit dessen Skriptklasse samt
+//! Essaktion (ChefZ_SpiceIngredients.c). Sie hat keinen Food-Knoten, liegt in
+//! keinem Kochgeraet und braucht CanBeCooked() nie - "kein Fehler, nur
+//! weniger" (Kopf von ChefZ_Edible_Base.c).
+class ChefZ_CheeseCurd extends ChefZ_Edible_Base
+{
+    //! Dieselben zwei Aktionen, die Marmalade.c registriert, und aus derselben
+    //! Ueberlegung wie bei ChefZ_Egg: mit dem Wechsel der Skriptkette auf
+    //! ChefZ_Edible_Base fielen sie ersatzlos weg, und der Spieler haette
+    //! einen Becher Quark in der Hand, den er nicht essen kann.
     override void SetActions()
     {
         super.SetActions();

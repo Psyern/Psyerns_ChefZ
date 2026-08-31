@@ -1,6 +1,7 @@
 {
     "kind": "nutrition",
     "schemaVersion": 1,
+    "_note": "ERZEUGT vom chefz-registry-integrator aus Psyerns_ChefZ_Core/_deltas/*.json (Workflow 5). NICHT VON HAND BEARBEITEN - der naechste Merge ueberschreibt jede Aenderung. Das Delta-Feld \"class\" heisst hier \"id\", das Delta-Feld \"stomach\" heisst hier \"fullness\" (Feldname aus ChefZ_NutritionDef). GEMISCHTE FULLNESS-SKALA, BEKANNT UND NICHT ZU \"REPARIEREN\": die aelteren Records (Cheese 35, Butter 15, alle Gerichte 30-300) stehen auf der alten, falschen fullnessIndex-Skala; ChefZ_CheeseCurd (2.8) und ChefZ_MushroomCulture (0.1) stehen auf der am 31.08.2026 korrigierten Engine-Skala (PlayerStomach.c:86, volume = fullnessIndex * m_Amount, KEIN \"/100\"). Die Divergenz ist folgenlos fuer die Laufzeit: Registry-Naehrwerte werden NIE an ein Item geschrieben und NIE beim Verzehr angewandt (ChefZ_NutritionDef.c:16-18, ChefZ_NutritionManager.c:9-33) - sie sind allein Eingangsgroesse der Sollrechnung des Startaudits, und die vergleicht ausschliesslich \"energy\". Die Gesamtangleichung der Altwerte ist eine Doku-/Audit-Frage und wird an einem Gate entschieden, nicht beim Merge. Wer sie angleicht, tut das in den DELTAS der zustaendigen Slices, nie hier.",
     "records": [
         {
             "id": "ChefZ_Butter",
@@ -17,6 +18,13 @@
             "fullness": 35
         },
         {
+            "id": "ChefZ_CheeseCurd",
+            "scope": "class",
+            "energy": 200,
+            "water": 120,
+            "fullness": 2.8
+        },
+        {
             "id": "ChefZ_Cream",
             "scope": "class",
             "energy": 350,
@@ -29,6 +37,13 @@
             "energy": 90,
             "water": 40,
             "fullness": 12
+        },
+        {
+            "id": "ChefZ_MushroomCulture",
+            "scope": "class",
+            "energy": 5,
+            "water": 0,
+            "fullness": 0.1
         },
         {
             "id": "ChefZ_BoneBrothSoupBowl",
@@ -73,6 +88,13 @@
             "fullness": 45
         },
         {
+            "id": "ChefZ_Dough",
+            "scope": "class",
+            "energy": 300,
+            "water": 90,
+            "fullness": 35
+        },
+        {
             "id": "ChefZ_DriedPasta",
             "scope": "class",
             "energy": 380,
@@ -99,13 +121,6 @@
             "energy": 260,
             "water": 60,
             "fullness": 30
-        },
-        {
-            "id": "ChefZ_Dough",
-            "scope": "class",
-            "energy": 300,
-            "water": 90,
-            "fullness": 35
         },
         {
             "id": "ChefZ_Wheat",
@@ -241,6 +256,13 @@
             "fullness": 140
         },
         {
+            "id": "ChefZ_DicedMeat",
+            "scope": "class",
+            "energy": 140,
+            "water": 45,
+            "fullness": 120
+        },
+        {
             "id": "ChefZ_HunterSausage",
             "scope": "class",
             "energy": 525,
@@ -267,13 +289,6 @@
             "energy": 120,
             "water": 46,
             "fullness": 95
-        },
-        {
-            "id": "ChefZ_DicedMeat",
-            "scope": "class",
-            "energy": 140,
-            "water": 45,
-            "fullness": 120
         },
         {
             "id": "ChefZ_MincedMeat",

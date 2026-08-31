@@ -275,7 +275,11 @@ Presses milk into cheese. At 5 minutes for 3 milk, the longest single dairy step
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_MilkToCheese` | 3× Milk | Cheese | 1× (no mode given) | 5 min | — |
+| `TR_CurdToCheese` | 1× Cheese Curd | Cheese | 1× (class default) | 5 min | — |
+
+The curd is cooked in a pot or cauldron (`RCP_ChefZ_CheeseCurd`: 3× milk +
+1× mushroom culture, boiling, 5 min); the old direct route `TR_MilkToCheese`
+was replaced by this two-stage chain on 2026-08-31.
 
 ## Cutting Board — removed
 
