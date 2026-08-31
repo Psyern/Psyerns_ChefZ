@@ -338,11 +338,11 @@ check failed before the heat check was reached.
 carries its own burn state, fed with bark from its own cargo — five minutes of full
 burn for two pieces. Smoked Fish and Smoked Sausage work.
 
-### `TR_SaltedMeatToSmoked` is rejected at boot — open
+### `TR_SaltedMeatToSmoked` was rejected at boot — fixed 2026-08-31
 
 Found 2026-08-31 while compiling [Recipe-Book](Recipe-Book).
 
-The transform in `ChefZ_Preservation/Config/Processing/Smoking.json` declares **no
+The transform in `ChefZ_Preservation/Config/Processing/Smoking.json` declared **no
 `process` field**, where its two neighbours in the same file both name
 `PROCESS_SMOKE` and pin `stationsAllowed: ["ChefZ_Smoker"]`.
 `ChefZ_TransformDef.ResolveDefaults` defaults `process` to the empty string
@@ -353,16 +353,20 @@ without complaint (`ChefZ_TransformDef.c:287`), and
 > Prozess heisst: keine Station koennte ihn anbieten und keine Aktion ihn
 > ausloesen."*
 
-**What it costs:** `ChefZ_SmokedMeat` has no source. Salted Meat can only be dried.
-The class, its model, its nutrition record and its stringtable entries are all
-shipped and unreachable.
+**What it cost:** `ChefZ_SmokedMeat` had no source — the class, its model, its
+nutrition record and its stringtable entries were all shipped and unreachable, and
+Salted Meat could only be dried.
 
 **Why no checker saw it:** `chefzproc` does not test that a transform names a
 process at all. The compiler's own error only appears in the RPT at server boot,
 and the mod has not had a clean boot since 2026-08-28.
 
-The fix is two lines in `Smoking.json`, copied from `TR_RawSausageToSmoked`. It is
-content, not core, so it belongs to whoever owns `ChefZ_Preservation`.
+**The fix**, two lines in `Smoking.json` copied from `TR_RawSausageToSmoked`:
+`"process": "PROCESS_SMOKE"` and `"stationsAllowed": ["ChefZ_Smoker"]`. All three
+transforms in the file now carry the same shape, so Salted Meat reaches the smoker
+in five minutes like its neighbours. Still unverified in a running game — nobody
+has had a clean boot since 2026-08-28. The checker gap that hid it is written up in
+[Validation](Validation).
 
 ## Built but inert
 

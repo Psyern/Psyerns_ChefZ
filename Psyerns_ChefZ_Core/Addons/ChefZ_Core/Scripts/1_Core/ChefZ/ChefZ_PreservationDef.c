@@ -412,18 +412,55 @@ class ChefZ_PreservationDef extends ChefZ_Record
     }
 
     /**
+     * "Die Umgebungstemperatur liess sich nicht ermitteln."
+     *
+     * BEFUND 31.08.2026 (S11, Gruppe "PreservationDef",
+     * PreservationDef:503): hier stand fuer diesen Fall
+     * ChefZ_Undefined.FLOAT. Seit der Sentinelumstellung vom 28.08.2026 IST
+     * ChefZ_Undefined.FLOAT == 0.0 (Kopf von ChefZ_Undefined) - und 0 °C ist
+     * keine fehlende Angabe, sondern der Gefrierpunkt. Eine Regel
+     * "-50 bis +5 °C" hoerte damit ausgerechnet bei 0 °C auf zu gelten, und
+     * das ist die Temperatur, um die es bei Kuehlung geht. Der Selbsttest
+     * verlangte in derselben Funktion beides: AppliesAt(0.0) == true (Zeile
+     * 503) und AppliesAt(ChefZ_Undefined.FLOAT) == false - zwei Aussagen
+     * ueber denselben Zahlenwert.
+     *
+     * Deshalb ein eigener Sentinel statt des JSON-Sentinels. Er kommt NICHT
+     * aus einer Datei, sondern entsteht zur Laufzeit in
+     * ChefZ_ItemDecay.EnvironmentTemperature - fuer einen Wert, den nie
+     * jemand deserialisiert, gilt die Begruendung der Umstellung nicht.
+     * float.MIN ist dieselbe Wahl, die Vanilla fuer "nicht gesetzt" trifft
+     * (DayZGame.c:1132).
+     */
+    static const float TEMPERATURE_UNKNOWN = float.MIN;
+
+    /**
+     * Ist das die "unbekannt"-Marke und keine Messung?
+     *
+     * Ueber eine Schranke statt ueber ==, damit eine Umrechnung unterwegs
+     * die Marke nicht unkenntlich machen kann. -1000000000.0 liegt weit
+     * unter jedem Wert, den GetBaseEnvTemperatureAtObject je liefert, und
+     * weit ueber float.MIN.
+     */
+    static bool IsTemperatureUnknown(float temperature)
+    {
+        return temperature < -1000000000.0;
+    }
+
+    /**
      * Gilt die Regel bei dieser Umgebungstemperatur?
      *
-     * @param temperature  ChefZ_Undefined.FLOAT heisst "unbekannt". Dann greift
+     * @param temperature  TEMPERATURE_UNKNOWN heisst "unbekannt". Dann greift
      *        eine temperaturgebundene Regel NICHT - 02 §8: "jeder Fehler bewegt
      *        das System Richtung weniger ChefZ, nie Richtung falsches ChefZ".
-     *        Eine Regel ohne Bereich ist davon unberuehrt.
+     *        Eine Regel ohne Bereich ist davon unberuehrt. Jeder andere Wert
+     *        ist eine Messung - 0.0 ausdruecklich eingeschlossen.
      */
     bool AppliesAt(float temperature)
     {
         if (!HasTemperatureGate())
             return true;
-        if (ChefZ_Undefined.IsFloatUndefined(temperature))
+        if (IsTemperatureUnknown(temperature))
             return false;
         return environmentTemperature.Contains(temperature);
     }
@@ -456,22 +493,22 @@ class ChefZ_PreservationDef extends ChefZ_Record
         ChefZ_PreservationDef bare = new ChefZ_PreservationDef();
         bare.id = "CHEFZ_SELFTEST_PRES_A";
         bare.ResolveDefaults();
-        if (bare.scope != ChefZ_PreservationScope.NAME_STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 459, "bare.scope != ChefZ_PreservationScope.NAME_STATE");
-        if (bare.spoilageMultiplier != 1.0) return ChefZ_SelfTestTrace.Fail("PreservationDef", 460, "bare.spoilageMultiplier != 1.0");
-        if (bare.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 461, "bare.stopsDecay");
-        if (bare.preventsRotten) return ChefZ_SelfTestTrace.Fail("PreservationDef", 462, "bare.preventsRotten");
-        if (bare.HasOnPlayerMultiplier()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 463, "bare.HasOnPlayerMultiplier()");
-        if (bare.HasTemperatureGate()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 464, "bare.HasTemperatureGate()");
-        if (!bare.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 465, "!bare.Validate(ctx)");
+        if (bare.scope != ChefZ_PreservationScope.NAME_STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 496, "bare.scope != ChefZ_PreservationScope.NAME_STATE");
+        if (bare.spoilageMultiplier != 1.0) return ChefZ_SelfTestTrace.Fail("PreservationDef", 497, "bare.spoilageMultiplier != 1.0");
+        if (bare.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 498, "bare.stopsDecay");
+        if (bare.preventsRotten) return ChefZ_SelfTestTrace.Fail("PreservationDef", 499, "bare.preventsRotten");
+        if (bare.HasOnPlayerMultiplier()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 500, "bare.HasOnPlayerMultiplier()");
+        if (bare.HasTemperatureGate()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 501, "bare.HasTemperatureGate()");
+        if (!bare.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 502, "!bare.Validate(ctx)");
         bare.Compile(null);
-        if (bare.scopeKind != ChefZ_PreservationScope.STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 467, "bare.scopeKind != ChefZ_PreservationScope.STATE");
+        if (bare.scopeKind != ChefZ_PreservationScope.STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 504, "bare.scopeKind != ChefZ_PreservationScope.STATE");
 
         // 2. Unbekannter scope: abgewiesen, nicht stillschweigend "state".
         ChefZ_PreservationDef bad = new ChefZ_PreservationDef();
         bad.id    = "CHEFZ_SELFTEST_PRES_B";
         bad.scope = "zustand";
         bad.ResolveDefaults();
-        if (bad.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 474, "bad.Validate(ctx)");
+        if (bad.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 511, "bad.Validate(ctx)");
 
         // 3. Nicht positiver Multiplikator wird geklemmt, nicht abgewiesen.
         //    In der Reihenfolge des Config Managers: ResolveDefaults ZUERST.
@@ -485,10 +522,10 @@ class ChefZ_PreservationDef extends ChefZ_Record
         // ChefZ_JsonExplicit den Schluessel ein - hier tut es der Test.
         zero.MarkExplicit("spoilageMultiplier");
         zero.ResolveDefaults();
-        if (!zero.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 488, "!zero.Validate(ctx)");
-        if (zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER) return ChefZ_SelfTestTrace.Fail("PreservationDef", 489, "zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER");
+        if (!zero.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 525, "!zero.Validate(ctx)");
+        if (zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER) return ChefZ_SelfTestTrace.Fail("PreservationDef", 526, "zero.spoilageMultiplier != MIN_SPOILAGE_MULTIPLIER");
         zero.Compile(null);
-        if (zero.scopeKind != ChefZ_PreservationScope.TAG) return ChefZ_SelfTestTrace.Fail("PreservationDef", 491, "zero.scopeKind != ChefZ_PreservationScope.TAG");
+        if (zero.scopeKind != ChefZ_PreservationScope.TAG) return ChefZ_SelfTestTrace.Fail("PreservationDef", 528, "zero.scopeKind != ChefZ_PreservationScope.TAG");
 
         // 4. Temperaturbereich: greift innerhalb, nicht ausserhalb, und bei
         //    unbekannter Temperatur ausdruecklich NICHT.
@@ -498,11 +535,16 @@ class ChefZ_PreservationDef extends ChefZ_Record
         cold.environmentTemperature = new ChefZ_Range();
         cold.environmentTemperature.Init(-50.0, 5.0);
         cold.ResolveDefaults();
-        if (!cold.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 501, "!cold.Validate(ctx)");
-        if (!cold.HasTemperatureGate()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 502, "!cold.HasTemperatureGate()");
-        if (!cold.AppliesAt(0.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 503, "!cold.AppliesAt(0.0)");
-        if (cold.AppliesAt(20.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 504, "cold.AppliesAt(20.0)");
-        if (cold.AppliesAt(ChefZ_Undefined.FLOAT)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 505, "cold.AppliesAt(ChefZ_Undefined.FLOAT)");
+        if (!cold.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 538, "!cold.Validate(ctx)");
+        if (!cold.HasTemperatureGate()) return ChefZ_SelfTestTrace.Fail("PreservationDef", 539, "!cold.HasTemperatureGate()");
+        if (!cold.AppliesAt(0.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 540, "!cold.AppliesAt(0.0)");
+        if (cold.AppliesAt(20.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 541, "cold.AppliesAt(20.0)");
+        // Der Gefrierpunkt ist eine Messung, keine fehlende Angabe - siehe
+        // TEMPERATURE_UNKNOWN. Bis zum 31.08.2026 stand hier
+        // ChefZ_Undefined.FLOAT, also derselbe Zahlenwert wie eine Zeile
+        // darueber; die beiden Zeilen widersprachen sich.
+        if (cold.AppliesAt(ChefZ_PreservationDef.TEMPERATURE_UNKNOWN)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 546, "cold.AppliesAt(ChefZ_PreservationDef.TEMPERATURE_UNKNOWN)");
+        if (!cold.AppliesAt(-50.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 547, "!cold.AppliesAt(-50.0)");
 
         // 5. Leerer Temperaturbereich (min > max) wird verworfen, der Record
         //    bleibt gueltig und gilt danach wieder immer.
@@ -512,23 +554,23 @@ class ChefZ_PreservationDef extends ChefZ_Record
         swapped.environmentTemperature = new ChefZ_Range();
         swapped.environmentTemperature.Init(30.0, 10.0);
         swapped.ResolveDefaults();
-        if (!swapped.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 515, "!swapped.Validate(ctx)");
-        if (swapped.environmentTemperature) return ChefZ_SelfTestTrace.Fail("PreservationDef", 516, "swapped.environmentTemperature");
-        if (!swapped.AppliesAt(999.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 517, "!swapped.AppliesAt(999.0)");
+        if (!swapped.Validate(ctx)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 557, "!swapped.Validate(ctx)");
+        if (swapped.environmentTemperature) return ChefZ_SelfTestTrace.Fail("PreservationDef", 558, "swapped.environmentTemperature");
+        if (!swapped.AppliesAt(999.0)) return ChefZ_SelfTestTrace.Fail("PreservationDef", 559, "!swapped.AppliesAt(999.0)");
 
         // 6. bool ohne explicitFields wirkt nicht, mit wirkt es (02 E3).
         ChefZ_PreservationDef ex = new ChefZ_PreservationDef();
         ex.id         = "CHEFZ_SELFTEST_PRES_F";
         ex.stopsDecay = true;
         ex.ResolveDefaults();
-        if (ex.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 524, "ex.stopsDecay");
+        if (ex.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 566, "ex.stopsDecay");
 
         ChefZ_PreservationDef ex2 = new ChefZ_PreservationDef();
         ex2.id         = "CHEFZ_SELFTEST_PRES_G";
         ex2.stopsDecay = true;
         ex2.MarkExplicit("stopsDecay");
         ex2.ResolveDefaults();
-        if (!ex2.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 531, "!ex2.stopsDecay");
+        if (!ex2.stopsDecay) return ChefZ_SelfTestTrace.Fail("PreservationDef", 573, "!ex2.stopsDecay");
 
         // 7. Patch: nur gesetzte Felder wandern, der Rest bleibt.
         ChefZ_PreservationDef basis = new ChefZ_PreservationDef();
@@ -540,8 +582,8 @@ class ChefZ_PreservationDef extends ChefZ_Record
         overlay.id                 = "CHEFZ_SELFTEST_PRES_H";
         overlay.spoilageMultiplier = 0.5;
         basis.PatchFrom(overlay);
-        if (basis.spoilageMultiplier != 0.5) return ChefZ_SelfTestTrace.Fail("PreservationDef", 543, "basis.spoilageMultiplier != 0.5");
-        if (basis.scope != ChefZ_PreservationScope.NAME_STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 544, "basis.scope != ChefZ_PreservationScope.NAME_STATE");
+        if (basis.spoilageMultiplier != 0.5) return ChefZ_SelfTestTrace.Fail("PreservationDef", 585, "basis.spoilageMultiplier != 0.5");
+        if (basis.scope != ChefZ_PreservationScope.NAME_STATE) return ChefZ_SelfTestTrace.Fail("PreservationDef", 586, "basis.scope != ChefZ_PreservationScope.NAME_STATE");
 
         return ChefZ_PreservationScope.SelfCheck();
     }

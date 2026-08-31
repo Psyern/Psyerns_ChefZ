@@ -437,9 +437,11 @@ class ChefZ_PreservationManager : Managed
      *    ChefZ_StateDef heraushaelt.
      *
      * @param containerModifier  aus 16. Bis S17 reicht der Aufrufer 1.0.
-     * @param environmentTemperature  ChefZ_Undefined.FLOAT heisst "unbekannt";
-     *        temperaturgebundene Regeln greifen dann nicht (siehe
-     *        ChefZ_PreservationDef.AppliesAt).
+     * @param environmentTemperature  ChefZ_PreservationDef.TEMPERATURE_UNKNOWN
+     *        heisst "unbekannt"; temperaturgebundene Regeln greifen dann nicht
+     *        (siehe ChefZ_PreservationDef.AppliesAt). Jeder andere Wert ist
+     *        eine Messung - 0.0 ausdruecklich eingeschlossen, denn das ist der
+     *        Gefrierpunkt und nicht "keine Angabe".
      * @param trace  NUR fuer Diagnose. null heisst "keine Ablaufverfolgung"
      *        und ist der Normalfall im Verfallstakt - die Liste wird
      *        ABSICHTLICH nicht angelegt, denn sonst kostete jeder Tick jedes

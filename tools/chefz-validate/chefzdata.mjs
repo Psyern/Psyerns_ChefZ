@@ -99,8 +99,16 @@ export function allRecords() {
       const kind = CFG_ROOTS[node.name];
       if (!kind) continue;
       for (const child of node.children) {
+        const obj = resolveCfgProps(node, child);
+        // Vorlagenschalter (31.08.2026): Ein CfgChefZIngredients-Knoten mit
+        // template = "<eigener Klassenname>" ist eine Binding-VORLAGE und wird
+        // vom Core-Loader uebersprungen (ChefZ_ConfigCppSource.IsBindingTemplate).
+        // Kinder ERBEN den String des Elters - der ist nie ihr eigener Name,
+        // sie bleiben echte Bindungen. Exakt diese Semantik hier nachgebildet,
+        // sonst sammelt der Validator die 7 Vorlagen weiter als Records ein.
+        if (kind === 'ingredient' && obj.template === child.name) continue;
         out.push({
-          kind, id: child.name, obj: resolveCfgProps(node, child),
+          kind, id: child.name, obj,
           file, line: child.line, rank: 1, origin: 'config.cpp',
         });
       }

@@ -22,15 +22,9 @@
             "slots": [
                 {
                     "slotId": "bacon",
+                    "_note": "NUR DIE GEOEFFNETE DOSE (Korrektur 31.08.2026 nach dem Livetest). Bis dahin stand hier ein anyOf ueber TacticalBaconCan_Opened UND TacticalBaconCan, und keine der beiden Klassen war als Zutat deklariert - der Ladebericht meldete beide, der Pflichtslot blieb leer, und das Gericht war nicht kochbar. Die Bindung steht jetzt in Config/Ingredients/TacticalBacon.json, und der zweite Zweig ist entfallen: TacticalBaconCan ist die VERSIEGELTE Dose, ein Behaelter (Vanilla ersetzt sie beim Oeffnen durch _Opened, TacticalBaconCan.c:1-5). Bei consume \"whole\" wird das Item geloescht (ChefZ_CompiledSlot.c:22) - eine versiegelte Dose waere samt Inhalt weg. Dieselbe Regel wie bei Vanillas Bohnendose in Config/Ingredients/Beans.json. Gebunden ueber cls und nicht ueber die Kategorie CANNED_MEAT: das Gericht heisst nach dieser Dose (Production Map §61.11); mit CANNED_MEAT wuerde auch eine Dose Pate ein \"Tactical Bacon Breakfast\" ergeben.",
                     "match": {
-                        "anyOf": [
-                            {
-                                "cls": "TacticalBaconCan_Opened"
-                            },
-                            {
-                                "cls": "TacticalBaconCan"
-                            }
-                        ]
+                        "cls": "TacticalBaconCan_Opened"
                     },
                     "minCount": 1,
                     "maxCount": 1,
@@ -114,16 +108,10 @@
                     "ruleId": "GR_TB_FreshHerb",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 },
@@ -451,16 +439,10 @@
                     "ruleId": "GR_FB_FreshHerb",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -600,16 +582,10 @@
                     "ruleId": "GR_CF_FreshHerb",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -923,16 +899,10 @@
                     "ruleId": "GR_MP_FreshMushrooms",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_MUSHROOM"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_MUSHROOM",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1250,16 +1220,10 @@
                     "ruleId": "GR_MD_FreshHerb",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1497,16 +1461,10 @@
                     "ruleId": "GR_HBP_FreshBread",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "category": "BREAD"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "category": "BREAD",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }

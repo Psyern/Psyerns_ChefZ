@@ -459,7 +459,7 @@ graph LR
 |---|---|---|---|---|---|
 | `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat (1×) | *handcraft* | — | 6 s |
 | `TR_SaltedMeatToDried` | 1× Salted Meat | Dried Meat (1:1) | Drying Rack | — | 60 min |
-| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat (1:1) | — | — | **never runs, see below** |
+| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat (1:1) | Smoker | — | 5 min + bark |
 | `TR_RawSausageToDry` | 1× *SAUSAGE* + state RAW | Dry Sausage (1:1) | Drying Rack | — | 90 min |
 | `TR_RawSausageToSmoked` | 1× *SAUSAGE* + state RAW | Smoked Sausage (1:1) | Smoker | — | 5 min + bark |
 | `TR_CaninaBerriesToDried` | 2× `CaninaBerry` | Dried Berries (1×) | Drying Rack | — | 7 min |
@@ -485,13 +485,12 @@ step for fish; meat and sausage cannot be smoked without curing or stuffing firs
 carries its own burn state: it consumes bark from its own cargo, and five minutes
 of full burn costs two pieces. Smoked Fish and Smoked Sausage work.
 
-**Gap — Smoked Meat still does not exist.** `TR_SaltedMeatToSmoked` declares no
-`process` field at all. `ChefZ_ProcessCompiler.c:355` rejects any transform whose
-process is not found, and the empty string never resolves, so the transform is
-dropped at boot with an error in the RPT. Nothing at any station offers it. The fix
-is one line in `Smoking.json` — `"process": "PROCESS_SMOKE"` plus
+**Closed — Smoked Meat exists since 2026-08-31.** `TR_SaltedMeatToSmoked` declared
+no `process` field at all, so `ChefZ_ProcessCompiler.c:355` dropped it at boot and
+nothing at any station offered it. It now carries `"process": "PROCESS_SMOKE"` and
 `"stationsAllowed": ["ChefZ_Smoker"]`, exactly as its two neighbours in the same
-file have. See [Known-Limitations](Known-Limitations).
+file — five minutes at the smoker, two pieces of bark. Unverified in a running
+game. See [Known-Limitations](Known-Limitations).
 
 ## Honey
 
@@ -602,7 +601,7 @@ All 61 transforms are accounted for above.
 | Of those, at a station | 39 |
 | Of those, handcraft | 22 |
 | Recipes fed by these chains | 47 |
-| Chains blocked at least in part | 4 — grain (mill has no cargo), meat/sausage (no cargo), preservation (smoker), everything upstream of loot. The last one shrank on 31.08.2026: wheat, corn and three of the herbs now have CE events, but only as a **template a human still has to install** — see the box at the top of this page |
+| Chains blocked at least in part | 3 — grain (mill has no cargo), meat/sausage (no cargo), everything upstream of loot. Preservation dropped off the list on 31.08.2026: the smoker burns bark and `TR_SaltedMeatToSmoked` names its process. The last one shrank on 31.08.2026: wheat, corn and three of the herbs now have CE events, but only as a **template a human still has to install** — see the box at the top of this page |
 
 Recounted 2026-08-29 after the apiary, the bee smoker fuel step and the return of
 diced meat: 61 transforms, 9 of them in the apiary. The honey chain is the one chain

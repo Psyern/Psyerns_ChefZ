@@ -2911,6 +2911,10 @@ class CfgChefZIngredients
 {
     class ChefZ_SauceIngredient
     {
+        // VORLAGE, keine Bindung (ChefZ_ConfigCppSource.IsBindingTemplate: template == eigener
+        // Klassenname; Erben tragen DIESEN Namen und bleiben Bindungen). Vorfall 31.08.2026:
+        // ohne das Feld meldete der Ladebericht je Serverstart 7 Vorlagen als fehlende Klasse.
+        template          = "ChefZ_SauceIngredient";
         categories[]      = {"SAUCE"};
         tags[]            = {"CHEFZ_SAUCE_BASE"};
         defaultState      = "COOKED";
@@ -2993,6 +2997,10 @@ class CfgChefZIngredients
 
     class ChefZ_DishesBPlate
     {
+        // VORLAGE, keine Bindung (ChefZ_ConfigCppSource.IsBindingTemplate: template == eigener
+        // Klassenname; Erben tragen DIESEN Namen und bleiben Bindungen). Vorfall 31.08.2026:
+        // ohne das Feld meldete der Ladebericht je Serverstart 7 Vorlagen als fehlende Klasse.
+        template          = "ChefZ_DishesBPlate";
         defaultState      = "COOKED";
         quantityUnit      = "PIECE";
         unitsPerWholeItem = 1;
@@ -3049,6 +3057,10 @@ class CfgChefZIngredients
     //--------------------------------------------------------------------------
     class ChefZ_BowlDishIngredient
     {
+        // VORLAGE, keine Bindung (ChefZ_ConfigCppSource.IsBindingTemplate: template == eigener
+        // Klassenname; Erben tragen DIESEN Namen und bleiben Bindungen). Vorfall 31.08.2026:
+        // ohne das Feld meldete der Ladebericht je Serverstart 7 Vorlagen als fehlende Klasse.
+        template          = "ChefZ_BowlDishIngredient";
         categories[]      = {};
         tags[]            = {"CHEFZ_HOT_MEAL"};
         defaultState      = "COOKED";
@@ -3091,6 +3103,10 @@ class CfgChefZIngredients
 
     class ChefZ_DishesAPlate
     {
+        // VORLAGE, keine Bindung (ChefZ_ConfigCppSource.IsBindingTemplate: template == eigener
+        // Klassenname; Erben tragen DIESEN Namen und bleiben Bindungen). Vorfall 31.08.2026:
+        // ohne das Feld meldete der Ladebericht je Serverstart 7 Vorlagen als fehlende Klasse.
+        template          = "ChefZ_DishesAPlate";
         defaultState      = "COOKED";
         quantityUnit      = "PIECE";
         unitsPerWholeItem = 1;
@@ -3132,6 +3148,10 @@ class CfgChefZIngredients
 
     class ChefZ_DishesVanillaBowl
     {
+        // VORLAGE, keine Bindung (ChefZ_ConfigCppSource.IsBindingTemplate: template == eigener
+        // Klassenname; Erben tragen DIESEN Namen und bleiben Bindungen). Vorfall 31.08.2026:
+        // ohne das Feld meldete der Ladebericht je Serverstart 7 Vorlagen als fehlende Klasse.
+        template          = "ChefZ_DishesVanillaBowl";
         tags[]            = {"CHEFZ_HOT_MEAL"};
         defaultState      = "COOKED";
         quantityUnit      = "PIECE";
@@ -3143,6 +3163,10 @@ class CfgChefZIngredients
 
     class ChefZ_DishesVanillaPlate
     {
+        // VORLAGE, keine Bindung (ChefZ_ConfigCppSource.IsBindingTemplate: template == eigener
+        // Klassenname; Erben tragen DIESEN Namen und bleiben Bindungen). Vorfall 31.08.2026:
+        // ohne das Feld meldete der Ladebericht je Serverstart 7 Vorlagen als fehlende Klasse.
+        template          = "ChefZ_DishesVanillaPlate";
         tags[]            = {"CHEFZ_HOT_MEAL"};
         defaultState      = "COOKED";
         quantityUnit      = "PIECE";
@@ -3228,6 +3252,15 @@ class CfgChefZ
         handcraftRecipeSlots = 5;
         dataFiles[] =
         {
+            // DREI dataFiles seit dem 31.08.2026. Craftables.json bindet die
+            // drei Vanilla-WERKSTOFFE, aus denen die beiden anderen Dateien
+            // schnitzen und falten - Firewood, Paper, MetalPlate. Ohne sie war
+            // keine dieser Klassen eine deklarierte Zutat, und vier der fuenf
+            // Handcraft-Transforms dieses Slice hatten einen Eingangsslot, der
+            // nie gefuellt werden konnte (Livetest, Ladebericht). Sie steht
+            // ZUERST: wer die Liste liest, soll den Werkstoff vor dem Vorgang
+            // sehen, der ihn verbraucht.
+            "ChefZ_Cooking/Config/Ingredients/Craftables.json",
             "ChefZ_Cooking/Config/Processing/Tableware.json",
             "ChefZ_Cooking/Config/Processing/Containers.json"
         };
@@ -3290,6 +3323,16 @@ class CfgChefZ
     // handcraftRecipeSlots = 0: alle zehn Rezepte zuenden am Kochgeraet. Dieser
     // Slice registriert KEIN einziges Handcraft-Rezept, Vanillas Rezeptliste
     // bleibt um kein Bit veraendert (Regel §10.2).
+    // ZWEI dataFiles seit dem 31.08.2026, und die erste ist kein Versehen:
+    // TacticalBacon.json bindet eine FREMDklasse (Vanillas geoeffnete
+    // Speckdose) als Zutat. 05 §2 verlangt dafuer den JSON-Weg - eigene
+    // Klassen deklarieren sich in der eigenen config.cpp, fremde im
+    // Slice-JSON, weil Vanilla-Dateien nie veraendert werden (Regel §10.5).
+    // Dieselbe Bauform wie Beans.json im Slice dishes-c.
+    //
+    // Sie steht VOR der Rezeptdatei: der Core haengt Records zwar nicht
+    // voneinander ab, aber wer die Liste liest, soll die Zutat vor dem Rezept
+    // sehen, das sie braucht.
     class ChefZ_DishesB
     {
         chefzApiVersion = 1;
@@ -3297,6 +3340,7 @@ class CfgChefZ
         handcraftRecipeSlots = 0;
         dataFiles[] =
         {
+            "ChefZ_Cooking/Config/Ingredients/TacticalBacon.json",
             "ChefZ_Cooking/Config/Recipes/DishesB.json"
         };
     };

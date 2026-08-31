@@ -1910,6 +1910,13 @@ class CfgChefZIngredients
 {
     class ChefZ_ProduceIngredient
     {
+        // Vorlage, keine Bindung: der eigene Klassenname als template laesst
+        // ChefZ_ConfigCppSource.IsBindingTemplate() den Knoten uebergehen -
+        // sonst suchte der Manager je Serverstart nach einer CfgVehicles-Klasse
+        // "ChefZ_ProduceIngredient", die es nicht gibt (Vorfall 31.08.2026).
+        // Die Kinder unten erben diese Zeichenkette, nicht ihren eigenen Namen,
+        // und bleiben deshalb echte Bindungen.
+        template          = "ChefZ_ProduceIngredient";
         categories[]      = {"VEGETABLE"};
         tags[]            = {"CHEFZ_FRESH"};
         defaultState      = "RAW";

@@ -214,7 +214,8 @@ class ChefZ_IngredientManager : Managed
         string unitName         = InheritedText(chain, "quantityUnit");
         string containerName    = InheritedText(chain, "containerCategory");
         string returnName       = InheritedText(chain, "returnContainer");
-        float  perWhole         = InheritedUnitsPerWholeItem(chain);
+        float  perWhole;
+        ResolveUnitsPerWholeItem(chain, perWhole);
         bool   decays           = InheritedDecays(chain);
 
         if (ChefZ_Undefined.IsTextUndefined(unitName))
@@ -223,9 +224,24 @@ class ChefZ_IngredientManager : Managed
         bool isDefaultUnit = (unitName == ChefZ_IngredientDef.DEFAULT_QUANTITY_UNIT);
 
         // --- 3. Menge pruefen (05 §7) ----------------------------------------
-        if (ChefZ_Undefined.IsFloatUndefined(perWhole))
-            perWhole = 1.0;
-
+        //
+        // BEFUND 31.08.2026 (S4, Gruppe "Einheiten", IngredientSelfTest:532):
+        // hier stand
+        //     if (ChefZ_Undefined.IsFloatUndefined(perWhole)) perWhole = 1.0;
+        // Seit der Sentinelumstellung vom 28.08.2026 IST
+        // ChefZ_Undefined.FLOAT == 0.0 (siehe Kopf von ChefZ_Undefined). Damit
+        // hat diese Zeile jede AUSDRUECKLICH geschriebene Null in eine 1
+        // verwandelt - und zwar genau die Null, die
+        // ChefZ_IngredientDef.HasUnitsPerWholeItem() ueber explicitFields[]
+        // am Sentinel vorbeigerettet hatte, damit der Nenner Null hier
+        // ankommt. Die Abweisung darunter war seitdem unerreichbar: wer
+        // "quantityUnit": "GRAM" mit "unitsPerWholeItem": 0 schreibt, bekam
+        // still eine 1 statt der Fehlermeldung, die 05 §7 zusagt. Kein
+        // Absturz, aber eine falsche Menge ohne jeden Hinweis.
+        //
+        // Die Frage "hat die Kette etwas gesagt?" gehoert deshalb in die
+        // Aufloesung (ResolveUnitsPerWholeItem) und nicht in einen Vergleich
+        // gegen den Wert - der Wert kann sie nicht beantworten.
         if (perWhole <= 0.0)
         {
             if (!isDefaultUnit)
@@ -403,14 +419,37 @@ class ChefZ_IngredientManager : Managed
         return ChefZ_Undefined.TEXT;
     }
 
-    private float InheritedUnitsPerWholeItem(notnull array<ChefZ_IngredientDef> chain)
+    /**
+     * Die Stueckzahl der Kette: erster Eintrag, der ueberhaupt etwas sagt -
+     * sonst 1.0.
+     *
+     * Der Unterschied zu den Inherited*-Helfern darueber, und der Grund fuer
+     * den out-Parameter: hier gibt es KEINEN Sentinel, den man
+     * zurueckgeben koennte. Seit dem 28.08.2026 ist
+     * ChefZ_Undefined.FLOAT == 0.0 (Kopf von ChefZ_Undefined), und die
+     * ausdrueckliche 0 ist ausgerechnet der Wert, auf den es ankommt: sie ist
+     * der Nenner Null, den AdmitOne abweisen soll (05 §7). Ein Sentinel, der
+     * genau den einen Wert verschluckt, den er durchlassen muesste, ist
+     * keiner - deshalb entscheidet HasUnitsPerWholeItem() (explicitFields[])
+     * und nicht der Zahlenwert.
+     *
+     * @param value  wird IMMER geschrieben, auch wenn niemand etwas sagt: die
+     *        Vorgabe 1.0 heisst "ein volles Item ist eine Einheit" (05 §6).
+     *        Der Aufrufer muss sich damit nicht darauf verlassen, was Enforce
+     *        mit einem out-Parameter beim Eintritt tut.
+     */
+    private void ResolveUnitsPerWholeItem(notnull array<ChefZ_IngredientDef> chain, out float value)
     {
+        value = 1.0;
+
         for (int i = 0; i < chain.Count(); i++)
         {
             if (chain.Get(i).HasUnitsPerWholeItem())
-                return chain.Get(i).unitsPerWholeItem;
+            {
+                value = chain.Get(i).unitsPerWholeItem;
+                return;
+            }
         }
-        return ChefZ_Undefined.FLOAT;
     }
 
     //! bool hat keinen Sentinel: "gesetzt" ist der Eintrag in explicitFields[]

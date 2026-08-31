@@ -131,16 +131,10 @@
                     "ruleId": "GR_PS_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -294,16 +288,10 @@
                     "ruleId": "GR_SFP_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -448,16 +436,10 @@
                     "ruleId": "GR_FC_FreshFruit",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "category": "FRUIT"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "category": "FRUIT",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }

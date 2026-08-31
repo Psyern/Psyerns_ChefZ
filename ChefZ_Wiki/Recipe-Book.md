@@ -192,9 +192,9 @@ Frame — the frame survives the harvest and goes back into the hive.
 Spoilage multipliers by state: `DRIED` ×0.15 · `SMOKED` ×0.25 · `SALTED` ×0.50 ·
 `COOKED` ×0.80.
 
-> **Salted Meat has no path to Smoked Meat.** The transform exists in the data but
-> names no process, so it is rejected at boot. See
-> [Known-Limitations](Known-Limitations).
+> **Salted Meat reaches Smoked Meat since 31.08.2026.** The transform existed in
+> the data but named no process and was rejected at boot; it now names
+> `PROCESS_SMOKE` and the smoker. See [Known-Limitations](Known-Limitations).
 
 ## Plates, bowls, boxes and cans
 

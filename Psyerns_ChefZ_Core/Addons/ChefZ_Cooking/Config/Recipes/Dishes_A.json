@@ -105,16 +105,10 @@
                     "ruleId": "GR_SpagFreshHerb",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1186,16 +1180,10 @@
                     "ruleId": "GR_BloodPlateMarjoram",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1346,16 +1334,10 @@
                     "ruleId": "GR_FishFresh",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "category": "FISH"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "category": "FISH",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }

@@ -289,13 +289,13 @@ and nothing is lost. It also means a failed ChefZ recipe is silent. If you expec
 a Pork Sausage and got a burnt one, check that the class was `ChefZ_RawPorkSausage`
 and not the generic raw sausage.
 
-**Smoked Meat cannot currently be made.** `TR_SaltedMeatToSmoked` in
-`ChefZ_Preservation/Config/Processing/Smoking.json` carries no `process` field. The
-process compiler rejects any transform whose process does not exist
-(`ChefZ_ProcessCompiler.c:355`), so the transform is dropped at boot with an error
-in the RPT and Salted Meat has no path to Smoked Meat. Smoked **fish** and smoked
-**sausage** are unaffected — both name `PROCESS_SMOKE` correctly. See
-[Known-Limitations](Known-Limitations).
+**Smoked Meat works since 2026-08-31.** `TR_SaltedMeatToSmoked` in
+`ChefZ_Preservation/Config/Processing/Smoking.json` carried no `process` field, so
+the process compiler dropped it at boot (`ChefZ_ProcessCompiler.c:355`) and Salted
+Meat had no path to Smoked Meat. The two missing lines — `PROCESS_SMOKE` and
+`stationsAllowed: ["ChefZ_Smoker"]` — are in, and all three transforms in the file
+now have the same shape: five minutes at the smoker, bark as fuel. Not yet seen in
+a running game. See [Known-Limitations](Known-Limitations).
 
 ## See also
 

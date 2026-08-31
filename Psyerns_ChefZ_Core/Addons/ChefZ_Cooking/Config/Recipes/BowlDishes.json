@@ -213,16 +213,10 @@
                     "ruleId": "GR_HS_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -386,16 +380,10 @@
                     "ruleId": "GR_HSB_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -564,16 +552,10 @@
                     "ruleId": "GR_HSG_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -724,16 +706,10 @@
                     "ruleId": "GR_FS_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 },
@@ -741,16 +717,10 @@
                     "ruleId": "GR_FS_FreshFish",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "category": "FISH"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.85
-                                }
-                            }
-                        ]
+                        "category": "FISH",
+                        "freshness": {
+                            "min": 0.85
+                        }
                     },
                     "points": 1
                 }
@@ -905,16 +875,10 @@
                     "ruleId": "GR_FSB_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1063,16 +1027,10 @@
                     "ruleId": "GR_FSG_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1226,16 +1184,10 @@
                     "ruleId": "GR_VS_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 },
@@ -1243,16 +1195,10 @@
                     "ruleId": "GR_VS_FreshVeg",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_FRESH"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.85
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_FRESH",
+                        "freshness": {
+                            "min": 0.85
+                        }
                     },
                     "points": 1
                 }
@@ -1407,16 +1353,10 @@
                     "ruleId": "GR_VSG_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1562,16 +1502,10 @@
                     "ruleId": "GR_BB_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 1
                 }
@@ -1705,16 +1639,10 @@
                     "ruleId": "GR_BBG_FreshHerbs",
                     "when": "anyItem",
                     "selector": {
-                        "allOf": [
-                            {
-                                "tag": "CHEFZ_HERB"
-                            },
-                            {
-                                "freshness": {
-                                    "min": 0.8
-                                }
-                            }
-                        ]
+                        "tag": "CHEFZ_HERB",
+                        "freshness": {
+                            "min": 0.8
+                        }
                     },
                     "points": 2
                 }

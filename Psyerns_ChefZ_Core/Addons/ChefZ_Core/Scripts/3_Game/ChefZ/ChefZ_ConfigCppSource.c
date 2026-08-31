@@ -385,6 +385,10 @@ class ChefZ_ConfigCppSource extends ChefZ_IRecordSource
             string id = names.Get(i);
             string node = root + " " + id;
 
+            // Vorlagenknoten uebergehen - siehe IsBindingTemplate().
+            if (IsBindingTemplate(node, id))
+                continue;
+
             ChefZ_IngredientDef rec = new ChefZ_IngredientDef();
             rec.id                = id;
             rec.categories        = TextArrayOrNull(node + " categories");
@@ -406,6 +410,79 @@ class ChefZ_ConfigCppSource extends ChefZ_IRecordSource
 
             Finish(rec, root, node, sink);
         }
+    }
+
+    /**
+     * "Ist dieser Knoten nur eine Vorlage zum Erben und keine Bindung?"
+     *
+     * ---------------------------------------------------------------------
+     * Wofuer der Schalter da ist
+     * ---------------------------------------------------------------------
+     * Content-Module bauen ihre Zutatenbindungen mit einer Vorlage:
+     *
+     *     class ChefZ_SauceIngredient { quantityUnit = "GRAM"; ... };
+     *     class ChefZ_TomatoSauce : ChefZ_SauceIngredient { ... };
+     *
+     * Der Leser darueber sieht nur direkte Kinder von CfgChefZIngredients -
+     * und die Vorlage IST ein direktes Kind. Sie wurde deshalb als Bindung
+     * fuer eine Klasse gelesen, die es in keiner CfgVehicles gibt, und
+     * ChefZ_IngredientManager.WarnIfClassMissing meldete sie je Serverstart.
+     *
+     * BELEGT (Livetest 31.08.2026, script_2026-08-31_14-44-26.log, Client wie
+     * Server): sieben solche Meldungen je Boot -
+     * ChefZ_BowlDishIngredient, ChefZ_DishesAPlate, ChefZ_DishesBPlate,
+     * ChefZ_DishesVanillaBowl, ChefZ_DishesVanillaPlate, ChefZ_SauceIngredient
+     * (ChefZ_Cooking) und ChefZ_ProduceIngredient (ChefZ_Farming).
+     *
+     * ---------------------------------------------------------------------
+     * Warum der Schalter den eigenen Namen NENNT statt "template = 1" zu sein
+     * ---------------------------------------------------------------------
+     * Weil die Engine Config-VERERBUNG aufloest. ConfigGetInt an einem
+     * Kindknoten liefert den Wert des Elternknotens - genau darauf baut
+     * dieser Mod an mehreren Stellen ausdruecklich (siehe
+     * ChefZ_Edible_Base.ChefZ_DeclaresCookTransitions: "Die Vererbung loest
+     * die Engine auf"), und genau darauf baut das Content-Beispiel oben:
+     * ChefZ_TomatoSauce schreibt nur categories[] hin und erbt Einheit,
+     * Zustand und decays.
+     *
+     * Ein "template = 1" auf der Vorlage waere damit auch an JEDER Bindung
+     * gesetzt, die von ihr erbt - der Schalter haette genau die Bindungen
+     * geloescht, fuer die er gebaut wurde. Ein "template = 0" als Pflicht-
+     * Rueckstellung im Kind waere eine Falle: wer sie vergisst, verliert
+     * seine Bindung STILL, und still verlorene Bindungen sind der teuerste
+     * Fehler dieses Ladeweges.
+     *
+     * Deshalb traegt das Feld den eigenen Klassennamen:
+     *
+     *     class ChefZ_SauceIngredient
+     *     {
+     *         template = "ChefZ_SauceIngredient";   // <- der eigene Name
+     *         quantityUnit = "GRAM";
+     *     };
+     *     class ChefZ_TomatoSauce : ChefZ_SauceIngredient { ... };
+     *
+     * ChefZ_TomatoSauce erbt die Zeichenkette "ChefZ_SauceIngredient" - und
+     * die ist NICHT sein eigener Name. Der Vergleich unten ist damit ohne
+     * jede Rueckstellung vererbungsfest, und er faellt in die sichere
+     * Richtung: ein Tippfehler heisst "keine Vorlage" und damit genau das
+     * Verhalten von heute (eine Warnung, kein Verlust).
+     *
+     * Der Core setzt dieses Feld nirgends - er hat keinen Content und keine
+     * Vorlage. Es zu setzen ist Sache des Moduls, dem die Vorlage gehoert.
+     */
+    private bool IsBindingTemplate(string node, string id)
+    {
+        string declared = Text(node + " template");
+        if (declared == "")
+            return false;
+
+        if (declared != id)
+            return false;
+
+        if (ChefZ_Log.Enabled(ChefZ_LogChannel.CONFIG, ChefZ_LogLevel.DEBUG))
+            ChefZ_Log.Debug(ChefZ_LogChannel.CONFIG, node + ": Vorlagenknoten (template == eigener Klassenname) - keine Zutatenbindung. " + "Erbende Knoten sind davon unberuehrt, sie tragen den Namen der Vorlage " + "und nicht ihren eigenen.");
+
+        return true;
     }
 
     //--------------------------------------------------------------------------

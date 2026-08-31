@@ -421,22 +421,28 @@ class ChefZ_ItemDecay
      * benutzt zum Beispiel in Apple.EEOnCECreate) - kein Nachbau, keine
      * eigene Wetterrechnung.
      *
-     * @return ChefZ_Undefined.FLOAT, wenn sie nicht zu ermitteln ist. Eine
-     *         temperaturgebundene Regel greift dann NICHT (02 §8: "jeder
-     *         Fehler bewegt das System Richtung weniger ChefZ").
+     * @return ChefZ_PreservationDef.TEMPERATURE_UNKNOWN, wenn sie nicht zu
+     *         ermitteln ist. Eine temperaturgebundene Regel greift dann NICHT
+     *         (02 §8: "jeder Fehler bewegt das System Richtung weniger
+     *         ChefZ").
+     *
+     *         NICHT ChefZ_Undefined.FLOAT, und der Unterschied ist der ganze
+     *         Punkt: der ist seit dem 28.08.2026 0.0, also der Gefrierpunkt -
+     *         eine Messung und keine fehlende Angabe. Siehe den Befund im Kopf
+     *         von ChefZ_PreservationDef.TEMPERATURE_UNKNOWN.
      */
     private static float EnvironmentTemperature(notnull ItemBase item)
     {
         if (!g_Game)
-            return ChefZ_Undefined.FLOAT;
+            return ChefZ_PreservationDef.TEMPERATURE_UNKNOWN;
 
         Mission mission = g_Game.GetMission();
         if (!mission)
-            return ChefZ_Undefined.FLOAT;
+            return ChefZ_PreservationDef.TEMPERATURE_UNKNOWN;
 
         WorldData world = mission.GetWorldData();
         if (!world)
-            return ChefZ_Undefined.FLOAT;
+            return ChefZ_PreservationDef.TEMPERATURE_UNKNOWN;
 
         return world.GetBaseEnvTemperatureAtObject(item);
     }

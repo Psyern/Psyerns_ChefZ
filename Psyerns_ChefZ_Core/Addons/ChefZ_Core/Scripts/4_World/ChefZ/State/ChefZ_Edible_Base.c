@@ -433,15 +433,84 @@ class ChefZ_Edible_Base extends Edible_Base
     }
 
     /**
+     * "Hat diese Klasse ueberhaupt Vanilla-Garstufen?"
+     *
+     * GetFoodStage() != null IST die Antwort auf HasFoodStage()
+     * (ItemBase.c:2654): Edible_Base legt m_FoodStage genau dann an, wenn
+     * HasFoodStage() beim Konstruieren true war (Edible_Base.c:27). Dieselbe
+     * Gleichsetzung steht schon in CanBeCooked() oben.
+     *
+     * Bewusst diese Form und NICHT der Configaufruf: HasFoodStage() baut je
+     * Aufruf eine Zeichenkette und fragt die Config
+     * (string.Format + ConfigIsExisting). Die beiden Wachen darunter laufen
+     * je Lebensmittel und je ProcessVariables-Takt - das ist der heisseste
+     * Pfad, den ChefZ ueberhaupt beruehrt. Der Zeigervergleich kostet nichts
+     * und sagt dasselbe.
+     *
+     * protected und nicht private: eine Content-Klasse, die CanDecay() oder
+     * CanProcessDecay() selbst ueberschreibt, braucht dieselbe Wache - und
+     * zwei Fassungen derselben Frage laufen garantiert auseinander (dasselbe
+     * Argument wie bei ChefZ_DeclaresCookTransitions oben).
+     */
+    protected bool ChefZ_HasFoodStages()
+    {
+        return GetFoodStage() != null;
+    }
+
+    /**
      * 01 V9: CanDecay() ist auf Edible_Base false - eine neue ChefZ-Nahrung
      * verdirbt gar nicht, solange das niemand sagt. Gesagt wird es als
      * Datenfeld an der Zutat (ChefZ_IngredientDef.decays), nicht im Code.
      *
      * Salz und getrocknete Gewuerze sollen genau das: nie verderben. Der
      * Default bleibt deshalb false.
+     *
+     * ---------------------------------------------------------------------
+     * VORFALL 31.08.2026 - 1925 Nullzugriffe in 80 Minuten Livetest
+     * ---------------------------------------------------------------------
+     * Fundstelle: script_2026-08-31_14-44-26.log, "NULL pointer to instance"
+     * in Edible_Base.GetFoodStageType (Edible_Base.c:533,
+     * "return GetFoodStage().GetFoodStageType();" - ungeschuetzt).
+     * Betroffen waren ausschliesslich ChefZ-Klassen OHNE Food-Block:
+     * ChefZ_PepperBerries 415x, ChefZ_WildGarlic 305x, ChefZ_Thyme 301x,
+     * ChefZ_Rosemary 257x, ChefZ_CheeseFlatbread 254x, ChefZ_PotatoPancakes
+     * 254x, ChefZ_FarmersBreakfast 139x.
+     *
+     * Der Weg dorthin, Zeile fuer Zeile:
+     *
+     *   ItemBase.ProcessVariables (ItemBase.c:4670) rechnet
+     *       processDecay = foodDecay && CanDecay() && CanProcessDecay();
+     *   In VANILLA endet das immer vor der zweiten Klammer, weil
+     *   Edible_Base.CanDecay() false liefert (Edible_Base.c:730) - die
+     *   Kurzschlussauswertung erreicht CanProcessDecay() gar nicht. GENAU
+     *   DAS war der Schutz, den diese Ueberschreibung wegnimmt: sie liefert
+     *   decays aus dem Zutatendatensatz, ohne zu pruefen, ob die Klasse den
+     *   Mechanismus ueberhaupt hat, an dem Vanillas Verfall haengt.
+     *
+     * Deshalb die Wache. Sie nimmt niemandem etwas weg, den es gibt:
+     * Vanillas Verfall arbeitet AUSSCHLIESSLICH ueber Stufenwechsel
+     * (Edible_Base.ProcessDecay vergleicht m_LastDecayStage gegen
+     * GetFoodStageType() und ruft ChangeFoodStage(ROTTEN)). Eine Klasse ohne
+     * Stufen hat nichts, was verfallen koennte - "decays": true ist an ihr
+     * eine Angabe ohne Gegenstueck.
+     *
+     * Was das Feld weiterhin tut: es bleibt der Datenschalter fuer JEDE
+     * ChefZ-eigene Frischerechnung, die nicht am Vanilla-Takt haengt. Nur
+     * ChefZ_ItemDecay.AdvanceFreshness haengt heute daran, und die laeuft
+     * ohnehin nur aus ProcessDecay heraus - also nur dort, wo es Stufen
+     * gibt. Fuer stufenlose Klassen tickt die Frische damit nicht, und das
+     * ist keine Aenderung: sie tickte dort noch nie, weil ProcessVariables
+     * vor der ersten Multiplikation mit einem Nullzugriff abbrach. Derselbe
+     * Abbruch kostete diese Items bisher AUCH Nasswerden und Temperatur -
+     * beides laeuft ab jetzt wieder (ItemBase.c:4672ff).
      */
     override bool CanDecay()
     {
+        // Erst die Wache, dann die Daten: ein "decays": true darf nur wirken,
+        // wo Vanilla ueberhaupt einen Verfallsmechanismus hat.
+        if (!ChefZ_HasFoodStages())
+            return false;
+
         ChefZ_IngredientInfo info = ChefZ_IngredientManager.Get().ResolveByName(GetType());
         if (!info)
             return super.CanDecay();
@@ -461,9 +530,34 @@ class ChefZ_Edible_Base extends Edible_Base
      * ihr Gesundheitswert darf sich aber weiter veraendern duerfen - zwei
      * Schalter statt einem erlauben genau das, ohne dass der Core wissen muss,
      * was eine Konserve ist.
+     *
+     * ---------------------------------------------------------------------
+     * Die Wache DAVOR - Guertel und Hosentraeger zum Vorfall 31.08.2026
+     * ---------------------------------------------------------------------
+     * Der eigentliche Riegel gegen die 1925 Nullzugriffe sitzt in CanDecay()
+     * darueber; hier steht der zweite, und er ist nicht doppelt gemoppelt:
+     *
+     *   1. super.CanProcessDecay() IST die Absturzstelle. Vanilla schreibt
+     *      dort "!GetIsFrozen() && (GetFoodStageType() != ROTTEN)"
+     *      (Edible_Base.c:735), und GetFoodStageType() ruft ungeprueft
+     *      GetFoodStage().GetFoodStageType() (Edible_Base.c:533). Ohne
+     *      Stufen ist der Aufruf selbst der Fehler - wir duerfen ihn also
+     *      gar nicht erst betreten.
+     *   2. Die Kurzschlussauswertung in ProcessVariables ist eine Zusage
+     *      VANILLAS, nicht unsere. Sie steht in einer Zeile, die jeder
+     *      andere Mod ueberschreiben kann - und ChefZ laeuft auf Servern mit
+     *      dreistelliger Modzahl. Genau so kam der Vorfall ans Licht: in der
+     *      Kette stand ein fremdes "modded class ItemBase".
+     *   3. Dieselbe Ueberlegung wie bei plan.stopsDecay in ProcessDecay()
+     *      weiter unten: ein Schutz, der an einer Zusage haengt, die uns
+     *      nicht gehoert, gehoert an BEIDE Stellen.
      */
     override bool CanProcessDecay()
     {
+        // VOR super: der super-Aufruf ist die Stelle, die ohne Stufen wirft.
+        if (!ChefZ_HasFoodStages())
+            return false;
+
         if (!super.CanProcessDecay())
             return false;
 

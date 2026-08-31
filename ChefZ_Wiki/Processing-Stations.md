@@ -206,7 +206,7 @@ Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` se
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat | 1:1 from input | **never runs** | SMOKED |
+| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat | 1:1 from input | 5 min | SMOKED |
 | `TR_FishToSmoked` | 1× *FISH* + state RAW | Smoked Fish | 1:1 from input | 5 min | SMOKED |
 | `TR_RawSausageToSmoked` | 1× *SAUSAGE* + state RAW | Smoked Sausage | 1:1 from input | 5 min | SMOKED |
 
@@ -218,12 +218,12 @@ the station record set `"needsFuel": true` against a class with no fuel slot.
 carries its own burn state, fed with bark from its own cargo. Five minutes of full
 burn costs two pieces. The price of smoking is fuel now, not waiting.
 
-> **Smoked Meat still cannot be made, for an unrelated reason.**
-> `TR_SaltedMeatToSmoked` declares no `process` field — unlike its two neighbours
-> in the same file, which both name `PROCESS_SMOKE`. `ChefZ_ProcessCompiler.c:355`
-> rejects any transform whose process cannot be resolved, so this one is dropped at
-> boot with an error in the RPT and no station ever offers it. Smoked Fish and
-> Smoked Sausage are unaffected. See [Known-Limitations](Known-Limitations).
+> **Smoked Meat was blocked for a second, unrelated reason — fixed the same day.**
+> `TR_SaltedMeatToSmoked` declared no `process` field, unlike its two neighbours in
+> the same file, so `ChefZ_ProcessCompiler.c:355` dropped it at boot and no station
+> ever offered it. Since 31.08.2026 it names `PROCESS_SMOKE` and pins
+> `stationsAllowed: ["ChefZ_Smoker"]` like the other two. See
+> [Known-Limitations](Known-Limitations).
 
 ## Frying Pan
 
@@ -509,9 +509,9 @@ slots for them.
 | Station categories | 11 |
 | Processes | 34 — 18 handcraft, 7 station action, 9 station timed (recounted 2026-08-31) |
 | Handcraft slots reserved | 22, matching the 22 handcraft transforms exactly |
-| Transforms | 62 — 39 at a station, 22 handcraft, 1 rejected at boot (recounted 2026-08-31) |
+| Transforms | 62 — 40 at a station, 22 handcraft, none rejected at boot (recounted 2026-08-31, after `TR_SaltedMeatToSmoked` was fixed) |
 | Processes with no transform | 3 — `PROCESS_HARVEST_HIVE`, `PROCESS_HARVEST_WILD` and `PROCESS_PACK_HIVE`, all by design |
-| Transforms naming an undeclared process | 1 — `TR_SaltedMeatToSmoked` names none at all, see the Smoker |
+| Transforms naming an undeclared process | 0 — the last one, `TR_SaltedMeatToSmoked`, was fixed on 31.08.2026, see the Smoker |
 | Transforms naming an unknown station | 0 |
 | Stations without cargo | 0 since 2026-08-31 — Mortar and Drying Rack inherit theirs from `ChefZ_HerbStationBase` |
 

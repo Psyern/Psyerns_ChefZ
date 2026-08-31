@@ -57,8 +57,8 @@ design questions — is kept internally and is not part of this repository.
 | **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 48 recipes · 62 transforms · 15 stations |
 | **Cookbook** | Implemented as knowledge state, RPC and an F9 key — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
-| **Validation** | 19 checkers · **exit code 0 · 0 errors · 2 warnings** |
-| **Validator self-test** | 18 of 19 checkers provably fire · `chefzaction` not yet covered |
+| **Validation** | 20 checkers · **exit code 0 · 0 errors · 2 warnings** |
+| **Validator self-test** | 19 of 20 checkers provably fire · `chefzaction` not yet covered |
 | **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
@@ -549,7 +549,7 @@ Nineteen checkers plus a runner under `tools/chefz-validate/` — Node, no depen
 non-zero exit code on failure.
 
 ```bash
-node tools/chefz-validate/index.mjs       # 0 errors, 2 warnings, 19/19 green
+node tools/chefz-validate/index.mjs       # 0 errors, 2 warnings, 20/20 green
 node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 ```
 
@@ -591,6 +591,7 @@ node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 | `chefzmanaged.mjs` | Anything held by `ref` must be `Managed`, or the object is freed under the pointer |
 | `chefzswitch.mjs` | A `case` label must be a literal — a `static const` label compiles and then matches nothing |
 | `chefzaction.mjs` | An action class nobody registers in `RegisterActions()` compiles, logs nothing, and never appears in the game |
+| `tracelines.mjs` | The line number inside `ChefZ_SelfTestTrace.Fail("...", N, ...)` must be the line it stands on — otherwise every failed self-test points the reader at the wrong place |
 
 `index.mjs` runs all nineteen, writes a JSON report and sets the exit code.
 
@@ -598,7 +599,7 @@ node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 
 `selftest.mjs` builds a throwaway module that violates every rule on purpose, runs the
 suite against it, and asserts that each rule fires and the run exits `1`. Current
-coverage: **18 of 19 checkers provably fire.** `chefzaction` is not covered — it could
+coverage: **19 of 20 checkers provably fire.** `chefzaction` is not covered — it could
 go blind without anything noticing.
 
 `tools/chefz-assets/check-todo.mjs` is a third tool with a different job: it compares
