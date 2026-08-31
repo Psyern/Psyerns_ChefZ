@@ -21,6 +21,16 @@ self-test trace, Beekeeping V2 and the two asset addons all landed on 29.08.2026
 after this run. The mod is fifteen sources now, not twelve addons, and none of the
 changes since have been through a compiler or a server start. The static suite is green; that is a different claim.
 
+What that gap costs became concrete on 31.08.2026. `ChefZ_WearsGasMask`, part of the
+Beekeeping V2 code that landed on 29.08., called `IsGasMask()` on an `ItemBase`. The
+function does not exist there — vanilla declares it on `Clothing_Base`
+(`InventoryItem.c:995`) and overrides it in `MaskBase.c:6`. The call cannot compile,
+so `ChefZ_Farming` could not have built, and the beehive's entire sting branch sat
+behind it. It stood in the tree for two days and no validator saw it: the static
+suite parses ChefZ's own rules, not the vanilla class hierarchy. It is fixed — the
+cast is `Clothing` now, vanilla's own pattern in `PlayerBase.c:1479/1499` — but it
+was found by reading, which is not a method that scales.
+
 Two properties of the engine's JSON layer caused most of this. One is fixed, one
 is not. Both are described below, because neither is visible from the code and
 neither produces an error message.

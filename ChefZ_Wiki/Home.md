@@ -19,6 +19,11 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 > addons of the time registered — then the process died in the mission's `OnInit`
 > chain, with the core in safe mode and its registries empty. Nothing has been
 > signed or binarised, and no gate checklist has been executed in a live game.
+>
+> **That run is older than the code.** Everything from 29.08.2026 on — the cookbook,
+> Beekeeping V2, the asset addons — has never been near a compiler. On 31.08.2026 a
+> call that cannot compile was found in that untested stretch by reading it. Treat
+> "compiles" as a statement about 28.08., not about the current tree.
 > [Known Limitations](Known-Limitations) is the full inventory, and it is the right
 > page to start on if you are considering a live server.
 
