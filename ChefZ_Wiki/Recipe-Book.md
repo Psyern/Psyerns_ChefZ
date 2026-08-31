@@ -40,9 +40,9 @@ error — it is the normal case. See [Recipes](Recipes#1-the-one-rule-that-matte
 
 | Group | What counts |
 |---|---|
-| *meat* | Every raw and cooked meat in the mod, sausages and mince included |
+| *meat* | Every raw and cooked meat in the mod, sausages and mince included. The three primal cuts are **not** in it — a Beef, Pork or Venison Leg is category `PRIMAL_CUT` and has to be cut into steaks first |
 | *minced meat* | Diced Meat · Minced Meat · Minced Pork · Minced Venison · Minced Boar · Minced Chicken · Minced Bear |
-| *wild meat* | Deer, Boar, Rabbit, Wolf and Bear steak · Venison Leg · Minced Venison / Boar / Bear · the four wild sausages |
+| *wild meat* | Deer, Boar and Rabbit steak · Minced Venison and Minced Boar · the raw and cooked Venison, Boar and Hunter sausages. **Wolf and Bear are not in it** — they are category `PREDATOR_MEAT`, and so is Minced Bear |
 | *sausage* | All fourteen sausage classes — raw, cooked, dry and smoked |
 | *casing* | Guts · Small Guts |
 | *fish* | Carp, Mackerel, Steelhead Trout, Walleye Pollock fillet · Sardines · Bitterlings · Salted, Dried and Smoked Fish |

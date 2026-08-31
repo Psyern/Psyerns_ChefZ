@@ -172,9 +172,11 @@ So the shortest route to the best sausage skips the grinder entirely for the mea
 2x Deer Steak (raw) + 2x spice + 1x Guts  =  1x Raw Hunter Sausage
 ```
 
-`WILD_MEAT` covers deer, boar, rabbit, wolf and bear steaks, plus minced venison,
-minced boar and minced bear — but the selector excludes `MINCED_MEAT`, so mince
-does not qualify. It has to be whole steaks.
+`WILD_MEAT` covers **deer, boar and rabbit** — and nothing else you can carry
+whole. **Wolf and bear do not count**: both are category `PREDATOR_MEAT`. They
+carry the *tag* `CHEFZ_WILD_MEAT`, but this slot binds on the category, and the two
+are not the same list. The selector also excludes `MINCED_MEAT`, so mince does not
+qualify either. It has to be whole deer, boar or rabbit.
 
 ## Step 5 — Three endings
 
