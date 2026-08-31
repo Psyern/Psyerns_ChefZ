@@ -141,7 +141,14 @@ export default function run() {
       }
       const res = readJson(file);
       if (!res.ok) { f.error(file, 0, `Registry nicht lesbar: ${res.error}`); continue; }
-      const section = name.replace('.json', '').toLowerCase();
+      let section = name.replace('.json', '').toLowerCase();
+      // Namensbruecke fuer den Fall, dass Processing.json je in CORE_REGISTRIES
+      // aufgenommen wird (Delta-Sektion heisst "processes"). Heute ist das
+      // BEWUSST nicht so: Prozesse sind per K1 (ChefZ_Registry/config.cpp:126)
+      // Rang-1-Sache von CfgChefZProcesses und wandern nie in die Registry -
+      // gepruft 2026-08-31 am Fall PROCESS_HARVEST_WILD. Die Bruecke ist also
+      // derzeit toter, aber absichernder Code.
+      if (section === 'processing') section = 'processes';
       const expected = merged[section];
       if (!expected) continue;
       // Die Registry hat die Dokumentform des Core: { kind, schemaVersion, records }.

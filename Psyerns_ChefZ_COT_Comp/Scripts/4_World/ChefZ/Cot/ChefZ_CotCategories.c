@@ -19,15 +19,39 @@
 // ---------------------------------------------------------------------------
 // Aus den config.cpp unter Psyerns_ChefZ_Core/Addons/ - und nur von dort. Jeder
 // Name unten ist eine Klasse mit scope = 2, die dort mit Rumpf definiert ist.
-// Gegengeprueft gegen die classes-Listen in Psyerns_ChefZ_Core/_deltas/*.json:
-// beide Quellen nennen dieselben 185 Klassen, davon 168 mit scope = 2. Diese
-// 168 stehen hier, jede in GENAU EINER Kategorie.
 //
-// Die 17 fehlenden sind die Basisklassen mit scope = 0 (ChefZ_GrainFoodBase,
-// ChefZ_MeatItemBase, ChefZ_ServedDish_Base ...). Sie fehlen bewusst: sie sind
-// nicht spawnbar. COT wuerde sie ohnehin verwerfen (JMObjectSpawnerForm.c:940 -
-// "scope == 0" -> continue); sie hier zu fuehren hiesse, dem Admin siebzehn
-// tote Zeilen anzubieten.
+// NACHGEZAEHLT AM 31.08.2026, aus den Configbaeumen selbst und gegengeprueft
+// gegen die classes-Listen in Psyerns_ChefZ_Core/_deltas/*.json:
+//
+//   144   ChefZ_-Klassen stehen in CfgVehicles unter Addons/
+//   129   davon mit scope = 2
+//    15   davon mit scope = 0
+//   109   davon stehen hier, jede in GENAU EINER Kategorie
+//
+// Die 15 mit scope = 0 sind die Basisklassen (ChefZ_GrainFoodBase,
+// ChefZ_MeatItemBase, ChefZ_ServedDish_Base, ChefZ_WildPlant_Base ...). Sie
+// fehlen bewusst: sie sind nicht spawnbar. COT wuerde sie ohnehin verwerfen
+// (JMObjectSpawnerForm.c:940 - "scope == 0" -> continue); sie hier zu fuehren
+// hiesse, dem Admin fuenfzehn tote Zeilen anzubieten.
+//
+// Die 20 verbleibenden spawnbaren Klassen fehlen NICHT bewusst, sondern noch
+// NICHT: sie stammen aus Slices, die nach dem Aufbau dieser Tabelle
+// dazugekommen sind, und fuer sie ist keine Kategoriezuordnung entschieden
+// worden. Sie hier still einzusortieren waere geraten. Der Stand, damit die
+// Luecke nachweisbar bleibt und nicht wieder gezaehlt werden muss:
+//
+//   ChefZ_Cookbook      ChefZ_CookbookItem
+//   ChefZ_Cooking       ChefZ_PumpkinSoupBowl, ChefZ_SmallFishPan,
+//                       ChefZ_FruitCompoteBowl
+//   ChefZ_Farming       ChefZ_Beehive, ChefZ_BeehiveDouble, ChefZ_BeehiveKit,
+//                       ChefZ_HoneycombFrameEmpty, ChefZ_HoneycombFrameFull,
+//                       ChefZ_HoneycombFrameUncapped, ChefZ_UncappingFork,
+//                       ChefZ_BeeSmoker
+//   ChefZ_Ingredients   ChefZ_DriedBerries, ChefZ_CheeseCurd,
+//                       ChefZ_MushroomCulture
+//   ChefZ_Meat          ChefZ_BeefLeg, ChefZ_PorkLeg, ChefZ_VenisonLeg,
+//                       ChefZ_DicedMeat
+//   ChefZ_Processing    ChefZ_HoneyExtractor
 //
 // ---------------------------------------------------------------------------
 // WARUM KLASSENLISTEN UND NICHT BASISKLASSEN
@@ -58,6 +82,48 @@
 // Name, den es nicht gibt, wird dort still uebersprungen. Deshalb darf hier
 // ruhig die volle Liste stehen, auch wenn ein Server nur einen Teil der
 // ChefZ-Addons laedt.
+//
+// ---------------------------------------------------------------------------
+// UNAUFNEHMBARE WELTOBJEKTE - GEPRUEFT, ES AENDERT NICHTS
+// ---------------------------------------------------------------------------
+// Mit dem Slice "wildplants" stehen erstmals Klassen in dieser Tabelle, die ein
+// Spieler nicht in die Hand nehmen kann: ChefZ_WildPlant_Base ueberschreibt
+// IsTakeable, CanPutInCargo, CanRemoveFromCargo und CanPutIntoHands mit false
+// (ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c:208-226,
+// Vanillas Satz aus GardenPlot.c:113-131). Die naheliegende Sorge - "COT kann
+// so etwas nicht spawnen" - ist nachgeprueft und unbegruendet:
+//
+//   Liste     JMObjectSpawnerForm.UpdateList (Z. 938-975) prueft scope, Modell
+//             und IsExcludedClassName. IsTakeable kommt dort nicht vor. Alle
+//             vier Wildpflanzen haben scope = 2 und ein echtes Modell
+//             (corn_plant.p3d, parsley.p3d, rosmary.p3d und - beim Thymian -
+//             Vanillas plant_material.p3d), keines ist "bmp". Auch COTs
+//             Sperrliste greift nicht: sie enthaelt "placing", "debug",
+//             "bldr_", "land_", "staticobj_" (JMObjectSpawnerModule.c:45-51),
+//             und kein Wildpflanzenname enthaelt eines davon.
+//   Spawn     JMObjectSpawnerModule.SpawnEntity (Z. 607-700) geht fuer einen
+//             Spawn an eine Position ueber g_Game.CreateObjectEx mit
+//             ECE_PLACE_ON_SURFACE - dieselbe Erzeugung, die ChefZ selbst fuer
+//             seine Begleitpflanzen benutzt. Kein Inventarweg, kein
+//             IsTakeable.
+//
+// ZWEI DINGE, DIE DER ADMIN WISSEN SOLLTE - beides COTs unveraendertes
+// Verhalten, nicht unseres:
+//
+//   1. "Spawn to inventory" ist fuer diese vier sinnlos. SpawnEntity nimmt den
+//      Inventarzweig nur bei IsInventoryType (Z. 592-604, IsKindOf
+//      Inventory_Base) - das trifft zu -, und legt das Objekt dann per
+//      FindFreeLocationFor ab. CanPutInCargo/CanPutIntoHands sagen dort nein,
+//      COT protokolliert "Couldn't move ..." (Z. 656-657) und die Pflanze
+//      bleibt liegen, wo sie erzeugt wurde. Kein Absturz, nur kein Nutzen.
+//   2. Im Setup-Modus CE ruft COT EEOnCECreate() am frisch erzeugten Objekt
+//      (Z. 713-714). Bei ChefZ_WildCorn stellt genau dieser Haken 0..2
+//      Begleitpflanzen daneben (ChefZ_WildPlants.c:342-346). Ein Admin, der in
+//      diesem Modus einmal Mais spawnt, bekommt also unter Umstaenden drei -
+//      gewollt und CE-getreu, aber ueberraschend, wenn man es nicht weiss.
+//
+// Diese Datei aendert daran nichts und soll es auch nicht: sie macht Klassen
+// auffindbar, nicht spawnbar.
 //
 // ---------------------------------------------------------------------------
 // EINE NEUE KLASSE NACHTRAGEN
@@ -207,15 +273,24 @@ class ChefZ_CotCategories
 		// unter "Teig, Brot und Pasta", obwohl sie dieselbe Basisklasse
 		// ChefZ_GrainFoodBase teilen: sie sind der Rohstoff der Kette, nicht
 		// ihr Erzeugnis.
+		//
+		// ChefZ_WildCorn steht in derselben Zeile wie ChefZ_Corn und
+		// ChefZ_CornPlant, und aus demselben Grund: es ist die dritte Gestalt
+		// desselben Rohstoffs. Ein Admin, der Mais sucht, sucht ihn als Zutat -
+		// ob er den Kolben, die Beetpflanze oder den Wildwuchs braucht, weiss
+		// er selbst, aber er will alle drei an einer Stelle finden. Die
+		// Wildpflanze ist ein Weltobjekt und kein Inventaritem; dass das fuer
+		// COT nichts aendert, ist im Dateikopf unter "UNAUFNEHMBARE
+		// WELTOBJEKTE" nachgewiesen.
 		Add("chefz_cot_ingredients", "#STR_CHEFZ_COT_CAT_INGREDIENTS",
 		{
 			"ChefZ_Wheat",
-			"ChefZ_Flour", 
-			"ChefZ_Onion", 
-			"ChefZ_Garlic", 
-			"ChefZ_Carrot", 
-			"ChefZ_Cabbage", 
-			"ChefZ_Corn", "ChefZ_CornPlant",
+			"ChefZ_Flour",
+			"ChefZ_Onion",
+			"ChefZ_Garlic",
+			"ChefZ_Carrot",
+			"ChefZ_Cabbage",
+			"ChefZ_Corn", "ChefZ_CornPlant", "ChefZ_WildCorn",
 			"ChefZ_Egg",
 			"ChefZ_RawSalt", "ChefZ_Salt", "ChefZ_BoneBroth",
 			"ChefZ_TomatoSauce", "ChefZ_CreamSauce", "ChefZ_MushroomCreamSauce"
@@ -228,10 +303,22 @@ class ChefZ_CotCategories
 		// "Thymian", nicht "Thymian, Stufe 2 von 3"; die drei Basisklassen
 		// dahinter (ChefZ_FreshHerbBase, ChefZ_DriedHerbBase, ChefZ_SpiceBase)
 		// interessieren ihn nicht.
+		//
+		// Die drei Wildkraeuter sind die nullte Stufe derselben Kette und
+		// stehen deshalb hier - jedes direkt hinter seiner Ernte, damit die
+		// Liste Pflanze und Bund nebeneinander zeigt. Sie sind Weltobjekte
+		// (ChefZ_WildPlant_Base, vierte Basisklasse dieser Kategorie); genau
+		// deshalb kaeme man mit COTs Typfilter ueber eine gemeinsame Basis hier
+		// noch weniger weit als zuvor.
 		Add("chefz_cot_herbs", "#STR_CHEFZ_COT_CAT_HERBS",
 		{
-			"ChefZ_Parsley",
-			"ChefZ_Thyme", "ChefZ_Rosemary",
+			"ChefZ_Parsley", "ChefZ_WildParsley",
+			"ChefZ_Thyme", "ChefZ_WildThyme",
+			"ChefZ_Rosemary", "ChefZ_WildRosemary",
+			// ChefZ_WildGarlic ist trotz des Namens KEINE Wildpflanze im Sinne
+			// des Slice "wildplants", sondern der Baerlauch selbst - ein
+			// ChefZ_FreshHerbBase wie Petersilie. Nicht mit ChefZ_Wild* oben
+			// verwechseln; es gibt kein "ChefZ_WildWildGarlic".
 			"ChefZ_WildGarlic", "ChefZ_PepperBerries",
 			"ChefZ_DriedParsley", "ChefZ_DriedThyme",
 			"ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_DriedPaprika",

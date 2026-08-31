@@ -92,7 +92,8 @@
 // liest keine Registry und keinen Datensatz):
 //
 //   ChefZ_Core          Ladewurzel des Hauptmods
-//   ChefZ_Farming       Weizen, Gemuese, Kraeuterpflanzen und -saat
+//   ChefZ_Farming       Weizen, Gemuese, Kraeuterpflanzen und -saat, seit dem
+//                       Slice "wildplants" auch die vier Wildpflanzen
 //   ChefZ_Ingredients   Schnittgut, Milchwaren, Salz, Trockenkraeuter, Gewuerze
 //   ChefZ_Baking        Hefe, Teige, Pasta, Brot
 //   ChefZ_Meat          Hackfleisch und Wurst
