@@ -15,7 +15,7 @@ For the reasoning behind the split, see [Architecture](Architecture).
 |---|---:|---:|---:|---:|---:|
 | `ChefZ_Core` | 0 | 137 | — | 2 | 4 |
 | `ChefZ_Registry` | 0 | 0 | — | 137 | — |
-| `ChefZ_Farming` | 29 | 4 | 19 | 21 | 53 |
+| `ChefZ_Farming` | 29 | 5 | 19 | 21 | 62 |
 | `ChefZ_Processing` | 14 | 8 | 18 | 30 | 41 |
 | `ChefZ_Ingredients` | 26 | 3 | 1 | 49 | 58 |
 | `ChefZ_Meat` | 32 | 1 | — | 58 | 55 |
@@ -363,9 +363,9 @@ all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key. Ea
 | `ChefZ_Plants` | the crops and herbs — cabbage, carrot, corn cob and plant, garlic, parsley, red onion, rosemary, thyme |
 | `ChefZ_Food` | prepared food |
 
-Together **50 models and 52 textures**. **53 of the mod's 125 spawnable classes** now
+Together **50 models and 52 textures**. **56 of the mod's 129 spawnable classes** now
 stand on their own geometry rather than a vanilla proxy — 45 of them rebound in the
-second delivery alone. The remaining 72 still point at a vanilla mesh; the standing
+second delivery alone. The remaining 73 still point at a vanilla mesh; the standing
 backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing

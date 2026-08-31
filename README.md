@@ -37,8 +37,8 @@
 **The mod is written. It has never kept a DayZ server running.**
 
 Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 163 `CfgVehicles`
-classes (`scope = 0` base classes included), 173 script files, 480 data records and
-356 stringtable keys in 13 languages. The static validator suite runs green. What
+classes (`scope = 0` base classes included), 174 script files, 480 data records and
+365 stringtable keys in 13 languages. The static validator suite runs green. What
 has not happened is a server that survives startup — the process registers every
 addon, loads its config, and then dies with an access violation in the mission's
 `OnInit` chain while the core sits in safe mode with empty registries.
@@ -62,7 +62,7 @@ design questions — is kept internally and is not part of this repository.
 | **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Two deliveries in — 50 models, 52 textures, **53 of 125 classes** on their own geometry |
+| **3D assets** | Two deliveries in — 50 models, 52 textures, **56 of 129 classes** on their own geometry |
 
 ## Repository Layout
 
