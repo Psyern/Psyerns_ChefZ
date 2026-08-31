@@ -9,18 +9,23 @@
 - [Configuration](Configuration)
 - [Troubleshooting](Troubleshooting)
 
+**Cookbook**
+
+- [Recipe Book](Recipe-Book)
+- [From Meat to Sausage](From-Meat-to-Sausage)
+- [Recipe Reference](Recipe-Reference)
+
 **How it works**
 
 - [Architecture](Architecture)
 - [Modules](Modules)
-- [Recipes](Recipes)
+- [Recipe Engine](Recipes)
 - [Food States](Food-States)
 - [Quality and Nutrition](Quality-and-Nutrition)
 - [Portions and Containers](Portions-and-Containers)
 
 **Reference**
 
-- [Recipe Reference](Recipe-Reference)
 - [Processing Stations](Processing-Stations)
 - [Production Chains](Production-Chains)
 

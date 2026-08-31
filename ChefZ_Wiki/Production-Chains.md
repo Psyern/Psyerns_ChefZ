@@ -54,7 +54,7 @@ graph LR
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
 | `TR_WheatToFlour` | 1× Wheat | Flour (×0.78 of input) | Grain Mill | — | 25 s |
-| `TR_CornToFlour` | 1-5× Corn | Flour (120 g per cob) | Grain Mill (currently no cargo, see [Known-Limitations](Known-Limitations)) | — | 25 s |
+| `TR_CornToFlour` | 1-5× Corn | Flour (120 g per cob) | Grain Mill | — | 25 s |
 | `TR_FlourWaterToDough` | 1× Flour (250) + 1× container with Water (150) | Dough (1×) | *handcraft* | — | 8 s |
 | `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta (500×) | *handcraft* | `ROLLING_PIN` (pasta machine) | 10 s |
 | `TR_RawPastaToDriedPasta` | 1× Fresh Pasta | Dried Pasta (1:1) | Drying Rack | — | 30 min |
@@ -152,16 +152,16 @@ graph LR
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_ParsleyToDried` | 1+× Fresh Parsley | Dried Parsley (1:1) | Drying Rack | — | 8 min |
-| `TR_ThymeToDried` | 1+× Fresh Thyme | Dried Thyme (1:1) | Drying Rack | — | 8 min |
-| `TR_RosemaryToDried` | 1+× Fresh Rosemary | Dried Rosemary (1:1) | Drying Rack | — | 10 min |
-| `TR_WildGarlicToDried` | 1+× Fresh Wild Garlic | Dried Wild Garlic (1:1) | Drying Rack | — | 8 min |
-| `TR_PaprikaToDried` | 1+× Paprika | Dried Paprika (1:1) | Drying Rack | — | 15 min |
-| `TR_PepperBerriesToDried` | 1+× Pepper Berries | Dried Peppercorns (1:1) | Drying Rack | — | 15 min |
-| `TR_PeppercornsToBlackPepper` | 1+× Dried Peppercorns | Black Pepper (1:1) | Mortar and Pestle | — | 20 s |
-| `TR_DriedPaprikaToPowder` | 1+× Dried Paprika | Paprika Powder (1:1) | Mortar and Pestle | — | 20 s |
-| `TR_HerbMix` | 1+× Dried Thyme + 1+× Dried Parsley + 1+× Dried Rosemary | Herb Mix (1×) | Mortar and Pestle | — | 25 s |
-| `TR_HunterSeasoning` | 1+× Black Pepper + 1+× Paprika Powder + 1+× Dried Thyme + 1+× Dried Wild Garlic + 1+× *SPICE* | Hunter Seasoning (1×) | Mortar and Pestle | — | 35 s |
+| `TR_ParsleyToDried` | 1× Fresh Parsley | Dried Parsley (1:1) | Drying Rack | — | 8 min |
+| `TR_ThymeToDried` | 1× Fresh Thyme | Dried Thyme (1:1) | Drying Rack | — | 8 min |
+| `TR_RosemaryToDried` | 1× Fresh Rosemary | Dried Rosemary (1:1) | Drying Rack | — | 10 min |
+| `TR_WildGarlicToDried` | 1× Fresh Wild Garlic | Dried Wild Garlic (1:1) | Drying Rack | — | 8 min |
+| `TR_PaprikaToDried` | 1× Paprika | Dried Paprika (1:1) | Drying Rack | — | 15 min |
+| `TR_PepperBerriesToDried` | 1× Pepper Berries | Dried Peppercorns (1:1) | Drying Rack | — | 15 min |
+| `TR_PeppercornsToBlackPepper` | 1× Dried Peppercorns | Black Pepper (1:1) | Mortar and Pestle | — | 20 s |
+| `TR_DriedPaprikaToPowder` | 1× Dried Paprika | Paprika Powder (1:1) | Mortar and Pestle | — | 20 s |
+| `TR_HerbMix` | 1× Dried Thyme + 1× Dried Parsley + 1× Dried Rosemary | Herb Mix (1×) | Mortar and Pestle | — | 25 s |
+| `TR_HunterSeasoning` | 1× Black Pepper + 1× Paprika Powder + 1× Dried Thyme + 1× Dried Wild Garlic + 1× *SPICE* | Hunter Seasoning (1×) | Mortar and Pestle | — | 35 s |
 
 **Where it feeds in.** The tag `CHEFZ_HERB` is used by 25 recipes and
 `CHEFZ_SPICE` by 22, nearly always as an optional grade slot. Both the fresh and
@@ -221,7 +221,7 @@ matter: the Meat Grinder both minces and stuffs.
 graph LR
   LG(["Beef / Pork / Venison Leg"]) -->|"knife, 4 s"| RM(["Raw meat<br/>2 steaks per leg"])
   RM -->|"knife, 4 s"| DM(["Diced Meat<br/>MEAT + MINCED_MEAT"])
-  RM -->|"Meat Grinder<br/>20 s"| MM(["Minced Meat<br/>+ 5 species variants"])
+  RM -->|"Meat Grinder<br/>30 s"| MM(["Minced Meat<br/>+ 5 species variants"])
   MM -.->|"35-60 % chance"| AF(["Animal Fat"])
   MM --> ST["Hunter Stew<br/>Fisherman's Stew"]
   DM --> ST
@@ -237,7 +237,7 @@ graph LR
   SS --> RS(["6 raw sausages"])
   RS -->|"cookware"| CS["6 cooked sausages"]
   RS -->|"Drying Rack 90 min"| DS["Dry Sausage"]
-  RS -->|"Smoker 40 min"| SM["Smoked Sausage"]
+  RS -->|"Smoker 5 min"| SM["Smoked Sausage"]
 ```
 
 ### Cutting the legs
@@ -257,12 +257,12 @@ same transforms.
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_MeatToMinced` | 1+× *MEAT* + stage Raw | Minced Meat (1:1) | Meat Grinder | — | 20 s |
-| `TR_PorkToMinced` | 1+× Pig Steak + stage Raw | Minced Pork (1:1) | Meat Grinder | — | 20 s |
-| `TR_VenisonToMinced` | 1+× Deer Steak + stage Raw | Minced Venison (1:1) | Meat Grinder | — | 20 s |
-| `TR_BoarToMinced` | 1+× Boar Steak + stage Raw | Minced Boar (1:1) | Meat Grinder | — | 20 s |
-| `TR_ChickenToMinced` | 1+× Chicken Breast + stage Raw | Minced Chicken (1:1) | Meat Grinder | — | 20 s |
-| `TR_BearToMinced` | 1+× Bear Steak + stage Raw | Minced Bear (1:1) | Meat Grinder | — | 20 s |
+| `TR_MeatToMinced` | 1× *MEAT* + stage Raw | Minced Meat (1:1) | Meat Grinder | — | 30 s |
+| `TR_PorkToMinced` | 1× Pig Steak + stage Raw | Minced Pork (1:1) | Meat Grinder | — | 30 s |
+| `TR_VenisonToMinced` | 1× Deer Steak + stage Raw | Minced Venison (1:1) | Meat Grinder | — | 30 s |
+| `TR_BoarToMinced` | 1× Boar Steak + stage Raw | Minced Boar (1:1) | Meat Grinder | — | 30 s |
+| `TR_ChickenToMinced` | 1× Chicken Breast + stage Raw | Minced Chicken (1:1) | Meat Grinder | — | 30 s |
+| `TR_BearToMinced` | 1× Bear Steak + stage Raw | Minced Bear (1:1) | Meat Grinder | — | 30 s |
 
 The six mincing transforms are ordered by priority — the generic `TR_MeatToMinced`
 sits at 0, the five species transforms at 20, so pork becomes Minced Pork rather than
@@ -276,7 +276,7 @@ only ever been a vanilla proxy was worth having again.
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_DicedMeat` | 1+× *MEAT* + stage Raw | Diced Meat | *handcraft* | `CUTTING_TOOL` | 4 s |
+| `TR_DicedMeat` | 1× *MEAT* + stage Raw | Diced Meat | *handcraft* | `CUTTING_TOOL` | 4 s |
 
 It shares `PROCESS_CUT_MEAT` with the three leg cuts and sits at priority 0 against
 their 20, so a leg still becomes steaks and everything else raw becomes cubes.
@@ -292,12 +292,12 @@ category `CASING`; there is no cleaning step and no ChefZ casing class.
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_RawSausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawPorkSausage` | 1+× Minced Pork + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Pork Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawVenisonSausage` | 1+× Minced Venison + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Venison Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawBoarSausage` | 1+× Minced Boar + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Boar Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Hunter Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawSpicySausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *CASING* (Guts or Small Guts) | Raw Spicy Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawSausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawPorkSausage` | 1× Minced Pork + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Pork Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawVenisonSausage` | 1× Minced Venison + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Venison Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawBoarSausage` | 1× Minced Boar + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Boar Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Hunter Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawSpicySausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Spicy Sausage (1×) | Meat Grinder | — | 15 s |
 
 `TR_RawHunterSausage` is the only stuffing transform that takes **whole raw wild
 meat** instead of mince — 2× `WILD_MEAT` at stage `Raw`. It is also the only
@@ -313,12 +313,8 @@ on food stage `Baked` or `Boiled`. See
 `MEAT` by 2, `WILD_MEAT` by 2. Diced Meat fills a required slot in all three
 Hunter Stew variants, as one of three allowed classes.
 
-**Gaps.** Both stations in this chain — the Cutting Board and the Meat Grinder —
-currently have **no cargo block**, so nothing can be put into them. That breaks the
-chain at its two narrowest points: no casing, therefore no raw sausage, therefore
-none of the six cooked sausages, and no Dry or Smoked Sausage either. Diced Meat is
-unaffected, because it is handcraft. See
-[Processing-Stations](Processing-Stations) and [Known-Limitations](Known-Limitations).
+The whole chain, written out step by step for a player, is on
+[From-Meat-to-Sausage](From-Meat-to-Sausage).
 
 ## Milk
 
@@ -326,8 +322,8 @@ Three transforms, two stations, no tools. Milk is loot-only.
 
 ```mermaid
 graph LR
-  M(["Milk<br/>loot only"]) -->|"Butter Churn<br/>2 milk, 2 min"| CR(["Cream"])
-  CR -->|"Butter Churn<br/>2 cream, 3 min"| BU(["Butter"])
+  M(["Milk<br/>loot only"]) -->|"Butter Churn<br/>2 milk, 60 s"| CR(["Cream"])
+  CR -->|"Butter Churn<br/>2 cream, 60 s"| BU(["Butter"])
   M -->|"Cheese Press<br/>3 milk, 5 min"| CH(["Cheese"])
   CR --> S1["Cream Sauce<br/>Creamy Mushroom Pasta"]
   BU --> S2["13 recipes"]
@@ -336,8 +332,8 @@ graph LR
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_MilkToCream` | 2× Milk | Cream (1×, no mode given) | Butter Churn | — | 2 min |
-| `TR_CreamToButter` | 2× Cream | Butter (1×, no mode given) | Butter Churn | — | 3 min |
+| `TR_MilkToCream` | 2× Milk | Cream (1×, no mode given) | Butter Churn | — | 60 s |
+| `TR_CreamToButter` | 2× Cream | Butter (1×, no mode given) | Butter Churn | — | 60 s |
 | `RCP_ChefZ_CheeseCurd` | 3× Milk + 1× Mushroom Culture | Cheese Curd | Pot/Cauldron, boiling ≥60° | — | 5 min |
 | `TR_CurdToCheese` | 1× Cheese Curd | Cheese (1×, no mode given) | Cheese Press | — | 5 min |
 
@@ -375,22 +371,22 @@ graph LR
   F(["Carp, Mackerel,<br/>Steelhead Trout,<br/>Walleye Pollock Fillet"]) --> CAT["category FISH"]
   CAT -->|"Salt Cure<br/>20 salt, 6 s"| SF(["Salted Fish"])
   SF -->|"Drying Rack<br/>45 min"| DF(["Dried Fish"])
-  CAT -->|"Smoker<br/>25 min"| SMF(["Smoked Fish"])
+  CAT -->|"Smoker<br/>5 min"| SMF(["Smoked Fish"])
   CAT --> R["Fisherman's Stew<br/>Fish and Potatoes"]
 ```
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
 | `TR_SaltFish` | 1× *FISH* + state RAW + 1× *SALT* (20) | Salted Fish (1×) | *handcraft* | — | 6 s |
-| `TR_SaltedFishToDried` | 1+× Salted Fish | Dried Fish (1:1) | Drying Rack | — | 45 min |
-| `TR_FishToSmoked` | 1+× *FISH* + state RAW | Smoked Fish (1:1) | Smoker | — | 25 min + heat |
+| `TR_SaltedFishToDried` | 1× Salted Fish | Dried Fish (1:1) | Drying Rack | — | 45 min |
+| `TR_FishToSmoked` | 1× *FISH* + state RAW | Smoked Fish (1:1) | Smoker | — | 5 min + bark |
 
 **Where it feeds in.** `FISH` is used by 4 recipes: the three Fisherman's Stew
 variants and Fish and Potatoes. Salted, Dried and Smoked Fish all keep the `FISH`
 category, so a preserved fillet still cooks.
 
-**Gaps.** Smoked Fish is unreachable — see the smoker note under
-[preservation](#preservation).
+Smoked Fish became reachable on 2026-08-31, when `ChefZ_Smoker` gained its own
+burn state — see [preservation](#preservation).
 
 ## Preservation
 
@@ -402,21 +398,21 @@ preserved item still matches the recipes its fresh form matched.
 graph LR
   M(["Raw meat"]) -->|"Salt Cure<br/>20 salt"| SM(["Salted Meat<br/>SALTED"])
   SM -->|"Drying Rack 60 min"| DM(["Dried Meat<br/>DRIED"])
-  SM -->|"Smoker 30 min"| SMM(["Smoked Meat<br/>SMOKED"])
+  SM -->|"Smoker 5 min"| SMM(["Smoked Meat<br/>SMOKED"])
   F(["Raw fish"]) -->|"Salt Cure<br/>20 salt"| SF(["Salted Fish"])
   SF -->|"Drying Rack 45 min"| DF(["Dried Fish"])
-  F -->|"Smoker 25 min"| SMF(["Smoked Fish"])
+  F -->|"Smoker 5 min"| SMF(["Smoked Fish"])
   RS(["Raw sausage"]) -->|"Drying Rack 90 min"| DS(["Dry Sausage"])
-  RS -->|"Smoker 40 min"| SMS(["Smoked Sausage"])
+  RS -->|"Smoker 5 min"| SMS(["Smoked Sausage"])
 ```
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
 | `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat (1×) | *handcraft* | — | 6 s |
-| `TR_SaltedMeatToDried` | 1+× Salted Meat | Dried Meat (1:1) | Drying Rack | — | 60 min |
-| `TR_SaltedMeatToSmoked` | 1+× Salted Meat | Smoked Meat (1:1) | Smoker | — | 30 min + heat |
-| `TR_RawSausageToDry` | 1+× *SAUSAGE* + state RAW | Dry Sausage (1:1) | Drying Rack | — | 90 min |
-| `TR_RawSausageToSmoked` | 1+× *SAUSAGE* + state RAW | Smoked Sausage (1:1) | Smoker | — | 40 min + heat |
+| `TR_SaltedMeatToDried` | 1× Salted Meat | Dried Meat (1:1) | Drying Rack | — | 60 min |
+| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat (1:1) | — | — | **never runs, see below** |
+| `TR_RawSausageToDry` | 1× *SAUSAGE* + state RAW | Dry Sausage (1:1) | Drying Rack | — | 90 min |
+| `TR_RawSausageToSmoked` | 1× *SAUSAGE* + state RAW | Smoked Sausage (1:1) | Smoker | — | 5 min + bark |
 | `TR_CaninaBerriesToDried` | 2× `CaninaBerry` | Dried Berries (1×) | Drying Rack | — | 7 min |
 | `TR_SambucusBerriesToDried` | 2× `SambucusBerry` | Dried Berries (1×) | Drying Rack | — | 7 min |
 
@@ -426,22 +422,27 @@ they converge on the same output. `ChefZ_DriedBerries` is category `BERRY`, tag
 `CHEFZ_PRESERVED`, default state `DRIED`, and it is a **required** slot of Fruit
 Compote, which makes seven minutes at the rack the price of that dish.
 
-Salt curing is handcraft: no station, no tool, 6 seconds, 20 units of salt. Everything
-after it needs a station and real time — 25 to 90 minutes.
+Salt curing is handcraft: no station, no tool, 6 seconds, 20 units of salt. After
+that it splits: the smoker is quick but wants fuel (5 minutes, two pieces of bark),
+the drying rack is slow but free (7 to 90 minutes).
 
 All nine outputs carry the tag `CHEFZ_PRESERVED`, and the six that are meat or fish
 keep their `MEAT` or `FISH` category. Smoking is the only path that skips the salt
 step for fish; meat and sausage cannot be smoked without curing or stuffing first.
 
-**Gaps — the smoking half of this chain does not run.** `PROCESS_SMOKE` sets
-`requiresHeat = 1`, but `ChefZ_Smoker` is declared as
-`class ChefZ_Smoker extends ChefZ_ProcessingStation_Base {}` and never overrides
-`ChefZ_HasHeat()`, which the base returns `false` from. Independently, the station
-record sets `needsFuel: true` while the class has no fuel slot, so
-`ChefZ_IsPowered()` is false and `MeetsEnvironment` rejects first on
-`stationPowered`. Smoked Meat, Smoked Fish and Smoked Sausage are therefore
-unreachable in V1. The drying half is unaffected — `PROCESS_DRY` needs neither
-heat nor fuel. See [Known-Limitations](Known-Limitations).
+**The smoker runs since 2026-08-31.** `ChefZ_Smoker` now overrides both
+`ChefZ_HasHeat()` and `ChefZ_IsPowered()`
+(`ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c:202,216`) and
+carries its own burn state: it consumes bark from its own cargo, and five minutes
+of full burn costs two pieces. Smoked Fish and Smoked Sausage work.
+
+**Gap — Smoked Meat still does not exist.** `TR_SaltedMeatToSmoked` declares no
+`process` field at all. `ChefZ_ProcessCompiler.c:355` rejects any transform whose
+process is not found, and the empty string never resolves, so the transform is
+dropped at boot with an error in the RPT. Nothing at any station offers it. The fix
+is one line in `Smoking.json` — `"process": "PROCESS_SMOKE"` plus
+`"stationsAllowed": ["ChefZ_Smoker"]`, exactly as its two neighbours in the same
+file have. See [Known-Limitations](Known-Limitations).
 
 ## Honey
 

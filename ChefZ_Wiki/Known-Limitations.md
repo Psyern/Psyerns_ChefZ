@@ -263,45 +263,58 @@ static check, and each would have looked like something else in game:
 | Cooking attributed no player | XP "isn't implemented" |
 | Two stations derived from cookware | Vanilla cooking "behaves oddly" |
 
-## Stations that cannot work
+## Stations
 
-Both of these were found while writing this wiki, not by a gate review, and neither
-is reported by any checker. Both would look in game like "the station is broken".
+All three defects in this section were found by reading, not by a gate review, and
+none of them is reported by any checker. Two are fixed; one is open.
 
-### Two stations have no cargo
+### Two stations had no cargo — fixed 2026-08-31
 
-`ChefZ_GrainMill` and `ChefZ_MeatGrinder` declare no `class Cargo` block in
-`ChefZ_Processing/config.cpp`. The processing station base reads its ingredients
-through the fact collector, which returns immediately when the inventory has no
-cargo — so these two cannot receive input at all. (The cutting board, which had the
-same problem, was removed on 2026-08-29.)
+`ChefZ_GrainMill` and `ChefZ_MeatGrinder` declared no `class Cargo` block, so the
+fact collector returned immediately and nothing could be put into them. The grain
+chain stopped at its first step and the sausage chain had no station at all.
 
-The six other stations all have one.
+Both have one now: the mill 5×4, the grinder 5×3
+(`ChefZ_Processing/config.cpp`). Every station in the mod now has cargo. The five
+cells `TR_CornToFlour` needs for its `maxCount` of 5 are covered by the mill's
+twenty.
 
-This also covers `TR_CornToFlour` (added 2026-08-29): corn is configured as a
-second mill input, but until the grain mill gets a cargo block it is exactly as
-unreachable as `TR_WheatToFlour`. Its `maxCount` of 5 means the future cargo needs
-at least five cells — that is a requirement for the mill's gate entry, not a
-separate defect.
+### The smoker could never run — fixed 2026-08-31
 
-What this costs: the grain chain stops at its first step, so no flour and therefore
-no dough, bread, pasta or dumplings. The sausage chain stops at the cutting board,
-so no casing, therefore no raw sausage and none of the six cooked sausage varieties,
-and no dry or smoked sausage either.
+`PROCESS_SMOKE` sets `requiresHeat` while the station base answers `false`, and the
+station record set `needsFuel` against a class with no fuel slot, so the powered
+check failed before the heat check was reached.
 
-### The smoker can never run
+`ChefZ_Smoker` now overrides both `ChefZ_HasHeat()` and `ChefZ_IsPowered()`
+(`ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c:202,216`) and
+carries its own burn state, fed with bark from its own cargo — five minutes of full
+burn for two pieces. Smoked Fish and Smoked Sausage work.
 
-Two independent reasons, either of which alone would be enough:
+### `TR_SaltedMeatToSmoked` is rejected at boot — open
 
-`PROCESS_SMOKE` sets `requiresHeat`, but `ChefZ_Smoker.c` is an empty class that
-never overrides the heat check, which the base answers with `false`.
-`ChefZ_FryingPan` does override it, with a fireplace proximity test — the pattern
-exists, it was just not applied here.
+Found 2026-08-31 while compiling [Recipe-Book](Recipe-Book).
 
-Independently, the station record sets `needsFuel` while the class has no fuel
-attachment slot, so the powered check fails before the heat check is even reached.
+The transform in `ChefZ_Preservation/Config/Processing/Smoking.json` declares **no
+`process` field**, where its two neighbours in the same file both name
+`PROCESS_SMOKE` and pin `stationsAllowed: ["ChefZ_Smoker"]`.
+`ChefZ_TransformDef.ResolveDefaults` defaults `process` to the empty string
+without complaint (`ChefZ_TransformDef.c:287`), and
+`ChefZ_ProcessCompiler.c:355` then rejects the transform outright:
 
-All three smoking transforms are unreachable.
+> *"nennt den Prozess "", den es nicht gibt — Transform abgewiesen (11 §7). Kein
+> Prozess heisst: keine Station koennte ihn anbieten und keine Aktion ihn
+> ausloesen."*
+
+**What it costs:** `ChefZ_SmokedMeat` has no source. Salted Meat can only be dried.
+The class, its model, its nutrition record and its stringtable entries are all
+shipped and unreachable.
+
+**Why no checker saw it:** `chefzproc` does not test that a transform names a
+process at all. The compiler's own error only appears in the RPT at server boot,
+and the mod has not had a clean boot since 2026-08-28.
+
+The fix is two lines in `Smoking.json`, copied from `TR_RawSausageToSmoked`. It is
+content, not core, so it belongs to whoever owns `ChefZ_Preservation`.
 
 ## Built but inert
 

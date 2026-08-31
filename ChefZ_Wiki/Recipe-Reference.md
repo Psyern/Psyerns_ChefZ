@@ -2,7 +2,10 @@
 
 Every cooking recipe ChefZ ships, read straight out of the shipped JSON.
 
-**Totals: 47 recipes** in 7 files across 3 modules.
+**Totals: 48 recipes** in 8 files across 3 modules.
+
+For the same recipes written as `X + Y = Z` without the engine columns, see
+[Recipe-Book](Recipe-Book).
 
 | Group | File | Module | Recipes |
 |---|---|---|---|
@@ -11,9 +14,10 @@ Every cooking recipe ChefZ ships, read straight out of the shipped JSON.
 | Plate dishes B — pan and breakfast | `DishesB.json` | `ChefZ_Cooking` | 10 |
 | Plate dishes from vanilla produce | `DishesVanilla.json` | `ChefZ_Cooking` | 3 |
 | Sauces and broth | `Sauces.json` | `ChefZ_Cooking` | 4 |
+| Cheese | `Cheese.json` | `ChefZ_Cooking` | 1 |
 | Sausage — cooking the raw sausages | `Sausage.json` | `ChefZ_Meat` | 6 |
 | Bread | `GrainRecipes.json` | `ChefZ_Baking` | 2 |
-| **Total** | | | **47** |
+| **Total** | | | **48** |
 
 > A **recipe** runs inside cookware — Pot, Cauldron, Frying Pan, Oven.
 > Everything that happens at a workbench (milling, grinding, drying, smoking,
@@ -35,7 +39,7 @@ Every cooking recipe ChefZ ships, read straight out of the shipped JSON.
 ### Quality
 
 Grade points from optional slots are only half of the quality score.
-33 of the 44
+36 of the 48
 recipes carry additional `gradeRules` on top of the slot points — typically
 +1 for a named herb, +1 for freshness above 0.8, +2 for Hunter Seasoning or a
 sausage tagged `CHEFZ_PREMIUM`. The shared tier set `DISH_DEFAULT` is declared
@@ -53,9 +57,10 @@ Details on [Quality-and-Nutrition](Quality-and-Nutrition).
 
 ### Policy
 
-32 recipes forbid
-`BURNT` and `ROTTEN` inputs and require `minMatchedHealth01` 0.15.
-38 of 44
+36 recipes forbid
+`BURNT` and `ROTTEN` inputs, and 26 of those also require
+`minMatchedHealth01` 0.15.
+42 of 48
 set `extraItems: forbid` — an unexpected item in the vessel makes the recipe
 not match, and vanilla cooking runs instead.
 
@@ -208,6 +213,24 @@ Sauces are not meals. They are intermediates that other recipes consume through 
 | Mushroom Cream Sauce | `RCP_ChefZ_MushroomCreamSauce` | BAKING, BOILING | TIMED | 150 s | 50 °C | — |
 | Bone Broth | `RCP_ChefZ_BoneBroth` | BOILING | TIMED | 420 s | 80 °C | — |
 
+## Cheese
+
+The first half of the cheese chain. The second half is not a recipe: the curd is pressed into a loaf at the [Cheese Press](Processing-Stations#cheese-press).
+
+**1 recipe** · `ChefZ_Cooking/Config/Recipes/Cheese.json`
+
+| Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
+|---|---|---|---|---|---|---|
+| Cheese Curd | `RCP_ChefZ_CheeseCurd` | Pot, Cauldron | 3× *DAIRY* − butter, cream, cheese, curd<br>1× *CHEFZ_CULTURE* | — | Cheese Curd (100) | — |
+
+### Timing
+
+| Dish | Recipe ID | Method | Completion | Done at | Min. temp. | Liquid used |
+|---|---|---|---|---|---|---|
+| Cheese Curd | `RCP_ChefZ_CheeseCurd` | BOILING | TIMED | 300 s | 60 °C | — |
+
+The longest cook in the module. The `culture` slot binds on the **tag** `CHEFZ_CULTURE`, whose only member is `ChefZ_MushroomCulture`; the dairy slot excludes butter, cream, cheese and curd, so in practice it means three `PowderedMilk`. There are no `gradeRules` and no `qualityTierSet` — the curd has one quality.
+
 ## Sausage — cooking the raw sausages
 
 These six recipes only turn a raw sausage into its cooked class. The raw sausages themselves are **not** made in cookware — they are stuffed at the [Meat Grinder](Processing-Stations). Each recipe is a single class match with no optional slots, so the grade system does not apply.
@@ -216,12 +239,12 @@ These six recipes only turn a raw sausage into its cooked class. The raw sausage
 
 | Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
 |---|---|---|---|---|---|---|
-| Cooked Sausage | `RCP_CookSausage` | FryingPan, Pot, Cauldron | 1+× Raw Sausage | — | Cooked Sausage | — |
-| Pork Sausage | `RCP_CookPorkSausage` | FryingPan, Pot, Cauldron | 1+× Raw Pork Sausage | — | Pork Sausage | — |
-| Venison Sausage | `RCP_CookVenisonSausage` | FryingPan, Pot, Cauldron | 1+× Raw Venison Sausage | — | Venison Sausage | — |
-| Boar Sausage | `RCP_CookBoarSausage` | FryingPan, Pot, Cauldron | 1+× Raw Boar Sausage | — | Boar Sausage | — |
-| Hunter Sausage | `RCP_CookHunterSausage` | FryingPan, Pot, Cauldron | 1+× Raw Hunter Sausage | — | Hunter Sausage | — |
-| Spicy Sausage | `RCP_CookSpicySausage` | FryingPan, Pot, Cauldron | 1+× Raw Spicy Sausage | — | Spicy Sausage | — |
+| Cooked Sausage | `RCP_CookSausage` | FryingPan, Pot, Cauldron | 1× Raw Sausage | — | Cooked Sausage | — |
+| Pork Sausage | `RCP_CookPorkSausage` | FryingPan, Pot, Cauldron | 1× Raw Pork Sausage | — | Pork Sausage | — |
+| Venison Sausage | `RCP_CookVenisonSausage` | FryingPan, Pot, Cauldron | 1× Raw Venison Sausage | — | Venison Sausage | — |
+| Boar Sausage | `RCP_CookBoarSausage` | FryingPan, Pot, Cauldron | 1× Raw Boar Sausage | — | Boar Sausage | — |
+| Hunter Sausage | `RCP_CookHunterSausage` | FryingPan, Pot, Cauldron | 1× Raw Hunter Sausage | — | Hunter Sausage | — |
+| Spicy Sausage | `RCP_CookSpicySausage` | FryingPan, Pot, Cauldron | 1× Raw Spicy Sausage | — | Spicy Sausage | — |
 
 ### Timing
 
@@ -242,8 +265,8 @@ Both bread recipes take a dough and bake it. The doughs come from handcraft tran
 
 | Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
 |---|---|---|---|---|---|---|
-| Bread | `REC_ChefZ_Bread` | Pot, FryingPan, OvenIndoor | 1× Yeast Dough | — | Bread | — |
-| Flatbread | `REC_ChefZ_Flatbread` | FryingPan, Pot | 1× Simple Dough | — | Flatbread | — |
+| Bread | `REC_ChefZ_Bread` | Pot, OvenIndoor | 1× Dough | — | Bread | — |
+| Flatbread | `REC_ChefZ_Flatbread` | FryingPan | 1× Dough | — | Flatbread | — |
 
 ### Timing
 
@@ -254,7 +277,7 @@ Both bread recipes take a dough and bake it. The doughs come from handcraft tran
 
 ## Effect IDs
 
-23 of the 47 recipes attach opaque effect IDs to their output. ChefZ Core
+23 of the 48 recipes attach opaque effect IDs to their output. ChefZ Core
 never evaluates them; they exist so an effect module can pick them up later.
 
 | Effect ID | Recipes carrying it |
@@ -271,13 +294,14 @@ never evaluates them; they exist so an effect module can pick them up later.
 | Finding | Detail |
 |---|---|
 | Salt slots without counts | The eight optional `salt` slots in `DishesB.json` declare neither `minCount` nor `maxCount`. Every other optional salt slot in the mod writes `"minCount": 1, "maxCount": 1`. Affected: `RCP_ChefZ_TacticalBreakfast`, `RCP_ChefZ_ScrambledEggSausage`, `RCP_ChefZ_FarmersBreakfast`, `RCP_ChefZ_CheeseFlatbread`, `RCP_ChefZ_MushroomPan`, `RCP_ChefZ_PotatoPancakes`, `RCP_ChefZ_MeatDumplings`, `RCP_ChefZ_MilkRice`. |
-| Sausage slots without `maxCount` | All six recipes in `Sausage.json` declare `"minCount": 1` and no `maxCount`. |
+| Sausage slots without `maxCount` | All six recipes in `Sausage.json` declare `"minCount": 1` and no `maxCount`. That is not open-ended: `ChefZ_Selector.ResolveDefaults` sets `maxCount = DefaultInt("maxCount", maxCount, minCount)` (`ChefZ_Selector.c:257`), so the slot takes exactly one. |
 | Paprika bound by class, not category | `RCP_ChefZ_ChernarusChili` and its group variant match `GreenBellPepper` and `ChefZ_PaprikaPowder` by class, because no `PAPRIKA` category exists and the three ingredient records belong to other modules. The recipe file states this openly. |
 | Ingredients with no in-game source | `Rice` and `Honey` (required by Milk Rice and Honey Bread Platter) are vanilla loot. `ChefZ_Egg` is a loot-only ChefZ class (milk is vanilla `PowderedMilk`), and since 2026-08-29 so are wheat, the four vegetables and the six herbs (found like mushrooms) — and the mod ships **no `types.xml`**, so nothing spawns without an admin. See [Known-Limitations](Known-Limitations). |
-| Sausage recipes reachable only through a broken chain | The six cooked sausages need raw sausages, which need the Meat Grinder, which currently has no cargo. See [Processing-Stations](Processing-Stations). |
+| Salted Meat cannot be smoked | `TR_SaltedMeatToSmoked` (`ChefZ_Preservation/Config/Processing/Smoking.json`) declares no `process`. `ChefZ_ProcessCompiler.c:355` rejects any transform whose process does not exist, so it is dropped at boot. Smoked fish and smoked sausage are unaffected. See [Known-Limitations](Known-Limitations). |
 
 ## See also
 
+[Recipe-Book](Recipe-Book) · [From-Meat-to-Sausage](From-Meat-to-Sausage) ·
 [Recipes](Recipes) · [Processing-Stations](Processing-Stations) ·
 [Production-Chains](Production-Chains) · [Quality-and-Nutrition](Quality-and-Nutrition) ·
 [Portions-and-Containers](Portions-and-Containers) · [Food-States](Food-States) ·

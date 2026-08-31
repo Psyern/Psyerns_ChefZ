@@ -97,7 +97,7 @@ above serves a handcraft process.
 
 ## Grain Mill
 
-`ChefZ_GrainMill` · category `MILL` · 1 parallel slot · cargo **none**
+`ChefZ_GrainMill` · category `MILL` · 1 parallel slot · cargo 5×4
 
 Turns wheat or corn into flour. One process, two transforms — the narrowest station in the mod, and the head of the entire grain chain.
 
@@ -112,26 +112,21 @@ Turns wheat or corn into flour. One process, two transforms — the narrowest st
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
 | `TR_WheatToFlour` | 1× Wheat | Flour | × 0.78 of input | 25 s | — |
-| `TR_CornToFlour` | 1-5× Corn | Flour | 120 g per cob (needs a future cargo of at least 5 cells) | 25 s | — |
+| `TR_CornToFlour` | 1-5× Corn | Flour | 120 g per cob | 25 s | — |
 
 `TR_CornToFlour` carries `priority` 1 while `TR_WheatToFlour` stays at 0. The two
 transforms match disjoint inputs, so the order never decides anything; the offset
 only keeps `ChefZ_ProcessingManager` from reporting a tie between two transforms
 of equal specificity on the same process at build time.
 
-> **This station has no cargo.** Its `config.cpp` class carries no
-> `class Cargo { itemsCargoSize[] = {...}; }` block, and `Inventory_Base`
-> supplies none. `ChefZ_FactCollector.CollectFromCargo` returns as soon as
-> `inventory.GetCargo()` is null, so nothing can ever be placed in the station and
-> no transform above can match. The Butter Churn, Cheese Press, Frying Pan, Smoker
-> and the herb-station base all carry such a block; these three do not.
-> See [Known-Limitations](Known-Limitations).
+> **Cargo since 2026-08-31.** This station had no `class Cargo` block and could
+> not receive input at all. It has one now, so the transforms above are reachable.
 
 ## Mortar and Pestle
 
 `ChefZ_Mortar` · category `MORTAR` · 1 parallel slot · cargo 4×3
 
-Grinds dried herbs and spices into powders and mixes. Both processes are `STATION_ACTION`: the player stands at the mortar and works. This is the only source of Black Pepper, Paprika Powder, Herb Mix and Hunter Seasoning.
+Grinds dried herbs and spices into powders and mixes. Both processes are `STATION_ACTION`: the player stands at the mortar and works. This is the only source of Black Pepper, Paprika Powder, Herb Mix, Hunter Seasoning and Mushroom Culture — the last of which starts the cheese chain and is the one thing here that is not a seasoning.
 
 ### Processes
 
@@ -140,14 +135,15 @@ Grinds dried herbs and spices into powders and mixes. Both processes are `STATIO
 | `PROCESS_GRIND_SPICE` | STATION_ACTION | 20 s | no | none |
 | `PROCESS_GRIND_HERB` | STATION_ACTION | 15 s | no | none |
 
-### Transforms (4)
+### Transforms (5)
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_PeppercornsToBlackPepper` | 1+× Dried Peppercorns | Black Pepper | 1:1 from input | 20 s | PREPARED |
-| `TR_DriedPaprikaToPowder` | 1+× Dried Paprika | Paprika Powder | 1:1 from input | 20 s | PREPARED |
-| `TR_HunterSeasoning` | 1+× Black Pepper + 1+× Paprika Powder + 1+× Dried Thyme + 1+× Dried Wild Garlic + 1+× *SPICE* | Hunter Seasoning | 1× | 35 s | PREPARED |
-| `TR_HerbMix` | 1+× Dried Thyme + 1+× Dried Parsley + 1+× Dried Rosemary | Herb Mix | 1× | 25 s | PREPARED |
+| `TR_RottenMushroomToCulture` | 1× *MUSHROOM* + stage Rotten | Mushroom Culture | 1× | 20 s | PREPARED |
+| `TR_PeppercornsToBlackPepper` | 1× Dried Peppercorns | Black Pepper | 1:1 from input | 20 s | PREPARED |
+| `TR_DriedPaprikaToPowder` | 1× Dried Paprika | Paprika Powder | 1:1 from input | 20 s | PREPARED |
+| `TR_HunterSeasoning` | 1× Black Pepper + 1× Paprika Powder + 1× Dried Thyme + 1× Dried Wild Garlic + 1× *SPICE* | Hunter Seasoning | 1× | 35 s | PREPARED |
+| `TR_HerbMix` | 1× Dried Thyme + 1× Dried Parsley + 1× Dried Rosemary | Herb Mix | 1× | 25 s | PREPARED |
 
 ## Drying Rack
 
@@ -166,15 +162,15 @@ The busiest station in the mod. Twelve transforms across four different chains �
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
 | `TR_RawPastaToDriedPasta` | 1× Fresh Pasta | Dried Pasta | 1:1 from input | 30 min | — |
-| `TR_SaltedMeatToDried` | 1+× Salted Meat | Dried Meat | 1:1 from input | 60 min | DRIED |
-| `TR_SaltedFishToDried` | 1+× Salted Fish | Dried Fish | 1:1 from input | 45 min | DRIED |
-| `TR_RawSausageToDry` | 1+× *SAUSAGE* + state RAW | Dry Sausage | 1:1 from input | 90 min | DRIED |
-| `TR_ParsleyToDried` | 1+× Fresh Parsley | Dried Parsley | 1:1 from input | 8 min | DRIED |
-| `TR_ThymeToDried` | 1+× Fresh Thyme | Dried Thyme | 1:1 from input | 8 min | DRIED |
-| `TR_RosemaryToDried` | 1+× Fresh Rosemary | Dried Rosemary | 1:1 from input | 10 min | DRIED |
-| `TR_WildGarlicToDried` | 1+× Fresh Wild Garlic | Dried Wild Garlic | 1:1 from input | 8 min | DRIED |
-| `TR_PaprikaToDried` | 1+× Paprika | Dried Paprika | 1:1 from input | 15 min | DRIED |
-| `TR_PepperBerriesToDried` | 1+× Pepper Berries | Dried Peppercorns | 1:1 from input | 15 min | DRIED |
+| `TR_SaltedMeatToDried` | 1× Salted Meat | Dried Meat | 1:1 from input | 60 min | DRIED |
+| `TR_SaltedFishToDried` | 1× Salted Fish | Dried Fish | 1:1 from input | 45 min | DRIED |
+| `TR_RawSausageToDry` | 1× *SAUSAGE* + state RAW | Dry Sausage | 1:1 from input | 90 min | DRIED |
+| `TR_ParsleyToDried` | 1× Fresh Parsley | Dried Parsley | 1:1 from input | 8 min | DRIED |
+| `TR_ThymeToDried` | 1× Fresh Thyme | Dried Thyme | 1:1 from input | 8 min | DRIED |
+| `TR_RosemaryToDried` | 1× Fresh Rosemary | Dried Rosemary | 1:1 from input | 10 min | DRIED |
+| `TR_WildGarlicToDried` | 1× Fresh Wild Garlic | Dried Wild Garlic | 1:1 from input | 8 min | DRIED |
+| `TR_PaprikaToDried` | 1× Paprika | Dried Paprika | 1:1 from input | 15 min | DRIED |
+| `TR_PepperBerriesToDried` | 1× Pepper Berries | Dried Peppercorns | 1:1 from input | 15 min | DRIED |
 | `TR_CaninaBerriesToDried` | 2× `CaninaBerry` | Dried Berries | 2 → 1, fixed | 7 min | DRIED |
 | `TR_SambucusBerriesToDried` | 2× `SambucusBerry` | Dried Berries | 2 → 1, fixed | 7 min | DRIED |
 
@@ -184,7 +180,7 @@ on the same output class.
 
 ## Smoker
 
-`ChefZ_Smoker` · category `SMOKER` · 2 parallel slots · cargo 4×3
+`ChefZ_Smoker` · category `SMOKER` · 2 parallel slots · cargo 5×5
 
 Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` set.
 
@@ -192,32 +188,30 @@ Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` se
 
 | Process | Kind | Base duration | Heat | Tool |
 |---|---|---|---|---|
-| `PROCESS_SMOKE` | STATION_TIMED | 30 min | **required** | none |
+| `PROCESS_SMOKE` | STATION_TIMED | 5 min | **required** | none |
 
 ### Transforms (3)
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_SaltedMeatToSmoked` | 1+× Salted Meat | Smoked Meat | 1:1 from input | 30 min | SMOKED |
-| `TR_FishToSmoked` | 1+× *FISH* + state RAW | Smoked Fish | 1:1 from input | 25 min | SMOKED |
-| `TR_RawSausageToSmoked` | 1+× *SAUSAGE* + state RAW | Smoked Sausage | 1:1 from input | 40 min | SMOKED |
+| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat | 1:1 from input | **never runs** | SMOKED |
+| `TR_FishToSmoked` | 1× *FISH* + state RAW | Smoked Fish | 1:1 from input | 5 min | SMOKED |
+| `TR_RawSausageToSmoked` | 1× *SAUSAGE* + state RAW | Smoked Sausage | 1:1 from input | 5 min | SMOKED |
 
-> **The smoker cannot run as shipped.** Two independent reasons:
->
-> 1. `PROCESS_SMOKE` sets `requiresHeat = 1`.
->    `ChefZ_ProcessingStation_Base.ChefZ_HasHeat()` returns `false` in the base
->    class, and the smoker is declared as
->    `class ChefZ_Smoker extends ChefZ_ProcessingStation_Base {}` — it never
->    overrides it. `ChefZ_FryingPan` does override it, with a proximity check for a
->    burning `FireplaceBase`; the smoker has no equivalent.
-> 2. The station record sets `"needsFuel": true`, and `ChefZ_IsPowered()` returns
->    `!m_ChefZ_NeedsFuel`. `ChefZ_CompiledProcess.MeetsEnvironment` rejects on
->    `stationPowered` before it ever reaches the heat check. The `config.cpp`
->    class has no fuel attachment slot.
->
-> Both are fail-safe by design — the job pauses rather than running cold — but the
-> effect is that all three smoking transforms are unreachable in V1.
-> See [Known-Limitations](Known-Limitations).
+**The smoker burns its own fuel since 2026-08-31.** It had neither heat nor power:
+`PROCESS_SMOKE` sets `requiresHeat = 1` while the base class answered `false`, and
+the station record set `"needsFuel": true` against a class with no fuel slot.
+`ChefZ_Smoker` now overrides both `ChefZ_HasHeat()` and `ChefZ_IsPowered()`
+(`ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c:202,216`) and
+carries its own burn state, fed with bark from its own cargo. Five minutes of full
+burn costs two pieces. The price of smoking is fuel now, not waiting.
+
+> **Smoked Meat still cannot be made, for an unrelated reason.**
+> `TR_SaltedMeatToSmoked` declares no `process` field — unlike its two neighbours
+> in the same file, which both name `PROCESS_SMOKE`. `ChefZ_ProcessCompiler.c:355`
+> rejects any transform whose process cannot be resolved, so this one is dropped at
+> boot with an error in the RPT and no station ever offers it. Smoked Fish and
+> Smoked Sausage are unaffected. See [Known-Limitations](Known-Limitations).
 
 ## Frying Pan
 
@@ -241,7 +235,7 @@ The entire salt chain. Boil sea water down to raw salt, then dry raw salt into s
 
 ## Butter Churn
 
-`ChefZ_ButterChurn` · category `CHURN` · 1 parallel slot · cargo 4×4
+`ChefZ_ButterChurn` · category `CHURN` · 1 parallel slot · cargo 10×14
 
 Skims milk into cream and churns cream into butter. Both are `STATION_TIMED`: start the job and walk away. Neither dairy output declares a `quantityMode`, so both produce one item.
 
@@ -249,15 +243,15 @@ Skims milk into cream and churns cream into butter. Both are `STATION_TIMED`: st
 
 | Process | Kind | Base duration | Heat | Tool |
 |---|---|---|---|---|
-| `PROCESS_SEPARATE_CREAM` | STATION_TIMED | 2 min | no | none |
-| `PROCESS_CHURN_BUTTER` | STATION_TIMED | 3 min | no | none |
+| `PROCESS_SEPARATE_CREAM` | STATION_TIMED | 2 min (overridden to 60 s) | no | none |
+| `PROCESS_CHURN_BUTTER` | STATION_TIMED | 60 s | no | none |
 
 ### Transforms (2)
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_MilkToCream` | 2× Milk | Cream | 1× (no mode given) | 2 min | — |
-| `TR_CreamToButter` | 2× Cream | Butter | 1× (no mode given) | 3 min | — |
+| `TR_MilkToCream` | 2× Milk | Cream | 1× (no mode given) | 60 s | — |
+| `TR_CreamToButter` | 2× Cream | Butter | 1× (no mode given) | 60 s | — |
 
 ## Cheese Press
 
@@ -290,7 +284,7 @@ object on its next start.
 
 ## Meat Grinder
 
-`ChefZ_MeatGrinder` · category `GRINDER` · 1 parallel slot · cargo **none**
+`ChefZ_MeatGrinder` · category `GRINDER` · 1 parallel slot · cargo 5×3
 
 Mince raw meat, then stuff the mince into casing. Twelve transforms — six mincing, six stuffing — make this the widest station in the mod. Four of the six mincing transforms drop Animal Fat as a chance byproduct.
 
@@ -298,33 +292,28 @@ Mince raw meat, then stuff the mince into casing. Twelve transforms — six minc
 
 | Process | Kind | Base duration | Heat | Tool |
 |---|---|---|---|---|
-| `PROCESS_GRIND_MEAT` | STATION_ACTION | 20 s | no | none |
+| `PROCESS_GRIND_MEAT` | STATION_TIMED | 30 s | no | none |
 | `PROCESS_STUFF_SAUSAGE` | STATION_ACTION | 15 s | no | none |
 
 ### Transforms (12)
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_MeatToMinced` | 1+× *MEAT* + stage Raw | Minced Meat<br>byproduct: Animal Fat (35 %) | 1:1 from input | 20 s | PREPARED |
-| `TR_PorkToMinced` | 1+× Pig Steak + stage Raw | Minced Pork<br>byproduct: Animal Fat (50 %) | 1:1 from input | 20 s | PREPARED |
-| `TR_VenisonToMinced` | 1+× Deer Steak + stage Raw | Minced Venison | 1:1 from input | 20 s | PREPARED |
-| `TR_BoarToMinced` | 1+× Boar Steak + stage Raw | Minced Boar<br>byproduct: Animal Fat (35 %) | 1:1 from input | 20 s | PREPARED |
-| `TR_ChickenToMinced` | 1+× Chicken Breast + stage Raw | Minced Chicken | 1:1 from input | 20 s | PREPARED |
-| `TR_BearToMinced` | 1+× Bear Steak + stage Raw | Minced Bear<br>byproduct: Animal Fat (60 %) | 1:1 from input | 20 s | PREPARED |
-| `TR_RawSausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Sausage | 1× | 15 s | RAW |
-| `TR_RawPorkSausage` | 1+× Minced Pork + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Pork Sausage | 1× | 15 s | RAW |
-| `TR_RawVenisonSausage` | 1+× Minced Venison + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× Sausage Casing | Raw Venison Sausage | 1× | 15 s | RAW |
-| `TR_RawBoarSausage` | 1+× Minced Boar + 1+× *SPICE* (1) + 1+× *HERB* or *DRIED_HERB* (1) + 1+× Sausage Casing | Raw Boar Sausage | 1× | 15 s | RAW |
-| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Hunter Sausage | 1× | 15 s | RAW |
-| `TR_RawSpicySausage` | 1+× *MINCED_MEAT* + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× *SPICE* (1) + 1+× Sausage Casing | Raw Spicy Sausage | 1× | 15 s | RAW |
+| `TR_MeatToMinced` | 1× *MEAT* + stage Raw | Minced Meat<br>byproduct: Animal Fat (35 %) | 1:1 from input | 30 s | PREPARED |
+| `TR_PorkToMinced` | 1× Pig Steak + stage Raw | Minced Pork<br>byproduct: Animal Fat (50 %) | 1:1 from input | 30 s | PREPARED |
+| `TR_VenisonToMinced` | 1× Deer Steak + stage Raw | Minced Venison | 1:1 from input | 30 s | PREPARED |
+| `TR_BoarToMinced` | 1× Boar Steak + stage Raw | Minced Boar<br>byproduct: Animal Fat (35 %) | 1:1 from input | 30 s | PREPARED |
+| `TR_ChickenToMinced` | 1× Chicken Breast + stage Raw | Minced Chicken | 1:1 from input | 30 s | PREPARED |
+| `TR_BearToMinced` | 1× Bear Steak + stage Raw | Minced Bear<br>byproduct: Animal Fat (60 %) | 1:1 from input | 30 s | PREPARED |
+| `TR_RawSausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Sausage | 1× | 15 s | RAW |
+| `TR_RawPorkSausage` | 1× Minced Pork + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Pork Sausage | 1× | 15 s | RAW |
+| `TR_RawVenisonSausage` | 1× Minced Venison + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Venison Sausage | 1× | 15 s | RAW |
+| `TR_RawBoarSausage` | 1× Minced Boar + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Boar Sausage | 1× | 15 s | RAW |
+| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Hunter Sausage | 1× | 15 s | RAW |
+| `TR_RawSpicySausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Spicy Sausage | 1× | 15 s | RAW |
 
-> **This station has no cargo.** Its `config.cpp` class carries no
-> `class Cargo { itemsCargoSize[] = {...}; }` block, and `Inventory_Base`
-> supplies none. `ChefZ_FactCollector.CollectFromCargo` returns as soon as
-> `inventory.GetCargo()` is null, so nothing can ever be placed in the station and
-> no transform above can match. The Butter Churn, Cheese Press, Frying Pan, Smoker
-> and the herb-station base all carry such a block; these three do not.
-> See [Known-Limitations](Known-Limitations).
+> **Cargo since 2026-08-31.** This station had no `class Cargo` block and could
+> not receive input at all. It has one now, so the transforms above are reachable.
 
 ## Honey Extractor
 
@@ -484,8 +473,8 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 |---|---|---|---|---|---|
 | `TR_FlourWaterToDough` | 1× Flour (250) + 1× container with Water (150) | Dough | 1× | 8 s | — |
 | `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta | 500× | 10 s | — |
-| `TR_CarveWoodenPlate` | 1+× Firewood | Empty Plate | 1× | 20 s | — |
-| `TR_CarveWoodenBowl` | 1+× Firewood | Empty Bowl | 1× | 25 s | — |
+| `TR_CarveWoodenPlate` | 1× Firewood | Empty Plate | 1× | 20 s | — |
+| `TR_CarveWoodenBowl` | 1× Firewood | Empty Bowl | 1× | 25 s | — |
 | `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat | 1× | 6 s | SALTED |
 | `TR_SaltFish` | 1× *FISH* + state RAW + 1× *SALT* (20) | Salted Fish | 1× | 6 s | SALTED |
 | `TR_BuildBeehiveKit` | 4× Wooden Plank + 10× Nail | Beehive Kit | 1× | 25 s | — |
@@ -504,15 +493,15 @@ slots for them.
 
 | | |
 |---|---|
-| Stations | 11 (9 in `ChefZ_Processing`, 2 beehives in `ChefZ_Farming`) |
+| Station records | 15 — 9 workbenches in `ChefZ_Processing`, 2 beehives and 4 wild-plant harvest points in `ChefZ_Farming` (added 2026-08-31). The eleven described above are the workbenches and the hives; a wild plant is a harvest point, not a workbench. |
 | Station categories | 11 |
-| Processes | 33 — 18 handcraft, 7 station action, 8 station timed (recounted 2026-08-29) |
+| Processes | 34 — 18 handcraft, 7 station action, 9 station timed (recounted 2026-08-31) |
 | Handcraft slots reserved | 22, matching the 22 handcraft transforms exactly |
-| Transforms | 61 — 39 at a station, 22 handcraft (recounted 2026-08-29) |
-| Processes with no transform | 1 — `PROCESS_HARVEST_HIVE`, by design |
-| Transforms naming an undeclared process | 0 |
+| Transforms | 62 — 39 at a station, 22 handcraft, 1 rejected at boot (recounted 2026-08-31) |
+| Processes with no transform | 3 — `PROCESS_HARVEST_HIVE`, `PROCESS_HARVEST_WILD` and `PROCESS_PACK_HIVE`, all by design |
+| Transforms naming an undeclared process | 1 — `TR_SaltedMeatToSmoked` names none at all, see the Smoker |
 | Transforms naming an unknown station | 0 |
-| Stations without cargo | 2 (Grain Mill, Meat Grinder) — Mortar and Drying Rack inherit theirs from `ChefZ_HerbStationBase` |
+| Stations without cargo | 0 since 2026-08-31 — Mortar and Drying Rack inherit theirs from `ChefZ_HerbStationBase` |
 
 ## See also
 

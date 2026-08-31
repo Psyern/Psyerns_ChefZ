@@ -36,6 +36,8 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 | Fix something that is wrong | [Troubleshooting](Troubleshooting) |
 | Understand how it is built | [Architecture](Architecture) |
 | Add a dish or an ingredient | [Adding Content](Adding-Content) |
+| Look up a recipe | [Recipe Book](Recipe-Book) |
+| Make a sausage | [From Meat to Sausage](From-Meat-to-Sausage) |
 | Look up what exists | [Recipe Reference](Recipe-Reference) |
 
 ## What is in it
@@ -44,12 +46,12 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 |---|---:|
 | Addons | 14 — ten with content, four assets only |
 | Optional compatibility mods | 3 |
-| Recipes | 47 |
+| Recipes | 48 |
 | Ingredient records | 113 — 59 ChefZ classes, 54 vanilla items mapped in |
-| Processing transforms | 61 |
+| Processing transforms | 62 |
 | Processing stations | 11 |
 | Ingredient categories | 41 |
-| Food tags | 19 |
+| Food tags | 20 |
 | Script files | 171 in the mod, 22 in the comp mods |
 | Translated strings | 349 keys × 13 languages |
 

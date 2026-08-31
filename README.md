@@ -54,7 +54,7 @@ design questions — is kept internally and is not part of this repository.
 | | |
 |---|---|
 | **`ChefZ_Core`** | Implemented — 137 script files, zero content classes |
-| **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 47 recipes · 61 transforms · 11 stations |
+| **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 48 recipes · 62 transforms · 11 stations |
 | **Cookbook** | Implemented as knowledge state, RPC and an F9 key — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
 | **Validation** | 19 checkers · **exit code 0 · 0 errors · 2 warnings** |
@@ -381,6 +381,11 @@ CHEFZ_CREAMY      CHEFZ_MUSHROOM    CHEFZ_SAUCE_BASE
 ```
 
 ## Recipe Definition
+
+Every shipped recipe written as `X + Y = Z` is in the wiki:
+[Recipe Book](ChefZ_Wiki/Recipe-Book.md) for all 48 dishes and the preparation
+steps behind them, [From Meat to Sausage](ChefZ_Wiki/From-Meat-to-Sausage.md) for
+one chain from the animal to the plate.
 
 Recipes are JSON, not hardcoded. New dishes ship as config, not as Core edits. Trimmed
 from the real `RCP_ChefZ_SausagePasta` — optional slots and grade rules removed:
