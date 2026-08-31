@@ -25,6 +25,21 @@
 import { COLOR, CARD, FONT, LABEL } from './style.mjs';
 import { familyOf, renderGlyph } from './icons.mjs';
 
+// --- Schmale Schrift ohne Schriftdatei ---------------------------------------
+// Der Brief verlangt eine "schmale, technische/militaerische Schrift". Auf
+// diesem Rechner ist KEINE installiert: gemessen in Chrome ist 'Arial Narrow'
+// exakt so breit wie sans-serif (311.2px fuer denselben Satz), faellt also
+// zurueck. Statt eine Schrift zu behaupten, die nicht da ist, wird der Text
+// geometrisch gestaucht: eine Gruppe mit scale(k,1) und ein durch k geteiltes x
+// ergeben denselben Ankerpunkt bei schmaleren Glyphen - exakt, ohne Messung.
+export const CONDENSE = 0.86;
+
+export function condText(x, y, attrs, content) {
+  const k = CONDENSE;
+  return '<g transform="scale(' + k + ',1)"><text x="' + (x / k).toFixed(2) +
+         '" y="' + y + '" ' + attrs + '>' + content + '</text></g>';
+}
+
 export function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -111,9 +126,9 @@ export function renderCard(recipe, x, y, w, h, images) {
   const fit = estW > maxTitleW
     ? ' textLength="' + maxTitleW.toFixed(1) + '" lengthAdjust="spacingAndGlyphs"'
     : ' letter-spacing="1.1"';
-  s.push('<text x="' + (x + w / 2) + '" y="' + (y + CARD.headerH - 8) +
-         '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + CARD.headerFont +
-         '" fill="' + COLOR.text + '"' + fit + '>' + esc(title) + '</text>');
+  s.push(condText(x + w / 2, y + CARD.headerH - 8,
+    'text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + CARD.headerFont +
+    '" fill="' + COLOR.text + '"' + fit, esc(title)));
 
   // --- Aufteilung des Rumpfes ----------------------------------------------
   const bodyY = y + CARD.headerH + 6;
@@ -150,7 +165,7 @@ export function renderCard(recipe, x, y, w, h, images) {
       const fam = familyOf(c.imageKey, c.what);
       if (fam) {
         images.noteGlyph(c.imageKey, fam);
-        const pad = cell * 0.10;
+        const pad = -cell * 0.05;
         s.push(renderGlyph(fam, cx + pad, cy + pad, cell - pad * 2, COLOR.glyph));
       } else {
         images.noteBlank(c.imageKey);
@@ -158,9 +173,9 @@ export function renderCard(recipe, x, y, w, h, images) {
                '" height="' + (cell - 6) + '" fill="none" stroke="' + COLOR.missing +
                '" stroke-width="1" stroke-dasharray="3 2"/>');
         const fs = Math.max(7, Math.min(11, Math.round(cell / 4)));
-        s.push('<text x="' + (cx + cell / 2) + '" y="' + (cy + cell / 2 + fs / 3) +
-               '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + fs +
-               '" fill="' + COLOR.textDim + '">' + esc(token(c.what)) + '</text>');
+        s.push(condText(cx + cell / 2, cy + cell / 2 + fs / 3,
+          'text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + fs +
+          '" fill="' + COLOR.textDim + '"', esc(token(c.what))));
       }
     }
 
@@ -173,14 +188,14 @@ export function renderCard(recipe, x, y, w, h, images) {
       const lw = Math.min(cell, Math.max(20, txt.length * 5.4 + 8));
       s.push('<rect x="' + cx + '" y="' + (cy - CARD.labelH + 1) + '" width="' + lw +
              '" height="' + (CARD.labelH - 1) + '" fill="' + L.fill + '" stroke="' + L.stroke + '" stroke-width="0.8"/>');
-      s.push('<text x="' + (cx + lw / 2) + '" y="' + (cy - 3) +
-             '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + CARD.labelFont +
-             '" fill="' + L.text + '" letter-spacing="0.3">' + esc(txt) + '</text>');
+      s.push(condText(cx + lw / 2, cy - 3,
+        'text-anchor="middle" font-family="' + FONT.stack + '" font-size="' + CARD.labelFont +
+        '" fill="' + L.text + '" letter-spacing="0.3"', esc(txt)));
     }
     if (c.span && cell >= 34) {
-      s.push('<text x="' + (cx + cell - 3) + '" y="' + (cy + cell - 4) +
-             '" text-anchor="end" font-family="' + FONT.mono + '" font-size="9" fill="' +
-             COLOR.accent + '">' + esc(c.span) + '</text>');
+      s.push(condText(cx + cell - 3, cy + cell - 4,
+        'text-anchor="end" font-family="' + FONT.mono + '" font-size="9" fill="' + COLOR.accent + '"',
+        esc(c.span)));
     }
   }
 
@@ -210,15 +225,15 @@ export function renderCard(recipe, x, y, w, h, images) {
       s.push('<rect x="' + (resX + 4) + '" y="' + (resY + 4) + '" width="' + (rs - 8) +
              '" height="' + (rs - 8) + '" fill="none" stroke="' + COLOR.missing +
              '" stroke-width="1" stroke-dasharray="3 2"/>');
-      s.push('<text x="' + (resX + rs / 2) + '" y="' + (resY + rs / 2 + 5) +
-             '" text-anchor="middle" font-family="' + FONT.stack + '" font-size="14" fill="' +
-             COLOR.textDim + '">' + esc(token(recipe.name)) + '</text>');
+      s.push(condText(resX + rs / 2, resY + rs / 2 + 5,
+        'text-anchor="middle" font-family="' + FONT.stack + '" font-size="14" fill="' + COLOR.textDim + '"',
+        esc(token(recipe.name))));
     }
   }
   if (recipe.result.quantity) {
-    s.push('<text x="' + (resX + rs - 4) + '" y="' + (resY + rs - 5) +
-           '" text-anchor="end" font-family="' + FONT.mono + '" font-size="10" fill="' +
-           COLOR.accent + '">' + esc(recipe.result.quantity) + '</text>');
+    s.push(condText(resX + rs - 4, resY + rs - 5,
+      'text-anchor="end" font-family="' + FONT.mono + '" font-size="10" fill="' + COLOR.accent + '"',
+      esc(recipe.result.quantity)));
   }
 
   // --- Fusszeile: die Bedingungen, die kein eigenes Symbol tragen ----------
@@ -228,9 +243,10 @@ export function renderCard(recipe, x, y, w, h, images) {
   if (recipe.cookSeconds) foot.push(Math.round(recipe.cookSeconds / 60) + ' MIN');
   if (recipe.container) foot.push(token(recipe.container.replace(/^ChefZ_/, '')));
   if (foot.length) {
-    s.push('<text x="' + (x + P) + '" y="' + (y + h - 7) + '" font-family="' + FONT.stack +
-           '" font-size="' + CARD.footFont + '" fill="' + COLOR.textDim + '" letter-spacing="0.6">' +
-           esc(clip(foot.join('  ·  ').toUpperCase(), 52)) + '</text>');
+    s.push(condText(x + P, y + h - 7,
+      'font-family="' + FONT.stack + '" font-size="' + CARD.footFont +
+      '" fill="' + COLOR.textDim + '" letter-spacing="0.6"',
+      esc(clip(foot.join('  ·  ').toUpperCase(), 52))));
   }
 
   s.push('</g>');

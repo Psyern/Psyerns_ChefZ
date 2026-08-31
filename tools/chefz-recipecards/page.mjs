@@ -7,7 +7,7 @@
 //==============================================================================
 
 import { PAGE, COLOR, FONT, CARD } from './style.mjs';
-import { renderCard, esc } from './card.mjs';
+import { renderCard, esc, condText } from './card.mjs';
 import { familyOf, renderGlyph, FAMILY_NAMES } from './icons.mjs';
 
 // Die Legende. Ohne sie muss der Leser raten, ob ein kleines Gefaess Salz,
@@ -41,9 +41,9 @@ function renderLegend(fams, x, y, w) {
     const ex = x + i * each;
     s.push(renderGlyph(fam, ex, y - 2, size, COLOR.glyph));
     const txt = label.length > chars ? label.slice(0, chars - 1) + '…' : label;
-    s.push('<text x="' + (ex + size + 4) + '" y="' + (y + 10) +
-           '" font-family="' + FONT.stack + '" font-size="9" fill="' + COLOR.textDim + '">' +
-           esc(txt.toUpperCase()) + '</text>');
+    s.push(condText(ex + size + 4, y + 10,
+      'font-family="' + FONT.stack + '" font-size="9" fill="' + COLOR.textDim + '"',
+      esc(txt.toUpperCase())));
   });
   return s.join('');
 }
@@ -73,8 +73,9 @@ export function renderPage(recipes, pageNo, pageMax, images, cfg = PAGE) {
 
   // --- Titel oben mittig ---------------------------------------------------
   const title = 'RECIPES (' + pageNo + '/' + pageMax + ')';
-  s.push('<text x="' + (W / 2) + '" y="58" text-anchor="middle" font-family="' + FONT.stack +
-         '" font-size="40" fill="' + COLOR.text + '" letter-spacing="6">' + esc(title) + '</text>');
+  s.push(condText(W / 2, 58,
+    'text-anchor="middle" font-family="' + FONT.stack +
+    '" font-size="40" fill="' + COLOR.text + '" letter-spacing="6"', esc(title)));
   // Duenne Linie darunter - die einzige Dekoration, die die Seite bekommt.
   s.push('<path d="M ' + cfg.padX + ' 72 H ' + (W - cfg.padX) + '" stroke="' + COLOR.border + '" stroke-width="1"/>');
 

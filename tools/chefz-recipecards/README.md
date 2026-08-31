@@ -113,6 +113,19 @@ run says so and keeps the SVGs — it does not fail.
 Everything visual lives in `style.mjs` — colours, card metrics, label palette.
 The renderer contains no number of its own.
 
+## The narrow type, and why it is geometry
+
+The brief asks for a narrow, technical, military typeface. **This machine has
+none installed** — measured in Chrome, `Arial Narrow` renders exactly as wide as
+`sans-serif` (311.2 px for the same line), so the font stack silently falls back.
+
+Rather than claim a face that is not there, the text is condensed geometrically:
+every string is wrapped in `<g transform="scale(0.86,1)">` with its `x` divided
+by the same factor. The anchor lands in the identical place, the glyphs and the
+spacing between them get narrower, and no measurement is needed to make it exact.
+`CONDENSE` in `card.mjs` is the single knob. Install a real condensed face, put it
+at the front of `FONT.stack`, and set `CONDENSE` to 1.
+
 ## Exit codes
 
 | Code | Meaning |
