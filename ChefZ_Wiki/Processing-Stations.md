@@ -1,12 +1,14 @@
 # Processing Stations
 
-ChefZ ships **11 processing stations**. They run *transforms*,
+ChefZ ships **15 processing stations**. They run *transforms*,
 not recipes: a transform takes items out of the station's cargo and puts different
 items back. Nine station records live in
 `Psyerns_ChefZ_Core/Addons/ChefZ_Processing/Config/` with their `CfgVehicles`
-classes in that module's `config.cpp`; the two beehives live in
-`ChefZ_Farming` (`Config/Processing/Apiary_Stations.json`) and are the one
-exception to "a station runs transforms" — see [Beehive](#beehive-and-double-beehive).
+classes in that module's `config.cpp`; six more live in `ChefZ_Farming` — the two
+beehives (`Config/Processing/Apiary_Stations.json`) and, since 31.08.2026, the four
+wild plants (`Config/Processing/WildPlant_Stations.json`). Those six are the
+exceptions to "a station runs transforms": neither a hive nor a wild plant runs one
+— see [Beehive](#beehive-and-double-beehive).
 
 ## Stations are deliberately not cookware
 
@@ -41,9 +43,19 @@ nothing can be cooked inside one.**
 | Honey Extractor | `ChefZ_HoneyExtractor` | `EXTRACTOR` | 1 | 1 | 10×10 | no | 9500 g | `Cauldron.p3d` |
 | Beehive | `ChefZ_Beehive` | `APIARY` | 1 | 1 | 10×9 | no | 14000 g | own: `ChefZ_Devices/models/beekeeper.p3d` |
 | Double Beehive | `ChefZ_BeehiveDouble` | `APIARY` | 1 | 1 | 10×15 | no | 26000 g | own: `ChefZ_Devices/models/beehive.p3d` |
+| Wild Corn | `ChefZ_WildCorn` | `WILD_PLANT` | 1 | 1 | **none** | no | 900 g | own: `ChefZ_Plants/models/corn_plant.p3d` |
+| Wild Thyme | `ChefZ_WildThyme` | `WILD_PLANT` | 1 | 1 | **none** | no | 400 g | `plant_material.p3d` |
+| Wild Rosemary | `ChefZ_WildRosemary` | `WILD_PLANT` | 1 | 1 | **none** | no | 400 g | own: `ChefZ_Plants/models/rosmary.p3d` |
+| Wild Parsley | `ChefZ_WildParsley` | `WILD_PLANT` | 1 | 1 | **none** | no | 400 g | own: `ChefZ_Plants/models/parsley.p3d` |
 
-All eleven run at `speedMultiplier` 1.0. Every model is a vanilla proxy — no station
-has its own geometry yet.
+All fifteen run at `speedMultiplier` 1.0. Five of them stand on their own geometry —
+the two beehives and three of the four wild plants; the other ten are still vanilla
+proxies.
+
+The four wild plants are stations only in the record sense: nothing builds them and
+nothing places them. The CE spawns them from the templates in
+`ChefZ_Farming/ServerConfig/` and they are harvested where they stand, which is why
+they carry no cargo and run no transform.
 
 The cargo area **is** the input side: `ChefZ_ProcessingStation_Base` reads its
 ingredients with `ChefZ_FactCollector.CollectFromCargo(this, ...)`. That function
