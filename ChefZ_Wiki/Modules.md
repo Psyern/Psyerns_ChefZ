@@ -15,14 +15,14 @@ For the reasoning behind the split, see [Architecture](Architecture).
 |---|---:|---:|---:|---:|---:|
 | `ChefZ_Core` | 0 | 137 | — | 2 | 4 |
 | `ChefZ_Registry` | 0 | 0 | — | 137 | — |
-| `ChefZ_Farming` | 29 | 4 | 19 | 21 | 52 |
-| `ChefZ_Processing` | 14 | 7 | 18 | 30 | 41 |
+| `ChefZ_Farming` | 29 | 4 | 19 | 21 | 53 |
+| `ChefZ_Processing` | 14 | 8 | 18 | 30 | 41 |
 | `ChefZ_Ingredients` | 26 | 3 | 1 | 49 | 54 |
 | `ChefZ_Meat` | 32 | 1 | — | 58 | 55 |
 | `ChefZ_Baking` | 6 | 1 | — | 12 | 16 |
 | `ChefZ_Preservation` | 10 | 1 | 10 | 20 | 28 |
 | `ChefZ_Cooking` | 44 | 5 | 58 | 45 | 96 |
-| `ChefZ_Cookbook` | 2 | 11 | — | — | 3 |
+| `ChefZ_Cookbook` | 2 | 12 | — | — | 5 |
 | `ChefZ_Devices` | 0 | 0 | — | — | — |
 | `ChefZ_Food` | 0 | 0 | — | — | — |
 | `ChefZ_Items` | 0 | 0 | — | — | — |
@@ -156,10 +156,14 @@ the thing that is kept, not a station somebody builds a workflow around.
   `ChefZ_Mortar`, `ChefZ_DryingRack`, `ChefZ_ButterChurn`, `ChefZ_CheesePress`,
   `ChefZ_Smoker`, `ChefZ_FryingPan`, `ChefZ_MeatGrinder`, `ChefZ_HoneyExtractor`.
   The cutting board is gone — cutting is "ingredient + knife".
-- **7 script files**, mostly empty derivations from
+- **8 script files**, mostly empty derivations from
   `ChefZ_ProcessingStation_Base` — the station behaviour is in the core and in
-  data. The exception is `ChefZ_HoneyExtractor.c`, which restarts its own job
-  after every jar and limits the cargo to 5 frames and 15 jars.
+  data. Two exceptions: `ChefZ_HoneyExtractor.c`, which restarts its own job
+  after every jar and limits the cargo to 5 frames and 15 jars, and
+  `ChefZ_StationGate.c`, which holds the one question every gatekeeper in this
+  module asks — does this item belong in THIS station. It answers over
+  `CanReceiveItemIntoCargo` and by category, not by class name, so a new spice
+  needs no script change.
 - **Rank 1**: **18 records** — 15 processes and 3 tool groups (`CUTTING_TOOL`
   with eight vanilla knives, `ROLLING_PIN`, `METALWORK_TOOL`). Tool group classes are deliberately *not* checked
   against `CfgVehicles`: a knife from an optional module may be named without
@@ -304,10 +308,18 @@ RPC that would feed a screen all exist, and nothing draws them.
 - **2 item classes**: `ChefZ_CookbookItem` and its base. The model is vanilla's
   `book_kniga.p3d` — own geometry for the cookbook is an open item in the asset
   backlog, which is why `DZ_Gear_Books` is a dependency at all.
-- **11 script files**: `ChefZ_KnowledgeManager.c`, `ChefZ_KnowledgeState.c`,
+- **12 script files**: `ChefZ_KnowledgeManager.c`, `ChefZ_KnowledgeState.c`,
   `ChefZ_RecipeStatus.c` and `ChefZ_CookbookRPC.c` in `3_Game`; the item, the
   opener, the server side, the player knowledge, the action and its registration
-  in `4_World`.
+  in `4_World`; and `ChefZ_CookbookInput.c` in `5_Mission`, the only file of this
+  module on that layer — a key has no owner to ask, so it has to be polled, and
+  the only per-frame loop is `MissionGameplay.OnUpdate`.
+- **A key: F9.** Declared data-driven in `Scripts/Data/Inputs.xml` and wired
+  through `inputs =` in `CfgMods`, not through `GetUApi().RegisterInput()` —
+  that function exists but has no caller in vanilla 1.29 or in Expansion, and
+  using it yields a group that never appears in the controls menu. Pressing it
+  without a cookbook in the inventory does nothing; with one it reaches
+  `ChefZ_CookbookOpener`, which today only prints that no interface is loaded.
 - **Rank 1**: `CfgChefZCookbook > partialMinKnownSlots = 1` — the threshold at
   which a recipe counts as *partially known*. That is a balancing decision of this
   milestone, not a system parameter, which is why it lives here and not in the
@@ -351,9 +363,9 @@ all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key. Ea
 | `ChefZ_Plants` | the crops and herbs — cabbage, carrot, corn cob and plant, garlic, parsley, red onion, rosemary, thyme |
 | `ChefZ_Food` | prepared food |
 
-Together **50 models and 52 textures**. **53 of the mod's 123 spawnable classes** now
+Together **50 models and 52 textures**. **53 of the mod's 125 spawnable classes** now
 stand on their own geometry rather than a vanilla proxy — 45 of them rebound in the
-second delivery alone. The remaining 70 still point at a vanilla mesh; the standing
+second delivery alone. The remaining 72 still point at a vanilla mesh; the standing
 backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
