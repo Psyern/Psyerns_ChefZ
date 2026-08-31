@@ -47,10 +47,11 @@
 // ohnehin verfaellt - Aufwand ohne Gegenwert, und ein weiterer Block in
 // OnStoreSave, den ChefZ ausdruecklich nicht will.
 //
-// Die Menge waechst nicht unbegrenzt: Schluessel sind Rezept- und
-// Transform-IDs (eine feste Menge), Zeilen sind angemeldete Spieler, und
-// abgelaufene Eintraege werden beim naechsten Zugriff desselben Spielers
-// entfernt.
+// Die Menge waechst nicht unbegrenzt: Schluessel sind Rezept- und Prozess-IDs
+// (eine feste Menge - seit dem 31.08.2026 sogar eine kleinere, weil sich die
+// Verarbeitungsschritte auf ihre Prozesse zusammenfassen), Zeilen sind
+// angemeldete Spieler, und abgelaufene Eintraege werden beim naechsten Zugriff
+// desselben Spielers entfernt.
 //
 // Layer: 4_World.
 //==============================================================================
@@ -142,10 +143,17 @@ class ChefZ_TerjeXpDamper
      * vergeben wird - sonst zaehlte ein Vorgang mit 0 XP die Daempfung fuer
      * einen spaeteren echten Vorgang hoch.
      *
-     * @param key  Rezept- oder Transform-ID. Verschiedene Aktionen daempfen
-     *             sich gegenseitig NICHT: wer abwechselnd Brot backt und
-     *             Wurst stopft, wird nicht bestraft. Gedaempft wird das
-     *             stumpfe Wiederholen DESSELBEN Schritts.
+     * @param key  Der Aktionsschluessel, den der Aufrufer waehlt:
+     *             beim Kochen die REZEPT-ID, beim Verarbeiten die PROZESS-ID
+     *             (seit 31.08.2026, Balance-Befund B-5; die Begruendung und
+     *             die Liste der zusammengefassten Transforms stehen an
+     *             ChefZ_TerjeProgressSink.ProcessDamperKey()).
+     *
+     *             Verschiedene Aktionen daempfen sich gegenseitig NICHT: wer
+     *             abwechselnd Brot backt und Wurst stopft, wird nicht
+     *             bestraft. Gedaempft wird das stumpfe Wiederholen DERSELBEN
+     *             Taetigkeit - und "dieselbe Taetigkeit" heisst seither
+     *             "derselbe Prozess", nicht "dieselbe Zutat".
      */
     static int RepeatPercent(int identityId, string key)
     {

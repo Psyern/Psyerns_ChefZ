@@ -212,7 +212,12 @@ class ChefZ_TerjeSkillsConfig
      * Tags, die eine Ernte ueberhaupt survival-relevant machen.
      *
      * Die Liste selbst wird herausgegeben, nicht eine Kopie - sie ist nach
-     * Load() unveraenderlich, und der einzige Leser ist der Erntepfad.
+     * Load() unveraenderlich.
+     *
+     * HEUTE INERT (31.08.2026): es gibt keinen Erntepfad. Der Core kennt keine
+     * Fortschrittsart "harvest", und die Wildernte zahlt laut Wildwuchs-Spec §5
+     * 0 XP. Vollstaendige Begruendung an "class ChefZ_Harvest" in der
+     * config.cpp. Dasselbe gilt fuer HarvestDefaultXp() und HarvestClassXp().
      */
     static array<string> HarvestTags()
     {

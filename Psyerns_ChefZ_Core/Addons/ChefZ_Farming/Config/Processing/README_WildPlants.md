@@ -55,6 +55,34 @@ wäre still auf 1 geklemmt worden, und der Wurf hätte nichts bewirkt.
 Kein Werkzeugeinfluss, kein Terje-Einfluss, kein XP — Entscheidung „nur Würfel"
 (Spec Kap. 1 und 5).
 
+### Ertragsmultiplikatoren — `nominal` ist **nicht** die Itemzahl
+
+Der häufigste Rechenfehler an diesem System ist „nominal 140 = 140 Items".
+Zwischen dem `nominal` eines Events und dem, was ein Spieler in die Hand
+bekommt, liegen **zwei** Faktoren: der Begleiterwurf beim Erscheinen und der
+Ausbeutewurf beim Ernten.
+
+| Event | Pflanzen je Spawn | Ertrag je Pflanze | **Items je Event-Spawn** |
+|---|---:|---:|---:|
+| `ChefZTrajectoryHerbs` | 1,00 | 1,25 | **1,25** |
+| `ChefZTrajectoryCorn` | 2,00 | 1,35 | **2,70** |
+
+- **1,25** = 1 sicher + 0,25 (25 % → +1).
+- **1,35** = 1 sicher + 0,25 (25 % → +1) + 0,10 (5 % → +2).
+- **2,00** Pflanzen = Mutterpflanze + 0–2 Begleiter gleichverteilt (Ø +1).
+
+Daraus die Bestandszahlen bei den ausgelieferten `nominal`-Werten:
+
+| Event | nominal | Pflanzen in der Welt | Items |
+|---|---:|---:|---:|
+| Kräuter | 140 | 140 | ~175 Bund (≈58 je Kraut) |
+| Mais | 60 | 120 | ~162 Kolben |
+
+Das Mais-`nominal` ist deshalb **60 und nicht 140** (B-1, Balance-Review
+31.08.2026): bei 120 wären es 240 Pflanzen und 324 Kolben — das 2,31-fache
+eines Vanilla-Pilzevents, während Alex' Vorgabe „wie Pilze" lautete
+(Spec Kap. 1). Wer den Begleiterwurf abschaltet, darf das `nominal` verdoppeln.
+
 ---
 
 ## Warum `PROCESS_HARVEST_WILD` keinen Transform hat
@@ -149,21 +177,79 @@ tragen damit dieselbe `types.xml`-Zeile — dieselbe `lifetime`, dieselbe
 Zählung. Diese Zusage kostet keine Zeile Code; sie folgt daraus, dass es
 dieselbe Klasse ist.
 
-**Rekursionswache:** ein statisches Flag um die Erzeugungsschleife herum
-(`ChefZ_WildPlant_Base.s_ChefZ_SpawningCompanions`). Statisch und nicht am
-Objekt, weil die Gefahr am Aufrufzeitpunkt hängt und nicht am erzeugten Objekt:
-liefe `EEOnCECreate` synchron *innerhalb* von `CreateObjectEx`, gäbe es das
-Objekt noch gar nicht, an dem ein Instanzflag stehen könnte.
+**Der Spawn läuft einen Frame später** (Conflict-Scout **F3**, 31.08.2026).
+Vorher lief die Schleife synchron aus `EEOnCECreate` — also `CreateObjectEx`
+mitten im Erzeugungsdurchlauf der CE. Was die CE tut, während man ihr neue
+Objekte in denselben Durchlauf schiebt, ist nirgends zugesagt.
 
-Dass der Fall wahrscheinlich gar nicht eintritt, ist geprüfte Nebensache und
-kein Ersatz für die Wache: `EEOnCECreate` ist „called when entity is being
-created as new by CE/ Debug" (`EntityAI.c:1385-1388`), und der volle Aufbau
-hängt an `ECE_SETUP` („process full entity setup", `CentralEconomy.c:8`).
-`ECE_PLACE_ON_SURFACE` ist 1060 = `ECE_CREATEPHYSICS|ECE_UPDATEPATHGRAPH|
-ECE_TRACE` (`CentralEconomy.c:37`) — `ECE_SETUP` ist **nicht** darin.
+Vanillas einziges Vergleichsmuster verschiebt exakt das:
+`Wreck_SantasSleigh.EEOnCECreate()` (`scripts - 1.29`,
+`4_World/DayZ/Entities/Building/Wrecks/Wreck_SantasSleigh.c:30-34`) ruft
+`SpawnRandomDeerLater()`, und die setzt `CallLater(SpawnRandomDeers, 0)`
+(`:47-51`). Der Schlitten stellt tote Rehe um sich herum — dieselbe Aufgabe,
+dieselbe Lösung. `ChefZ_WildPlant_Base.ChefZ_SpawnCompanionsLater()` trägt
+denselben Namen aus demselben Grund: ein `CallLater` mitten in `EEOnCECreate`
+sähe aus wie eine Laune.
+
+*Eine benannte Abweichung:* Vanilla nimmt dort `CALL_CATEGORY_GAMEPLAY`, hier
+steht `CALL_CATEGORY_SYSTEM` — dieses Modul führt seine Serverarbeit
+durchgehend in `SYSTEM` (`ChefZ_StartFillTimer`, `ChefZ_PackUp`, die Ernte),
+und ein CE-Spawn ist Serverarbeit, kein Gameplay.
+
+Weil der Aufruf jetzt aus der Warteschlange kommt, prüft
+`ChefZ_SpawnCompanions()` zusätzlich `IsSetForDeletion()`: zwischen Einreihen
+und Ausführen kann die Mutterpflanze fort sein.
+
+**Rekursionswache — seit F3 ein zweiter Riegel, keine Notwendigkeit mehr.**
+Ein statisches Flag um die Erzeugungsschleife
+(`ChefZ_WildPlant_Base.s_ChefZ_SpawningCompanions`). Statisch und nicht am
+Objekt, weil die Gefahr am Aufrufzeitpunkt hing und nicht am erzeugten Objekt:
+liefe `EEOnCECreate` synchron *innerhalb* von `CreateObjectEx`, gäbe es das
+Objekt noch gar nicht, an dem ein Instanzflag stehen könnte. Nach der
+Verschiebung kann dieser Wiedereintritt strukturell nicht mehr auftreten.
+
+Das Flag bleibt trotzdem: es kostet einen `bool` und zwei Zuweisungen, und der
+Fehler, den es abfängt — eine Maispflanze, die sich selbst vermehrt — füllt den
+Server und steht in keinem Log. Ein Riegel gegen so etwas wird nicht abgebaut,
+weil er „eigentlich" nicht mehr gebraucht wird.
+
+Der dritte, unabhängige Riegel liegt in den Flags: `EEOnCECreate` ist „called
+when entity is being created as new by CE/ Debug" (`EntityAI.c:1385-1388`), und
+der volle Aufbau hängt an `ECE_SETUP` („process full entity setup",
+`CentralEconomy.c:8`). `ECE_PLACE_ON_SURFACE` ist 1060 =
+`ECE_CREATEPHYSICS|ECE_UPDATEPATHGRAPH|ECE_TRACE` (`CentralEconomy.c:37`) —
+`ECE_SETUP` ist **nicht** darin.
 
 **Folge für die Zählung:** Die tatsächliche Zahl Maispflanzen liegt im Mittel
-beim Doppelten des `nominal`.
+beim Doppelten des `nominal` — deshalb steht dort 60 und nicht 140. Siehe
+„Ertragsmultiplikatoren" oben.
+
+**Folge für die Standzeit (Conflict-Scout F2):** Ein Begleiter gehört *keinem
+Event*. Die Event-`lifetime` (180 s) räumt nur die Instanzen ab, die das Event
+selbst gesetzt hat; für Skript-Spawns gilt allein die `types.xml`-`lifetime`.
+Deshalb trägt `ChefZ_WildCorn` dort **300** statt 900 — mit 900 stünden
+Begleiter fünfmal so lange wie ihre Mutterpflanze und der Bestand liefe auf
+~360–720 Pflanzen statt der angepeilten 160–220. Rechnung, Zielband und der
+Gate-Messauftrag stehen in `ServerConfig/README_ServerConfig.md`.
+
+**Folge für das Beet (B-6):** Weil Wildmais nichts kostet und im Mittel 1,35
+Kolben gibt, war ein Beet mit `CropsCount 2` sinnlos — es gab netto 1 Kolben
+(einer geht als Saatgut zurück in den Boden). `ChefZ_CornPlant.CropsCount` steht
+deshalb seit dem 31.08.2026 auf **4** (Vanillas Band ist 3–5): netto +3 je
+Pflanze, +27 je 9er-Beet. Das Beet ist damit die skalierbare Quelle, der
+Wildwuchs die Sofortquelle.
+
+> **Bewusste Abweichung von der Anti-Recycling-Regel (Production Map §22),
+> Gate-Review vorbehalten.** Der Kolben ist sein eigenes Saatgut
+> (`class Horticulture` an `ChefZ_Corn`; `GardenBase` liest `Horticulture
+> PlantType` aus der Config des gepflanzten Items, `GardenBase.c:386`). Es gibt
+> keinen externen Eingang — ein Kolben hinein, vier heraus. Das ist eine
+> Schleife, und §22 verbietet Schleifen. Sie steht trotzdem, weil Vanilla bei
+> Kartoffel und Tomate exakt dieselbe fährt und ChefZ-Mais sonst die einzige
+> Pflanze im Spiel wäre, die sich nicht vermehrt. Begrenzt wird sie durch das
+> Beet selbst: Plätze, Wasser, Wachstumszeit, Lebensdauer der Kolben. Vorher
+> war es ein Verdoppler, jetzt ein Vervierfacher — die Regel war also schon
+> vorher gebrochen, nur weniger sichtbar.
 
 ---
 
@@ -222,6 +308,43 @@ anderen.
 > (`SetAnimationPhase` sitzt auf `Entity`, nicht auf `PlantBase`), aber nicht
 > durch ein laufendes Beispiel belegt. Steht der Mais im Gate unsichtbar oder
 > sechsfach da, ist das eine Modell-/Configfrage und keine Skriptfrage.
+
+---
+
+## Der blinde Passagier: Weizen (B-7)
+
+Das CE-Fragment dieses Slice führt ein **drittes** Event, das sachlich zum Slice
+`grain` gehört: `ChefZTrajectoryWheat`, `nominal 40`, ein Kind `ChefZ_Wheat`.
+
+**Grund:** `ChefZ_Wheat` hatte bis zum 31.08.2026 überhaupt keine Weltquelle —
+kein Event, keine `types.xml`-Zeile, keinen Transform, der ihn erzeugt. Die
+komplette Getreidekette (Mühle → Mehl → Teig → Brot/Nudeln) war ohne
+Admin-Spawn tot, und Mais wäre die einzige Mehlstraße gewesen. Das kehrt die
+Rollen der Production Map um.
+
+Die Zeile steht hier und nicht in einem zweiten CE-Fragment, weil dies das
+einzige des Projekts ist; ein zweites daneben wäre ein zweiter Ort, an dem ein
+Betreiber suchen müsste. **Kein fremdes Modul ist dafür angefasst worden** — die
+`config.cpp` des Slice `grain` bleibt unberührt, das CE-Fragment ist eine
+Missionsvorlage und kein Modinhalt.
+
+**Weizen liegt, er steht nicht.** Es gibt kein Weizenpflanzenmodell;
+`ChefZ_Wheat` ist ein gewöhnliches Item auf Vanillas `\dz\gear\food\Rice.p3d`
+und wird **aufgehoben** wie ein Pilz, nicht geerntet wie eine Wildpflanze. Es
+gibt deshalb kein `ChefZ_WildWheat` — das Kind des Events ist die Garbe selbst.
+Ein eigenes Ähren-Mesh ist als Asset-Bedarf gemeldet; bis dahin ist das Proxy
+tragbar, weil Reis und Weizen beide Getreide in einem Sack sind.
+
+Die Rollenverteilung, mit den echten Werten gerechnet:
+
+| Quelle | Rechnung | Mehl | Brote |
+|---|---|---:|---:|
+| Weizen | 40 Garben × 1000 g × 0,78 (`TR_WheatToFlour`) | 31.200 g | **125** |
+| Mais | 162 Kolben × 120 g (`TR_CornToFlour`) | 19.440 g | **78** |
+
+(250 g Mehl je Teig, `ChefZ_Baking/Config/GrainTransforms.json:15`.) Weizen
+führt, Mais trägt bei — so herum ist es gemeint. Eine Garbe sind gut drei Brote;
+wer am `nominal` dreht, dreht direkt an der Brotmenge des Servers.
 
 ---
 

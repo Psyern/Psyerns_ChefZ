@@ -17,10 +17,30 @@
     GRUPPE, in der Mais waechst, entsteht deshalb im Skript
     (ChefZ_WildCorn.EEOnCECreate) und nicht hier - die Begruendung steht in
     README_ServerConfig.md unter "Warum die Maisgruppe nicht hier steht".
+
+    DREI EVENTS, DREI VERSCHIEDENE nominal - und das ist gerechnet, nicht
+    geschaetzt. Die Zahlen stammen aus dem Balance-Review vom 31.08.2026; die
+    Rechnung steht jeweils am Event.
 -->
 <events>
+    <!--
+        MAIS - nominal 60 und NICHT 140 wie ein Vanilla-Pilzevent (B-1,
+        Balance-Review 31.08.2026).
+
+        DER GRUND IST DER BEGLEITERWURF. ChefZ_WildCorn.EEOnCECreate() stellt
+        0..2 Begleiter gleichverteilt daneben, im Mittel also +1. Ein
+        Event-Spawn ergibt damit 2,0 Pflanzen, und jede Pflanze traegt im
+        Mittel 1,35 Kolben (1 sicher, 25 % +1, 5 % +2):
+
+            nominal 120  ->  240 Pflanzen  ->  324 Kolben   = 2,31 x Pilzevent
+            nominal  60  ->  120 Pflanzen  ->  162 Kolben   ~ Pilzpopulation
+
+        Alex' Vorgabe war "wie Pilze" (Spec Kap. 1). 120 Pflanzen in der Welt
+        sind das; 240 waeren es nicht. Wer den Begleiterwurf abschaltet, darf
+        hier verdoppeln.
+    -->
     <event name="ChefZTrajectoryCorn">
-        <nominal>120</nominal>
+        <nominal>60</nominal>
         <min>2</min>
         <max>4</max>
         <lifetime>180</lifetime>
@@ -36,6 +56,14 @@
             <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildCorn"/>
         </children>
     </event>
+    <!--
+        KRAEUTER - nominal 140 wie ein Vanilla-Pilzevent, unveraendert.
+
+        Kein Begleiterwurf: ein Event-Spawn ist EINE Pflanze. Der Wurf gibt
+        1,25 Bund je Pflanze (1 sicher, 25 % +1), verteilt auf drei Klassen -
+        rund 58 Bund je Kraut. Das ist die Groessenordnung, die die
+        Trockenkette braucht.
+    -->
     <event name="ChefZTrajectoryHerbs">
         <nominal>140</nominal>
         <min>2</min>
@@ -53,6 +81,54 @@
             <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildThyme"/>
             <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildRosemary"/>
             <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildParsley"/>
+        </children>
+    </event>
+    <!--
+        WEIZEN - nominal 40 (B-7, Balance-Review 31.08.2026).
+
+        WARUM DIESES EVENT UEBERHAUPT HIER STEHT, obwohl Weizen kein
+        Wildwuchs-Slice-Inhalt ist: ChefZ_Wheat hatte bis zum 31.08.2026
+        KEINE Weltquelle - kein Event, keine types-Zeile, keinen Transform,
+        der ihn erzeugt. Die ganze Getreidekette (Muehle -> Mehl -> Teig ->
+        Brot/Nudeln) war ohne Admin-Spawn tot, und Mais waere die einzige
+        Mehlstrasse gewesen. Die Zeile gehoert sachlich zum Slice grain und
+        steht hier, weil dies das einzige CE-Fragment des Projekts ist; ein
+        zweites daneben waere ein zweiter Ort, an dem ein Betreiber suchen
+        muesste.
+
+        WEIZEN LIEGT, ER STEHT NICHT. Es gibt kein Weizenpflanzenmodell -
+        ChefZ_Wheat ist ein gewoehnliches Item auf Vanillas Rice.p3d
+        (config.cpp) und wird AUFGEHOBEN wie ein Pilz, nicht geerntet wie eine
+        Wildpflanze. Deshalb steht hier auch kein ChefZ_Wild*: das Kind ist
+        die Garbe selbst.
+
+        DIE ROLLENVERTEILUNG (Production Map: Weizen ist die Getreidekette,
+        Mais ihre Zweitverwertung), gerechnet mit den echten Werten:
+
+            Weizen  40 Garben x 1000 g x 0,78 (TR_WheatToFlour)
+                    = 31.200 g Mehl : 250 g je Teig  = 125 Brote
+            Mais   162 Kolben x 120 g (TR_CornToFlour)
+                    = 19.440 g Mehl : 250 g je Teig  =  78 Brote
+
+        Weizen fuehrt damit, Mais traegt bei - so herum ist es gemeint. Wer
+        die Zahl aendert, aendert die Brotmenge des Servers direkt: eine
+        Garbe sind gut drei Brote.
+    -->
+    <event name="ChefZTrajectoryWheat">
+        <nominal>40</nominal>
+        <min>2</min>
+        <max>4</max>
+        <lifetime>180</lifetime>
+        <restock>0</restock>
+        <saferadius>25</saferadius>
+        <distanceradius>100</distanceradius>
+        <cleanupradius>25</cleanupradius>
+        <flags deletable="0" init_random="0" remove_damaged="0"/>
+        <position>player</position>
+        <limit>mixed</limit>
+        <active>1</active>
+        <children>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_Wheat"/>
         </children>
     </event>
 </events>

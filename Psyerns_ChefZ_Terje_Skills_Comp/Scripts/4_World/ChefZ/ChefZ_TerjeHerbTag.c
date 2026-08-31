@@ -73,6 +73,12 @@ class ChefZ_TerjeHerbTag
     /**
      * Traegt die Klasse eines der Tags, die eine Ernte survival-relevant
      * machen? (config.cpp: ChefZ_Harvest harvestTags[])
+     *
+     * HEUTE OHNE AUFRUFER (31.08.2026): es gibt keinen Erntepfad, der XP
+     * vergibt - der Core kennt keine Fortschrittsart "harvest", und die
+     * Wildernte zahlt laut Wildwuchs-Spec §5 0 XP. Die Funktion bleibt als
+     * Gegenstueck zur ebenfalls beschrifteten Config stehen; die vollstaendige
+     * Begruendung steht an "class ChefZ_Harvest" in der config.cpp.
      */
     static bool IsHarvestRelevant(string className)
     {

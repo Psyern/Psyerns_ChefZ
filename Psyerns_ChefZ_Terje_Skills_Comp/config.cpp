@@ -129,10 +129,17 @@ class CfgPatches
         //   ChefZ_Core     ChefZ_ProgressRegistry, ChefZ_CapabilityRegistry,
         //                  ChefZ_IProgressSink, ChefZ_ICapabilityProvider,
         //                  ChefZ_Log - Bezeichner im eigenen Quelltext.
-        //   ChefZ_Farming  ChefZ_FreshHerbBase - die einzige ChefZ-Klasse, die
-        //                  hier per "modded class" erweitert wird. Kraeuter
-        //                  sind Fundpflanzen; die fruehere Erweiterung der
-        //                  Pflanze im Beet ist mit ihr entfallen.
+        //   ChefZ_Farming  die vier ChefZ-Klassen, die hier per "modded class"
+        //                  erweitert werden - ausschliesslich fuer das
+        //                  Hervorheben von Kraeutern (Perkstufe I):
+        //                    ChefZ_FreshHerbBase  das Erntebund am Boden,
+        //                    ChefZ_WildThyme      }
+        //                    ChefZ_WildRosemary   } die stehenden Wildpflanzen
+        //                    ChefZ_WildParsley    } seit dem 31.08.2026.
+        //                  ChefZ_WildCorn fehlt hier absichtlich: Mais ist kein
+        //                  Kraut (ChefZ_TerjeWildHerbPlant.c).
+        //                  Ausserdem ChefZ_WildPlant_Base.ChefZ_YieldClass() -
+        //                  die Auskunft, WAS eine Wildpflanze hergibt.
         //
         // TerjeCore und TerjeSkills stehen bewusst NICHT hier. Sie werden
         // ueber "#ifdef TERJE_SKILLS_MOD" in jeder Skriptdatei geprueft; die
@@ -328,6 +335,16 @@ class CfgChefZTerjeSkills
         // erreicht ist. Nach repeatWindowSec ohne diese Aktion ist der Zaehler
         // wieder bei null.
         //
+        // WAS "DIESELBE AKTION" HEISST (seit 31.08.2026, Balance-Befund B-5):
+        //   Kochen      die REZEPT-ID. Zwei Rezepte sind zwei Gerichte.
+        //   Verarbeiten die PROZESS-ID, NICHT die Transform-ID. Alle zwoelf
+        //               Trocknungen teilen sich damit einen Topf - vorher
+        //               hatte jede ihren eigenen, und wer Thymian, Rosmarin
+        //               und Petersilie abwechselte, hatte dreimal so viele
+        //               freie Durchlaeufe. Die vollstaendige Begruendung samt
+        //               Liste der betroffenen Prozesse steht an
+        //               ChefZ_TerjeProgressSink.ProcessDamperKey().
+        //
         // 0 fuer repeatFreeCount schaltet die Daempfung ab.
         //----------------------------------------------------------------------
         repeatFreeCount   = 5;
@@ -448,15 +465,57 @@ class CfgChefZTerjeSkills
         };
 
         //----------------------------------------------------------------------
+        //! HEUTE INERT — Wildernte zahlt 0 XP, Entscheidung Wildwuchs-Spec §5,
+        //! 31.08.2026
+        //
         // Kraeuterernte. §26 "Kraut ernten 2-5", §10 "seltenes Kraut 4-5",
         // "Pfeffer ernten 5".
         //
-        // XP gibt es je ERNTEVORGANG, nicht je Kraut. Der Mengenbonus oben
-        // gilt auch hier.
+        // ----------------------------------------------------------------------
+        // WARUM DIESE ZAHLEN HEUTE NIEMAND LIEST
+        // ----------------------------------------------------------------------
+        // Es gibt keinen Leser, und zwar auf drei Ebenen - jede einzelne
+        // genuegt:
         //
-        // Voraussetzung fuer JEDEN Eintrag: die geerntete Klasse traegt eines
-        // der Tags aus ChefZ_HarvestTags. Einzelne Kraeuterklassen stehen
-        // bewusst nicht im Skript.
+        //   1. Der ChefZ-Core kennt keine Fortschrittsart "harvest".
+        //      ChefZ_ProgressKind fuehrt genau fuenf: cook, process, preserve,
+        //      consume, discover (ChefZ_Core/Scripts/1_Core/ChefZ/
+        //      ChefZ_EventNames.c:216-231).
+        //   2. ChefZ_TerjeProgressSink.OnChefZProgress bewertet davon nur cook
+        //      und process; alles andere faellt in den else-Zweig und kehrt
+        //      zurueck.
+        //   3. Die Wildernte meldet ohnehin nichts: PROCESS_HARVEST_WILD hat
+        //      absichtlich keinen Transform, der ChefZ_ProcessRunner endet mit
+        //      NO_MATCH, und ein Fortschrittsbericht entsteht nie
+        //      (ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c,
+        //      Abschnitt "WARUM PROCESS_HARVEST_WILD KEINEN TRANSFORM HAT").
+        //
+        // Das ist kein Versehen, sondern die Entscheidung der Wildwuchs-Spec
+        // §5 (Psyerns_ChefZ_Docs/ChefZ_Wildwuchs_Spawn_Plan.md, freigegeben
+        // 31.08.2026): eine Wildpflanze zu ernten ist Buecken, kein Handwerk.
+        // Erfahrung gibt es fuer das, was der Spieler DARAUS macht -
+        // trocknen, mahlen, kochen -, und die zahlt der Prozesspfad.
+        //
+        // NACHZUTRAGEN in Psyerns_ChefZ_Docs/ChefZ_Terje_Compatibility_Analyse.md
+        // §26 (XP-Matrix), eine Zeile: "Wildernte: 0 XP, Entscheidung
+        // 31.08.2026". Die Docs gehoeren nicht diesem Modul; der Vermerk steht
+        // deshalb hier und als Uebergabe im Bericht zu B-3.
+        //
+        // ----------------------------------------------------------------------
+        // WARUM DER BLOCK TROTZDEM STEHENBLEIBT
+        // ----------------------------------------------------------------------
+        // Weil das Modul inerte, aber fertige Stellschrauben ausdruecklich
+        // fuehrt und benennt - siehe ChefZ_Capabilities weiter unten ("der
+        // Anbieter wird also aktuell nie gefragt") und das leere
+        // ChefZ_Recipes. Ein geloeschter Block waere eine Entscheidung, die
+        // niemand mehr sieht; ein beschrifteter ist eine, die man nachlesen
+        // kann. Wer die Wildernte spaeter doch bezahlen will, braucht dann
+        // einen Fortschrittsbericht im Core - nicht diese Zahlen neu.
+        //
+        // Bis dahin gilt: XP gaebe es je ERNTEVORGANG, nicht je Kraut, und der
+        // Mengenbonus oben wuerde auch hier gelten. Voraussetzung fuer JEDEN
+        // Eintrag waere, dass die geerntete Klasse eines der Tags aus
+        // harvestTags traegt.
         //----------------------------------------------------------------------
         class ChefZ_Harvest
         {

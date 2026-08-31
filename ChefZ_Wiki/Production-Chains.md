@@ -19,11 +19,19 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 **Read the diagrams like this:** rounded boxes are items, the label on an arrow is
 the station or the tool, and `[]` boxes are the dishes a chain feeds into.
 
-> **Nothing in this mod spawns by itself.** ChefZ ships no `types.xml`. Every chain
-> head below — wheat, the five vegetables, the four herbs, eggs, the three legs —
-> needs an admin spawn until a loot table exists. Since 29.08.2026 they are *found*
-> items rather than crops, which makes the missing loot table the only thing between
-> them and the world. Milk is vanilla `PowderedMilk` and spawns on its own.
+> **Almost nothing in this mod spawns by itself.** No `types.xml` is packed into the
+> PBO. Every chain head below — wheat, the five vegetables, the four herbs, eggs, the
+> three legs — needs an admin spawn until a loot table exists. Since 29.08.2026 they
+> are *found* items rather than crops, which makes the missing loot table the only
+> thing between them and the world. Milk is vanilla `PowderedMilk` and spawns on its
+> own.
+>
+> **The one exception, since 31.08.2026:** corn, thyme, rosemary and parsley also grow
+> wild. `ChefZ_Farming/ServerConfig/` ships `ChefZ_events.xml` and `ChefZ_types.xml`
+> as **templates** — not packed into the PBO, never read by the mod — which spawn the
+> four wild-plant harvest points and let a player harvest `ChefZ_Corn`, `ChefZ_Thyme`,
+> `ChefZ_Rosemary` and `ChefZ_Parsley` with no admin. Nothing changes until someone
+> installs that fragment into the mission (`README_ServerConfig.md`).
 > See [Known-Limitations](Known-Limitations).
 
 ## Grain

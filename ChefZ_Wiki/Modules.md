@@ -45,7 +45,7 @@ The script-file total counts what ships. `ChefZ_Core` carries one more —
 brings the repository to 171 `.c` files.
 
 Across all modules that adds up to **47 recipes**, **61 transforms**,
-**33 processes**, **11 stations**, **185 ingredient bindings**, **5 containers**,
+**33 processes**, **15 stations**, **185 ingredient bindings**, **5 containers**,
 **3 cooking devices**, **10 food states**, **5 quality tiers** and
 **8 tool groups**.
 
@@ -148,9 +148,10 @@ comp mod (see [Terje Compatibility](Terje-Compatibility)).
 
 ## `ChefZ_Processing`
 
-Stations and tools. Nine of the mod's eleven stations live here, regardless of
-which chain they belong to; the two hives sit in `ChefZ_Farming` because they are
-the thing that is kept, not a station somebody builds a workflow around.
+Stations and tools. Nine of the mod's fifteen stations live here, regardless of
+which chain they belong to; the two hives and the four wild plants sit in
+`ChefZ_Farming` because they are the thing that is kept or found, not a station
+somebody builds a workflow around.
 
 - **item classes** including 9 stations: `ChefZ_GrainMill`,
   `ChefZ_Mortar`, `ChefZ_DryingRack`, `ChefZ_ButterChurn`, `ChefZ_CheesePress`,

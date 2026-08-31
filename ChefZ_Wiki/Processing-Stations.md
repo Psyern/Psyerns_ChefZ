@@ -28,7 +28,7 @@ fireplace.
 `Inventory_Base` closes both paths. **No station appears in any recipe context, and
 nothing can be cooked inside one.**
 
-## The eleven stations
+## The fifteen stations
 
 | Station | Class | Category | Processes | Parallel slots | Cargo | Needs fuel | Weight | Proxy model |
 |---|---|---|---|---|---|---|---|---|
@@ -505,7 +505,7 @@ slots for them.
 
 | | |
 |---|---|
-| Station records | 15 — 9 workbenches in `ChefZ_Processing`, 2 beehives and 4 wild-plant harvest points in `ChefZ_Farming` (added 2026-08-31). The eleven described above are the workbenches and the hives; a wild plant is a harvest point, not a workbench. |
+| Station records | 15 — 9 workbenches in `ChefZ_Processing`, 2 beehives and 4 wild-plant harvest points in `ChefZ_Farming` (added 2026-08-31). All fifteen are described above; a wild plant is a harvest point, not a workbench. |
 | Station categories | 11 |
 | Processes | 34 — 18 handcraft, 7 station action, 9 station timed (recounted 2026-08-31) |
 | Handcraft slots reserved | 22, matching the 22 handcraft transforms exactly |

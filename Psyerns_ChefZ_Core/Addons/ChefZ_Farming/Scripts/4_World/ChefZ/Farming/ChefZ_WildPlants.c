@@ -110,24 +110,39 @@ class ChefZ_WildPlant_Base extends ChefZ_ProcessingStation_Base
      * Die Rekursionswache der Gruppenbildung (Spec Kap. 3, Fallback:
      * "Begleiter duerfen selbst KEINE weiteren Begleiter wuerfeln").
      *
-     * STATISCH und nicht am Objekt, weil die Gefahr NICHT am erzeugten Objekt
-     * haengt, sondern am Aufrufzeitpunkt: laeuft EEOnCECreate einer neuen
-     * Pflanze synchron INNERHALB von CreateObjectEx, gaebe es das Objekt noch
-     * gar nicht, an dem ein Instanzflag stehen koennte. Ein statisches Flag um
-     * die Erzeugungsschleife herum deckt genau diesen Fall - und das ist der
-     * einzige realistische, denn Enforce laeuft einfaedig.
+     * -------------------------------------------------------------------------
+     * SIE IST SEIT DEM 31.08.2026 EIN ZWEITER RIEGEL, KEINE NOTWENDIGKEIT MEHR
+     * -------------------------------------------------------------------------
+     * Bis zum Conflict-Scout-Befund F3 lief die Gruppenbildung SYNCHRON aus
+     * EEOnCECreate - also CreateObjectEx mitten im Erzeugungsdurchlauf der CE.
+     * Dort war das Flag die einzige Absicherung, und zwar STATISCH und nicht am
+     * Objekt: gaebe es einen synchronen Wiedereintritt, existierte das neue
+     * Objekt noch gar nicht, an dem ein Instanzflag stehen koennte.
      *
-     * DASS DER FALL WAHRSCHEINLICH GAR NICHT EINTRITT, ist gepruefte
-     * Nebensache und kein Ersatz fuer die Wache: EEOnCECreate ist "called when
-     * entity is being created as new by CE/ Debug" (scripts - 1.29,
-     * EntityAI.c:1385-1388), und der volle Aufbau haengt am Flag ECE_SETUP
-     * ("process full entity setup (when creating NEW entity)",
+     * Seit F3 ist der Spawn um einen Frame verschoben (siehe
+     * ChefZ_SpawnCompanionsLater). Damit laeuft die Schleife AUSSERHALB des
+     * CE-Durchlaufs, und der synchrone Wiedereintritt, gegen den das Flag
+     * gebaut war, kann strukturell nicht mehr auftreten.
+     *
+     * DAS FLAG BLEIBT TROTZDEM. Zwei Gruende, und beide zaehlen:
+     *
+     *   1. Es kostet nichts. Ein bool und zwei Zuweisungen je Gruppe.
+     *   2. Der Fehler, den es abfaengt, ist der teuerste denkbare dieses
+     *      Slice: eine Maispflanze, die sich selbst vermehrt, fuellt den Server
+     *      und steht in keinem Log. Ein Riegel gegen so etwas wird nicht
+     *      abgebaut, weil er "eigentlich" nicht mehr gebraucht wird.
+     *
+     * Die dritte, unabhaengige Absicherung liegt in den Flags: EEOnCECreate ist
+     * "called when entity is being created as new by CE/ Debug" (scripts -
+     * 1.29, EntityAI.c:1385-1388), und der volle Aufbau haengt am Flag
+     * ECE_SETUP ("process full entity setup (when creating NEW entity)",
      * CentralEconomy.c:8). ECE_PLACE_ON_SURFACE ist 1060 und damit
      * ECE_CREATEPHYSICS|ECE_UPDATEPATHGRAPH|ECE_TRACE (CentralEconomy.c:37) -
      * ECE_SETUP ist NICHT darin. Ein per Skript gesetzter Begleiter sollte den
-     * Haken also ohnehin nie sehen. "Sollte" ist hier zu wenig: eine
-     * Maispflanze, die sich selbst vermehrt, waere ein Serverfehler, den
-     * niemand suchen wuerde.
+     * Haken also ohnehin nie sehen.
+     *
+     * Drei Riegel fuer einen Fall, der wahrscheinlich nie eintritt: ja. Der
+     * Preis dafuer sind vier Zeilen.
      */
     protected static bool s_ChefZ_SpawningCompanions;
 
@@ -342,11 +357,53 @@ class ChefZ_WildPlant_Base extends ChefZ_ProcessingStation_Base
     override void EEOnCECreate()
     {
         super.EEOnCECreate();
-        ChefZ_SpawnCompanions();
+        ChefZ_SpawnCompanionsLater();
+    }
+
+    /**
+     * Die Gruppe entsteht einen Frame SPAETER (Conflict-Scout F3, 31.08.2026).
+     *
+     * DER BEFUND: bis dahin lief die Schleife synchron aus EEOnCECreate - also
+     * CreateObjectEx MITTEN im Erzeugungsdurchlauf der CE. Was die CE tut,
+     * waehrend man ihr neue Objekte in denselben Durchlauf schiebt, ist
+     * nirgends zugesagt.
+     *
+     * DAS VORBILD IST VANILLAS EINZIGES: Wreck_SantasSleigh verschiebt genau
+     * das und nur das (scripts - 1.29, 4_World/DayZ/Entities/Building/Wrecks/
+     * Wreck_SantasSleigh.c:30-34 ruft SpawnRandomDeerLater, und :47-51 setzt
+     * CallLater(SpawnRandomDeers, 0)). Der Schlitten stellt tote Rehe um sich
+     * herum - dieselbe Aufgabe, dieselbe Loesung, bis auf die Zwischenmethode,
+     * die hier denselben Namen traegt.
+     *
+     * EINE ABWEICHUNG, benannt: Vanilla nimmt dort CALL_CATEGORY_GAMEPLAY,
+     * hier steht CALL_CATEGORY_SYSTEM. Grund ist die Umgebung, nicht der
+     * Geschmack - dieses Modul fuehrt seine Serverarbeit durchgehend in
+     * SYSTEM (ChefZ_Beehive.ChefZ_StartFillTimer, ChefZ_PackUp, und die Ernte
+     * ein paar Zeilen weiter unten). SYSTEM haengt nicht an der
+     * Gameplay-Schleife, und ein CE-Spawn ist Serverarbeit, kein Gameplay.
+     *
+     * OEFFENTLICH ist nur ChefZ_SpawnCompanions selbst noetig - CallLater
+     * nimmt hier einen Methodenzeiger, keinen Namen. Die Zwischenmethode
+     * bleibt trotzdem, weil sie die Verschiebung BENENNT: ein CallLater
+     * mitten in EEOnCECreate saehe aus wie eine Laune.
+     */
+    protected void ChefZ_SpawnCompanionsLater()
+    {
+        if (!g_Game || !g_Game.IsServer())
+            return;
+
+        g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(ChefZ_SpawnCompanions, 0, false);
     }
 
     /**
      * Stellt 0..n Pflanzen derselben Klasse in den Umkreis.
+     *
+     * OEFFENTLICH und mit Loeschwache, beides seit der Verschiebung um einen
+     * Frame (F3): der Aufruf kommt jetzt aus der Aufrufschlange und nicht mehr
+     * unmittelbar aus EEOnCECreate. Zwischen dem Einreihen und dem Ausfuehren
+     * kann die Mutterpflanze bereits fort sein - die CE raeumt im selben
+     * Durchlauf auf, in dem sie setzt. Dieselbe Wache und derselbe Grund wie
+     * in ChefZ_Harvest().
      *
      * SERVERSEITIG: eine neue Weltentitaet ist autoritativer Zustand (00 §5).
      *
@@ -364,12 +421,17 @@ class ChefZ_WildPlant_Base extends ChefZ_ProcessingStation_Base
      * ohnehin. Eine Gruppe von einem ist eine Pflanze, und das ist ein
      * gueltiger Fund.
      */
-    protected void ChefZ_SpawnCompanions()
+    void ChefZ_SpawnCompanions()
     {
         if (!g_Game || !g_Game.IsServer())
             return;
 
-        // Die Wache. Siehe s_ChefZ_SpawningCompanions.
+        // Die Mutterpflanze ist zwischen Einreihen und Ausfuehren fort - dann
+        // gibt es keine Gruppe, um die herum etwas stehen koennte.
+        if (IsSetForDeletion())
+            return;
+
+        // Der zweite Riegel. Siehe s_ChefZ_SpawningCompanions.
         if (s_ChefZ_SpawningCompanions)
             return;
 

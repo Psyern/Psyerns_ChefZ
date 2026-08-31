@@ -87,6 +87,12 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         int    xp  = 0;
         string key = "";
 
+        // Der Schluessel der Wiederholungsdaempfung. Beim Kochen ist das die
+        // Rezept-ID, beim Verarbeiten seit dem 31.08.2026 die PROZESS-ID und
+        // nicht mehr die Transform-ID - die Begruendung steht unten an
+        // ProcessDamperKey().
+        string damperKey = "";
+
         // Name() und nicht NameOrMark(): ein leerer Name heisst "der Core
         // konnte den Vorgang nicht benennen". Dann gibt es hier nichts -
         // weder eine sinnvolle Ausnahmeliste noch einen Schluessel fuer die
@@ -98,13 +104,20 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
             if (key == "")
                 return;
             xp = CookXp(args, key);
+            damperKey = key;
         }
         else if (progressKind == ChefZ_ProgressKind.PROCESS)
         {
             key = ChefZ_SymbolTable.Name(args.recipeOrTransform);
             if (key == "")
                 return;
-            xp = ProcessXp(args, key);
+
+            // EINMAL aufgeloest und zweimal gebraucht: fuer die Einstufung
+            // (welcher XP-Wert) und fuer den Daempferschluessel (welcher Topf).
+            string processId = ProcessIdOf(args.recipeOrTransform);
+
+            xp = ProcessXp(key, processId);
+            damperKey = ProcessDamperKey(key, processId);
         }
         else
         {
@@ -125,7 +138,7 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         xp = xp + ChefZ_TerjeXpDamper.BatchBonus(xp, produced);
 
         // ZAEHLT MIT - deshalb erst hier, wenn feststeht, dass es XP gibt.
-        int percent = ChefZ_TerjeXpDamper.RepeatPercent(args.identityId, key);
+        int percent = ChefZ_TerjeXpDamper.RepeatPercent(args.identityId, damperKey);
         if (percent < 100)
         {
             xp = (xp * percent) / 100;
@@ -151,7 +164,7 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         {
             string line = "TerjeSkills: +" + xp.ToString() + " surv fuer " + progressKind + " \"" + key;
             line = line + "\" (Spieler " + args.identityId.ToString() + ", Ergebnisse " + produced.ToString();
-            line = line + ", Daempfung " + percent.ToString() + "%)";
+            line = line + ", Daempfung " + percent.ToString() + "% auf \"" + damperKey + "\")";
             ChefZ_Log.Debug(ChefZ_LogChannel.EVENT, line);
         }
     }
@@ -192,6 +205,32 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
     }
 
     /**
+     * Der PROZESS zu einer Transform, oder "".
+     *
+     * Der Prozess steht nicht in der Nutzlast: ChefZ_ProcessRunner.c:896
+     * setzt recipeOrTransform auf die TRANSFORM. Der Weg zum Prozess fuehrt
+     * ueber ChefZ_ProcessingManager.GetTransform(sym).processSym - dieselbe
+     * Auskunftsstelle, die der Runner selbst benutzt.
+     *
+     * "" ist ein normaler Rueckgabewert und kein Fehler: solange der
+     * ChefZ_ProcessingManager nicht bereit ist oder die Transform ihm
+     * unbekannt ist, gibt es keinen Prozessnamen. Beide Aufrufer haben fuer
+     * diesen Fall einen Rueckfallweg auf die Transform-ID.
+     */
+    private string ProcessIdOf(ChefZ_Sym transformSym)
+    {
+        ChefZ_ProcessingManager mgr = ChefZ_ProcessingManager.Get();
+        if (!mgr || !mgr.IsReady())
+            return "";
+
+        ChefZ_CompiledTransform tr = mgr.GetTransform(transformSym);
+        if (!tr)
+            return "";
+
+        return ChefZ_SymbolTable.Name(tr.processSym);
+    }
+
+    /**
      * XP fuer einen abgeschlossenen Verarbeitungsschritt.
      *
      * Zuerst der PROZESS (PROCESS_DRY, PROCESS_SMOKE ...), weil die XP-Matrix
@@ -199,29 +238,78 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
      * Eine einzelne Transform kann das ueberschreiben - dafuer gibt es
      * ChefZ_Transforms in der Config, und dort stehen die beiden Faelle, in
      * denen §26 eine Kette anders bewertet als ihre Schritte.
-     *
-     * Der Prozess steht nicht in der Nutzlast: ChefZ_ProcessRunner.c:896
-     * setzt recipeOrTransform auf die TRANSFORM. Der Weg zum Prozess fuehrt
-     * ueber ChefZ_ProcessingManager.GetTransform(sym).processSym - dieselbe
-     * Auskunftsstelle, die der Runner selbst benutzt.
      */
-    private int ProcessXp(notnull ChefZ_EventArgs args, string transformId)
+    private int ProcessXp(string transformId, string processId)
     {
         int fallback = ChefZ_TerjeSkillsConfig.ProcessDefaultXp();
 
-        ChefZ_ProcessingManager mgr = ChefZ_ProcessingManager.Get();
-        if (mgr && mgr.IsReady())
-        {
-            ChefZ_CompiledTransform tr = mgr.GetTransform(args.recipeOrTransform);
-            if (tr)
-            {
-                string processId = ChefZ_SymbolTable.Name(tr.processSym);
-                if (processId != "")
-                    fallback = ChefZ_TerjeSkillsConfig.ProcessXp(processId, fallback);
-            }
-        }
+        if (processId != "")
+            fallback = ChefZ_TerjeSkillsConfig.ProcessXp(processId, fallback);
 
         return ChefZ_TerjeSkillsConfig.TransformXp(transformId, fallback);
+    }
+
+    /**
+     * Der Schluessel, unter dem die Wiederholungsdaempfung mitzaehlt.
+     *
+     * -------------------------------------------------------------------------
+     * WARUM DER PROZESS UND NICHT DIE TRANSFORM (Balance-Befund B-5,
+     * 31.08.2026)
+     * -------------------------------------------------------------------------
+     * Bis dahin zaehlte die Daempfung je TRANSFORM. Das Wildwuchs-System
+     * (Psyerns_ChefZ_Docs/ChefZ_Wildwuchs_Spawn_Plan.md, 31.08.2026) hat daraus
+     * eine Luecke gemacht: die CE stellt Thymian, Rosmarin und Petersilie im
+     * selben Ring auf, und ihre Trocknungen sind DREI Transforms
+     * (TR_ThymeToDried, TR_RosemaryToDried, TR_ParsleyToDried,
+     * ChefZ_Processing/Config/Processing/HerbDrying.json). Wer sie abwechselnd
+     * trocknete, hatte damit dreimal repeatFreeCount freie Durchlaeufe je
+     * Fenster - 15 statt 5 - fuer eine Taetigkeit, die sich nur im Beutel
+     * unterscheidet, den man einlegt.
+     *
+     * Der Prozess ist die richtige Zaehleinheit: die XP-Matrix aus §26 ist nach
+     * TAETIGKEITEN geordnet ("Kraeuter trocknen 3"), nicht nach Zutaten, und
+     * die Daempfung bewertet die Wiederholung einer Taetigkeit.
+     *
+     * -------------------------------------------------------------------------
+     * WAS DAS SONST NOCH STRAFFT - alle Faelle, nicht nur die drei Kraeuter
+     * -------------------------------------------------------------------------
+     * PROCESS_DRY fasst im heutigen Datenbestand ZWOELF Transforms zusammen:
+     * sechs Kraeuter- und Gewuerztrocknungen (Thymian, Rosmarin, Petersilie,
+     * Baerlauch, Paprika, Pfefferbeeren), zwei Vanilla-Beeren (Canina,
+     * Sambucus), Nudeln, gesalzenes Fleisch, gesalzener Fisch und Rohwurst.
+     * Sie teilen sich ab jetzt EINEN Topf. Wer erst Fleisch und dann Kraeuter
+     * trocknet, kommt also frueher in die Daempfung als bisher.
+     *
+     * Das ist gewollt und nicht bloss hingenommen: es ist derselbe Handgriff an
+     * derselben Station: Ware hinein, warten, Ware heraus. Wer die Daempfung
+     * meiden will, soll die TAETIGKEIT wechseln - mahlen, kneten, raeuchern -,
+     * nicht die Zutat.
+     *
+     * Gleichfalls betroffen, aber unauffaellig: PROCESS_STUFF_SAUSAGE (6),
+     * PROCESS_GRIND_MEAT (6), PROCESS_GRIND_SPICE (4), PROCESS_CUT_MEAT (4),
+     * PROCESS_SMOKE (2), PROCESS_SALT_CURE (2), PROCESS_MILL (2). Alle
+     * uebrigen Prozesse fuehren genau eine Transform; fuer sie aendert sich
+     * nichts ausser dem Namen im Debuglog.
+     *
+     * NICHT betroffen ist das KOCHEN. Dort bleibt die Rezept-ID der
+     * Schluessel: zwei Rezepte sind zwei Gerichte, und ein gemeinsamer Topf
+     * "Kochen" wuerde jeden bestrafen, der abwechslungsreich kocht.
+     *
+     * -------------------------------------------------------------------------
+     * Rueckfall
+     * -------------------------------------------------------------------------
+     * Ist der Prozess nicht ermittelbar (ProcessingManager noch nicht bereit,
+     * Transform unbekannt), bleibt es bei der Transform-ID. Lieber eine
+     * Daempfung, die feiner zaehlt als gewollt, als gar keine: ein leerer
+     * Schluessel schaltet RepeatPercent() vollstaendig ab
+     * (ChefZ_TerjeXpDamper.c, "if (identityId == 0 || key == \"\")").
+     */
+    private string ProcessDamperKey(string transformId, string processId)
+    {
+        if (processId != "")
+            return processId;
+
+        return transformId;
     }
 }
 #endif // TERJE_SKILLS_MOD

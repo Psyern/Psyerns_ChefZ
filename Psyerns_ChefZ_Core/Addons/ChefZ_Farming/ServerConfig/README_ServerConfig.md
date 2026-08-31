@@ -72,25 +72,64 @@ und schauen.
 
 ### `ChefZ_events.xml`
 
-Zwei Events nach Vanillas Pilz- und Obstbauform (`db\events.xml`,
+Drei Events nach Vanillas Pilz- und Obstbauform (`db\events.xml`,
 `TrajectoryHumus` / `TrajectoryApple`):
 
 | Event | nominal | Kinder |
 |---|---:|---|
-| `ChefZTrajectoryCorn` | 120 | `ChefZ_WildCorn` |
+| `ChefZTrajectoryCorn` | 60 | `ChefZ_WildCorn` |
 | `ChefZTrajectoryHerbs` | 140 | `ChefZ_WildThyme`, `ChefZ_WildRosemary`, `ChefZ_WildParsley` |
+| `ChefZTrajectoryWheat` | 40 | `ChefZ_Wheat` |
 
-Beide `position=player`, `limit=mixed`, `active=1`, `lifetime=180`,
+Alle drei `position=player`, `limit=mixed`, `active=1`, `lifetime=180`,
 `saferadius=25`, `distanceradius=100`, `cleanupradius=25`. Das heißt: die
-Engine sucht sich einen Fleck im Ring 25–100 m um einen Spieler und stellt
-dort eine Pflanze hin. **Wo genau, entscheidet die Engine** — Mais steht damit
-nicht garantiert auf einem Acker. Das ist der bewusst akzeptierte Preis dafür,
-dass keine Koordinate gepflegt werden muss und das Ganze auf jeder Karte läuft
+Engine sucht sich einen Fleck im Ring 25–100 m um einen Spieler und legt dort
+etwas hin. **Wo genau, entscheidet die Engine** — Mais steht damit nicht
+garantiert auf einem Acker. Das ist der bewusst akzeptierte Preis dafür, dass
+keine Koordinate gepflegt werden muss und das Ganze auf jeder Karte läuft
 (Spec Kap. 1).
 
-`nominal` ist die Zielzahl gleichzeitig existierender Instanzen serverweit.
-260 zusammen ist etwa das, was Vanilla allein für Pilze und Obst fährt
-(sieben Trajectory-Events zu je 140).
+### `nominal` ist nicht die Itemzahl
+
+`nominal` ist die Zielzahl gleichzeitig existierender **Instanzen** serverweit —
+nicht die Zahl der Items, die ein Spieler bekommt. Dazwischen liegen zwei
+Faktoren:
+
+| Event | Objekte je Spawn | Ertrag je Objekt | Items je Spawn | Items gesamt |
+|---|---:|---:|---:|---:|
+| Kräuter | 1,00 | 1,25 | 1,25 | ~175 Bund |
+| Mais | 2,00 | 1,35 | 2,70 | ~162 Kolben |
+| Weizen | 1,00 | 1,00 | 1,00 | 40 Garben |
+
+Der Faktor 2,00 beim Mais ist der Begleiterwurf (siehe unten), die 1,25/1,35
+sind der Ausbeutewurf beim Ernten. **Genau deshalb steht beim Mais 60 und nicht
+140:** bei 120 wären es 240 Pflanzen und 324 Kolben, also das 2,31-fache eines
+Vanilla-Pilzevents. Wer den Begleiterwurf abschaltet, darf verdoppeln.
+
+Kräuter und Mais zusammen liegen damit etwa dort, wo Vanilla allein für Pilze
+und Obst steht (sieben Trajectory-Events zu je 140).
+
+### Warum Weizen mitkommt, obwohl er kein Wildwuchs ist
+
+`ChefZ_Wheat` hatte bis zum 31.08.2026 **keine Weltquelle** — kein Event, keine
+`types.xml`-Zeile, keinen Transform, der ihn erzeugt. Die komplette
+Getreidekette (Mühle → Mehl → Teig → Brot/Nudeln) war ohne Admin-Spawn tot, und
+Mais wäre die einzige Mehlstraße gewesen. Das kehrt die Rollen der Production
+Map um.
+
+Die Garbe **liegt** wie ein Pilz und wird aufgehoben; sie ist keine Wildpflanze
+und hat keine Ernteaktion (es gibt kein Weizenpflanzenmodell). Deshalb heißt das
+Kind `ChefZ_Wheat` und nicht `ChefZ_WildWheat`.
+
+Die Rollenverteilung, gerechnet:
+
+| Quelle | Rechnung | Mehl | Brote |
+|---|---|---:|---:|
+| Weizen | 40 × 1000 g × 0,78 | 31.200 g | **125** |
+| Mais | 162 × 120 g | 19.440 g | **78** |
+
+(250 g Mehl je Teig.) Eine Garbe sind gut drei Brote — wer am `nominal` dreht,
+dreht direkt an der Brotmenge des Servers.
 
 ### Warum die Maisgruppe nicht hier steht
 
@@ -125,8 +164,55 @@ im Mittel beim **Doppelten** des `nominal` (1 + durchschnittlich 1 Begleiter).
 
 ### `ChefZ_types.xml`
 
-Vier Einträge nach Pilzmuster: `nominal=0`, `lifetime=900`, `crafted="1"`,
+Fünf Einträge nach Pilzmuster: `nominal=0`, `lifetime=900`, `crafted="1"`,
 Kategorie `food`, keine `usage`, keine `tag`, kein `value`.
+
+Die vier Wildpflanzen zählen nur `count_in_map` — sie können in kein Inventar
+(`IsTakeable()` → `false`). `ChefZ_Wheat` zählt **überall** (`count_in_cargo`,
+`count_in_hoarder`, `count_in_player`): eine Garbe kann man aufheben, und ohne
+diese Zählung könnte ein Spieler beliebig viele horten, während der Nachschub
+unbegrenzt weiterliefe.
+
+### `ChefZ_WildCorn` hat `lifetime 300`, alle anderen 900
+
+Das ist kein Tippfehler (Conflict-Scout **F2**, 31.08.2026).
+
+**Ein Begleiter gehört keinem Event.** Die Event-`lifetime` (180 s) räumt nur
+die Instanzen ab, die das Event selbst gesetzt hat. Für alles, was ein Skript
+per `CreateObjectEx` in die Welt legt — und die Maisbegleiter sind genau das —
+gilt allein die `types.xml`-`lifetime`. Bei 900 s stünden Begleiter fünfmal so
+lange wie ihre Mutterpflanze.
+
+Gleichgewichtsschätzung:
+
+```
+Bestand ≈ nominal × (1 + companionMean × typesLifetime / eventTurnover)
+
+lifetime 900  →  60 + 60 × (900/180)  =  ~360 … 720 Pflanzen
+lifetime 300  →  60 + 60 × (300/180)  =  ~160 … 220 Pflanzen   ← Zielband
+```
+
+Mit 900 hätten die Begleiter die `nominal`-Senkung von 120 auf 60 (B-1)
+vollständig aufgefressen. Kräuter und Weizen behalten 900: die Kräuter haben
+keine Begleiter, jede Instanz gehört einem Event; Weizen soll liegen bleiben
+dürfen.
+
+### Gate: Objektzählung
+
+**Die Formel oben ist gerechnet, nicht gemessen.** Sie unterstellt, dass die
+Event-`lifetime` den Durchsatz der Mutterpflanzen bestimmt — plausibel, aber
+nicht belegt.
+
+Messauftrag fürs Gate:
+
+1. Server mit dem eingebauten Fragment 30 Minuten mit Spielerbewegung laufen
+   lassen.
+2. Objekte zählen (COT-Objektliste oder `log_ce_dynamicevent`), getrennt nach
+   `ChefZ_WildCorn` und den drei Kräutern.
+3. Erwartung: Mais **160–220**, Kräuter zusammen **~140**.
+4. Liegt Mais deutlich darüber oder darunter, wird **`nominal` in
+   `ChefZTrajectoryCorn`** nachjustiert — nicht die `lifetime`. Die `lifetime`
+   trägt die Begleiterlogik, das `nominal` trägt die Menge.
 
 `nominal=0` ist wichtig und kein Versehen: die Zeile ist ein **Limit-Container**.
 Sie sagt, wie lange eine Pflanze liegen bleibt und wie sie gezählt wird — nicht,
@@ -141,9 +227,11 @@ bekommt Maispflanzen im Loot von Gebäuden.
 |---|---|
 | Mehr / weniger Pflanzen | `nominal` im jeweiligen Event |
 | Pflanzen bleiben länger stehen | `lifetime` im **Event** (180 s bis zum Cleanup) und `lifetime` im **types** (900 s) |
+| Maisdichte feinjustieren | `lifetime` von `ChefZ_WildCorn` in `ChefZ_types.xml` (300 s) — sie steuert **nur die Begleiter**, siehe F2 oben |
 | Näher / weiter vom Spieler | `saferadius` / `distanceradius` |
 | Nur Kräuter, kein Mais | `<active>0</active>` in `ChefZTrajectoryCorn` |
 | Eine Pflanze ganz abschalten | Ihr `<child>`-Element aus dem Event entfernen |
+| Mehr / weniger Brot | `nominal` in `ChefZTrajectoryWheat` — eine Garbe ≈ 3 Brote |
 
 Die Ausbeute je Pflanze steht **nicht** hier — sie steht im Mod
 (`Config/Processing/README_WildPlants.md`).

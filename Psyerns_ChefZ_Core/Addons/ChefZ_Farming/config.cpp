@@ -1536,7 +1536,45 @@ class CfgVehicles
     // Die Maispflanze im Beet (Lieferung c09900f). Vanillas Anbau uebernimmt
     // alles: GardenBase erzeugt sie als Attachment aus dem PlantType des
     // gepflanzten Kolbens (GardenBase.c:484), PlantBase laesst sie wachsen.
-    // 7 Stufen und 2 Kolben Ertrag sind die Werte der Lieferung.
+    // 7 Wachstumsstufen sind der Wert der Lieferung und bleiben.
+    //
+    // ------------------------------------------------------------------------
+    // CropsCount 2 -> 4 (B-6, Balance-Review 31.08.2026)
+    // ------------------------------------------------------------------------
+    // DER BEFUND: Seit es Wildmais gibt, war das Beet vollstaendig entwertet.
+    // Eine Wildpflanze gibt im Mittel 1,35 Kolben und kostet nichts als fuenf
+    // Sekunden; eine Beetpflanze gab 2 Kolben, verbrauchte davon aber einen
+    // als Saatgut - NETTO also 1 Kolben, nach Pflanzen, Giessen und Warten.
+    // Ein Wildfund entsprach damit 1,35 Beetpflanzen netto, und wer je ein
+    // Beet anlegte, tat es aus Nostalgie.
+    //
+    // MIT 4: netto +3 Kolben je Pflanze, ein 9er-Beet traegt +27. Das Beet ist
+    // damit die SKALIERBARE Quelle (Arbeit rein, Menge raus), der Wildwuchs
+    // die SOFORTQUELLE (nichts rein, wenig raus). Beide haben wieder einen
+    // Platz.
+    //
+    // 4 liegt in Vanillas eigenem Band: Plant_Potato, Plant_Tomato und
+    // Plant_Pepper fuehren CropsCount 3 bis 5. Die Zahl ist damit keine
+    // Ausnahme, sondern die Mitte.
+    //
+    // ------------------------------------------------------------------------
+    // BEWUSSTE ABWEICHUNG VON DER ANTI-RECYCLING-REGEL (Production Map §22)
+    // ------------------------------------------------------------------------
+    // Der Kolben ist sein EIGENES Saatgut (class Horticulture an ChefZ_Corn -
+    // GardenBase liest "Horticulture PlantType" aus der Config des gepflanzten
+    // Items, GardenBase.c:386). Es gibt also keinen externen Eingang: ein
+    // Kolben hinein, vier heraus. Das Beet ist ein VERVIERFACHER ohne Kosten
+    // ausser Zeit und Wasser - vorher war es ein Verdoppler.
+    //
+    // Das ist eine Schleife, und §22 verbietet Schleifen. Sie steht trotzdem,
+    // weil Vanilla bei Kartoffel und Tomate exakt dieselbe Schleife faehrt und
+    // ChefZ-Mais sonst die einzige Pflanze im Spiel waere, die sich nicht
+    // vermehrt. Die Begrenzung ist die des Beets selbst: Plaetze, Wasser,
+    // Wachstumszeit und die Lebensdauer der Kolben.
+    //
+    // ENTSCHEIDUNG 31.08.2026, GATE-REVIEW VORBEHALTEN. Wer sie zurueckdreht,
+    // aendert genau diese eine Zahl - und muss dann erklaeren, wozu ein Beet
+    // noch da ist.
     //--------------------------------------------------------------------------
     class ChefZ_CornPlant : PlantBase
     {
@@ -1547,7 +1585,7 @@ class CfgVehicles
         class Horticulture
         {
             GrowthStagesCount = 7;
-            CropsCount = 2;
+            CropsCount = 4;
             CropsType = "ChefZ_Corn";
         };
     };

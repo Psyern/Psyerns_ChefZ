@@ -54,7 +54,7 @@ design questions — is kept internally and is not part of this repository.
 | | |
 |---|---|
 | **`ChefZ_Core`** | Implemented — 137 script files, zero content classes |
-| **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 48 recipes · 62 transforms · 11 stations |
+| **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 48 recipes · 62 transforms · 15 stations |
 | **Cookbook** | Implemented as knowledge state, RPC and an F9 key — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
 | **Validation** | 19 checkers · **exit code 0 · 0 errors · 2 warnings** |
@@ -197,8 +197,10 @@ single integrator merges it. See [Registry Delta Protocol](#registry-delta-proto
 
 ### Processing Stations
 
-Eleven stations, each declared as data — a station is a class plus a `station` record
-naming the processes it accepts.
+Fifteen stations, each declared as data — a station is a class plus a `station` record
+naming the processes it accepts. The eleven below are the ones somebody builds or keeps;
+the four wild-plant harvest points (since 31.08.2026) run no transform and are listed in
+[Processing-Stations](ChefZ_Wiki/Processing-Stations.md).
 
 | Station | Processes | Turns |
 |---|---|---|
@@ -784,7 +786,7 @@ the four gate checklists run in a live game.
 
 | Version | Contents | State |
 |---|---|---|
-| **V1 — Cooking Core** | Ingredients · 20 plate dishes · 5 stews · sauces · herbs · salt · pepper · paprika · sausage · dairy · baking · preservation · beekeeping · 11 stations | Written, not yet running |
+| **V1 — Cooking Core** | Ingredients · 20 plate dishes · 5 stews · sauces · herbs · salt · pepper · paprika · sausage · dairy · baking · preservation · beekeeping · 15 stations | Written, not yet running |
 | **V1.1 — Cookbook UI** | The knowledge layer exists (Milestone 5.1); the UI on top of it does not | Next |
 | **V2 — Preservation depth** | Mason jars · canning · pickling · curing · deeper shelf-life model · larder economy | Planned |
 | **V3 — Progression** | Rare recipes · recipe rarities · DME signature meals · quest and event recipes | Planned |

@@ -14,7 +14,10 @@
                    wie lange ein Stueck liegen bleibt und wie es gezaehlt wird.
                    Wer hier ein nominal setzt, bekommt Wildpflanzen zusaetzlich
                    im normalen Loot der Gebaeude.
-      lifetime 900 fuenfzehn Minuten. Dieselbe Zahl wie am Pilz.
+      lifetime 900 fuenfzehn Minuten. Dieselbe Zahl wie am Pilz - AUSSER bei
+                   ChefZ_WildCorn, der 300 traegt. Die Begruendung steht an
+                   der Zeile selbst (Conflict-Scout F2): Begleiter gehoeren
+                   keinem Event, fuer sie gilt allein diese lifetime.
       crafted="1"  nimmt das Stueck aus der Respawn-Buchhaltung des normalen
                    Loots heraus.
       count_in_map="1", alles andere 0 - gezaehlt wird nur, was in der Welt
@@ -23,11 +26,55 @@
 
     KEINE usage, KEINE tag, KEINE value: die Pflanzen kommen ueber das Event,
     nicht ueber die Loot-Verteilung der Gebaeude.
+
+    FUENF ZEILEN, nicht vier: ChefZ_Wheat steht mit dabei (B-7,
+    Balance-Review 31.08.2026). Die Garbe hatte bis dahin keine Weltquelle,
+    und ohne types-Zeile fiele das Event ChefZTrajectoryWheat ins Leere - die
+    CE spawnt nichts, wofuer sie keinen Typ kennt. Die Begruendung samt
+    Rechnung steht am Event in ChefZ_events.xml.
+
+    quantmin/quantmax bleiben ueberall -1: der Klassendefault gilt. Bei den
+    vier Pflanzen ist das belanglos (sie tragen keine Menge), bei ChefZ_Wheat
+    sind es die vollen 1000 g varQuantityInit aus der config.cpp - eine ganze
+    Garbe. Wer halbe Garben will, setzt hier quantmin/quantmax in Prozent.
 -->
 <types>
+    <!--
+        MAIS - lifetime 300 und NICHT 900 wie die uebrigen vier
+        (Conflict-Scout F2, 31.08.2026).
+
+        DER BEFUND: Ein Begleiter gehoert KEINEM Event. Die Event-lifetime
+        (180 s in ChefZ_events.xml) raeumt nur die Instanzen ab, die das Event
+        selbst gesetzt hat; fuer alles, was ein Skript per CreateObjectEx in
+        die Welt legt, gilt allein DIESE Zeile hier. Bei 900 s stehen
+        Begleiter also fuenfmal so lange wie ihre Mutterpflanze.
+
+        DIE RECHNUNG (Gleichgewicht, nicht Momentaufnahme):
+
+            Bestand ~ nominal x (1 + companionMean x typesLifetime / eventTurnover)
+
+            lifetime 900 ->  60 + 60 x (900/180)  =  ~360 ... 720 Pflanzen
+            lifetime 300 ->  60 + 60 x (300/180)  =  ~160 ... 220 Pflanzen
+
+        Das untere Band ist das Ziel (siehe B-1: rund 120 Pflanzen sind
+        "wie Pilze"; 160-220 ist die vertretbare Obergrenze). Mit 900 haetten
+        die Begleiter den Effekt der nominal-Senkung von 120 auf 60 komplett
+        aufgefressen.
+
+        WARUM NUR HIER: Die drei Kraeuter haben keine Begleiter - jede ihrer
+        Instanzen gehoert einem Event und wird von dessen lifetime geraeumt.
+        ChefZ_Wheat ist aufhebbar und soll liegen bleiben duerfen. Beide
+        behalten 900.
+
+        NOCH NICHT GEMESSEN. Die Formel oben unterstellt, dass die
+        Event-lifetime den Durchsatz der Mutterpflanzen bestimmt. Das ist
+        plausibel, aber nicht belegt - der Gate-Messauftrag steht in
+        README_ServerConfig.md unter "Gate: Objektzaehlung". Kommt eine andere
+        Zahl heraus, wird das nominal nachjustiert, nicht diese Zeile.
+    -->
     <type name="ChefZ_WildCorn">
         <nominal>0</nominal>
-        <lifetime>900</lifetime>
+        <lifetime>300</lifetime>
         <restock>0</restock>
         <min>0</min>
         <quantmin>-1</quantmin>
@@ -67,6 +114,29 @@
         <quantmax>-1</quantmax>
         <cost>100</cost>
         <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+    <!--
+        Die Weizengarbe (B-7). ANDERE FLAGS als die vier Pflanzen, und das ist
+        Absicht: eine Garbe kann man aufheben, also zaehlt sie auch im
+        Rucksack und im Lager. Wuerde sie das nicht, koennte ein Spieler
+        beliebig viele horten, ohne dass die CE es merkt, und der Nachschub
+        liefe unbegrenzt weiter. Eine Wildpflanze hat dieses Problem nicht -
+        sie kann in kein Inventar (IsTakeable() -> false).
+
+        lifetime 900 wie die Pilze; die config.cpp fuehrt an ChefZ_Wheat
+        21600, das gilt fuer eine per Handwerk entstandene Garbe. Was die CE
+        in die Welt legt, soll nicht sechs Stunden liegen bleiben.
+    -->
+    <type name="ChefZ_Wheat">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="1" deloot="0" />
         <category name="food" />
     </type>
 </types>
