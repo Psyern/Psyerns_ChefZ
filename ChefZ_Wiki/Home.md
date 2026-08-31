@@ -5,7 +5,7 @@ A cooking and food-production overhaul for DayZ.
 ChefZ turns eating from a pickup into a production chain: grow and gather, process
 at a station, season, cook, preserve, serve. It adds farming, herbs, milling,
 butchery, sausage-making, dairy, drying, smoking, salting and beekeeping, and
-47 recipes that turn the results into actual meals.
+48 recipes that turn the results into actual meals.
 
 **It extends vanilla cooking. It never takes it over.** If no ChefZ recipe matches
 what is in the pot, DayZ cooks the way it always did. That rule runs both ways: a
@@ -37,6 +37,7 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 | Understand how it is built | [Architecture](Architecture) |
 | Add a dish or an ingredient | [Adding Content](Adding-Content) |
 | Look up a recipe | [Recipe Book](Recipe-Book) |
+| See every recipe as a card | [Recipe Cards](Recipe-Cards) |
 | Make a sausage | [From Meat to Sausage](From-Meat-to-Sausage) |
 | Look up what exists | [Recipe Reference](Recipe-Reference) |
 
@@ -49,7 +50,7 @@ vanilla cooking, so the build refuses to contain one. See [Architecture](Archite
 | Recipes | 48 |
 | Ingredient records | 113 — 59 ChefZ classes, 54 vanilla items mapped in |
 | Processing transforms | 62 |
-| Processing stations | 11 |
+| Processing stations | 15 |
 | Ingredient categories | 41 |
 | Food tags | 20 |
 | Script files | 171 in the mod, 22 in the comp mods |
