@@ -62,7 +62,7 @@ design questions — is kept internally and is not part of this repository.
 | **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Three deliveries in — 50 models, 70 textures, **56 of 129 classes** on their own geometry |
+| **3D assets** | Three deliveries in — 53 models, 84 textures, **76 of 129 classes** on their own geometry |
 
 ## Repository Layout
 
