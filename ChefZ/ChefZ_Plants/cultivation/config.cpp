@@ -92,7 +92,7 @@ class CfgVehicles
 		class Horticulture
 		{
 			GrowthStagesCount=6;
-			CropsCount=2;
+			CropsCount=4;
 			CropsType="ChefZ_Plant_Corn_Cob";
 		};
 	};

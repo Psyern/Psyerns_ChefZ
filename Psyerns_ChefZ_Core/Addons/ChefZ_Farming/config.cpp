@@ -103,7 +103,7 @@ class CfgPatches
         // Die Gegenrichtung waere ein Zyklus. Der Slice apiary fuehrt deshalb
         // seine drei Werkzeuggruppen selbst (CfgChefZTools weiter unten),
         // statt METALWORK_TOOL aus ChefZ_Processing zu benutzen.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices", "ChefZ_Plants"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices", "ChefZ_Plants", "ChefZ_Plants_Cultivation"};
     };
 };
 
@@ -1581,10 +1581,17 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CORNPLANT";
         descriptionShort = "#STR_CHEFZ_ITEM_CORNPLANT_DESC";
-        model = "\ChefZ\ChefZ_Plants\models\corn_plant.p3d";
+        model = "\ChefZ\ChefZ_Plants\cultivation\models\corn_plant.p3d";
         class Horticulture
         {
-            GrowthStagesCount = 7;
+            // 6 STUFEN, WEIL DAS MESH SECHS TRAEGT (Lieferung a78a247, 01.09.2026).
+            // PlantBase.c:485 waechst bis m_PlantStateIndex == GrowthStagesCount - 2
+            // und SetDry/SetSpoiled erhoeht danach genau einmal - die hoechste je
+            // gezeigte Selektion ist damit plantStage_(GrowthStagesCount - 1).
+            // cultivation/models/model.cfg definiert plantStage_01 bis _05, also
+            // ist 6 der Hoechstwert ohne Verweis auf eine fehlende Selektion.
+            // Die 7 hier stammte vom alten Mesh, das plantStage_06 noch hatte.
+            GrowthStagesCount = 6;
             CropsCount = 4;
             CropsType = "ChefZ_Corn";
         };
@@ -1686,7 +1693,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_WILDCORN";
         descriptionShort = "#STR_CHEFZ_ITEM_WILDCORN_DESC";
-        model = "\ChefZ\ChefZ_Plants\models\corn_plant.p3d";
+        model = "\ChefZ\ChefZ_Plants\cultivation\models\corn_plant.p3d";
         itemSize[] = {4, 4};
         weight = 900;
 
@@ -1773,8 +1780,14 @@ class CfgHorticulture
     {
         class ChefZ_CornPlant
         {
-            healthyTex = "ChefZ\ChefZ_Plants\data\corn_plant_co.paa";
-            healthyMat = "ChefZ\ChefZ_Plants\cultivation\data\corn_plant.rvmat";
+            // Schluesselnamen: PluginHorticulture.c:52-66 kennt genau diese vier.
+            // corn_plant.rvmat und das flache corn_plant_co.paa sind mit a78a247
+            // entfallen; die Lieferung setzt auf Vanillas Cannabis-Material und
+            // die Stufentextur 4 - identisch zu cultivation/config.cpp.
+            infestedTex = "dz\gear\cultivation\data\cannabis_plant_insect_co.paa";
+            infestedMat = "dz\gear\cultivation\data\cannabis_plant_insect.rvmat";
+            healthyTex = "ChefZ\ChefZ_Plants\cultivation\data\corn_plant_4_co.paa";
+            healthyMat = "dz\gear\cultivation\data\cannabis_plant.rvmat";
         };
     };
 };
