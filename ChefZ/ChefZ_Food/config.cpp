@@ -227,7 +227,15 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_Leg_Beef";
 		model="\ChefZ\ChefZ_Food\models\Leg_Beef.p3d";
 		descriptionShort="#STR_CHEFZ_Leg_Beef_DESC";
-		itemSize[]={2,1};
+		itemSize[]={1,3};
+		inventorySlot[]=
+		{
+			"ChefZ_DryRack_Hook_1",
+			"ChefZ_DryRack_Hook_2",
+			"ChefZ_DryRack_Hook_3",
+			"ChefZ_DryRack_Hook_4",
+			"ChefZ_DryRack_Hook_5"
+		};
 		class Nutrition
 		{
 			fullnessIndex=3;
@@ -259,7 +267,7 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_Leg_Venison";
 		model="\ChefZ\ChefZ_Food\models\Leg_Venison.p3d";
 		descriptionShort="#STR_CHEFZ_Leg_Venison_DESC";
-		itemSize[]={3,2};
+		itemSize[]={2,3};
 		class Nutrition
 		{
 			fullnessIndex=3;
@@ -459,6 +467,34 @@ class CfgVehicles
 			water=0;
 			nutritionalIndex=1;
 			toxicity=0;
+		};
+	};
+	class ChefZ_Food_Panfood_Base : ChefZ_Food_Base
+	{
+		scope=0;
+		displayName="#STR_CHEFZ_Meal";
+		model="\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+		descriptionShort="#STR_CHEFZ_Meal_DESC";
+		itemSize[]={3,2};
+		hiddenSelections[]=
+		{
+			"camo"
+		};
+		hiddenSelectionsTextures[]=
+		{
+			"ChefZ\ChefZ_Food\data\panfood_base_co.paa"
+		};
+		class Nutrition
+		{
+			fullnessIndex=3;
+			energy=100;
+			water=0;
+			nutritionalIndex=1;
+			toxicity=0;
+		};
+		inventorySlot[]=
+		{
+			"ChefZ_Meal"
 		};
 	};
 };

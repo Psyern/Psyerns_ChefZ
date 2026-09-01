@@ -61,3 +61,11 @@ class ChefZ_Device_Smoker_Kit : ChefZ_Base_Kit
 		return "ChefZ_Device_Smoker";
 	}
 };
+
+class ChefZ_Device_DryRack_Kit : ChefZ_Base_Kit
+{
+	string GetDeployedClassname()
+	{
+		return "ChefZ_Device_DryRack";
+	}
+};

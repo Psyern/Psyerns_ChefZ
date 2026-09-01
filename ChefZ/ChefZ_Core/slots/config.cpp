@@ -113,4 +113,34 @@ class CfgSlots
 		name="ChefZ_Honeycomb_Frame20";
 		displayName="#STR_CHEFZ_HONEYCOMB_FRAME";
 	};
+	class Slot_ChefZ_DryRack_Hook_1
+	{
+		name="ChefZ_DryRack_Hook_1";
+		displayName="#STR_CHEFZ_DryRack_Hook";
+	};
+	class Slot_ChefZ_DryRack_Hook_2
+	{
+		name="ChefZ_DryRack_Hook_2";
+		displayName="#STR_CHEFZ_DryRack_Hook";
+	};
+	class Slot_ChefZ_DryRack_Hook_3
+	{
+		name="ChefZ_DryRack_Hook_3";
+		displayName="#STR_CHEFZ_DryRack_Hook";
+	};
+	class Slot_ChefZ_DryRack_Hook_4
+	{
+		name="ChefZ_DryRack_Hook_4";
+		displayName="#STR_CHEFZ_DryRack_Hook";
+	};
+	class Slot_ChefZ_DryRack_Hook_5
+	{
+		name="ChefZ_DryRack_Hook_5";
+		displayName="#STR_CHEFZ_DryRack_Hook";
+	};
+	class Slot_ChefZ_Meal
+	{
+		name="ChefZ_Meal";
+		displayName="#STR_CHEFZ_Meal";
+	};
 };

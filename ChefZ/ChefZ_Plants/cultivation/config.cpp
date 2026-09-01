@@ -47,8 +47,10 @@ class CfgHorticulture
 	{
 		class ChefZ_Plant_Corn
 		{
-			healthyTex="ChefZ\ChefZ_Plants\data\corn_plant_co.paa";
-			healthyMat="ChefZ\ChefZ_Plants\cultivation\data\corn_plant.rvmat";
+			infestedTex="dz\gear\cultivation\data\cannabis_plant_insect_co.paa";
+			infestedMat="dz\gear\cultivation\data\cannabis_plant_insect.rvmat";
+			healthyTex="ChefZ\ChefZ_Plants\cultivation\data\corn_plant_4_co.paa";
+			healthyMat="dz\gear\cultivation\data\cannabis_plant.rvmat";
 		};
 	};
 };
@@ -86,10 +88,10 @@ class CfgVehicles
 		scope=2;
 		displayName="$STR_CHEFZ_Corn";
 		descriptionShort="$STR_CHEFZ_Corn_DESC";
-		model="\ChefZ\ChefZ_Plants\models\corn_plant.p3d";
+		model="\ChefZ\ChefZ_Plants\cultivation\models\corn_plant.p3d";
 		class Horticulture
 		{
-			GrowthStagesCount=7;
+			GrowthStagesCount=6;
 			CropsCount=2;
 			CropsType="ChefZ_Plant_Corn_Cob";
 		};

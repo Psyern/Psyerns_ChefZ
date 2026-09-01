@@ -194,4 +194,70 @@ class CfgVehicles
 		weight=25000;
 		itemSize[]={10,10};
 	};
+	class ChefZ_Device_DryRack_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_DryRack - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_DryRack : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_DryRack";
+		model="\ChefZ\ChefZ_Devices\models\DryRack.p3d";
+		descriptionShort="#STR_CHEFZ_DryRack_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+		attachments[]=
+		{
+			"ChefZ_DryRack_Hook_1",
+			"ChefZ_DryRack_Hook_2",
+			"ChefZ_DryRack_Hook_3",
+			"ChefZ_DryRack_Hook_4",
+			"ChefZ_DryRack_Hook_5"
+		};
+	};
+};
+class CfgNonAIVehicles
+{
+	class ProxyAttachment;
+	class Proxyhook_1: ProxyAttachment
+	{
+		model="ChefZ\ChefZ_Devices\models\proxies\hook_1.p3d";
+		inventorySlot[]=
+		{
+			"ChefZ_DryRack_Hook_1"
+		};
+	};
+	class Proxyhook_2: ProxyAttachment
+	{
+		model="ChefZ\ChefZ_Devices\models\proxies\hook_2.p3d";
+		inventorySlot[]=
+		{
+			"ChefZ_DryRack_Hook_2"
+		};
+	};
+	class Proxyhook_3: ProxyAttachment
+	{
+		model="ChefZ\ChefZ_Devices\models\proxies\hook_3.p3d";
+		inventorySlot[]=
+		{
+			"ChefZ_DryRack_Hook_3"
+		};
+	};
+	class Proxyhook_4: ProxyAttachment
+	{
+		model="ChefZ\ChefZ_Devices\models\proxies\hook_4.p3d";
+		inventorySlot[]=
+		{
+			"ChefZ_DryRack_Hook_4"
+		};
+	};
+	class Proxyhook_5: ProxyAttachment
+	{
+		model="ChefZ\ChefZ_Devices\models\proxies\hook_5.p3d";
+		inventorySlot[]=
+		{
+			"ChefZ_DryRack_Hook_5"
+		};
+	};
 };

@@ -8,7 +8,8 @@ class CfgPatches
 		requiredAddons[]=
 		{
 			"ChefZ_Core",
-			"ChefZ_Core_Slots"
+			"ChefZ_Core_Slots",
+			"DZ_Gear_Cooking"
 		};
 	};
 };
@@ -131,5 +132,27 @@ class CfgVehicles
 		model="\ChefZ\ChefZ_Items\models\Box_Open.p3d";
 		descriptionShort="#STR_CHEFZ_Box_Open_DESC";
 		itemSize[]={2,2};
+	};
+	class Inventory_Base;
+	class FryingPan : Inventory_Base
+	{
+		scope=2;
+		model="\ChefZ\ChefZ_Items\models\fryingpan.p3d";
+		attachments[]+=
+		{
+			"ChefZ_Meal"
+		};
+	};
+};
+class CfgNonAIVehicles
+{
+	class ProxyAttachment;
+	class Proxymeal: ProxyAttachment
+	{
+		model="ChefZ\ChefZ_Food\models\proxies\meal.p3d";
+		inventorySlot[]=
+		{
+			"ChefZ_Meal"
+		};
 	};
 };

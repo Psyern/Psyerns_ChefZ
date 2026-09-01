@@ -11,6 +11,7 @@ modded class PluginRecipesManager
         RegisterRecipe(new Pack_MeatGrinder);
         RegisterRecipe(new Pack_Mortar);
         RegisterRecipe(new Pack_Smoker);
+        RegisterRecipe(new Pack_DryRack);
     }
 }
 
