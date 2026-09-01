@@ -62,7 +62,7 @@ design questions — is kept internally and is not part of this repository.
 | **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Two deliveries in — 50 models, 52 textures, **56 of 129 classes** on their own geometry |
+| **3D assets** | Three deliveries in — 50 models, 70 textures, **56 of 129 classes** on their own geometry |
 
 ## Repository Layout
 
@@ -112,12 +112,12 @@ Psyerns_ChefZ/                              ← repository root (this README)
 compatibility mods are optional consumers; ChefZ runs unchanged without any of them.
 
 **About `ChefZ/`.** The asset delivery as it was handed over, kept in the repository
-unchanged on purpose. It has grown to **129 files** — 50 models, 52 textures and 17
-scripts across `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items` and
-`ChefZ_Plants`. Only part of it is in use: the beekeeping and item models were copied
-into `ChefZ_Devices`, `ChefZ_Items`, `ChefZ_Food` and `ChefZ_Plants` under `Addons/`
-and are bound to their classes since 30.08. This folder is the original, not a second copy
-in use. It is **not part of the build** — `pack.mjs` collects
+unchanged on purpose. It has grown to **146 files** — 59 models (six of them proxy
+stubs), 59 textures and 18 scripts across `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`,
+`ChefZ_Items` and `ChefZ_Plants`. Only part of it is in use: the beekeeping and item
+models were copied into `ChefZ_Devices`, `ChefZ_Items`, `ChefZ_Food` and `ChefZ_Plants`
+under `Addons/` and are bound to their classes since 30.08. This folder is the original,
+not a second copy in use. It is **not part of the build** — `pack.mjs` collects
 `Psyerns_ChefZ_Core/Addons/*` and root folders matching `Psyerns_ChefZ_*_Comp`, and
 `ChefZ/` is neither — and the validator never reads it. Worth knowing: three of its five
 `CfgPatches` names — `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Items` — are also the names

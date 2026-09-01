@@ -37,7 +37,8 @@ neither produces an error message.
 
 ## Four asset addons — packer rule fixed, verified 31.08.2026
 
-Two deliveries landed on 29. and 30.08.2026, together **50 `.p3d` and 52 `.paa` files**
+Two deliveries landed on 29. and 30.08.2026 and a third on 01.09.2026 (18 dish
+textures for `ChefZ_Food`), together **50 `.p3d` and 70 `.paa` files**
 in four addons: `ChefZ_Devices` (hive and the stations), `ChefZ_Items` (tools and
 containers), `ChefZ_Plants` (crops and herbs) and `ChefZ_Food` (prepared food).
 **56 of the 129 spawnable classes** now stand on their own geometry instead of a
@@ -71,9 +72,11 @@ must never be packed (see next section); the repair is one full `pack.mjs` run.
 
 `ChefZ/` was removed on 29.08.2026 and restored the same evening ("exactly as
 uploaded"). It is the asset delivery in its original shape, and it keeps growing: a
-second batch on 30.08. brought the plant models. It now holds **129 files** — 50
-models, 52 textures, 17 scripts — in five folders: `ChefZ_Core`, `ChefZ_Devices`,
-`ChefZ_Food`, `ChefZ_Items`, `ChefZ_Plants`.
+second batch on 30.08. brought the plant models, a third on 01.09. the frying pan,
+the pan-food base, the drying rack with its five hook proxies and the corn plant. It
+now holds **146 files** — 59 models (six of them proxy stubs), 59 textures, 18 scripts
+— in five folders: `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items`,
+`ChefZ_Plants`.
 
 Nothing consumes it directly. Eight of its models were copied into `ChefZ_Devices` and
 `ChefZ_Items` under `Addons/`, and those copies are what the content addons point at.
