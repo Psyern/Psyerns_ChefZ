@@ -252,6 +252,26 @@ class CfgChefZStates
     slice: 'schlecht_b',
     categories: [{ id: 'KAT_STREIT', parent: null, displayName: '#STR_B' }],
   }, null, 2),
+
+  // Ein Asset-Paket, dessen Modell einen Proxy nennt, den niemand liefert -
+  // loest proxies aus. Der Pruefer liest den Binaerstrom nach Klartext ab,
+  // deshalb genuegt hier eine Textdatei mit der Endung .p3d: das ist die
+  // Zeile, die in einer echten MLOD-Datei genauso dasteht.
+  'Psyerns_ChefZ_Core/Addons/ChefZ_SchlechtAssets/$PREFIX$': 'ChefZ\\ChefZ_SchlechtAssets',
+  'Psyerns_ChefZ_Core/Addons/ChefZ_SchlechtAssets/config.cpp': `
+class CfgPatches
+{
+    class ChefZ_SchlechtAssets
+    {
+        units[] = {};
+        weapons[] = {};
+        requiredVersion = 0.1;
+        requiredAddons[] = {"DZ_Data"};
+    };
+};
+`,
+  'Psyerns_ChefZ_Core/Addons/ChefZ_SchlechtAssets/models/gestell.p3d':
+    'MLOD proxy:\\ChefZ\\ChefZ_SchlechtAssets\\models\\proxies\\haken_1.001',
 };
 
 // --- Was zuenden MUSS -------------------------------------------------------
@@ -285,6 +305,7 @@ const EXPECT = [
   ['schema', /hat keine Kennung/, 'Rezept ohne id - und Erkennung am Dokumenttyp, nicht am Pfad'],
   ['deltas', /ID-Kollision in "categories"/, 'zwei Slices definieren dieselbe Kategorie unterschiedlich'],
   ['deltas', /Haltbarkeitsregel "NIE_DEKLARIERT"/, 'Preservation zeigt auf einen undeklarierten Zustand'],
+  ['proxies', /haken_1/, 'Modell nennt einen Proxy, den niemand liefert'],
 ];
 
 // --- Ablauf -----------------------------------------------------------------

@@ -38,7 +38,7 @@ export const CHECKS = [
   'schema', 'configcpp', 'classrefs', 'naming', 'stringtable', 'deltas',
   'chefzsym', 'chefzcore', 'chefznut', 'chefzstage', 'chefzproc', 'chefzlog',
   'chefzvanilla', 'chefzcookable', 'enforce', 'chefzbase', 'chefzmanaged', 'chefzswitch', 'chefzaction',
-  'tracelines',
+  'tracelines', 'proxies',
 ];
 
 export const REGISTRY_ADDON = 'ChefZ_Registry';

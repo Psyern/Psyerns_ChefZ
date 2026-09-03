@@ -37,13 +37,17 @@ neither produces an error message.
 
 ## Four asset addons — packer rule fixed, verified 31.08.2026
 
-Two deliveries landed on 29. and 30.08.2026 and a third on 01.09.2026 (18 dish
-textures for `ChefZ_Food`), together **50 `.p3d` and 70 `.paa` files**
+Two deliveries landed on 29. and 30.08.2026 and a third on 01.09.2026; the meshes
+of that third one reached the addons on 02.09., when `sync-assets.mjs` copied 43
+files out of the delivery folder. Together **53 `.p3d` and 102 `.paa` files**
 in four addons: `ChefZ_Devices` (hive and the stations), `ChefZ_Items` (tools and
 containers), `ChefZ_Plants` (crops and herbs) and `ChefZ_Food` (prepared food).
-**56 of the 129 spawnable classes** now stand on their own geometry instead of a
-vanilla proxy; 45 of them were rebound in the second delivery alone. All four
-addons are assets only — no class, no script, no record.
+**76 of the 129 spawnable classes** now stand on their own geometry instead of a
+vanilla proxy; 45 of them were rebound in the second delivery alone. The 102
+textures are 84 distinct images: the eighteen dishes sit in `ChefZ_Food` twice,
+once as `ChefZ_<Dish>_co.paa` from 01.09. and once under the lowercase name the
+configs actually use. All four addons are assets only — no class, no script, no
+record.
 
 All four carry two-level prefixes of the form `ChefZ\<name>`, inherited from the
 delivery layout they came from. That prefix is **not a mistake**: the model paths
@@ -73,15 +77,20 @@ must never be packed (see next section); the repair is one full `pack.mjs` run.
 `ChefZ/` was removed on 29.08.2026 and restored the same evening ("exactly as
 uploaded"). It is the asset delivery in its original shape, and it keeps growing: a
 second batch on 30.08. brought the plant models, a third on 01.09. the frying pan,
-the pan-food base, the drying rack with its five hook proxies and the corn plant. It
-now holds **146 files** — 59 models (six of them proxy stubs), 59 textures, 18 scripts
+the pan-food base, the drying rack with its five hook proxies and the corn plant, and
+on 02.09. the eighteen dish textures that had until then existed only in the addons. It
+now holds **164 files** — 59 models (six of them proxy stubs), 77 textures, 18 scripts
 — in five folders: `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items`,
 `ChefZ_Plants`.
 
-Nothing consumes it directly. Eight of its models were copied into `ChefZ_Devices` and
-`ChefZ_Items` under `Addons/`, and those copies are what the content addons point at.
-The rest — including every plant model from the 30.08. batch — is delivered but not
-bound to any class yet. The folder is the record of what arrived, not a second source.
+Nothing consumes it directly. `sync-assets.mjs` copies out of it into `Addons/`, and
+those copies are what the content addons point at; since 03.09. all **59** of its
+meshes stand in the four asset addons, name for name — the six proxy stubs included.
+Until that day they were not: the script copied only the top level of `models/` and
+skipped every directory, so `models/proxies/` stayed behind. The models that name
+those proxies were shipped without them, and the packer stopped with *Invalid P3D
+proxy path(s) found in ChefZ_Devices: 5*. The folder is the record of what arrived,
+not a second source.
 
 **It must not be packed as it stands.** Three of its five `CfgPatches` names —
 `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Items` — are also the names of real addons under

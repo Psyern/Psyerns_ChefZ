@@ -507,5 +507,5 @@ See [Terje Compatibility](Terje-Compatibility) and
 - [Recipes](Recipes) and [Recipe Reference](Recipe-Reference) — the recipe format
 - [Food States](Food-States), [Quality and Nutrition](Quality-and-Nutrition),
   [Portions and Containers](Portions-and-Containers)
-- [Validation](Validation) — the nineteen static checkers
+- [Validation](Validation) — the twenty-one static checkers
 - [Known Limitations](Known-Limitations) — what has not been verified

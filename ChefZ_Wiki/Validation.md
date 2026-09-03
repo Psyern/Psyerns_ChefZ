@@ -1,6 +1,6 @@
 # Validation
 
-ChefZ ships a static validator: **twenty checkers**, no dependencies, Node 18
+ChefZ ships a static validator: **twenty-one checkers**, no dependencies, Node 18
 or newer. It reads the project on disk and reports what is wrong before a server
 ever sees it.
 
@@ -117,7 +117,7 @@ a validator that is red in the normal state gets ignored after two weeks.
 
 Each item carries `severity`, `summary`, and where applicable `file` and `line`.
 
-## 4. The twenty checkers
+## 4. The twenty-one checkers
 
 ### Form of the files
 
@@ -165,6 +165,7 @@ build-and-start cycle before it existed.
 | `chefzswitch.mjs` | A `case` label must be a literal. `static const int FLAG = 1 << 3;` compiles and then matches nothing at runtime — silently. |
 | `chefzaction.mjs` | An action class must be registered in `ActionConstructor.RegisterActions()`. That list is maintained by hand; `ConstructActions()` instantiates only what stands in it, so an unregistered action compiles cleanly, appears in no log, and never exists in the game. Found on 28.08.2026: `ChefZ_ActionTakePortion` and `ChefZ_ActionProcessAtStation` had been missing since they were written. |
 | `tracelines.mjs` | `ChefZ_SelfTestTrace.Fail("Modul", N, ...)` carries its own line number as a literal — the only place a failed self-test group names its location in the RPT. If an edit moves the lines and the literals are not dragged along, every diagnosis from there on lies. On 31.08.2026 a Core edit moved 82 of 836 literals; they were repaired with a throwaway script, and this checker is what was missing from the net. |
+| `proxies.mjs` | A delivered MLOD model carries its proxy targets as plain text in the binary stream — `proxy:\ChefZ\ChefZ_Devices\models\proxies\hook_1.001`. A proxy target is an ordinary `.p3d` and has to travel into the PBO with the model. On 03.09.2026 it did not: `sync-assets.mjs` copied only the top level of `models/` and left `models/proxies/` behind, so the packer aborted with *Invalid P3D proxy path(s) found in ChefZ_Devices: 5*. Five hooks of the drying rack and the plate proxy of the frying pan were missing. This checker resolves every proxy path against the `$PREFIX$` files of all addons — across package boundaries, because that is how DayZ resolves them at runtime. |
 
 `chefzcookable` exists because of a blocker that walked past every other
 checker: `ChefZ_Edible_Base` did not override `CanBeCooked()`, vanilla's default
@@ -256,19 +257,19 @@ zuendet  schema      Rezept ohne id - und Erkennung am Dokumenttyp, nicht am Pfa
 zuendet  deltas      zwei Slices definieren dieselbe Kategorie unterschiedlich
 zuendet  deltas      Preservation zeigt auf einen undeklarierten Zustand
 ────────────────────────────────────────────────────────────────────────
-Wegwerf-Modul: Exit-Code 1 (erwartet 1), 33 Fehler, 7 Warnungen.
+Wegwerf-Modul: Exit-Code 1 (erwartet 1), 34 Fehler, 9 Warnungen.
 
-Abdeckung: 19 von 20 Pruefern werden vom Wegwerf-Modul ausgeloest.
+Abdeckung: 20 von 21 Pruefern werden vom Wegwerf-Modul ausgeloest.
 Nicht ausgeloest: chefzaction
 
-ERGEBNIS: BESTANDEN - jede der 18 abgedeckten Pruefergruppen hat gezuendet.
+ERGEBNIS: BESTANDEN - jede der 20 abgedeckten Pruefergruppen hat gezuendet.
 ────────────────────────────────────────────────────────────────────────
 ```
 
 A `BLIND` line means the rule did not fire on a case that was built to trigger
 it. Treat it as a broken checker, not as a passing project.
 
-> **Coverage gap.** The throwaway module triggers **19 of the 20 checkers**. The
+> **Coverage gap.** The throwaway module triggers **20 of the 21 checkers**. The
 > one it does not reach is **`chefzaction`** — it needs an action class that no
 > `RegisterActions()` mentions, and the throwaway module does not build one. Until
 > it does, `chefzaction` could stop finding things without anything here saying so.

@@ -112,11 +112,12 @@ Psyerns_ChefZ/                              ← repository root (this README)
 compatibility mods are optional consumers; ChefZ runs unchanged without any of them.
 
 **About `ChefZ/`.** The asset delivery as it was handed over, kept in the repository
-unchanged on purpose. It has grown to **146 files** — 59 models (six of them proxy
-stubs), 59 textures and 18 scripts across `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`,
+unchanged on purpose. It has grown to **164 files** — 59 models (six of them proxy
+stubs), 77 textures and 18 scripts across `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`,
 `ChefZ_Items` and `ChefZ_Plants`. Only part of it is in use: the beekeeping and item
 models were copied into `ChefZ_Devices`, `ChefZ_Items`, `ChefZ_Food` and `ChefZ_Plants`
-under `Addons/` and are bound to their classes since 30.08. This folder is the original,
+under `Addons/` and are bound to their classes since 30.08.; since the `sync-assets.mjs`
+run of 03.09. all 59 of its meshes stand there, the six proxy stubs included. This folder is the original,
 not a second copy in use. It is **not part of the build** — `pack.mjs` collects
 `Psyerns_ChefZ_Core/Addons/*` and root folders matching `Psyerns_ChefZ_*_Comp`, and
 `ChefZ/` is neither — and the validator never reads it. Worth knowing: three of its five
@@ -593,8 +594,9 @@ node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 | `chefzswitch.mjs` | A `case` label must be a literal — a `static const` label compiles and then matches nothing |
 | `chefzaction.mjs` | An action class nobody registers in `RegisterActions()` compiles, logs nothing, and never appears in the game |
 | `tracelines.mjs` | The line number inside `ChefZ_SelfTestTrace.Fail("...", N, ...)` must be the line it stands on — otherwise every failed self-test points the reader at the wrong place |
+| `proxies.mjs` | Every `proxy:` path written into a delivered `.p3d` must resolve to a file inside one of the addons — a missing proxy target aborts the pack, and where it does not, nothing hangs on the drying rack |
 
-`index.mjs` runs all nineteen, writes a JSON report and sets the exit code.
+`index.mjs` runs all twenty-one, writes a JSON report and sets the exit code.
 
 ### The checkers are themselves checked
 
