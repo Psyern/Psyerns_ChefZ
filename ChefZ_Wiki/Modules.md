@@ -405,9 +405,9 @@ Together **53 models and 102 texture files — 84 distinct images**, since the e
 dishes of 01.09.2026 sit in `ChefZ_Food` under two names. Six further `.p3d` stand
 beside them in `models/proxies/` — the five hooks of the drying rack and the plate of
 the frying pan. They carry no geometry of their own; they are the places at which
-another model is hung, and they were missing from the addons until 03.09.2026. **76 of the mod's 129
+another model is hung, and they were missing from the addons until 03.09.2026. **76 of the mod's 130
 spawnable classes** now stand on their own geometry rather than a vanilla proxy — 45 of
-them rebound in the second delivery alone. The remaining 53 still point at a vanilla mesh; the standing
+them rebound in the second delivery alone. The remaining 54 still point at a vanilla mesh; the standing
 backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing

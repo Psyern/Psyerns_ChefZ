@@ -42,7 +42,7 @@ of that third one reached the addons on 02.09., when `sync-assets.mjs` copied 43
 files out of the delivery folder. Together **53 `.p3d` and 102 `.paa` files**
 in four addons: `ChefZ_Devices` (hive and the stations), `ChefZ_Items` (tools and
 containers), `ChefZ_Plants` (crops and herbs) and `ChefZ_Food` (prepared food).
-**76 of the 129 spawnable classes** now stand on their own geometry instead of a
+**76 of the 130 spawnable classes** now stand on their own geometry instead of a
 vanilla proxy; 45 of them were rebound in the second delivery alone. The 102
 textures are 84 distinct images: the eighteen dishes sit in `ChefZ_Food` twice,
 once as `ChefZ_<Dish>_co.paa` from 01.09. and once under the lowercase name the

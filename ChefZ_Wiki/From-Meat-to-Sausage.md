@@ -40,11 +40,11 @@ Five steps, two of them at the same station. The Meat Grinder does the mincing
 | A spice | Anything tagged `CHEFZ_SPICE`, listed below |
 | Cookware, a Smoker or a Drying Rack | Depending on which of the three endings you want |
 
-**The spices that count.** Eight items carry `CHEFZ_SPICE`, and every stuffing slot
+**The spices that count.** Nine items carry `CHEFZ_SPICE`, and every stuffing slot
 that asks for a spice accepts any of them:
 
 > Salt · Black Pepper · Dried Peppercorns · Dried Paprika · Paprika Powder ·
-> Pepper Berries · Herb Mix · Hunter Seasoning
+> Pepper Berries · Chili · Herb Mix · Hunter Seasoning
 
 Mushroom Culture is filed under category `SPICE` but does **not** carry the tag, so
 it can never end up in a sausage. That separation is deliberate

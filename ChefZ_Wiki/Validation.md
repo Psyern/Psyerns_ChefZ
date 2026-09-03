@@ -374,9 +374,9 @@ Last full run:
 
 ```
 node tools/chefz-validate/index.mjs    -> Exit 0
-                                          0 errors, 2 warnings, 20/20 checkers green,
+                                          0 errors, 2 warnings, 21/21 checkers green,
                                           0 tool failures
-node tools/chefz-validate/selftest.mjs -> Exit 0, 19 of 20 checkers covered
+node tools/chefz-validate/selftest.mjs -> Exit 0, 20 of 21 checkers covered
 ```
 
 Where the 2 warnings sit:
