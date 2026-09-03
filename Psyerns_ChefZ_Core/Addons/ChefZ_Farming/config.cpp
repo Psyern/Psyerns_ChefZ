@@ -69,7 +69,7 @@ class CfgPatches
             
             
             "ChefZ_Parsley", "ChefZ_Thyme", "ChefZ_Rosemary",
-            "ChefZ_WildGarlic", "ChefZ_PepperBerries",
+            "ChefZ_WildGarlic", "ChefZ_PepperBerries", "ChefZ_Chili",
             // ### SLICE apiary ###
             "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_BeehiveKit",
             // Die Projektionshuelle des Aufstellvorgangs (31.08.2026).
@@ -903,6 +903,41 @@ class CfgVehicles
             energy = 12;
             water = 8;
             nutritionalIndex = 10;
+            toxicity = 0;
+            digestibility = 1;
+        };
+    };
+
+    // Chili: zweiter Rohstoff der Schaerfe neben den Pfefferbeeren, und wie
+    // diese eine FUNDPFLANZE (§3 der Asset-Liste: gefunden, nicht gezogen -
+    // kein Saatgut, keine Wachstumsstufe). Kategorie SPICE und nicht
+    // VEGETABLE: das Chili wuerzt, es saettigt nicht. Damit greift kein
+    // Gemueseslot darauf zu und ein Chili kann in keinem Rezept eine Zwiebel
+    // vertreten - dieselbe Trennung, die die Pfefferbeeren tragen.
+    //
+    // PROXY, kein eigenes Mesh: Sambucus_nigra.p3d ist im Modul bereits an
+    // ChefZ_PepperBerries erprobt und damit ein nachgewiesen ladbarer Pfad.
+    // dz/gear/food/pepper_green.p3d waere das bessere Bild, steht im Projekt
+    // aber nur in einem Kommentar (die geloeschte ChefZ_Paprika) und in keiner
+    // aktiven model=-Zeile - unbestaetigt wird er hier nicht gesetzt. Der
+    // Tausch ist eine Zeile, sobald das Modell geliefert oder der Pfad
+    // verifiziert ist. Zwei Klassen auf einem Proxy = P2 nach der Regel der
+    // Asset-Liste (P1 erst ab drei).
+    class ChefZ_Chili : ChefZ_FreshHerbBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CHILI";
+        descriptionShort = "#STR_CHEFZ_ITEM_CHILI_DESC";
+        model = "\dz\gear\food\Sambucus_nigra.p3d";
+        class Nutrition
+        {
+            // Zwischen Pfefferbeere (50) und Kraut (55): eine Schote hat mehr
+            // Substanz als eine Beere, bleibt aber Wuerzgut. Herleitung wie an
+            // ChefZ_FreshHerbBase - Zielvolumen / varQuantityMax (= 1).
+            fullnessIndex = 52;
+            energy = 14;
+            water = 14;
+            nutritionalIndex = 18;
             toxicity = 0;
             digestibility = 1;
         };

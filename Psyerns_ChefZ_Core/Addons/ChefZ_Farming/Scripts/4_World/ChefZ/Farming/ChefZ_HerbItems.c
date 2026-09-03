@@ -76,6 +76,11 @@ class ChefZ_WildGarlic extends ChefZ_FreshHerbBase {}
 //! Pfefferbeeren sind der Rohstoff der Pfefferkette (Production Map §16).
 class ChefZ_PepperBerries extends ChefZ_FreshHerbBase {}
 
+//! Chili ist der zweite Wuerzrohstoff. Noch ohne Trockenkette - der Weg
+//! ueber den Trockenrahmen zu Flocken und Pulver ist bewusst nicht Teil
+//! dieser Ergaenzung.
+class ChefZ_Chili extends ChefZ_FreshHerbBase {}
+
 //! Frische Paprika hat KEINE eigene Klasse: das ist Vanillas GreenBellPepper
 //! (Vanilla-Audit §2). Eingang der Trockenkette §15 ist deshalb ein
 //! Vanilla-Item; einen ChefZ-Zustand kann es nicht tragen, es braucht ihn hier
