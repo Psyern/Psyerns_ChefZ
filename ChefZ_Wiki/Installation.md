@@ -24,6 +24,13 @@ build; the packer rule for the two-level asset prefixes was fixed on 31.08.2026.
 > Left at `C:/` the build aborts with *Invalid P3D proxy path(s) found in ChefZ_Devices* —
 > proxy validation is mandatory and ignores the Preflight and Binarize switches. The
 > prefixes are read from `$PREFIX$` and stay correct either way.
+>
+> On the workstation of 03.09.2026 both halves are in place: the setting points at the
+> repository, and `C:\ChefZ` is a junction onto `<repo>\ChefZ` so that the old root
+> resolves as well. The junction is machine-local, not repository state — a fresh machine
+> needs the setting, or the same junction:
+> `New-Item -ItemType Junction -Path C:\ChefZ -Target <repo>\ChefZ`. Remove it with
+> `rmdir C:\ChefZ`, which deletes the link and not the delivery behind it.
 
 ### `Psyerns_ChefZ_Core` — the main mod (14 PBOs)
 
