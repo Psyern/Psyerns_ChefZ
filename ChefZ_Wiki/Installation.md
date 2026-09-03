@@ -3,7 +3,7 @@
 This page describes what a server operator has to do to run ChefZ.
 
 > **Read this first.** The PBOs have been built and the server has been started —
-> `tools/chefz-pack/pack.mjs` packs all thirteen, unsigned and unbinarised, and
+> `tools/chefz-pack/pack.mjs` packs all seventeen, unsigned and unbinarised, and
 > `tools/chefz-pack/testrun.ps1` launches the test server. What has never happened
 > is a server that *stays up*: it registers every addon, loads its config, and then
 > dies in the mission's `OnInit` chain. Nothing here has been signed or binarised,
@@ -12,8 +12,18 @@ This page describes what a server operator has to do to run ChefZ.
 
 ## 1. What ChefZ consists of
 
-ChefZ is shipped as **four mod folders**, which pack into **seventeen PBOs** — of which
-four do not build today, see [Known Limitations](Known-Limitations#four-asset-addons-that-never-reach-a-pbo).
+ChefZ is shipped as **four mod folders**, which pack into **seventeen PBOs**. All of them
+build; the packer rule for the two-level asset prefixes was fixed on 31.08.2026.
+
+> **Building with the RaG PBO Builder?** Set its **Project root** to the repository root.
+> RaG resolves every path stored inside a `.p3d` against that root alone — not against the
+> addon folder and not against `$PREFIX$`. A drying rack that names
+> `proxy:\ChefZ\ChefZ_Devices\models\proxies\hook_1.001` is looked up at
+> `<Project root>\ChefZ\ChefZ_Devices\models\proxies\hook_1.p3d`, which only exists when the
+> root is the repository: `ChefZ/`, the delivery folder, is laid out as the runtime tree.
+> Left at `C:/` the build aborts with *Invalid P3D proxy path(s) found in ChefZ_Devices* —
+> proxy validation is mandatory and ignores the Preflight and Binarize switches. The
+> prefixes are read from `$PREFIX$` and stay correct either way.
 
 ### `Psyerns_ChefZ_Core` — the main mod (14 PBOs)
 

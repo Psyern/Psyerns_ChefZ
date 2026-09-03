@@ -57,12 +57,12 @@ design questions — is kept internally and is not part of this repository.
 | **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 48 recipes · 62 transforms · 15 stations |
 | **Cookbook** | Implemented as knowledge state, RPC and an F9 key — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
-| **Validation** | 20 checkers · **exit code 0 · 0 errors · 2 warnings** |
-| **Validator self-test** | 19 of 20 checkers provably fire · `chefzaction` not yet covered |
+| **Validation** | 21 checkers · **exit code 0 · 0 errors · 2 warnings** |
+| **Validator self-test** | 20 of 21 checkers provably fire · `chefzaction` not yet covered |
 | **Packing** | 17 sources, **13 packed** — the four asset addons are skipped, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Three deliveries in — 53 models, 84 textures, **76 of 129 classes** on their own geometry |
+| **3D assets** | Three deliveries in — 53 models, 84 textures, **76 of 130 classes** on their own geometry |
 
 ## Repository Layout
 
@@ -92,6 +92,7 @@ Psyerns_ChefZ/                              ← repository root (this README)
 │   │   ├── ChefZ_Items/                    models and textures — tools, containers
 │   │   └── ChefZ_Plants/                   models and textures — crops and herbs
 │   ├── Keys/
+│   ├── Audit/                              the Enforce audit of 03.09. — not built
 │   └── _deltas/                            registry deltas from the content slices
 │
 ├── ChefZ/                                   ← the delivery, kept verbatim; not built
@@ -178,7 +179,7 @@ single integrator merges it. See [Registry Delta Protocol](#registry-delta-proto
 <td width="33%" valign="top">
 
 ### Content Scope (V1)
-- 5 found herbs + pepper berries
+- 5 found herbs + pepper berries and chili
 - 11 processing stations
 - 6 raw and 6 cooked sausages
 - 20 plate dishes
@@ -602,7 +603,7 @@ node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 
 `selftest.mjs` builds a throwaway module that violates every rule on purpose, runs the
 suite against it, and asserts that each rule fires and the run exits `1`. Current
-coverage: **19 of 20 checkers provably fire.** `chefzaction` is not covered — it could
+coverage: **20 of 21 checkers provably fire.** `chefzaction` is not covered — it could
 go blind without anything noticing.
 
 `tools/chefz-assets/check-todo.mjs` is a third tool with a different job: it compares
@@ -819,21 +820,33 @@ farmed herbs (they are found, not grown) · cut vegetables · yeast · 3D asset 
 ### Packing
 
 ```bash
-node tools/chefz-pack/pack.mjs            # 15 sources, unsigned and unbinarised
+node tools/chefz-pack/pack.mjs            # 17 sources, unsigned and unbinarised
 powershell tools/chefz-pack/testrun.ps1   # start the test server, read its verdict, stop it
 ```
 
-> **The four asset addons do not pack today.** `pack.mjs` requires `$PREFIX$` to equal
-> the folder name and skips the addon otherwise (`pack.mjs:85`). `ChefZ_Devices`,
-> `ChefZ_Food`, `ChefZ_Items` and `ChefZ_Plants` all carry two-level prefixes of the
-> form `ChefZ<name>`, which is exactly what the model paths in the content addons
-> point at — config and prefix agree, the packer's rule does not. The result is 13 PBOs
-> out of 17 sources, and the content addons require four addons that were never built.
-> It started as two addons on 29.08. and doubled with the second delivery. Either the
-> prefixes and the model paths move to one level, or the rule learns about multi-level
-> prefixes while still proving that prefix and paths match.
+All 17 sources pack. `pack.mjs` accepts the two-level prefix `ChefZ\<name>` that the four
+asset addons carry, because that is what the model paths inside the delivered `.p3d` point
+at (`pack.mjs:88`); every other addon's prefix must match its folder name.
 
-`Psyerns_ChefZ_Core` packs to twelve PBOs, one per addon folder; the three compatibility
+> **The RaG PBO Builder needs its Project root set to the repository root.** RaG resolves
+> every path written inside a `.p3d` — textures, materials and proxy targets — against the
+> configured **Project root**, and against nothing else: not against the addon folder, and
+> not against the addon's own `$PREFIX$`. A model that says
+> `proxy:\ChefZ\ChefZ_Devices\models\proxies\hook_1.001` is therefore looked up at
+> `<Project root>\ChefZ\ChefZ_Devices\models\proxies\hook_1.p3d`. With the root left at
+> `C:/` nothing resolves, and the build stops with *Invalid P3D proxy path(s) found in
+> ChefZ_Devices* — MLOD proxy validation is mandatory and runs even with Preflight and
+> Binarize switched off. Set the root to the repository root and those paths land in
+> `ChefZ/`, the delivery folder, which is laid out as the runtime tree: it is the
+> modeller's P: drive, kept. Prefixes are unaffected — RaG reads `$PREFIX$` itself, and
+> all fourteen PBOs keep theirs. Headless, the same run is
+> `RaG_PBO_Builder.exe build --project-root <repository root>`.
+>
+> Note what this does **not** catch: with the root pointing at `ChefZ/`, a proxy resolves
+> out of the delivery folder even when it is missing from the addon that ships it. That
+> gap is what `proxies.mjs` covers — it reads the addons and nothing else.
+
+`Psyerns_ChefZ_Core` packs to fourteen PBOs, one per addon folder; the three compatibility
 mods pack to one each. The dependency graph inside the main mod is closed — `ChefZ_Cooking`
 requires seven other ChefZ addons and `ChefZ_Registry` requires eight — so the main mod
 cannot ship as a subset. Treat it as one indivisible workshop item.
