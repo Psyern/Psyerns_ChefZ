@@ -397,13 +397,17 @@ all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key. Ea
 | Addon | Contents |
 |---|---|
 | `ChefZ_Devices` | the two hives and the processing stations — butter churn, cheese press, drying rack, grain mill, meat grinder, mortar, smoker |
-| `ChefZ_Items` | tools and containers — frames, jar, bee smoker |
+| `ChefZ_Items` | tools and containers — frames, jar, bee smoker, frying pan |
 | `ChefZ_Plants` | the crops and herbs — cabbage, carrot, corn cob and plant, garlic, parsley, red onion, rosemary, thyme |
 | `ChefZ_Food` | prepared food |
 
-Together **50 models and 70 textures** — 18 dish textures joined  on 01.09.2026. **56 of the mod's 129 spawnable classes** now
-stand on their own geometry rather than a vanilla proxy — 45 of them rebound in the
-second delivery alone. The remaining 73 still point at a vanilla mesh; the standing
+Together **53 models and 102 texture files — 84 distinct images**, since the eighteen
+dishes of 01.09.2026 sit in `ChefZ_Food` under two names. Six further `.p3d` stand
+beside them in `models/proxies/` — the five hooks of the drying rack and the plate of
+the frying pan. They carry no geometry of their own; they are the places at which
+another model is hung, and they were missing from the addons until 03.09.2026. **76 of the mod's 129
+spawnable classes** now stand on their own geometry rather than a vanilla proxy — 45 of
+them rebound in the second delivery alone. The remaining 53 still point at a vanilla mesh; the standing
 backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
