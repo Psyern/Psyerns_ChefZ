@@ -7,6 +7,8 @@ class CfgPatches
 		requiredVersion=0.1;
 		requiredAddons[]=
 		{
+			"DZ_Scripts",
+			"DZ_Data",
 			"ChefZ_Core",
 			"ChefZ_Core_Slots"
 		};
@@ -215,6 +217,52 @@ class CfgVehicles
 			"ChefZ_DryRack_Hook_4",
 			"ChefZ_DryRack_Hook_5"
 		};
+	};
+	class ChefZ_Device_HoneyExtractor_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_HoneyExtractor - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_HoneyExtractor : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_HoneyExtractor";
+		model="\ChefZ\ChefZ_Devices\models\Honey_Extractor.p3d";
+		descriptionShort="#STR_CHEFZ_HoneyExtractor_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+		attachments[]=
+		{
+			"ChefZ_Honeycomb_Frame01",
+		};
+	};
+	class ChefZ_Device_ShroomBox_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_ShroomBox - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_ShroomBox : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_ShroomBox";
+		model="\ChefZ\ChefZ_Devices\models\ShroomBox.p3d";
+		descriptionShort="#STR_CHEFZ_ShroomBox_DESC";
+		weight=25000;
+		itemSize[]={10,10};
+	};
+	class ChefZ_Device_PastaMachine_Kit : ChefZ_Base_Kit
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_PastaMachine - #STR_CHEFZ_KIT";
+	};
+	class ChefZ_Device_PastaMachine : ChefZ_Deployed_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_PastaMachine";
+		model="\ChefZ\ChefZ_Devices\models\PastaMachine.p3d";
+		descriptionShort="#STR_CHEFZ_PastaMachine_DESC";
+		weight=25000;
+		itemSize[]={10,10};
 	};
 };
 class CfgNonAIVehicles

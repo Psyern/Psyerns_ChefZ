@@ -7,6 +7,8 @@ class CfgPatches
 		requiredVersion=0.1;
 		requiredAddons[]=
 		{
+			"DZ_Scripts",
+			"DZ_Data",
 			"ChefZ_Core",
 			"ChefZ_Core_Slots"
 		};
@@ -92,5 +94,13 @@ class CfgVehicles
 		model="\ChefZ\ChefZ_Plants\models\Rosmary.p3d";
 		descriptionShort="#STR_CHEFZ_Rosmary_DESC";
 		itemSize[]={1,3};
+	};
+	class ChefZ_Plant_Chili : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Chili";
+		model="\ChefZ\ChefZ_Plants\models\Chili.p3d";
+		descriptionShort="#STR_CHEFZ_Chili_DESC";
+		itemSize[]={1,2};
 	};
 };

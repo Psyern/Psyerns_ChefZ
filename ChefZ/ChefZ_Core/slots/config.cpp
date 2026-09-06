@@ -7,6 +7,8 @@ class CfgPatches
 		requiredVersion=0.1;
 		requiredAddons[]=
 		{
+			"DZ_Scripts",
+			"DZ_Data",
 			"ChefZ_Core"
 		};
 	};

@@ -17,5 +17,6 @@ modded class ModItemRegisterCallbacks
 		pType.AddItemInHandsProfileIK("ChefZ_Item_MilkCan",			   "dz/anims/workspaces/player/player_main/props/player_main_2h_pot.asi",		  pBehavior, "dz/anims/anm/player/ik/two_handed/CookingPot.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_Item_Box",			   	   "dz/anims/workspaces/player/player_main/props/player_main_2h_pot.asi",		  pBehavior, "dz/anims/anm/player/ik/two_handed/Cauldron.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_Item_Box_Open",	   	   "dz/anims/workspaces/player/player_main/props/player_main_2h_pot.asi",		  pBehavior, "dz/anims/anm/player/ik/two_handed/Cauldron.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_Item_Wooden_Bowl",	   	   "dz/anims/workspaces/player/player_main/props/player_main_2h_pot.asi",		  pBehavior, "dz/anims/anm/player/ik/two_handed/Cauldron.anm");
 	}
 }

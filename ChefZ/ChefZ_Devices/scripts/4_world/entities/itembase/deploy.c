@@ -69,3 +69,27 @@ class ChefZ_Device_DryRack_Kit : ChefZ_Base_Kit
 		return "ChefZ_Device_DryRack";
 	}
 };
+
+class ChefZ_Device_HoneyExtractor_Kit : ChefZ_Base_Kit
+{
+	string GetDeployedClassname()
+	{
+		return "ChefZ_Device_HoneyExtractor";
+	}
+};
+
+class ChefZ_Device_ShroomBox_Kit : ChefZ_Base_Kit
+{
+	string GetDeployedClassname()
+	{
+		return "ChefZ_Device_ShroomBox";
+	}
+};
+
+class ChefZ_Device_PastaMachine_Kit : ChefZ_Base_Kit
+{
+	string GetDeployedClassname()
+	{
+		return "ChefZ_Device_PastaMachine";
+	}
+};

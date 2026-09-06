@@ -7,6 +7,8 @@ class CfgPatches
 		requiredVersion=0.1;
 		requiredAddons[]=
 		{
+			"DZ_Scripts",
+			"DZ_Data",
 			"ChefZ_Core",
 			"ChefZ_Core_Slots",
 			"DZ_Gear_Cooking"
@@ -142,6 +144,46 @@ class CfgVehicles
 		{
 			"ChefZ_Meal"
 		};
+	};
+	class ChefZ_Item_Cream : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Cream";
+		model="\ChefZ\ChefZ_Items\models\Cream.p3d";
+		descriptionShort="#STR_CHEFZ_Cream_DESC";
+		itemSize[]={2,1};
+	};
+	class ChefZ_Item_Flour : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Flour";
+		model="\ChefZ\ChefZ_Items\models\Flour.p3d";
+		descriptionShort="#STR_CHEFZ_Flour_DESC";
+		itemSize[]={2,1};
+	};
+	class ChefZ_Item_Spicetin : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Spicetin";
+		model="\ChefZ\ChefZ_Items\models\Spicetin.p3d";
+		descriptionShort="#STR_CHEFZ_Spicetin_DESC";
+		itemSize[]={2,1};
+	};
+	class ChefZ_Item_Tomato_Sauce : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Tomato_Sauce";
+		model="\ChefZ\ChefZ_Items\models\Tomato_Sauce.p3d";
+		descriptionShort="#STR_CHEFZ_Tomato_Sauce_DESC";
+		itemSize[]={2,1};
+	};
+	class ChefZ_Item_Wooden_Bowl : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Wooden_Bowl";
+		model="\ChefZ\ChefZ_Items\models\Wooden_Bowl.p3d";
+		descriptionShort="#STR_CHEFZ_Wooden_Bowl_DESC";
+		itemSize[]={3,2};
 	};
 };
 class CfgNonAIVehicles

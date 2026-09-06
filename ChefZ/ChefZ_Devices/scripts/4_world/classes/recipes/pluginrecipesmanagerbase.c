@@ -12,6 +12,9 @@ modded class PluginRecipesManager
         RegisterRecipe(new Pack_Mortar);
         RegisterRecipe(new Pack_Smoker);
         RegisterRecipe(new Pack_DryRack);
+        RegisterRecipe(new Pack_HoneyExtractor);
+        RegisterRecipe(new Pack_ShroomBox);
+        RegisterRecipe(new Pack_PastaMachine);
     }
 }
 
