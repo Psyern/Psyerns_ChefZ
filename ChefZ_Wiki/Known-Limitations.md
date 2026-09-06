@@ -201,20 +201,52 @@ to decay and for 1925 runtime null accesses to accumulate. Whether the access
 violation above is gone or only unhit is not written down anywhere — this entry
 needs the operator's verdict.
 
-### The core comes up in safe mode
+### The core no longer comes up in safe mode — measured 07.09.2026
 
-551 records read, 550 good, none rejected — and every registry empty. Two causes,
-both listed under *Engine limits* below: the overlay clamps
-`safeModeErrorThreshold` to 1, and a single failing self-test then trips it,
-because self-test errors count towards the same counter that guards safe mode.
+This entry used to read "551 records read, 550 good, none rejected — and every
+registry empty." That is no longer what happens. The run of 07.09.2026 reports
 
-`ChefZ_Log.ResetCounters()` after `RunSelfTest()` would separate the two.
+```
+[ChefZ][CONFIG] slices=28 files=56 records=490 ok=489 rejected=0 patched=1 health=OK
+[ChefZ][CORE]   Config SERVER health=OK records=487 kategorien=41 zutaten=157
+                zustaende=10 stufen=5 rezepte=48 haltbarkeit=6 naehrwerte=73
+                prozesse=34 stationen=15 transforms=62 werkzeuggruppen=9
+                handwerksrezepte=22/22 behaelter=5 aktiv=true
+```
 
-### Eight self-test groups fail
+`health=OK`, `aktiv=true`, and the registries are populated. The safe-mode trip
+described here — `safeModeErrorThreshold` clamped to 1, tripped by a self-test
+error landing on the same counter — does not fire in this build. Whether it was
+fixed deliberately or fell away with something else is not written down anywhere;
+what is measured is the line above. `ChefZ_Log.ResetCounters()` after
+`RunSelfTest()` remains the clean separation if the counters are ever shared again.
 
-S1, S9, S10, S11, S13, S14, S16 and S17 report failures. Some of them are likely
-downstream of the constructor limit below, since the tests assume the sentinel
-machinery works.
+### Three self-test groups fail, not eight
+
+This entry used to list S1, S9, S10, S11, S13, S14, S16 and S17. Measured on
+07.09.2026, five of those pass: **S1 8/8, S9 9/9, S10 15/15, S14 15/15, S16 14/14,
+S17 9/9**, alongside S2, S3, S4, S5, S6, S8, S12, S15 and S18. Three still fail:
+
+| Group | Result | First failing assertion | Consequence the core states itself |
+|---|---|---|---|
+| **S7** Kochadapter | 3 of 4 | `CookSession:358 [s.ticksSinceMatch != LONG_AGO]` | the cooking adapter is declared untrustworthy; vanilla cooking unaffected, the hook calls `super` first and returns its value |
+| **S11** Konservierung | 10/13 | `PreservationDef:546`, `PreservationSelfTest:523`, `:801` | decay speed and remaining freshness unreliable; vanilla food unaffected |
+| **S13** Ereignisschicht | 10/19 | `EventSelfTest:356 [a.count != 1]` and eight more | comp modules get wrong or no notifications; cooking and vanilla unaffected |
+
+S13 is the one to read first: nine of its groups fail, and the assertions are
+almost all "a listener that should have been called once was not" — Zustellung,
+Abmeldung, Storno, KeinStorno, Abfrage, KeineAbfrage, Tiefe, Umbau and
+Prioritaet. `[ChefZ][CORE] Aussenkante SERVER abonnenten=0` in the same run is
+consistent with that.
+
+### A false ERR on every healthy boot — fixed 07.09.2026
+
+`ChefZ_CategoryClosure.SetBit(8192)` was logged as an error on every start. It
+came from the closure's own self-test, which throws invalid indices at `SetBit`
+to prove they stay harmless — a passing test writing "Programmierfehler im
+Kategorieaufbau" into the log. Worse, `ChefZ_Log.Once` fires once per key, so the
+self-test consumed the budget and a later genuine out-of-range index would have
+been swallowed. The deliberate calls are bracketed now.
 
 ### No signatures, no binarisation
 

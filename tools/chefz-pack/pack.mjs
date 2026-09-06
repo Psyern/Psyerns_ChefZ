@@ -99,13 +99,33 @@ for (const src of sources()) {
   const include = path.join(src, 'include.txt');
   if (fs.existsSync(include)) args.push(`-include=${include}`);
 
-  const r = spawnSync(ADDON_BUILDER, args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const pbo = path.join(TARGET, `${name}.pbo`);
+
+  // Stand VOR dem Aufruf merken. Warum: die Erfolgspruefung unten fragte
+  // frueher nur, OB eine PBO am Zielort liegt - nicht, ob sie aus DIESEM Lauf
+  // stammt. Eine alte Datei liess damit jeden folgenlosen AddonBuilder-Lauf
+  // als Erfolg durchgehen. Am 07.09.2026 gemessen: ein Packlauf meldete
+  // "BESTANDEN - 17 PBOs gepackt" und Exit 0, waehrend alle siebzehn Dateien
+  // unveraendert eine halbe Stunde alt blieben; der Testserver lief danach
+  // gegen den alten Code, und der Fehler fiel nur auf, weil hinterher im
+  // Binaerstrom der PBO nach einem neuen Symbol gesucht wurde.
+  let vorher = 0;
+  if (fs.existsSync(pbo)) vorher = fs.statSync(pbo).mtimeMs;
+
+  const r = spawnSync(ADDON_BUILDER, args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 
   if (r.status !== 0 || !fs.existsSync(pbo)) {
     const log = ((r.stdout || '') + (r.stderr || ''))
       .split(/\r?\n/).filter(l => /ERROR|FAIL|Exception/i.test(l)).slice(0, 5).join('\n      ');
     failed.push(`${name}: AddonBuilder Exit ${r.status}\n      ${log || '(keine Fehlerzeile im Protokoll)'}`);
+    continue;
+  }
+
+  // Exit 0 und Datei vorhanden reichen nicht - sie muss auch neu sein.
+  if (fs.statSync(pbo).mtimeMs <= vorher) {
+    failed.push(`${name}: AddonBuilder meldete Erfolg, hat die PBO aber nicht angefasst\n`
+      + `      ${pbo}\n`
+      + '      unveraendert seit ' + new Date(vorher).toLocaleString('de-DE') + ' - der Server laeuft sonst gegen alten Code');
     continue;
   }
 
