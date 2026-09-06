@@ -60,7 +60,7 @@ design questions — is kept internally and is not part of this repository.
 | **Validation** | 21 checkers · **exit code 0 · 0 errors · 2 warnings** |
 | **Validator self-test** | 20 of 21 checkers provably fire · `chefzaction` not yet covered |
 | **Packing** | 17 sources, **all 17 packed** — the four asset addons included, see [Packing](#packing) |
-| **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
+| **Server run** | All 12 script modules compile and register, core boots, self-tests S1–S9 run · **0 ChefZ errors** · still dies after `[CE][Hive] :: Loading core data` — 0 of 3 starts, measured 07.09.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
 | **3D assets** | Four deliveries in, all 80 meshes synced — 90 `.p3d`, 144 texture files (**119 distinct**), **78 of 130 classes** on their own geometry; every config asset path resolves (69 of 69) |
 

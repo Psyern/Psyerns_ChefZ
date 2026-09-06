@@ -16,10 +16,29 @@ warnings, the server binds its port, and all twelve addons of the time register.
 The config load then reads 551 records, 550 of them good. After that the process
 still dies, and the core comes up inert.
 
-**That measurement is older than the code.** `ChefZ_Cookbook` (Milestone 5.1), the
-self-test trace, Beekeeping V2 and the two asset addons all landed on 29.08.2026,
-after this run. The mod is fifteen sources now, not twelve addons, and none of the
-changes since have been through a compiler or a server start. The static suite is green; that is a different claim.
+**Measured again on 07.09.2026, and the picture is better than that paragraph used
+to say.** Three runs of `testrun.ps1` against the full current tree: all **twelve
+script modules compile and register** (`ChefZ_Core`, `ChefZ_Cookbook`, `ChefZ_Farming`,
+`ChefZ_Processing`, `ChefZ_Baking`, `ChefZ_MeatMod`, `ChefZ_PreservationMod`,
+`ChefZ_Ingredients`, `ChefZ_CookingMod` and the three comp mods), the core boots
+server-side, and self-tests S1–S9 run: S1 8/8, S2 9/9, S3 6/6, S4 8/8, S5 15/15,
+S6 15/15, S7 3 of 4, S8 9/9, S9 9/9. **Zero script errors from ChefZ.**
+
+Two internal faults the core reports itself, both present in the run of 06.09. as
+well and therefore not new: `ChefZ_CategoryClosure.SetBit(8192)` is rejected as
+above the 8192 ceiling — the core calls that a programming error in the category
+build and notes that the affected category will never match again — and self-test
+S7 fails on `CookSession:358`, which the core answers by declaring the cooking
+adapter untrustworthy. Vanilla cooking is unaffected either way; the hook calls
+`super` first and returns its value.
+
+**What still does not happen is a completed startup.** The process dies with an
+access violation in `init.c:6 main`, immediately after `[CE][Hive] :: Loading core
+data` — line 32809 of a 3.7 MB RPT. That is the sporadic deployment crash
+`testrun.ps1` documents in its own header: on 29.08.2026 the same unchanged build
+gave 1 start and 2 crashes, and the same rate appeared without ChefZ. On 07.09. it
+was 0 of 3. The mod is not the thing standing between this deployment and a running
+server, but nothing here proves the deployment healthy either.
 
 What that gap costs became concrete on 31.08.2026. `ChefZ_WearsGasMask`, part of the
 Beekeeping V2 code that landed on 29.08., called `IsGasMask()` on an `ItemBase`. The
