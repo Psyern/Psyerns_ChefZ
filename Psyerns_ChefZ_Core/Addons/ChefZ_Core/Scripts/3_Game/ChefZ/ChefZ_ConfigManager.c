@@ -978,7 +978,10 @@ class ChefZ_ConfigManager : Managed
         string chefzTxt1 = "slices=" + m_SliceCount.ToString() + " files=" + m_FileCount.ToString() + " records=";
         chefzTxt1 = chefzTxt1 + m_Sink.GetSubmittedCount().ToString() + " ok=" + m_Sink.GetAcceptedCount().ToString() + " rejected=" + m_Sink.GetRejectedCount().ToString();
         chefzTxt1 = chefzTxt1 + " patched=" + m_Sink.GetPatchedCount().ToString() + " health=" + HealthName(m_Health) + " in ";
-        chefzTxt1 = chefzTxt1 + m_LoadMillis.ToString() + "ms";
+        // m_LoadMillis haelt ENGINE-TICKS, nicht Millisekunden - TickCount()
+        // liefert 100-ns-Einheiten (Begruendung an ChefZ_Log.TICKS_PER_MS).
+        // Ohne die Umrechnung stand hier "in 48820006ms" fuer 4,9 Sekunden.
+        chefzTxt1 = chefzTxt1 + ChefZ_Log.TicksToMs(m_LoadMillis).ToString() + "ms";
         string line = chefzTxt1;
 
         // Geht an der Stufenpruefung vorbei: 18 §4 verlangt diese Zeile IMMER,

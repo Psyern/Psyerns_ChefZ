@@ -176,7 +176,8 @@ class ChefZ_CategoryManager : Managed
         if (report)
         {
             string chefzTxt1 = "Kategoriebaum: " + GetCategoryCount().ToString() + " Kategorien, " + "Tiefe " + m_MaxDepth.ToString();
-            chefzTxt1 = chefzTxt1 + ", " + GetTagCount().ToString() + " Tags" + " in " + TickCount(startTick).ToString();
+            // Ticks sind 100 ns - siehe ChefZ_Log.TICKS_PER_MS.
+            chefzTxt1 = chefzTxt1 + ", " + GetTagCount().ToString() + " Tags" + " in " + ChefZ_Log.TicksToMs(TickCount(startTick)).ToString();
             chefzTxt1 = chefzTxt1 + "ms.";
             report.AddInfo(chefzTxt1);
         }

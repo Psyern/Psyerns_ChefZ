@@ -63,7 +63,42 @@ class ChefZ_Log
     private static int  s_MaxLogSizeMB = 8;
     private static int  s_MaxScopes    = 64;
 
-    static const int FLUSH_INTERVAL_TICKS = 30000;  // 18 §4: "alle 30 Sekunden"
+    /**
+     * Ein Engine-Tick ist 100 ns, nicht eine Millisekunde.
+     *
+     * Vanilla deklariert nur "proto native int TickCount(int prev)"
+     * (EnSystem.c:106) und nennt keine Einheit. Die Umrechnung steht in
+     * DayZExpansion, ExpansionWorld.c:275:
+     *
+     *     float cost = TickCount(tickCount) * 0.0001;  //! ms
+     *
+     * I4-BELEG: Der Modname steht hier als Quellenangabe fuer eine
+     * Engine-Einheit, die Vanilla nicht dokumentiert - nicht als Hook. Der
+     * Core ruft nichts aus Expansion auf und haengt an nichts davon; die
+     * Zeile ist reine Herkunftsangabe und darf beim Lesen genau so
+     * verstanden werden.
+     *
+     * Wer Ticks fuer Millisekunden haelt, rechnet um den Faktor 10000 daneben.
+     * Genau das ist hier dreimal passiert, gemessen am 07.09.2026:
+     *
+     *   - FLUSH_INTERVAL_TICKS = 30000 sollte "alle 30 Sekunden" heissen,
+     *     waren aber 3 Millisekunden - der Puffer wurde praktisch bei jedem
+     *     Aufruf geleert, und die Pufferung aus 18 §4 lief ins Leere.
+     *   - ChefZ_ConfigManager meldete "in 48820006ms" fuer einen Ladevorgang
+     *     von 4,9 Sekunden.
+     *   - ChefZ_CategoryManager haengte "ms" an denselben rohen Tickwert.
+     *
+     * EndScope() weiter unten war von Anfang an ehrlich: es schreibt " ticks".
+     */
+    static const int TICKS_PER_MS = 10000;
+
+    //! Ticks in Millisekunden, ganzzahlig. Unterhalb einer Millisekunde: 0.
+    static int TicksToMs(int ticks)
+    {
+        return ticks / TICKS_PER_MS;
+    }
+
+    static const int FLUSH_INTERVAL_MS = 30000;  // 18 §4: "alle 30 Sekunden"
 
     private static ref map<string, bool>  s_OnceKeys;
     private static ref array<string>      s_OnceOrder;
@@ -548,7 +583,7 @@ class ChefZ_Log
             Flush();
             return;
         }
-        if (TickCount(s_LastFlushTick) >= FLUSH_INTERVAL_TICKS)
+        if (TicksToMs(TickCount(s_LastFlushTick)) >= FLUSH_INTERVAL_MS)
             Flush();
     }
 

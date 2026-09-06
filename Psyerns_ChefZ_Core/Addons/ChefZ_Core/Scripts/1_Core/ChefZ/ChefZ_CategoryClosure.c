@@ -38,6 +38,29 @@ class ChefZ_CategoryClosure : Managed
      */
     static const int MAX_BITS = 8192;
 
+    /**
+     * Schaltet die Bereichsmeldung in SetBit ab - ausschliesslich fuer die
+     * Stelle im Selbsttest, die absichtlich ungueltige Indizes einwirft.
+     *
+     * Warum das noetig ist: der Selbsttest weiter unten prueft mit SetBit(-5),
+     * SetBit(MAX_BITS) und SetBit(MAX_BITS + 1000), dass ungueltige Indizes
+     * folgenlos bleiben. Er BESTEHT dabei - aber die Meldung in SetBit lief
+     * trotzdem, und zwar als ERR: jeder gesunde Serverstart trug damit die
+     * Zeile "SetBit(8192) ... Das ist ein Programmierfehler im Kategorieaufbau"
+     * im Log, obwohl nichts falsch war.
+     *
+     * Der teurere Teil des Fehlers steckt in ChefZ_Log.Once: die feuert je
+     * Schluessel genau einmal. Der Selbsttest verbrauchte das Kontingent von
+     * "closure.bit.outofrange" beim Booten, und ein SPAETERER, echter
+     * Bereichsueberlauf aus Daten waere danach stillschweigend verschluckt
+     * worden - also genau der Fall, fuer den die Meldung da ist.
+     *
+     * Kein Mutex und kein Zaehler: das hier laeuft zur Bootzeit in einem
+     * Strang, und der Selbsttest setzt die Klammer unmittelbar um die drei
+     * Aufrufe.
+     */
+    private static bool s_QuietRangeCheck = false;
+
     private ref array<int> m_Words;
 
     void ChefZ_CategoryClosure()
@@ -61,7 +84,8 @@ class ChefZ_CategoryClosure : Managed
 
         if (categoryIndex >= MAX_BITS)
         {
-            ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONFIG, "closure.bit.outofrange", "ChefZ_CategoryClosure.SetBit(" + categoryIndex.ToString() + ") liegt oberhalb " + "der Obergrenze " + MAX_BITS.ToString() + " und wurde ignoriert. Das ist ein " + "Programmierfehler im Kategorieaufbau, kein Datenfehler - die betroffene " + "Kategorie matcht ab jetzt nie.");
+            if (!s_QuietRangeCheck)
+                ChefZ_Log.Once(ChefZ_LogLevel.ERR, ChefZ_LogChannel.CONFIG, "closure.bit.outofrange", "ChefZ_CategoryClosure.SetBit(" + categoryIndex.ToString() + ") liegt oberhalb " + "der Obergrenze " + MAX_BITS.ToString() + " und wurde ignoriert. Das ist ein " + "Programmierfehler im Kategorieaufbau, kein Datenfehler - die betroffene " + "Kategorie matcht ab jetzt nie.");
             return;
         }
 
@@ -273,68 +297,76 @@ class ChefZ_CategoryClosure : Managed
     {
         ChefZ_CategoryClosure a = new ChefZ_CategoryClosure();
 
-        if (!a.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 276, "!a.IsEmpty()");
-        if (a.HasBit(0)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 277, "a.HasBit(0)");
-        if (a.HasBit(-1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 278, "a.HasBit(-1)");
-        if (a.CountBits() != 0) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 279, "a.CountBits() != 0");
+        if (!a.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 300, "!a.IsEmpty()");
+        if (a.HasBit(0)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 301, "a.HasBit(0)");
+        if (a.HasBit(-1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 302, "a.HasBit(-1)");
+        if (a.CountBits() != 0) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 303, "a.CountBits() != 0");
 
         a.SetBit(0);
         a.SetBit(31);       // Wortgrenze, Vorzeichenbit
         a.SetBit(32);       // erstes Bit des zweiten Wortes
         a.SetBit(200);
 
-        if (!a.HasBit(0)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 286, "!a.HasBit(0)");
-        if (!a.HasBit(31)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 287, "!a.HasBit(31)");
-        if (!a.HasBit(32)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 288, "!a.HasBit(32)");
-        if (!a.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 289, "!a.HasBit(200)");
-        if (a.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 290, "a.HasBit(1)");
-        if (a.HasBit(33)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 291, "a.HasBit(33)");
-        if (a.HasBit(9999)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 292, "a.HasBit(9999)");
-        if (a.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 293, "a.IsEmpty()");
-        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 294, "a.CountBits() != 4");
+        if (!a.HasBit(0)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 310, "!a.HasBit(0)");
+        if (!a.HasBit(31)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 311, "!a.HasBit(31)");
+        if (!a.HasBit(32)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 312, "!a.HasBit(32)");
+        if (!a.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 313, "!a.HasBit(200)");
+        if (a.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 314, "a.HasBit(1)");
+        if (a.HasBit(33)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 315, "a.HasBit(33)");
+        if (a.HasBit(9999)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 316, "a.HasBit(9999)");
+        if (a.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 317, "a.IsEmpty()");
+        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 318, "a.CountBits() != 4");
 
         // Idempotenz: dasselbe Bit zweimal setzen aendert nichts.
         a.SetBit(31);
-        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 298, "a.CountBits() != 4");
+        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 322, "a.CountBits() != 4");
 
         // Vereinigung
         ChefZ_CategoryClosure b = new ChefZ_CategoryClosure();
         b.SetBit(1);
         b.OrWith(a);
-        if (!b.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 304, "!b.HasBit(1)");
-        if (!b.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 305, "!b.HasBit(200)");
-        if (b.CountBits() != 5) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 306, "b.CountBits() != 5");
+        if (!b.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 328, "!b.HasBit(1)");
+        if (!b.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 329, "!b.HasBit(200)");
+        if (b.CountBits() != 5) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 330, "b.CountBits() != 5");
 
         // a darf sich durch das Vereinigen in b NICHT veraendert haben.
-        if (a.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 309, "a.HasBit(1)");
-        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 310, "a.CountBits() != 4");
+        if (a.HasBit(1)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 333, "a.HasBit(1)");
+        if (a.CountBits() != 4) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 334, "a.CountBits() != 4");
 
         // Kopie ist unabhaengig
         ChefZ_CategoryClosure c = new ChefZ_CategoryClosure();
         c.CopyFrom(b);
-        if (c.CountBits() != 5) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 315, "c.CountBits() != 5");
+        if (c.CountBits() != 5) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 339, "c.CountBits() != 5");
         c.SetBit(300);
-        if (b.HasBit(300)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 317, "b.HasBit(300)");
+        if (b.HasBit(300)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 341, "b.HasBit(300)");
 
         // Leeren
         c.Clear();
-        if (!c.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 321, "!c.IsEmpty()");
-        if (c.CountBits() != 0) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 322, "c.CountBits() != 0");
-        if (c.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 323, "c.HasBit(200)");
+        if (!c.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 345, "!c.IsEmpty()");
+        if (c.CountBits() != 0) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 346, "c.CountBits() != 0");
+        if (c.HasBit(200)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 347, "c.HasBit(200)");
 
         // Ungueltige Indizes bleiben folgenlos.
+        //
+        // Die Klammer um s_QuietRangeCheck gehoert zwingend hierher: ohne sie
+        // schreibt dieser BESTEHENDE Test eine ERR-Zeile ins Log und
+        // verbraucht dabei das Einmal-Kontingent von "closure.bit.outofrange",
+        // sodass ein echter Ueberlauf spaeter unbemerkt bliebe. Siehe die
+        // Begruendung an s_QuietRangeCheck.
         ChefZ_CategoryClosure d = new ChefZ_CategoryClosure();
+        s_QuietRangeCheck = true;
         d.SetBit(-5);
         d.SetBit(MAX_BITS);
         d.SetBit(MAX_BITS + 1000);
-        if (!d.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 330, "!d.IsEmpty()");
+        s_QuietRangeCheck = false;
+        if (!d.IsEmpty()) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 362, "!d.IsEmpty()");
 
         // OrWith mit einer leeren Closure aendert nichts.
         ChefZ_CategoryClosure e = new ChefZ_CategoryClosure();
         e.SetBit(5);
         e.OrWith(d);
-        if (e.CountBits() != 1) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 336, "e.CountBits() != 1");
-        if (!e.HasBit(5)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 337, "!e.HasBit(5)");
+        if (e.CountBits() != 1) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 368, "e.CountBits() != 1");
+        if (!e.HasBit(5)) return ChefZ_SelfTestTrace.Fail("CategoryClosure", 369, "!e.HasBit(5)");
 
         return true;
     }
