@@ -1,0 +1,1738 @@
+[
+ {
+  "prio": "P0",
+  "rule": "cfg-requiredAddon-missing",
+  "file": "Addons/ChefZ_Farming/config.cpp",
+  "line": 106,
+  "msg": "ChefZ_Farming verlangt requiredAddons 'ChefZ_Plants_Cultivation', aber kein Addon im Repo deklariert diese CfgPatches-Klasse",
+  "code": ""
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_EventBus.c",
+  "line": 1007,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "return g_Game.IsServer();"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Container/ChefZ_ContainerService.c",
+  "line": 235,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Container/ChefZ_ContainerService.c",
+  "line": 341,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Container/ChefZ_ContainerService.c",
+  "line": 399,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_Applicator.c",
+  "line": 131,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookActor.c",
+  "line": 170,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookingDeviceAdapter.c",
+  "line": 211,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookingHook.c",
+  "line": 66,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Portion/ChefZ_PortionedFood_Base.c",
+  "line": 186,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ActionProcessAtStation.c",
+  "line": 673,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_GenericCraftRecipe.c",
+  "line": 686,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessRunner.c",
+  "line": 112,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessRunner.c",
+  "line": 198,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingStation_Base.c",
+  "line": 541,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingStation_Base.c",
+  "line": 633,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingStation_Base.c",
+  "line": 713,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingStation_Base.c",
+  "line": 985,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingStation_Base.c",
+  "line": 1229,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingStation_Base.c",
+  "line": 1306,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemDecay.c",
+  "line": 136,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemDecay.c",
+  "line": 309,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemDecay.c",
+  "line": 352,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemStateComponent.c",
+  "line": 971,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "return g_Game && g_Game.IsServer();"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemTransform.c",
+  "line": 85,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Core/Scripts/5_Mission/ChefZ/Diagnostics/ChefZ_Diagnostics.c",
+  "line": 107,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 390,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 494,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 553,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 816,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 981,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 1356,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 1589,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 1612,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c",
+  "line": 392,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c",
+  "line": 426,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c",
+  "line": 543,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c",
+  "line": 588,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c",
+  "line": 274,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c",
+  "line": 289,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c",
+  "line": 319,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_DairyStations.c",
+  "line": 210,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_HoneyExtractor.c",
+  "line": 200,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P2",
+  "rule": "IsClient-IsServer",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_MeatStations.c",
+  "line": 187,
+  "msg": "IsClient()/IsServer() gelten als unzuverlaessig - IsDedicatedServer() bzw. !IsDedicatedServer()",
+  "code": "if (!g_Game || !g_Game.IsServer())"
+ },
+ {
+  "prio": "P3",
+  "rule": "GetObjectsAtPosition",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Container/ChefZ_ContainerService.c",
+  "line": 654,
+  "msg": "GetObjectsAtPosition* ist teuer - Wiki raet zu Triggern/statischen Listen (pruefen, ob Aufruf selten ist)",
+  "code": "g_Game.GetObjectsAtPosition3D(center, radius, objects, proxies);"
+ },
+ {
+  "prio": "P3",
+  "rule": "GetObjectsAtPosition",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Salt/ChefZ_FryingPan.c",
+  "line": 72,
+  "msg": "GetObjectsAtPosition* ist teuer - Wiki raet zu Triggern/statischen Listen (pruefen, ob Aufruf selten ist)",
+  "code": "g_Game.GetObjectsAtPosition(GetPosition(), CHEFZ_HEAT_RADIUS_M, nearby, proxies);"
+ },
+ {
+  "prio": "P3",
+  "rule": "model-path-missing",
+  "file": "Addons/ChefZ_Farming/config.cpp",
+  "line": 1619,
+  "msg": "Modell-/Texturdatei '\\ChefZ\\ChefZ_Plants\\cultivation\\models\\corn_plant.p3d' fehlt (Addons/ChefZ_Plants/cultivation/models/corn_plant.p3d)",
+  "code": ""
+ },
+ {
+  "prio": "P3",
+  "rule": "model-path-missing",
+  "file": "Addons/ChefZ_Farming/config.cpp",
+  "line": 1731,
+  "msg": "Modell-/Texturdatei '\\ChefZ\\ChefZ_Plants\\cultivation\\models\\corn_plant.p3d' fehlt (Addons/ChefZ_Plants/cultivation/models/corn_plant.p3d)",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/3_Game/ChefZ/Cookbook/ChefZ_CookbookRPC.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (26 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/3_Game/ChefZ/Cookbook/ChefZ_KnowledgeManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (189 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/3_Game/ChefZ/Cookbook/ChefZ_KnowledgeState.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (142 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/3_Game/ChefZ/Cookbook/ChefZ_RecipeStatus.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (33 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/4_World/ChefZ/Cookbook/ChefZ_ActionOpenCookbook.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (43 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/4_World/ChefZ/Cookbook/ChefZ_ActionRegistration.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (5 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/4_World/ChefZ/Cookbook/ChefZ_CookbookItem.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (24 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/4_World/ChefZ/Cookbook/ChefZ_CookbookOpener.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (26 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/4_World/ChefZ/Cookbook/ChefZ_CookbookServer.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (98 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/4_World/ChefZ/Cookbook/ChefZ_KnowledgeHooks.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (41 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/4_World/ChefZ/Cookbook/ChefZ_PlayerKnowledge.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (214 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cookbook/Scripts/5_Mission/ChefZ/Cookbook/ChefZ_CookbookInput.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (121 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cooking/Scripts/4_World/ChefZ/Cooking/ChefZ_SauceItems.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (22 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Cooking/Scripts/4_World/ChefZ/Serving/ChefZ_ServingItems.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (33 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CapabilityGate.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (65 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CategoryClosure.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (276 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CompiledGradeRule.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (470 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CompiledProcess.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (287 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CompiledRecipe.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (430 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CompiledSelector.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (367 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CompiledSlot.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (218 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_ContainerDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (310 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CookContext.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (149 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CoreSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (49 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CoreSettingsDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (882 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_CraftIntent.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (87 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_EventArgs.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (269 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_EventNames.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (165 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Identity.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (416 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_IngredientInfo.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (72 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_ItemFacts.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (363 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_LoadReport.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (265 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Log.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (581 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_LogDefs.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (217 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_MatchResult.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (269 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_MatchTrace.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (158 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Matcher.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (544 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_MatcherSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (815 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_NutritionDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (303 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_NutritionVector.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (356 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_PortionSpec.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (247 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_PreservationDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (461 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_PriorityWeights.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (134 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_PriorityWeightsDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (141 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_ProcessContext.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (363 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_ProcessDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (240 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_QualityEvaluation.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (159 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_QualityScoring.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (195 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_QualityScoringDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (165 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_QualityTierDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (268 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Range.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (118 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_RecipeDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (858 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_RecipeEvaluator.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (355 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_RecipeRank.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (92 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Record.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (638 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_RecordKind.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (128 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_RecordTypes.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (200 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Selector.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (190 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_SelectorCompiler.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (715 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_SelectorLevels.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (196 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_SelectorNode.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (187 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_SelfTestTrace.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (52 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_SlotEvaluator.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (338 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_StateDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (301 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_StationDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (127 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_StringOrder.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (100 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_SymbolResolver.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (259 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_SymbolTable.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (148 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_TextList.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (116 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_ToolGroupDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (125 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_TransformDef.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (380 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_Undefined.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (54 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_VanillaStage.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (121 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/1_Core/ChefZ/ChefZ_VesselKeys.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (176 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_AddonJsonSource.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (198 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_CapabilityRegistry.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (501 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_CategoryManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (832 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_CategorySelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (405 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ConfigCppSource.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (509 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ConfigManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (1067 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ConfigSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (170 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ContainerRegistry.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (538 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ContainerSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (385 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_EventBus.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (867 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_EventSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (811 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_IngredientManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (734 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_IngredientSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (532 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_JsonDocs.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (707 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ManagerSymbolResolver.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (112 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_NutritionManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (1302 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_NutritionSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (569 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_PortionManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (745 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_PortionRequest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (136 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_PortionSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (456 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_PreservationManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (966 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_PreservationSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (724 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ProcessCompiler.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (677 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ProcessingManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (793 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ProcessingSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (609 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ProfileOverlaySource.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (245 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ProgressRegistry.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (186 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_QualityManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (1383 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_QualitySelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (707 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_RecipeCompiler.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (646 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_RecipeEngine.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (672 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_RecipeRanker.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (388 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_RecipeSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (757 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_RecordSink.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (233 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_RecordSource.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (304 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_Registry.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (184 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_StateManager.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (537 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_StateSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (391 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_ToolRegistry.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (441 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/3_Game/ChefZ/ChefZ_VanillaNutrition.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (190 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/ChefZ_ActionRegistration.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (6 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/ChefZ_FactCollector.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (495 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Container/ChefZ_ContainerService.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (799 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Container/ChefZ_Container_Base.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (37 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_Applicator.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (1202 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_ApplicatorSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (336 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookActor.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (196 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookSession.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (356 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookingDeviceAdapter.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (1439 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookingHook.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (180 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_CookingSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (30 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_DeviceDescriptor.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (55 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_ModdedCooking.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (54 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_PlannedOutput.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (38 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_SessionState.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (5 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_VesselSignature.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (227 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Portion/ChefZ_ActionTakePortion.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (222 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Portion/ChefZ_PortionedFood_Base.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (647 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ActionProcessAtStation.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (662 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_GenericCraftRecipe.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (742 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_HandcraftBridge.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (619 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_HandcraftSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (386 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ModdedRecipes.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (59 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ModdedWorldCraft.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (76 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessRunner.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (786 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingStation_Base.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (1146 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_Edible_Base.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (622 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemDecay.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (384 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemStateComponent.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (801 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_ItemTransform.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (225 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_Item_Base.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (118 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/5_Mission/ChefZ/ChefZ_Boot.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (418 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/5_Mission/ChefZ/ChefZ_CompNotice.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (15 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/5_Mission/ChefZ/ChefZ_CoreEntry.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (68 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/5_Mission/ChefZ/Diagnostics/ChefZ_AdminCommands.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (383 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/5_Mission/ChefZ/Diagnostics/ChefZ_Diagnostics.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (674 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Scripts/5_Mission/ChefZ/Diagnostics/ChefZ_DiagnosticsSelfTest.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (389 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Core/Tests/V_A_PboJsonSmoke/Scripts/5_Mission/ChefZ/ChefZ_PboProbe.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (152 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_Apiary.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (1266 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_FarmingItems.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (30 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_HerbItems.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (43 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_ProduceFarming.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (39 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Farming/Scripts/4_World/ChefZ/Farming/ChefZ_WildPlants.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (625 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Ingredients/Scripts/4_World/ChefZ/Ingredients/ChefZ_DairyIngredients.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (44 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Ingredients/Scripts/4_World/ChefZ/Ingredients/ChefZ_SpiceIngredients.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (39 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Ingredients/Scripts/4_World/ChefZ/Ingredients/ChefZ_VanillaFoodItems.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (28 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Meat/Scripts/4_World/ChefZ/Meat/ChefZ_MeatItemBase.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (59 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Preservation/Scripts/4_World/ChefZ/Preservation/ChefZ_PreservedFood_Base.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (36 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (310 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_DairyStations.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (130 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_HoneyExtractor.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (196 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_MeatStations.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (178 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_ProcessingItems.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (42 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Processing/ChefZ_StationGate.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (73 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ },
+ {
+  "prio": "P4",
+  "rule": "indent-spaces",
+  "file": "Addons/ChefZ_Processing/Scripts/4_World/ChefZ/Salt/ChefZ_FryingPan.c",
+  "line": 1,
+  "msg": "Einrueckung mit Leerzeichen (30 Zeilen), Hard Rule verlangt Tabs",
+  "code": ""
+ }
+]

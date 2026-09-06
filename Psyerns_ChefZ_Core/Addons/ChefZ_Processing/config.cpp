@@ -94,7 +94,7 @@ class CfgPatches
         // Transform nennt die Klasse nur als NAMEN und bindet zur Laufzeit;
         // das Skript der Schleuder prueft sie ueber IsKindOf, nie ueber einen
         // Klassenbezug. Fehlt ChefZ_Cooking, matcht der Transform schlicht nie.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "DZ_Gear_Cooking", "ChefZ_Devices"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "DZ_Gear_Cooking", "ChefZ_Devices", "ChefZ_Items"};
     };
 };
 
@@ -343,7 +343,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_DRYINGRACK";
         descriptionShort = "#STR_CHEFZ_ITEM_DRYINGRACK_DESC";
-        model = "\DZ\structures\furniture\various\rack_dz.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\DryRack.p3d";   // EIGENES MODELL (01.09.2026, Lieferung a78a247)
         itemSize[] = {6, 4};
         weight = 4200;
         rotationFlags = 2;
@@ -556,7 +556,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_FRYINGPAN";
         descriptionShort = "#STR_CHEFZ_ITEM_FRYINGPAN_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";
+        model = "\ChefZ\ChefZ_Items\models\fryingpan.p3d";   // EIGENES MODELL (01.09.2026, Lieferung a78a247)
         rotationFlags = 17;
         itemSize[] = {4, 3};
         weight = 2400;

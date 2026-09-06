@@ -46,6 +46,15 @@
       "quantityUnit": "PIECE",
       "unitsPerWholeItem": 1,
       "decays": true
+    },
+    {
+      "id": "ChefZ_Chili",
+      "categories": ["SPICE"],
+      "tags": ["CHEFZ_SPICE"],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
     }
   ]
 }

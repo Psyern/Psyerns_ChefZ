@@ -880,7 +880,15 @@ class CfgVehicles
     class ChefZ_ServedDish_Base : Edible_Base
     {
         scope = 0;
-        model = "\dz\gear\cooking\FryingPan.p3d";
+        // GEMEINSAMES SPEISEN-MESH (Lieferung a78a247, 01.09.2026).
+        // Vanillas FryingPan.p3d traegt KEINE Textur-Selektion - nur
+        // Engine-Selektionen und eine fest verdrahtete frying_pan_co.paa;
+        // hiddenSelectionsTextures waere dort tote Config gewesen.
+        // Panfood_Base bringt die Sektion "camo" mit (model.cfg des
+        // Asset-PBOs), also traegt EIN Mesh alle Tellergerichte und jede
+        // Klasse nur noch ihre eigene Textur.
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelections[] = {"camo"};
         rotationFlags = 17;
         itemSize[] = {2, 2};
         weight = 450;
@@ -1071,7 +1079,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_TACTICALBREAKFAST";
         descriptionShort = "#STR_CHEFZ_ITEM_TACTICALBREAKFAST_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\tacticalbreakfast_co.paa"};
         weight = 480;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -1121,7 +1130,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SCRAMBLEDEGGSAUSAGE";
         descriptionShort = "#STR_CHEFZ_ITEM_SCRAMBLEDEGGSAUSAGE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\scrambledeggsausage_co.paa"};
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -1220,7 +1230,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHEESEFLATBREAD";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESEFLATBREAD_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\cheeseflatbread_co.paa"};
         weight = 380;
         lifetime = 21600;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -1320,7 +1331,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MUSHROOMPAN";
         descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMPAN_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\mushroompan_co.paa"};
         weight = 420;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -1369,7 +1381,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_POTATOPANCAKES";
         descriptionShort = "#STR_CHEFZ_ITEM_POTATOPANCAKES_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\potatopancakes_co.paa"};
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -1470,7 +1483,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MILKRICE";
         descriptionShort = "#STR_CHEFZ_ITEM_MILKRICE_DESC";
-        model = "\dz\gear\cooking\CookingPot.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\milkrice_co.paa"};
         weight = 540;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -1519,7 +1533,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HONEYBREADPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_HONEYBREADPLATE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\honeybreadplate_co.paa"};
         weight = 360;
         lifetime = 21600;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -1926,7 +1941,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SMALLFISHPAN";
         descriptionShort = "#STR_CHEFZ_ITEM_SMALLFISHPAN_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\smallfishpan_co.paa"};
         itemSize[] = {2, 2};
         weight = 400;
         lifetime = 7200;
@@ -2039,7 +2055,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SURVIVORSPAGHETTI";
         descriptionShort = "#STR_CHEFZ_ITEM_SURVIVORSPAGHETTI_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\survivorspaghetti_co.paa"};
         weight = 470;
         lifetime = 14400;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2081,7 +2098,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SAUSAGEPASTA";
         descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEPASTA_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\sausagepasta_co.paa"};
         weight = 490;
         lifetime = 14400;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2123,7 +2141,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HUNTERPASTA";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERPASTA_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\hunterpasta_co.paa"};
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2164,7 +2183,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CREAMMUSHROOMPASTA";
         descriptionShort = "#STR_CHEFZ_ITEM_CREAMMUSHROOMPASTA_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\creammushroompasta_co.paa"};
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2207,7 +2227,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MACANDCHEESE";
         descriptionShort = "#STR_CHEFZ_ITEM_MACANDCHEESE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\macandcheese_co.paa"};
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2248,7 +2269,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SAUSAGEPOTATOES";
         descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEPOTATOES_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\sausagepotatoes_co.paa"};
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2289,7 +2311,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HUNTERPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERPLATE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\hunterplate_co.paa"};
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2331,7 +2354,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BLOODSAUSAGEPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_BLOODSAUSAGEPLATE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\bloodsausageplate_co.paa"};
         weight = 490;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2372,7 +2396,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_FISHPOTATOPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_FISHPOTATOPLATE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\fishpotatoplate_co.paa"};
         weight = 470;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
@@ -2415,7 +2440,8 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BEANSAUSAGEPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_BEANSAUSAGEPLATE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
+        model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\beansausageplate_co.paa"};
         weight = 500;
         lifetime = 10800;
         // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92

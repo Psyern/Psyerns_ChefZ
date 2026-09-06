@@ -59,7 +59,7 @@ error — it is the normal case. See [Recipes](Recipes#1-the-one-rule-that-matte
 | *herb* | Fresh **or** dried Parsley, Thyme, Rosemary, Wild Garlic · Herb Mix |
 | *fresh herb* | Only the four fresh ones |
 | *dried herb* | The four dried ones · Herb Mix |
-| *spice* | Salt · Black Pepper · Dried Peppercorns · Dried Paprika · Paprika Powder · Pepper Berries · Herb Mix · Hunter Seasoning |
+| *spice* | Salt · Black Pepper · Dried Peppercorns · Dried Paprika · Paprika Powder · Pepper Berries · Chili · Herb Mix · Hunter Seasoning |
 | *salt* | Salt |
 | *culture* | Mushroom Culture — and only that. It is filed under `SPICE` but has no spice tag, so no recipe that asks for a spice can take it |
 | *dairy* | Powdered Milk · Cream · Butter · Cheese · Cheese Curd |
