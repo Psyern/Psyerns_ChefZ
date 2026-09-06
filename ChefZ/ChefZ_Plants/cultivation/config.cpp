@@ -7,7 +7,10 @@ class CfgPatches
 		requiredVersion=0.1;
 		requiredAddons[]=
 		{
-			"ChefZ_Plants"
+			"DZ_Scripts",
+			"DZ_Data",
+			"ChefZ_Plants",
+            "DZ_Gear_Cultivation"
 		};
 	};
 };
@@ -35,7 +38,7 @@ class CfgMods
 				value="";
 				files[]=
 				{
-					"ChefZ/ChefZ_Plants/scripts/4_World"
+					"ChefZ/ChefZ_Plants/cultivation/scripts/4_World"
 				};
 			};
 		};
@@ -45,45 +48,66 @@ class CfgHorticulture
 {
 	class Plants
 	{
-		class ChefZ_Plant_Corn
+		class Plant_Corn
 		{
 			infestedTex="dz\gear\cultivation\data\cannabis_plant_insect_co.paa";
 			infestedMat="dz\gear\cultivation\data\cannabis_plant_insect.rvmat";
 			healthyTex="ChefZ\ChefZ_Plants\cultivation\data\corn_plant_4_co.paa";
 			healthyMat="dz\gear\cultivation\data\cannabis_plant.rvmat";
 		};
+		class Plant_Chili
+		{
+			infestedTex="dz\gear\cultivation\data\cannabis_plant_insect_co.paa";
+			infestedMat="dz\gear\cultivation\data\cannabis_plant_insect.rvmat";
+			healthyTex="ChefZ\ChefZ_Plants\cultivation\data\chili_plant_4_co.paa";
+			healthyMat="dz\gear\cultivation\data\cannabis_plant.rvmat";
+		};
 	};
 };
 class CfgVehicles
 {
+	class ChefZ_Item_Base;
 	class SeedBase;
 	class PlantBase;
+///////////////////////////////////////////
+// 				SEEDS					//
+/////////////////////////////////////////
 	class ChefZ_Plant_Corn_Cob : SeedBase
 	{
 		scope=2;
 		displayName="#STR_CHEFZ_Corn_Cob";
 		model="\ChefZ\ChefZ_Plants\models\Corn_Cob.p3d";
 		descriptionShort="#STR_CHEFZ_Corn_Cob_DESC";
-		itemSize[]={1,3};
+		itemSize[]={1,2};
+		canBeSplit=0;
 		varQuantityInit=1;
 		varQuantityMin=0;
 		varQuantityMax=1;
-		varTemperatureFreezeTime=2640;
-		varTemperatureThawTime=2640;
-		varTemperatureFreezePoint=-2;
-		varTemperatureThawPoint=-2;
-		varTemperatureMax=105;
-		varTemperatureMin=-100;
-		rotationFlags=12;
-		weight=200;
-		stackedUnit="g";
-		absorbency=0.2;
 		class Horticulture
 		{
-			PlantType="ChefZ_Plant_Corn";
+			PlantType="Plant_Corn";
 		};
 	};
-	class ChefZ_Plant_Corn: PlantBase
+	class ChefZ_Plant_ChiliSeeds : SeedBase
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_ChiliSeeds";
+		model="\dz\gear\cultivation\Zucchini_seeds.p3d";
+		descriptionShort="#STR_CHEFZ_ChiliSeeds_DESC";
+		itemSize[]={1,1};
+		canBeSplit=1;
+		varQuantityInit=0;
+		varQuantityMin=0;
+		varQuantityMax=20;
+		class Horticulture
+		{
+			PlantType="Plant_Chili";
+		};
+	};
+///////////////////////////////////////////
+// 				PLANTS					//
+/////////////////////////////////////////
+	class Plant_Corn: PlantBase
 	{
 		scope=2;
 		displayName="$STR_CHEFZ_Corn";
@@ -91,9 +115,22 @@ class CfgVehicles
 		model="\ChefZ\ChefZ_Plants\cultivation\models\corn_plant.p3d";
 		class Horticulture
 		{
-			GrowthStagesCount=6;
-			CropsCount=4;
+			GrowthStagesCount=7;
+			CropsCount=2;
 			CropsType="ChefZ_Plant_Corn_Cob";
+		};
+	};
+	class Plant_Chili: PlantBase
+	{
+		scope=2;
+		displayName="$STR_CHEFZ_Chiliplant";
+		descriptionShort="$STR_CHEFZ_Chiliplant_DESC";
+		model="\ChefZ\ChefZ_Plants\cultivation\models\Chili_plant.p3d";
+		class Horticulture
+		{
+			GrowthStagesCount=7;
+			CropsCount=2;
+			CropsType="ChefZ_Plant_Chili";
 		};
 	};
 };
