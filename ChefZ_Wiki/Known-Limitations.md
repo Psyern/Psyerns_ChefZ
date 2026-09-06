@@ -86,12 +86,25 @@ models (six of them proxy stubs), 92 textures, 24 scripts — in five folders:
 `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items`, `ChefZ_Plants`.
 
 Nothing consumes it directly. `sync-assets.mjs` copies out of it into `Addons/`, and
-those copies are what the content addons point at. The run of 03.09. put every mesh of
-the first three deliveries there, the six proxy stubs included. **The fourth delivery has
-not been synced.** 49 of its 80 meshes stand in the four asset addons; the 31 that arrived
-on 06.09. do not, and ten meshes still stand in the addons that the delivery no longer
-carries — the nine soups and stews, and the old `ChefZ_Plants/models/corn_plant.p3d`,
-which the delivery replaced with a 11 KB proxy stub under `cultivation/models/`.
+those copies are what the content addons point at. The run of 06.09. copied 58 files
+across and left 99 unchanged, so **64 of the 80 meshes** now stand in the four asset
+addons, the six proxy stubs included. Ten meshes still stand there that the delivery no
+longer carries — the six soups and stews and three plates, plus the old
+`ChefZ_Plants/models/corn_plant.p3d`; the script copies but never deletes.
+
+**Sixteen meshes the sync does not reach.** `SUBDIRS` in `sync-assets.mjs` lists
+`models`, `data` and `cultivation/data` — not `cultivation/models`, where the seven
+chili and seven corn growth stages and their two plant stubs live. This is the same
+failure the script's own header records for `models/proxies/` on 03.09., one directory
+level deeper: the models are in the delivery, the addon never sees them, and nothing
+reports it. Adding `'cultivation/models'` to that array is the fix. `ChefZ_CornPlant` is
+not at risk meanwhile — its bound `models/corn_plant.p3d` is still in the pack source,
+because the script never deletes.
+
+Being synced is not the same as being used. Of the meshes that arrived on 06.09., exactly
+one is bound: `ChefZ_HoneyExtractor`, which moved off `Cauldron.p3d` the same day. The
+other eleven are files in the PBO that no class points at until someone writes the
+`model=` line.
 Until that day they were not: the script copied only the top level of `models/` and
 skipped every directory, so `models/proxies/` stayed behind. The models that name
 those proxies were shipped without them, and the packer stopped with *Invalid P3D

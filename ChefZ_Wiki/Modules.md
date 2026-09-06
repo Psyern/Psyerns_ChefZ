@@ -401,22 +401,25 @@ all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key. Ea
 | `ChefZ_Plants` | the crops and herbs — cabbage, carrot, corn cob and plant, garlic, parsley, red onion, rosemary, thyme |
 | `ChefZ_Food` | prepared food |
 
-Together **53 models and 102 texture files — 84 distinct images**, since the eighteen
-dishes of 01.09.2026 sit in `ChefZ_Food` under two names. Six further `.p3d` stand
+Together **68 models and 144 texture files — 119 distinct images**, since the dishes of
+01.09.2026 now sit in `ChefZ_Food` under three names: our own, the delivery's original,
+and the `data/panfood/` set of 06.09. Six further `.p3d` stand
 beside them in `models/proxies/` — the five hooks of the drying rack and the plate of
 the frying pan. They carry no geometry of their own; they are the places at which
-another model is hung, and they were missing from the addons until 03.09.2026. **76 of the mod's 130
+another model is hung, and they were missing from the addons until 03.09.2026. **77 of the mod's 130
 spawnable classes** now stand on their own geometry rather than a vanilla proxy — 45 of
-them rebound in the second delivery alone. The remaining 54 still point at a vanilla mesh; the standing
+them rebound in the second delivery alone. The remaining 53 still point at a vanilla mesh; the standing
 backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
-These figures count the addons, not the delivery folder. The fourth delivery of
-06.09.2026 added 31 meshes to `ChefZ/` that no `sync-assets.mjs` run has copied over
-yet, so none of them has moved a class off its vanilla proxy — the honey extractor, the
-pasta machine, the mushroom box, butter, dough, dried pasta, egg, flatbread, raw rabbit,
-cream, flour, the spice tin, tomato sauce, the wooden bowl, and the chili and corn
-growth stages are all still waiting. Until that run, `Known-Limitations` holds the
-difference.
+A synced mesh is not yet a bound one, and the count above only ever moves on binding.
+The `sync-assets.mjs` run of 06.09.2026 brought the fourth delivery into the addons, but
+just one class was rebound onto it that day: `ChefZ_HoneyExtractor` left `Cauldron.p3d`
+for its own `honey_extractor.p3d`, which carries its texture path inside the `.p3d` and
+therefore needs no `hiddenSelections`. Eleven further meshes — the pasta machine,
+butter, dough, dried pasta, egg, flatbread, cream, flour, tomato sauce, the wooden bowl
+and the chili pod — sit in the asset PBOs with no class pointing at them. Three more
+(mushroom box, raw rabbit, spice tin) have no class at all. `Known-Limitations` holds
+the difference, including the sixteen growth-stage meshes the sync cannot reach.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
 about categories, recipes or states — it is a shape a content class points at. Keeping

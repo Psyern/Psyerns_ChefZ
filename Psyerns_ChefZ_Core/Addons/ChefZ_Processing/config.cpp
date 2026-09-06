@@ -812,19 +812,26 @@ class CfgVehicles
     // Schleuder fuer ChefZ zu einem Kochgefaess mit Portionszahl machen. Die
     // vollstaendige Begruendung steht an ChefZ_ButterChurn weiter oben.
     //
-    // PROXY: Cauldron.p3d - ein grosses zylindrisches Metallgefaess. Genau die
-    // Silhouette einer Schleuder, und ein im Projekt belegter Pfad
-    // (ChefZ_MeatGrinder traegt ihn bereits). Das MODELL zu benutzen und die
-    // KLASSE nicht zu beerben ist derselbe Unterschied, den ChefZ_Vanilla_
-    // Assets §22.1 fuer CookingPot festhaelt. Ziel ist ein Blechzylinder mit
-    // Kurbel und Auslaufhahn - eigene Geometrie, siehe Asset-Bedarf.
+    // MODELL: eigene Geometrie seit dem 06.09.2026 (Lieferung 449b70f). Bis
+    // dahin stand hier Cauldron.p3d - ein grosses zylindrisches Metallgefaess,
+    // gewaehlt, weil es die Silhouette einer Schleuder trifft und der Pfad im
+    // Projekt bereits belegt war (ChefZ_MeatGrinder trug ihn ebenfalls). Der
+    // Proxy hat getan, was ein Proxy tun soll, und ist jetzt abgeloest: die
+    // Lieferung brachte den Blechzylinder mit Kurbel und Auslaufhahn, den der
+    // Asset-Bedarf verlangt hatte.
+    //
+    // Die .paa wird NICHT hier gesetzt. honey_extractor.p3d traegt ihren Pfad
+    // "ChefZ\ChefZ_Devices\data\honey_extractor_co.paa" fest im Binaerstrom -
+    // nachgelesen, nicht vermutet - und findet sie, weil das Asset-PBO genau
+    // dieses Praefix traegt. Deshalb kein hiddenSelections, wie beim
+    // Butterfass und den uebrigen Stationen auch.
     //==========================================================================
     class ChefZ_HoneyExtractor : Inventory_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HONEYEXTRACTOR";
         descriptionShort = "#STR_CHEFZ_ITEM_HONEYEXTRACTOR_DESC";
-        model = "\dz\gear\cooking\Cauldron.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\honey_extractor.p3d";   // EIGENES MODELL (06.09.2026, Lieferung 449b70f)
         rotationFlags = 2;
         itemSize[] = {5, 5};
         weight = 9500;
