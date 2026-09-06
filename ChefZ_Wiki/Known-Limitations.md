@@ -78,14 +78,20 @@ must never be packed (see next section); the repair is one full `pack.mjs` run.
 uploaded"). It is the asset delivery in its original shape, and it keeps growing: a
 second batch on 30.08. brought the plant models, a third on 01.09. the frying pan,
 the pan-food base, the drying rack with its five hook proxies and the corn plant, and
-on 02.09. the eighteen dish textures that had until then existed only in the addons. It
-now holds **164 files** — 59 models (six of them proxy stubs), 77 textures, 18 scripts
-— in five folders: `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items`,
-`ChefZ_Plants`.
+on 02.09. the eighteen dish textures that had until then existed only in the addons. A
+fourth arrived on 06.09. with the honey extractor, the pasta machine and the mushroom
+box, five item models, six food models and the chili and corn growth stages — and it
+took the nine soup and stew meshes back out again. It now holds **206 files** — 80
+models (six of them proxy stubs), 92 textures, 24 scripts — in five folders:
+`ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items`, `ChefZ_Plants`.
 
 Nothing consumes it directly. `sync-assets.mjs` copies out of it into `Addons/`, and
-those copies are what the content addons point at; since 03.09. all **59** of its
-meshes stand in the four asset addons, name for name — the six proxy stubs included.
+those copies are what the content addons point at. The run of 03.09. put every mesh of
+the first three deliveries there, the six proxy stubs included. **The fourth delivery has
+not been synced.** 49 of its 80 meshes stand in the four asset addons; the 31 that arrived
+on 06.09. do not, and ten meshes still stand in the addons that the delivery no longer
+carries — the nine soups and stews, and the old `ChefZ_Plants/models/corn_plant.p3d`,
+which the delivery replaced with a 11 KB proxy stub under `cultivation/models/`.
 Until that day they were not: the script copied only the top level of `models/` and
 skipped every directory, so `models/proxies/` stayed behind. The models that name
 those proxies were shipped without them, and the packer stopped with *Invalid P3D

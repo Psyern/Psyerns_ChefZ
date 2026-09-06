@@ -410,6 +410,14 @@ spawnable classes** now stand on their own geometry rather than a vanilla proxy 
 them rebound in the second delivery alone. The remaining 54 still point at a vanilla mesh; the standing
 backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
+These figures count the addons, not the delivery folder. The fourth delivery of
+06.09.2026 added 31 meshes to `ChefZ/` that no `sync-assets.mjs` run has copied over
+yet, so none of them has moved a class off its vanilla proxy — the honey extractor, the
+pasta machine, the mushroom box, butter, dough, dried pasta, egg, flatbread, raw rabbit,
+cream, flour, the spice tin, tomato sauce, the wooden bowl, and the chili and corn
+growth stages are all still waiting. Until that run, `Known-Limitations` holds the
+difference.
+
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
 about categories, recipes or states — it is a shape a content class points at. Keeping
 the shapes in their own PBOs means a content addon can rebind a class from a vanilla
