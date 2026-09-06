@@ -353,7 +353,7 @@ class ChefZ_EventSelfTest
         args.amount = 7;
         bus.Raise(args);
 
-        if (a.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 356, "a.count != 1");
+        if (a.count != 1) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 356, "a.count != 1  [anmeldungen=" + bus.GetSubscriptionCount().ToString() + " ausgeloest=" + bus.GetRaisedCount().ToString() + " zugestellt=" + bus.GetDeliveredCount().ToString() + "]");
         if (a.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 357, "a.lastEventId != ChefZ_EventNames.RECIPE_COMPLETED");
         if (a.lastAmount != 7) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 358, "a.lastAmount != 7");
 
