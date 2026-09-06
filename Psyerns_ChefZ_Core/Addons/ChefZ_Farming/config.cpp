@@ -103,7 +103,20 @@ class CfgPatches
         // Die Gegenrichtung waere ein Zyklus. Der Slice apiary fuehrt deshalb
         // seine drei Werkzeuggruppen selbst (CfgChefZTools weiter unten),
         // statt METALWORK_TOOL aus ChefZ_Processing zu benutzen.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices", "ChefZ_Plants", "ChefZ_Plants_Cultivation"};
+        //
+        // KEIN ChefZ_Plants_Cultivation. Das stand hier von 46b0c4d bis zum
+        // 07.09.2026 und ist der Grund, aus dem der Testserver an einem modalen
+        // Dialog haengen blieb: "Addon 'ChefZ_Farming' requires addon
+        // 'ChefZ_Plants_Cultivation'". Diesen Addonnamen gibt es im Mod nicht.
+        // Er stammt aus ChefZ/ChefZ_Plants/cultivation/config.cpp - dem
+        // Lieferordner, der bewusst NIE gepackt wird (er traegt einen eigenen
+        // Mini-Core). Die Kultivierungsdateien liegen im PBO von ChefZ_Plants
+        // unter cultivation/, tragen also dessen Praefix und sind mit
+        // "ChefZ_Plants" bereits vollstaendig abgedeckt.
+        //
+        // Merksatz: requiredAddons nennt CfgPatches-Klassen der GEPACKTEN
+        // Addons. Ein Ordnername der Lieferung ist keine.
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices", "ChefZ_Plants"};
     };
 };
 

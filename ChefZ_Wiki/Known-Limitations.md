@@ -31,6 +31,18 @@ suite parses ChefZ's own rules, not the vanilla class hierarchy. It is fixed —
 cast is `Clothing` now, vanilla's own pattern in `PlayerBase.c:1479/1499` — but it
 was found by reading, which is not a method that scales.
 
+The same gap cost a night on 07.09.2026, one directory further out. `ChefZ_Farming`
+had listed `ChefZ_Plants_Cultivation` in its `requiredAddons` since `46b0c4d`. **No
+PBO declares that name.** It is a `CfgPatches` class from
+`ChefZ/ChefZ_Plants/cultivation/config.cpp` — the delivery folder, which is never
+packed. The cultivation files ship inside `ChefZ_Plants.pbo` under `cultivation/`,
+so `"ChefZ_Plants"` already covered them and the extra entry named nothing at all.
+The server answered the only way it can: `Addon 'ChefZ_Farming' requires addon
+'ChefZ_Plants_Cultivation'` in a modal window, and stopped there. `configcpp.mjs`
+checks that `requiredAddons` is non-empty and that it names `ChefZ_Core`; it has
+never checked that the addons named exist. That is the third static gap of the same
+shape in ten days — a value the configs assert and no checker resolves.
+
 Two properties of the engine's JSON layer caused most of this. One is fixed, one
 is not. Both are described below, because neither is visible from the code and
 neither produces an error message.
