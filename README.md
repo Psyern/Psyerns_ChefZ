@@ -62,7 +62,7 @@ design questions — is kept internally and is not part of this repository.
 | **Packing** | 17 sources, **all 17 packed** — the four asset addons included, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Four deliveries in — 68 models, 144 texture files (**119 distinct**), **77 of 130 classes** on their own geometry; 11 synced meshes still await a `model=` line |
+| **3D assets** | Four deliveries in, all 80 meshes synced — 90 `.p3d`, 144 texture files (**119 distinct**), **77 of 130 classes** on their own geometry; every config asset path resolves (69 of 69) |
 
 ## Repository Layout
 
@@ -117,12 +117,14 @@ unchanged on purpose. The fourth delivery of 06.09. grew it to **206 files** —
 (six of them proxy stubs), 92 textures and 24 scripts across `ChefZ_Core`, `ChefZ_Devices`,
 `ChefZ_Food`, `ChefZ_Items` and `ChefZ_Plants`. Only part of it is in use: the beekeeping and item
 models were copied into `ChefZ_Devices`, `ChefZ_Items`, `ChefZ_Food` and `ChefZ_Plants`
-under `Addons/` and are bound to their classes since 30.08. The `sync-assets.mjs` run of
-06.09. copied 58 more files across, so 64 of the 80 meshes now stand in the addons. The
-sixteen that do not are the chili and corn growth stages under `cultivation/models/` —
-a gap in the tool, not in the delivery: its `SUBDIRS` lists `models`, `data` and
-`cultivation/data`, but not `cultivation/models`. Of the meshes that did arrive, only
-`ChefZ_HoneyExtractor` is bound so far; the other eleven wait for a `model=` line. This folder is the original,
+under `Addons/` and are bound to their classes since 30.08. Two `sync-assets.mjs` runs on
+06.09. copied 75 files across, and **all 80 delivered meshes now stand in the addons**.
+The second run was a repair: `SUBDIRS` had never listed `cultivation/models`, so the
+sixteen chili and corn growth-stage meshes had never arrived — and with them the file
+`ChefZ_CornPlant` and `ChefZ_WildCorn` have pointed at since 01.09. Both classes carried
+a model path that resolved to nothing in the PBO; see
+[Known Limitations](ChefZ_Wiki/Known-Limitations.md). Of the meshes that arrived, only
+`ChefZ_HoneyExtractor` was newly bound; eleven more wait for a `model=` line. This folder is the original,
 not a second copy in use. It is **not part of the build** — `pack.mjs` collects
 `Psyerns_ChefZ_Core/Addons/*` and root folders matching `Psyerns_ChefZ_*_Comp`, and
 `ChefZ/` is neither — and the validator never reads it. Worth knowing: three of its five

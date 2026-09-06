@@ -32,7 +32,17 @@ const PAIRS = [
   ['ChefZ/ChefZ_Food',    'Psyerns_ChefZ_Core/Addons/ChefZ_Food'],
   ['ChefZ/ChefZ_Plants',  'Psyerns_ChefZ_Core/Addons/ChefZ_Plants'],
 ];
-const SUBDIRS = ['models', 'data', 'cultivation/data'];
+// cultivation/models gehoert dazu, seit dem 06.09.2026 nachgetragen. Es fehlte,
+// und der Preis war derselbe wie beim vergessenen models/proxies/ am 03.09.:
+// ChefZ_CornPlant und ChefZ_WildCorn zeigen seit 46b0c4d auf
+// "\ChefZ\ChefZ_Plants\cultivation\models\corn_plant.p3d" - eine Datei, die
+// nie in der Packquelle ankam. Die Klassen trugen damit ein totes Modell, ohne
+// dass irgendetwas es meldete: der Packer prueft Proxy-Ziele, aber kein
+// Werkzeug prueft, ob ein model= ueberhaupt auf eine vorhandene Datei zeigt.
+// corn_plant.p3d ist zudem selbst nur ein Proxy-Container - es haengt die
+// sieben Wachstumsstufen aus cultivation/models/corn/ ein, die aus demselben
+// Grund fehlten.
+const SUBDIRS = ['models', 'data', 'cultivation/data', 'cultivation/models'];
 
 let copied = 0;
 let same = 0;

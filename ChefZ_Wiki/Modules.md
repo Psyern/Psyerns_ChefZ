@@ -401,9 +401,10 @@ all**: no `CfgVehicles` class, no script, no JSON record, no stringtable key. Ea
 | `ChefZ_Plants` | the crops and herbs — cabbage, carrot, corn cob and plant, garlic, parsley, red onion, rosemary, thyme |
 | `ChefZ_Food` | prepared food |
 
-Together **68 models and 144 texture files — 119 distinct images**, since the dishes of
+Together **90 `.p3d` and 144 texture files — 119 distinct images**, since the dishes of
 01.09.2026 now sit in `ChefZ_Food` under three names: our own, the delivery's original,
-and the `data/panfood/` set of 06.09. Six further `.p3d` stand
+and the `data/panfood/` set of 06.09. Of those `.p3d`, fourteen are the chili and corn
+growth stages under `cultivation/models/`, hung into two plant stubs. Six further `.p3d` stand
 beside them in `models/proxies/` — the five hooks of the drying rack and the plate of
 the frying pan. They carry no geometry of their own; they are the places at which
 another model is hung, and they were missing from the addons until 03.09.2026. **77 of the mod's 130
@@ -418,8 +419,9 @@ for its own `honey_extractor.p3d`, which carries its texture path inside the `.p
 therefore needs no `hiddenSelections`. Eleven further meshes — the pasta machine,
 butter, dough, dried pasta, egg, flatbread, cream, flour, tomato sauce, the wooden bowl
 and the chili pod — sit in the asset PBOs with no class pointing at them. Three more
-(mushroom box, raw rabbit, spice tin) have no class at all. `Known-Limitations` holds
-the difference, including the sixteen growth-stage meshes the sync cannot reach.
+(mushroom box, raw rabbit, spice tin) have no class at all. The same day's second sync
+closed a longer-standing hole: the corn plant's model path had never resolved inside the
+PBO. `Known-Limitations` has the account.
 
 They exist because a model is not content in the ChefZ sense. A `.p3d` says nothing
 about categories, recipes or states — it is a shape a content class points at. Keeping

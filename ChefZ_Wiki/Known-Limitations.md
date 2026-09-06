@@ -86,20 +86,44 @@ models (six of them proxy stubs), 92 textures, 24 scripts — in five folders:
 `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`, `ChefZ_Items`, `ChefZ_Plants`.
 
 Nothing consumes it directly. `sync-assets.mjs` copies out of it into `Addons/`, and
-those copies are what the content addons point at. The run of 06.09. copied 58 files
-across and left 99 unchanged, so **64 of the 80 meshes** now stand in the four asset
-addons, the six proxy stubs included. Ten meshes still stand there that the delivery no
-longer carries — the six soups and stews and three plates, plus the old
-`ChefZ_Plants/models/corn_plant.p3d`; the script copies but never deletes.
+those copies are what the content addons point at. Two runs on 06.09. copied 75 files
+across, so **all 80 meshes** now stand in the four asset addons, the six proxy stubs
+included. Ten meshes still stand there that the delivery no longer carries — the six
+soups and stews and three plates, plus the old `ChefZ_Plants/models/corn_plant.p3d`; the
+script copies but never deletes.
 
-**Sixteen meshes the sync does not reach.** `SUBDIRS` in `sync-assets.mjs` lists
-`models`, `data` and `cultivation/data` — not `cultivation/models`, where the seven
-chili and seven corn growth stages and their two plant stubs live. This is the same
-failure the script's own header records for `models/proxies/` on 03.09., one directory
-level deeper: the models are in the delivery, the addon never sees them, and nothing
-reports it. Adding `'cultivation/models'` to that array is the fix. `ChefZ_CornPlant` is
-not at risk meanwhile — its bound `models/corn_plant.p3d` is still in the pack source,
-because the script never deletes.
+**The corn plant carried a dead model path, and nothing said so.** `SUBDIRS` in
+`sync-assets.mjs` listed `models`, `data` and `cultivation/data` — not
+`cultivation/models`, where the seven chili and seven corn growth stages and their two
+plant stubs live. Sixteen meshes therefore never left the delivery folder. That is the
+same failure the script's own header records for `models/proxies/` on 03.09., one
+directory level deeper.
+
+The cost was worse than a missing mesh. Since `46b0c4d`, `ChefZ_CornPlant` and
+`ChefZ_WildCorn` have set
+
+```
+model = "\ChefZ\ChefZ_Plants\cultivation\models\corn_plant.p3d";
+```
+
+and that file had never been in the pack source — only the older
+`models/corn_plant.p3d`, which nothing references any more. Both classes have been
+pointing at a path that resolves to nothing inside the PBO since 01.09. `corn_plant.p3d`
+is itself only an 11 KB proxy container: it hangs the seven stage meshes from
+`cultivation/models/corn/` into place, and those were missing for the same reason.
+
+**Why no checker caught it.** `pack.mjs` validates proxy targets — that is what stopped
+the build on 03.09. `check-todo.mjs` holds the asset list against the configs. But
+nothing asks whether a `model=` points at a file that exists. Resolving all 69 ChefZ
+asset paths in the configs against the pack source found exactly this one dead; the
+other 68 resolved. A checker that does this permanently is the lesson worth taking.
+
+**Fixed on 06.09.2026:** `'cultivation/models'` is in `SUBDIRS`, a second sync pulled
+the sixteen meshes and the cultivation `model.cfg` across, and all 69 paths now resolve.
+Not yet proven: that the corn plant renders correctly on the staged stub. It moves from
+one 4.6 MB mesh to seven stages — the arrangement the config has demanded since 01.09.,
+but only an in-game test settles it. The old `models/corn_plant.p3d` stays behind as
+unreferenced freight; the script never deletes.
 
 Being synced is not the same as being used. Of the meshes that arrived on 06.09., exactly
 one is bound: `ChefZ_HoneyExtractor`, which moved off `Cauldron.p3d` the same day. The
