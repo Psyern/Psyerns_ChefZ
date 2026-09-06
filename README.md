@@ -848,6 +848,19 @@ at (`pack.mjs:88`); every other addon's prefix must match its folder name.
 > all fourteen PBOs keep theirs. Headless, the same run is
 > `RaG_PBO_Builder.exe build --project-root <repository root>`.
 >
+> **A wrong root has a second symptom, and it names the wrong file.** With Binarize
+> switched on, RaG passes the Project root straight through as `-addon=` and `-binpath=`.
+> A root of `C:/` therefore tells Binarize to scan the **whole drive** for configs — the
+> Recycle Bin included. On 07.09.2026 that turned a deleted 28.08. copy of the mod into a
+> build failure: CfgConvert parsed
+> `C:\$Recycle.Bin\...\Psyerns_ChefZ_Core\Addons\ChefZ_Baking\config.cpp`, a version that
+> still declared `ChefZ_Yeast` against a base class the current tree no longer has, and
+> stopped with *Error 3 while parsing config* → `Binarize failed with exit code 1:
+> C:\Temp\addons\ChefZ_Devices\staging`. **`ChefZ_Devices` is named because it is the
+> first addon in the run that owns a `.p3d`** — the four before it skip Binarize
+> entirely — not because anything is wrong with it. Read the path in the CfgConvert
+> error before touching the addon it blames.
+>
 > Note what this does **not** catch: with the root pointing at `ChefZ/`, a proxy resolves
 > out of the delivery folder even when it is missing from the addon that ships it. That
 > gap is what `proxies.mjs` covers — it reads the addons and nothing else.
