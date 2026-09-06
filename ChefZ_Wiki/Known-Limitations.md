@@ -125,10 +125,11 @@ one 4.6 MB mesh to seven stages — the arrangement the config has demanded sinc
 but only an in-game test settles it. The old `models/corn_plant.p3d` stays behind as
 unreferenced freight; the script never deletes.
 
-Being synced is not the same as being used. Of the meshes that arrived on 06.09., exactly
-one is bound: `ChefZ_HoneyExtractor`, which moved off `Cauldron.p3d` the same day. The
-other eleven are files in the PBO that no class points at until someone writes the
-`model=` line.
+Being synced is not the same as being used. Of the meshes that arrived on 06.09., two are
+bound: `ChefZ_HoneyExtractor` moved off `Cauldron.p3d` and `ChefZ_PastaMachine` off
+`Meat_Tenderizer.p3d`, both the same day. The other ten are files in the PBO that no
+class points at until someone writes the `model=` line. Each binding also empties a
+shared proxy: `ChefZ_UncappingFork` now sits on `Meat_Tenderizer.p3d` alone.
 Until that day they were not: the script copied only the top level of `models/` and
 skipped every directory, so `models/proxies/` stayed behind. The models that name
 those proxies were shipped without them, and the packer stopped with *Invalid P3D

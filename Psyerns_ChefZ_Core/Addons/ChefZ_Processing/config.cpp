@@ -247,17 +247,32 @@ class CfgVehicles
     //      baut die Maschine aus einem MetalPlate mit METALWORK_TOOL. Wer sie
     //      will, kann sie herstellen, statt auf ein Loot-Roll zu hoffen.
     //
-    // PROXY: Meat_Tenderizer.p3d - dasselbe Modell, das die Vanillaklasse
-    // MeatTenderizer traegt und damit ein im Projekt belegter Pfad
-    // (ChefZ_Asset_Backlog §10.1 nennt ihn als den korrekten). Ein metallenes
-    // Kuechengeraet mit Griff. Eigenes Pastamaschinenmesh ist gemeldet (U, P2).
+    // MODELL: eigene Geometrie seit dem 06.09.2026 (Lieferung 449b70f). Bis
+    // dahin stand hier Meat_Tenderizer.p3d - dasselbe Modell, das die
+    // Vanillaklasse MeatTenderizer traegt und damit ein im Projekt belegter
+    // Pfad (ChefZ_Asset_Backlog §10.1 nannte ihn als den korrekten). Der
+    // Proxy war doppelt begruendet: ein metallenes Kuechengeraet mit Griff,
+    // und dieselbe Klasse, die ueber ROLLING_PIN.classes[] die Loot-Quelle
+    // der Maschine ist. Beides bleibt richtig - nur das Aussehen nicht mehr:
+    // die Lieferung hat das Pastamaschinenmesh gebracht, das der Asset-Bedarf
+    // als (U, P2) gefuehrt hat.
+    //
+    // Damit sitzt ChefZ_UncappingFork allein auf Meat_Tenderizer.p3d; die
+    // Zwei-Klassen-Kollision der Asset-Liste ist aufgeloest.
+    //
+    // KEIN hiddenSelections, obwohl das Mesh eine Selektion "camo" traegt:
+    // pastamachine.p3d nennt seine Textur
+    // "ChefZ\ChefZ_Devices\data\pastamachine_co.paa" bereits im eigenen
+    // Binaerstrom - nachgelesen, nicht vermutet. Eine zweite Zuweisung ueber
+    // hiddenSelectionsTextures waere tote Config. Gleiche Anordnung wie
+    // Butterfass, Raeucherofen und Honigschleuder.
     //--------------------------------------------------------------------------
     class ChefZ_PastaMachine : Inventory_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_PASTAMACHINE";
         descriptionShort = "#STR_CHEFZ_PASTAMACHINE_DESC";
-        model = "\dz\gear\tools\Meat_Tenderizer.p3d";
+        model = "\ChefZ\ChefZ_Devices\models\pastamachine.p3d";   // EIGENES MODELL (06.09.2026, Lieferung 449b70f)
         weight = 2200;
         itemSize[] = {3, 2};
         repairableWithKits[] = {};

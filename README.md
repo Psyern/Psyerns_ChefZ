@@ -62,7 +62,7 @@ design questions — is kept internally and is not part of this repository.
 | **Packing** | 17 sources, **all 17 packed** — the four asset addons included, see [Packing](#packing) |
 | **Server run** | Boots and registers, then dies in `OnInit` — measured 28.08.2026 |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
-| **3D assets** | Four deliveries in, all 80 meshes synced — 90 `.p3d`, 144 texture files (**119 distinct**), **77 of 130 classes** on their own geometry; every config asset path resolves (69 of 69) |
+| **3D assets** | Four deliveries in, all 80 meshes synced — 90 `.p3d`, 144 texture files (**119 distinct**), **78 of 130 classes** on their own geometry; every config asset path resolves (69 of 69) |
 
 ## Repository Layout
 
@@ -123,8 +123,8 @@ The second run was a repair: `SUBDIRS` had never listed `cultivation/models`, so
 sixteen chili and corn growth-stage meshes had never arrived — and with them the file
 `ChefZ_CornPlant` and `ChefZ_WildCorn` have pointed at since 01.09. Both classes carried
 a model path that resolved to nothing in the PBO; see
-[Known Limitations](ChefZ_Wiki/Known-Limitations.md). Of the meshes that arrived, only
-`ChefZ_HoneyExtractor` was newly bound; eleven more wait for a `model=` line. This folder is the original,
+[Known Limitations](ChefZ_Wiki/Known-Limitations.md). Of the meshes that arrived, two were
+newly bound — `ChefZ_HoneyExtractor` and `ChefZ_PastaMachine`; ten more wait for a `model=` line. This folder is the original,
 not a second copy in use. It is **not part of the build** — `pack.mjs` collects
 `Psyerns_ChefZ_Core/Addons/*` and root folders matching `Psyerns_ChefZ_*_Comp`, and
 `ChefZ/` is neither — and the validator never reads it. Worth knowing: three of its five

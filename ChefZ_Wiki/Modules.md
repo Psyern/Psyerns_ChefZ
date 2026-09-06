@@ -407,18 +407,18 @@ and the `data/panfood/` set of 06.09. Of those `.p3d`, fourteen are the chili an
 growth stages under `cultivation/models/`, hung into two plant stubs. Six further `.p3d` stand
 beside them in `models/proxies/` — the five hooks of the drying rack and the plate of
 the frying pan. They carry no geometry of their own; they are the places at which
-another model is hung, and they were missing from the addons until 03.09.2026. **77 of the mod's 130
+another model is hung, and they were missing from the addons until 03.09.2026. **78 of the mod's 130
 spawnable classes** now stand on their own geometry rather than a vanilla proxy — 45 of
-them rebound in the second delivery alone. The remaining 53 still point at a vanilla mesh; the standing
+them rebound in the second delivery alone. The remaining 52 still point at a vanilla mesh; the standing
 backlog is what `tools/chefz-assets/check-todo.mjs` measures.
 
 A synced mesh is not yet a bound one, and the count above only ever moves on binding.
 The `sync-assets.mjs` run of 06.09.2026 brought the fourth delivery into the addons, but
-just one class was rebound onto it that day: `ChefZ_HoneyExtractor` left `Cauldron.p3d`
-for its own `honey_extractor.p3d`, which carries its texture path inside the `.p3d` and
-therefore needs no `hiddenSelections`. Eleven further meshes — the pasta machine,
-butter, dough, dried pasta, egg, flatbread, cream, flour, tomato sauce, the wooden bowl
-and the chili pod — sit in the asset PBOs with no class pointing at them. Three more
+two classes were rebound onto it that day: `ChefZ_HoneyExtractor` left `Cauldron.p3d`
+and `ChefZ_PastaMachine` left `Meat_Tenderizer.p3d`, both for meshes that carry their
+texture path inside the `.p3d` and therefore need no `hiddenSelections`. Ten further
+meshes — butter, dough, dried pasta, egg, flatbread, cream, flour, tomato sauce, the
+wooden bowl and the chili pod — sit in the asset PBOs with no class pointing at them. Three more
 (mushroom box, raw rabbit, spice tin) have no class at all. The same day's second sync
 closed a longer-standing hole: the corn plant's model path had never resolved inside the
 PBO. `Known-Limitations` has the account.
