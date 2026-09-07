@@ -355,7 +355,7 @@ class ChefZ_CookSession : Managed
         if (s.HasBinding()) return ChefZ_SelfTestTrace.Fail("CookSession", 355, "s.HasBinding()");
         if (s.IsInert()) return ChefZ_SelfTestTrace.Fail("CookSession", 356, "s.IsInert()");
         if (s.signature.IsMeasured()) return ChefZ_SelfTestTrace.Fail("CookSession", 357, "s.signature.IsMeasured()");
-        if (s.ticksSinceMatch != LONG_AGO) return ChefZ_SelfTestTrace.Fail("CookSession", 358, "s.ticksSinceMatch != LONG_AGO");
+        if (s.ticksSinceMatch != LONG_AGO) return ChefZ_SelfTestTrace.Fail("CookSession", 358, "s.ticksSinceMatch != LONG_AGO  [ist=" + s.ticksSinceMatch.ToString() + " LONG_AGO=" + LONG_AGO.ToString() + "]");
 
         // Touch zaehlt, laeuft aber nicht ueber.
         s.ticksSinceMatch = 0;
