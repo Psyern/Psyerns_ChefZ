@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/Recipes-JSON_driven-E67E22?style=flat-square" alt="JSON Recipes">
   <img src="https://img.shields.io/badge/Optional-Terje_Skills_%7C_Medicine-8E44AD?style=flat-square" alt="Terje">
   <img src="https://img.shields.io/badge/Optional-Community_Online_Tools-3498DB?style=flat-square" alt="COT">
-  <img src="https://img.shields.io/badge/Validation-19_static_checkers-E74C3C?style=flat-square" alt="Validators">
+  <img src="https://img.shields.io/badge/Validation-21_static_checkers-E74C3C?style=flat-square" alt="21 static validators">
 </p>
 
 <p align="center">
@@ -34,14 +34,33 @@
 
 ## Project Status
 
-**The mod is written. It has never kept a DayZ server running.**
+**The mod is written and it loads. It has not yet been proven on a server
+running the current tree.**
 
-Every addon under `ChefZ_Core/Addons/` is implemented: 163 `CfgVehicles`
-classes (`scope = 0` base classes included), 174 script files, 480 data records and
-365 stringtable keys in 13 languages. The static validator suite runs green. What
-has not happened is a server that survives startup — the process registers every
-addon, loads its config, and then dies with an access violation in the mission's
-`OnInit` chain while the core sits in safe mode with empty registries.
+Every addon under `ChefZ_Core/Addons/` is implemented: **156 `CfgVehicles`
+classes** (130 spawnable, 15 `scope = 0` base classes, 11 sub-nodes), **200 script
+files** (176 in the mod, 24 in the three compatibility mods), **574 records** in the
+JSON configuration and **383 stringtable keys** in 13 languages. Counted from the
+files on 07.09.2026 with the validators' own parser, not carried forward.
+
+The static suite runs green: `chefz-validate` exits 0 with 0 errors and 2
+warnings, `check-todo` reports no drift in any of its four categories, and every
+one of the 69 asset paths the configs name resolves in the pack source.
+
+**What a server run showed on 07.09.2026.** All twelve script modules compile and
+register, the core boots server-side, self-tests S1–S9 run, and the config load
+reports `health=OK` with populated registries — 41 categories, 157 ingredients,
+48 recipes, 62 transforms, 15 stations, 22 of 22 handcraft recipes. Zero script
+errors from ChefZ. One run of three held the mission for 75 seconds without a
+runtime error; the other two died with an access violation right after
+`[CE][Hive] :: Loading core data`, which `testrun.ps1` documents as a sporadic
+fault of this deployment that also occurs without ChefZ.
+
+**That measurement does not describe the code in this tree.** The test script
+loaded `@ChefZ` last, an older build that overrode the freshly packed PBOs, and
+that was only found afterwards. It is fixed; a run against the current tree is
+still outstanding. Earlier statements here about the core coming up in safe mode
+with empty registries were from that older build and are no longer true.
 
 Read [Known Limitations](ChefZ_Wiki/Known-Limitations.md) before putting this
 anywhere near a live server. It is the honest inventory and it is kept current on
@@ -53,14 +72,14 @@ design questions — is kept internally and is not part of this repository.
 
 | | |
 |---|---|
-| **`ChefZ_Core`** | Implemented — 137 script files, zero content classes |
+| **`ChefZ_Core`** | Implemented — 138 script files, zero content classes |
 | **Content modules** | Implemented — 7 content addons, the merged registry and 4 asset packages · 48 recipes · 62 transforms · 15 stations |
 | **Cookbook** | Implemented as knowledge state, RPC and an F9 key — no UI yet (Milestone 5.1) |
 | **Compatibility mods** | Implemented — Terje Skills, Terje Medicine, COT · 0 new item classes |
 | **Validation** | 21 checkers · **exit code 0 · 0 errors · 2 warnings** |
 | **Validator self-test** | 20 of 21 checkers provably fire · `chefzaction` not yet covered |
 | **Packing** | 17 sources, **all 17 packed** — the four asset addons included, see [Packing](#packing) |
-| **Server run** | All 12 script modules compile and register, core boots, self-tests S1–S9 run · **0 ChefZ errors** · still dies after `[CE][Hive] :: Loading core data` — 0 of 3 starts, measured 07.09.2026 |
+| **Server run** | 12 of 12 script modules compile and register, core boots, `health=OK`, registries populated · **0 ChefZ errors** · 1 of 3 runs held the mission 75 s; the other two hit the deployment's sporadic crash after `[CE][Hive] :: Loading core data` · measured 07.09.2026 **against an older build** — see Project Status |
 | **Gates 1–4** | Reports written · Gate 4 verdict: NOT READY |
 | **3D assets** | Four deliveries in, all 80 meshes synced — 90 `.p3d`, 144 texture files (**119 distinct**), **78 of 130 classes** on their own geometry; every config asset path resolves (69 of 69) |
 
@@ -98,11 +117,11 @@ independent compatibility mods that are only needed if you run Terje or COT.
 │   ├── Audit/                              the Enforce audit of 03.09. — not built
 │   └── _deltas/                            registry deltas from the content slices
 │
-├── ChefZ/                                   ← the delivery, kept verbatim; not built
+├── ChefZ/                                  ← the delivery, kept verbatim; not built
 │
-├── ChefZ_Terje_Skills_Comp/        ← optional mod — Survival XP, Herbalist perk
-├── ChefZ_Terje_Medicine_Comp/      ← optional mod — herbal teas, immunity, poisoning
-├── ChefZ_COT_Comp/                 ← optional mod — COT spawn categories
+├── ChefZ_Terje_Skills_Comp/                ← optional mod — Survival XP, Herbalist perk
+├── ChefZ_Terje_Medicine_Comp/              ← optional mod — herbal teas, immunity, poisoning
+├── ChefZ_COT_Comp/                         ← optional mod — COT spawn categories
 │
 └── tools/
     ├── chefz-validate/                     static validators (Node, no dependencies)
