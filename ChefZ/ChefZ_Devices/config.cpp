@@ -59,8 +59,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_BEEHIVE";
 		model="\ChefZ\ChefZ_Devices\models\beehive.p3d";
 		descriptionShort="#STR_CHEFZ_BEEHIVE_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 		attachments[]=
 		{
 			"ChefZ_Honeycomb_Frame01",
@@ -96,8 +94,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_BEEKEEPER";
 		model="\ChefZ\ChefZ_Devices\models\beekeeper.p3d";
 		descriptionShort="#STR_CHEFZ_BEEKEEPER_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 		attachments[]=
 		{
 			"ChefZ_Honeycomb_Frame01",
@@ -123,8 +119,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_ButterChurn";
 		model="\ChefZ\ChefZ_Devices\models\ButterChurn.p3d";
 		descriptionShort="#STR_CHEFZ_ButterChurn_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 	class ChefZ_Device_CheesePress_Kit : ChefZ_Base_Kit
 	{
@@ -137,8 +131,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_CheesePress";
 		model="\ChefZ\ChefZ_Devices\models\CheesePress.p3d";
 		descriptionShort="#STR_CHEFZ_CheesePress_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 	class ChefZ_Device_GrainMill_Kit : ChefZ_Base_Kit
 	{
@@ -151,8 +143,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_GrainMill";
 		model="\ChefZ\ChefZ_Devices\models\GrainMill.p3d";
 		descriptionShort="#STR_CHEFZ_GrainMill_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 	class ChefZ_Device_MeatGrinder_Kit : ChefZ_Base_Kit
 	{
@@ -165,8 +155,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_MeatGrinder";
 		model="\ChefZ\ChefZ_Devices\models\MeatGrinder.p3d";
 		descriptionShort="#STR_CHEFZ_MeatGrinder_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 	class ChefZ_Device_Mortar_Kit : ChefZ_Base_Kit
 	{
@@ -179,8 +167,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_Mortar";
 		model="\ChefZ\ChefZ_Devices\models\Mortar.p3d";
 		descriptionShort="#STR_CHEFZ_Mortar_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 	class ChefZ_Device_Smoker_Kit : ChefZ_Base_Kit
 	{
@@ -193,8 +179,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_Smoker";
 		model="\ChefZ\ChefZ_Devices\models\Smoker.p3d";
 		descriptionShort="#STR_CHEFZ_Smoker_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 	class ChefZ_Device_DryRack_Kit : ChefZ_Base_Kit
 	{
@@ -207,8 +191,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_DryRack";
 		model="\ChefZ\ChefZ_Devices\models\DryRack.p3d";
 		descriptionShort="#STR_CHEFZ_DryRack_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 		attachments[]=
 		{
 			"ChefZ_DryRack_Hook_1",
@@ -229,8 +211,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_HoneyExtractor";
 		model="\ChefZ\ChefZ_Devices\models\Honey_Extractor.p3d";
 		descriptionShort="#STR_CHEFZ_HoneyExtractor_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 		attachments[]=
 		{
 			"ChefZ_Honeycomb_Frame01",
@@ -247,8 +227,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_ShroomBox";
 		model="\ChefZ\ChefZ_Devices\models\ShroomBox.p3d";
 		descriptionShort="#STR_CHEFZ_ShroomBox_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 	class ChefZ_Device_PastaMachine_Kit : ChefZ_Base_Kit
 	{
@@ -261,8 +239,6 @@ class CfgVehicles
 		displayName="#STR_CHEFZ_PastaMachine";
 		model="\ChefZ\ChefZ_Devices\models\PastaMachine.p3d";
 		descriptionShort="#STR_CHEFZ_PastaMachine_DESC";
-		weight=25000;
-		itemSize[]={10,10};
 	};
 };
 class CfgNonAIVehicles

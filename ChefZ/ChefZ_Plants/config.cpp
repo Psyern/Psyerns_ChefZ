@@ -29,7 +29,7 @@ class CfgMods
 		type="mod";
 		dependencies[]=
 		{
-			"world"
+			"World"
 		};
 		class defs
 		{

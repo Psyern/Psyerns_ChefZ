@@ -118,6 +118,8 @@ class CfgVehicles
 	class ChefZ_Deployed_Base : ChefZ_Item_Base
 	{
 		scope=0;
+		weight=25000;
+		itemSize[]={10,10};
 		physLayer="item_large";
 		class DamageSystem
 		{

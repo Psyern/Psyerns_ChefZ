@@ -122,6 +122,8 @@
 
 "STR_CHEFZ_BEEHIVE","Beehive","Beehive","Bienenstock",
 "STR_CHEFZ_BEEHIVE_DESC","PLATZHALTER","PLATZHALTER","PLATZHALTER",
+"STR_CHEFZ_BEEKEEPER","Beehive","Beehive","Bienenstock",
+"STR_CHEFZ_BEEKEEPER_DESC","PLATZHALTER","PLATZHALTER","PLATZHALTER",
 "STR_CHEFZ_ButterChurn","Butterchurn","Butterchurn","Butterfass",
 "STR_CHEFZ_ButterChurn_DESC","PLATZHALTER","PLATZHALTER","PLATZHALTER",
 "STR_CHEFZ_CheesePress","Cheese press","Cheese press","Käsepresse",
@@ -137,3 +139,9 @@
 "STR_CHEFZ_DryRack","Drying rack","Drying rack","Trockengestell",
 "STR_CHEFZ_DryRack_DESC","PLATZHALTER","PLATZHALTER","PLATZHALTER",
 "STR_CHEFZ_DryRack_Hook","Hook for Meat","Hook for Meat","Haken für Fleisch",
+"STR_CHEFZ_HoneyExtractor","Honey extractor","Honey extractor","Honigschleuder",
+"STR_CHEFZ_HoneyExtractor_DESC","PLATZHALTER","PLATZHALTER","PLATZHALTER",
+"STR_CHEFZ_ShroomBox","Mushroom box","Mushroom box","Pilzzucht",
+"STR_CHEFZ_ShroomBox_DESC","PLATZHALTER","PLATZHALTER","PLATZHALTER",
+"STR_CHEFZ_PastaMachine","Paste machine","Paste machine","Nudelmaschine",
+"STR_CHEFZ_PastaMachine_DESC","PLATZHALTER","PLATZHALTER","PLATZHALTER",

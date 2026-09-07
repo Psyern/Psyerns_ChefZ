@@ -71,14 +71,14 @@ class CfgHorticulture
 		{
 			infestedTex="dz\gear\cultivation\data\cannabis_plant_insect_co.paa";
 			infestedMat="dz\gear\cultivation\data\cannabis_plant_insect.rvmat";
-			healthyTex="ChefZ\ChefZ_Plants\cultivation\data\corn_plant_4_co.paa";
+			healthyTex="ChefZ\ChefZ_Plants\cultivation\Plant_Corn\Data\corn_plant_4_co.paa";
 			healthyMat="dz\gear\cultivation\data\cannabis_plant.rvmat";
 		};
 		class Plant_Chili
 		{
 			infestedTex="dz\gear\cultivation\data\cannabis_plant_insect_co.paa";
 			infestedMat="dz\gear\cultivation\data\cannabis_plant_insect.rvmat";
-			healthyTex="ChefZ\ChefZ_Plants\cultivation\data\chili_plant_4_co.paa";
+			healthyTex="ChefZ\ChefZ_Plants\cultivation\Plant_Chili\data\chili_plant_4_co.paa";
 			healthyMat="dz\gear\cultivation\data\cannabis_plant.rvmat";
 		};
 	};
