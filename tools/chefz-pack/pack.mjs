@@ -30,7 +30,18 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
 
-const DEFAULT_TARGET = 'D:\\Agent\\deployments\\DME-Test\\@ChefZ\\Addons';
+// Ziel ist @3786176249, nicht mehr @ChefZ.
+//
+// Beide Ordner liegen im Deployment und tragen dieselben siebzehn Addonnamen.
+// Geladen wird der, der in der -mod-Zeile spaeter steht; der Server fuehrt seit
+// dem 06.09. @3786176249 und kein @ChefZ (RPT vom 07.09. 00:59). Wer weiter
+// nach @ChefZ packt, baut siebzehn PBOs, die niemand laedt - am 07.09. hat das
+// mehrere Messungen wertlos gemacht, ohne dass irgendetwas fehlgeschlagen
+// waere.
+//
+// @ChefZ ist damit ein Ueberbleibsel. Loeschen darf ihn nur der Mensch; bis
+// dahin steht er wenigstens nicht mehr im Weg (siehe auch testrun.ps1).
+const DEFAULT_TARGET = 'D:\\Agent\\deployments\\DME-Test\\@3786176249\\Addons';
 const TARGET = process.argv[2] || DEFAULT_TARGET;
 
 const ADDON_BUILDER = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\DayZ Tools'

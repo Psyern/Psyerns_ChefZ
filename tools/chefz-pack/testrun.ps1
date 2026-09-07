@@ -93,7 +93,23 @@ public class ChefZWin {
 Add-Type -TypeDefinition $sig -Language CSharp
 
 $profiles = Join-Path $Deployment "profiles"
-$mods = "@3689057982;@2536780687;@2931560672;@2918418331;@2276010135;@2572331007;@2116157322;@1564026768;@2545327648;@1559212036;@3571685323;@3649957186;@3649958757;@3649957536;@3649959707;@1646187754;@3164839000;@2651195301;@1832448183;@1710977250;@1932611410;@2170927235;@3690289718;@3354681846;@2471347750;@3616635518;@3759357431;@3786175534;@3783149286;@3623510671;@3627848296;@3646233886;@3780383282;@3786176249;@ChefZ;"
+# KEIN @ChefZ am Ende. Der Ordner traegt DIESELBEN siebzehn Addonnamen wie
+# @3786176249, und der spaetere Eintrag gewinnt - jeder Lauf mit "@ChefZ;" am
+# Schluss hat also den Inhalt von @ChefZ geladen und den von @3786176249
+# verworfen.
+#
+# Gemessen am 07.09.2026: @ChefZ stand auf dem Stand vom 31.08. Frisch gepackte
+# PBOs in @3786176249 blieben dadurch wirkungslos, und zwar lautlos - der Server
+# startete, die Selbsttests liefen, der Ladebericht kam, alles vom alten Stand.
+# Zwei Reparaturen galten als widerlegt, obwohl sie nie geladen worden waren,
+# und eine dritte galt als bewiesen, obwohl der alte Stand das Problem nur nicht
+# hatte.
+#
+# @3786176249 ist der richtige Ordner: die -mod-Zeile des Servers im RPT vom
+# 07.09. 00:59 fuehrt ihn und kein @ChefZ. Wer @ChefZ behalten will, muss ihn
+# aus dieser Liste heraushalten - zwei Ordner mit denselben Addonnamen sind
+# keine Redundanz, sondern eine stille Ueberdeckung.
+$mods = "@3689057982;@2536780687;@2931560672;@2918418331;@2276010135;@2572331007;@2116157322;@1564026768;@2545327648;@1559212036;@3571685323;@3649957186;@3649958757;@3649957536;@3649959707;@1646187754;@3164839000;@2651195301;@1832448183;@1710977250;@1932611410;@2170927235;@3690289718;@3354681846;@2471347750;@3616635518;@3759357431;@3786175534;@3783149286;@3623510671;@3627848296;@3646233886;@3780383282;@3786176249;"
 foreach ($weg in $OhneMods) { $mods = $mods.Replace("@$weg;", "") }
 if ($OhneMods.Count -gt 0) { Write-Host "Diagnose: ohne $($OhneMods -join ', ')" }
 
