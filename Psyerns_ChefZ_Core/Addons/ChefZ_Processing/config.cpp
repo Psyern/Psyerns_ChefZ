@@ -165,6 +165,23 @@ class CfgSlots
     class Slot_ChefZ_DryHook03 { name = "ChefZ_DryHook03"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
     class Slot_ChefZ_DryHook04 { name = "ChefZ_DryHook04"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
     class Slot_ChefZ_DryHook05 { name = "ChefZ_DryHook05"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
+
+    // Die fuenf Raehmchenplaetze der Honigschleuder (07.09.2026).
+    //
+    // Fuenf, weil der Kopf von ChefZ_HoneyExtractor genau damit rechnet:
+    // "fuenf Rahmen a 2x3 (30) und fuenfzehn Glaeser a 1x2 (30)". Die Glaeser
+    // bleiben im Cargo - sie sind Behaelter, keine eingehaengten Teile, und
+    // TR_SpinHoney nimmt je Durchgang eines.
+    //
+    // EIGENE NAMEN statt der Stockplaetze ChefZ_Frame01..20: ein Raehmchen
+    // soll in beiden Geraeten liegen duerfen, aber ein Slot gehoert genau
+    // einem Geraet. Die Basis ChefZ_HoneycombFrame_Base fuehrt beide
+    // Namensraeume in ihrem inventorySlot[].
+    class Slot_ChefZ_ExtractorFrame01 { name = "ChefZ_ExtractorFrame01"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
+    class Slot_ChefZ_ExtractorFrame02 { name = "ChefZ_ExtractorFrame02"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
+    class Slot_ChefZ_ExtractorFrame03 { name = "ChefZ_ExtractorFrame03"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
+    class Slot_ChefZ_ExtractorFrame04 { name = "ChefZ_ExtractorFrame04"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
+    class Slot_ChefZ_ExtractorFrame05 { name = "ChefZ_ExtractorFrame05"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
 };
 
 class CfgVehicles
@@ -894,6 +911,19 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_HONEYEXTRACTOR";
         descriptionShort = "#STR_CHEFZ_ITEM_HONEYEXTRACTOR_DESC";
         model = "\ChefZ\ChefZ_Devices\models\honey_extractor.p3d";   // EIGENES MODELL (06.09.2026, Lieferung 449b70f)
+
+        // DIE FUENF RAEHMCHENPLAETZE (07.09.2026). Begruendung an class
+        // CfgSlots im Kopf dieser Datei.
+        //
+        // Das Cargo daneben BLEIBT und behaelt seine Groesse: dort liegen die
+        // Glaeser und der erzeugte Honig. Wer die Raehmchen aus dem Cargo in
+        // die Plaetze umhaengt, aendert am Ablauf nichts - ChefZ_CountFrames()
+        // und ChefZ_RetireSpentFrames() lesen seit dem 07.09. beides.
+        attachments[] =
+        {
+            "ChefZ_ExtractorFrame01", "ChefZ_ExtractorFrame02", "ChefZ_ExtractorFrame03",
+            "ChefZ_ExtractorFrame04", "ChefZ_ExtractorFrame05"
+        };
         rotationFlags = 2;
         itemSize[] = {5, 5};
         weight = 9500;

@@ -233,24 +233,53 @@ class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
         int i = cargo.GetItemCount() - 1;
         while (i >= 0)
         {
-            ChefZ_HoneycombFrameUncapped frame = ChefZ_HoneycombFrameUncapped.Cast(cargo.GetItem(i));
-            if (frame && frame.GetQuantity() < CHEFZ_FRAME_SPENT_BELOW)
-            {
-                // Ein Rahmen ohne Inventar steckt bereits im Loeschen; ihn zu
-                // ersetzen waere ein VM-Fehler mitten im Timer-Rueckruf, und
-                // der Folgejob kaeme nie. Er wird uebersprungen.
-                GameInventory frameInventory = frame.GetInventory();
-                if (frameInventory)
-                {
-                    TurnItemIntoItemLambda lambda = new TurnItemIntoItemLambda(frame, CHEFZ_FRAME_EMPTY_CLASS, null);
-                    lambda.SetTransferParams(false, false, true, true);
-                    m_ChefZ_ReplacingFrame = true;
-                    frameInventory.ReplaceItemWithNew(InventoryMode.SERVER, lambda);
-                    m_ChefZ_ReplacingFrame = false;
-                }
-            }
+            ChefZ_RetireOneFrame(ChefZ_HoneycombFrameUncapped.Cast(cargo.GetItem(i)));
             i = i - 1;
         }
+
+        // Und dasselbe fuer die eingehaengten Raehmchen (07.09.2026).
+        // Rueckwaerts aus demselben Grund wie oben: der Tausch veraendert die
+        // Liste, ueber die gerade gelaufen wird.
+        int a = inventory.AttachmentCount() - 1;
+        while (a >= 0)
+        {
+            ChefZ_RetireOneFrame(ChefZ_HoneycombFrameUncapped.Cast(inventory.GetAttachmentFromIndex(a)));
+            a = a - 1;
+        }
+    }
+
+    /**
+     * Ein leergeschleudertes Raehmchen gegen ein leeres tauschen.
+     *
+     * Herausgezogen am 07.09.2026, als die Schleuder ihre Raehmchen auch aus
+     * Anbauplaetzen holen musste: derselbe Tausch an zwei Stellen waere zwei
+     * Gelegenheiten gewesen, ihn verschieden zu machen.
+     *
+     * ReplaceItemWithNew ersetzt AN ORT UND STELLE - ein Raehmchen im Cargo
+     * bleibt im Cargo, eines im Platz bleibt im Platz. Dass das leere
+     * Raehmchen die Extractor-Slots ebenfalls in seinem inventorySlot[] fuehrt,
+     * ist deshalb Bedingung und kein Beiwerk (ChefZ_Farming/config.cpp,
+     * class ChefZ_HoneycombFrame_Base).
+     */
+    protected void ChefZ_RetireOneFrame(ChefZ_HoneycombFrameUncapped frame)
+    {
+        if (!frame)
+            return;
+        if (frame.GetQuantity() >= CHEFZ_FRAME_SPENT_BELOW)
+            return;
+
+        // Ein Rahmen ohne Inventar steckt bereits im Loeschen; ihn zu
+        // ersetzen waere ein VM-Fehler mitten im Timer-Rueckruf, und der
+        // Folgejob kaeme nie. Er wird uebersprungen.
+        GameInventory frameInventory = frame.GetInventory();
+        if (!frameInventory)
+            return;
+
+        TurnItemIntoItemLambda lambda = new TurnItemIntoItemLambda(frame, CHEFZ_FRAME_EMPTY_CLASS, null);
+        lambda.SetTransferParams(false, false, true, true);
+        m_ChefZ_ReplacingFrame = true;
+        frameInventory.ReplaceItemWithNew(InventoryMode.SERVER, lambda);
+        m_ChefZ_ReplacingFrame = false;
     }
 
     //! Rahmen im Cargo - entdeckelte und leergeschleuderte gleichermassen.
@@ -268,6 +297,17 @@ class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
         for (int i = 0; i < n; i++)
         {
             if (ChefZ_HoneycombFrame_Base.Cast(cargo.GetItem(i)))
+                count = count + 1;
+        }
+
+        // Und die fuenf Raehmchenplaetze (07.09.2026). Ohne diese Schleife
+        // zaehlte die Schleuder ein eingehaengtes Raehmchen nicht mit, meldete
+        // "keine Raehmchen" und stand - waehrend fuenf davon sichtbar an ihr
+        // hingen. Ein Slot ist kein Cargo.
+        int slots = inventory.AttachmentCount();
+        for (int a = 0; a < slots; a++)
+        {
+            if (ChefZ_HoneycombFrame_Base.Cast(inventory.GetAttachmentFromIndex(a)))
                 count = count + 1;
         }
         return count;

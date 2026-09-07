@@ -1385,7 +1385,25 @@ class CfgVehicles
             "ChefZ_Frame09", "ChefZ_Frame10",
             "ChefZ_Frame11", "ChefZ_Frame12", "ChefZ_Frame13", "ChefZ_Frame14",
             "ChefZ_Frame15", "ChefZ_Frame16", "ChefZ_Frame17", "ChefZ_Frame18",
-            "ChefZ_Frame19", "ChefZ_Frame20"
+            "ChefZ_Frame19", "ChefZ_Frame20",
+
+            // Und die fuenf Plaetze der Honigschleuder (07.09.2026). Sie stehen
+            // hier an der BASIS und gelten damit fuer alle drei Zustaende -
+            // leer, voll, entdeckelt.
+            //
+            // Warum auch am LEEREN: die Schleuder tauscht ein leergeschleudertes
+            // Raehmchen an Ort und Stelle gegen ein leeres
+            // (ChefZ_HoneyExtractor.ChefZ_RetireSpentFrames, ReplaceItemWithNew).
+            // Passt das leere nicht in denselben Platz, misslingt der Tausch -
+            // und zwar lautlos.
+            //
+            // Warum auch am VOLLEN: ein verdeckeltes Raehmchen in der Schleuder
+            // ist kein Fehler, es matcht nur nicht (TR_SpinHoney nimmt
+            // ausdruecklich ChefZ_HoneycombFrameUncapped). Einhaengen duerfen
+            // und dann merken, dass erst entdeckelt werden muss, ist die
+            // freundlichere Rueckmeldung als ein Platz, der es gar nicht annimmt.
+            "ChefZ_ExtractorFrame01", "ChefZ_ExtractorFrame02", "ChefZ_ExtractorFrame03",
+            "ChefZ_ExtractorFrame04", "ChefZ_ExtractorFrame05"
         };
     };
 
