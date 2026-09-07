@@ -420,6 +420,16 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 240;
 
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
+
         // VOLUMEN: 1.96 * 250 = 490. Das schwerste Stueck Fleisch der Kette,
         // noch mit seinem Salzwasser - deshalb weit oben im Band 300-600 und
         // ueber Doerr- wie Rauchfleisch, genau wie im alten Wert 115.
@@ -549,6 +559,16 @@ class CfgVehicles
         model = "\dz\gear\food\steak.p3d";
         itemSize[] = {2, 1};
         weight = 200;
+
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
 
         // VOLUMEN: 1.52 * 250 = 380. Ein Salzfilet ist flacher als ein
         // Poekelstueck Fleisch und fuellt weniger - alter Wert 95 gegen 115.

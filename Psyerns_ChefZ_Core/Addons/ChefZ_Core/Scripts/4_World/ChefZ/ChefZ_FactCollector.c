@@ -228,6 +228,57 @@ class ChefZ_FactCollector
         LogIfDebug(container, snapshot);
     }
 
+    /**
+     * Wie CollectFromCargo, zusaetzlich die ANGEHAENGTEN Items.
+     *
+     * Wozu eine zweite Methode statt einer Erweiterung von CollectFromCargo:
+     * die liest auch der Kochadapter (ChefZ_CookingDeviceAdapter:1618). Ein
+     * Vanilla-Kochgefaess traegt Anbauteile, die keine Zutaten sind, und die
+     * duerfen dort nicht ploetzlich in den Topf wandern. Stationen sind der
+     * einzige Ort, an dem ein Anbauplatz eine Zutat haelt - deshalb bekommt
+     * nur ChefZ_ActionProcessAtStation diese Fassung.
+     *
+     * Warum es sie ueberhaupt braucht: ein Slot ist kein Cargo. Der
+     * Trockenrahmen haengt seine fuenf Stuecke an Haken
+     * (ChefZ_DryingRack.attachments[]), und ohne diese Schleife saehe der
+     * Matcher ein leeres Gestell - die Haken waeren Zierrat, das Trocknen
+     * wuerde nie matchen, und nichts wuerde das melden.
+     *
+     * Reihenfolge: erst Cargo, dann Anbauten. Beide Listen wachsen gemeinsam
+     * weiter, outEntities[facts.handle] bleibt also gueltig.
+     */
+    static void CollectFromStation(notnull ItemBase station, out ChefZ_FactSnapshot snapshot, out array<ItemBase> outEntities)
+    {
+        CollectFromCargo(station, snapshot, outEntities);
+
+        GameInventory inventory = station.GetInventory();
+        if (!inventory)
+            return;
+
+        int slots = inventory.AttachmentCount();
+        for (int i = 0; i < slots; i++)
+        {
+            ItemBase item = ItemBase.Cast(inventory.GetAttachmentFromIndex(i));
+            if (!item)
+                continue;
+            if (item == station)
+                continue;
+            if (!IsCollectable(item))
+                continue;
+
+            int handle = outEntities.Count();
+            ChefZ_ItemFacts facts = snapshot.Acquire();
+
+            if (!CollectSingle(item, handle, facts))
+            {
+                snapshot.DiscardLast();
+                continue;
+            }
+
+            outEntities.Insert(item);
+        }
+    }
+
     //==========================================================================
     // Ein einzelnes Item
     //==========================================================================

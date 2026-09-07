@@ -484,7 +484,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         ChefZ_FactSnapshot snapshot;
         array<ItemBase>    entities;
-        ChefZ_FactCollector.CollectFromCargo(this, snapshot, entities);
+        ChefZ_FactCollector.CollectFromStation(this, snapshot, entities);
         snapshot.SortStable();
 
         ChefZ_TransformMatch match;
@@ -556,7 +556,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         ChefZ_FactSnapshot snapshot;
         array<ItemBase>    entities;
-        ChefZ_FactCollector.CollectFromCargo(this, snapshot, entities);
+        ChefZ_FactCollector.CollectFromStation(this, snapshot, entities);
         snapshot.SortStable();
 
         ChefZ_TransformMatch match;
@@ -731,7 +731,7 @@ class ChefZ_ProcessingStation_Base extends ItemBase
 
         ChefZ_FactSnapshot snapshot;
         array<ItemBase>    entities;
-        ChefZ_FactCollector.CollectFromCargo(this, snapshot, entities);
+        ChefZ_FactCollector.CollectFromStation(this, snapshot, entities);
         snapshot.SortStable();
 
         ChefZ_TransformMatch match;

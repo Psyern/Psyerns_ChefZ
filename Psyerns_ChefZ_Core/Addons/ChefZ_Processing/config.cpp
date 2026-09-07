@@ -131,6 +131,42 @@ class CfgMods
     };
 };
 
+//==============================================================================
+// Die fuenf Haken des Trockenrahmens (07.09.2026).
+//
+// WARUM SLOTS UND NICHT NUR CARGO: DryRack.p3d bringt fuenf Proxys mit
+// (models/proxies/hook_1..hook_5, seit dem Sync vom 03.09. auch im Asset-PBO).
+// Ohne Anbauplaetze waren sie Zierrat - das Gestell nahm sein Trockengut im
+// Cargo entgegen und sah leer aus, egal wie voll es war.
+//
+// Das Muster ist nicht neu, es steht seit dem 31.08. am Bienenstock
+// (ChefZ_Farming/config.cpp, class CfgSlots). Die Engine prueft beide
+// Richtungen: attachments[] am Gestell sagt, welche Plaetze es gibt,
+// inventorySlot[] am Trockengut sagt, in welche es darf. Fehlt eine der
+// beiden Seiten, nimmt der Slot nichts an und meldet das nirgends.
+//
+// Das Cargo BLEIBT. Kraeuter und Beeren trocknen hier ebenfalls
+// (ChefZ_Processing/Config/Processing/HerbDrying.json,
+// ChefZ_Ingredients/Config/Processing/VanillaFoodProcessing.json); sie an
+// Haken zu haengen waere Unsinn. Die Haken sind fuer die fuenf grossen
+// Stuecke, die der Modellierer vorgesehen hat.
+//
+// Dass die Prozessmaschine die Haken ueberhaupt sieht, ist KEINE Selbst-
+// verstaendlichkeit: ChefZ_FactCollector.CollectFromCargo liest nur
+// GetCargo(). Deshalb gibt es seit dem 07.09. CollectFromStation(), das
+// zusaetzlich ueber AttachmentCount()/GetAttachmentFromIndex() laeuft, und
+// nur Stationen benutzen es. Ohne diese Aenderung waeren die Slots eine
+// Attrappe gewesen - sichtbar befuellbar, aber nie ein Match.
+//==============================================================================
+class CfgSlots
+{
+    class Slot_ChefZ_DryHook01 { name = "ChefZ_DryHook01"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
+    class Slot_ChefZ_DryHook02 { name = "ChefZ_DryHook02"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
+    class Slot_ChefZ_DryHook03 { name = "ChefZ_DryHook03"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
+    class Slot_ChefZ_DryHook04 { name = "ChefZ_DryHook04"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
+    class Slot_ChefZ_DryHook05 { name = "ChefZ_DryHook05"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
+};
+
 class CfgVehicles
 {
     // Die einzige Configbasis dieses Moduls. Es gibt hier bewusst KEINE
@@ -362,6 +398,17 @@ class CfgVehicles
         itemSize[] = {6, 4};
         weight = 4200;
         rotationFlags = 2;
+
+        // DIE FUENF HAKEN (07.09.2026). Reihenfolge = Fuellreihenfolge, wie am
+        // Bienenstock. Begruendung an class CfgSlots im Kopf dieser Datei.
+        //
+        // Das geerbte Cargo aus ChefZ_HerbStationBase (4x3) bleibt daneben
+        // bestehen - Kraeuter und Beeren trocknen weiter dort.
+        attachments[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
     };
 
     //==========================================================================

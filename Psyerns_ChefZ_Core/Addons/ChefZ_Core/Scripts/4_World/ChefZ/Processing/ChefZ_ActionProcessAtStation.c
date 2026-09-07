@@ -325,7 +325,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
 
         ChefZ_FactSnapshot snapshot;
         array<ItemBase>    entities;
-        ChefZ_FactCollector.CollectFromCargo(station, snapshot, entities);
+        ChefZ_FactCollector.CollectFromStation(station, snapshot, entities);
         snapshot.SortStable();
 
         ChefZ_TransformMatch match;
@@ -620,7 +620,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
 
         ChefZ_FactSnapshot snapshot;
         array<ItemBase>    entities;
-        ChefZ_FactCollector.CollectFromCargo(station, snapshot, entities);
+        ChefZ_FactCollector.CollectFromStation(station, snapshot, entities);
         snapshot.SortStable();
 
         ChefZ_TransformMatch match;
@@ -839,7 +839,7 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
 
         ChefZ_FactSnapshot snapshot;
         array<ItemBase>    entities;
-        ChefZ_FactCollector.CollectFromCargo(station, snapshot, entities);
+        ChefZ_FactCollector.CollectFromStation(station, snapshot, entities);
         snapshot.SortStable();
 
         ChefZ_TransformMatch match;

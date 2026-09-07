@@ -884,6 +884,16 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 320;
 
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
+
         // VOLUMEN: 435 (ganzes Fleischprodukt, 320 g - der Bezugswert aller
         // Rohwuerste). 435 / varQuantityMax 250 = 1.74. Vorher 150 - Herleitung im Kopf.
         class Nutrition
@@ -919,6 +929,16 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_pork.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
+
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
 
         // VOLUMEN: 450 (ganzes Fleischprodukt, 320 g - fetter als die Basiswurst).
         // 450 / varQuantityMax 250 = 1.8. Vorher 155 - siehe Herleitung im Kopf.
@@ -956,6 +976,16 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 320;
 
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
+
         // VOLUMEN: 430 (ganzes Fleischprodukt, 320 g - magerste Rohwurst).
         // 430 / varQuantityMax 250 = 1.72. Vorher 148 - siehe Herleitung im Kopf.
         class Nutrition
@@ -991,6 +1021,16 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_boar.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
+
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
 
         // VOLUMEN: 440 (ganzes Fleischprodukt, 320 g - zwischen Wild und Schwein).
         // 440 / varQuantityMax 250 = 1.76. Vorher 152 - siehe Herleitung im Kopf.
@@ -1028,6 +1068,16 @@ class CfgVehicles
         itemSize[] = {2, 1};
         weight = 320;
 
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
+
         // VOLUMEN: 460 (fuelligste Rohwurst des Moduls, 320 g mit voller Wuerzung).
         // 460 / varQuantityMax 250 = 1.84. Vorher 158 - siehe Herleitung im Kopf.
         class Nutrition
@@ -1063,6 +1113,16 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_spicy.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 320;
+
+        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
+        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
+        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
+        // das Stueck an, und es meldet das nirgends.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05"
+        };
 
         // VOLUMEN: 435 (ganzes Fleischprodukt, 320 g - wie die Basiswurst; die
         // Schaerfe aendert die Menge nicht).
