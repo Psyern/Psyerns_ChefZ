@@ -27,16 +27,34 @@ class CfgMods
 		type="mod";
 		dependencies[]=
 		{
-			"world"
+			"Game",
+			"World",
+			"Mission"
 		};
 		class defs
 		{
+			class gameScriptModule
+			{
+				value="";
+				files[]=
+				{
+					"ChefZ/ChefZ_Core/scripts/3_Game"
+				};
+			};
 			class worldScriptModule
 			{
 				value="";
 				files[]=
 				{
 					"ChefZ/ChefZ_Core/scripts/4_World"
+				};
+			};
+			class missionScriptModule
+			{
+				value="";
+				files[]=
+				{
+					"ChefZ/ChefZ_Core/scripts/5_Mission"
 				};
 			};
 		};

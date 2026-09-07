@@ -9,8 +9,9 @@ class CfgPatches
 		{
 			"DZ_Scripts",
 			"DZ_Data",
+			"ChefZ_Core",
 			"ChefZ_Plants",
-            "DZ_Gear_Cultivation"
+			"DZ_Gear_Cultivation"
 		};
 	};
 };
@@ -29,16 +30,34 @@ class CfgMods
 		type="mod";
 		dependencies[]=
 		{
-			"world"
+			"Game",
+			"World",
+			"Mission"
 		};
 		class defs
 		{
+			class gameScriptModule
+			{
+				value="";
+				files[]=
+				{
+					"ChefZ/ChefZ_Plants/cultivation/scripts/3_Game"
+				};
+			};
 			class worldScriptModule
 			{
 				value="";
 				files[]=
 				{
 					"ChefZ/ChefZ_Plants/cultivation/scripts/4_World"
+				};
+			};
+			class missionScriptModule
+			{
+				value="";
+				files[]=
+				{
+					"ChefZ/ChefZ_Plants/cultivation/scripts/5_Mission"
 				};
 			};
 		};
@@ -112,7 +131,7 @@ class CfgVehicles
 		scope=2;
 		displayName="$STR_CHEFZ_Corn";
 		descriptionShort="$STR_CHEFZ_Corn_DESC";
-		model="\ChefZ\ChefZ_Plants\cultivation\models\corn_plant.p3d";
+		model="ChefZ\ChefZ_Plants\cultivation\Plant_Corn\corn_plant.p3d";
 		class Horticulture
 		{
 			GrowthStagesCount=7;
@@ -125,7 +144,7 @@ class CfgVehicles
 		scope=2;
 		displayName="$STR_CHEFZ_Chiliplant";
 		descriptionShort="$STR_CHEFZ_Chiliplant_DESC";
-		model="\ChefZ\ChefZ_Plants\cultivation\models\Chili_plant.p3d";
+		model="ChefZ\ChefZ_Plants\cultivation\Plant_Chili\chili_plant.p3d";
 		class Horticulture
 		{
 			GrowthStagesCount=7;
