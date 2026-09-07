@@ -15,7 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const WIKI_DIR = path.dirname(fileURLToPath(import.meta.url));
-const REPO = 'https://github.com/Psyern/Psyerns_ChefZ.wiki.git';
+const REPO = 'https://github.com/Psyern/ChefZ.wiki.git';
 
 // Tooling, not wiki content.
 const EXCLUDE = new Set(['PUBLISH.md', 'publish.mjs']);
@@ -40,8 +40,8 @@ try {
     `The wiki repository does not exist yet.\n\n` +
     `GitHub creates ${REPO}\n` +
     `only after the wiki has been enabled and given a first page in the browser:\n\n` +
-    `  1. https://github.com/Psyern/Psyerns_ChefZ/settings  ->  tick "Wikis"\n` +
-    `  2. https://github.com/Psyern/Psyerns_ChefZ/wiki      ->  create any first page\n\n` +
+    `  1. https://github.com/Psyern/ChefZ/settings  ->  tick "Wikis"\n` +
+    `  2. https://github.com/Psyern/ChefZ/wiki      ->  create any first page\n\n` +
     `Then run this script again. It will replace that first page.`
   );
 }
@@ -103,7 +103,7 @@ try {
     `Publish wiki from ChefZ_Wiki (source ${stamp})`], { cwd: tmp });
   git(['push', '--quiet', 'origin', 'HEAD'], { cwd: tmp });
 
-  console.log('\nPublished. https://github.com/Psyern/Psyerns_ChefZ/wiki');
+  console.log('\nPublished. https://github.com/Psyern/ChefZ/wiki');
 } finally {
   fs.rmSync(tmp, { recursive: true, force: true });
 }

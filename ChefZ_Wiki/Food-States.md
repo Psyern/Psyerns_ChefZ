@@ -12,7 +12,7 @@ Related pages: [Recipes](Recipes), [Processing-Stations](Processing-Stations),
 ## 1. Where the catalogue actually lives
 
 **`CfgChefZStates` in
-`Psyerns_ChefZ_Core/Addons/ChefZ_Preservation/config.cpp` (line 622).**
+`ChefZ_Core/Addons/ChefZ_Preservation/config.cpp` (line 622).**
 
 Not in JSON. The reason is recorded in the file header: the state is
 sync-relevant, it travels over the network, and Rank-1 data (game config) is the
@@ -21,7 +21,7 @@ be modifiable through the `$profile:` overlay — which the design forbids for
 anything that syncs. The record type accepts JSON (`"kind": "state"`) and no
 shipped file uses it.
 
-`Psyerns_ChefZ_Core/_deltas/preservation.json` contains a `states[]` block with
+`ChefZ_Core/_deltas/preservation.json` contains a `states[]` block with
 the same ten entries. **`_deltas/` is a hand-off staging area between content
 modules; no code reads it.** See [Delta-Protocol](Delta-Protocol).
 
@@ -140,7 +140,7 @@ Station and handcraft conversions. `ChefZ_TransformDef`
 `ChefZ_OutputDef`), `durationOverrideSec`, `qualityRule`, `freshnessCarry`,
 `qualityDelta`, `priority`, `requires[]`.
 
-From `Psyerns_ChefZ_Core/Addons/ChefZ_Preservation/Config/Processing/Smoking.json`:
+From `ChefZ_Core/Addons/ChefZ_Preservation/Config/Processing/Smoking.json`:
 
 ```json
 {
@@ -223,7 +223,7 @@ Spoiled stays spoiled.
 ## 7. Preservation
 
 Preservation records are `"kind": "preservation"`. Shipped in
-`Psyerns_ChefZ_Core/Addons/ChefZ_Registry/Config/Preservation.json`:
+`ChefZ_Core/Addons/ChefZ_Registry/Config/Preservation.json`:
 
 | `id` | `scope` | `spoilageMultiplier` |
 |---|---|---|

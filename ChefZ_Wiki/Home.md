@@ -1,4 +1,4 @@
-# Psyerns ChefZ
+# ChefZ
 
 A cooking and food-production overhaul for DayZ.
 

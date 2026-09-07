@@ -61,11 +61,11 @@ ChefZ statische Validierung
 [ok] schema  (0 Fehler, 0 Warnungen)
 
 [hinweise] configcpp  (0 Fehler, 24 Warnungen)
-  W  Psyerns_ChefZ_Core/Addons/ChefZ_Cooking/config.cpp:752
+  W  ChefZ_Core/Addons/ChefZ_Cooking/config.cpp:752
      Klasse "ChefZ_BulkRawToBaked" steht nicht in units[] von CfgPatches
 
 [FEHLER] classrefs  (3 Fehler, 1 Warnungen)
-  E  Psyerns_ChefZ_Core/Addons/ChefZ_Meat/Config/Recipes/Sausage.json:41
+  E  ChefZ_Core/Addons/ChefZ_Meat/Config/Recipes/Sausage.json:41
      ...
 
 ────────────────────────────────────────────────────────────────────────
@@ -191,7 +191,7 @@ the proof, write `I4-BELEG` in the comment block; the finding then drops to an
 `info`. That is the only door, it is narrow, and it is greppable:
 
 ```bash
-grep -rn "I4-BELEG" Psyerns_ChefZ_Core/Addons/ChefZ_Core
+grep -rn "I4-BELEG" ChefZ_Core/Addons/ChefZ_Core
 ```
 
 String literals prefixed `CHEFZ_` are self-test markers and are exempt: the

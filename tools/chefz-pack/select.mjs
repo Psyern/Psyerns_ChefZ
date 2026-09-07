@@ -29,12 +29,12 @@ const SRC    = path.resolve(path.dirname(new URL(import.meta.url).pathname.repla
 
 function alleModule() {
   const out = [];
-  for (const dir of [path.join(SRC, 'Psyerns_ChefZ_Core', 'Addons')]) {
+  for (const dir of [path.join(SRC, 'ChefZ_Core', 'Addons')]) {
     if (!fs.existsSync(dir)) continue;
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) if (e.isDirectory()) out.push(e.name);
   }
   for (const e of fs.readdirSync(SRC, { withFileTypes: true })) {
-    if (e.isDirectory() && /^Psyerns_ChefZ_.*_Comp$/.test(e.name)) out.push(e.name);
+    if (e.isDirectory() && /^ChefZ_.*_Comp$/.test(e.name)) out.push(e.name);
   }
   return out;
 }
@@ -42,7 +42,7 @@ function alleModule() {
 /** requiredAddons eines Moduls, soweit es ChefZ-Module nennt. */
 function abhaengigkeiten(name) {
   const kandidaten = [
-    path.join(SRC, 'Psyerns_ChefZ_Core', 'Addons', name, 'config.cpp'),
+    path.join(SRC, 'ChefZ_Core', 'Addons', name, 'config.cpp'),
     path.join(SRC, name, 'config.cpp'),
   ];
   const cfg = kandidaten.find(p => fs.existsSync(p));

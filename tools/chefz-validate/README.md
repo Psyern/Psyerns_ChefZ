@@ -71,7 +71,7 @@ sieht aber genauso aus wie ein Hook. Wer den Beleg behalten will, schreibt
 Bericht. Das ist die einzige Tuer, sie ist eng, und sie ist greppbar:
 
 ```bash
-grep -rn "I4-BELEG" Psyerns_ChefZ_Core/Addons/ChefZ_Core
+grep -rn "I4-BELEG" ChefZ_Core/Addons/ChefZ_Core
 ```
 
 ## Die zwei Marker

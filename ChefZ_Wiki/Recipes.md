@@ -4,7 +4,7 @@ How a ChefZ recipe is written, and how the engine picks one out of the pot.
 
 Everything on this page is taken from the shipped code and data, not from the
 planning documents. File references point at the repository root
-(`Psyerns_ChefZ/`) so you can check every claim.
+(`ChefZ/`) so you can check every claim.
 
 Related pages: [Recipe-Reference](Recipe-Reference), [Adding-Content](Adding-Content),
 [Architecture](Architecture), [Food-States](Food-States),
@@ -18,7 +18,7 @@ Related pages: [Recipe-Reference](Recipe-Reference), [Adding-Content](Adding-Con
 
 This is structural, not merely intended. The only hook into the cooking path is
 `modded class Cooking` in
-`Psyerns_ChefZ_Core/Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_ModdedCooking.c`:
+`ChefZ_Core/Addons/ChefZ_Core/Scripts/4_World/ChefZ/Cooking/ChefZ_ModdedCooking.c`:
 
 ```c
 override int CookWithEquipment(ItemBase cooking_equipment, float cooking_time_coef = 1)
@@ -64,7 +64,7 @@ Recipes are JSON records of `"kind": "recipe"`. As shipped:
 
 | File | Records |
 |---|---|
-| `Psyerns_ChefZ_Core/Addons/ChefZ_Cooking/Config/Recipes/BowlDishes.json` | 12 |
+| `ChefZ_Core/Addons/ChefZ_Cooking/Config/Recipes/BowlDishes.json` | 12 |
 | `.../ChefZ_Cooking/Config/Recipes/Dishes_A.json` | 10 |
 | `.../ChefZ_Cooking/Config/Recipes/DishesB.json` | 10 |
 | `.../ChefZ_Cooking/Config/Recipes/Sauces.json` | 4 |
@@ -83,7 +83,7 @@ allowed to be incomplete; compiled ones are not.
 ## 3. The worked example
 
 `RCP_ChefZ_HunterStew` from
-`Psyerns_ChefZ_Core/Addons/ChefZ_Cooking/Config/Recipes/BowlDishes.json`. It uses
+`ChefZ_Core/Addons/ChefZ_Cooking/Config/Recipes/BowlDishes.json`. It uses
 almost every mechanism on this page: device context with a liquid requirement,
 `anyOf` matching, category and tag matching, required and optional slots,
 partial consumption by amount, grade points, grade rules, a policy, and a

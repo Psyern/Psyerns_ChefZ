@@ -15,15 +15,15 @@ export const TOOL_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = process.env.CHEFZ_VALIDATE_ROOT
   ? path.resolve(process.env.CHEFZ_VALIDATE_ROOT)
   : path.resolve(TOOL_DIR, '..', '..');
-export const MOD_ROOT = path.join(ROOT, 'Psyerns_ChefZ_Core');
+export const MOD_ROOT = path.join(ROOT, 'ChefZ_Core');
 export const ADDONS_DIR = path.join(MOD_ROOT, 'Addons');
 export const DELTA_DIR = path.join(MOD_ROOT, '_deltas');
 export const REFINDEX_DIR = path.join(TOOL_DIR, 'refindex');
 
 export const COMP_DIRS = [
-  path.join(ROOT, 'Psyerns_ChefZ_Terje_Skills_Comp'),
-  path.join(ROOT, 'Psyerns_ChefZ_Terje_Medicine_Comp'),
-  path.join(ROOT, 'Psyerns_ChefZ_COT_Comp'),
+  path.join(ROOT, 'ChefZ_Terje_Skills_Comp'),
+  path.join(ROOT, 'ChefZ_Terje_Medicine_Comp'),
+  path.join(ROOT, 'ChefZ_COT_Comp'),
 ];
 
 // Die zusammengefuehrten Registries. Sie liegen seit Meilenstein 2 NICHT mehr in

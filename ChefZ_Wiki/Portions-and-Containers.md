@@ -281,7 +281,7 @@ deletion of player property.**
 
 ### 6.1 Where they are declared
 
-`CfgChefZContainers` in `Psyerns_ChefZ_Core/Addons/ChefZ_Cooking/config.cpp`
+`CfgChefZContainers` in `ChefZ_Core/Addons/ChefZ_Cooking/config.cpp`
 (line 2755). One declaration project-wide.
 
 Rank 1, not JSON, and the reason is a client-side one:

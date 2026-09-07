@@ -31,9 +31,9 @@ For the reasoning behind the split, see [Architecture](Architecture).
 
 | Comp mod | Item classes | Script files | Stringtable keys |
 |---|---:|---:|---:|
-| `Psyerns_ChefZ_COT_Comp` | 0 | 5 | 10 |
-| `Psyerns_ChefZ_Terje_Skills_Comp` | 0 | 11 | 2 |
-| `Psyerns_ChefZ_Terje_Medicine_Comp` | 0 | 6 | 1 |
+| `ChefZ_COT_Comp` | 0 | 5 | 10 |
+| `ChefZ_Terje_Skills_Comp` | 0 | 11 | 2 |
+| `ChefZ_Terje_Medicine_Comp` | 0 | 6 | 1 |
 
 "Item classes" counts top-level `class` definitions inside `CfgVehicles`,
 including the `scope = 0` base classes. "Rank 1" counts records declared in
@@ -482,14 +482,14 @@ about the sequence in which the config manager reads slices.
 
 ## The three compatibility mods
 
-Each is a **separate mod**, not an addon inside `Psyerns_ChefZ_Core`. Each names
+Each is a **separate mod**, not an addon inside `ChefZ_Core`. Each names
 its foreign system in `requiredAddons[]`, which means DayZ does not load the PBO
 at all when that system is absent — the `modded class` declarations are then
 never compiled. ChefZ runs unchanged either way.
 
 None of the three declares a single `CfgVehicles` class.
 
-### `Psyerns_ChefZ_COT_Comp`
+### `ChefZ_COT_Comp`
 
 Appends eight ChefZ spawn categories to Community Online Tools' object spawner.
 An admin tool; no recipe, no nutrition value, no transform, no balancing. The
@@ -505,7 +505,7 @@ only intervention is an extra filter in an admin dialog.
 
 See [COT Compatibility](COT-Compatibility).
 
-### `Psyerns_ChefZ_Terje_Skills_Comp`
+### `ChefZ_Terje_Skills_Comp`
 
 Hangs cooking perks into TerjeSkills' existing `surv` skill and feeds ChefZ's
 capability and progress registries.
@@ -517,7 +517,7 @@ capability and progress registries.
 - The whole XP matrix is config, not script, so an operator can override it via
   `$profile:TerjeSettings\Core\GameOverrides.xml`.
 
-### `Psyerns_ChefZ_Terje_Medicine_Comp`
+### `ChefZ_Terje_Medicine_Comp`
 
 Gives ChefZ teas TerjeMedicine consumable effects.
 

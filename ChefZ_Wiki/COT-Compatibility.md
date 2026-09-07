@@ -1,6 +1,6 @@
 # COT Compatibility
 
-`Psyerns_ChefZ_COT_Comp` adds eight ChefZ spawn categories to the Object Spawner of
+`ChefZ_COT_Comp` adds eight ChefZ spawn categories to the Object Spawner of
 [Community Online Tools](https://github.com/Jacob-Mango/DayZ-CommunityOnlineTools).
 
 That is the whole feature. It is an **admin tool**. It changes no game mechanic.
@@ -39,7 +39,7 @@ window and one `modded class` on a COT form. The benefit is that finding
 
 ## Installation
 
-The module is a separate mod folder, `Psyerns_ChefZ_COT_Comp`. Its `CfgPatches`
+The module is a separate mod folder, `ChefZ_COT_Comp`. Its `CfgPatches`
 declares:
 
 ```cpp
@@ -331,7 +331,7 @@ lists.
 ## Where the 128 come from
 
 The class names come from the `config.cpp` files under
-`Psyerns_ChefZ_Core/Addons/` and nowhere else. Every name listed is a class defined
+`ChefZ_Core/Addons/` and nowhere else. Every name listed is a class defined
 there with a body and `scope = 2`.
 
 Counted against the project as it stands:
@@ -380,7 +380,7 @@ shrink to match. There is no ghost class and no error message.
 The flip side: **a mistyped class name in the table does not fail anywhere.** It is
 silently discarded at runtime, and an admin ends up searching for an item that never
 existed. Anyone adding a class must verify it actually exists with `scope = 2` in a
-`config.cpp` under `Psyerns_ChefZ_Core/Addons/`, and must add the owning addon to
+`config.cpp` under `ChefZ_Core/Addons/`, and must add the owning addon to
 `requiredAddons[]`. See [Adding-Content](Adding-Content).
 
 ## The code footprint

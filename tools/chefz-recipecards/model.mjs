@@ -28,7 +28,7 @@ const REPO = path.resolve(HERE, '..', '..');
 // Spalte 2 ist "english" (Kopfzeile jeder stringtable.csv).
 function loadStrings() {
   const out = new Map();
-  const addons = path.join(REPO, 'Psyerns_ChefZ_Core', 'Addons');
+  const addons = path.join(REPO, 'ChefZ_Core', 'Addons');
   if (!fs.existsSync(addons)) return out;
   for (const dir of fs.readdirSync(addons)) {
     const f = path.join(addons, dir, 'stringtable.csv');

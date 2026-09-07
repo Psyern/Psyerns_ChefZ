@@ -12,7 +12,7 @@
 //   Rang 2  JSON im Addon: { kind, schemaVersion, records[] }
 //   Rang 3  $profile:-Overlay                   (statisch nicht sichtbar)
 //
-// Dazu kommen die Slice-Deltas unter Psyerns_ChefZ_Core/_deltas/ - das
+// Dazu kommen die Slice-Deltas unter ChefZ_Core/_deltas/ - das
 // Uebergabeformat der Content-Slices aus Workflow §2. Sie sind duenner als ein
 // vollstaendiger Record, melden aber IDs an, und genau darum geht es hier.
 //
@@ -246,7 +246,7 @@ export function registries() {
 
 // --- Modulzuordnung ---------------------------------------------------------
 
-/** Modulname eines Pfades: "ChefZ_Core", "ChefZ_Meat", "Psyerns_ChefZ_COT_Comp" ... */
+/** Modulname eines Pfades: "ChefZ_Core", "ChefZ_Meat", "ChefZ_COT_Comp" ... */
 export function moduleOf(file) {
   const rel = path.relative(ADDONS_DIR, file);
   if (!rel.startsWith('..')) return rel.split(path.sep)[0];

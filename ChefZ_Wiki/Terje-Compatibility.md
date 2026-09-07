@@ -4,8 +4,8 @@ ChefZ ships two optional compatibility PBOs for [TerjeMods](https://github.com/T
 
 | PBO | Requires | What it does |
 |---|---|---|
-| `Psyerns_ChefZ_Terje_Skills_Comp` | `TerjeCore`, `TerjeSkills`, `ChefZ_Core`, `ChefZ_Farming` | Grants Survival XP for ChefZ cooking, processing and herb harvesting; adds one perk (`chefzherb`); exposes skill values as ChefZ capabilities |
-| `Psyerns_ChefZ_Terje_Medicine_Comp` | `TerjeCore`, `TerjeMedicine`, `ChefZ_Core` | Attaches Terje immunity/regeneration effects to three herbal tea items |
+| `ChefZ_Terje_Skills_Comp` | `TerjeCore`, `TerjeSkills`, `ChefZ_Core`, `ChefZ_Farming` | Grants Survival XP for ChefZ cooking, processing and herb harvesting; adds one perk (`chefzherb`); exposes skill values as ChefZ capabilities |
+| `ChefZ_Terje_Medicine_Comp` | `TerjeCore`, `TerjeMedicine`, `ChefZ_Core` | Attaches Terje immunity/regeneration effects to three herbal tea items |
 
 Neither PBO defines a single item, recipe, process or nutrition record. They connect
 two existing systems and nothing else. If you want ChefZ content, you want the main
@@ -37,8 +37,8 @@ The comp modules know ChefZ and they know Terje. ChefZ knows neither.
 Three places, in increasing order of hardness:
 
 1. **`requiredAddons[]` in the comp modules.**
-   `Psyerns_ChefZ_Terje_Skills_Comp` lists `TerjeCore` and `TerjeSkills`;
-   `Psyerns_ChefZ_Terje_Medicine_Comp` lists `TerjeCore` and `TerjeMedicine`.
+   `ChefZ_Terje_Skills_Comp` lists `TerjeCore` and `TerjeSkills`;
+   `ChefZ_Terje_Medicine_Comp` lists `TerjeCore` and `TerjeMedicine`.
    DayZ does not load an addon whose `requiredAddons` cannot be resolved. Without
    Terje installed, these PBOs are simply not there — their `modded class`
    declarations never compile, their config nodes never exist.
@@ -79,7 +79,7 @@ You can load ChefZ without Terje, Terje without ChefZ, or both. There is no buil
 of ChefZ that requires you to run TerjeMods, and adding or removing a comp PBO does
 not touch any ChefZ save data — neither module writes persistent state.
 
-## Module 1: `Psyerns_ChefZ_Terje_Skills_Comp`
+## Module 1: `ChefZ_Terje_Skills_Comp`
 
 ### How XP reaches Terje
 
@@ -426,7 +426,7 @@ TerjeSkills-Anbindung v0.0.1 aktiv  aktiv=1 xp=1 skill=surv kraut=CHEFZ_HERB her
 See [Configuration](Configuration) for ChefZ's own settings and
 [Troubleshooting](Troubleshooting) if the banner does not appear.
 
-## Module 2: `Psyerns_ChefZ_Terje_Medicine_Comp`
+## Module 2: `ChefZ_Terje_Medicine_Comp`
 
 ### The Medicine module is dormant
 

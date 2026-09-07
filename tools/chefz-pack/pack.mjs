@@ -50,7 +50,7 @@ const ADDON_BUILDER = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\DayZ T
 /** Alle Paketquellen: die Core-Addons plus die drei eigenstaendigen Comp-Mods. */
 function sources() {
   const out = [];
-  const coreAddons = path.join(ROOT, 'Psyerns_ChefZ_Core', 'Addons');
+  const coreAddons = path.join(ROOT, 'ChefZ_Core', 'Addons');
   if (fs.existsSync(coreAddons)) {
     for (const e of fs.readdirSync(coreAddons, { withFileTypes: true })) {
       if (e.isDirectory()) out.push(path.join(coreAddons, e.name));
@@ -58,7 +58,7 @@ function sources() {
   }
   for (const e of fs.readdirSync(ROOT, { withFileTypes: true })) {
     if (!e.isDirectory()) continue;
-    if (!/^Psyerns_ChefZ_.*_Comp$/.test(e.name)) continue;
+    if (!/^ChefZ_.*_Comp$/.test(e.name)) continue;
     out.push(path.join(ROOT, e.name));
   }
   return out;

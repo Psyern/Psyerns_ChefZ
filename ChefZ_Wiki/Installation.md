@@ -32,9 +32,9 @@ build; the packer rule for the two-level asset prefixes was fixed on 31.08.2026.
 > `New-Item -ItemType Junction -Path C:\ChefZ -Target <repo>\ChefZ`. Remove it with
 > `rmdir C:\ChefZ`, which deletes the link and not the delivery behind it.
 
-### `Psyerns_ChefZ_Core` — the main mod (14 PBOs)
+### `ChefZ_Core` — the main mod (14 PBOs)
 
-One PBO per subfolder of `Psyerns_ChefZ_Core/Addons/`. Each subfolder carries a
+One PBO per subfolder of `ChefZ_Core/Addons/`. Each subfolder carries a
 `$PREFIX$` file whose content is the PBO prefix, and the prefix is the root of
 every runtime path inside that PBO.
 
@@ -58,7 +58,7 @@ every runtime path inside that PBO.
 "Mandatory" here means: the dependency graph above is closed. `ChefZ_Cooking`
 requires seven other ChefZ addons; `ChefZ_Registry` requires eight. You cannot
 ship a subset of the main mod without editing `requiredAddons[]`. Treat
-`Psyerns_ChefZ_Core` as one indivisible mod.
+`ChefZ_Core` as one indivisible mod.
 
 `ChefZ_Core` itself only requires `DZ_Data`. It carries no items
 (`units[] = {}`) — it is the engine, not the content. See [Modules](Modules).
@@ -70,9 +70,9 @@ folder *is* the addon folder — there is no `Addons/` level.
 
 | Mod folder / `CfgPatches` class | `requiredAddons[]` | Needs |
 |---|---|---|
-| `Psyerns_ChefZ_Terje_Skills_Comp` | `DZ_Data`, `ChefZ_Core`, `ChefZ_Farming`, `TerjeCore`, `TerjeSkills` | Terje Core + Terje Skills |
-| `Psyerns_ChefZ_Terje_Medicine_Comp` | `TerjeCore`, `TerjeMedicine`, `ChefZ_Core` | Terje Core + Terje Medicine |
-| `Psyerns_ChefZ_COT_Comp` | `JM_COT_Scripts`, `ChefZ_Core`, `ChefZ_Farming`, `ChefZ_Ingredients`, `ChefZ_Baking`, `ChefZ_Meat`, `ChefZ_Preservation`, `ChefZ_Processing`, `ChefZ_Cooking` | Community Online Tools |
+| `ChefZ_Terje_Skills_Comp` | `DZ_Data`, `ChefZ_Core`, `ChefZ_Farming`, `TerjeCore`, `TerjeSkills` | Terje Core + Terje Skills |
+| `ChefZ_Terje_Medicine_Comp` | `TerjeCore`, `TerjeMedicine`, `ChefZ_Core` | Terje Core + Terje Medicine |
+| `ChefZ_COT_Comp` | `JM_COT_Scripts`, `ChefZ_Core`, `ChefZ_Farming`, `ChefZ_Ingredients`, `ChefZ_Baking`, `ChefZ_Meat`, `ChefZ_Preservation`, `ChefZ_Processing`, `ChefZ_Cooking` | Community Online Tools |
 
 **ChefZ runs completely without all three.** None of them adds an item class
 (`units[] = {}`, `weapons[] = {}` in all three). They add XP attribution, tea
@@ -97,11 +97,11 @@ no `.pbo`, no `.bikey`, no `.biprivatekey`, no `mod.cpp`, no `meta.cpp`.
 ### 2.2 Pack each addon separately
 
 Nine packing runs for the main mod, one per subfolder of
-`Psyerns_ChefZ_Core/Addons/`. Addon Builder, per addon:
+`ChefZ_Core/Addons/`. Addon Builder, per addon:
 
 ```
-Source directory:       ...\Psyerns_ChefZ_Core\Addons\ChefZ_Core
-Destination directory:  ...\@Psyerns_ChefZ_Core\addons
+Source directory:       ...\ChefZ_Core\Addons\ChefZ_Core
+Destination directory:  ...\@ChefZ_Core\addons
 ```
 
 Then repeat for `ChefZ_Registry`, `ChefZ_Farming`, `ChefZ_Processing`,
@@ -111,8 +111,8 @@ Then repeat for `ChefZ_Registry`, `ChefZ_Farming`, `ChefZ_Processing`,
 And once per compatibility mod:
 
 ```
-Source directory:       ...\Psyerns_ChefZ_COT_Comp
-Destination directory:  ...\@Psyerns_ChefZ_COT_Comp\addons
+Source directory:       ...\ChefZ_COT_Comp
+Destination directory:  ...\@ChefZ_COT_Comp\addons
 ```
 
 **The prefix is not optional.** Every addon folder carries a `$PREFIX$` file,
@@ -126,7 +126,7 @@ The prefixes are exactly the folder names:
 ```
 ChefZ_Core  ChefZ_Registry  ChefZ_Farming  ChefZ_Processing  ChefZ_Ingredients
 ChefZ_Meat  ChefZ_Baking    ChefZ_Preservation  ChefZ_Cooking
-Psyerns_ChefZ_COT_Comp  Psyerns_ChefZ_Terje_Medicine_Comp  Psyerns_ChefZ_Terje_Skills_Comp
+ChefZ_COT_Comp  ChefZ_Terje_Medicine_Comp  ChefZ_Terje_Skills_Comp
 ```
 
 ### 2.3 Files that must be included, not filtered
@@ -159,7 +159,7 @@ Four of them deviate, each for a reason:
 
 ### 2.3a The CE fragment is a mission file, not a PBO file
 
-`Psyerns_ChefZ_Core/Addons/ChefZ_Farming/ServerConfig/` holds `ChefZ_events.xml`,
+`ChefZ_Core/Addons/ChefZ_Farming/ServerConfig/` holds `ChefZ_events.xml`,
 `ChefZ_types.xml` and `README_ServerConfig.md`. They are **templates for the
 mission**, not mod content: the mod never reads them, and a PBO cannot carry
 central-economy data.
@@ -186,12 +186,12 @@ There are no keys in the repository. If your server runs with
 PBOs:
 
 ```
-DSCreateKey Psyerns_ChefZ
-DSSignFile Psyerns_ChefZ.biprivatekey <path to each .pbo>
+DSCreateKey ChefZ
+DSSignFile ChefZ.biprivatekey <path to each .pbo>
 ```
 
-Put `Psyerns_ChefZ.bikey` into the server's `keys\` directory and into
-`@Psyerns_ChefZ_Core\keys\` so clients receive it.
+Put `ChefZ.bikey` into the server's `keys\` directory and into
+`@ChefZ_Core\keys\` so clients receive it.
 
 ### 2.5 Missing mod metadata
 
@@ -207,7 +207,7 @@ main mod before the comp mods on the command line so the launcher's own
 dependency check has nothing to complain about:
 
 ```
-@Psyerns_ChefZ_Core;@Psyerns_ChefZ_COT_Comp;@Psyerns_ChefZ_Terje_Skills_Comp;@Psyerns_ChefZ_Terje_Medicine_Comp
+@ChefZ_Core;@ChefZ_COT_Comp;@ChefZ_Terje_Skills_Comp;@ChefZ_Terje_Medicine_Comp
 ```
 
 The foreign mods (`@Terje...`, `@CommunityOnlineTools`) must come **before**
@@ -251,15 +251,15 @@ ChefZ cannot be a `-serverMod`, for three reasons that are all structural:
    count, crafting recipe IDs drift apart. The mod detects and refuses that
    case, but the result is crafting that silently does nothing.
 
-The **comp mods** follow the same rule. `Psyerns_ChefZ_COT_Comp` registers COT
-spawn categories, which are a client-side UI; `Psyerns_ChefZ_Terje_Skills_Comp`
+The **comp mods** follow the same rule. `ChefZ_COT_Comp` registers COT
+spawn categories, which are a client-side UI; `ChefZ_Terje_Skills_Comp`
 adds a perk to Terje's skill config, which the client reads. Both go in `-mod`.
 
 Example server start line:
 
 ```
 DayZServer_x64.exe -config=serverDZ.cfg -profiles=profiles -port=2302 ^
-  "-mod=@CommunityOnlineTools;@TerjeCore;@TerjeSkills;@TerjeMedicine;@Psyerns_ChefZ_Core;@Psyerns_ChefZ_COT_Comp;@Psyerns_ChefZ_Terje_Skills_Comp;@Psyerns_ChefZ_Terje_Medicine_Comp" ^
+  "-mod=@CommunityOnlineTools;@TerjeCore;@TerjeSkills;@TerjeMedicine;@ChefZ_Core;@ChefZ_COT_Comp;@ChefZ_Terje_Skills_Comp;@ChefZ_Terje_Medicine_Comp" ^
   -cpuCount=4 -dologs -adminlog -netlog -freezecheck
 ```
 

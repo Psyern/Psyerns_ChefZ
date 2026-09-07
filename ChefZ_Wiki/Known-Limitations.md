@@ -97,7 +97,7 @@ prefix/path divergence would again be invisible to the static suite.
 
 **Incident, same day:** the five PBOs `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Food`,
 `ChefZ_Items`, `ChefZ_Plants` on the test server were hand-packed from the
-delivery folder `ChefZ/` instead of `Psyerns_ChefZ_Core/Addons/` — recognizable
+delivery folder `ChefZ/` instead of `ChefZ_Core/Addons/` — recognizable
 by their raw filesystem-path prefixes (`Users\Administrator\...`). That replaced
 the real 2.9 MB core with the delivery's 17 KB stub, and the Game script module
 failed with `Unknown type 'ChefZ_Sym'` for every core type. The delivery folder
@@ -178,9 +178,9 @@ Three checks keep it harmless today, and all three are checkable:
 
 | Check | Result |
 |---|---|
-| Packed by `pack.mjs`? | **No** — it matches neither `Psyerns_ChefZ_Core/Addons/*` nor `Psyerns_ChefZ_*_Comp` |
+| Packed by `pack.mjs`? | **No** — it matches neither `ChefZ_Core/Addons/*` nor `ChefZ_*_Comp` |
 | Carries a `$PREFIX$`? | **No** |
-| Read by `chefz-validate`? | **No** — `ADDONS_DIR` is `Psyerns_ChefZ_Core/Addons` and nothing else |
+| Read by `chefz-validate`? | **No** — `ADDONS_DIR` is `ChefZ_Core/Addons` and nothing else |
 
 ## Not yet done
 
@@ -268,7 +268,7 @@ All four milestone gates stand at **NOT READY**. Each gate report carries a
 numbered in-game checklist — together roughly 150 steps with concrete ingredients,
 quantities, durations and expected RPT lines — and not one step has been executed.
 A fifth list joined them on 31.08.2026:
-`Psyerns_ChefZ_Docs/GATE_WILDWUCHS_CHECKLISTE.md`, 22 steps for the wild plants and
+`ChefZ_Docs/GATE_WILDWUCHS_CHECKLISTE.md`, 22 steps for the wild plants and
 the CE fragment, including a server-side step nobody has had to do before — installing
 central-economy files into the mission.
 
@@ -410,7 +410,7 @@ all — the reason vanilla's prettier clutter models were *not* used is that the
 carry no geometry LOD — and whether a harvest that produces nothing correctly leaves
 the plant standing.
 
-The step-by-step measurement is `Psyerns_ChefZ_Docs/GATE_WILDWUCHS_CHECKLISTE.md`
+The step-by-step measurement is `ChefZ_Docs/GATE_WILDWUCHS_CHECKLISTE.md`
 in the repository — 22 steps, each with an expected value and a named failure mode.
 
 ### The test deployment holds two copies of the mod

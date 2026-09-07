@@ -1,7 +1,7 @@
-# Psyerns ChefZ
+# ChefZ
 
 <p align="center">
-  <img src="data/Psyerns_ChefZ_Banner.png" alt="Psyerns ChefZ" width="800">
+  <img src="data/ChefZ_Banner.png" alt="ChefZ" width="800">
 </p>
 
 <p align="center">
@@ -36,7 +36,7 @@
 
 **The mod is written. It has never kept a DayZ server running.**
 
-Every addon under `Psyerns_ChefZ_Core/Addons/` is implemented: 163 `CfgVehicles`
+Every addon under `ChefZ_Core/Addons/` is implemented: 163 `CfgVehicles`
 classes (`scope = 0` base classes included), 174 script files, 480 data records and
 365 stringtable keys in 13 languages. The static validator suite runs green. What
 has not happened is a server that survives startup — the process registers every
@@ -66,16 +66,19 @@ design questions — is kept internally and is not part of this repository.
 
 ## Repository Layout
 
-One Steam Workshop item (`Psyerns_ChefZ_Core`) containing fourteen PBOs, plus three
+One Steam Workshop item (`ChefZ_Core`) containing fourteen PBOs, plus three
 independent compatibility mods that are only needed if you run Terje or COT.
 
 ```text
-Psyerns_ChefZ/                              ← repository root (this README)
+<repository root>/                          ← this README
+│                                             (the checkout still sits in a folder
+│                                              named Psyerns_ChefZ; the name inside
+│                                              the tree is ChefZ everywhere)
 │
 ├── data/                                   ← banner, screenshots
 ├── ChefZ_Wiki/                             ← the full wiki, published from here
 │
-├── Psyerns_ChefZ_Core/                     ← THE mod (one workshop item, 14 PBOs)
+├── ChefZ_Core/                             ← THE mod (one workshop item, 14 PBOs)
 │   ├── Addons/                             14 addons, four of them assets only
 │   │   ├── ChefZ_Core/                     systems only — no content
 │   │   ├── ChefZ_Registry/                 the merged vocabulary, no scripts, no items
@@ -97,9 +100,9 @@ Psyerns_ChefZ/                              ← repository root (this README)
 │
 ├── ChefZ/                                   ← the delivery, kept verbatim; not built
 │
-├── Psyerns_ChefZ_Terje_Skills_Comp/        ← optional mod — Survival XP, Herbalist perk
-├── Psyerns_ChefZ_Terje_Medicine_Comp/      ← optional mod — herbal teas, immunity, poisoning
-├── Psyerns_ChefZ_COT_Comp/                 ← optional mod — COT spawn categories
+├── ChefZ_Terje_Skills_Comp/        ← optional mod — Survival XP, Herbalist perk
+├── ChefZ_Terje_Medicine_Comp/      ← optional mod — herbal teas, immunity, poisoning
+├── ChefZ_COT_Comp/                 ← optional mod — COT spawn categories
 │
 └── tools/
     ├── chefz-validate/                     static validators (Node, no dependencies)
@@ -126,7 +129,7 @@ a model path that resolved to nothing in the PBO; see
 [Known Limitations](ChefZ_Wiki/Known-Limitations.md). Of the meshes that arrived, two were
 newly bound — `ChefZ_HoneyExtractor` and `ChefZ_PastaMachine`; ten more wait for a `model=` line. This folder is the original,
 not a second copy in use. It is **not part of the build** — `pack.mjs` collects
-`Psyerns_ChefZ_Core/Addons/*` and root folders matching `Psyerns_ChefZ_*_Comp`, and
+`ChefZ_Core/Addons/*` and root folders matching `ChefZ_*_Comp`, and
 `ChefZ/` is neither — and the validator never reads it. Worth knowing: three of its five
 `CfgPatches` names — `ChefZ_Core`, `ChefZ_Devices`, `ChefZ_Items` — are also the names
 of real addons, so it must never be packed as it stands. `ChefZ_Food` and
@@ -480,7 +483,7 @@ Full reference: [Configuration](ChefZ_Wiki/Configuration.md).
 
 ## Addon Structure
 
-Every addon under `Psyerns_ChefZ_Core/Addons/` follows the same shape:
+Every addon under `ChefZ_Core/Addons/` follows the same shape:
 
 ```text
 ChefZ_Meat/
@@ -853,7 +856,7 @@ at (`pack.mjs:88`); every other addon's prefix must match its folder name.
 > A root of `C:/` therefore tells Binarize to scan the **whole drive** for configs — the
 > Recycle Bin included. On 07.09.2026 that turned a deleted 28.08. copy of the mod into a
 > build failure: CfgConvert parsed
-> `C:\$Recycle.Bin\...\Psyerns_ChefZ_Core\Addons\ChefZ_Baking\config.cpp`, a version that
+> `C:\$Recycle.Bin\...\ChefZ_Core\Addons\ChefZ_Baking\config.cpp`, a version that
 > still declared `ChefZ_Yeast` against a base class the current tree no longer has, and
 > stopped with *Error 3 while parsing config* → `Binarize failed with exit code 1:
 > C:\Temp\addons\ChefZ_Devices\staging`. **`ChefZ_Devices` is named because it is the
@@ -865,7 +868,7 @@ at (`pack.mjs:88`); every other addon's prefix must match its folder name.
 > out of the delivery folder even when it is missing from the addon that ships it. That
 > gap is what `proxies.mjs` covers — it reads the addons and nothing else.
 
-`Psyerns_ChefZ_Core` packs to fourteen PBOs, one per addon folder; the three compatibility
+`ChefZ_Core` packs to fourteen PBOs, one per addon folder; the three compatibility
 mods pack to one each. The dependency graph inside the main mod is closed — `ChefZ_Cooking`
 requires seven other ChefZ addons and `ChefZ_Registry` requires eight — so the main mod
 cannot ship as a subset. Treat it as one indivisible workshop item.
@@ -925,7 +928,7 @@ EAT / STORE / TRADE
 
 ## License
 
-Psyerns ChefZ is licensed under the **MIT License** — see [`LICENSE`](LICENSE).
+ChefZ is licensed under the **MIT License** — see [`LICENSE`](LICENSE).
 
 Third-party components retain their own licenses. Terje and vanilla files are never modified or
 redistributed — the compatibility modules only extend them.

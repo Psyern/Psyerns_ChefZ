@@ -28,7 +28,7 @@ import { configItemIndex, configChain, resolveProp, moduleOf } from '../chefz-va
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const HIER = path.dirname(fileURLToPath(import.meta.url));
-const DOC = path.resolve(HIER, '..', '..', 'Psyerns_ChefZ_Docs', 'ChefZ_3D_Asset_ToDo.md');
+const DOC = path.resolve(HIER, '..', '..', 'ChefZ_Docs', 'ChefZ_3D_Asset_ToDo.md');
 
 // --- 1. Der Code: jede ChefZ-Klasse mit scope != 0 und ihr Modell ---------
 const index = configItemIndex();

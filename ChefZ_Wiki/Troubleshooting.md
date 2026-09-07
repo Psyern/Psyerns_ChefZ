@@ -72,7 +72,7 @@ not report this.** It just stands there.
 
 **Fix** — Add the missing key or column and repack. If the validator is green
 but the key still shows raw in-game, the file is not being packed: check
-`include.txt` contains `*.csv`. `Psyerns_ChefZ_COT_Comp` has no `include.txt` at
+`include.txt` contains `*.csv`. `ChefZ_COT_Comp` has no `include.txt` at
 all — see [Installation](Installation).
 
 ## 2. A dish never finishes cooking
@@ -388,7 +388,7 @@ module **without any RPT entry**.
 
 ## 8. Cooking XP never arrives
 
-**Symptom** — With `Psyerns_ChefZ_Terje_Skills_Comp` loaded, processing at
+**Symptom** — With `ChefZ_Terje_Skills_Comp` loaded, processing at
 stations awards XP but cooking a dish awards nothing.
 
 **Cause** — Attribution. The core does not award XP; it reports completions and

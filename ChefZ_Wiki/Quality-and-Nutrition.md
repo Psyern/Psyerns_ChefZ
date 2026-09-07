@@ -14,7 +14,7 @@ Related pages: [Recipes](Recipes), [Food-States](Food-States),
 ### 1.1 Where the tiers live
 
 **`CfgChefZQualityTiers` in
-`Psyerns_ChefZ_Core/Addons/ChefZ_Cooking/config.cpp` (line 2952).** Exactly one
+`ChefZ_Core/Addons/ChefZ_Cooking/config.cpp` (line 2952).** Exactly one
 declaration project-wide.
 
 Rank 1 (game config), not JSON, for the same reason as
@@ -295,7 +295,7 @@ Two independent sources, and they must not be confused:
    ChefZ never writes there.
 2. **The expected value ChefZ computes** comes from records of
    `"kind": "nutrition"` (`ChefZ_NutritionDef`), shipped in
-   `Psyerns_ChefZ_Core/Addons/ChefZ_Registry/Config/Nutrition.json`.
+   `ChefZ_Core/Addons/ChefZ_Registry/Config/Nutrition.json`.
 
 A nutrition record looks like this:
 
@@ -313,7 +313,7 @@ Lookup order for one ingredient is class → category (deepest first) → first
 matching tag, so the most specific statement wins and the answer is the same on
 every server.
 
-> `Psyerns_ChefZ_Core/_deltas/preservation.json` writes nutrition entries as
+> `ChefZ_Core/_deltas/preservation.json` writes nutrition entries as
 > `{ "class": "...", "energy": ..., ... }`. That is the delta hand-off shape, not
 > the loaded schema — the loader expects `"id"` plus `"scope"`. See
 > [Delta-Protocol](Delta-Protocol).

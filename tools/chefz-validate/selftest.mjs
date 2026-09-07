@@ -30,8 +30,8 @@ const TOOL_DIR = path.dirname(fileURLToPath(import.meta.url));
 
 const FILES = {
   // Ein Core, der alles falsch macht, was chefzcore und chefzlog verbieten.
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Core/$PREFIX$': 'ChefZ_Core',
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Core/config.cpp': `
+  'ChefZ_Core/Addons/ChefZ_Core/$PREFIX$': 'ChefZ_Core',
+  'ChefZ_Core/Addons/ChefZ_Core/config.cpp': `
 class CfgPatches
 {
     class ChefZ_Core
@@ -50,7 +50,7 @@ class CfgVehicles
     };
 };
 `,
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Core/Config/Core.json': JSON.stringify({
+  'ChefZ_Core/Addons/ChefZ_Core/Config/Core.json': JSON.stringify({
     kind: 'coreSettings',
     schemaVersion: 1,
     records: [{
@@ -59,7 +59,7 @@ class CfgVehicles
       defaultExcludedStates: ['GIBTESNICHT'],   // unbekannter Zustand
     }],
   }, null, 2),
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Core/Scripts/1_Core/ChefZ_Schlecht.c': `
+  'ChefZ_Core/Addons/ChefZ_Core/Scripts/1_Core/ChefZ_Schlecht.c': `
 // Diese Datei verletzt absichtlich I3 und I4.
 // Kommentar-Hook ohne Marker: spaeter vielleicht CF_Trace nutzen.
 class ChefZ_Schlecht
@@ -122,8 +122,8 @@ enum ChefZ_EFoodState
 
   // Ein Content-Modul, das alles falsch macht, was chefzsym, chefznut,
   // chefzstage und chefzproc verbieten.
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/$PREFIX$': 'ChefZ_Schlecht',
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/config.cpp': `
+  'ChefZ_Core/Addons/ChefZ_Schlecht/$PREFIX$': 'ChefZ_Schlecht',
+  'ChefZ_Core/Addons/ChefZ_Schlecht/config.cpp': `
 class CfgPatches
 {
     class ChefZ_Schlecht
@@ -182,19 +182,19 @@ class CfgChefZStates
     };
 };
 `,
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/Categories.json': JSON.stringify({
+  'ChefZ_Core/Addons/ChefZ_Schlecht/Config/Categories.json': JSON.stringify({
     kind: 'category', schemaVersion: 1,
     records: [{ id: 'KAT_A' }],
   }, null, 2),
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/Tools.json': JSON.stringify({
+  'ChefZ_Core/Addons/ChefZ_Schlecht/Config/Tools.json': JSON.stringify({
     kind: 'toolGroup', schemaVersion: 1,
     records: [{ id: 'TG_MESSER', classes: ['KitchenKnife'] }],
   }, null, 2),
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/Processes.json': JSON.stringify({
+  'ChefZ_Core/Addons/ChefZ_Schlecht/Config/Processes.json': JSON.stringify({
     kind: 'process', schemaVersion: 1,
     records: [{ id: 'PROZ_HAND', exec: 'HANDCRAFT', toolGroups: ['TG_MESSER'] }],
   }, null, 2),
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/Transforms.json': JSON.stringify({
+  'ChefZ_Core/Addons/ChefZ_Schlecht/Config/Transforms.json': JSON.stringify({
     kind: 'transform', schemaVersion: 1,
     records: [{
       id: 'TR_ZUVIEL',
@@ -207,7 +207,7 @@ class CfgChefZStates
       outputs: [{ cls: 'ChefZ_TestGericht' }],
     }],
   }, null, 2),
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/Recipes.json': JSON.stringify({
+  'ChefZ_Core/Addons/ChefZ_Schlecht/Config/Recipes.json': JSON.stringify({
     kind: 'recipe', schemaVersion: 1,
     records: [{
       id: 'REZ_TEST',
@@ -230,7 +230,7 @@ class CfgChefZStates
   // Rezept ohne Kennung - loest schema aus. Bewusst NICHT in einem
   // Config/Recipes/-Ordner, damit zugleich belegt ist, dass die Erkennung am
   // Dokumenttyp haengt und nicht am Pfad.
-  'Psyerns_ChefZ_Core/Addons/ChefZ_Schlecht/Config/MehrRezepte.json': JSON.stringify({
+  'ChefZ_Core/Addons/ChefZ_Schlecht/Config/MehrRezepte.json': JSON.stringify({
     kind: 'recipe', schemaVersion: 1,
     records: [
       // ohne Kennung -> schema
@@ -243,12 +243,12 @@ class CfgChefZStates
   // Zwei Slices definieren dieselbe Kategorie unterschiedlich, und eine
   // Haltbarkeitsregel zeigt auf einen Zustand, den niemand deklariert -
   // loest deltas aus.
-  'Psyerns_ChefZ_Core/_deltas/schlecht_a.json': JSON.stringify({
+  'ChefZ_Core/_deltas/schlecht_a.json': JSON.stringify({
     slice: 'schlecht_a',
     categories: [{ id: 'KAT_STREIT', parent: null, displayName: '#STR_A' }],
     preservation: [{ id: 'NIE_DEKLARIERT', scope: 'state', spoilageMultiplier: 0.5 }],
   }, null, 2),
-  'Psyerns_ChefZ_Core/_deltas/schlecht_b.json': JSON.stringify({
+  'ChefZ_Core/_deltas/schlecht_b.json': JSON.stringify({
     slice: 'schlecht_b',
     categories: [{ id: 'KAT_STREIT', parent: null, displayName: '#STR_B' }],
   }, null, 2),
@@ -257,8 +257,8 @@ class CfgChefZStates
   // loest proxies aus. Der Pruefer liest den Binaerstrom nach Klartext ab,
   // deshalb genuegt hier eine Textdatei mit der Endung .p3d: das ist die
   // Zeile, die in einer echten MLOD-Datei genauso dasteht.
-  'Psyerns_ChefZ_Core/Addons/ChefZ_SchlechtAssets/$PREFIX$': 'ChefZ\\ChefZ_SchlechtAssets',
-  'Psyerns_ChefZ_Core/Addons/ChefZ_SchlechtAssets/config.cpp': `
+  'ChefZ_Core/Addons/ChefZ_SchlechtAssets/$PREFIX$': 'ChefZ\\ChefZ_SchlechtAssets',
+  'ChefZ_Core/Addons/ChefZ_SchlechtAssets/config.cpp': `
 class CfgPatches
 {
     class ChefZ_SchlechtAssets
@@ -270,7 +270,7 @@ class CfgPatches
     };
 };
 `,
-  'Psyerns_ChefZ_Core/Addons/ChefZ_SchlechtAssets/models/gestell.p3d':
+  'ChefZ_Core/Addons/ChefZ_SchlechtAssets/models/gestell.p3d':
     'MLOD proxy:\\ChefZ\\ChefZ_SchlechtAssets\\models\\proxies\\haken_1.001',
 };
 

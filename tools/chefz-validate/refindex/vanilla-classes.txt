@@ -1,6 +1,6 @@
 # Vanilla-DayZ-Klassen
 #
-# Erhoben aus Psyerns_ChefZ_Docs/ChefZ_Vanilla_Assets.md, das seinerseits aus
+# Erhoben aus ChefZ_Docs/ChefZ_Vanilla_Assets.md, das seinerseits aus
 # der types.xml (1.924 Eintraege) erstellt wurde. Damit sind die Vanilla-ITEM-
 # Klassen erfasst, die in den Game-Configs stehen und deshalb weder in
 # "scripts - 1.29" noch in einem Mod-Repository zu finden sind.

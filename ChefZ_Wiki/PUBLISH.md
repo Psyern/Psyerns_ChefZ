@@ -5,13 +5,13 @@ These pages are the source of truth and live in the main repository under
 
 ## One-time setup — this part needs you
 
-GitHub does not create `Psyerns_ChefZ.wiki.git` until the wiki has been enabled and
+GitHub does not create `ChefZ.wiki.git` until the wiki has been enabled and
 given a first page through the web interface. Until then a push fails with
 `Repository not found`, which is what happens today.
 
-1. Open <https://github.com/Psyern/Psyerns_ChefZ/settings> and make sure **Wikis**
+1. Open <https://github.com/Psyern/ChefZ/settings> and make sure **Wikis**
    is ticked under *Features*.
-2. Open <https://github.com/Psyern/Psyerns_ChefZ/wiki> and click **Create the first
+2. Open <https://github.com/Psyern/ChefZ/wiki> and click **Create the first
    page**. Any content will do — the next step overwrites it.
 3. Save the page.
 

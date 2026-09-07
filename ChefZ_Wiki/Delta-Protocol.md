@@ -31,11 +31,11 @@ So the registries have exactly one writer, and everyone else files a request.
 ## 2. The two halves
 
 ```
-Psyerns_ChefZ_Core/_deltas/<slice>.json      written by the content author
+ChefZ_Core/_deltas/<slice>.json      written by the content author
                     |
                     |  chefz-registry-integrator
                     v
-Psyerns_ChefZ_Core/Addons/ChefZ_Registry/Config/
+ChefZ_Core/Addons/ChefZ_Registry/Config/
     Categories.json  Tags.json  Nutrition.json  Preservation.json
 ```
 
@@ -58,7 +58,7 @@ the two thin ones — they declare only `processes` and `classes`, no vocabulary
 
 ## 3. What a delta looks like
 
-A real one — `Psyerns_ChefZ_Core/_deltas/salt.json`, complete and unedited:
+A real one — `ChefZ_Core/_deltas/salt.json`, complete and unedited:
 
 ```json
 {
@@ -111,7 +111,7 @@ reference `ChefZ_FryingPan` before anyone has modelled it.
 ## 4. What the integrator does
 
 The integrator (`chefz-registry-integrator`) is the only writer of
-`Psyerns_ChefZ_Core/Addons/ChefZ_Registry/**`. It never corrects content in a
+`ChefZ_Core/Addons/ChefZ_Registry/**`. It never corrects content in a
 module folder — it reports the error back to the owning slice.
 
 Its steps:
@@ -260,7 +260,7 @@ except `parent` is equal, and one of the two parents is `null`, so the concrete
 parent wins and the run carries a warning:
 
 ```
-W  Psyerns_ChefZ_Core/_deltas/meat.json:17
+W  ChefZ_Core/_deltas/meat.json:17
    Kategorie "DRIED_HERB": Slice "herbs" und "meat" unterscheiden sich nur im
    parent (HERB / null) - der konkrete gewinnt
 ```
@@ -320,7 +320,7 @@ directly in your module and read from there.
 
 When you file one:
 
-1. Add or extend `Psyerns_ChefZ_Core/_deltas/<your-slice>.json`.
+1. Add or extend `ChefZ_Core/_deltas/<your-slice>.json`.
 2. List every class your module will define in `classes`, even the ones that do
    not exist yet.
 3. **No `_comment` fields.** This applies to the delta as much as to a data file

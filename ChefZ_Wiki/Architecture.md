@@ -12,7 +12,7 @@ ChefZ ships as one mod folder with fourteen addons inside it, plus three separat
 compatibility mods:
 
 ```
-Psyerns_ChefZ_Core/
+ChefZ_Core/
   Addons/
     ChefZ_Core          the rule engine — 132 script files, no items
     ChefZ_Registry      the merged shared vocabulary — no scripts, no items
@@ -21,9 +21,9 @@ Psyerns_ChefZ_Core/
     ChefZ_Cooking
   _deltas/              registry contributions of each content slice
 
-Psyerns_ChefZ_COT_Comp
-Psyerns_ChefZ_Terje_Skills_Comp
-Psyerns_ChefZ_Terje_Medicine_Comp
+ChefZ_COT_Comp
+ChefZ_Terje_Skills_Comp
+ChefZ_Terje_Medicine_Comp
 ```
 
 Per-addon detail is on [Modules](Modules).

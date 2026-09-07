@@ -62,7 +62,7 @@ cooking vessel and is eaten. Portions are vanilla quantity — the recipe sets
 | `ChefZ_Cooking/config.cpp` → `CfgChefZ` | the `dataFiles[]` entry, if the recipe file is new |
 | `ChefZ_Cooking/Config/Recipes/Dishes_A.json` | the recipe record |
 | `ChefZ_Cooking/stringtable.csv` | 2 keys: name and description |
-| `Psyerns_ChefZ_Core/_deltas/dishes-a.json` | the class name in `classes` |
+| `ChefZ_Core/_deltas/dishes-a.json` | the class name in `classes` |
 | *(optional)* a script file | empty derivations, see below |
 
 ### Step 1 — the config class
@@ -223,7 +223,7 @@ file resolves.
 ### Step 6 — the delta
 
 Add both class names to the `classes` array of
-`Psyerns_ChefZ_Core/_deltas/dishes-a.json`. A dish needs no other delta section
+`ChefZ_Core/_deltas/dishes-a.json`. A dish needs no other delta section
 unless it introduces a new category, tag or nutrition record — see
 [Delta Protocol](Delta-Protocol#8-checklist-for-a-content-author).
 
@@ -550,8 +550,8 @@ text used to live in the JSON.
 
 ### Path root is the addon folder name, not the mod name
 
-`ChefZ_Cooking/Config/...`, never `Psyerns_ChefZ_Core/Addons/ChefZ_Cooking/...`
-and never `Psyerns_ChefZ/...`. A wrong prefix in `files[]` makes DayZ skip the
+`ChefZ_Cooking/Config/...`, never `ChefZ_Core/Addons/ChefZ_Cooking/...`
+and never `ChefZ/...`. A wrong prefix in `files[]` makes DayZ skip the
 script module **silently, without an RPT entry**. A wrong prefix in
 `dataFiles[]` produces an error naming both path forms that were tried, so the
 symptom is at least visible — but if it happens for every file in a slice, the

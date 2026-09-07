@@ -5,7 +5,7 @@
 // in dem die Lieferung ankommt - so, wie der Modellierer sie ablegt, mit
 // seinem eigenen config.cpp und seinen Skripten, die NICHT gepackt werden
 // (sie tragen einen eigenen Mini-Core, der mit ChefZ_Core kollidieren
-// wuerde). Gepackt werden Psyerns_ChefZ_Core/Addons/ChefZ_Items und
+// wuerde). Gepackt werden ChefZ_Core/Addons/ChefZ_Items und
 // ChefZ_Devices: nur models/ und data/ plus $PREFIX$ und ein config.cpp ohne
 // Klassen. Das Praefix ist "ChefZ\ChefZ_Items" bzw. "ChefZ\ChefZ_Devices",
 // weil die Texturpfade so in den .p3d stehen.
@@ -27,10 +27,10 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const PAIRS = [
-  ['ChefZ/ChefZ_Items',   'Psyerns_ChefZ_Core/Addons/ChefZ_Items'],
-  ['ChefZ/ChefZ_Devices', 'Psyerns_ChefZ_Core/Addons/ChefZ_Devices'],
-  ['ChefZ/ChefZ_Food',    'Psyerns_ChefZ_Core/Addons/ChefZ_Food'],
-  ['ChefZ/ChefZ_Plants',  'Psyerns_ChefZ_Core/Addons/ChefZ_Plants'],
+  ['ChefZ/ChefZ_Items',   'ChefZ_Core/Addons/ChefZ_Items'],
+  ['ChefZ/ChefZ_Devices', 'ChefZ_Core/Addons/ChefZ_Devices'],
+  ['ChefZ/ChefZ_Food',    'ChefZ_Core/Addons/ChefZ_Food'],
+  ['ChefZ/ChefZ_Plants',  'ChefZ_Core/Addons/ChefZ_Plants'],
 ];
 // cultivation/models gehoert dazu, seit dem 06.09.2026 nachgetragen. Es fehlte,
 // und der Preis war derselbe wie beim vergessenen models/proxies/ am 03.09.:

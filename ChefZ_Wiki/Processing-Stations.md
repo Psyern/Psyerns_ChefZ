@@ -3,7 +3,7 @@
 ChefZ ships **15 processing stations**. They run *transforms*,
 not recipes: a transform takes items out of the station's cargo and puts different
 items back. Nine station records live in
-`Psyerns_ChefZ_Core/Addons/ChefZ_Processing/Config/` with their `CfgVehicles`
+`ChefZ_Core/Addons/ChefZ_Processing/Config/` with their `CfgVehicles`
 classes in that module's `config.cpp`; six more live in `ChefZ_Farming` — the two
 beehives (`Config/Processing/Apiary_Stations.json`) and, since 31.08.2026, the four
 wild plants (`Config/Processing/WildPlant_Stations.json`). Those six are the
