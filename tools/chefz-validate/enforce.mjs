@@ -109,6 +109,19 @@ const RULES = [
     why: 'ref gehoert an Membervariablen und Typedefs, nicht an Parameter, '
        + 'Rueckgaben oder lokale Variablen.',
   },
+  {
+    id: 'foreach-ref',
+    severity: 'error',
+    test: l => /\bforeach\s*\(\s*(?:[^():]*,\s*)?ref\s+\w+/.test(l) && !/^\s*(?:\/\/|\*)/.test(l),
+    why: 'Die Laufvariable einer foreach-Schleife ist eine lokale Variable, und '
+       + 'an eine lokale gehoert kein ref. Die ref-parameter-Regel greift hier '
+       + 'nicht, weil zwischen ref und der Klammer noch der Variablenname steht. '
+       + 'Belegt am 09.09.2026 im Client-Log des Testservers: 36 VM-Ausnahmen '
+       + 'NULL pointer to instance aus ChefZ_CotCategories.c:222 und '
+       + 'ChefZ_CotObjectSpawner.c:120 - den beiden einzigen foreach(ref ...) '
+       + 'im Baum. Abhilfe: ref weglassen und die Quelle vorher in eine lokale '
+       + 'Variable holen.',
+  },
 ];
 
 function scriptFilesOf(dir) {

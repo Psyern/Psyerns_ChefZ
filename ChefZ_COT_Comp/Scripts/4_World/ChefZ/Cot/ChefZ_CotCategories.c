@@ -211,6 +211,18 @@ class ChefZ_CotCategories
 	 * leere Text (COTs "Alle"), "edible_base", "transport" und alles andere aus
 	 * COTs eigener Typleiste. Der Aufrufer nimmt genau das als Signal, COTs
 	 * unveraenderten Zweig zu benutzen.
+	 *
+	 * Hier stand bis zum 09.09.2026 ein "foreach (ref ChefZ_CotCategory
+	 * category : Get())". Die Laufvariable einer Schleife ist eine LOKALE
+	 * Variable, und an eine lokale gehoert kein ref. Das Client-Log vom
+	 * 09.09.2026 zeigt, was daraus wird: 36 VM-Ausnahmen "NULL pointer to
+	 * instance", 34 davon in genau dieser Schleife, zwei in der gleich
+	 * gebauten von ChefZ_CotObjectSpawner.OnInit. Der Object Spawner blieb
+	 * dabei leer, weil UpdateList nie bis super.UpdateList() kam.
+	 * Deshalb: Quelle in eine lokale Variable holen, pruefen, mit einer
+	 * gewoehnlichen for-Schleife laufen - so wie IndexOf() es immer schon tat.
+	 * Die Validierung faengt den Rueckfall ab (tools/chefz-validate,
+	 * enforce.mjs, Regel "foreach-ref").
 	 */
 	static ChefZ_CotCategory Find(string filterId)
 	{
@@ -219,9 +231,16 @@ class ChefZ_CotCategories
 			return NULL;
 		}
 
-		foreach (ref ChefZ_CotCategory category : Get())
+		array<ref ChefZ_CotCategory> categories = Get();
+		if (!categories)
 		{
-			if (category.GetFilterId() == filterId)
+			return NULL;
+		}
+
+		for (int i = 0; i < categories.Count(); i++)
+		{
+			ChefZ_CotCategory category = categories.Get(i);
+			if (category && category.GetFilterId() == filterId)
 			{
 				return category;
 			}
@@ -239,6 +258,11 @@ class ChefZ_CotCategories
 		}
 
 		array<ref ChefZ_CotCategory> categories = Get();
+		if (!categories)
+		{
+			return -1;
+		}
+
 		for (int i = 0; i < categories.Count(); i++)
 		{
 			if (categories.Get(i).GetFilterId() == filterId)

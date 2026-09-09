@@ -617,7 +617,7 @@ node tools/chefz-validate/selftest.mjs    # do the checkers still see?
 
 | Validator | Rule |
 |---|---|
-| `enforce.mjs` | Ten hard Enforce rules — no ternary, no `GetGame()` since 1.29, no `var`/`auto`, no `?.`/`??`, no parent on a `modded class`, `ref` only on members … |
+| `enforce.mjs` | Thirteen hard Enforce rules — no ternary, no `GetGame()` since 1.29, no `var`/`auto`, no `?.`/`??`, no parent on a `modded class`, `ref` only on members, no `ref` on a `foreach` runner … |
 | `chefzbase.mjs` | A parent class must resolve inside its own `config.cpp` — otherwise DayZ aborts with *Undefined base class* |
 | `chefzmanaged.mjs` | Anything held by `ref` must be `Managed`, or the object is freed under the pointer |
 | `chefzswitch.mjs` | A `case` label must be a literal — a `static const` label compiles and then matches nothing |

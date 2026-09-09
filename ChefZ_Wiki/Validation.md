@@ -159,7 +159,7 @@ build-and-start cycle before it existed.
 
 | File | Rule |
 |---|---|
-| `enforce.mjs` | Ten hard Enforce rules: no ternary, no `GetGame()` since 1.29, no `var`/`auto`, no `?.`/`??`, no `delete`, no parent on a `modded class`, one variable per declaration, `ref` only on members, no line beginning with an operator, no variable named like a type. |
+| `enforce.mjs` | Thirteen hard Enforce rules: no ternary, no `GetGame()` since 1.29, no `var`/`auto`, no `?.`/`??`, no `delete`, no parent on a `modded class`, one variable per declaration, no line beginning with an operator, no line ending in a bare `=`, no variable named like a type, no identifier that begins with a keyword plus a digit, `ref` only on members — and, since 09.09.2026, no `ref` on the runner of a `foreach`. The last rule was written from a client log of that day: `foreach (ref ChefZ_CotCategory category : Get())` in the COT compatibility module threw *NULL pointer to instance* 36 times, and COT's object spawner stayed empty because `UpdateList` never reached `super.UpdateList()`. The older `ref` rule did not see it — between `ref` and the closing bracket stands the variable name. |
 | `chefzbase.mjs` | A parent class must be resolvable inside its own `config.cpp` — with a body or as a forward declaration. Otherwise DayZ aborts with *Undefined base class*, in a modal window nobody on a server ever clicks away. |
 | `chefzmanaged.mjs` | Anything held by `ref` must be `Managed`, including plain members where the compiler says nothing at all. Without it nothing counts references and the object is freed under the pointer. |
 | `chefzswitch.mjs` | A `case` label must be a literal. `static const int FLAG = 1 << 3;` compiles and then matches nothing at runtime — silently. |

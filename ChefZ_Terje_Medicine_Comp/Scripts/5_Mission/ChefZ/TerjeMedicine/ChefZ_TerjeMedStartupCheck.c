@@ -99,7 +99,7 @@ modded class ChefZ_CompNotice
         array<ref TerjeSkillCfg> skills = new array<ref TerjeSkillCfg>;
         GetTerjeSkillsRegistry().GetSkills(skills);
 
-        foreach (ref TerjeSkillCfg skill : skills)
+        foreach (TerjeSkillCfg skill : skills)
         {
             if (!skill)
             {

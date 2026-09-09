@@ -117,9 +117,13 @@ modded class JMObjectSpawnerForm
 		array<string> options = new array<string>;
 		options.Insert("#STR_CHEFZ_COT_CAT_NONE");
 
-		foreach (ref ChefZ_CotCategory category : ChefZ_CotCategories.Get())
+		array<ref ChefZ_CotCategory> categories = ChefZ_CotCategories.Get();
+		if (categories)
 		{
-			options.Insert(category.GetLabel());
+			for (int i = 0; i < categories.Count(); i++)
+			{
+				options.Insert(categories.Get(i).GetLabel());
+			}
 		}
 
 		m_ChefZCategorySelect = UIActionManager.CreateSelectionBox(
