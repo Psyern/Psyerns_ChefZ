@@ -58,6 +58,22 @@ class ChefZ_Config_PlantJson
 		if (EnsurePlant(ChefZ_Constants.PLANT_TYPE_CHILI, ChefZ_Constants.DEFAULT_CHILI_MATURITY_TIME, ChefZ_Constants.DEFAULT_CHILI_HARVEST_MIN, ChefZ_Constants.DEFAULT_CHILI_HARVEST_MAX))
 			addedPlant = true;
 
+		// Blackberry
+		if (EnsurePlant(ChefZ_Constants.PLANT_TYPE_BLACKBERRY, ChefZ_Constants.DEFAULT_BLACKBERRY_MATURITY_TIME, ChefZ_Constants.DEFAULT_BLACKBERRY_HARVEST_MIN, ChefZ_Constants.DEFAULT_BLACKBERRY_HARVEST_MAX))
+			addedPlant = true;
+
+		// Strawberry
+		if (EnsurePlant(ChefZ_Constants.PLANT_TYPE_STRAWBERRY, ChefZ_Constants.DEFAULT_STRAWBERRY_MATURITY_TIME, ChefZ_Constants.DEFAULT_STRAWBERRY_HARVEST_MIN, ChefZ_Constants.DEFAULT_STRAWBERRY_HARVEST_MAX))
+			addedPlant = true;
+
+		// Blueberry
+		if (EnsurePlant(ChefZ_Constants.PLANT_TYPE_BLUEBERRY, ChefZ_Constants.DEFAULT_BLUEBERRY_MATURITY_TIME, ChefZ_Constants.DEFAULT_BLUEBERRY_HARVEST_MIN, ChefZ_Constants.DEFAULT_BLUEBERRY_HARVEST_MAX))
+			addedPlant = true;
+
+		// Raspberry
+		if (EnsurePlant(ChefZ_Constants.PLANT_TYPE_RASPBERRY, ChefZ_Constants.DEFAULT_RASPBERRY_MATURITY_TIME, ChefZ_Constants.DEFAULT_RASPBERRY_HARVEST_MIN, ChefZ_Constants.DEFAULT_RASPBERRY_HARVEST_MAX))
+			addedPlant = true;
+
 		// PlantName
 		// if (EnsurePlant(ChefZ_Constants.PLANT_TYPE_NAME, ChefZ_Constants.DEFAULT_NAME_MATURITY_TIME, ChefZ_Constants.DEFAULT_NAME_HARVEST_MIN, ChefZ_Constants.DEFAULT_NAME_HARVEST_MAX))
 		// 	addedPlant = true;

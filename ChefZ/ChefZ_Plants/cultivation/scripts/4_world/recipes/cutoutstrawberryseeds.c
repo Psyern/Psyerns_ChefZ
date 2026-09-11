@@ -1,4 +1,4 @@
-class CoutOutChiliSeeds extends CutOutSeeds
+class CoutOutStrawberrySeeds extends CutOutSeeds
 {	
 	override void Init()
 	{
@@ -20,7 +20,7 @@ class CoutOutChiliSeeds extends CutOutSeeds
 		//----------------------------------------------------------------------------------------------------------------------
 		//INGREDIENTS
 		//ingredient 1
-		InsertIngredient(0,"ChefZ_Plant_Chili");					//you can insert multiple ingredients this way
+		InsertIngredient(0,"ChefZ_Plant_Strawberry");					//you can insert multiple ingredients this way
 
 		m_IngredientAddHealth[0]			= 0;		// 0 = do nothing
 		m_IngredientSetHealth[0]			= -1;		// -1 = do nothing
@@ -60,7 +60,7 @@ class CoutOutChiliSeeds extends CutOutSeeds
 		//----------------------------------------------------------------------------------------------------------------------
 		//RESULTS
 		//result1
-		AddResult("ChefZ_Plant_ChiliSeeds");						// add results here
+		AddResult("ChefZ_Plant_StrawberrySeeds");						// add results here
 
 		m_ResultSetFullQuantity[0]			= false;	// true = set full quantity, false = do nothing
 		m_ResultSetQuantity[0]				= 3;		// -1 = do nothing

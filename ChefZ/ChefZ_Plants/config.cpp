@@ -103,4 +103,44 @@ class CfgVehicles
 		descriptionShort="#STR_CHEFZ_Chili_DESC";
 		itemSize[]={1,2};
 	};
+	class ChefZ_Plant_Blackberry : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Blackberry";
+		model="\ChefZ\ChefZ_Plants\models\Blackberry.p3d";
+		descriptionShort="#STR_CHEFZ_Blackberry_DESC";
+		itemSize[]={1,1};
+		containsSeedsType="ChefZ_Plant_BlackberrySeeds";
+		containsSeedsQuantity="3";
+	};
+	class ChefZ_Plant_Strawberry : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Strawberry";
+		model="\ChefZ\ChefZ_Plants\models\Strawberry.p3d";
+		descriptionShort="#STR_CHEFZ_Strawberry_DESC";
+		itemSize[]={1,1};
+		containsSeedsType="ChefZ_Plant_StrawberrySeeds";
+		containsSeedsQuantity="3";
+	};
+	class ChefZ_Plant_Blueberry : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Blueberry";
+		model="\ChefZ\ChefZ_Plants\models\Blueberry.p3d";
+		descriptionShort="#STR_CHEFZ_Blueberry_DESC";
+		itemSize[]={1,1};
+		containsSeedsType="ChefZ_Plant_BlueberrySeeds";
+		containsSeedsQuantity="3";
+	};
+	class ChefZ_Plant_Raspberry : ChefZ_Item_Base
+	{
+		scope=2;
+		displayName="#STR_CHEFZ_Raspberry";
+		model="\ChefZ\ChefZ_Plants\models\Raspberry.p3d";
+		descriptionShort="#STR_CHEFZ_Raspberry_DESC";
+		itemSize[]={1,1};
+		containsSeedsType="ChefZ_Plant_RaspberrySeeds";
+		containsSeedsQuantity="3";
+	};
 };
