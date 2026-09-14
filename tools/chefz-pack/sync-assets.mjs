@@ -42,7 +42,10 @@ const PAIRS = [
 // corn_plant.p3d ist zudem selbst nur ein Proxy-Container - es haengt die
 // sieben Wachstumsstufen aus cultivation/models/corn/ ein, die aus demselben
 // Grund fehlten.
-const SUBDIRS = ['models', 'data', 'cultivation/data', 'cultivation/models'];
+// cultivation/Plant_Wild seit dem 14.09.2026: die vier Wildbeerenbuesche der
+// Lieferung 392857d (wild_<beere>.p3d, Textur in Plant_Wild/data). Die
+// Klassen ChefZ_Wild<Beere> in ChefZ_Farming zeigen dorthin.
+const SUBDIRS = ['models', 'data', 'cultivation/data', 'cultivation/models', 'cultivation/Plant_Wild'];
 
 let copied = 0;
 let same = 0;

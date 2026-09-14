@@ -99,6 +99,14 @@ class ChefZ_Carrot extends ChefZ_VegetableFood_Base {}
 class ChefZ_Corn extends ChefZ_VegetableFood_Base {}
 class ChefZ_Cabbage extends ChefZ_VegetableFood_Base {}
 
+//! ### SLICE berries ### (14.09.2026) Die vier Wildbeeren - Fundgut vom
+//! Wildbusch (ChefZ_WildPlants.c), sonst Gemuese wie die Karotte: essbar,
+//! kochbar, Zutat mit ChefZ-Zustand.
+class ChefZ_Blackberry extends ChefZ_VegetableFood_Base {}
+class ChefZ_Blueberry extends ChefZ_VegetableFood_Base {}
+class ChefZ_Raspberry extends ChefZ_VegetableFood_Base {}
+class ChefZ_Strawberry extends ChefZ_VegetableFood_Base {}
+
 //! Die Maispflanze im Beet (30.08.2026). Vanillas PlantBase macht alles;
 //! die Klasse existiert, damit die Config-Klasse eine Skriptklasse hat.
 class ChefZ_CornPlant extends PlantBase {}

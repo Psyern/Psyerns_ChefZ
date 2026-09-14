@@ -799,3 +799,98 @@ class ChefZ_WildParsley extends ChefZ_WildPlant_Base
         return 25;
     }
 }
+
+//------------------------------------------------------------------------------
+// ### SLICE berries ###   Die vier Wildbeerenbuesche (14.09.2026)
+//
+// Auftrag: "genau so spawnen wie die Pilze". Das ist diese Familie - CE-Event
+// mit position=player, Ernte mit der Hand, Busch verschwindet, CE stellt
+// anderswo einen neuen hin. Nichts an der Basis aendert sich; jede Beere
+// traegt nur Ertragsklasse und Wurf.
+//
+// DER WURF ist der des Mais (1 sicher, 25 % +1, 5 % +2, im Mittel 1,35): ein
+// tragender Busch gibt mehr her als ein Kraeuterbueschel, und eine Handvoll
+// Beeren (60/45/45) wiegt ernaehrungsseitig weniger als ein Kolben (220/180/
+// 40). Keine Begleiter - die Dichte regelt das nominal des Events, nicht die
+// Pflanze. Balancing ist Sache des Gates; die Zahlen stehen je Klasse an
+// genau einer Stelle.
+//
+// Einteilige Modelle ohne Wuchsstufen: keine ChefZ_ApplyModelStage-
+// Ueberschreibung, die Vorgabe der Basis (nichts tun) ist richtig.
+//------------------------------------------------------------------------------
+
+//! Brombeere.
+class ChefZ_WildBlackberry extends ChefZ_WildPlant_Base
+{
+    override string ChefZ_YieldClass()
+    {
+        return "ChefZ_Blackberry";
+    }
+
+    override int ChefZ_BonusOnePct()
+    {
+        return 25;
+    }
+
+    override int ChefZ_BonusTwoPct()
+    {
+        return 5;
+    }
+}
+
+//! Heidelbeere.
+class ChefZ_WildBlueberry extends ChefZ_WildPlant_Base
+{
+    override string ChefZ_YieldClass()
+    {
+        return "ChefZ_Blueberry";
+    }
+
+    override int ChefZ_BonusOnePct()
+    {
+        return 25;
+    }
+
+    override int ChefZ_BonusTwoPct()
+    {
+        return 5;
+    }
+}
+
+//! Himbeere.
+class ChefZ_WildRaspberry extends ChefZ_WildPlant_Base
+{
+    override string ChefZ_YieldClass()
+    {
+        return "ChefZ_Raspberry";
+    }
+
+    override int ChefZ_BonusOnePct()
+    {
+        return 25;
+    }
+
+    override int ChefZ_BonusTwoPct()
+    {
+        return 5;
+    }
+}
+
+//! Erdbeere.
+class ChefZ_WildStrawberry extends ChefZ_WildPlant_Base
+{
+    override string ChefZ_YieldClass()
+    {
+        return "ChefZ_Strawberry";
+    }
+
+    override int ChefZ_BonusOnePct()
+    {
+        return 25;
+    }
+
+    override int ChefZ_BonusTwoPct()
+    {
+        return 5;
+    }
+}

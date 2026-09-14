@@ -81,7 +81,10 @@ class CfgPatches
             "ChefZ_HandRake",
             // ### SLICE wildplants ###
             "ChefZ_WildPlant_Base",
-            "ChefZ_WildCorn", "ChefZ_WildThyme", "ChefZ_WildRosemary", "ChefZ_WildParsley"
+            "ChefZ_WildCorn", "ChefZ_WildThyme", "ChefZ_WildRosemary", "ChefZ_WildParsley",
+            // ### SLICE berries ### (14.09.2026)
+            "ChefZ_Blackberry", "ChefZ_Blueberry", "ChefZ_Raspberry", "ChefZ_Strawberry",
+            "ChefZ_WildBlackberry", "ChefZ_WildBlueberry", "ChefZ_WildRaspberry", "ChefZ_WildStrawberry"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -802,6 +805,151 @@ class CfgVehicles
                 class Boiled { nutrition_properties[] = {172, 115, 92, 34, 0, 0, 1}; };
                 class Burned { nutrition_properties[] = {44, 17, 0, 0, 0, 0, 1}; };
                 class Rotten { nutrition_properties[] = {44, 17, 16, 0, 15, 0, 1}; };
+            };
+        };
+    };
+
+    //==========================================================================
+    // ### SLICE berries ###   Die vier Wildbeeren (14.09.2026)
+    //
+    // Brombeere, Heidelbeere, Himbeere und Erdbeere sind FUNDGUT wie Vanillas
+    // Pilze: kein Saatgut, kein Beet. Ihre Quelle in der Welt ist der
+    // Wildbusch (ChefZ_Wild<Beere>, Abschnitt wildplants unten), den die CE
+    // spielerzentriert verteilt und der beim Ernten eine Handvoll abgibt.
+    //
+    // WARUM ChefZ_VegetableFood_Base und nicht ChefZ_FreshHerbBase: eine
+    // Handvoll Beeren saettigt und laesst sich kochen (Kompott, spaeter
+    // Marmelade). Die Basis bringt FoodStages und Uebergaenge mit, ohne die
+    // eine Zutat im Topf beim ersten Garstufenwechsel verbrennt (Kopf der
+    // Basis, Punkt 1). Kategorie ist BERRY (unter FRUIT, Delta
+    // _deltas/vanilla-foods.json) - dieselbe Bindung wie CaninaBerry und
+    // SambucusBerry in VanillaFoodstuffs.json.
+    //
+    // MODELLE: eigene Meshes aus Lykos' Lieferung 392857d
+    // (ChefZ/ChefZ_Plants/models/<beere>.p3d, Textur <beere>_co.paa). Die
+    // Lieferung fuehrt dazu Anbaupflanzen (Plant_Blackberry usw. auf
+    // PlantBase) und containsSeedsType - beides ist hier NICHT gebunden:
+    // Beeren sind in ChefZ Fundgut, und die Anbaustufen sind noch nicht in
+    // der Packquelle (sync-assets.mjs, SUBDIRS).
+    //
+    // NAEHRWERTE: eine Handvoll ist weniger als eine Karotte (140/100/60) und
+    // mehr als ein Bund Kraeuter (55/15/12). Wasserreich, wenig Energie -
+    // Beeren sind Beilage, kein Hauptgang. Faktor 4.0 wie beim Kohl
+    // (FoodStage.c:314-317): 15->60, 13->54, 14->58, 4->15, 4->15.
+    //==========================================================================
+
+    class ChefZ_Blackberry : ChefZ_VegetableFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BLACKBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_BLACKBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\blackberry.p3d";   // EIGENES MODELL (11.09.2026, Lieferung 392857d)
+        weight = 100;
+        class Nutrition
+        {
+            fullnessIndex = 60;
+            energy = 45;
+            water = 45;
+            nutritionalIndex = 35;
+            toxicity = 0;
+            digestibility = 1;
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
+            };
+        };
+    };
+
+    class ChefZ_Blueberry : ChefZ_VegetableFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BLUEBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_BLUEBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\blueberry.p3d";   // EIGENES MODELL (11.09.2026, Lieferung 392857d)
+        weight = 100;
+        class Nutrition
+        {
+            fullnessIndex = 60;
+            energy = 45;
+            water = 45;
+            nutritionalIndex = 35;
+            toxicity = 0;
+            digestibility = 1;
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
+            };
+        };
+    };
+
+    class ChefZ_Raspberry : ChefZ_VegetableFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_RASPBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_RASPBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\raspberry.p3d";   // EIGENES MODELL (11.09.2026, Lieferung 392857d)
+        weight = 100;
+        class Nutrition
+        {
+            fullnessIndex = 60;
+            energy = 45;
+            water = 45;
+            nutritionalIndex = 35;
+            toxicity = 0;
+            digestibility = 1;
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
+            };
+        };
+    };
+
+    class ChefZ_Strawberry : ChefZ_VegetableFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_STRAWBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_STRAWBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\models\strawberry.p3d";   // EIGENES MODELL (11.09.2026, Lieferung 392857d)
+        weight = 100;
+        class Nutrition
+        {
+            fullnessIndex = 60;
+            energy = 45;
+            water = 45;
+            nutritionalIndex = 35;
+            toxicity = 0;
+            digestibility = 1;
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
+                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
+                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
+                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
+                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
             };
         };
     };
@@ -1836,6 +1984,61 @@ class CfgVehicles
         descriptionShort = "#STR_CHEFZ_ITEM_WILDPARSLEY_DESC";
         model = "\ChefZ\ChefZ_Plants\models\parsley.p3d";
     };
+
+    //==========================================================================
+    // ### SLICE berries ###   Die vier Wildbeerenbuesche (14.09.2026)
+    //
+    // Dieselbe Bauform wie die vier Wildpflanzen darueber, und aus demselben
+    // Auftrag: "genau so spawnen wie die Pilze". Die CE stellt sie
+    // spielerzentriert hin (ChefZTrajectoryBerries in ServerConfig/
+    // ChefZ_events.xml), der Spieler erntet mit der Hand
+    // (PROCESS_HARVEST_WILD), die Handvoll faellt daneben, der Busch geht.
+    //
+    // EIGENE, STEHENDE MODELLE - die ersten dieser Familie neben dem Mais:
+    // Lykos' Lieferung 392857d bringt vier Buesche unter
+    // ChefZ/ChefZ_Plants/cultivation/Plant_Wild/models/wild_<beere>.p3d mit
+    // Textur cultivation/Plant_Wild/data/wild_<beere>_co.paa (Pfad steht fest
+    // im MLOD). Einteilig, ohne Wuchsstufen - deshalb KEIN
+    // class AnimationSources und keine ChefZ_ApplyModelStage-Ueberschreibung.
+    // sync-assets.mjs kopiert cultivation/Plant_Wild seit dem 14.09.2026 mit
+    // in die Packquelle.
+    //
+    // itemSize und weight der Basis (3x3, 400 g) bleiben: ein Busch ist
+    // ohnehin nie in einem Inventar. Keine Begleiter - Beerenbuesche stehen
+    // einzeln wie die Kraeuter; die Dichte regelt das nominal des Events.
+    //==========================================================================
+
+    class ChefZ_WildBlackberry : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDBLACKBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDBLACKBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_blackberry.p3d";
+    };
+
+    class ChefZ_WildBlueberry : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDBLUEBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDBLUEBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_blueberry.p3d";
+    };
+
+    class ChefZ_WildRaspberry : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDRASPBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDRASPBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_raspberry.p3d";
+    };
+
+    class ChefZ_WildStrawberry : ChefZ_WildPlant_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_WILDSTRAWBERRY";
+        descriptionShort = "#STR_CHEFZ_ITEM_WILDSTRAWBERRY_DESC";
+        model = "\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_strawberry.p3d";
+    };
 };
 
 // Anbau-Registrierung der Maispflanze: Textur und Material der gesunden
@@ -2012,6 +2215,15 @@ class CfgChefZIngredients
     // Muehle. Kein Rezept-Slot matcht auf GRAIN - die Kategorie ist deshalb
     // I2-neutral. Tag bleibt CHEFZ_FRESH; CHEFZ_GRAIN gehoert dem Slice grain.
     class ChefZ_Corn : ChefZ_ProduceIngredient    { categories[] = {"VEGETABLE","GRAIN"}; };
+
+    // ### SLICE berries ### BERRY statt VEGETABLE - dieselbe Bindung wie
+    // CaninaBerry und SambucusBerry (VanillaFoodstuffs.json). BERRY haengt
+    // unter FRUIT (Delta vanilla-foods.json): ein FRUIT-Slot nimmt sie mit,
+    // ein Gemueseslot nie.
+    class ChefZ_Blackberry : ChefZ_ProduceIngredient { categories[] = {"BERRY"}; };
+    class ChefZ_Blueberry : ChefZ_ProduceIngredient  { categories[] = {"BERRY"}; };
+    class ChefZ_Raspberry : ChefZ_ProduceIngredient  { categories[] = {"BERRY"}; };
+    class ChefZ_Strawberry : ChefZ_ProduceIngredient { categories[] = {"BERRY"}; };
 };
 
 //==============================================================================

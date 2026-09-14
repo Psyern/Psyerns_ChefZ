@@ -1,0 +1,27 @@
+{
+  "slice": "berries",
+
+  "categories": [],
+
+  "tags": [],
+
+  "processes": [],
+
+  "nutrition": [
+    { "class": "ChefZ_Blackberry", "energy": 45, "water": 45, "stomach": 15 },
+    { "class": "ChefZ_Blueberry",  "energy": 45, "water": 45, "stomach": 15 },
+    { "class": "ChefZ_Raspberry",  "energy": 45, "water": 45, "stomach": 15 },
+    { "class": "ChefZ_Strawberry", "energy": 45, "water": 45, "stomach": 15 }
+  ],
+
+  "classes": [
+    "ChefZ_Blackberry",
+    "ChefZ_Blueberry",
+    "ChefZ_Raspberry",
+    "ChefZ_Strawberry",
+    "ChefZ_WildBlackberry",
+    "ChefZ_WildBlueberry",
+    "ChefZ_WildRaspberry",
+    "ChefZ_WildStrawberry"
+  ]
+}

@@ -62,9 +62,9 @@ Die CE liest `cfgeconomycore.xml` nur beim Start.
 ### 4. Prüfen
 
 Im CE-Log (`log_ce_dynamicevent` bzw. `log_ce_loop` in den `<defaults>` von
-`cfgeconomycore.xml` auf `true`) müssen `ChefZTrajectoryCorn` und
-`ChefZTrajectoryHerbs` auftauchen. Im Spiel: 25 bis 100 m um sich herum laufen
-und schauen.
+`cfgeconomycore.xml` auf `true`) müssen `ChefZTrajectoryCorn`,
+`ChefZTrajectoryHerbs` und `ChefZTrajectoryBerries` auftauchen. Im Spiel: 25
+bis 100 m um sich herum laufen und schauen.
 
 ---
 
@@ -72,7 +72,7 @@ und schauen.
 
 ### `ChefZ_events.xml`
 
-Drei Events nach Vanillas Pilz- und Obstbauform (`db\events.xml`,
+Vier Events nach Vanillas Pilz- und Obstbauform (`db\events.xml`,
 `TrajectoryHumus` / `TrajectoryApple`):
 
 | Event | nominal | Kinder |
@@ -80,8 +80,9 @@ Drei Events nach Vanillas Pilz- und Obstbauform (`db\events.xml`,
 | `ChefZTrajectoryCorn` | 60 | `ChefZ_WildCorn` |
 | `ChefZTrajectoryHerbs` | 140 | `ChefZ_WildThyme`, `ChefZ_WildRosemary`, `ChefZ_WildParsley` |
 | `ChefZTrajectoryWheat` | 40 | `ChefZ_Wheat` |
+| `ChefZTrajectoryBerries` | 140 | `ChefZ_WildBlackberry`, `ChefZ_WildBlueberry`, `ChefZ_WildRaspberry`, `ChefZ_WildStrawberry` (seit 14.09.2026) |
 
-Alle drei `position=player`, `limit=mixed`, `active=1`, `lifetime=180`,
+Alle vier `position=player`, `limit=mixed`, `active=1`, `lifetime=180`,
 `saferadius=25`, `distanceradius=100`, `cleanupradius=25`. Das heißt: die
 Engine sucht sich einen Fleck im Ring 25–100 m um einen Spieler und legt dort
 etwas hin. **Wo genau, entscheidet die Engine** — Mais steht damit nicht

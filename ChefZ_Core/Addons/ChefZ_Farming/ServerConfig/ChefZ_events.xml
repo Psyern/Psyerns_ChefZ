@@ -131,4 +131,41 @@
             <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_Wheat"/>
         </children>
     </event>
+    <!--
+        WILDBEEREN (14.09.2026) - nominal 140 wie ein Vanilla-Pilzevent und
+        wie die Kraeuter, unveraendert uebernommen.
+
+        Kein Begleiterwurf: ein Event-Spawn ist EIN Busch. Der Wurf gibt 1,35
+        Handvoll je Busch (1 sicher, 25 % +1, 5 % +2 - der Maiswurf), verteilt
+        auf vier Klassen: rund 47 Handvoll je Beerensorte in der Welt. Eine
+        Handvoll traegt 60/45/45 (Saettigung/Energie/Wasser) und damit
+        weniger als eine Karotte - die Beeren sind Beilage und Kompottbasis,
+        kein Hauptgang. Wer sie seltener will, senkt HIER; wer eine Sorte
+        seltener will, nimmt sie aus den children und gibt ihr ein eigenes
+        Event mit kleinerem nominal.
+
+        Auftrag: "genau so spawnen wie die Pilze". Der Ring, die lifetime,
+        der cleanupradius und position=player sind darum die Pilzwerte
+        (db/events.xml, TrajectoryHumus Z.1024ff) - nichts davon ist neu.
+    -->
+    <event name="ChefZTrajectoryBerries">
+        <nominal>140</nominal>
+        <min>2</min>
+        <max>4</max>
+        <lifetime>180</lifetime>
+        <restock>0</restock>
+        <saferadius>25</saferadius>
+        <distanceradius>100</distanceradius>
+        <cleanupradius>25</cleanupradius>
+        <flags deletable="0" init_random="0" remove_damaged="0"/>
+        <position>player</position>
+        <limit>mixed</limit>
+        <active>1</active>
+        <children>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildBlackberry"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildBlueberry"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildRaspberry"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildStrawberry"/>
+        </children>
+    </event>
 </events>

@@ -139,4 +139,60 @@
         <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="1" deloot="0" />
         <category name="food" />
     </type>
+    <!--
+        Die vier Wildbeerenbuesche (14.09.2026). Dieselben Zeilen wie die
+        drei Kraeuter: lifetime 900 wie die Pilze, keine Begleiter, also
+        nichts, was laenger stuende als sein Event. Nicht aufhebbar
+        (ChefZ_WildPlant_Base.IsTakeable() -> false), gezaehlt wird nur, was
+        in der Welt steht.
+
+        Die HANDVOLL (ChefZ_Blackberry usw.) hat hier KEINE Zeile - genau wie
+        ChefZ_Corn und die drei Kraeuterbunde: sie entsteht per Skript beim
+        Ernten, nicht durch die CE, und lebt mit der lifetime ihrer Config
+        (21600 s, ChefZ_VegetableFood_Base).
+    -->
+    <type name="ChefZ_WildBlackberry">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+    <type name="ChefZ_WildBlueberry">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+    <type name="ChefZ_WildRaspberry">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
+    <type name="ChefZ_WildStrawberry">
+        <nominal>0</nominal>
+        <lifetime>900</lifetime>
+        <restock>0</restock>
+        <min>0</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="0" count_in_hoarder="0" count_in_map="1" count_in_player="0" crafted="1" deloot="0" />
+        <category name="food" />
+    </type>
 </types>

@@ -4,6 +4,34 @@
     "_note": "ERZEUGT vom chefz-registry-integrator aus ChefZ_Core/_deltas/*.json (Workflow 5). NICHT VON HAND BEARBEITEN - der naechste Merge ueberschreibt jede Aenderung. Das Delta-Feld \"class\" heisst hier \"id\", das Delta-Feld \"stomach\" heisst hier \"fullness\" (Feldname aus ChefZ_NutritionDef). GEMISCHTE FULLNESS-SKALA, BEKANNT UND NICHT ZU \"REPARIEREN\": die aelteren Records (Cheese 35, Butter 15, alle Gerichte 30-300) stehen auf der alten, falschen fullnessIndex-Skala; ChefZ_CheeseCurd (2.8) und ChefZ_MushroomCulture (0.1) stehen auf der am 31.08.2026 korrigierten Engine-Skala (PlayerStomach.c:86, volume = fullnessIndex * m_Amount, KEIN \"/100\"). Die Divergenz ist folgenlos fuer die Laufzeit: Registry-Naehrwerte werden NIE an ein Item geschrieben und NIE beim Verzehr angewandt (ChefZ_NutritionDef.c:16-18, ChefZ_NutritionManager.c:9-33) - sie sind allein Eingangsgroesse der Sollrechnung des Startaudits, und die vergleicht ausschliesslich \"energy\". Die Gesamtangleichung der Altwerte ist eine Doku-/Audit-Frage und wird an einem Gate entschieden, nicht beim Merge. Wer sie angleicht, tut das in den DELTAS der zustaendigen Slices, nie hier.",
     "records": [
         {
+            "id": "ChefZ_Blackberry",
+            "scope": "class",
+            "energy": 45,
+            "water": 45,
+            "fullness": 15
+        },
+        {
+            "id": "ChefZ_Blueberry",
+            "scope": "class",
+            "energy": 45,
+            "water": 45,
+            "fullness": 15
+        },
+        {
+            "id": "ChefZ_Raspberry",
+            "scope": "class",
+            "energy": 45,
+            "water": 45,
+            "fullness": 15
+        },
+        {
+            "id": "ChefZ_Strawberry",
+            "scope": "class",
+            "energy": 45,
+            "water": 45,
+            "fullness": 15
+        },
+        {
             "id": "ChefZ_Butter",
             "scope": "class",
             "energy": 600,

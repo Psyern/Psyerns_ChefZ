@@ -39,6 +39,14 @@ Bienenstock arbeitet.
 | `ChefZ_WildThyme` | 1 | 25 % | — | `ChefZ_Thyme` |
 | `ChefZ_WildRosemary` | 1 | 25 % | — | `ChefZ_Rosemary` |
 | `ChefZ_WildParsley` | 1 | 25 % | — | `ChefZ_Parsley` |
+| `ChefZ_WildBlackberry` | 1 | 25 % | 5 % | `ChefZ_Blackberry` |
+| `ChefZ_WildBlueberry` | 1 | 25 % | 5 % | `ChefZ_Blueberry` |
+| `ChefZ_WildRaspberry` | 1 | 25 % | 5 % | `ChefZ_Raspberry` |
+| `ChefZ_WildStrawberry` | 1 | 25 % | 5 % | `ChefZ_Strawberry` |
+
+Die vier Beerenbüsche (Slice `berries`, 14.09.2026) tragen den Maiswurf: ein
+tragender Busch gibt mehr her als ein Kräuterbüschel, und eine Handvoll Beeren
+(60/45/45) wiegt ernährungsseitig weniger als ein Kolben. Keine Begleiter.
 
 **Ein Wurf, zwei Bänder** (`ChefZ_WildPlant_Base.ChefZ_RollBonus()`):
 `Math.RandomIntInclusive(0, 99)`, `roll < twoPct` → +2, `roll < twoPct + onePct`
@@ -261,9 +269,19 @@ Wildwuchs die Sofortquelle.
 | `ChefZ_WildThyme` | `\dz\gear\cultivation\plant_material.p3d` | **Proxy** |
 | `ChefZ_WildRosemary` | `\ChefZ\ChefZ_Plants\models\rosmary.p3d` | **Proxy** (Item-Mesh der Ernte) |
 | `ChefZ_WildParsley` | `\ChefZ\ChefZ_Plants\models\parsley.p3d` | **Proxy** (Item-Mesh der Ernte) |
+| `ChefZ_WildBlackberry` | `\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_blackberry.p3d` | eigenes Modell, stehend |
+| `ChefZ_WildBlueberry` | `\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_blueberry.p3d` | eigenes Modell, stehend |
+| `ChefZ_WildRaspberry` | `\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_raspberry.p3d` | eigenes Modell, stehend |
+| `ChefZ_WildStrawberry` | `\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_strawberry.p3d` | eigenes Modell, stehend |
 
 Drei stehende Kräuterbüschel und ein Thymian-Item-Mesh sind als Asset-Bedarf
 gemeldet.
+
+Die vier Beerenbüsche kommen aus Lykos' Lieferung 392857d (11.09.2026). Sie
+sind einteilig ohne Wuchsstufen, brauchen also weder `AnimationSources` noch
+eine `ChefZ_ApplyModelStage`-Überschreibung. `sync-assets.mjs` kopiert
+`cultivation/Plant_Wild` seit dem 14.09.2026 mit in die Packquelle; die Textur
+liegt fest im MLOD (`cultivation\Plant_Wild\data\wild_<beere>_co.paa`).
 
 **Nicht genommen:** Vanillas Clutter-Modelle (`\dz\plants\clutter\c_*.p3d`),
 obwohl sie am hübschesten aussähen. Clutter ist Bodenbewuchs und trägt
@@ -363,7 +381,8 @@ und `*.md` fällt ohnehin unter kein Muster.
 
 ## `WildPlant_Stations.json`
 
-Vier Stationsdatensätze, alle gleich: `stationCategories ["WILD_PLANT"]`,
+Acht Stationsdatensätze (vier Wildpflanzen, seit dem 14.09.2026 vier
+Beerenbüsche), alle gleich: `stationCategories ["WILD_PLANT"]`,
 `processes ["PROCESS_HARVEST_WILD"]`, `parallelSlots 1`, `speedMultiplier 1.0`,
 `needsFuel false`.
 

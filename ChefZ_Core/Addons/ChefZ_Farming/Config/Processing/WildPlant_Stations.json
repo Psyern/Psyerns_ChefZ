@@ -33,6 +33,38 @@
             "parallelSlots": 1,
             "speedMultiplier": 1.0,
             "needsFuel": false
+        },
+        {
+            "id": "ChefZ_WildBlackberry",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        },
+        {
+            "id": "ChefZ_WildBlueberry",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        },
+        {
+            "id": "ChefZ_WildRaspberry",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
+        },
+        {
+            "id": "ChefZ_WildStrawberry",
+            "stationCategories": ["WILD_PLANT"],
+            "processes": ["PROCESS_HARVEST_WILD"],
+            "parallelSlots": 1,
+            "speedMultiplier": 1.0,
+            "needsFuel": false
         }
     ]
 }
