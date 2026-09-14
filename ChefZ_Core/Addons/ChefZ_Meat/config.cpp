@@ -649,13 +649,37 @@ class CfgVehicles
         };
     };
 
+    //--------------------------------------------------------------------------
+    // §30: die sechs Hacksorten - EIN MESH FUER ALLE (14.09.2026)
+    //
+    // Auftrag: "wir haben bereits einmal minced meat und dieses 3D-Asset werden
+    // wir fuer die anderen minced-Varianten auch nutzen." Das Asset ist
+    // dicedmeat.p3d aus Lykos' Lieferung c09900f - bis dahin allein an
+    // ChefZ_DicedMeat gebunden. Die sechs Hacksorten standen auf Vanillas
+    // steak.p3d, zusammen mit sechs Poekel-, Doerr- und Raeucherstuecken:
+    // zwoelf Klassen auf einem Proxy, die groesste Kollision des Mods
+    // (ChefZ_3D_Asset_ToDo.md, Abschnitt 15).
+    //
+    // Jetzt: sieben Klassen auf dicedmeat.p3d (Wuerfel + sechs Hack), sechs
+    // bleiben auf steak.p3d. Gleiche Bauform wie die elf Wuerste auf
+    // sausage_cooked.p3d - ein Mesh, mehrere Klassen.
+    //
+    // KEINE hiddenSelectionsTextures, obwohl das Mesh eine "camo"-Selektion
+    // traegt: ChefZ_Food/models/model.cfg fuehrt sections[] = {"camo"} nur
+    // fuer panfood_base, nicht fuer dicedmeat. Ohne den Eintrag greift eine
+    // Texturzuweisung nicht (dieselbe Anmerkung wie an den Tellergerichten in
+    // ChefZ_Cooking). model.cfg gehoert der Lieferung (sync-assets.mjs
+    // kopiert es); der Eintrag plus sechs Texturen sind als Asset-Bedarf
+    // gemeldet. Bis dahin sehen alle sieben gleich aus - und sind im Inventar
+    // ueber den Namen zu unterscheiden, wie die sechs gekochten Wuerste.
+    //--------------------------------------------------------------------------
     // §30: das gattungsneutrale Hack. Entsteht, wenn keine Sorte greift.
     class ChefZ_MincedMeat : ChefZ_MeatItemBase
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MINCEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDMEAT1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
         itemSize[] = {2, 1};
         weight = 250;
 
@@ -691,7 +715,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MINCEDPORK0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDPORK1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
         itemSize[] = {2, 1};
         weight = 250;
 
@@ -727,7 +751,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MINCEDVENISON0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDVENISON1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
         itemSize[] = {2, 1};
         weight = 245;
 
@@ -763,7 +787,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MINCEDBOAR0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDBOAR1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
         itemSize[] = {2, 1};
         weight = 250;
 
@@ -799,7 +823,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MINCEDCHICKEN0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDCHICKEN1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
         itemSize[] = {2, 1};
         weight = 220;
 
@@ -835,7 +859,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MINCEDBEAR0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDBEAR1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
         itemSize[] = {2, 1};
         weight = 280;
 
