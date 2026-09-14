@@ -1,5 +1,5 @@
 //==============================================================================
-// ChefZ_DishesVanillaItems - die Skriptseite der drei Gerichte aus den bisher
+// ChefZ_DishesVanillaItems - die Skriptseite der zwei Gerichte aus den bisher
 // ungenutzten Vanilla-Assets.
 //
 // Slice "dishes-vanilla". Quelle: Vanilla-Audit §3.
@@ -29,15 +29,14 @@
 
 //! Kleinfischpfanne aus Sardines und Bitterlings - Pfanne, gebacken, Teller.
 
-//! Obstkompott - Topf, gekocht, Schuessel. Das erste suesse Gericht des Mods.
+//! (Obstkompott: am 14.09.2026 entfernt - Auftrag "wir entfernen ChefZ_FruitCompoteBowl".)
 
 //------------------------------------------------------------------------------
 // 2. Die servierten Portionen - das, was der Spieler isst (15 §2, 16 §5)
 //
 // Beim letzten Bissen geben sie ueber ChefZ_Edible_Base.OnConsume den leeren
-// Behaelter zurueck - Schuessel bei Suppe und Kompott, Teller bei der Pfanne.
+// Behaelter zurueck - Schuessel bei der Suppe, Teller bei der Pfanne.
 //------------------------------------------------------------------------------
 
 class ChefZ_PumpkinSoupBowl  extends ChefZ_ServedDish_Base {}
 class ChefZ_SmallFishPan     extends ChefZ_ServedDish_Base {}
-class ChefZ_FruitCompoteBowl extends ChefZ_ServedDish_Base {}

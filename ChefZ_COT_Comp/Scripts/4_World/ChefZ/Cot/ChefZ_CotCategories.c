@@ -41,8 +41,7 @@
 // Luecke nachweisbar bleibt und nicht wieder gezaehlt werden muss:
 //
 //   ChefZ_Cookbook      ChefZ_CookbookItem
-//   ChefZ_Cooking       ChefZ_PumpkinSoupBowl, ChefZ_SmallFishPan,
-//                       ChefZ_FruitCompoteBowl
+//   ChefZ_Cooking       ChefZ_PumpkinSoupBowl, ChefZ_SmallFishPan
 //   ChefZ_Farming       ChefZ_Beehive, ChefZ_BeehiveDouble, ChefZ_BeehiveKit,
 //                       ChefZ_HoneycombFrameEmpty, ChefZ_HoneycombFrameFull,
 //                       ChefZ_HoneycombFrameUncapped, ChefZ_UncappingFork,

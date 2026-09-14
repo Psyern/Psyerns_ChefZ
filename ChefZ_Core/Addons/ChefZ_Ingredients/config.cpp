@@ -208,8 +208,9 @@ class CfgVehicles
     //
     // WARUM SIE EINE EIGENE BAUFORM BRAUCHT und nicht bei den Kraeutern liegt:
     // getrocknete Kraeuter sind Wuerze und kommen nie in einen Pflicht-Slot;
-    // getrocknete Beeren sind die PFLICHTzutat des Obstkompotts (Slice
-    // dishes-vanilla, RCP_ChefZ_FruitCompote). Damit gilt fuer sie
+    // getrocknete Beeren waren die PFLICHTzutat des Obstkompotts (Slice
+    // dishes-vanilla, RCP_ChefZ_FruitCompote - am 14.09.2026 entfernt; die
+    // Bauform bleibt fuer das naechste Rezept mit Beeren-Pflichtslot). Dann gilt
     // ChefZ_RecipeEvaluator.CheckStages: jede gebundene Pflichtzutat muss eine
     // erlaubte Endstufe erreichen. Eine Klasse ohne FoodStage meldet Stufe 0
     // (NONE), und das Gericht wuerde nie fertig.
@@ -1387,7 +1388,8 @@ class CfgChefZIngredients
     // Getrocknete Beeren. BERRY haengt unter FRUIT (Delta _deltas/vanilla-foods.json);
     // ein FRUIT-Slot nimmt sie damit mit, ein BERRY-Slot nur sie und die zwei
     // frischen Vanillabeeren. CHEFZ_PRESERVED trennt sie im Rezept vom frischen
-    // Obst - RCP_ChefZ_FruitCompote nutzt genau diesen Unterschied.
+    // Obst - RCP_ChefZ_FruitCompote nutzte genau diesen Unterschied (entfernt
+    // 14.09.2026; die Trennung bleibt fuer das naechste Obstrezept).
     //
     // defaultState "DRIED": die beiden Transforms setzen ihn ohnehin; dieser
     // Wert ist die Rueckfallebene der Zustandsprojektion (06 §3) fuer Exemplare

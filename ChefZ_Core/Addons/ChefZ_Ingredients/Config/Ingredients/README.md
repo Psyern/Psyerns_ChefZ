@@ -112,7 +112,7 @@ Konserven kommen deshalb nur dort hinein, wo ein Rezept sie **namentlich** einl�
   `CANNED_MEAT`, ein Punkt. `completion: "INSTANT"`, kalt angerichtet, keine
   Garstufe im Spiel. Vier häufige Lootitems bekommen damit eine Kochrolle, ohne
   ein neues Rezept.
-- `RCP_ChefZ_FruitCompote` — optionaler Slot `canned` auf `CANNED_FRUIT`.
+- ~~`RCP_ChefZ_FruitCompote` — optionaler Slot `canned` auf `CANNED_FRUIT`.~~ Rezept am 14.09.2026 entfernt; `CANNED_FRUIT` bleibt als Kategorie gebunden, ohne Rezept.
 
 ### `Rice` und `Honey` (Audit §3 G)
 

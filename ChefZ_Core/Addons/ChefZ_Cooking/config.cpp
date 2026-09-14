@@ -140,12 +140,12 @@ class CfgPatches
             "ChefZ_FishPotatoPlate",
             "ChefZ_BeanSausagePlate",
 
-            // ### SLICE dishes-vanilla ###   drei Gerichte aus den bisher
+            // ### SLICE dishes-vanilla ###   zwei Gerichte (bis 14.09.2026 drei -
+            // das Obstkompott ist entfernt) aus den bisher
             // ungenutzten Vanilla-Assets (Vanilla-Audit §3). Dasselbe Paar je
             // Gericht wie in dishes-a bis dishes-c.
             "ChefZ_PumpkinSoupBowl",
-            "ChefZ_SmallFishPan",
-            "ChefZ_FruitCompoteBowl"
+            "ChefZ_SmallFishPan"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -1859,10 +1859,10 @@ class CfgVehicles
     };
 
     //==========================================================================
-    // ### SLICE dishes-vanilla ###   DREI GERICHTE AUS UNGENUTZTEN VANILLA-ASSETS
+    // ### SLICE dishes-vanilla ###   ZWEI GERICHTE AUS UNGENUTZTEN VANILLA-ASSETS
     //
     // Quelle: Vanilla-Audit §3. Rund 106 Vanilla-Klassen waren ungebunden; die
-    // drei Gerichte hier sind die, fuer die es keine bestehende Schuessel und
+    // zwei Gerichte hier sind die, fuer die es keine bestehende Schuessel und
     // keinen bestehenden Teller gibt:
     //
     //   Kuerbissuppe      SlicedPumpkin - Vanillas geschnittener Kuerbis hatte
@@ -1870,12 +1870,14 @@ class CfgVehicles
     //   Kleinfischpfanne  Sardines und Bitterlings - der HAEUFIGSTE Angelfang
     //                     in Vanilla, ohne Filet-Pendant und deshalb bisher
     //                     wertlos (Audit §3 D).
-    //   Obstkompott       Apple, Pear, Plum, die zwei Waldbeeren und der Honig -
-    //                     das erste suesse Gericht des Mods ueberhaupt.
+    //   (Obstkompott      Apple, Pear, Plum, Waldbeeren, Honig - am 14.09.2026
+    //                     ENTFERNT, Auftrag "wir entfernen ChefZ_FruitCompoteBowl".
+    //                     Rezept, Klasse, Strings und Delta sind weg; die
+    //                     Vanilla-Fruechte bleiben ueber vanilla-foods gebunden.)
     //
     // BAUFORM: dieselbe wie in dishes-a, dishes-b und dishes-c - EINE Klasse
-    // je Gericht, das Rezept liefert sie direkt (seit 29.08.2026). Suppe und
-    // Kompott geben in eine Schuessel und heissen deshalb ...Bowl, die
+    // je Gericht, das Rezept liefert sie direkt (seit 29.08.2026). Die Suppe
+    // geht in eine Schuessel und heisst deshalb ...Bowl, die
     // Fischpfanne auf einen Teller und heisst nur nach dem Gericht.
     //
     // NAEHRWERT: energy und water unter jeder Klasse sind die Summe EINER
@@ -1964,45 +1966,6 @@ class CfgVehicles
             energy = 430;
             water = 35;
             nutritionalIndex = 55;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-    };
-
-    //--------------------------------------------------------------------------
-    // Obstkompott         Behaelter: BOWL      Geraet: Pot / Cauldron
-    //
-    // NAEHRWERTHERLEITUNG: 4 Fruechte (~4x70 Energie) + 1 getrocknete Beeren
-    // (130) auf DREI Portionen, mal 1.05. Der Zucker steckt im optionalen
-    // Honigslot und nicht in der Grundrechnung - ohne ihn ist es SIMPLE.
-    //--------------------------------------------------------------------------
-    class ChefZ_FruitCompoteBowl : ChefZ_ServedDish_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_FRUITCOMPOTE";
-        descriptionShort = "#STR_CHEFZ_ITEM_FRUITCOMPOTE_DESC";
-        model = "\dz\gear\cooking\FryingPan.p3d";   // PROXY, kein eigenes Mesh
-        itemSize[] = {2, 2};
-        weight = 420;
-        lifetime = 7200;
-        // Menge = 100 je Portion. energy und water rechnet PlayerStomach.c:92
-        // je 100 Einheiten einmal ab; fullnessIndex NICHT - der geht in
-        // PlayerStomach.c:86 unverkuerzt mal der Menge ins Magenvolumen.
-        // Init = kleinstes Rezept (Spawn ohne Rezept), Max = groesstes Rezept;
-        // das Rezept setzt 100 x Portionen.
-        varQuantityInit = 300;
-        varQuantityMax = 300;
-
-        class Nutrition
-        {
-            // MAGENVOLUMEN (PlayerStomach.c:86, Herleitung an ChefZ_ServedDish_Base):
-            // 1.35 x 300 Einheiten = 405 - Pfannen-/leichtes Gericht.
-            // Alt: 40 x 300 = 12000, das 6-fache von VOMIT_THRESHOLD 2000.
-            fullnessIndex = 1.35;
-            energy = 145;
-            water = 95;
-            nutritionalIndex = 60;
             toxicity = 0;
             agents = 0;
             digestibility = 1;
@@ -3166,8 +3129,9 @@ class CfgChefZIngredients
     // ChefZ_DishesB... bereits vergeben sind und zwei gleichnamige Knoten eine
     // doppelte Definition waeren.
     //
-    // ZWEI Portionsknoten und nicht einer: die Kuerbissuppe und das Kompott
-    // gehen in eine Schuessel, die Fischpfanne auf einen Teller.
+    // ZWEI Portionsknoten und nicht einer: die Kuerbissuppe geht in eine
+    // Schuessel, die Fischpfanne auf einen Teller. (Bis 14.09.2026 teilte das
+    // Obstkompott den Schuesselknoten; es ist entfernt.)
     //
     // KEINE categories[] und KEINE tags[] ausser CHEFZ_HOT_MEAL: ein fertiges
     // Gericht ist Endprodukt und nie wieder Zutat.
@@ -3205,7 +3169,6 @@ class CfgChefZIngredients
 
     class ChefZ_PumpkinSoupBowl : ChefZ_DishesVanillaBowl {};
     class ChefZ_SmallFishPan : ChefZ_DishesVanillaPlate {};
-    class ChefZ_FruitCompoteBowl : ChefZ_DishesVanillaBowl {};
 };
 
 //==============================================================================
@@ -3439,16 +3402,16 @@ class CfgChefZ
 
     // ### SLICE dishes-vanilla ###
     //
-    // Die drei Gerichte aus den bisher ungenutzten Vanilla-Assets
+    // Die zwei Gerichte aus den bisher ungenutzten Vanilla-Assets
     // (Vanilla-Audit §3). Eigener Knoten, weil CfgChefZ genau EINEN Knoten je
     // SLICE traegt (02 §4) - dieses Modul ist ein geteilter Ordner.
     //
-    // loadOrder 350: nach allen anderen Gerichteslices. Die drei lesen aus der
+    // loadOrder 350: nach allen anderen Gerichteslices. Die zwei lesen aus der
     // Zutatenbindung des Slice vanilla-foods (loadOrder 240) und aus der Bruehe
     // und den Behaeltern dieses Moduls; niemand liest aus ihnen. Der Core
     // haengt Records nicht voneinander ab - die Reihenfolge ist Vorsorge.
     //
-    // handcraftRecipeSlots = 0: alle drei Rezepte zuenden am Kochgeraet.
+    // handcraftRecipeSlots = 0: beide Rezepte zuenden am Kochgeraet.
     // Dieser Slice registriert KEIN Handcraft-Rezept; Vanillas Rezeptliste
     // bleibt um kein Bit veraendert.
     class ChefZ_DishesVanilla
