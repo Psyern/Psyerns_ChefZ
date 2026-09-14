@@ -1089,7 +1089,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHILI";
         descriptionShort = "#STR_CHEFZ_ITEM_CHILI_DESC";
-        model = "\dz\gear\food\Sambucus_nigra.p3d";
+        model = "\ChefZ\ChefZ_Plants\models\chili.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         class Nutrition
         {
             // Zwischen Pfefferbeere (50) und Kraut (55): eine Schote hat mehr

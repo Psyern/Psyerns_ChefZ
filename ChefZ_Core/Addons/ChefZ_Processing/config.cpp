@@ -347,7 +347,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_FLOUR";
         descriptionShort = "#STR_CHEFZ_FLOUR_DESC";
-        model = "\dz\gear\food\PowderedMilk.p3d";
+        model = "\ChefZ\ChefZ_Items\models\flour.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 300;
         itemSize[] = {2, 2};
         stackedUnit = "grams";

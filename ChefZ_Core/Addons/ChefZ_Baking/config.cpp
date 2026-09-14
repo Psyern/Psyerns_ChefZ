@@ -214,7 +214,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_DOUGH";
         descriptionShort = "#STR_CHEFZ_DOUGH_DESC";
-        model = "\dz\gear\food\lard.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dough.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 450;
         itemSize[] = {2, 2};
         varQuantityInit = 1;
@@ -340,7 +340,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_DRIEDPASTA";
         descriptionShort = "#STR_CHEFZ_DRIEDPASTA_DESC";
-        model = "\dz\gear\food\Rice.p3d";
+        model = "\ChefZ\ChefZ_Food\models\dried_pasta.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 350;
         itemSize[] = {2, 2};
         stackedUnit = "grams";
@@ -462,7 +462,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_FLATBREAD";
         descriptionShort = "#STR_CHEFZ_FLATBREAD_DESC";
-        model = "\dz\gear\food\pumpkin_sliced.p3d";
+        model = "\ChefZ\ChefZ_Food\models\flatbread.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 300;
         itemSize[] = {2, 2};
         varQuantityInit = 1;

@@ -443,6 +443,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_TOMATOSAUCE";
         descriptionShort = "#STR_CHEFZ_ITEM_TOMATOSAUCE_DESC";
+        model = "\ChefZ\ChefZ_Items\models\tomato_sauce.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 420;
         // Eingekochtes Fruchtfleisch im Glas haelt laenger als die Bruehe.
         lifetime = 28800;
@@ -659,7 +660,7 @@ class CfgVehicles
         descriptionShort = "#STR_CHEFZ_ITEM_EMPTYBOWL1";
         // PROXY: Topfsilhouette, zu gross und mit Buegel. Bedarf: eigenes
         // Schuesselmesh (P1).
-        model = "\dz\gear\cooking\CookingPot.p3d";
+        model = "\ChefZ\ChefZ_Items\models\wooden_bowl.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         itemSize[] = {2, 2};
         weight = 300;
     };

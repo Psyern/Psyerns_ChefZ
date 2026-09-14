@@ -412,6 +412,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CREAM";
         descriptionShort = "#STR_CHEFZ_ITEM_CREAM_DESC";
+        model = "\ChefZ\ChefZ_Items\models\cream.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 260;
         itemSize[] = {2, 2};
         varQuantityInit = 100;
@@ -447,6 +448,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BUTTER";
         descriptionShort = "#STR_CHEFZ_ITEM_BUTTER_DESC";
+        model = "\ChefZ\ChefZ_Food\models\butter.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 250;
         itemSize[] = {2, 1};
         varQuantityInit = 100;
@@ -822,6 +824,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_EGG";
         descriptionShort = "#STR_CHEFZ_ITEM_EGG_DESC";
+        model = "\ChefZ\ChefZ_Food\models\egg.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 60;
         itemSize[] = {1, 1};
         varQuantityInit = 100;
