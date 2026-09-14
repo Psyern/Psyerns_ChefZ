@@ -77,7 +77,21 @@ class CfgPatches
         // fuehrt die Registry seit K1 nicht mehr, also erzeugt dieser Slice
         // hier keinen einzigen Datensatz und keine Abhaengigkeit.
         //
-        // Alle sieben sind ECHTE Abhaengigkeiten der DATEN, nicht Kosmetik:
+        // Zugekommen mit dem Merge der VIERTEN WELLE (Slices fillets,
+        // fish-fresh, fish-sea-a, fish-sea-b, baits): ChefZ_Fishing. Erstes
+        // neues Addon seit der ersten Welle, und ein echter Neuzugang - die 61
+        // neuen Nutrition-Records (31 ganze Fische, 30 Filets) nennen
+        // ausschliesslich Klassen aus ChefZ_Fishing. baits bringt weder
+        // Kategorie noch Tag noch Naehrwert mit, nur classes[]; der Slice
+        // erzeugt hier also keinen einzigen Datensatz, und die Abhaengigkeit
+        // kommt allein von den vier Fisch- und Filetslices.
+        //
+        // Zyklus geprueft: ChefZ_Fishing (CfgChefZ-loadOrder 400/405/420)
+        // liegt hinter der Registry (150) und nennt ChefZ_Registry in seinem
+        // requiredAddons[] ausdruecklich NICHT - der Kommentar an
+        // ChefZ_Fishing/config.cpp:278-286 haelt genau diese Richtung fest.
+        //
+        // Alle acht sind ECHTE Abhaengigkeiten der DATEN, nicht Kosmetik:
         // jeder Nutrition-Record nennt eine Klasse, und ein Record ohne seine
         // Klasse ist ein Naehrwert fuer nichts. Keines der genannten Module
         // haengt umgekehrt von ChefZ_Registry ab - es gibt also keinen Zyklus.
@@ -99,7 +113,8 @@ class CfgPatches
             "ChefZ_Meat",
             "ChefZ_Baking",
             "ChefZ_Preservation",
-            "ChefZ_Cooking"
+            "ChefZ_Cooking",
+            "ChefZ_Fishing"
         };
     };
 };

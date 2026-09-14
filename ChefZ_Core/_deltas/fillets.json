@@ -1,0 +1,232 @@
+{
+    "slice": "fillets",
+    "categories": [
+        {
+            "id": "FISH",
+            "parent": null,
+            "displayName": "#STR_CHEFZ_CAT_FISH"
+        },
+        {
+            "id": "FISH_FILLET",
+            "parent": "FISH",
+            "displayName": "#STR_CHEFZ_CAT_FISH_FILLET"
+        }
+    ],
+    "nutrition": [
+        {
+            "class": "ChefZ_PlaiceFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_GiltheadBreamFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_HalibutFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_CodFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_SoleFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_SeaBassFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_RedMulletFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_CongerFillet",
+            "energy": 205,
+            "water": 32,
+            "stomach": 375
+        },
+        {
+            "class": "ChefZ_HorseMackerelFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_JapaneseSardineFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_RockfishFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_BluefinTunaFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_YellowfinTunaFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_RedSnapperFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_GiantGrouperFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_MahiMahiFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_GiantTrevallyFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_BlueMarlinFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_SailfishFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_BonitoFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_YellowtailFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_TarponFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_SalmonFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_SockeyeSalmonFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_PerchFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_MuskellungeFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_SnakeheadFillet",
+            "energy": 110,
+            "water": 45,
+            "stomach": 350
+        },
+        {
+            "class": "ChefZ_RainbowTroutFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_CharFillet",
+            "energy": 165,
+            "water": 38,
+            "stomach": 363
+        },
+        {
+            "class": "ChefZ_EelFillet",
+            "energy": 205,
+            "water": 32,
+            "stomach": 375
+        }
+    ],
+    "classes": [
+        "ChefZ_FishFillet_Base",
+        "ChefZ_SeaFillet_Base",
+        "ChefZ_FreshFillet_Base",
+        "ChefZ_PlaiceFillet",
+        "ChefZ_GiltheadBreamFillet",
+        "ChefZ_HalibutFillet",
+        "ChefZ_CodFillet",
+        "ChefZ_SoleFillet",
+        "ChefZ_SeaBassFillet",
+        "ChefZ_RedMulletFillet",
+        "ChefZ_CongerFillet",
+        "ChefZ_HorseMackerelFillet",
+        "ChefZ_JapaneseSardineFillet",
+        "ChefZ_RockfishFillet",
+        "ChefZ_BluefinTunaFillet",
+        "ChefZ_YellowfinTunaFillet",
+        "ChefZ_RedSnapperFillet",
+        "ChefZ_GiantGrouperFillet",
+        "ChefZ_MahiMahiFillet",
+        "ChefZ_GiantTrevallyFillet",
+        "ChefZ_BlueMarlinFillet",
+        "ChefZ_SailfishFillet",
+        "ChefZ_BonitoFillet",
+        "ChefZ_YellowtailFillet",
+        "ChefZ_TarponFillet",
+        "ChefZ_SalmonFillet",
+        "ChefZ_SockeyeSalmonFillet",
+        "ChefZ_PerchFillet",
+        "ChefZ_MuskellungeFillet",
+        "ChefZ_SnakeheadFillet",
+        "ChefZ_RainbowTroutFillet",
+        "ChefZ_CharFillet",
+        "ChefZ_EelFillet"
+    ]
+}

@@ -75,6 +75,8 @@ class ChefZ_ConfigCppSource extends ChefZ_IRecordSource
         ReadIngredients(sink, report);
         ReadProcesses(sink, report);
         ReadStations(sink, report);
+        ReadFishingYields(sink, report);
+        ReadBaits(sink, report);
 
         return sink.GetAcceptedCount() > before;
     }
@@ -280,6 +282,84 @@ class ChefZ_ConfigCppSource extends ChefZ_IRecordSource
                 rec.needsFuel = g_Game.ConfigGetInt(node + " needsFuel") != 0;
                 rec.MarkExplicit("needsFuel");
             }
+
+            Finish(rec, root, node, sink);
+        }
+    }
+
+    /**
+     * Fangertraege (20 §4.1, 21 §2.1).
+     *
+     * Warum die Art ueberhaupt aus Rang 1 kommen DARF und nicht nur aus JSON:
+     * die Gewichtstabelle entsteht auf CLIENT UND SERVER, und beide Seiten
+     * muessen dieselbe Menge sehen (20 §6 D1). Rang 1 liest der Client
+     * garantiert. Rang 2 liegt in denselben PBOs und ist damit genauso gut;
+     * Rang 3 ist fuer beide Arten gesperrt (ChefZ_RecordKind.IsOverlayBlocked).
+     *
+     * "id == Klassenname" wie bei den Stationen: der Knoten heisst genauso wie
+     * die CfgVehicles-Klasse, die er beschreibt, und aus diesem Namen bildet
+     * die Engine ihren Ertragshash.
+     */
+    private void ReadFishingYields(ChefZ_RecordSink sink, ChefZ_LoadReport report)
+    {
+        string root = "CfgChefZFishingYields";
+        array<string> names = ChildNames(root);
+        for (int i = 0; i < names.Count(); i++)
+        {
+            string id = names.Get(i);
+            string node = root + " " + id;
+
+            ChefZ_FishingYieldDef rec = new ChefZ_FishingYieldDef();
+            rec.id                   = id;
+            rec.baseWeight           = IntOrUndefined(node + " baseWeight");
+            rec.enviro               = Text(node + " enviro");
+            rec.methods              = TextArrayOrNull(node + " methods");
+            rec.hourlyCoefs          = FloatArrayOrNull(node + " hourlyCoefs");
+            rec.quality              = FloatOrUndefined(node + " quality");
+            rec.baitSensitivityAllow = TextArrayOrNull(node + " baitSensitivityAllow");
+            rec.loadOrder            = IntOr(node + " loadOrder", 0);
+
+            // bool kennt keinen Sentinel: die Anwesenheit des Config-Eintrags
+            // IST die Aussage "gesetzt" (02 E3, Mittel 3).
+            if (g_Game.ConfigIsExisting(node + " lureOnly"))
+            {
+                rec.lureOnly = g_Game.ConfigGetInt(node + " lureOnly") != 0;
+                rec.MarkExplicit("lureOnly");
+            }
+            if (g_Game.ConfigIsExisting(node + " overrideExisting"))
+            {
+                rec.overrideExisting = g_Game.ConfigGetInt(node + " overrideExisting") != 0;
+                rec.MarkExplicit("overrideExisting");
+            }
+
+            Finish(rec, root, node, sink);
+        }
+    }
+
+    /**
+     * Koeder (20 §4.1, 21 §3.1).
+     *
+     * Die Klasse wird hier ausdruecklich NICHT gegen CfgVehicles geprueft -
+     * dieselbe Regel wie bei Werkzeugen und Behaeltern: ein Koeder darf aus
+     * einem OPTIONALEN Modul stammen. Geprueft wird das in der
+     * ChefZ_FishingRegistry, wo die Meldung hingehoert.
+     */
+    private void ReadBaits(ChefZ_RecordSink sink, ChefZ_LoadReport report)
+    {
+        string root = "CfgChefZBaits";
+        array<string> names = ChildNames(root);
+        for (int i = 0; i < names.Count(); i++)
+        {
+            string id = names.Get(i);
+            string node = root + " " + id;
+
+            ChefZ_BaitDef rec = new ChefZ_BaitDef();
+            rec.id               = id;
+            rec.baitKind         = Text(node + " baitKind");
+            rec.targets          = TextArrayOrNull(node + " targets");
+            rec.weightMultiplier = FloatOrUndefined(node + " weightMultiplier");
+            rec.lureWearPerUse   = FloatOrUndefined(node + " lureWearPerUse");
+            rec.loadOrder        = IntOr(node + " loadOrder", 0);
 
             Finish(rec, root, node, sink);
         }
@@ -588,6 +668,27 @@ class ChefZ_ConfigCppSource extends ChefZ_IRecordSource
      * Array hiesse "ausdruecklich leer" und wuerde beim Patchen eine bestehende
      * Liste loeschen.
      */
+    /**
+     * Zahlenliste oder null - dieselbe Lesart wie TextArrayOrNull.
+     *
+     * null ist bedeutungstragend: "nicht gesetzt". Ein leeres Array hiesse
+     * "ausdruecklich leer" und wuerde beim Patchen eine bestehende Liste
+     * loeschen; bei der Tageskurve waere das ein stiller Verlust.
+     */
+    private array<float> FloatArrayOrNull(string path)
+    {
+        if (!g_Game.ConfigIsExisting(path))
+            return null;
+
+        TFloatArray raw = new TFloatArray();
+        g_Game.ConfigGetFloatArray(path, raw);
+
+        array<float> values = new array<float>();
+        for (int i = 0; i < raw.Count(); i++)
+            values.Insert(raw.Get(i));
+        return values;
+    }
+
     private array<string> TextArrayOrNull(string path)
     {
         if (!g_Game.ConfigIsExisting(path))

@@ -90,6 +90,8 @@ class ChefZ_ConfigManager : Managed
     private ref ChefZ_Registry<ChefZ_StationDef>      m_Stations;
     private ref ChefZ_Registry<ChefZ_TransformDef>    m_Transforms;
     private ref ChefZ_Registry<ChefZ_RecipeDef>       m_Recipes;
+    private ref ChefZ_Registry<ChefZ_FishingYieldDef> m_FishingYields;
+    private ref ChefZ_Registry<ChefZ_BaitDef>         m_Baits;
 
     //--- Identitaeten der sync-relevanten Arten (03 §3.2) --------------------
     private ref ChefZ_IdentityMap m_StateIdentities;
@@ -126,6 +128,8 @@ class ChefZ_ConfigManager : Managed
         m_Stations     = new ChefZ_Registry<ChefZ_StationDef>();
         m_Transforms   = new ChefZ_Registry<ChefZ_TransformDef>();
         m_Recipes      = new ChefZ_Registry<ChefZ_RecipeDef>();
+        m_FishingYields = new ChefZ_Registry<ChefZ_FishingYieldDef>();
+        m_Baits         = new ChefZ_Registry<ChefZ_BaitDef>();
 
         m_Categories.Init(ChefZ_RecordKind.CATEGORY);
         m_Tags.Init(ChefZ_RecordKind.TAG);
@@ -141,6 +145,8 @@ class ChefZ_ConfigManager : Managed
         m_Stations.Init(ChefZ_RecordKind.STATION);
         m_Transforms.Init(ChefZ_RecordKind.TRANSFORM);
         m_Recipes.Init(ChefZ_RecordKind.RECIPE);
+        m_FishingYields.Init(ChefZ_RecordKind.FISHING_YIELD);
+        m_Baits.Init(ChefZ_RecordKind.BAIT);
 
         m_StateIdentities = new ChefZ_IdentityMap();
         m_StateIdentities.SetRegistryName(ChefZ_RecordKind.STATE);
@@ -659,6 +665,25 @@ class ChefZ_ConfigManager : Managed
         // NIE - weil niemand merkt, dass er nicht satt wird.
         RunNutritionAudit();
 
+        // FANGTABELLE UND KOEDER (20 §5, BOOT) - seit dem Fishing-Slice.
+        //
+        // An KEINE andere Registry gebunden, und das ist Absicht: ein
+        // Fangertrag nennt einen Klassennamen, ein Gewicht und zwei Masken,
+        // ein Koeder nennt Ertragsnamen. Weder Kategorien noch Zustaende noch
+        // Rezepte spielen eine Rolle - deshalb gibt es hier keine
+        // Reihenfolgeauflage ausser der einen innerhalb der Arten (Ertraege
+        // vor Koedern), und die steht bereits in ChefZ_RecordKind.LoadOrder().
+        //
+        // Zwingend VOR FreezeAll(): der Aufbau liest beide Registries, und ein
+        // Leser soll sie nicht als fertig ansehen, bevor die Tabelle steht.
+        //
+        // Der Aufruf ist unbedingt - auch ohne einen einzigen Ertrag soll die
+        // Registry "bereit und leer" sein. Dann liefert GetWeightMultiplier
+        // fuer jeden Koeder 1.0, IsLure ist ein ruhiges false, der Registrar
+        // traegt nichts ein, und geangelt wird bitgenau nach Vanilla (20 §8,
+        // erste Zeile).
+        ChefZ_FishingRegistry.Get().Build(m_FishingYields, m_Baits, m_Report);
+
         // EREIGNISSE UND FAEHIGKEITEN (17 §3.3, §9) - seit S13.
         //
         // Zuletzt und ohne Bedingung: die Schicht haengt an keiner Registry
@@ -809,6 +834,8 @@ class ChefZ_ConfigManager : Managed
         m_Stations.Freeze();
         m_Transforms.Freeze();
         m_Recipes.Freeze();
+        m_FishingYields.Freeze();
+        m_Baits.Freeze();
     }
 
     //==========================================================================
@@ -865,6 +892,8 @@ class ChefZ_ConfigManager : Managed
         m_Stations.ClearAll();
         m_Transforms.ClearAll();
         m_Recipes.ClearAll();
+        m_FishingYields.ClearAll();
+        m_Baits.ClearAll();
 
         // Der Kategoriebaum haengt an den Registries und muss mit ihnen
         // fallen. Ein zurueckbleibender Baum wuerde Zugehoerigkeiten
@@ -966,6 +995,22 @@ class ChefZ_ConfigManager : Managed
         // ein Core, der sie loeschte, machte ein fremdes Modul kaputt, statt
         // sich selbst abzuschalten. Ausgeloest wird ohnehin nichts mehr - es
         // gibt kein Rezept, das abschliessen koennte.
+        // Und die Fangtabelle (20 §8, zweite Zeile). Eine stehengebliebene
+        // Tabelle waere hier besonders unangenehm: die Ertragsobjekte haengen
+        // bereits in der Bank der Welt und wuerden weiter gewichten, obwohl es
+        // die Datensaetze dahinter nicht mehr gibt - und der Kunstkoeder
+        // ueberlebte weiter ein Loeschen, das Vanilla vorsieht. Danach liefert
+        // GetWeightMultiplier fuer jeden Koeder 1.0, IsLure ist false, und das
+        // Angeln ist reines Vanilla.
+        //
+        // Die bereits eingetragenen Ertragsobjekte werden NICHT aus der Bank
+        // entfernt: sie wurden aus Vanillas eigener Basisklasse gebaut, liefern
+        // ohne Tabelle exakt ihr Grundgewicht und sind damit von einem
+        // Vanilla-Eintrag nicht zu unterscheiden. Sie herauszuloeschen hiesse,
+        // im SAFE MODE die Fangtabelle der Welt zu veraendern - und genau das
+        // soll der SAFE MODE nicht tun.
+        ChefZ_FishingRegistry.Get().Build(null, null, null);
+
         ChefZ_CapabilityGate.ClearActive();
         ChefZ_QualityManager.Get().SetCapabilityProbe(null);
 
@@ -1135,6 +1180,8 @@ class ChefZ_ConfigManager : Managed
     ChefZ_Registry<ChefZ_StationDef>      Stations()      { return m_Stations; }
     ChefZ_Registry<ChefZ_TransformDef>    Transforms()    { return m_Transforms; }
     ChefZ_Registry<ChefZ_RecipeDef>       Recipes()       { return m_Recipes; }
+    ChefZ_Registry<ChefZ_FishingYieldDef> FishingYields() { return m_FishingYields; }
+    ChefZ_Registry<ChefZ_BaitDef>         Baits()         { return m_Baits; }
 
     ChefZ_IdentityMap StateIdentities()   { return m_StateIdentities; }
     ChefZ_IdentityMap QualityIdentities() { return m_QualityIdentities; }
@@ -1157,6 +1204,8 @@ class ChefZ_ConfigManager : Managed
         if (kind == ChefZ_RecordKind.STATION)       return m_Stations;
         if (kind == ChefZ_RecordKind.TRANSFORM)     return m_Transforms;
         if (kind == ChefZ_RecordKind.RECIPE)        return m_Recipes;
+        if (kind == ChefZ_RecordKind.FISHING_YIELD) return m_FishingYields;
+        if (kind == ChefZ_RecordKind.BAIT)          return m_Baits;
         return null;
     }
 

@@ -1,0 +1,40 @@
+{
+    "slice": "fish-fresh",
+
+    "handcraftRecipeSlots": 8,
+
+    "categories": [
+        { "id": "WHOLE_FISH", "parent": "FISH", "displayName": "#STR_CHEFZ_CAT_WHOLE_FISH" }
+    ],
+
+    "tags": [],
+
+    "processes": [
+        { "id": "PROCESS_FILLET_FISH", "durationSec": 6 }
+    ],
+
+    "nutrition": [
+        { "class": "ChefZ_Perch",         "energy": 180, "water": 85,  "stomach": 150 },
+        { "class": "ChefZ_Muskellunge",   "energy": 520, "water": 210, "stomach": 400 },
+        { "class": "ChefZ_Snakehead",     "energy": 350, "water": 125, "stomach": 250 },
+        { "class": "ChefZ_RainbowTrout",  "energy": 410, "water": 120, "stomach": 250 },
+        { "class": "ChefZ_Char",          "energy": 400, "water": 120, "stomach": 250 },
+        { "class": "ChefZ_Salmon",        "energy": 800, "water": 180, "stomach": 400 },
+        { "class": "ChefZ_SockeyeSalmon", "energy": 760, "water": 180, "stomach": 400 },
+        { "class": "ChefZ_Eel",           "energy": 650, "water": 100, "stomach": 250 }
+    ],
+
+    "preservation": [],
+
+    "classes": [
+        "ChefZ_FreshwaterFish_Base",
+        "ChefZ_Perch",
+        "ChefZ_Muskellunge",
+        "ChefZ_Snakehead",
+        "ChefZ_RainbowTrout",
+        "ChefZ_Char",
+        "ChefZ_Salmon",
+        "ChefZ_SockeyeSalmon",
+        "ChefZ_Eel"
+    ]
+}

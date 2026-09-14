@@ -1,0 +1,106 @@
+{
+  "kind": "bait",
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "ChefZ_AntiqueSpoonFlasher",
+      "baitKind": "lure",
+      "weightMultiplier": 3.0,
+      "lureWearPerUse": 1.5,
+      "targets": [
+        "Mackerel",
+        "ChefZ_Salmon",
+        "ChefZ_SockeyeSalmon",
+        "ChefZ_RainbowTrout",
+        "ChefZ_SeaBass",
+        "ChefZ_Bonito",
+        "ChefZ_Yellowtail"
+      ]
+    },
+    {
+      "id": "ChefZ_BlueBait",
+      "baitKind": "soft",
+      "weightMultiplier": 3.0,
+      "targets": [
+        "ChefZ_Cod",
+        "ChefZ_Halibut",
+        "ChefZ_GiltheadBream",
+        "ChefZ_RedSnapper",
+        "ChefZ_GiantGrouper",
+        "ChefZ_Rockfish"
+      ]
+    },
+    {
+      "id": "ChefZ_MinnowLure",
+      "baitKind": "lure",
+      "weightMultiplier": 3.0,
+      "lureWearPerUse": 1.5,
+      "targets": [
+        "ChefZ_Perch",
+        "ChefZ_Muskellunge",
+        "ChefZ_Snakehead",
+        "ChefZ_SeaBass",
+        "ChefZ_MahiMahi",
+        "ChefZ_GiantTrevally",
+        "ChefZ_Tarpon"
+      ]
+    },
+    {
+      "id": "ChefZ_PaddleTailBait",
+      "baitKind": "soft",
+      "weightMultiplier": 3.0,
+      "targets": [
+        "ChefZ_Cod",
+        "ChefZ_Halibut",
+        "ChefZ_Sole",
+        "ChefZ_Plaice",
+        "ChefZ_Conger",
+        "ChefZ_GiantGrouper",
+        "ChefZ_Rockfish",
+        "ChefZ_SeaEel"
+      ]
+    },
+    {
+      "id": "ChefZ_RedTopperBait",
+      "baitKind": "lure",
+      "weightMultiplier": 3.0,
+      "lureWearPerUse": 1.5,
+      "targets": [
+        "ChefZ_MahiMahi",
+        "ChefZ_GiantTrevally",
+        "ChefZ_YellowfinTuna",
+        "ChefZ_BluefinTuna",
+        "ChefZ_BlueMarlin",
+        "ChefZ_Sailfish",
+        "ChefZ_Bonito"
+      ]
+    },
+    {
+      "id": "ChefZ_Spinnerbait",
+      "baitKind": "lure",
+      "weightMultiplier": 3.0,
+      "lureWearPerUse": 1.5,
+      "targets": [
+        "ChefZ_Perch",
+        "ChefZ_Muskellunge",
+        "ChefZ_Snakehead",
+        "ChefZ_Char",
+        "ChefZ_SeaBass",
+        "ChefZ_Yellowtail"
+      ]
+    },
+    {
+      "id": "ChefZ_TroutBait",
+      "baitKind": "soft",
+      "weightMultiplier": 3.0,
+      "targets": [
+        "ChefZ_RainbowTrout",
+        "ChefZ_Char",
+        "ChefZ_Salmon",
+        "ChefZ_SockeyeSalmon",
+        "ChefZ_HorseMackerel",
+        "ChefZ_JapaneseSardine"
+      ]
+    }
+  ]
+}

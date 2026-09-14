@@ -1,0 +1,96 @@
+{
+  "slice": "fish-sea-b",
+  "handcraftRecipeSlots": 11,
+  "categories": [
+    {
+      "id": "WHOLE_FISH",
+      "parent": "FISH",
+      "displayName": "#STR_CHEFZ_CAT_WHOLE_FISH"
+    }
+  ],
+  "tags": [],
+  "processes": [],
+  "nutrition": [
+    {
+      "class": "ChefZ_BluefinTuna",
+      "energy": 300,
+      "water": 40,
+      "stomach": 810
+    },
+    {
+      "class": "ChefZ_YellowfinTuna",
+      "energy": 285,
+      "water": 40,
+      "stomach": 810
+    },
+    {
+      "class": "ChefZ_RedSnapper",
+      "energy": 175,
+      "water": 46,
+      "stomach": 275
+    },
+    {
+      "class": "ChefZ_GiantGrouper",
+      "energy": 260,
+      "water": 40,
+      "stomach": 810
+    },
+    {
+      "class": "ChefZ_MahiMahi",
+      "energy": 200,
+      "water": 44,
+      "stomach": 480
+    },
+    {
+      "class": "ChefZ_GiantTrevally",
+      "energy": 205,
+      "water": 44,
+      "stomach": 480
+    },
+    {
+      "class": "ChefZ_BlueMarlin",
+      "energy": 270,
+      "water": 40,
+      "stomach": 810
+    },
+    {
+      "class": "ChefZ_Sailfish",
+      "energy": 265,
+      "water": 40,
+      "stomach": 810
+    },
+    {
+      "class": "ChefZ_Bonito",
+      "energy": 185,
+      "water": 46,
+      "stomach": 275
+    },
+    {
+      "class": "ChefZ_Yellowtail",
+      "energy": 225,
+      "water": 44,
+      "stomach": 480
+    },
+    {
+      "class": "ChefZ_Tarpon",
+      "energy": 240,
+      "water": 45,
+      "stomach": 810
+    }
+  ],
+  "preservation": [],
+  "classes": [
+    "ChefZ_SeaFishB_Base",
+    "ChefZ_BluefinTuna",
+    "ChefZ_YellowfinTuna",
+    "ChefZ_RedSnapper",
+    "ChefZ_GiantGrouper",
+    "ChefZ_MahiMahi",
+    "ChefZ_GiantTrevally",
+    "ChefZ_BlueMarlin",
+    "ChefZ_Sailfish",
+    "ChefZ_Bonito",
+    "ChefZ_Yellowtail",
+    "ChefZ_Tarpon"
+  ]
+}

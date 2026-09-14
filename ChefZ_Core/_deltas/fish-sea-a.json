@@ -1,0 +1,108 @@
+{
+    "slice": "fish-sea-a",
+    "handcraftRecipeSlots": 12,
+    "categories": [
+        {
+            "id": "FISH",
+            "parent": null,
+            "displayName": "#STR_CHEFZ_CAT_FISH"
+        },
+        {
+            "id": "WHOLE_FISH",
+            "parent": "FISH",
+            "displayName": "#STR_CHEFZ_CAT_WHOLE_FISH"
+        }
+    ],
+    "tags": [],
+    "processes": [],
+    "nutrition": [
+        {
+            "class": "ChefZ_Plaice",
+            "energy": 105,
+            "water": 60,
+            "stomach": 450
+        },
+        {
+            "class": "ChefZ_GiltheadBream",
+            "energy": 105,
+            "water": 60,
+            "stomach": 450
+        },
+        {
+            "class": "ChefZ_Halibut",
+            "energy": 105,
+            "water": 60,
+            "stomach": 640
+        },
+        {
+            "class": "ChefZ_Cod",
+            "energy": 105,
+            "water": 60,
+            "stomach": 450
+        },
+        {
+            "class": "ChefZ_Sole",
+            "energy": 105,
+            "water": 60,
+            "stomach": 450
+        },
+        {
+            "class": "ChefZ_SeaBass",
+            "energy": 105,
+            "water": 60,
+            "stomach": 450
+        },
+        {
+            "class": "ChefZ_RedMullet",
+            "energy": 105,
+            "water": 60,
+            "stomach": 300
+        },
+        {
+            "class": "ChefZ_Conger",
+            "energy": 105,
+            "water": 60,
+            "stomach": 640
+        },
+        {
+            "class": "ChefZ_SeaEel",
+            "energy": 105,
+            "water": 60,
+            "stomach": 450
+        },
+        {
+            "class": "ChefZ_HorseMackerel",
+            "energy": 105,
+            "water": 60,
+            "stomach": 300
+        },
+        {
+            "class": "ChefZ_JapaneseSardine",
+            "energy": 105,
+            "water": 60,
+            "stomach": 300
+        },
+        {
+            "class": "ChefZ_Rockfish",
+            "energy": 105,
+            "water": 60,
+            "stomach": 300
+        }
+    ],
+    "preservation": [],
+    "classes": [
+        "ChefZ_SaltwaterFishA_Base",
+        "ChefZ_Plaice",
+        "ChefZ_GiltheadBream",
+        "ChefZ_Halibut",
+        "ChefZ_Cod",
+        "ChefZ_Sole",
+        "ChefZ_SeaBass",
+        "ChefZ_RedMullet",
+        "ChefZ_Conger",
+        "ChefZ_SeaEel",
+        "ChefZ_HorseMackerel",
+        "ChefZ_JapaneseSardine",
+        "ChefZ_Rockfish"
+    ]
+}

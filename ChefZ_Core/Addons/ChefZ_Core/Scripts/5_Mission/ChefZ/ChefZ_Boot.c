@@ -41,6 +41,13 @@ class ChefZ_Boot
             // Rezeptplaetze sind noch leer. Ohne diese Zeile bliebe das
             // Handwerk ab dem zweiten Start stumm.
             ChefZ_HandcraftBridge.FillReserved();
+
+            // Dasselbe Argument fuer die Fangtabelle: die neue Mission hat
+            // neue Weltdaten und damit eine NEUE, leere Fangtabelle der Welt.
+            // Ohne diese beiden Zeilen bliebe sie ab dem zweiten Start ohne
+            // ChefZ-Eintraege - und das faellt niemandem auf, weil Angeln dann
+            // einfach wieder Vanilla ist.
+            RegisterFishingYields();
             return;
         }
         s_ServerDone = true;
@@ -64,6 +71,16 @@ class ChefZ_Boot
         // Plaetze leer und damit folgenlos - Vanilla-Crafting bleibt
         // vollstaendig.
         ChefZ_HandcraftBridge.FillReserved();
+
+        // Fishing-Slice (20 §5): die Fangtabelle in die Bank der Welt
+        // eintragen - NACH dem Einfrieren der Config und damit nach jedem
+        // ClearAllRegisteredItems, das eine Weltklasse in ihrem Konstruktor
+        // ausgefuehrt hat. Die Begruendung fuer diesen Zeitpunkt steht im Kopf
+        // von ChefZ_FishingYieldRegistrar.
+        //
+        // Ausschliesslich ADDITIV: ohne Datensaetze wird nichts eingetragen,
+        // und die Fangtabelle der Welt bleibt Bit fuer Bit die der Engine.
+        RegisterFishingYields();
 
         ReportState(cfg, "SERVER");
 
@@ -95,6 +112,7 @@ class ChefZ_Boot
             // Normalfall, sobald jemand einen zweiten Server betritt.
             // Begruendung siehe OnMissionStart.
             ChefZ_HandcraftBridge.FillReserved();
+            RegisterFishingYields();
             return;
         }
         s_ClientDone = true;
@@ -119,7 +137,36 @@ class ChefZ_Boot
         // Seiten ueberhaupt dasselbe Rezept meinen (ChefZ_CraftIntent).
         ChefZ_HandcraftBridge.FillReserved();
 
+        // Auch der Client traegt die Fangtabelle ein, und er MUSS es: er baut
+        // dasselbe Gewichtsfeld, um aus demselben synchronisierten
+        // Zufallsstrom denselben Index zu ziehen. Er ENTSCHEIDET damit nichts
+        // (der Fang ist serverautoritativ) - er braucht den Index fuer
+        // Zykluszeit und Partikel. Eine Seite, die weniger eintraegt, zeigt
+        // den Biss zu einem anderen Zeitpunkt, als der Server ihn wertet.
+        RegisterFishingYields();
+
         ReportState(cfg, "CLIENT");
+    }
+
+    /**
+     * Die Fangtabelle in die Bank der Welt eintragen (20 §5).
+     *
+     * ResetForNewMission davor, weil diese Methode auch beim ZWEITEN
+     * Missionsstart im selben Prozess laeuft - und dann in eine neue, leere
+     * Bank schreibt. Ohne den Ruecksetzer verweigerte der Registrar mit
+     * "schon geschehen", und das Angeln waere ab der zweiten Mission wieder
+     * reines Vanilla, ohne dass irgendwo etwas danebenginge.
+     *
+     * Fehler werden hier NICHT weitergereicht: was nicht eingetragen werden
+     * konnte, steht im Protokoll, und der Ausfallpfad ist die Fangtabelle der
+     * Engine (Invariante I2).
+     */
+    private static void RegisterFishingYields()
+    {
+        ChefZ_FishingYieldRegistrar.ResetForNewMission();
+
+        ChefZ_FishingRegisterReport report;
+        ChefZ_FishingYieldRegistrar.RegisterAll(report);
     }
 
     //--------------------------------------------------------------------------
@@ -405,6 +452,23 @@ class ChefZ_Boot
         // liefert den Block und veraendert nachweislich nichts", "chefz why
         // nennt den ersten verletzten Slot" - brauchen ein Gefaess in einer
         // Welt und bleiben dem Servertest vorbehalten.
+        // Fishing-Slice: Gewichtsregel, Koedertabelle, Reihenfolge,
+        // Fingerabdruck. Auch das ist reine Rechnung und ohne Gewaesser
+        // pruefbar - und es ist der leiseste Fehlerpfad dieses Bauabschnitts:
+        // eine Koederpraeferenz, die nicht greift, liefert weiterhin Faenge,
+        // nur eben in der Vanilla-Verteilung. Niemand misst nach, weil Fangen
+        // ohnehin Zufall ist.
+        //
+        // Die Gruppe "Masken" traegt zusaetzlich eine Beweispflicht: der
+        // Datensatz liegt in 1_Core und darf die Bitkonstanten der Engine nicht
+        // sehen, fuehrt sie also als Literale. Hier - und nur hier - sind beide
+        // Seiten sichtbar und werden verglichen.
+        bool okFishing = ChefZ_FishingSelfTest.Run();
+        if (okFishing)
+            ChefZ_Log.Banner(ChefZ_FishingSelfTest.Summary());
+        else
+            ChefZ_Log.Error(ChefZ_LogChannel.FISHING, ChefZ_FishingSelfTest.Summary());
+
         bool okDiagnostics = ChefZ_DiagnosticsSelfTest.Run();
         if (okDiagnostics)
             ChefZ_Log.Banner(ChefZ_DiagnosticsSelfTest.Summary());

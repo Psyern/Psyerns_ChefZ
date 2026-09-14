@@ -1,0 +1,426 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_PlaiceFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_GiltheadBreamFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_HalibutFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_CodFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SoleFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SeaBassFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_RedMulletFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_CongerFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_HorseMackerelFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_JapaneseSardineFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_RockfishFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_BluefinTunaFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_YellowfinTunaFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_RedSnapperFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_GiantGrouperFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_MahiMahiFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_GiantTrevallyFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_BlueMarlinFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SailfishFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_BonitoFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_YellowtailFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_TarponFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SalmonFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SockeyeSalmonFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_PerchFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_MuskellungeFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SnakeheadFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_RainbowTroutFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_CharFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_EelFillet",
+            "categories": [
+                "FISH_FILLET"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        }
+    ]
+}

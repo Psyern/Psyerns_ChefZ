@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+    ChefZ Fishing - CE-Typen. ### SLICE baits ###: die sieben Kunst- und
+    Weichkoeder.
+
+    VORLAGE. Diese Datei wird NICHT ins PBO gepackt und vom Mod nicht gelesen.
+    include.txt dieses Addons nennt *.c;*.json;*.csv;*.layout;*.txt;*.ogg -
+    *.xml steht bewusst nicht darin. Sie gehoert in die Mission des Servers.
+
+    Weitere Slices dieses Moduls haengen ihre Zeilen unten an, jeweils unter
+    einer eigenen Marke "### SLICE <name> ###". Fische kommen aus dem Wasser
+    und brauchen hier in aller Regel KEINE Zeile - Koeder schon, denn sie
+    haben keine andere Quelle.
+
+    ==========================================================================
+    ACHTUNG, EINE VERIFIZIERTE ABWEICHUNG VOM AUFTRAG
+    ==========================================================================
+    Der Auftrag lautete "usage Fishing". EINE USAGE DIESES NAMENS GIBT ES IN
+    VANILLA NICHT. Geprueft am 14.09.2026 gegen jede types.xml und
+    cfglimitsdefinition.xml unter "Mod Repositories" und im Projekt; der
+    vollstaendige Satz ist:
+
+      Coast, ContaminatedArea, Farm, Firefighter, Historical, Hunting,
+      Industrial, Lunapark, Medic, Military, Office, Police, Prison, School,
+      SeasonalEvent, Special, Town, Underground, Village
+
+    Eine usage, die in cfglimitsdefinition.xml nicht steht, laesst die CE den
+    Typ STILL fallen - kein Log, kein Spawn, und das faellt erst im Spiel auf.
+    Deshalb stehen hier die beiden Usages, unter denen Vanilla sein
+    Angelgeraet tatsaechlich verteilt:
+
+      Hunting   Jagd- und Anglergeschaefte. Vanillas Angelzeug (Rute, Haken,
+                Schnur) haengt an dieser Gruppe - wer den Laden pluendert,
+                findet dort auch die Koeder.
+      Coast     Haefen, Bootshaeuser, Fischerkaten. Die Kuestengruppe ist die
+                zweite Haelfte des Auftrags ("Loot in Angelgeschaeften und
+                Haefen").
+
+    WER WIRKLICH EINE EIGENE USAGE "Fishing" WILL, legt sie in
+    cfglimitsdefinition.xml an UND verteilt sie in mapgroupproto.xml auf die
+    Gebaeudegruppen. Beides ist Betreiberarbeit und gehoert nicht in diese
+    Vorlage; ohne den zweiten Schritt spawnt auch eine korrekt definierte
+    usage nichts.
+
+    ==========================================================================
+    DIE ZAHLEN
+    ==========================================================================
+    nominal / min  Weichkoeder sind Verbrauchsgut und stehen hoeher (20/8) als
+                   Kunstkoeder (12/5): ein Gummifisch ist nach ein paar
+                   Ausfluegen weg, ein Blinker bleibt am Haken (das ist die
+                   ganze Idee von baitKind "lure", 21 §3.1).
+    lifetime 14400 vier Stunden - der uebliche Wert fuer kleines Geraet.
+    restock 1800   halbe Stunde, damit ein leergeraeumter Angelladen nicht
+                   bis zum naechsten Serverneustart leer bleibt.
+    tier           Tier1/Tier2 nach dem Auftrag. Koeder sind Anfaengerbedarf,
+                   kein Endgame - sie sollen dort liegen, wo Spieler in der
+                   ersten Stunde vorbeikommen.
+    quantmin/-max  -1: die Klassen tragen keine Menge (kein varQuantity in der
+                   config.cpp). Ein Wert hier waere wirkungslos.
+
+    UNGEMESSEN. Die Zahlen sind ein Vorschlag im Vanilla-Massstab, kein
+    Messergebnis. Der Balance-Reviewer rechnet sie gegen die Fangrate; wer
+    vorher misst, korrigiert hier und nicht im PBO.
+-->
+<types>
+    <!-- ### SLICE baits ### Kunstkoeder (baitKind "lure") - halten laenger,
+         liegen deshalb seltener. -->
+    <type name="ChefZ_AntiqueSpoonFlasher">
+        <nominal>12</nominal>
+        <lifetime>14400</lifetime>
+        <restock>1800</restock>
+        <min>5</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="0" deloot="0" />
+        <category name="tools" />
+        <usage name="Hunting" />
+        <usage name="Coast" />
+        <value name="Tier1" />
+        <value name="Tier2" />
+    </type>
+    <type name="ChefZ_MinnowLure">
+        <nominal>12</nominal>
+        <lifetime>14400</lifetime>
+        <restock>1800</restock>
+        <min>5</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="0" deloot="0" />
+        <category name="tools" />
+        <usage name="Hunting" />
+        <usage name="Coast" />
+        <value name="Tier1" />
+        <value name="Tier2" />
+    </type>
+    <type name="ChefZ_RedTopperBait">
+        <nominal>8</nominal>
+        <lifetime>14400</lifetime>
+        <restock>1800</restock>
+        <min>3</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="0" deloot="0" />
+        <category name="tools" />
+        <usage name="Hunting" />
+        <usage name="Coast" />
+        <value name="Tier2" />
+    </type>
+    <type name="ChefZ_Spinnerbait">
+        <nominal>12</nominal>
+        <lifetime>14400</lifetime>
+        <restock>1800</restock>
+        <min>5</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="0" deloot="0" />
+        <category name="tools" />
+        <usage name="Hunting" />
+        <usage name="Coast" />
+        <value name="Tier1" />
+        <value name="Tier2" />
+    </type>
+
+    <!-- ### SLICE baits ### Weichkoeder (baitKind "soft") - Verbrauchsgut,
+         deshalb hoehere Stueckzahl. -->
+    <type name="ChefZ_BlueBait">
+        <nominal>20</nominal>
+        <lifetime>14400</lifetime>
+        <restock>1800</restock>
+        <min>8</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="0" deloot="0" />
+        <category name="tools" />
+        <usage name="Hunting" />
+        <usage name="Coast" />
+        <value name="Tier1" />
+        <value name="Tier2" />
+    </type>
+    <type name="ChefZ_PaddleTailBait">
+        <nominal>20</nominal>
+        <lifetime>14400</lifetime>
+        <restock>1800</restock>
+        <min>8</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="0" deloot="0" />
+        <category name="tools" />
+        <usage name="Hunting" />
+        <usage name="Coast" />
+        <value name="Tier1" />
+        <value name="Tier2" />
+    </type>
+    <type name="ChefZ_TroutBait">
+        <nominal>20</nominal>
+        <lifetime>14400</lifetime>
+        <restock>1800</restock>
+        <min>8</min>
+        <quantmin>-1</quantmin>
+        <quantmax>-1</quantmax>
+        <cost>100</cost>
+        <flags count_in_cargo="1" count_in_hoarder="1" count_in_map="1" count_in_player="1" crafted="0" deloot="0" />
+        <category name="tools" />
+        <usage name="Hunting" />
+        <usage name="Coast" />
+        <value name="Tier1" />
+        <value name="Tier2" />
+    </type>
+</types>

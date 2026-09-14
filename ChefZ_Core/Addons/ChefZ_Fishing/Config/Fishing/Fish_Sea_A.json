@@ -1,0 +1,206 @@
+{
+    "kind": "fishingYield",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "_note": "VANILLA-VORRANG: Die Makrele ist Vanillas Klasse 'Mackerel' und wird ERWEITERT, nicht dupliziert (Slice-Plan Paragraph 3). overrideExisting ersetzt Vanillas YieldItemMackerel durch den ChefZ-Ertrag mit unveraendertem Basisgewicht 42 - gleiche Fangzahlen wie bisher, ab jetzt aber mit Koederpraeferenz (21 Paragraph 2.3). Ohne den Schalter wird der Record uebersprungen. Kein Filet-Transform: Vanillas PrepareMackerel filetiert sie bereits.",
+            "id": "Mackerel",
+            "baseWeight": 42,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "overrideExisting": true
+        },
+        {
+            "id": "ChefZ_Plaice",
+            "baseWeight": 30,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45
+        },
+        {
+            "id": "ChefZ_GiltheadBream",
+            "baseWeight": 24,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45
+        },
+        {
+            "id": "ChefZ_Halibut",
+            "baseWeight": 8,
+            "enviro": "SEA",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": false,
+            "quality": 0.7
+        },
+        {
+            "id": "ChefZ_Cod",
+            "baseWeight": 34,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45
+        },
+        {
+            "id": "ChefZ_Sole",
+            "baseWeight": 22,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45
+        },
+        {
+            "id": "ChefZ_SeaBass",
+            "baseWeight": 26,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45
+        },
+        {
+            "id": "ChefZ_RedMullet",
+            "baseWeight": 28,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE",
+                "TRAP_SMALL"
+            ],
+            "lureOnly": false,
+            "quality": 0.3
+        },
+        {
+            "id": "ChefZ_Conger",
+            "baseWeight": 10,
+            "enviro": "SEA",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": false,
+            "quality": 0.7,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.2,
+                0.5,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.6,
+                0.4,
+                0.2,
+                0,
+                0,
+                0,
+                0
+            ],
+            "_note": "B-02 (14.09.2026): Werte invertiert. Vanilla-Semantik (YieldsFish.c:14-19): der Wert ist der Lerp-Faktor der ZYKLUSLAENGE - 1 = langsamster Biss, 0 = schnellster. Aktive Stunden stehen deshalb auf 0."
+        },
+        {
+            "id": "ChefZ_SeaEel",
+            "baseWeight": 14,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.2,
+                0.5,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.8,
+                0.6,
+                0.4,
+                0.2,
+                0,
+                0,
+                0,
+                0
+            ],
+            "_note": "B-02 (14.09.2026): Werte invertiert. Vanilla-Semantik (YieldsFish.c:14-19): der Wert ist der Lerp-Faktor der ZYKLUSLAENGE - 1 = langsamster Biss, 0 = schnellster. Aktive Stunden stehen deshalb auf 0."
+        },
+        {
+            "id": "ChefZ_HorseMackerel",
+            "baseWeight": 30,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE",
+                "TRAP_SMALL"
+            ],
+            "lureOnly": false,
+            "quality": 0.3
+        },
+        {
+            "id": "ChefZ_JapaneseSardine",
+            "baseWeight": 30,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE",
+                "TRAP_SMALL"
+            ],
+            "lureOnly": false,
+            "quality": 0.3
+        },
+        {
+            "id": "ChefZ_Rockfish",
+            "baseWeight": 22,
+            "enviro": "SEA",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE",
+                "TRAP_SMALL"
+            ],
+            "lureOnly": false,
+            "quality": 0.3
+        }
+    ]
+}

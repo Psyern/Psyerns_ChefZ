@@ -1,0 +1,126 @@
+{
+    "kind": "fishingYield",
+    "schemaVersion": 1,
+    "_note": "Slice fish-fresh: Suesswasser und Wanderfische, acht Arten. Kind heisst 'fishingYield' und nicht 'fishYield' - der Core fuehrt den Namen in ChefZ_RecordKind.FISHING_YIELD so, weil der Pruefer chefzcore das Wort 'fish' in Core-Code als Content-Vokabular ahndet (I3). Entwurf 21 §2 schreibt noch 'fishYield'; massgeblich ist der Code. Kein 'size'-Feld: die Groesse ist eine Planungsgroesse des Slice und materialisiert sich als Filetzahl im Transform (21 §5) und als varQuantityMax in der config.cpp.",
+    "records": [
+        {
+            "id": "ChefZ_Perch",
+            "baseWeight": 40,
+            "enviro": "POND",
+            "methods": [
+                "ROD",
+                "TRAP_SMALL",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.3,
+            "_note": "Der Brot-und-Butter-Fisch am Ufer. baseWeight 40 liegt knapp unter Vanillas Makrele (42) - wer in einen Teich wirft, faengt am haeufigsten einen Barsch. Klein genug fuer die kleine Reuse."
+        },
+        {
+            "id": "ChefZ_Muskellunge",
+            "baseWeight": 6,
+            "enviro": "POND",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": true,
+            "quality": 0.8,
+            "_note": "lureOnly: ohne Kunstkoeder ist das Gewicht 0. Deshalb steht hier KEIN Reusenverfahren - in einer Reuse gibt es keinen Rutenkontext, der Multiplikator bliebe 1.0, das Gewicht faellt auf 0, und der Eintrag existierte dort nie (ChefZ_FishingYieldDef.Validate weist die Kombination ab). Genannt wird er von ChefZ_MinnowLure und ChefZ_Spinnerbait - die Deckung steht."
+        },
+        {
+            "id": "ChefZ_Snakehead",
+            "baseWeight": 14,
+            "enviro": "POND",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.5
+        },
+        {
+            "id": "ChefZ_RainbowTrout",
+            "baseWeight": 30,
+            "enviro": "POND",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45
+        },
+        {
+            "id": "ChefZ_Char",
+            "baseWeight": 22,
+            "enviro": "POND",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.4
+        },
+        {
+            "id": "ChefZ_Salmon",
+            "baseWeight": 10,
+            "enviro": "BOTH",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.7,
+            "_note": "Wanderfisch: enviro BOTH bildet auf MASK_ENVIRO_WATER_ALL ab (CatchingConstants.c:114) - er steht im Meer wie im Fluss. Das ist die einzige Stelle, an der dieser Slice ueberhaupt Salzwasser beruehrt."
+        },
+        {
+            "id": "ChefZ_SockeyeSalmon",
+            "baseWeight": 8,
+            "enviro": "BOTH",
+            "methods": [
+                "ROD",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.65
+        },
+        {
+            "id": "ChefZ_Eel",
+            "baseWeight": 14,
+            "enviro": "POND",
+            "methods": [
+                "ROD",
+                "TRAP_SMALL",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.45,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0.1,
+                0.4,
+                0.7,
+                0.9,
+                0.95,
+                0.95,
+                0.95,
+                0.95,
+                0.95,
+                0.95,
+                0.95,
+                0.9,
+                0.8,
+                0.6,
+                0.3,
+                0.1,
+                0,
+                0,
+                0,
+                0
+            ],
+            "_note": "Der einzige Datensatz dieses Slice mit eigener Tageskurve: der Aal ist nachtaktiv. 24 Werte, Index = Stunde, jeder in [0,1] - eine halbe Kurve wuerde der Core verwerfen und die Vanilla-Vorgabe stehen lassen. Reusen sind Absicht: ein Aal geht in jede Roehre, die er findet. Er ist von KEINEM Koeder genannt - das ist zulaessig, weil er nicht lureOnly ist; er faengt sich mit Basisgewicht wie am Wurm. B-02 (14.09.2026): Werte invertiert. Vanilla-Semantik (YieldsFish.c:14-19): der Wert ist der Lerp-Faktor der ZYKLUSLAENGE - 1 = langsamster Biss, 0 = schnellster. Aktive Stunden stehen deshalb auf 0."
+        }
+    ]
+}

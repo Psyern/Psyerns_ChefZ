@@ -1,0 +1,357 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "_note": "Slice fish-fresh: acht HANDCRAFT-Transforms, Fisch + Schneidwerkzeug -> Filets. GENAU ACHT - dieselbe Zahl steht als handcraftRecipeSlots im CfgChefZ-Knoten ChefZ_fish_fresh. Der Prozess PROCESS_FILLET_FISH steht in der config.cpp dieses Moduls (CfgChefZProcesses) und wird von allen drei Fisch-Slices geteilt. Kein Transform fuer Vanillas Mackerel: PrepareMackerel filetiert sie bereits (4_World/DayZ/Classes/Recipes/Recipes/PrepareMackerel.c), ein zweites Rezept waere ein Dublett im Kontextmenue - und Mackerel gehoert ohnehin dem Slice fish-sea-a.",
+    "records": [
+        {
+            "id": "TR_FilletPerch",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Flussbarsch: small, ein Filet. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Perch"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_PerchFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletMuskellunge",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Muskellunge: large, drei Filets. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Muskellunge"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_MuskellungeFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_MuskellungeFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_MuskellungeFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletSnakehead",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Snakehead: medium, zwei Filets. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Snakehead"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SnakeheadFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                },
+                {
+                    "cls": "ChefZ_SnakeheadFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletRainbowTrout",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Regenbogenforelle: medium, zwei Filets. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_RainbowTrout"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_RainbowTroutFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                },
+                {
+                    "cls": "ChefZ_RainbowTroutFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletChar",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Saibling: medium, zwei Filets. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Char"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_CharFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                },
+                {
+                    "cls": "ChefZ_CharFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletSalmon",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Lachs: large, drei Filets. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Salmon"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SalmonFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_SalmonFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_SalmonFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletSockeyeSalmon",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Sockeye: large, drei Filets. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_SockeyeSalmon"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SockeyeSalmonFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_SockeyeSalmonFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_SockeyeSalmonFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletEel",
+            "process": "PROCESS_FILLET_FISH",
+            "_note": "Aal: medium, zwei Filets - und die Filetklasse heisst ChefZ_EelFillet, dieselbe, die der Salzwasser-Aal des Slice fish-sea-a ausgibt. EIN Filet fuer ZWEI Fischklassen, abgestimmt mit fish-sea-a; die Klasse gehoert dem Slice \"fillets\" und wird hier nur referenziert. Ein Eingang plus Werkzeuggruppe am Prozess - die Form, die Vanillas RecipeBase mit MAX_NUMBER_OF_INGREDIENTS = 2 verlangt (01 V12). Die Filetzahl steht als WIEDERHOLTER Ausgang, nicht als \"count\": ChefZ_OutputDef kennt kein Zaehlfeld (der Entwurf 21 §5 schreibt eines, der Code nicht - massgeblich ist der Code). Ohne \"quantity\" erbt jedes Filet den Klassendefault seiner eigenen Klasse; dieser Slice raet die Mengenskala einer fremden Klasse nicht.",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Eel"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_EelFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                },
+                {
+                    "cls": "ChefZ_EelFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        }
+    ]
+}

@@ -1,0 +1,71 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "_note": "Zutatenbindung der acht ganzen Fische (21 §4). Kategorie ist WHOLE_FISH unter FISH - nicht FISH selbst: ganzer Fisch und Filet sind zwei Kategorien unter einem Dach (20 §9, E4), damit ein Rezept ausdruecklich Filet verlangen kann. Jeder Bestandsslot, der {\"category\":\"FISH\"} sagt, wird trotzdem weiter erfuellt, weil IsInCategory das Vorfahren-Bitset testet (04 §2). WHOLE_FISH selbst kommt ueber das Delta _deltas/fish-fresh.json. Die FILETS stehen hier NICHT: sie gehoeren dem Slice 'fillets' und werden von diesem Slice nur als Transform-Ausgang referenziert.",
+    "records": [
+        {
+            "id": "ChefZ_Perch",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "ChefZ_Muskellunge",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "ChefZ_Snakehead",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "ChefZ_RainbowTrout",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "ChefZ_Char",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "ChefZ_Salmon",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "ChefZ_SockeyeSalmon",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "ChefZ_Eel",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        }
+    ]
+}

@@ -129,6 +129,7 @@ const CORE_VOCAB = new Map([
   ['BOILING', 'Vanilla-Kochmethode (Cooking.c:1).'],
   ['DRYING', 'Vanilla-Kochmethode (Cooking.c:1).'],
   ['TIME', 'Vanilla-Kochmethode (Cooking.c:1).'],
+  ['FishYieldItemBase', 'Vanilla-Basisklasse der Fangertraege (YieldsFish.c:1). CatchingResultFishingAction.c:13-16 castet hart darauf - ein ChefZ-Ertrag MUSS von ihr erben; der Name ist Engine, nicht Content (14.09.2026, Gate fishing 2.2).'],
 ]);
 
 //! Kuerzere Bezeichner werden bei C2 nicht verglichen: eine ein- oder

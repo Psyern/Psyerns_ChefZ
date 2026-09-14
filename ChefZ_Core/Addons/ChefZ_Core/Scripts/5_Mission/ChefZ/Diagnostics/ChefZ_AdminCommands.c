@@ -155,6 +155,15 @@ class ChefZ_AdminCommands
             return true;
         }
 
+        if (verb == "fishing")
+        {
+            // 20 §3: Fangtabelle, Koedertabelle und Fingerabdruck im
+            // Klartext. Rein lesend - die Tabelle entsteht beim Start und
+            // wird zur Laufzeit nie veraendert.
+            ChefZ_FishingRegistry.Get().Dump(lines);
+            return true;
+        }
+
         if (verb == "report")
         {
             ChefZ_Diagnostics.DumpLoadReport(lines);
@@ -398,6 +407,7 @@ class ChefZ_AdminCommands
         lines.Insert("  chefz report                      der Ladebericht des Starts");
         lines.Insert("  chefz audit                       Naehrwert-Startaudit erneut ausgeben");
         lines.Insert("  chefz ambiguities                 verdeckte Rezepte und Rangordnung");
+        lines.Insert("  chefz fishing                     Fangtabelle, Koeder, Fingerabdruck");
         lines.Insert("  chefz categories                  Kategoriebaum");
         lines.Insert("  chefz symbols                     Symboltabelle");
         lines.Insert("  chefz stats                       Sitzungen, Matchzaehler, PERF-Mittel");

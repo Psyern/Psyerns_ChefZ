@@ -1,0 +1,160 @@
+{
+  "kind": "ingredient",
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "ChefZ_BluefinTuna",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_YellowfinTuna",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_RedSnapper",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_GiantGrouper",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_MahiMahi",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_GiantTrevally",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_BlueMarlin",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Sailfish",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Bonito",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Yellowtail",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "ChefZ_Tarpon",
+      "categories": [
+        "WHOLE_FISH"
+      ],
+      "tags": [
+        "CHEFZ_FRESH",
+        "CHEFZ_HIGH_PROTEIN"
+      ],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    }
+  ]
+}

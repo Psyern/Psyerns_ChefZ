@@ -1,0 +1,562 @@
+{
+    "kind": "transform",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "TR_FilletBluefinTuna",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_BluefinTuna"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_BluefinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_BluefinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_BluefinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_BluefinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletYellowfinTuna",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_YellowfinTuna"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_YellowfinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_YellowfinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_YellowfinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_YellowfinTunaFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletRedSnapper",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_RedSnapper"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_RedSnapperFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                },
+                {
+                    "cls": "ChefZ_RedSnapperFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletGiantGrouper",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_GiantGrouper"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_GiantGrouperFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_GiantGrouperFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_GiantGrouperFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_GiantGrouperFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletMahiMahi",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_MahiMahi"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_MahiMahiFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_MahiMahiFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_MahiMahiFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletGiantTrevally",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_GiantTrevally"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_GiantTrevallyFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_GiantTrevallyFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_GiantTrevallyFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletBlueMarlin",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_BlueMarlin"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_BlueMarlinFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_BlueMarlinFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_BlueMarlinFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_BlueMarlinFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletSailfish",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Sailfish"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_SailfishFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_SailfishFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_SailfishFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_SailfishFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletBonito",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Bonito"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_BonitoFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                },
+                {
+                    "cls": "ChefZ_BonitoFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 125
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletYellowtail",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Yellowtail"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_YellowtailFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_YellowtailFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                },
+                {
+                    "cls": "ChefZ_YellowtailFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 133
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        },
+        {
+            "id": "TR_FilletTarpon",
+            "process": "PROCESS_FILLET_FISH",
+            "inputs": [
+                {
+                    "slotId": "fish",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "ChefZ_Tarpon"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                {
+                    "cls": "ChefZ_TarponFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_TarponFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_TarponFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                },
+                {
+                    "cls": "ChefZ_TarponFillet",
+                    "quantityMode": "fixed",
+                    "setState": "RAW",
+                    "inheritFreshness": true,
+                    "quantity": 150
+                }
+            ],
+            "qualityRule": "WEIGHTED_MEAN",
+            "freshnessCarry": 1,
+            "priority": 0
+        }
+    ]
+}

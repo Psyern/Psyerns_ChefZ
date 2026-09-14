@@ -1,0 +1,16 @@
+{
+  "slice": "baits",
+  "handcraftRecipeSlots": 0,
+  "classes": [
+    "ChefZ_Bait_Base",
+    "ChefZ_BaitLure_Base",
+    "ChefZ_BaitSoft_Base",
+    "ChefZ_AntiqueSpoonFlasher",
+    "ChefZ_BlueBait",
+    "ChefZ_MinnowLure",
+    "ChefZ_PaddleTailBait",
+    "ChefZ_RedTopperBait",
+    "ChefZ_Spinnerbait",
+    "ChefZ_TroutBait"
+  ]
+}

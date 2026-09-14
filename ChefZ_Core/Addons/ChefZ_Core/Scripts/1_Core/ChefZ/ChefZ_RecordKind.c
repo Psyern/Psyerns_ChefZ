@@ -35,6 +35,16 @@ class ChefZ_RecordKind
     static const string TRANSFORM     = "transform";
     static const string RECIPE        = "recipe";
 
+    //! Fangtabelle und Koederpraeferenz (20 §4.1, 21 §2/§3).
+    //
+    // Die Namen lauten "fishingYield" und "bait" und nicht "fishYield": der
+    // statische Pruefer chefzcore ahndet das Wort "fish" in Core-Code als
+    // Content-Vokabular (Invariante I3). "fishing" ist die Taetigkeit und
+    // damit Core-Vokabular wie "HANDCRAFT" - derselbe Begriff traegt bereits
+    // den Logkanal aus 20 §3.
+    static const string FISHING_YIELD = "fishingYield";
+    static const string BAIT          = "bait";
+
     /**
      * Die Ladeordnung aus 02 §6, woertlich:
      *
@@ -69,6 +79,19 @@ class ChefZ_RecordKind
         order.Insert(PROCESS);
         order.Insert(STATION);
         order.Insert(TRANSFORM);
+
+        // Fangtabelle und Koeder haengen an KEINER anderen Art: ein Ertrag
+        // nennt einen Klassennamen, ein Gewicht und zwei Masken, ein Koeder
+        // nennt Ertragsnamen. Sie stehen hier und nicht am Ende, damit RECIPE
+        // die letzte Art bleibt - Rezepte pruefen gegen alles, und diese
+        // Aussage soll ein Leser nicht erst nachzaehlen muessen.
+        //
+        // Die Reihenfolge untereinander ist dagegen Vertrag: der Koeder wird
+        // gegen die Ertraege geprueft (21 §3.4), also kommen die Ertraege
+        // zuerst.
+        order.Insert(FISHING_YIELD);
+        order.Insert(BAIT);
+
         order.Insert(RECIPE);
         return order;
     }
@@ -95,6 +118,30 @@ class ChefZ_RecordKind
     static bool IsSyncRelevant(string kind)
     {
         return kind == STATE || kind == QUALITY_TIER;
+    }
+
+    /**
+     * Arten, die das $profile:-Overlay (Rang 3) NICHT stellen darf (20 §6 D3).
+     *
+     * Das ist eine ANDERE Auflage als IsSyncRelevant, auch wenn sie aehnlich
+     * aussieht. Sync-relevante Arten scheitern an der ORDINALSYMMETRIE; diese
+     * beiden scheitern an der GEWICHTSSYMMETRIE:
+     *
+     *   Client und Server bauen das Wahrscheinlichkeitsfeld der Angelaktion
+     *   je fuer sich (CatchingContextBase.SetupProbabilityArray, aufgerufen
+     *   aus ActionFishingNew.SetupAction) und ziehen daraus mit EINEM
+     *   synchronisierten Zufallsstrom denselben Index. Das Overlay kennt aber
+     *   nur der Server. Ein Patch auf diese beiden Arten liesse die Felder
+     *   auseinanderlaufen - und dann zeigt der Client den Biss zu einem
+     *   anderen Zeitpunkt, als der Server ihn wertet.
+     *
+     * Anders als bei IsSyncRelevant ist hier auch der FELD-Patch gesperrt, und
+     * zwar aus genau diesem Grund: ein geaendertes baseWeight bewegt keine ID,
+     * aber jedes einzelne Gewicht.
+     */
+    static bool IsOverlayBlocked(string kind)
+    {
+        return kind == FISHING_YIELD || kind == BAIT;
     }
 
     //! Sync-Obergrenze der Art, 0 = keine. Quelle: 03 §4 / ChefZ_SyncLimits.
@@ -125,7 +172,7 @@ class ChefZ_RecordKind
     static bool SelfCheck()
     {
         array<string> order = LoadOrder();
-        if (order.Count() != 15)                        return false;
+        if (order.Count() != 17)                        return false;
         if (order.Get(0) != CORE_SETTINGS)              return false;
         if (order.Get(order.Count() - 1) != RECIPE)     return false;
 
@@ -144,6 +191,19 @@ class ChefZ_RecordKind
         if (IsSyncRelevant(RECIPE))                     return false;
         if (SyncLimit(STATE) != ChefZ_SyncLimits.STATE_ORDINAL_MAX)     return false;
         if (SyncLimit(RECIPE) != ChefZ_SyncLimits.NO_LIMIT)             return false;
+
+        // Fangtabelle und Koeder: bekannt, nicht sync-relevant, aber fuer das
+        // Overlay gesperrt - und Ertraege vor Koedern (21 §3.4).
+        if (!IsKnown(FISHING_YIELD))                    return false;
+        if (!IsKnown(BAIT))                             return false;
+        if (IsSyncRelevant(FISHING_YIELD))              return false;
+        if (!IsOverlayBlocked(FISHING_YIELD))           return false;
+        if (!IsOverlayBlocked(BAIT))                    return false;
+        if (IsOverlayBlocked(RECIPE))                   return false;
+        int iYield = order.Find(FISHING_YIELD);
+        int iBait  = order.Find(BAIT);
+        if (iYield < 0 || iBait < 0)                    return false;
+        if (iYield >= iBait)                            return false;
 
         // Keine Art doppelt.
         for (int a = 0; a < order.Count(); a++)

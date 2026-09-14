@@ -1,7 +1,7 @@
 {
     "kind": "nutrition",
     "schemaVersion": 1,
-    "_note": "ERZEUGT vom chefz-registry-integrator aus ChefZ_Core/_deltas/*.json (Workflow 5). NICHT VON HAND BEARBEITEN - der naechste Merge ueberschreibt jede Aenderung. Das Delta-Feld \"class\" heisst hier \"id\", das Delta-Feld \"stomach\" heisst hier \"fullness\" (Feldname aus ChefZ_NutritionDef). GEMISCHTE FULLNESS-SKALA, BEKANNT UND NICHT ZU \"REPARIEREN\": die aelteren Records (Cheese 35, Butter 15, alle Gerichte 30-300) stehen auf der alten, falschen fullnessIndex-Skala; ChefZ_CheeseCurd (2.8) und ChefZ_MushroomCulture (0.1) stehen auf der am 31.08.2026 korrigierten Engine-Skala (PlayerStomach.c:86, volume = fullnessIndex * m_Amount, KEIN \"/100\"). Die Divergenz ist folgenlos fuer die Laufzeit: Registry-Naehrwerte werden NIE an ein Item geschrieben und NIE beim Verzehr angewandt (ChefZ_NutritionDef.c:16-18, ChefZ_NutritionManager.c:9-33) - sie sind allein Eingangsgroesse der Sollrechnung des Startaudits, und die vergleicht ausschliesslich \"energy\". Die Gesamtangleichung der Altwerte ist eine Doku-/Audit-Frage und wird an einem Gate entschieden, nicht beim Merge. Wer sie angleicht, tut das in den DELTAS der zustaendigen Slices, nie hier.",
+    "_note": "ERZEUGT vom chefz-registry-integrator aus ChefZ_Core/_deltas/*.json (Workflow 5). NICHT VON HAND BEARBEITEN - der naechste Merge ueberschreibt jede Aenderung. Das Delta-Feld \"class\" heisst hier \"id\", das Delta-Feld \"stomach\" heisst hier \"fullness\" (Feldname aus ChefZ_NutritionDef). GEMISCHTE FULLNESS-SKALA, BEKANNT UND NICHT ZU \"REPARIEREN\": die aelteren Records (Cheese 35, Butter 15, alle Gerichte 30-300) stehen auf der alten, falschen fullnessIndex-Skala; ChefZ_CheeseCurd (2.8) und ChefZ_MushroomCulture (0.1) stehen auf der am 31.08.2026 korrigierten Engine-Skala (PlayerStomach.c:86, volume = fullnessIndex * m_Amount, KEIN \"/100\"). Die Divergenz ist folgenlos fuer die Laufzeit: Registry-Naehrwerte werden NIE an ein Item geschrieben und NIE beim Verzehr angewandt (ChefZ_NutritionDef.c:16-18, ChefZ_NutritionManager.c:9-33) - sie sind allein Eingangsgroesse der Sollrechnung des Startaudits, und die vergleicht ausschliesslich \"energy\". Die Gesamtangleichung der Altwerte ist eine Doku-/Audit-Frage und wird an einem Gate entschieden, nicht beim Merge. Wer sie angleicht, tut das in den DELTAS der zustaendigen Slices, nie hier. ZUR VIERTEN WELLE (Slices fillets, fish-fresh, fish-sea-a, fish-sea-b): die 61 neuen Fisch- und Filetrecords stehen ebenfalls auf der ALTEN fullnessIndex-Skala (150-810 fuer ganze Fische, 350-375 fuer Filets) - dieselbe Divergenz wie die uebrigen Altwerte, aus demselben Grund folgenlos und aus demselben Grund NICHT hier zu korrigieren, sondern in den Deltas der vier Slices, falls ein Gate das entscheidet.",
     "records": [
         {
             "id": "ChefZ_Blackberry",
@@ -107,6 +107,433 @@
             "energy": 165,
             "water": 195,
             "fullness": 45
+        },
+        {
+            "id": "ChefZ_BluefinTunaFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_BlueMarlinFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_BonitoFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_CharFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_CodFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_CongerFillet",
+            "scope": "class",
+            "energy": 205,
+            "water": 32,
+            "fullness": 375
+        },
+        {
+            "id": "ChefZ_EelFillet",
+            "scope": "class",
+            "energy": 205,
+            "water": 32,
+            "fullness": 375
+        },
+        {
+            "id": "ChefZ_GiantGrouperFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_GiantTrevallyFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_GiltheadBreamFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_HalibutFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_HorseMackerelFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_JapaneseSardineFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_MahiMahiFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_MuskellungeFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_PerchFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_PlaiceFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_RainbowTroutFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_RedMulletFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_RedSnapperFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_RockfishFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_SailfishFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_SalmonFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_SeaBassFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_SnakeheadFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_SockeyeSalmonFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_SoleFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_TarponFillet",
+            "scope": "class",
+            "energy": 110,
+            "water": 45,
+            "fullness": 350
+        },
+        {
+            "id": "ChefZ_YellowfinTunaFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_YellowtailFillet",
+            "scope": "class",
+            "energy": 165,
+            "water": 38,
+            "fullness": 363
+        },
+        {
+            "id": "ChefZ_Char",
+            "scope": "class",
+            "energy": 400,
+            "water": 120,
+            "fullness": 250
+        },
+        {
+            "id": "ChefZ_Eel",
+            "scope": "class",
+            "energy": 650,
+            "water": 100,
+            "fullness": 250
+        },
+        {
+            "id": "ChefZ_Muskellunge",
+            "scope": "class",
+            "energy": 520,
+            "water": 210,
+            "fullness": 400
+        },
+        {
+            "id": "ChefZ_Perch",
+            "scope": "class",
+            "energy": 180,
+            "water": 85,
+            "fullness": 150
+        },
+        {
+            "id": "ChefZ_RainbowTrout",
+            "scope": "class",
+            "energy": 410,
+            "water": 120,
+            "fullness": 250
+        },
+        {
+            "id": "ChefZ_Salmon",
+            "scope": "class",
+            "energy": 800,
+            "water": 180,
+            "fullness": 400
+        },
+        {
+            "id": "ChefZ_Snakehead",
+            "scope": "class",
+            "energy": 350,
+            "water": 125,
+            "fullness": 250
+        },
+        {
+            "id": "ChefZ_SockeyeSalmon",
+            "scope": "class",
+            "energy": 760,
+            "water": 180,
+            "fullness": 400
+        },
+        {
+            "id": "ChefZ_Cod",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 450
+        },
+        {
+            "id": "ChefZ_Conger",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 640
+        },
+        {
+            "id": "ChefZ_GiltheadBream",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 450
+        },
+        {
+            "id": "ChefZ_Halibut",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 640
+        },
+        {
+            "id": "ChefZ_HorseMackerel",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 300
+        },
+        {
+            "id": "ChefZ_JapaneseSardine",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 300
+        },
+        {
+            "id": "ChefZ_Plaice",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 450
+        },
+        {
+            "id": "ChefZ_RedMullet",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 300
+        },
+        {
+            "id": "ChefZ_Rockfish",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 300
+        },
+        {
+            "id": "ChefZ_SeaBass",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 450
+        },
+        {
+            "id": "ChefZ_SeaEel",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 450
+        },
+        {
+            "id": "ChefZ_Sole",
+            "scope": "class",
+            "energy": 105,
+            "water": 60,
+            "fullness": 450
+        },
+        {
+            "id": "ChefZ_BluefinTuna",
+            "scope": "class",
+            "energy": 300,
+            "water": 40,
+            "fullness": 810
+        },
+        {
+            "id": "ChefZ_BlueMarlin",
+            "scope": "class",
+            "energy": 270,
+            "water": 40,
+            "fullness": 810
+        },
+        {
+            "id": "ChefZ_Bonito",
+            "scope": "class",
+            "energy": 185,
+            "water": 46,
+            "fullness": 275
+        },
+        {
+            "id": "ChefZ_GiantGrouper",
+            "scope": "class",
+            "energy": 260,
+            "water": 40,
+            "fullness": 810
+        },
+        {
+            "id": "ChefZ_GiantTrevally",
+            "scope": "class",
+            "energy": 205,
+            "water": 44,
+            "fullness": 480
+        },
+        {
+            "id": "ChefZ_MahiMahi",
+            "scope": "class",
+            "energy": 200,
+            "water": 44,
+            "fullness": 480
+        },
+        {
+            "id": "ChefZ_RedSnapper",
+            "scope": "class",
+            "energy": 175,
+            "water": 46,
+            "fullness": 275
+        },
+        {
+            "id": "ChefZ_Sailfish",
+            "scope": "class",
+            "energy": 265,
+            "water": 40,
+            "fullness": 810
+        },
+        {
+            "id": "ChefZ_Tarpon",
+            "scope": "class",
+            "energy": 240,
+            "water": 45,
+            "fullness": 810
+        },
+        {
+            "id": "ChefZ_YellowfinTuna",
+            "scope": "class",
+            "energy": 285,
+            "water": 40,
+            "fullness": 810
+        },
+        {
+            "id": "ChefZ_Yellowtail",
+            "scope": "class",
+            "energy": 225,
+            "water": 44,
+            "fullness": 480
         },
         {
             "id": "ChefZ_Bread",

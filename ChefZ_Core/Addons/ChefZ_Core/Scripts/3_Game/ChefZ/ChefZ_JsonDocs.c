@@ -136,6 +136,20 @@ class ChefZ_RecipeDoc
     ref array<ref ChefZ_RecipeDef> records;
 }
 
+class ChefZ_FishingYieldDoc
+{
+    string kind;
+    int    schemaVersion;
+    ref array<ref ChefZ_FishingYieldDef> records;
+}
+
+class ChefZ_BaitDoc
+{
+    string kind;
+    int    schemaVersion;
+    ref array<ref ChefZ_BaitDef> records;
+}
+
 //==============================================================================
 
 /**
@@ -536,6 +550,8 @@ class ChefZ_JsonRecordReader
         else if (kind == ChefZ_RecordKind.STATION)       ok = ReadStation(text, outRecords, errorOut);
         else if (kind == ChefZ_RecordKind.TRANSFORM)     ok = ReadTransform(text, outRecords, errorOut);
         else if (kind == ChefZ_RecordKind.RECIPE)        ok = ReadRecipe(text, outRecords, errorOut);
+        else if (kind == ChefZ_RecordKind.FISHING_YIELD) ok = ReadFishingYield(text, outRecords, errorOut);
+        else if (kind == ChefZ_RecordKind.BAIT)          ok = ReadBait(text, outRecords, errorOut);
         else                                             errorOut = "Unbekannte Art \"" + kind + "\"";
 
         ChefZ_RecordProbe.Reset();
@@ -814,6 +830,38 @@ class ChefZ_JsonRecordReader
         for (int i = 0; i < a.records.Count(); i++)
         {
             ChefZ_RecipeDef rec = a.records.Get(i);
+            outRecords.Insert(rec);
+        }
+        return true;
+    }
+
+    private static bool ReadFishingYield(string text, out array<ref ChefZ_Record> outRecords, out string errorOut)
+    {
+        ChefZ_FishingYieldDoc a = new ChefZ_FishingYieldDoc();
+        if (!JsonFileLoader<ChefZ_FishingYieldDoc>.LoadData(text, a, errorOut))
+            return false;
+        if (!a.records)
+            return true;
+
+        for (int i = 0; i < a.records.Count(); i++)
+        {
+            ChefZ_FishingYieldDef rec = a.records.Get(i);
+            outRecords.Insert(rec);
+        }
+        return true;
+    }
+
+    private static bool ReadBait(string text, out array<ref ChefZ_Record> outRecords, out string errorOut)
+    {
+        ChefZ_BaitDoc a = new ChefZ_BaitDoc();
+        if (!JsonFileLoader<ChefZ_BaitDoc>.LoadData(text, a, errorOut))
+            return false;
+        if (!a.records)
+            return true;
+
+        for (int i = 0; i < a.records.Count(); i++)
+        {
+            ChefZ_BaitDef rec = a.records.Get(i);
             outRecords.Insert(rec);
         }
         return true;

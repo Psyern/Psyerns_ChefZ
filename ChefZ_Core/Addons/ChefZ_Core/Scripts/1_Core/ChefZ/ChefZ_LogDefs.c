@@ -107,9 +107,10 @@ class ChefZ_LogChannel
     static const int CONTAIN = 1024;   // Bit 10
     static const int EVENT   = 2048;   // Bit 11
     static const int PERF    = 4096;   // Bit 12
+    static const int FISHING = 8192;   // Bit 13, seit 20 §3
 
     static const int NONE    = 0;
-    static const int ALL     = 0x1FFF;      // Bits 0..12, deckt genau die 13 Kanaele
+    static const int ALL     = 0x3FFF;      // Bits 0..13, deckt genau die 14 Kanaele
 
     //! Name eines EINZELNEN Kanalbits. Fuer Masken mit mehreren Bits liefert
     //! die Funktion den ersten gesetzten Kanal plus "+" - im Ausgabepfad steht
@@ -131,11 +132,12 @@ class ChefZ_LogChannel
             case CONTAIN: return "CONTAIN";
             case EVENT:   return "EVENT";
             case PERF:    return "PERF";
+            case FISHING: return "FISHING";
             case NONE:    return "NONE";
             case ALL:     return "ALL";
         }
 
-        for (int bit = 0; bit < 13; bit++)
+        for (int bit = 0; bit < 14; bit++)
         {
             int single = 1 << bit;
             if ((channel & single) == 0)
@@ -172,6 +174,7 @@ class ChefZ_LogChannel
         if (n == "CONTAIN") return CONTAIN;
         if (n == "EVENT")   return EVENT;
         if (n == "PERF")    return PERF;
+        if (n == "FISHING") return FISHING;
         if (n == "ALL")     return ALL;
         if (n == "NONE")    return NONE;
         if (n == "OFF")     return NONE;
@@ -180,7 +183,7 @@ class ChefZ_LogChannel
 
     static string ValidNames()
     {
-        return "CORE, CONFIG, MATCH, COOK, PROCESS, STATE, QUALITY, NUTRI, " + "PRESERV, PORTION, CONTAIN, EVENT, PERF, ALL, NONE";
+        return "CORE, CONFIG, MATCH, COOK, PROCESS, STATE, QUALITY, NUTRI, " + "PRESERV, PORTION, CONTAIN, EVENT, PERF, FISHING, ALL, NONE";
     }
 
     /**
@@ -235,9 +238,13 @@ class ChefZ_LogChannel
     //! Nur fuer den Selbsttest (S1).
     static bool SelfCheck()
     {
-        if (ALL != 0x1FFF)                          return false;
+        if (ALL != 0x3FFF)                          return false;
         if (PERF != (1 << 12))                      return false;
+        if (FISHING != (1 << 13))                   return false;
         if ((ALL & PERF) == 0)                      return false;
+        if ((ALL & FISHING) == 0)                   return false;
+        if (Name(FISHING) != "FISHING")             return false;
+        if (FromName("fishing") != FISHING)         return false;
         if (FromName("match") != MATCH)             return false;
         if (FromName(" Cook ") != COOK)             return false;
         if (FromName("nope") != 0)                  return false;

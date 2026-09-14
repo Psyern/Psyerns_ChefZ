@@ -85,6 +85,27 @@ class ChefZ_JsonSourceHelper
             return 0;
         }
 
+        // 20 §6 D3: das Overlay darf die Fangtabelle und die Koedertabelle
+        // ueberhaupt nicht anfassen - weder erweiternd noch feldweise.
+        //
+        // Der Grund ist ein anderer als bei den sync-relevanten Arten und
+        // steht in ChefZ_RecordKind.IsOverlayBlocked: Client und Server bauen
+        // das Gewichtsfeld der Angelaktion je fuer sich, das Overlay kennt
+        // aber nur der Server. Eine ganze Datei abzuweisen ist hier richtiger
+        // als einzelne Records: ein Overlay, das die Haelfte seiner Zeilen
+        // verliert, waere schwerer zu verstehen als eines, das gar nicht
+        // wirkt.
+        //
+        // WARN und nicht ERROR: der Betreiber hat nichts kaputt gemacht, er
+        // hat etwas versucht, das nicht geht. Der Server laeuft mit der
+        // Tabelle aus Rang 1 und 2 weiter - also mit Vanillas und des
+        // Content-Moduls Zahlen.
+        if (rank >= ChefZ_SourceRank.PROFILE_OVERLAY && ChefZ_RecordKind.IsOverlayBlocked(kind))
+        {
+            AddWarn(report, resolved, "", "Die Art \"" + kind + "\" kann nicht aus dem $profile-Overlay kommen - Datei ignoriert. " + "Das Gewichtsfeld der Angelaktion entsteht auf Client UND Server, und das " + "Overlay kennt nur der Server; ein Patch liesse beide Seiten auseinander " + "laufen (20 §6 D3). Wer die Zahlen aendern will, aendert sie im Datenmodul.");
+            return 0;
+        }
+
         int schema = ChefZ_JsonText.ExtractInt(text, "schemaVersion", SCHEMA_VERSION);
         if (schema > SCHEMA_VERSION)
         {

@@ -1,0 +1,189 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "_note": "Erste ChefZ-Bindung fuer Vanillas Makrele. MackerelFilletMeat wird hier BEWUSST NICHT gebunden - das tut bereits ChefZ_Preservation/Config/Ingredients/Preservation.json (Kategorie FISH); eine zweite Bindung derselben ID waere ein Dublett, bei dem die erste gewinnt und die zweite als Fehler im Log steht.",
+            "id": "Mackerel",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Plaice",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_GiltheadBream",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Halibut",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Cod",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Sole",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SeaBass",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_RedMullet",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Conger",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SeaEel",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_HorseMackerel",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_JapaneseSardine",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Rockfish",
+            "categories": [
+                "WHOLE_FISH"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        }
+    ]
+}

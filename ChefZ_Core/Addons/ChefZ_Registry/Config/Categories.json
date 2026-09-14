@@ -16,6 +16,20 @@
             "displayName": "#STR_CHEFZ_CAT_BEANS"
         },
         {
+            "id": "FISH",
+            "displayName": "#STR_CHEFZ_CAT_FISH"
+        },
+        {
+            "id": "FISH_FILLET",
+            "parent": "FISH",
+            "displayName": "#STR_CHEFZ_CAT_FISH_FILLET"
+        },
+        {
+            "id": "WHOLE_FISH",
+            "parent": "FISH",
+            "displayName": "#STR_CHEFZ_CAT_WHOLE_FISH"
+        },
+        {
             "id": "BREAD",
             "displayName": "#STR_CHEFZ_CAT_BREAD"
         },
@@ -102,10 +116,6 @@
             "id": "WILD_MEAT",
             "parent": "MEAT",
             "displayName": "#STR_CHEFZ_CAT_WILD_MEAT"
-        },
-        {
-            "id": "FISH",
-            "displayName": "#STR_CHEFZ_CAT_FISH"
         },
         {
             "id": "LEAF_VEGETABLE",
