@@ -22,14 +22,14 @@ import { REFINDEX_DIR, walk, parseConfigCpp, exists, readText } from './lib.mjs'
 const REPOS = 'C:/Users/Administrator/Desktop/Mod Repositories';
 
 const SOURCES = [
-  { name: 'terje', dir: path.join(REPOS, 'TerjeMods-master-main') },
+  { name: 'terje', dir: path.join(REPOS, 'TerjeMods-experimental') },
   { name: 'expansion', dir: path.join(REPOS, 'DayZExpansion') },
-  { name: 'cot', dir: path.join(REPOS, 'DayZ-CommunityOnlineTools-production') },
+  { name: 'cot', dir: path.join(REPOS, 'COT_New') },
   { name: 'cf', dir: path.join(REPOS, 'DayZ-CommunityFramework-production') },
   { name: 'dabs', dir: path.join(REPOS, 'DayZ-Dabs-Framework-production') },
   // Vanilla-SCRIPT-Klassen (nicht die Item-Config-Klassen - siehe Hinweis oben).
   // Deckt Basisklassen und modded-class-Ziele ab.
-  { name: 'vanilla-scripts', dir: path.join(REPOS, 'scripts - 1.29') },
+  { name: 'vanilla-scripts', dir: path.join(REPOS, 'scripts (and more) - 1.30/scripts') },
 ];
 
 for (const extra of process.argv.slice(2)) {

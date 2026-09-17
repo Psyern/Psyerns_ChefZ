@@ -275,6 +275,11 @@ WrapSpacerCommandArgs
 XComboBoxCommandArgs
 XComboBoxWidgetController
 defs
+engineScriptModule
+gameLibScriptModule
+gameScriptModule
 imageSets
+missionScriptModule
 uint8
 widgetStyles
+worldScriptModule

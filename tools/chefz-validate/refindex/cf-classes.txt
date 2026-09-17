@@ -193,4 +193,9 @@ WeaponStableState
 Weapon_Base
 ZombieBase
 __Stack
+defs
 engineScriptModule
+gameLibScriptModule
+gameScriptModule
+missionScriptModule
+worldScriptModule

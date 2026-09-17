@@ -22,7 +22,7 @@ import { Findings, readText, stripComments, walk, exists, rel } from './lib.mjs'
 import { configItemIndex } from './chefzdata.mjs';
 import { foodContext, hasNode, scriptChainOf } from './chefzfood.mjs';
 
-const VANILLA_SCRIPTS = 'C:/Users/Administrator/Desktop/Mod Repositories/scripts - 1.29';
+const VANILLA_SCRIPTS = 'C:/Users/Administrator/Desktop/Mod Repositories/scripts (and more) - 1.30/scripts';
 
 /**
  * Skriptklassen mit einer CanBeCooked-Ueberschreibung, samt Urteil.
