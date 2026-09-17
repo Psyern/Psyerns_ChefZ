@@ -119,7 +119,22 @@ class CfgPatches
         //
         // Merksatz: requiredAddons nennt CfgPatches-Klassen der GEPACKTEN
         // Addons. Ein Ordnername der Lieferung ist keine.
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices", "ChefZ_Plants"};
+        //
+        // DZ_Sounds_Effects: liefert baseCharacter_SoundShader und
+        // baseCharacter_SoundSet. Von beiden leitet dieses Modul weiter unten
+        // ab (CfgSoundShaders / CfgSoundSets, ChefZ_Bees_Attack_*). Ohne den
+        // Eintrag ist die Ladereihenfolge nicht zugesichert; loest die
+        // Basisklasse leer auf, bleibt das Bienenangriffs-Geraeusch stumm.
+        // Belege fuer den Addonnamen sind fremde, ausgelieferte Configs mit
+        // genau dieser Paarung - Mod Repositories/DayZExpansion/AI/Sounds/
+        // config.cpp:8-11 (requiredAddons) zu :15-16 (class
+        // baseCharacter_SoundShader;), dazu A6_Base_Storage/BaseObjects/
+        // Sounds/config.cpp:8-11 und SilentZ_Particles. Gegen die
+        // 1.30-Addon-Configs selbst ist der Name lokal NICHT pruefbar: der
+        // 1.30-Stand fuehrt nur bin/config.cpp:2748-2751 mit
+        // "class CfgPatches { access=1; };" und keine Addonnamen. Diese eine
+        // Restpruefung gehoert an den Gate-Test.
+        requiredAddons[] = {"DZ_Data", "DZ_Sounds_Effects", "DZ_Gear_Cultivation", "DZ_Gear_Food", "DZ_Gear_Camping", "DZ_Gear_Tools", "DZ_Gear_Consumables", "ChefZ_Core", "ChefZ_Items", "ChefZ_Devices", "ChefZ_Plants"};
     };
 };
 

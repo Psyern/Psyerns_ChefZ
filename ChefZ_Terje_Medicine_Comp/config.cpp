@@ -102,12 +102,43 @@
 //
 // Loesung: ein eigener Config-Wurzelknoten. "CfgChefZTerjeMedicine/ChefZ_ThymeTea"
 // ist ein anderer Pfad als "CfgVehicles/ChefZ_ThymeTea" - keine Kollision, kein
-// Doppeleintrag, und das Hauptmod bleibt unangetastet. Die Parameter heissen
-// bewusst EXAKT wie bei Terje, damit
-//   a) jeder, der Terje kennt, sie ohne Uebersetzung liest, und
-//   b) $profile:TerjeSettings/Core/GameOverrides.xml sie ueber denselben Pfad
-//      ueberschreiben kann - GetTerjeGameConfig() bedient jeden Config-Wurzel-
-//      knoten gleich (TerjeCore/Scripts/3_Game/TerjeGameConfig.c:150-163).
+// Doppeleintrag, und das Hauptmod bleibt unangetastet.
+//
+// $profile:TerjeSettings/Core/GameOverrides.xml kann diesen Knoten genauso
+// ueberschreiben wie jeden anderen - GetTerjeGameConfig() bedient jeden
+// Config-Wurzelknoten gleich (TerjeCore/Scripts/3_Game/TerjeGameConfig.c:150-163).
+// Massgeblich sind dabei IMMER die Schluessel, die unten in diesem Knoten
+// stehen; ein Betreiber ueberschreibt sie woertlich, nicht nach Terje-Vorbild.
+//
+// ZUR NAMENSWAHL - und was daran seit der Terje-Experimental nicht mehr stimmt:
+// Die Schluessel wurden nach dem STABLE-Stand benannt
+// (TerjeMods-master-main/TerjeMedicine/FixVanilla/config.cpp:242-244:
+//  medImmunityGainForce, medImmunityGainTimeSec, medImmunityGainMaxTimer),
+// damit jeder, der Terje kennt, sie ohne Uebersetzung liest. In der
+// Experimental hat Terje zwei davon umbenannt:
+//   medImmunityGainForce   -> medImmunityGainValue
+//     (TerjeMods-experimental/TerjeMedicine/FixVanilla/config.cpp:247,
+//      gelesen in .../Scripts/4_World/Classes/TerjeConsumableEffects.c:156)
+//   medImmunityGainMaxTimer -> medImmunityGainMaxTimeSec
+//     (ebenda :249; die Deckel laufen dort generisch ueber
+//      TerjeGetMaxTimeSec als "med<X>MaxTimeSec",
+//      TerjeMods-experimental/TerjeCore/Scripts/4_World/Classes/Medicine/
+//      TerjeConsumableEffects.c:141-147)
+// medImmunityGainTimeSec und medHealthgainTimeSec/medHealthgainMaxTimeSec
+// heissen in beiden Staenden gleich.
+//
+// FOLGE FUER DIESES MODUL: keine. Terje liest CfgChefZTerjeMedicine nie; nur
+// ChefZ_TerjeMedConsumableEffects.c liest diesen Knoten, und zwar mit genau
+// den Schluesseln, die hier stehen. Das Modul wirkt gegen BEIDE Terje-Staende
+// unveraendert. Was NICHT mehr gilt, ist die Namensgleichheit gegenueber der
+// Experimental: wer dort Terjes NEUEN Namen in GameOverrides.xml unter
+// CfgChefZTerjeMedicine eintraegt, trifft ins Leere.
+//
+// Die Schluessel bleiben deshalb bewusst unveraendert, bis entschieden ist,
+// welcher Terje-Stand auf dem Zielserver laeuft - diese Entscheidung ist offen
+// (ChefZ_Docs/ChefZ_Terje_Experimental_Farming_Analyse.md §6, Punkt 1). Eine
+// Umbenennung waere reine Kosmetik am eigenen Knoten, wuerde die Namensparitaet
+// aber nur von einem Stand auf den anderen verschieben.
 //
 // Gelesen und angewendet wird das Ganze in
 //   Scripts/4_World/ChefZ/TerjeMedicine/ChefZ_TerjeMedConsumableEffects.c
@@ -159,75 +190,76 @@
 
 class CfgPatches
 {
-    class ChefZ_Terje_Medicine_Comp
-    {
-        units[] = {};
-        weapons[] = {};
-        requiredVersion = 0.1;
+	class ChefZ_Terje_Medicine_Comp
+	{
+		units[] = {};
+		weapons[] = {};
+		requiredVersion = 0.1;
 
-        // TerjeCore und TerjeMedicine stehen bewusst NICHT hier - sie werden
-        // ueber "#ifdef TERJE_MEDICINE_MOD" in jeder Skriptdatei geprueft.
-        // Begruendung mit Belegstellen im Kopf dieser Datei unter "WEICHE
-        // ABHAENGIGKEIT".
-        //
-        // ChefZ_Core bleibt: es ist die Ladewurzel desselben Mods, liegt im
-        // selben Ordner und wird zusammen ausgeliefert. Die Richtung bleibt
-        // einseitig - dieser Mod kennt ChefZ, ChefZ kennt ihn nicht.
-        requiredAddons[] = {"ChefZ_Core"};
-    };
+		// TerjeCore und TerjeMedicine stehen bewusst NICHT hier - sie werden
+		// ueber "#ifdef TERJE_MEDICINE_MOD" in jeder Skriptdatei geprueft.
+		// Begruendung mit Belegstellen im Kopf dieser Datei unter "WEICHE
+		// ABHAENGIGKEIT".
+		//
+		// ChefZ_Core bleibt: es ist die Ladewurzel desselben Mods, liegt im
+		// selben Ordner und wird zusammen ausgeliefert. Die Richtung bleibt
+		// einseitig - dieser Mod kennt ChefZ, ChefZ kennt ihn nicht.
+		requiredAddons[] = {"ChefZ_Core"};
+	};
 };
 
 class CfgMods
 {
-    // Klassenname nach Projekt-Namenskonvention (Workflow §10.7,
-    // ChefZ_PascalCase). "dir" ist und bleibt der ORDNERNAME - das PBO-Praefix
-    // in $PREFIX$ lautet identisch, sonst ueberspringt DayZ die Skriptmodule
-    // still und ohne RPT-Eintrag.
-    class ChefZ_TerjeMedicineComp
-    {
-        dir = "ChefZ_Terje_Medicine_Comp";
-        picture = "";
-        action = "";
-        hideName = 1;
-        hidePicture = 1;
-        name = "ChefZ Terje Medicine Compatibility";
-        credits = "Psyern";
-        author = "Psyern";
-        authorID = "0";
-        version = "0.0.1";
-        extra = 0;
-        type = "mod";
-        dependencies[] = {"Game", "World", "Mission"};
+	// Klassenname nach Projekt-Namenskonvention (Workflow §10.7,
+	// ChefZ_PascalCase). "dir" ist und bleibt der ORDNERNAME - das PBO-Praefix
+	// in $PREFIX$ lautet identisch, sonst ueberspringt DayZ die Skriptmodule
+	// still und ohne RPT-Eintrag.
+	class ChefZ_TerjeMedicineComp
+	{
+		dir = "ChefZ_Terje_Medicine_Comp";
+		picture = "";
+		action = "";
+		hideName = 1;
+		hidePicture = 1;
+		name = "ChefZ Terje Medicine Compatibility";
+		credits = "Psyern";
+		author = "Psyern";
+		authorID = "0";
+		version = "0.0.1";
+		extra = 0;
+		type = "mod";
+		dependencies[] = {"Game", "World", "Mission"};
 
-        class defs
-        {
-            class worldScriptModule
-            {
-                value = "";
-                files[] = {"ChefZ_Terje_Medicine_Comp/Scripts/4_World"};
-            };
+		class defs
+		{
+			class worldScriptModule
+			{
+				value = "";
+				files[] = {"ChefZ_Terje_Medicine_Comp/Scripts/4_World"};
+			};
 
-            // 5_Mission: zwei Dateien, die sich gegenseitig ausschliessen.
-            // ChefZ_TerjeMedStartupCheck.c steht unter "#ifdef
-            // TERJE_MEDICINE_MOD", ChefZ_TerjeMedAbsent.c unter "#ifndef".
-            // Es ist immer genau eine von beiden kompiliert, nie beide - also
-            // gibt es aus diesem PBO nie zwei aktive
-            // "modded class MissionServer".
-            class missionScriptModule
-            {
-                value = "";
-                files[] = {"ChefZ_Terje_Medicine_Comp/Scripts/5_Mission"};
-            };
-        };
-    };
+			// 5_Mission: zwei Dateien, die sich gegenseitig ausschliessen.
+			// ChefZ_TerjeMedStartupCheck.c steht unter "#ifdef
+			// TERJE_MEDICINE_MOD", ChefZ_TerjeMedAbsent.c unter "#ifndef".
+			// Es ist immer genau eine von beiden kompiliert, nie beide - also
+			// gibt es aus diesem PBO nie zwei aktive
+			// "modded class MissionServer".
+			class missionScriptModule
+			{
+				value = "";
+				files[] = {"ChefZ_Terje_Medicine_Comp/Scripts/5_Mission"};
+			};
+		};
+	};
 };
 
 // ============================================================================
 // CfgChefZTerjeMedicine - die Wirkungstabelle der Kraeutertees
 // ============================================================================
 //
-// MASSSTAB. Referenz ist Terjes eigenes Vitaminpraeparat
-// (TerjeMedicine/FixVanilla/config.cpp:238-245):
+// MASSSTAB. Referenz ist Terjes eigenes Vitaminpraeparat, hier im stable-Stand
+// (TerjeMods-master-main/TerjeMedicine/FixVanilla/config.cpp:238-245; in der
+// Experimental dieselben Zahlen unter neuen Schluesselnamen, :247-249):
 //
 //     VitaminBottle:  medImmunityGainForce = 1
 //                     medImmunityGainTimeSec = 120   (je Einheit)
@@ -283,46 +315,46 @@ class CfgMods
 
 class CfgChefZTerjeMedicine
 {
-    // Thymian - der "Hustentee". Schwaechster Immunitaetsschub, dafuer als
-    // einziger neben dem Kraeutertee eine kleine Erholungswirkung.
-    class ChefZ_ThymeTea
-    {
-        chefzServingSize = 1;
+	// Thymian - der "Hustentee". Schwaechster Immunitaetsschub, dafuer als
+	// einziger neben dem Kraeutertee eine kleine Erholungswirkung.
+	class ChefZ_ThymeTea
+	{
+		chefzServingSize = 1;
 
-        medImmunityGainForce = 0.20;
-        medImmunityGainTimeSec = 180;
-        medImmunityGainMaxTimer = 360;
+		medImmunityGainForce = 0.20;
+		medImmunityGainTimeSec = 180;
+		medImmunityGainMaxTimer = 360;
 
-        medHealthgainTimeSec = 20;
-        medHealthgainMaxTimeSec = 45;
-    };
+		medHealthgainTimeSec = 20;
+		medHealthgainMaxTimeSec = 45;
+	};
 
-    // Baerlauch - der Immunitaetstee der Analyse §22. Staerkster Force-Wert des
-    // Moduls, laengste Laufzeit, bewusst OHNE Regeneration: er soll vorbeugen,
-    // nicht heilen.
-    class ChefZ_WildGarlicTea
-    {
-        chefzServingSize = 1;
+	// Baerlauch - der Immunitaetstee der Analyse §22. Staerkster Force-Wert des
+	// Moduls, laengste Laufzeit, bewusst OHNE Regeneration: er soll vorbeugen,
+	// nicht heilen.
+	class ChefZ_WildGarlicTea
+	{
+		chefzServingSize = 1;
 
-        medImmunityGainForce = 0.40;
-        medImmunityGainTimeSec = 300;
-        medImmunityGainMaxTimer = 600;
+		medImmunityGainForce = 0.40;
+		medImmunityGainTimeSec = 300;
+		medImmunityGainMaxTimer = 600;
 
-        medHealthgainTimeSec = 0;
-        medHealthgainMaxTimeSec = 0;
-    };
+		medHealthgainTimeSec = 0;
+		medHealthgainMaxTimeSec = 0;
+	};
 
-    // Kraeutermischung - der Allrounder aus Analyse §21. Mittlerer
-    // Immunitaetswert plus eine Spur Regeneration.
-    class ChefZ_HerbalTea
-    {
-        chefzServingSize = 1;
+	// Kraeutermischung - der Allrounder aus Analyse §21. Mittlerer
+	// Immunitaetswert plus eine Spur Regeneration.
+	class ChefZ_HerbalTea
+	{
+		chefzServingSize = 1;
 
-        medImmunityGainForce = 0.30;
-        medImmunityGainTimeSec = 240;
-        medImmunityGainMaxTimer = 480;
+		medImmunityGainForce = 0.30;
+		medImmunityGainTimeSec = 240;
+		medImmunityGainMaxTimer = 480;
 
-        medHealthgainTimeSec = 15;
-        medHealthgainMaxTimeSec = 40;
-    };
+		medHealthgainTimeSec = 15;
+		medHealthgainMaxTimeSec = 40;
+	};
 };

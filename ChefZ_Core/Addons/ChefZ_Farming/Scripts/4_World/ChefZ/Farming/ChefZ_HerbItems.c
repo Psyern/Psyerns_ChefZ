@@ -32,6 +32,12 @@ class ChefZ_FreshHerbBase extends ChefZ_Edible_Base
      *
      * Vanillas Beleg: SambucusBerry.c, CaninaBerry.c und Cannabis.c - frisches
      * Pflanzengut ohne Garstufen - ueberschreiben alle drei IsFruit().
+     *
+     * BEWUSSTE AUSNAHME von "override immer mit super": Zusage-Praedikat mit
+     * festem Wert. Die Basis verneint pauschal (Edible_Base.c:377-380 gibt
+     * false zurueck), ein super-UND wuerde die Zusage also immer aufheben.
+     * Vanilla setzt den Haken an CaninaBerry.c:13-16 und Apple.c:13-16
+     * genauso als festen Wert ohne super.
      */
     override bool IsFruit()
     {

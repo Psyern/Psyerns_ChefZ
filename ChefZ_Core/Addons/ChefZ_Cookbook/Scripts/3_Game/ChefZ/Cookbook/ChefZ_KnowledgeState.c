@@ -147,10 +147,14 @@ class ChefZ_KnowledgeState : Managed
     /**
      * Liest zurueck, was Save() geschrieben hat.
      *
-     * @return false, sobald ein Lesevorgang scheitert. Der Aufrufer muss das
-     *         weiterreichen: DayZ verwirft den ganzen Spielerstand, wenn
-     *         OnStoreLoad false liefert, und das ist richtig so - ein halb
-     *         gelesener Kontext bringt jeden nachfolgenden Mod aus dem Tritt.
+     * @return false, sobald ein Lesevorgang scheitert. Der Aufrufer reicht das
+     *         NICHT weiter: false in OnStoreLoad verwirft den ganzen
+     *         Charakter, und der Strom an dieser Stelle gehoert ChefZ nicht
+     *         allein (Begruendung im Kopf von ChefZ_PlayerKnowledge.c). Wer
+     *         hier false bekommt, verwirft das Wissen und laesst den Charakter
+     *         stehen. Ein halb gelesener Kontext bringt nachfolgende Mods
+     *         trotzdem aus dem Tritt - das ist der Preis, aber er ist kleiner
+     *         als ein geloeschter Spielstand.
      */
     bool Load(ParamsReadContext ctx)
     {

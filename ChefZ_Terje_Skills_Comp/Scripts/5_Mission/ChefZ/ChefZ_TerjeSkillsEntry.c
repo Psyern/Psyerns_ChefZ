@@ -99,6 +99,36 @@ class ChefZ_TerjeSkillsEntry
 // Begruendung: derselbe Einstiegspunkt wie ChefZ_Core. super zuerst, danach
 // ausschliesslich eigene Anmeldungen an eigenen Registries - an Vanilla und
 // an Terje wird hier nichts veraendert.
+//
+// Vanilla 1.30: OnInit "scripts (and more) - 1.30"/scripts/5_Mission/DayZ/
+// mission/missionServer.c:85, InvokeOnDisconnect :442 (Aufruf aus
+// PlayerDisconnected :690/:703).
+//
+// Gesucht wurde in "Mod Repositories" nach "modded class MissionServer" und
+// danach, wer OnInit oder InvokeOnDisconnect erweitert. Ergebnis: jede
+// gefundene Stelle ruft super, die Kette bleibt also vollstaendig.
+//   TerjeCore/Scripts/5_Mission/MissionServer.c:1 - OnEvent :3, InvokeOnConnect
+//     :49, PlayerDisconnected :56, OnClientNewEvent :62, OnClientReadyEvent
+//     :73, jeweils mit super; WEDER OnInit NOCH InvokeOnDisconnect. Keine
+//     Ueberschneidung mit diesem Modul.
+//   TerjeStartScreen/Scripts/5_Mission/MissionServer.c:9 (experimental :20) -
+//     dieselbe Methode InvokeOnDisconnect, super an :11 (experimental :22).
+//     Beide Rumpfe laufen, unabhaengig davon, wer zuletzt laedt.
+//   COT_New/Scripts/5_mission/communityonlinetools/missionserver.c:21 -
+//     OnMissionStart/OnMissionLoaded/OnUpdate/OnEvent, alle mit super, kein
+//     OnInit.
+//   DayZ-CommunityFramework-production/JM/CF/Scripts/5_Mission/
+//     CommunityFramework/Mission/MissionServer.c:27 OnInit mit super :29 und
+//     :70 InvokeOnDisconnect mit super :74.
+//   ChefZ_Core/.../ChefZ_CoreEntry.c:87 - eigenes Modul, dieselbe Klasse,
+//     ebenfalls super zuerst.
+// Kein Fund ohne super, also kein Szenario, in dem eine Ladereihenfolge dieses
+// OnInit verschluckt. Bleibt das allgemeine Restrisiko: ein fremder Mod, der
+// super weglaesst, haengt jede spaeter geladene Erweiterung ab - dagegen
+// schuetzt an dieser Stelle nichts.
+// SCOUT-GEPRUEFT 2026-09-17 (Conflict-Scout-Lauf im Auftrag chefz-130, Suchraum
+// "Mod Repositories": Vanilla 1.30/1.29, Terje stable+experimental, COT_New,
+// COT alt, CF, Expansion, uebrige Fremdmods)
 modded class MissionServer
 {
     override void OnInit()
@@ -110,14 +140,27 @@ modded class MissionServer
     /**
      * Aufraeumen der Wiederholungszaehler.
      *
-     * scripts/5_Mission/DayZ/mission/missionServer.c:429 - InvokeOnDisconnect
-     * ist Vanillas Stelle dafuer und wird aus PlayerDisconnected gerufen.
+     * InvokeOnDisconnect ist Vanillas Stelle dafuer und wird aus
+     * PlayerDisconnected gerufen: "scripts (and more) - 1.30"/scripts/
+     * 5_Mission/DayZ/mission/missionServer.c:442 (Deklaration) und :703
+     * (Aufruf); in 1.29 dieselbe Bauart unter :429 und :690.
      * super zuerst, danach nur eine Zeile in einer EIGENEN Tabelle: an
      * Vanillas Abmeldung wird nichts veraendert.
      *
-     * Streng genommen unnoetig - die Zaehler verfallen ohnehin nach
-     * repeatWindowSec -, aber ein Server mit hoher Fluktuation soll keine
-     * Zeilen von laengst abgemeldeten Spielern mitschleppen.
+     * DIE IDENTITY KANN HIER FEHLEN. Vanilla schreibt das zwei Zeilen ueber
+     * dem Aufruf selbst hin: missionServer.c:692 "Note: At this point,
+     * identity can be already deleted" (1.29: :679). Dann faellt Forget()
+     * aus. Das ist seit dem 17.09.2026 kein Leck mehr, aber auch nicht hier
+     * geheilt: ChefZ_TerjeXpDamper.SweepAll() raeumt abgelaufene Zeilen
+     * zeitgesteuert weg, gleich ob der Spieler je abgemeldet wurde. Die
+     * Begruendung, warum nicht stattdessen der frueheren Stelle
+     * OnClientDisconnectedEvent (missionServer.c:641, 1.29: :628) gefolgt
+     * wird - der Spieler kann die Abmeldung dort noch abbrechen -, steht an
+     * SweepAll().
+     *
+     * Dieser Aufruf hier bleibt trotzdem: er ist der Normalfall, er wirkt
+     * sofort, und ein Server mit hoher Fluktuation soll keine Zeilen von
+     * laengst abgemeldeten Spielern mitschleppen.
      */
     override void InvokeOnDisconnect(PlayerBase player)
     {
@@ -135,6 +178,23 @@ modded class MissionServer
 // modded class MissionGameplay
 // Begruendung: die Hervorhebung ist rein clientseitig und braucht die
 // Config-Werte. Rein lesend.
+//
+// Vanilla 1.30: OnInit "scripts (and more) - 1.30"/scripts/5_Mission/DayZ/
+// mission/missionGameplay.c:102.
+//
+// Scout-Ergebnis fuer OnInit an dieser Klasse - jede Stelle ruft super:
+//   TerjeCore/Scripts/5_Mission/MissionGameplay.c:3 OnInit, super :5.
+//   TerjeSkills/Scripts/5_Mission/MissionGameplay.c:3 - nur OnMissionFinish und
+//     OnUpdateTerjeCustomGUI :14, kein OnInit; keine Ueberschneidung.
+//   COT_New/Scripts/5_mission/communityonlinetools/missiongameplay.c:79 OnInit,
+//     super :81.
+//   DayZExpansion/Hardline/.../MissionGameplay.c:20 (super :22),
+//     NamalskAdventure/.../MissionGameplay.c:19 (super :21),
+//     Quests/.../MissionGameplay.c:21 - dort steht super erst NACH dem eigenen
+//     Aufruf (:26), die Kette bleibt aber geschlossen.
+//   ChefZ_Core/.../ChefZ_CoreEntry.c:116 - eigenes Modul, dieselbe Klasse.
+// SCOUT-GEPRUEFT 2026-09-17 (derselbe Lauf; rein lesender Client-Eingriff, der
+// Nachweis ersetzt das nicht, er ergaenzt es)
 modded class MissionGameplay
 {
     override void OnInit()

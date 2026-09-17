@@ -82,6 +82,14 @@ class ChefZ_TerjeXpDamper
     //! hart.
     private static const int MAX_KEYS_PER_PLAYER = 128;
 
+    //! Mindestabstand zwischen zwei Rundumlaeufen ueber ALLE Zeilen, in
+    //! Sekunden. Gross genug, dass der Lauf im Serveralltag nicht auffaellt,
+    //! klein genug, dass eine Zeile nicht ueber Stunden stehenbleibt.
+    private static const float SWEEP_INTERVAL_SEC = 300.0;
+
+    //! Zeitpunkt des letzten Rundumlaufs, in Sekunden seit Serverstart.
+    private static float s_LastSweep;
+
     private static void EnsureInit()
     {
         if (!s_ByPlayer)
@@ -169,6 +177,14 @@ class ChefZ_TerjeXpDamper
         if (g_Game)
             now = g_Game.GetTime() * 0.001;
 
+        float window = ChefZ_TerjeSkillsConfig.RepeatWindowSec();
+
+        // VOR dem Zugriff auf die eigene Zeile: SweepAll kann Zeilen aus
+        // s_ByPlayer entfernen, und der Halter der Zeilen ist die map. Wer
+        // erst eine Zeile in eine lokale Variable holt und danach fegt,
+        // arbeitet im schlimmsten Fall auf einer bereits freigegebenen map.
+        SweepAll(now, window);
+
         map<string, ref ChefZ_TerjeXpRepeat> row;
         if (!s_ByPlayer.Find(identityId, row) || !row)
         {
@@ -176,7 +192,6 @@ class ChefZ_TerjeXpDamper
             s_ByPlayer.Set(identityId, row);
         }
 
-        float window = ChefZ_TerjeSkillsConfig.RepeatWindowSec();
         PruneRow(row, now, window);
 
         if (row.Count() >= MAX_KEYS_PER_PLAYER)
@@ -241,8 +256,73 @@ class ChefZ_TerjeXpDamper
             row.Remove(stale.Get(s));
     }
 
+    /**
+     * Rundumlauf: abgelaufene Eintraege ALLER Spieler entfernen, danach die
+     * leer gewordenen Zeilen selbst.
+     *
+     * WARUM ES DEN LAUF GIBT (17.09.2026)
+     * Forget() haengt an der Abmeldung, und die Abmeldung liefert die Spieler-
+     * ID nicht zuverlaessig: Vanilla haelt an seiner eigenen Aufrufstelle fest,
+     * dass die Identity dort schon geloescht sein kann -
+     * "scripts (and more) - 1.30"/scripts/5_Mission/DayZ/mission/
+     * missionServer.c:692 ("Note: At this point, identity can be already
+     * deleted"), der Aufruf von InvokeOnDisconnect steht in :703. In 1.29 steht
+     * beides gleichlautend in "scripts - 1.29"/5_Mission/DayZ/mission/
+     * missionServer.c:679 (Vermerk) und :690 (Aufruf) - das ist also kein
+     * 1.30-Bruch, sondern eine seit jeher offene Luecke.
+     *
+     * Faellt Forget() aus, blieb die Zeile des Spielers bisher bis zum
+     * Serverneustart stehen (bis zu MAX_KEYS_PER_PLAYER Schluessel je Spieler,
+     * ohne Obergrenze ueber die Zahl der Spieler). Dieser Lauf schliesst das
+     * ohne einen zweiten Vanilla-Haken: was ohnehin abgelaufen ist, verschwindet
+     * jetzt auch dann, wenn der Spieler nie wiederkommt. Damit erbt eine spaeter
+     * neu vergebene GetPlayerId auch keinen fremden Zaehler mehr, sobald
+     * repeatWindowSec verstrichen ist.
+     *
+     * NICHT ueber OnClientDisconnectedEvent geloest, obwohl die Identity dort
+     * noch lebt (missionServer.c:641): der Spieler kann die Abmeldung noch
+     * abbrechen. Ein Vergessen an dieser Stelle waere ein Schalter, mit dem
+     * sich die Daempfung durch Ausloggen und Abbrechen zuruecksetzen liesse -
+     * genau die XP-Schleife, die dieser Daempfer verhindern soll.
+     */
+    private static void SweepAll(float now, float window)
+    {
+        if (window <= 0.0)
+            return;
+        if (now <= 0.0)
+            return;
+        if (!s_ByPlayer)
+            return;
+        if (s_LastSweep > 0.0 && (now - s_LastSweep) < SWEEP_INTERVAL_SEC)
+            return;
+
+        s_LastSweep = now;
+
+        // Erst sammeln, dann entfernen - eine map waehrend der Iteration zu
+        // veraendern ist derselbe Absturz, den PruneRow unten meidet.
+        array<int> emptyRows = new array<int>();
+        for (int i = 0; i < s_ByPlayer.Count(); i++)
+        {
+            map<string, ref ChefZ_TerjeXpRepeat> row = s_ByPlayer.GetElement(i);
+            if (!row)
+            {
+                emptyRows.Insert(s_ByPlayer.GetKey(i));
+                continue;
+            }
+
+            PruneRow(row, now, window);
+
+            if (row.Count() == 0)
+                emptyRows.Insert(s_ByPlayer.GetKey(i));
+        }
+
+        for (int r = 0; r < emptyRows.Count(); r++)
+            s_ByPlayer.Remove(emptyRows.Get(r));
+    }
+
     //! Wenn ein Spieler den Server verlaesst. Nicht zwingend - die Eintraege
-    //! verfallen ohnehin -, aber ein voller Server soll keine Zeilen von
+    //! verfallen ohnehin, und SweepAll() raeumt die Zeile spaetestens beim
+    //! naechsten Rundumlauf weg -, aber ein voller Server soll keine Zeilen von
     //! Spielern mit sich herumtragen, die laengst weg sind.
     static void Forget(int identityId)
     {

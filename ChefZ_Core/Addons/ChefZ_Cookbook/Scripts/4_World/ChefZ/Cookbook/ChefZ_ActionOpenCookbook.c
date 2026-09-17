@@ -12,8 +12,9 @@
 // hat hier nichts zu entscheiden: das Wissen liegt bereits bei ihm, und wer
 // sein eigenes Buch aufschlaegt, veraendert nichts an der Welt.
 //
-// Deshalb steht die ganze Wirkung in OnEndClient. OnEndServer bleibt leer -
-// nicht vergessen, sondern absichtlich.
+// Deshalb steht die ganze Wirkung in OnEndClient. OnEndServer reicht nur an
+// super weiter und tut sonst nichts - das ist kein Vergessen, aber super darf
+// nicht fehlen (Begruendung unten an der Methode).
 //
 // ---------------------------------------------------------------------------
 // SIE MUSS REGISTRIERT WERDEN, SONST GIBT ES SIE NICHT
@@ -67,9 +68,26 @@ class ChefZ_ActionOpenCookbook : ActionSingleUseBase
         return ChefZ_CookbookItem.Cast(item) != null;
     }
 
+    /**
+     * Der Server hat hier inhaltlich nichts zu tun - aber super MUSS laufen.
+     *
+     * AnimatedActionBase.OnStartServer setzt fuer jede nicht-instante Aktion
+     * SetPerformedActionID(GetID()), und NUR AnimatedActionBase.OnEndServer
+     * setzt sie mit SetPerformedActionID(-1) wieder zurueck
+     * (1.30 scripts/4_World/DayZ/Classes/UserActionsComponent/AnimatedActionBase.c:504-516,
+     * in 1.29 identisch bei :488-501). Im gesamten 1.30-Baum gibt es keine
+     * zweite Stelle, die zuruecksetzt.
+     *
+     * Ohne super bliebe GetPerformedActionID() nach dem Aufschlagen ungleich
+     * -1, bis irgendeine andere animierte Aktion endet. ActionForceConsume.c:63
+     * liest den Wert und liesse solange kein Fuettern oder Traenken durch
+     * andere Spieler zu; ItemBase.c:1172 und :1203 werten ihn ebenfalls aus.
+     */
     override void OnEndServer(ActionData action_data)
     {
-        // Absichtlich leer. Siehe Kopf: der Server hat hier nichts zu tun.
+        super.OnEndServer(action_data);
+        // Darueber hinaus absichtlich leer. Siehe Kopf: die Wirkung steht in
+        // OnEndClient, der Server entscheidet hier nichts.
     }
 
     override void OnEndClient(ActionData action_data)

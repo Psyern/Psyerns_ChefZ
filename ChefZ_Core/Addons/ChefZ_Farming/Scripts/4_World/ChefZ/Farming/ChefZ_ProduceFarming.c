@@ -62,6 +62,12 @@ class ChefZ_VegetableFood_Base extends ChefZ_Edible_Base
      * den Obstzweig mit DECAY_FOOD_RAW_FRVG / BOILED_FRVG / BAKED_FRVG und dem
      * Ausgang "trocknet statt zu verrotten" - statt des Zweigs fuer geoeffnete
      * Konserven, in dem jedes ChefZ-Gemuese bisher lag.
+     *
+     * BEWUSSTE AUSNAHME von "override immer mit super": Zusage-Praedikat mit
+     * festem Wert. Die Basis verneint pauschal (Edible_Base.c:377-380 gibt
+     * false zurueck), ein super-UND wuerde die Zusage also immer aufheben.
+     * Vanilla setzt den Haken an Apple.c:13-16 und Banana.c:13-16 genauso
+     * als festen Wert ohne super.
      */
     override bool IsFruit()
     {

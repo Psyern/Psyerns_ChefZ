@@ -66,6 +66,23 @@
             "defaultState": "RAW",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1
+        },
+        {
+            "_note": "VANILLA 1.30, NEU. Zwei Ganzfische, die es in 1.29 nicht gab: 'scripts (and more) - 1.30'/scripts/4_World/DayZ/Systems/AnimalCatchingSystem/YieldItems/YieldsFish.c:175 (YieldItemRoundGoby, MASK_ENVIRO_POND, Kleinreuse) und :189 (YieldItemCatfish, MASK_ENVIRO_POND, Rute und Grossreuse); die Klassen liegen in 4_World/DayZ/Entities/ItemBase/Edible_Base/RoundGoby.c:1 und Catfish.c:1. Im 1.29-Stand endet dieselbe Datei bei :155 YieldItemShrimp - beide Klassen fehlen dort vollstaendig. Sie werden hier gebunden, nicht dupliziert (Vanilla-Vorrang, 21 Paragraph 5): ohne Bindung erfuellen sie keinen Slot mit category FISH oder WHOLE_FISH und laufen weder durch TR_SaltFish noch durch TR_FishToSmoked. Beide sind Suesswasser (POND) und gehoeren deshalb in diese Datei, nicht zu den Seefischen. KEIN Feld 'decays': RoundGoby.c und Catfish.c sind VANILLA-Klassen und erben nicht von ChefZ_Edible_Base - nur die liest das Feld. Vanilla sagt selbst CanDecay() == true (RoundGoby.c:20, Catfish.c:20). Das Filet CatfishFilletMeat wird hier NICHT gebunden; es gehoert zum Modul ChefZ_Preservation und ist dort getrennt gemeldet.",
+            "id": "RoundGoby",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "Catfish",
+            "categories": ["WHOLE_FISH"],
+            "tags": ["CHEFZ_FRESH", "CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
         }
     ]
 }

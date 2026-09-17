@@ -19,6 +19,25 @@
 class ChefZ_CookbookItem : Inventory_Base
 {
     /**
+     * Die Aktion "Kochbuch aufschlagen" an das Buch haengen.
+     *
+     * Die Registrierung in ChefZ_ActionRegistration.c legt die Aktion nur an.
+     * Sichtbar wird sie erst, wenn ein Item sie in SetActions per AddAction
+     * aufnimmt - so und nicht anders funktioniert das in Vanilla
+     * (1.30 scripts/4_World/DayZ/Entities/ItemBase.c:246 SetActions und :255
+     * AddAction(typename); in 1.29 gleich). Ohne diese Ueberschreibung war der
+     * Eintrag auf jedem Server tot, und nur das Tastenkuerzel aus
+     * ChefZ_CookbookInput blieb uebrig.
+     *
+     * super zuerst, sonst fehlen Aufnehmen, In-die-Haende-nehmen und Ablegen.
+     */
+    override void SetActions()
+    {
+        super.SetActions();
+        AddAction(ChefZ_ActionOpenCookbook);
+    }
+
+    /**
      * Traegt der Spieler ein Kochbuch bei sich?
      *
      * Durchsucht die gesamte Hierarchie, nicht nur die Haende: ein Buch im

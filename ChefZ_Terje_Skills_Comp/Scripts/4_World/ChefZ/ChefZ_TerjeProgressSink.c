@@ -156,8 +156,11 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         if (!player)
             return;
 
-        if (!ChefZ_TerjeSkillsBridge.AddSurvivalXp(player, xp,
-                ChefZ_TerjeSkillsConfig.ShowNotification()))
+        // Der Schalter zuerst in eine eigene Variable: Funktionsaufrufe stehen
+        // auf EINER Zeile, und ein Aufruf als Argument eines Aufrufs zwingt
+        // die Zeile sonst zum Umbruch.
+        bool notify = ChefZ_TerjeSkillsConfig.ShowNotification();
+        if (!ChefZ_TerjeSkillsBridge.AddSurvivalXp(player, xp, notify))
             return;
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))

@@ -1528,6 +1528,39 @@ class CfgChefZTools
     // deshalb hier und nicht in ChefZ_Meat, und sie wird bewusst nur EINMAL
     // deklariert - ein zweiter Knoten gleichen Namens in einem anderen Modul
     // waere eine doppelte Klassendefinition.
+    //
+    // DonerKnife und Jambiya kamen mit DayZ 1.30 dazu (im 1.29-Baum gibt es
+    // beide nicht, grep 0 Treffer). Beide tragen dasselbe Skriptprofil wie die
+    // acht darueber - ToolBase mit ActionSkinning, Jambiya zusaetzlich mit
+    // ActionShave (1.30 4_World/DayZ/Entities/ItemBase/DonerKnife.c:1 und :16,
+    // Jambiya.c:1, :22 und :29). Ohne sie koennte ein Spieler mit Doener- oder
+    // Jambiya-Messer haeuten und filetieren, aber keinen ChefZ-Schnitt
+    // ausloesen. allowSubclasses hilft dabei nicht: beide erben direkt von
+    // ToolBase, und ToolBase steht in keiner ChefZ-Gruppe.
+    //
+    // AKINAKA UND SCIMITAR BLEIBEN DRAUSSEN - ALS SETZUNG, NICHT WEGEN EINES
+    // MERKMALS IM SKRIPT. Die frueher hier notierte Begruendung ("Schwert-
+    // profil mit Finisher, kein ActionShave") war nachweislich falsch und ist
+    // deshalb ersetzt:
+    //   - Akinaka HAT ActionShave (Akinaka.c:27, dazu :26 ActionShaveTarget).
+    //     Sein Aktionssatz ist der des AUFGENOMMENEN Jambiya minus
+    //     ActionDisarmMine/ActionDisarmExplosive.
+    //   - Scimitar ist KEIN Finisher (Scimitar.c:7-10, return false) - das
+    //     aufgenommene Jambiya dagegen schon (Jambiya.c:7-15). "Finisher"
+    //     trennt hier also nichts.
+    //   - Vanillas Werkzeuglisten trennen ebenfalls nicht: CraftRag.c:23-59
+    //     und OpenCan.c:41-90 fuehren neben den Messern auch Machete, Sword,
+    //     Shovel und SledgeHammer. Das sind "irgendetwas Scharfes oder
+    //     Schweres"-Listen, keine Messerlisten - sie taugen weder als Beleg
+    //     fuer eine Aufnahme noch gegen eine.
+    // Es gibt damit KEIN Skriptmerkmal, das die vier neuen 1.30-Klingen in
+    // zwei Gruppen teilt, und die CfgVehicles-Kette liegt lokal nicht vor
+    // (der 1.30-Referenzstand enthaelt nur scripts/, bin/, Core/ und gui/).
+    // Die Trennung ist eine Entscheidung aus dem Gegenstand heraus: Akinaka
+    // (Kurzschwert) und Scimitar (Saebel) sind Klingen von Schwertlaenge und
+    // stehen damit bei Machete und Sword, die ChefZ aus demselben Grund nicht
+    // fuehrt (ChefZ_Cooking/config.cpp:2725-2728). Wer sie am Herd haben will,
+    // traegt sie hier ein - eine Zeile, ohne Folgen anderswo.
     class CUTTING_TOOL
     {
         classes[] =
@@ -1539,7 +1572,9 @@ class CfgChefZTools
             "KukriKnife",
             "BoneKnife",
             "StoneKnife",
-            "FangeKnife"
+            "FangeKnife",
+            "DonerKnife",
+            "Jambiya"
         };
         allowSubclasses = 1;
     };

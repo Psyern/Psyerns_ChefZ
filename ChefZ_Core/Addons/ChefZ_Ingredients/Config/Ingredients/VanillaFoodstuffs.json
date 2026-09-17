@@ -181,6 +181,24 @@
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
             "decays": true
+        },
+        {
+            "id": "Figs",
+            "categories": ["FRUIT"],
+            "tags": ["CHEFZ_FRESH"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "SarmaCan_Opened",
+            "categories": ["CANNED_MEAT"],
+            "tags": ["CHEFZ_PRESERVED"],
+            "defaultState": "COOKED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
         }
     ]
 }

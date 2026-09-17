@@ -140,367 +140,398 @@
 
 class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 {
-    //! Wie lange EIN Stueck Rinde den Schrank schwelen laesst. Herleitung im
-    //! Dateikopf; 300 s Raeuchergang / 150 s = zwei Stueck je Durchgang.
-    static const float CHEFZ_SECONDS_PER_BARK = 150.0;
+	//! Wie lange EIN Stueck Rinde den Schrank schwelen laesst. Herleitung im
+	//! Dateikopf; 300 s Raeuchergang / 150 s = zwei Stueck je Durchgang.
+	static const float CHEFZ_SECONDS_PER_BARK = 150.0;
 
-    //! Takt des Brenntimers. 5 s und nicht 0.1: der Schrank brennt Minuten
-    //! lang, und der Job-Timer der Basis tickt selbst nur alle 2 s.
-    static const float CHEFZ_BURN_TICK_SEC = 5.0;
+	//! Takt des Brenntimers. 5 s und nicht 0.1: der Schrank brennt Minuten
+	//! lang, und der Job-Timer der Basis tickt selbst nur alle 2 s.
+	static const float CHEFZ_BURN_TICK_SEC = 5.0;
 
-    //! Die beiden Kategorien, die ins Raeuchergut gehoeren. MEAT trifft ueber
-    //! die Closure auch SAUSAGE und alle Wildarten - siehe ChefZ_StationGate.
-    static const string CHEFZ_CAT_MEAT = "MEAT";
-    static const string CHEFZ_CAT_FISH = "FISH";
+	//! Die beiden Kategorien, die ins Raeuchergut gehoeren. MEAT trifft ueber
+	//! die Closure auch SAUSAGE und alle Wildarten - siehe ChefZ_StationGate.
+	static const string CHEFZ_CAT_MEAT = "MEAT";
+	static const string CHEFZ_CAT_FISH = "FISH";
 
-    //! Hoehe des Rauchpartikels ueber dem Objektursprung. GESCHAETZT am
-    //! Platzhaltermodell: der Rauch soll oben aus dem Schrank kommen, nicht
-    //! aus dem Boden. Mit dem endgueltigen Mesh gehoert die Zahl nachgemessen -
-    //! sie ist rein optisch und beeinflusst nichts.
-    static const float CHEFZ_SMOKE_HEIGHT_M = 1.4;
+	//! Hoehe des Rauchpartikels ueber dem Objektursprung. GESCHAETZT am
+	//! Platzhaltermodell: der Rauch soll oben aus dem Schrank kommen, nicht
+	//! aus dem Boden. Mit dem endgueltigen Mesh gehoert die Zahl nachgemessen -
+	//! sie ist rein optisch und beeinflusst nichts.
+	static const float CHEFZ_SMOKE_HEIGHT_M = 1.4;
 
-    //! Brennt der Schrank? Netzsynchron, damit der Client den Rauch zeigen
-    //! kann. NICHT persistiert - Begruendung im Dateikopf.
-    protected bool m_ChefZ_Lit;
+	//! Brennt der Schrank? Netzsynchron, damit der Client den Rauch zeigen
+	//! kann. NICHT persistiert - Begruendung im Dateikopf.
+	protected bool m_ChefZ_Lit;
 
-    //! Restsekunden des Stuecks Rinde, das gerade schwelt. Reiner
-    //! Serverzustand.
-    protected float m_ChefZ_FuelLeftSec;
+	//! Restsekunden des Stuecks Rinde, das gerade schwelt. Reiner
+	//! Serverzustand.
+	protected float m_ChefZ_FuelLeftSec;
 
-    protected ref Timer m_ChefZ_BurnTimer;
-    protected Particle  m_ChefZ_Smoke;
+	protected ref Timer m_ChefZ_BurnTimer;
+	protected Particle  m_ChefZ_Smoke;
 
-    void ChefZ_Smoker()
-    {
-        m_ChefZ_Lit         = false;
-        m_ChefZ_FuelLeftSec = 0.0;
-        RegisterNetSyncVariableBool("m_ChefZ_Lit");
-    }
+	void ChefZ_Smoker()
+	{
+		m_ChefZ_Lit         = false;
+		m_ChefZ_FuelLeftSec = 0.0;
+		RegisterNetSyncVariableBool("m_ChefZ_Lit");
+	}
 
-    void ~ChefZ_Smoker()
-    {
-        if (m_ChefZ_BurnTimer)
-        {
-            m_ChefZ_BurnTimer.Stop();
-            m_ChefZ_BurnTimer = null;
-        }
-        ChefZ_StopSmoke();
-    }
+	void ~ChefZ_Smoker()
+	{
+		if (m_ChefZ_BurnTimer)
+		{
+			m_ChefZ_BurnTimer.Stop();
+			m_ChefZ_BurnTimer = null;
+		}
+		ChefZ_StopSmoke();
+	}
 
-    //==========================================================================
-    // Die zwei Haken, an denen die Station haengt
-    //==========================================================================
+	//==========================================================================
+	// Die zwei Haken, an denen die Station haengt
+	//==========================================================================
 
-    /**
-     * Hat der Schrank Waerme?
-     *
-     * KEIN super: die Basis antwortet hier fest "nein" und ist ausdruecklich
-     * zum Ueberschreiben da (Core Z.373-388). Ein super-Aufruf haette nichts
-     * zu addieren - die Antwort wird ersetzt, nicht ergaenzt. Dasselbe macht
-     * ChefZ_FryingPan seit dem Salt-Slice.
-     */
-    override bool ChefZ_HasHeat()
-    {
-        return m_ChefZ_Lit;
-    }
+	/**
+	 * Hat der Schrank Waerme?
+	 *
+	 * super wird mitgenommen und ODER-verknuepft: die Basis antwortet hier fest
+	 * "nein" (ChefZ_ProcessingStation_Base.c:385-388), kann also nur ergaenzen,
+	 * nie wegnehmen. Die Antwort bleibt damit unveraendert "brennt er?", und
+	 * die Regel "override immer mit super" ist gewahrt. Dasselbe macht
+	 * ChefZ_FryingPan.
+	 */
+	override bool ChefZ_HasHeat()
+	{
+		return super.ChefZ_HasHeat() || m_ChefZ_Lit;
+	}
 
-    /**
-     * Hat der Schrank Brennstoff?
-     *
-     * Der Stationsdatensatz sagt needsFuel = true, die Basis antwortet dann
-     * "nein". Hier steht die eigentliche Auskunft: brennt er, ist er versorgt.
-     * Rinde, die nur im Cargo LIEGT, reicht nicht - jemand muss sie anzuenden.
-     *
-     * KEIN super, aus demselben Grund wie bei ChefZ_HasHeat.
-     */
-    override bool ChefZ_IsPowered()
-    {
-        return m_ChefZ_Lit;
-    }
+	/**
+	 * Hat der Schrank Brennstoff?
+	 *
+	 * Der Stationsdatensatz sagt needsFuel = true, die Basis antwortet dann
+	 * "nein" (ChefZ_ProcessingStation_Base.c:403-407). Hier steht die
+	 * eigentliche Auskunft: brennt er, ist er versorgt. Rinde, die nur im Cargo
+	 * LIEGT, reicht nicht - jemand muss sie anzuenden.
+	 *
+	 * super wird ODER-verknuepft, wie bei ChefZ_HasHeat: solange needsFuel gilt,
+	 * liefert die Basis false und die Antwort bleibt "brennt er?". Setzte der
+	 * Datensatz needsFuel je auf false, saehe die Basis das und der Schrank
+	 * braeuchte kein Feuer mehr - genau das ist die gewollte Lesart.
+	 */
+	override bool ChefZ_IsPowered()
+	{
+		return super.ChefZ_IsPowered() || m_ChefZ_Lit;
+	}
 
-    //==========================================================================
-    // Vanillas Anzuend-Schnittstelle (EntityAI.c:540-621)
-    //==========================================================================
+	//==========================================================================
+	// Vanillas Anzuend-Schnittstelle (EntityAI.c:540-621)
+	//==========================================================================
 
-    //! Liegt ueberhaupt Brennbares darin? Wird auf Server UND Client
-    //! ausgewertet und steuert nebenbei die Anzuendanimation
-    //! (ActionLightItemOnFire.SetIgnitingAnimation, Z.155-165).
-    override bool HasFlammableMaterial()
-    {
-        return ChefZ_CountBark() > 0;
-    }
+	//! Liegt ueberhaupt Brennbares darin? Wird auf Server UND Client
+	//! ausgewertet und steuert nebenbei die Anzuendanimation
+	//! (ActionLightItemOnFire.SetIgnitingAnimation, Z.155-165).
+	//!
+	//! super steht davor und wird ODER-verknuepft: EntityAI.HasFlammableMaterial
+	//! liefert die Konstante false (1.30 3_Game/DayZ/Entities/EntityAI.c:526-530),
+	//! kann die Antwort also nur ergaenzen, nie kippen.
+	override bool HasFlammableMaterial()
+	{
+		return super.HasFlammableMaterial() || ChefZ_CountBark() > 0;
+	}
 
-    override bool IsIgnited()
-    {
-        return m_ChefZ_Lit;
-    }
+	//! super fragt nur m_EM.IsWorking ab und liefert sonst false
+	//! (1.30 EntityAI.c:544-549). Der Schrank hat keinen EnergyManager, die
+	//! Verknuepfung laesst m_ChefZ_Lit damit unveraendert entscheiden.
+	override bool IsIgnited()
+	{
+		return super.IsIgnited() || m_ChefZ_Lit;
+	}
 
-    /**
-     * Laesst er sich JETZT anzuenden?
-     *
-     * Drei Bedingungen, und keine davon prueft die Inventarposition: das
-     * uebernimmt die Aktion selbst mit IsItemInCargoOfSomething
-     * (ActionLightItemOnFire.c:40-54, 77). Ein Schrank im Rucksack ist damit
-     * schon draussen, bevor diese Zeile laeuft.
-     *
-     * Die Nasspruefung ist woertlich die der Imkerpfeife und Vanillas Fackel
-     * (Torch.c:157-180): nasse Rinde faengt kein Feuer.
-     */
-    override bool CanBeIgnitedBy(EntityAI igniter = NULL)
-    {
-        if (m_ChefZ_Lit)
-            return false;
-        if (ChefZ_CountBark() <= 0)
-            return false;
-        if (GetWet() >= GameConstants.STATE_DAMP)
-            return false;
-        return true;
-    }
+	/**
+	 * Laesst er sich JETZT anzuenden?
+	 *
+	 * Drei Bedingungen, und keine davon prueft die Inventarposition: das
+	 * uebernimmt die Aktion selbst mit IsItemInCargoOfSomething
+	 * (ActionLightItemOnFire.c:40-54, 77). Ein Schrank im Rucksack ist damit
+	 * schon draussen, bevor diese Zeile laeuft.
+	 *
+	 * Die Nasspruefung ist woertlich die der Imkerpfeife und Vanillas Fackel
+	 * (Torch.c:157-180): nasse Rinde faengt kein Feuer.
+	 *
+	 * super steht an erster Stelle und darf nur zusagen, nie absagen:
+	 * EntityAI.CanBeIgnitedBy liefert die Konstante false
+	 * (1.30 3_Game/DayZ/Entities/EntityAI.c:532-535). Die drei Bedingungen
+	 * darunter entscheiden also weiter allein.
+	 */
+	override bool CanBeIgnitedBy(EntityAI igniter = NULL)
+	{
+		if (super.CanBeIgnitedBy(igniter))
+			return true;
 
-    //! Letzte Pruefung unmittelbar vor dem Zuenden, serverseitig
-    //! (ActionLightItemOnFire.OnFinishProgressServer, Z.115).
-    override bool IsThisIgnitionSuccessful(EntityAI item_source = NULL)
-    {
-        return CanBeIgnitedBy(item_source);
-    }
+		if (m_ChefZ_Lit)
+			return false;
+		if (ChefZ_CountBark() <= 0)
+			return false;
+		if (GetWet() >= GameConstants.STATE_DAMP)
+			return false;
+		return true;
+	}
 
-    //! Es hat gezuendet. Das erste Stueck Rinde geht sofort in die Glut - wer
-    //! anzuendet, verbrennt etwas, auch wenn er den Schrank gleich wieder
-    //! leerraeumt.
-    override void OnIgnitedThis(EntityAI fire_source)
-    {
-        super.OnIgnitedThis(fire_source);
+	//! Letzte Pruefung unmittelbar vor dem Zuenden, serverseitig
+	//! (ActionLightItemOnFire.OnFinishProgressServer, Z.115).
+	//!
+	//! super liefert hier die Konstante true
+	//! (1.30 3_Game/DayZ/Entities/EntityAI.c:604-607); UND-verknuepft bleibt die
+	//! Antwort deshalb genau die von CanBeIgnitedBy.
+	override bool IsThisIgnitionSuccessful(EntityAI item_source = NULL)
+	{
+		return super.IsThisIgnitionSuccessful(item_source) && CanBeIgnitedBy(item_source);
+	}
 
-        if (!g_Game || !g_Game.IsServer())
-            return;
-        if (!ChefZ_ConsumeOneBark())
-            return;
+	//! Es hat gezuendet. Das erste Stueck Rinde geht sofort in die Glut - wer
+	//! anzuendet, verbrennt etwas, auch wenn er den Schrank gleich wieder
+	//! leerraeumt.
+	override void OnIgnitedThis(EntityAI fire_source)
+	{
+		super.OnIgnitedThis(fire_source);
 
-        m_ChefZ_FuelLeftSec = CHEFZ_SECONDS_PER_BARK;
-        ChefZ_SetLit(true);
-    }
+		if (!g_Game || !g_Game.IsServer())
+			return;
+		if (!ChefZ_ConsumeOneBark())
+			return;
 
-    //==========================================================================
-    // Brennen
-    //==========================================================================
+		m_ChefZ_FuelLeftSec = CHEFZ_SECONDS_PER_BARK;
+		ChefZ_SetLit(true);
+	}
 
-    protected void ChefZ_SetLit(bool lit)
-    {
-        if (!g_Game || !g_Game.IsServer())
-            return;
-        if (m_ChefZ_Lit == lit)
-            return;
+	//==========================================================================
+	// Brennen
+	//==========================================================================
 
-        m_ChefZ_Lit = lit;
-        SetSynchDirty();
+	protected void ChefZ_SetLit(bool lit)
+	{
+		if (!g_Game || !g_Game.IsServer())
+			return;
+		if (m_ChefZ_Lit == lit)
+			return;
 
-        if (lit)
-        {
-            if (!m_ChefZ_BurnTimer)
-                m_ChefZ_BurnTimer = new Timer(CALL_CATEGORY_SYSTEM);
-            m_ChefZ_BurnTimer.Run(CHEFZ_BURN_TICK_SEC, this, "ChefZ_OnBurnTick", null, true);
-            return;
-        }
+		m_ChefZ_Lit = lit;
+		SetSynchDirty();
 
-        if (m_ChefZ_BurnTimer)
-            m_ChefZ_BurnTimer.Stop();
-    }
+		if (lit)
+		{
+			if (!m_ChefZ_BurnTimer)
+				m_ChefZ_BurnTimer = new Timer(CALL_CATEGORY_SYSTEM);
+			m_ChefZ_BurnTimer.Run(CHEFZ_BURN_TICK_SEC, this, "ChefZ_OnBurnTick", null, true);
+			return;
+		}
 
-    /**
-     * Timer-Rueckruf, deshalb oeffentlich.
-     *
-     * Ist das schwelende Stueck herunter, kommt das naechste aus dem Cargo.
-     * Liegt keines mehr da, geht der Schrank aus - und ein laufender
-     * Raeucherjob pausiert ab dem naechsten Tick der Basis, weil
-     * ChefZ_HasHeat und ChefZ_IsPowered dann beide "nein" sagen.
-     */
-    void ChefZ_OnBurnTick()
-    {
-        if (!g_Game || !g_Game.IsServer())
-            return;
-        if (!m_ChefZ_Lit)
-            return;
+		if (m_ChefZ_BurnTimer)
+			m_ChefZ_BurnTimer.Stop();
+	}
 
-        m_ChefZ_FuelLeftSec = m_ChefZ_FuelLeftSec - CHEFZ_BURN_TICK_SEC;
-        if (m_ChefZ_FuelLeftSec > 0.0)
-            return;
+	/**
+	 * Timer-Rueckruf, deshalb oeffentlich.
+	 *
+	 * Ist das schwelende Stueck herunter, kommt das naechste aus dem Cargo.
+	 * Liegt keines mehr da, geht der Schrank aus - und ein laufender
+	 * Raeucherjob pausiert ab dem naechsten Tick der Basis, weil
+	 * ChefZ_HasHeat und ChefZ_IsPowered dann beide "nein" sagen.
+	 */
+	void ChefZ_OnBurnTick()
+	{
+		if (!g_Game || !g_Game.IsServer())
+			return;
+		if (!m_ChefZ_Lit)
+			return;
 
-        if (ChefZ_ConsumeOneBark())
-        {
-            m_ChefZ_FuelLeftSec = CHEFZ_SECONDS_PER_BARK;
-            return;
-        }
+		m_ChefZ_FuelLeftSec = m_ChefZ_FuelLeftSec - CHEFZ_BURN_TICK_SEC;
+		if (m_ChefZ_FuelLeftSec > 0.0)
+			return;
 
-        m_ChefZ_FuelLeftSec = 0.0;
-        ChefZ_SetLit(false);
-    }
+		if (ChefZ_ConsumeOneBark())
+		{
+			m_ChefZ_FuelLeftSec = CHEFZ_SECONDS_PER_BARK;
+			return;
+		}
 
-    /**
-     * Nimmt EIN Stueck Rinde aus dem Cargo.
-     *
-     * Rinde ist im Cargo Stueckware ohne eigene Menge - Vanilla stapelt sie
-     * ueber den Anhangsslot (CfgSlots Slot_Bark stackMax = 8,
-     * scripts - 1.29/config.cpp:680-686), nicht ueber varQuantity. Der
-     * Mengenzweig steht trotzdem da: sollte ein Stapel doch einmal eine Menge
-     * tragen, wird davon abgezogen statt der ganze Stapel geloescht.
-     */
-    protected bool ChefZ_ConsumeOneBark()
-    {
-        ItemBase bark = ChefZ_FindBark();
-        if (!bark)
-            return false;
+		m_ChefZ_FuelLeftSec = 0.0;
+		ChefZ_SetLit(false);
+	}
 
-        float quantity = bark.GetQuantity();
-        if (quantity > 1.0)
-        {
-            bark.AddQuantity(-1.0);
-            return true;
-        }
+	/**
+	 * Nimmt EIN Stueck Rinde aus dem Cargo.
+	 *
+	 * Rinde ist im Cargo Stueckware ohne eigene Menge - Vanilla stapelt sie
+	 * ueber den Anhangsslot (CfgSlots Slot_Bark stackMax = 8,
+	 * scripts - 1.29/config.cpp:680-686), nicht ueber varQuantity. Der
+	 * Mengenzweig steht trotzdem da: sollte ein Stapel doch einmal eine Menge
+	 * tragen, wird davon abgezogen statt der ganze Stapel geloescht.
+	 */
+	protected bool ChefZ_ConsumeOneBark()
+	{
+		ItemBase bark = ChefZ_FindBark();
+		if (!bark)
+			return false;
 
-        bark.Delete();
-        return true;
-    }
+		float quantity = bark.GetQuantity();
+		if (quantity > 1.0)
+		{
+			bark.AddQuantity(-1.0);
+			return true;
+		}
 
-    //! Das erste Stueck Rinde im Cargo, oder null.
-    protected ItemBase ChefZ_FindBark()
-    {
-        GameInventory inventory = GetInventory();
-        if (!inventory)
-            return null;
+		bark.Delete();
+		return true;
+	}
 
-        CargoBase cargo = inventory.GetCargo();
-        if (!cargo)
-            return null;
+	//! Das erste Stueck Rinde im Cargo, oder null.
+	protected ItemBase ChefZ_FindBark()
+	{
+		GameInventory inventory = GetInventory();
+		if (!inventory)
+			return null;
 
-        int n = cargo.GetItemCount();
-        for (int i = 0; i < n; i++)
-        {
-            Bark_ColorBase bark = Bark_ColorBase.Cast(cargo.GetItem(i));
-            if (bark)
-                return bark;
-        }
-        return null;
-    }
+		CargoBase cargo = inventory.GetCargo();
+		if (!cargo)
+			return null;
 
-    //! Stuecke Rinde im Cargo. Bark_ColorBase und nicht die beiden
-    //! Einzelklassen: Eiche und Birke sind fuer den Schrank dasselbe, und ein
-    //! Mod, der eine dritte Rinde mitbringt, wird ohne Zutun mitgezaehlt.
-    protected int ChefZ_CountBark()
-    {
-        int count = 0;
+		int n = cargo.GetItemCount();
+		for (int i = 0; i < n; i++)
+		{
+			Bark_ColorBase bark = Bark_ColorBase.Cast(cargo.GetItem(i));
+			if (bark)
+				return bark;
+		}
+		return null;
+	}
 
-        GameInventory inventory = GetInventory();
-        if (!inventory)
-            return count;
+	//! Stuecke Rinde im Cargo. Bark_ColorBase und nicht die beiden
+	//! Einzelklassen: Eiche und Birke sind fuer den Schrank dasselbe, und ein
+	//! Mod, der eine dritte Rinde mitbringt, wird ohne Zutun mitgezaehlt.
+	protected int ChefZ_CountBark()
+	{
+		int count = 0;
 
-        CargoBase cargo = inventory.GetCargo();
-        if (!cargo)
-            return count;
+		GameInventory inventory = GetInventory();
+		if (!inventory)
+			return count;
 
-        int n = cargo.GetItemCount();
-        for (int i = 0; i < n; i++)
-        {
-            if (Bark_ColorBase.Cast(cargo.GetItem(i)))
-                count = count + 1;
-        }
-        return count;
-    }
+		CargoBase cargo = inventory.GetCargo();
+		if (!cargo)
+			return count;
 
-    //==========================================================================
-    // Eingangsseite
-    //==========================================================================
+		int n = cargo.GetItemCount();
+		for (int i = 0; i < n; i++)
+		{
+			if (Bark_ColorBase.Cast(cargo.GetItem(i)))
+				count = count + 1;
+		}
+		return count;
+	}
 
-    /**
-     * Rinde und Raeuchergut hinein, sonst nichts.
-     *
-     * Der Cargo ist zugleich Brennstofflager und Raeucherkammer - getrennte
-     * Bereiche gibt die Engine nicht her (siehe Kopf von ChefZ_StationGate).
-     * Deshalb muessen hier BEIDE Sorten durch, und genau darauf ist zu achten:
-     * ein Torwaechter, der nur an das Raeuchergut denkt, sperrt den eigenen
-     * Brennstoff aus und macht den Schrank ein zweites Mal unbenutzbar.
-     *
-     * Fleisch UND Fisch, weil Smoking.json beides raeuchert; die Ergebnisse
-     * (ChefZ_SmokedMeat, ChefZ_SmokedFish, ChefZ_SmokedSausage) liegen in
-     * denselben beiden Kategorien und duerfen deshalb im Cargo entstehen und
-     * liegen bleiben.
-     *
-     * Beleg: EntityAI.CanReceiveItemIntoCargo, scripts - 1.29/3_Game/DayZ/
-     * Entities/EntityAI.c:1550-1559; Ueberschreibung wie Barrel_ColorBase.c:512.
-     */
-    override bool CanReceiveItemIntoCargo(EntityAI item)
-    {
-        if (!super.CanReceiveItemIntoCargo(item))
-            return false;
-        if (!item)
-            return false;
+	//==========================================================================
+	// Eingangsseite
+	//==========================================================================
 
-        // Brennstoff.
-        if (Bark_ColorBase.Cast(item))
-            return true;
+	/**
+	 * Rinde und Raeuchergut hinein, sonst nichts.
+	 *
+	 * Der Cargo ist zugleich Brennstofflager und Raeucherkammer - getrennte
+	 * Bereiche gibt die Engine nicht her (siehe Kopf von ChefZ_StationGate).
+	 * Deshalb muessen hier BEIDE Sorten durch, und genau darauf ist zu achten:
+	 * ein Torwaechter, der nur an das Raeuchergut denkt, sperrt den eigenen
+	 * Brennstoff aus und macht den Schrank ein zweites Mal unbenutzbar.
+	 *
+	 * Fleisch UND Fisch, weil Smoking.json beides raeuchert; die Ergebnisse
+	 * (ChefZ_SmokedMeat, ChefZ_SmokedFish, ChefZ_SmokedSausage) liegen in
+	 * denselben beiden Kategorien und duerfen deshalb im Cargo entstehen und
+	 * liegen bleiben.
+	 *
+	 * Beleg: EntityAI.CanReceiveItemIntoCargo, scripts - 1.29/3_Game/DayZ/
+	 * Entities/EntityAI.c:1550-1559; Ueberschreibung wie Barrel_ColorBase.c:512.
+	 */
+	override bool CanReceiveItemIntoCargo(EntityAI item)
+	{
+		if (!super.CanReceiveItemIntoCargo(item))
+			return false;
+		if (!item)
+			return false;
 
-        // Solange die Register nicht stehen, wird nichts abgewiesen - sonst
-        // naehme der Schrank in genau diesem Fenster gar nichts an.
-        if (!ChefZ_StationGate.ChefZ_RegistryReady())
-            return true;
+		// Brennstoff.
+		if (Bark_ColorBase.Cast(item))
+			return true;
 
-        if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_MEAT))
-            return true;
-        if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_FISH))
-            return true;
+		// Solange die Register nicht stehen, wird nichts abgewiesen - sonst
+		// naehme der Schrank in genau diesem Fenster gar nichts an.
+		if (!ChefZ_StationGate.ChefZ_RegistryReady())
+			return true;
 
-        return false;
-    }
+		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_MEAT))
+			return true;
+		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_FISH))
+			return true;
 
-    /**
-     * Wer den Schrank aufhebt, loescht ihn.
-     *
-     * Ein brennender Raeucherschrank im Rucksack waere der einzige Gegenstand
-     * im Spiel, der das darf. Vanilla loest denselben Fall bei der Fackel
-     * ueber die Aktion; hier ist der Ortswechsel die ehrlichere Stelle, weil
-     * der Schrank auf jedem Weg aus der Welt verschwinden kann.
-     */
-    override void EEItemLocationChanged(notnull InventoryLocation oldLoc, notnull InventoryLocation newLoc)
-    {
-        super.EEItemLocationChanged(oldLoc, newLoc);
+		return false;
+	}
 
-        if (!m_ChefZ_Lit)
-            return;
-        if (newLoc.GetType() == InventoryLocationType.GROUND)
-            return;
+	/**
+	 * Wer den Schrank aufhebt, loescht ihn.
+	 *
+	 * Ein brennender Raeucherschrank im Rucksack waere der einzige Gegenstand
+	 * im Spiel, der das darf. Vanilla loest denselben Fall bei der Fackel
+	 * ueber die Aktion; hier ist der Ortswechsel die ehrlichere Stelle, weil
+	 * der Schrank auf jedem Weg aus der Welt verschwinden kann.
+	 */
+	override void EEItemLocationChanged(notnull InventoryLocation oldLoc, notnull InventoryLocation newLoc)
+	{
+		super.EEItemLocationChanged(oldLoc, newLoc);
 
-        ChefZ_SetLit(false);
-    }
+		if (!m_ChefZ_Lit)
+			return;
+		if (newLoc.GetType() == InventoryLocationType.GROUND)
+			return;
 
-    //==========================================================================
-    // Rauch (Client)
-    //==========================================================================
+		ChefZ_SetLit(false);
+	}
 
-    override void OnVariablesSynchronized()
-    {
-        super.OnVariablesSynchronized();
-        ChefZ_UpdateSmoke();
-    }
+	//==========================================================================
+	// Rauch (Client)
+	//==========================================================================
 
-    protected void ChefZ_UpdateSmoke()
-    {
-        if (!g_Game || g_Game.IsDedicatedServer())
-            return;
+	override void OnVariablesSynchronized()
+	{
+		super.OnVariablesSynchronized();
+		ChefZ_UpdateSmoke();
+	}
 
-        if (m_ChefZ_Lit)
-        {
-            if (!m_ChefZ_Smoke)
-                m_ChefZ_Smoke = ParticleManager.GetInstance().PlayOnObject(ParticleList.CAMP_SMALL_SMOKE, this, Vector(0, CHEFZ_SMOKE_HEIGHT_M, 0));
-            return;
-        }
+	//! Der Ausschluss lautet IsHeadlessOrDedicatedServer, nicht
+	//! IsDedicatedServer: genau so schliesst Vanilla seit 1.30 die
+	//! Feuerstellen-Partikel aus (1.30 4_World/DayZ/Entities/ItemBase/
+	//! FireplaceBase.c:1112 und :1132; 1.29 stand dort noch IsDedicatedServer,
+	//! FireplaceBase.c:1096 und :1116). Die Abfrage selbst ist proto native
+	//! (1.30 3_Game/DayZ/Global/Game.c:1136). Damit raucht der Schrank auch auf
+	//! einem Headless-Client nicht.
+	protected void ChefZ_UpdateSmoke()
+	{
+		if (!g_Game || g_Game.IsHeadlessOrDedicatedServer())
+			return;
 
-        ChefZ_StopSmoke();
-    }
+		if (m_ChefZ_Lit)
+		{
+			if (!m_ChefZ_Smoke)
+				m_ChefZ_Smoke = ParticleManager.GetInstance().PlayOnObject(ParticleList.CAMP_SMALL_SMOKE, this, Vector(0, CHEFZ_SMOKE_HEIGHT_M, 0));
+			return;
+		}
 
-    protected void ChefZ_StopSmoke()
-    {
-        if (!m_ChefZ_Smoke)
-            return;
-        m_ChefZ_Smoke.Stop();
-        m_ChefZ_Smoke = null;
-    }
+		ChefZ_StopSmoke();
+	}
+
+	protected void ChefZ_StopSmoke()
+	{
+		if (!m_ChefZ_Smoke)
+			return;
+		m_ChefZ_Smoke.Stop();
+		m_ChefZ_Smoke = null;
+	}
 }

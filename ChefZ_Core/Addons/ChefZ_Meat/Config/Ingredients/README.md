@@ -14,12 +14,26 @@ CfgVehicles-Klassen und Prozesse; eine Zutatenbindung ist ein anderer Gegenstand
 
 ## Gruppen in der Reihenfolge der Datei
 
-### 1. Vanilla-Fleisch (`PigSteakMeat` … `BearSteakMeat`)
+### 1. Vanilla-Fleisch (`PigSteakMeat` … `LizardMeat`)
 
 Production Map §28: ChefZ teilt VANILLA-Fleisch in Kategorien ein. Das ist der
 Uebergabepunkt aus §27 — was aus der Zerlegung faellt, ist ab hier eine
 ChefZ-Zutat. Kein Vanilla-Eintrag wird dafuer veraendert; die Zuordnung lebt
 ausschliesslich hier.
+
+`DogSteakMeat` und `LizardMeat` sind mit DayZ 1.30 dazugekommen
+(`scripts (and more) - 1.30/scripts/4_World/DayZ/Entities/ItemBase/Edible_Base/DogSteakMeat.c:1`
+und `.../LizardMeat.c:1`, beide `extends Edible_Base`; im 1.29-Baum gibt es
+keine der beiden Dateien). Ohne Eintrag hier waeren sie in ChefZ weder
+wuerfelbar noch faschierbar noch salzbar, denn `TR_DicedMeat`,
+`TR_MeatToMinced` und `TR_SaltMeat` matchen ueber die Kategorie `MEAT`, nicht
+ueber Klassennamen. Vanilla-Braten und -Essen war davon nie betroffen.
+
+`DogSteakMeat` steht unter `PREDATOR_MEAT` wie `WolfSteakMeat`, traegt aber
+**nicht** den Tag `CHEFZ_WILD_MEAT`: der Haushund (`AnimalBase.c`,
+`Animal_CanisFamiliaris_*`) ist kein Wild. `LizardMeat` steht unter
+`WILD_MEAT` und bleibt wie `RabbitLegMeat` ohne `CHEFZ_HIGH_PROTEIN` — ein
+Waran gibt kein Steak her.
 
 ### 2. Nebenprodukte der Zerlegung (`Lard`, `Bone`, `Guts`)
 

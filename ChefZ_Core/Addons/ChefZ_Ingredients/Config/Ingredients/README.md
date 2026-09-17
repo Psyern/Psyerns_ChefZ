@@ -66,7 +66,8 @@ neue Kategorie bekommen — dieser Slice schreibt nicht in fremde Module.
 
 ## VanillaFoodstuffs.json
 
-Slice `vanilla-foods`. Zwanzig FREMDE Klassen aus Vanilla-Audit §3 — die Datei
+Slice `vanilla-foods`. Zwanzig FREMDE Klassen aus Vanilla-Audit §3, seit der
+Hebung auf DayZ 1.30 zweiundzwanzig (letzter Abschnitt) — die Datei
 deklariert keine einzige eigene Klasse, sie bindet nur Vorhandenes (Entwurf 05 §2,
 Workflow §10.5: fremde Klassen im Slice-JSON, nie in ihrer eigenen `config.cpp`).
 
@@ -161,3 +162,22 @@ kochen nicht — `SWEETENER` taucht deshalb ausschließlich in optionalen Slots 
   zu hängen bringt nichts.
 - **`CatFoodCan`, `DogFoodCan`, `UnknownFoodCan`, `HumanSteakMeat`** — wie im Audit
   festgehalten, bewusst draußen.
+
+### Die neuen Nahrungsklassen aus DayZ 1.30 (17.09.2026)
+
+1.30 bringt sechs neue essbare Klassen mit, die es im 1.29-Baum nicht gab (dort
+jeweils 0 Treffer). Jede ist einzeln entschieden, und die Entscheidung hängt an
+derselben Frage wie oben: **kann die Klasse kochen?**
+
+| Klasse | Beleg im 1.30-Stand | `CanBeCooked()` | Entscheidung |
+|---|---|---|---|
+| `Figs` | `Edible_Base/Figs.c:3-6`, `:13-16` (`IsFruit` true), `:18-21` (`CanDecay` true) | **`true`** (eigener Override) | gebunden als `FRUIT`, `CHEFZ_FRESH`, `decays: true` — dieselbe Schublade wie `Apple`/`Pear`/`Plum` |
+| `SarmaCan_Opened` | `Gear/Food/CannedFood.c:488` | `false` (Default `Edible_Base.c:129-132`) | gebunden als `CANNED_MEAT`, `CHEFZ_PRESERVED`, `COOKED` — Sarma ist Kohl/Reis mit Hackfleisch, also dieselbe Wurzelkategorie wie `PorkCan_Opened`. Trifft damit genau einen Slot: den optionalen `spread` in `RCP_ChefZ_SausageBreadPlate` (`INSTANT`, ein Punkt). |
+| `Achar` | `Gear/Food/PackagedFood.c:34-43` | `false` (kein Override) | **nicht gebunden.** `VEGETABLE` ist Pflichtslot in `RCP_ChefZ_BoneBrothSoup` (`ON_STAGE`, `BowlDishes.json`) — exakt die Falle, an der oben schon `Pumpkin` draußen bleibt: die Suppe würde mit Achar im Topf nie fertig, ohne Log und ohne Meldung. |
+| `HalvaCan_Opened` | `Gear/Food/CannedFood.c:441` | `false` (kein Override) | **nicht gebunden.** Halva ist eine Sesam-Süßspeise — weder Fleisch noch Fisch noch Obst. `CANNED_MEAT` wäre ein falsches Etikett und ließe sie als „Aufstrich" in `RCP_ChefZ_SausageBreadPlate` laufen; eine eigene Kategorie (`CANNED_SWEET`) wäre eine Registry-Erweiterung, die heute kein Rezept abfragt. |
+| `Ayran` | `Gear/Drinks/Ayran.c:1` | — | **braucht nichts.** Flüssigkeiten liest ChefZ generisch über `GetLiquidType` (`ChefZ_FactCollector.c:148`, `:480`), nicht über den Klassennamen. Dasselbe gilt für die neuen Gefäße `AyranBottle`, `WineBottle` und `Waterskin_ColorBase`: `Bottle_Base`, aber kein ChefZ-Kochgerät — Geräte sind namentlich aufgezählt (`ChefZ_Cooking/config.cpp`, nur `FryingPan`, `Pot`, `Cauldron`). |
+
+Essen und Nährwert laufen für alle sechs unverändert über Vanilla:
+`ChefZ_VanillaNutrition.c` kennt keinen Klassennamen, sondern liest `CfgVehicles`
+direkt. Die Bindungen hier entscheiden ausschließlich, was in ChefZ-Rezepten in
+einen Slot passt.

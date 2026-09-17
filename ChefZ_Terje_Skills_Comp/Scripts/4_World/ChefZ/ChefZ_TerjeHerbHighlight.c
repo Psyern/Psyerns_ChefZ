@@ -137,8 +137,29 @@ class ChefZ_TerjeHerbHighlight
             if (current)
                 return current;
 
-            return ParticleManager.GetInstance().PlayOnObject(
-                ParticleList.TERJE_SKILLS_MUSHROOMS_HIGHLIGHT, what);
+            // Der Verwalter wird auf einem Headless-Client oder einem
+            // Dedicated Server NICHT angelegt und ist dort null:
+            // "scripts (and more) - 1.30"/scripts/3_Game/DayZ/Particles/
+            // ParticleManager/ParticleManager.c:63-74 - "if (!g_ParticleManager
+            // && !g_Game.IsHeadlessOrDedicatedServer())", danach "return
+            // g_ParticleManager".
+            //
+            // Der HEADLESS-Fall ist neu in 1.30: "scripts - 1.29"/3_Game/DayZ/
+            // Particles/ParticleManager/ParticleManager.c:65 fragt nur
+            // "IsDedicatedServer()". Ein Headless-Client bekam dort also noch
+            // einen Verwalter, in 1.30 bekommt er keinen mehr
+            // (IsHeadlessOrDedicatedServer deklariert in "scripts (and more) -
+            // 1.30"/scripts/3_Game/DayZ/Global/Game.c:1136). ShouldShow()
+            // faengt ihn nicht ab: ein Headless-Client meldet IsClient() = true.
+            //
+            // In einer eigenen Variable statt in der return-Zeile, weil der
+            // Aufruf sonst zweimal dastuende (Pruefung und Benutzung) - und
+            // weil Funktionsaufrufe auf EINER Zeile stehen.
+            ParticleManager manager = ParticleManager.GetInstance();
+            if (!manager)
+                return null;
+
+            return manager.PlayOnObject(ParticleList.TERJE_SKILLS_MUSHROOMS_HIGHLIGHT, what);
         }
 
         return Release(current);

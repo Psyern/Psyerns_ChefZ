@@ -29,96 +29,122 @@
 
 class ChefZ_FreshwaterFish_Base extends ChefZ_Edible_Base
 {
-    /**
-     * Ein ganzer Fisch ist ein KADAVER, kein Gericht.
-     *
-     * Vanilla sagt das an seinen eigenen Fischen woertlich (scripts - 1.29,
-     * 4_World/DayZ/Entities/ItemBase/Edible_Base/Mackerel.c und Carp.c: vier
-     * Ueberschreibungen, Zeile fuer Zeile dieselben). Die drei Zusagen hier
-     * sind die gleichen, und sie haengen zusammen:
-     *
-     *   CanBeCooked / CanBeCookedOnStick   false - der ganze Fisch kommt nicht
-     *       in den Topf und nicht auf den Stock. Deshalb traegt keine der acht
-     *       Configklassen einen Knoten Food > FoodStages oder
-     *       FoodStageTransitions: Garstufen ohne Kochbarkeit waeren toter Text
-     *       (01 V4). Gekocht wird das FILET, und das ist eine andere Klasse.
-     *
-     *   IsCorpse   true - ein toter Fisch ist ein Kadaver. Vanilla haengt
-     *       daran unter anderem das Verhalten beim Ablegen und die Behandlung
-     *       durch die Umwelt.
-     *
-     * Die Basis ChefZ_Edible_Base beantwortet CanBeCooked() sonst RECHNEND
-     * ("deklariert die Configklasse FoodStageTransitions?"). Das Ergebnis waere
-     * hier ohnehin false - aber es waere ein Rechenergebnis und keine Aussage.
-     * Ein "return false;" ist eine ENTSCHEIDUNG und als solche greppbar.
-     */
-    override bool CanBeCooked()
-    {
-        return false;
-    }
+	/**
+	 * Ein ganzer Fisch ist ein KADAVER, kein Gericht.
+	 *
+	 * Vanilla sagt das an seinen eigenen Fischen woertlich (scripts - 1.29,
+	 * 4_World/DayZ/Entities/ItemBase/Edible_Base/Mackerel.c und Carp.c: vier
+	 * Ueberschreibungen, Zeile fuer Zeile dieselben). Die drei Zusagen hier
+	 * sind die gleichen, und sie haengen zusammen:
+	 *
+	 *   CanBeCooked / CanBeCookedOnStick   false - der ganze Fisch kommt nicht
+	 *       in den Topf und nicht auf den Stock. Deshalb traegt keine der acht
+	 *       Configklassen einen Knoten Food > FoodStages oder
+	 *       FoodStageTransitions: Garstufen ohne Kochbarkeit waeren toter Text
+	 *       (01 V4). Gekocht wird das FILET, und das ist eine andere Klasse.
+	 *
+	 *   IsCorpse   true - ein toter Fisch ist ein Kadaver. Vanilla haengt
+	 *       daran unter anderem das Verhalten beim Ablegen und die Behandlung
+	 *       durch die Umwelt.
+	 *
+	 * Die Basis ChefZ_Edible_Base beantwortet CanBeCooked() sonst RECHNEND
+	 * ("deklariert die Configklasse FoodStageTransitions?"). Das Ergebnis waere
+	 * hier ohnehin false - aber es waere ein Rechenergebnis und keine Aussage.
+	 * Ein "return false;" ist eine ENTSCHEIDUNG und als solche greppbar.
+	 */
+	override bool CanBeCooked()
+	{
+		return false;
+	}
 
-    override bool CanBeCookedOnStick()
-    {
-        return false;
-    }
+	override bool CanBeCookedOnStick()
+	{
+		return false;
+	}
 
-    override bool IsCorpse()
-    {
-        return true;
-    }
+	override bool IsCorpse()
+	{
+		return true;
+	}
 
-    /**
-     * Fisch verdirbt. Vanillas Mackerel und Carp sagen dasselbe; ohne die
-     * Zusage bliebe ein Fang beliebig lange frisch, und die gesamte
-     * Konservierungskette (Salzen, Raeuchern, Trocknen) haette am ganzen Fisch
-     * nichts zu tun.
-     */
-    override bool CanDecay()
-    {
-        return true;
-    }
+	/**
+	 * Fisch verdirbt. Vanillas Mackerel und Carp sagen dasselbe; ohne die
+	 * Zusage bliebe ein Fang beliebig lange frisch, und die gesamte
+	 * Konservierungskette (Salzen, Raeuchern, Trocknen) haette am ganzen Fisch
+	 * nichts zu tun.
+	 *
+	 * ---------------------------------------------------------------------
+	 * ENTSCHEIDUNG 17.09.2026 - Konstante statt Registry, und warum
+	 * ---------------------------------------------------------------------
+	 * Die Frage war, ob hier stattdessen super gelten soll, also das Feld
+	 * "decays" der Zutat. Geprueft und verworfen, weil super fuer GENAU diese
+	 * acht Klassen gar nicht bis zum Feld kaeme:
+	 *
+	 *   ChefZ_Edible_Base.CanDecay beginnt mit einer Wache
+	 *   (ChefZ_Core/Scripts/4_World/ChefZ/State/ChefZ_Edible_Base.c:511-512:
+	 *   "if (!ChefZ_HasFoodStages()) return false;"), und
+	 *   ChefZ_HasFoodStages ist dort :455-457 "GetFoodStage() != null".
+	 *
+	 *   Keine der acht Configklassen traegt einen Knoten Food > FoodStages -
+	 *   das ist Absicht und steht im Kopf von CanBeCooked() begruendet.
+	 *
+	 * super.CanDecay() waere hier also IMMER false. Ein Umbau auf die
+	 * Registry wuerde den Verfall des ganzen Fisches nicht datengetrieben
+	 * machen, sondern abschalten - eine Verhaltensaenderung, und eine, die
+	 * Vanilla widerspricht: Mackerel.c:18-21, Carp.c:18-21 und der neue
+	 * Catfish.c:18-21 (Vanilla 1.30) geben an derselben Methode ebenfalls
+	 * die Konstante true zurueck.
+	 *
+	 * Das Feld "decays" ist fuer diese acht damit bewusst ohne Wirkung. Es
+	 * bleibt in Config/Ingredients/Fish_Fresh.json ungesetzt, damit dort
+	 * keine Angabe steht, die nichts tut.
+	 */
+	override bool CanDecay()
+	{
+		return true;
+	}
 
-    /**
-     * Fisch sagt, dass er Fleisch ist. Object.IsMeat() liefert sonst false.
-     *
-     * Das ist die Bedingung, unter der Vanilla die Sonderregeln fuer ROHES
-     * Fleisch ueberhaupt anwendet - vor allem Edible_Base.ProcessDecay, das
-     * ohne die Zusage in den letzten Zweig ("opened cans") faellt und dem Item
-     * still eAgents.FOOD_POISON einsetzt, statt es normal verderben zu lassen.
-     *
-     * Das Krankheitsrisiko selbst wird NICHT hier gebaut: die config.cpp setzt
-     * an jeder der acht Klassen agents = 4 (eAgents.SALMONELLA). Code, der
-     * dasselbe noch einmal behauptete, waere eine zweite Wahrheit.
-     */
-    override bool IsMeat()
-    {
-        return true;
-    }
+	/**
+	 * Fisch sagt, dass er Fleisch ist. Object.IsMeat() liefert sonst false.
+	 *
+	 * Das ist die Bedingung, unter der Vanilla die Sonderregeln fuer ROHES
+	 * Fleisch ueberhaupt anwendet - vor allem Edible_Base.ProcessDecay, das
+	 * ohne die Zusage in den letzten Zweig ("opened cans") faellt und dem Item
+	 * still eAgents.FOOD_POISON einsetzt, statt es normal verderben zu lassen.
+	 *
+	 * Das Krankheitsrisiko selbst wird NICHT hier gebaut: die config.cpp setzt
+	 * an jeder der acht Klassen agents = 4 (eAgents.SALMONELLA). Code, der
+	 * dasselbe noch einmal behauptete, waere eine zweite Wahrheit.
+	 */
+	override bool IsMeat()
+	{
+		return true;
+	}
 
-    /**
-     * Die Essaktion. Vanilla setzt sie NICHT auf Edible_Base, sondern auf jeder
-     * Nahrungsklasse einzeln (Lard.c:36-42, Potato.c). Ohne diese Zeilen bietet
-     * das Spiel den Fisch nicht zum Essen an - ohne Fehlerbild und ohne
-     * Logzeile.
-     *
-     * ActionEatMeat und nicht ActionEatBig: die Fleischvariante bringt
-     * ApplyModifiers mit (blutige Haende bei rohem Fleisch) und verbraucht
-     * UAQuantityConsumed.EAT_NORMAL. Ein roher Fisch ist kein Teller Eintopf.
-     *
-     * ActionForceFeed gehoert dazu, weil in Vanilla ueberall dort, wo selbst
-     * gegessen wird, auch gefuettert werden kann.
-     *
-     * Dass ein roher Fisch essbar ist, ist Absicht und nicht empfehlenswert:
-     * agents = 4 an jeder Klasse macht daraus ein Salmonellenrisiko. Der Weg
-     * ohne Risiko ist PROCESS_FILLET_FISH und danach die Pfanne.
-     */
-    override void SetActions()
-    {
-        super.SetActions();
+	/**
+	 * Die Essaktion. Vanilla setzt sie NICHT auf Edible_Base, sondern auf jeder
+	 * Nahrungsklasse einzeln (Lard.c:36-42, Potato.c). Ohne diese Zeilen bietet
+	 * das Spiel den Fisch nicht zum Essen an - ohne Fehlerbild und ohne
+	 * Logzeile.
+	 *
+	 * ActionEatMeat und nicht ActionEatBig: die Fleischvariante bringt
+	 * ApplyModifiers mit (blutige Haende bei rohem Fleisch) und verbraucht
+	 * UAQuantityConsumed.EAT_NORMAL. Ein roher Fisch ist kein Teller Eintopf.
+	 *
+	 * ActionForceFeed gehoert dazu, weil in Vanilla ueberall dort, wo selbst
+	 * gegessen wird, auch gefuettert werden kann.
+	 *
+	 * Dass ein roher Fisch essbar ist, ist Absicht und nicht empfehlenswert:
+	 * agents = 4 an jeder Klasse macht daraus ein Salmonellenrisiko. Der Weg
+	 * ohne Risiko ist PROCESS_FILLET_FISH und danach die Pfanne.
+	 */
+	override void SetActions()
+	{
+		super.SetActions();
 
-        AddAction(ActionForceFeed);
-        AddAction(ActionEatMeat);
-    }
+		AddAction(ActionForceFeed);
+		AddAction(ActionEatMeat);
+	}
 }
 
 //------------------------------------------------------------------------------

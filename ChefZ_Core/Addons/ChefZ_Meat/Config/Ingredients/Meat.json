@@ -146,6 +146,33 @@
             "unitsPerWholeItem": 1
         },
         {
+            "id": "DogSteakMeat",
+            "categories": [
+                "MEAT",
+                "PREDATOR_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
+            "id": "LizardMeat",
+            "categories": [
+                "MEAT",
+                "WILD_MEAT"
+            ],
+            "tags": [
+                "CHEFZ_RAW_MEAT",
+                "CHEFZ_WILD_MEAT"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
             "id": "Lard",
             "categories": [
                 "FAT"

@@ -46,12 +46,41 @@
 //==============================================================================
 
 // ---------------------------------------------------------------------------
-// WEICHE ABHAENGIGKEIT  -  warum TerjeSkills NICHT in requiredAddons steht
+// AUFGEGEBEN am 17.09.2026: die weiche Abhaengigkeit fuer den CONFIG-Teil
+// ---------------------------------------------------------------------------
+// Der Abschnitt darunter beschreibt, warum TerjeSkills lange NICHT in
+// requiredAddons stand. Fuer die Skriptseite gilt er unveraendert weiter - der
+// "#ifdef TERJE_SKILLS_MOD" in jeder Datei bleibt. Fuer die CONFIG-Seite gilt
+// er seit dem 1.30-Umbau nicht mehr, und zwar aus einem Grund, den der
+// Praeprozessor nicht loesen kann:
+//
+//   "class CfgTerjeSkills { class Survival { class Perks {...} } }" greift in
+//   einen Knoten ein, den TerjeSkills selbst definiert. Wer von beiden zuletzt
+//   in den Config-Merge geht, entscheidet ueber die Vererbung dieses Knotens.
+//   Ein "#ifdef" kann Configklassen nicht abschalten und die Merge-Reihenfolge
+//   nicht festlegen; nur requiredAddons kann das.
+//
+// Deshalb stehen TerjeCore und TerjeSkills jetzt in requiredAddons. Das macht
+// dieses PBO ohne Terje zu einem PBO mit unerfuellter Abhaengigkeit - das ist
+// hinnehmbar, weil ein reiner Kompatibilitaets-Mod ohne seinen Zielmod keinen
+// Zweck hat und niemand ihn ohne ihn installiert. Genau so baut Terje seine
+// eigenen Kompatibilitaetsmodule
+// (TerjeMods-experimental/TerjeCompatibilityCOT/config.cpp:7 nennt "TerjeCore"
+// UND "JM_COT_Scripts").
+//
+// Scripts/5_Mission/ChefZ/ChefZ_TerjeSkillsAbsent.c bleibt stehen: die Datei
+// kostet nichts, und sie ist der Beleg dafuer, dass die Skriptseite ohne Terje
+// weiterhin leer und fehlerfrei uebersetzt.
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// WEICHE ABHAENGIGKEIT  -  warum der SKRIPT-Teil ohne TerjeSkills auskommt
 // ---------------------------------------------------------------------------
 // requiredAddons[] ist eine HARTE Abhaengigkeit. Fehlt ein dort genannter
 // Eintrag, laedt das Addon nicht - und der Betreiber faengt sich einen
 // Startfehler ein, obwohl er nur einen OPTIONALEN Comp-Mod im Ordner liegen
-// hat. Genau das ist unerwuenscht.
+// hat. Fuer den Config-Teil wird das seit dem 17.09.2026 in Kauf genommen
+// (siehe Abschnitt darueber); fuer den Skript-Teil bleibt es unerwuenscht.
 //
 // Der Weg, den DayZ dafuer vorsieht, ist der Praeprozessor. Jeder Mod darf in
 // CfgMods "defines[]" veroeffentlichen; diese Symbole gelten beim Kompilieren
@@ -141,20 +170,27 @@ class CfgPatches
         //                  Ausserdem ChefZ_WildPlant_Base.ChefZ_YieldClass() -
         //                  die Auskunft, WAS eine Wildpflanze hergibt.
         //
-        // TerjeCore und TerjeSkills stehen bewusst NICHT hier. Sie werden
-        // ueber "#ifdef TERJE_SKILLS_MOD" in jeder Skriptdatei geprueft; die
-        // ausfuehrliche Begruendung mit Belegstellen steht im Kopf dieser
-        // Datei unter "WEICHE ABHAENGIGKEIT".
+        // Seit dem 17.09.2026 stehen TerjeCore und TerjeSkills hier - die
+        // Begruendung steht im Kopf dieser Datei unter "AUFGEGEBEN am
+        // 17.09.2026". Kurz: der Perk-Patch weiter unten greift in
+        // CfgTerjeSkills/Survival ein, und nur requiredAddons legt fest, dass
+        // TerjeSkills diesen Knoten VOR uns definiert.
         //
-        // Was aus Terje benutzt wird, damit die Liste nicht verlorengeht:
         //   TerjeCore    GetTerjeSkills(), GetTerjeGameConfig(),
         //                OnTerjeClientUpdate(), GetTerjeSkillsRegistry().
-        //   TerjeSkills  der Skill "surv", ParticleList.TERJE_SKILLS_*.
+        //                CfgPatches-Name belegt in
+        //                TerjeMods-experimental/TerjeCore/config.cpp:3.
+        //   TerjeSkills  der Skill "surv", ParticleList.TERJE_SKILLS_*, und
+        //                die Klasse SkillsBase. CfgPatches-Name belegt in
+        //                TerjeMods-experimental/TerjeSkills/config.cpp:3;
+        //                TerjeSkills nennt dort seinerseits TerjeCore (:8-11).
         requiredAddons[] =
         {
             "DZ_Data",
             "ChefZ_Core",
-            "ChefZ_Farming"
+            "ChefZ_Farming",
+            "TerjeCore",
+            "TerjeSkills"
         };
     };
 };
@@ -227,11 +263,51 @@ class CfgMods
 
 class CfgTerjeSkills
 {
-    // Kein ": SkillsBase" und keine Vorwaertsdeklaration: TerjeRadiation
-    // haengt seine beiden Perks genauso in "class Immunity { class Perks
-    // { ... } }" ein. Der Config-Merge der Engine ergaenzt den bestehenden
-    // Knoten; er ersetzt ihn nicht.
-    class Survival
+    //--------------------------------------------------------------------------
+    // WARUM HIER EINE BASISKLASSE STEHT (17.09.2026)
+    //--------------------------------------------------------------------------
+    // Bis hierher stand "class Survival" ohne Basis, mit TerjeRadiation als
+    // Vorbild. Dieses Vorbild gilt nur fuer den STABILEN Terje-Stand
+    // (TerjeMods-master-main/TerjeRadiation/config.cpp:59 "class Immunity").
+    //
+    // Fuer DayZ 1.30 gilt der EXPERIMENTELLE Stand, und das ist keine
+    // Geschmacksfrage:
+    //   TerjeMods-master-main/TerjeCore/Scripts/4_World/Entities/ItemBase.c:61
+    //     liest m_CleannessMin direkt an ItemBase.
+    //   In 1.30 gibt es dieses Feld an ItemBase nicht mehr; es liegt an
+    //     ItemBaseType ("scripts (and more) - 1.30"/scripts/4_World/DayZ/
+    //     Entities/ItemBaseType.c:20, benutzt in ItemBase.c:3799) - in 1.29 lag
+    //     es noch an ItemBase ("scripts - 1.29"/4_World/DayZ/Entities/
+    //     ItemBase.c:52).
+    //   Der experimentelle Stand faengt genau das ab:
+    //     TerjeMods-experimental/TerjeCore/Scripts/4_World/Entities/
+    //     ItemBase.c:61 "#ifdef DAYZ_1_29" mit ItemBaseType im #else-Zweig.
+    // Der stabile Stand uebersetzt unter 1.30 also gar nicht. Bezugsstand
+    // dieses Moduls ist damit TerjeMods-experimental.
+    //
+    // Dort liegen levels[], perkPointsPerLevel und expLoseOnDeath NICHT mehr in
+    // Survival, sondern in einer gemeinsamen Basis:
+    //   TerjeMods-experimental/TerjeSkills/config.cpp:63-75  class SkillsBase
+    //   TerjeMods-experimental/TerjeSkills/survival.hpp:1    class Survival: SkillsBase
+    // Wer Survival ohne ": SkillsBase" neu definiert, riskiert, dass die
+    // Engine die Vererbung des bestehenden Knotens zuruecksetzt. Dann liest
+    // TerjeSkillCfg.OnInit (TerjeMods-experimental/TerjeSkills/Scripts/4_World/
+    // Classes/TerjeSkillsRegistry.c:69-75) perkPointsPerLevel = 0 und ein
+    // leeres levels[] - Survival haette fuer ALLE Spieler weder Stufen noch
+    // Perkpunkte, samt Terjes eigenen Survival-Perks.
+    //
+    // Terje selbst hat seine Fremd-Patches deshalb umgestellt; das ist das neue
+    // Vorbild, Zeile fuer Zeile uebernommen:
+    //   TerjeMods-experimental/TerjeRadiation/config.cpp:59-60
+    //     class SkillsBase;  /  class Immunity: SkillsBase
+    //   TerjeMods-experimental/TerjeMedicine/config.cpp:60  dieselbe
+    //     Vorwaertsdeklaration vor den beiden #include-Zeilen.
+    //
+    // Die Reihenfolge, in der das gelesen wird, sichert requiredAddons oben:
+    // TerjeSkills definiert SkillsBase und Survival vor uns.
+    //--------------------------------------------------------------------------
+    class SkillsBase;
+    class Survival: SkillsBase
     {
         class Perks
         {

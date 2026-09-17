@@ -1306,6 +1306,12 @@ class ChefZ_BeehiveKit extends ItemBase
     //! einmal im Skript steht - dieselbe Regel wie an ChefZ_Beehive.
     static const string CHEFZ_HIVE_CLASS = "ChefZ_Beehive";
 
+    //! BEWUSSTE AUSNAHME von "override immer mit super": beide Haken sind
+    //! Zusage-Praedikate mit festem Wert. Die Basis sagt nein -
+    //! ItemBase.c:4348 IsDeployable gibt false zurueck, EntityAI.c:557-560
+    //! IsBasebuildingKit ebenso. Ein super-UND wuerde die Zusage also immer
+    //! auf false ziehen und den Bausatz unbrauchbar machen. Vanilla setzt
+    //! diese Haken an KitBase.c:5-8 genauso als festen Wert.
     override bool IsDeployable()
     {
         return true;
@@ -1531,6 +1537,16 @@ class ChefZ_BeeSmoker extends ItemBase
 
     // ---- Vanillas Anzuend-Schnittstelle (EntityAI.c:540-618) --------------
 
+    //! BEWUSSTE AUSNAHME von "override immer mit super" fuer die vier
+    //! folgenden Haken. Die Basis verneint sie pauschal: EntityAI.c:526-529
+    //! HasFlammableMaterial false, :532-535 CanBeIgnitedBy false,
+    //! :544-547 IsIgnited nur ueber den Energiemanager, den die Pfeife nicht
+    //! hat. Ein super-UND wuerde die Pfeife also nie brennen lassen.
+    //! IsThisIgnitionSuccessful (EntityAI.c:604-607) gibt umgekehrt pauschal
+    //! true zurueck; super wuerde dort nichts einschraenken, die eigene
+    //! Bedingung steht darum allein. Vanilla macht es ebenso: Torch.c:141,
+    //! :151, :157 rufen an den ersten drei Haken kein super,
+    //! Bark_ColorBase.c:32-35 am vierten ebenfalls nicht.
     override bool HasFlammableMaterial()
     {
         return GetQuantity() >= CHEFZ_MIN_FUEL_TO_LIGHT;
@@ -1632,17 +1648,46 @@ class ChefZ_BeeSmoker extends ItemBase
         ChefZ_UpdateSmoke();
     }
 
+    /**
+     * Das Gate fragt IsHeadlessOrDedicatedServer(), nicht IsDedicatedServer().
+     *
+     * 1.30 erzeugt den ParticleManager auf JEDER headless-Instanz nicht mehr:
+     * ParticleManager.c:65 lautet dort
+     * "if (!g_ParticleManager && !g_Game.IsHeadlessOrDedicatedServer())", und
+     * ohne diesen Zweig gibt :73 das null gebliebene Member zurueck. In 1.29
+     * stand an derselben Stelle (ParticleManager.c:65) noch
+     * "!g_Game.IsDedicatedServer()" - dort existierte die Instanz auf einem
+     * headless Client also noch. Das Praedikat selbst ist neu in 1.30:
+     * 3_Game/DayZ/Global/Game.c:1136, in der 1.29-Game.c fehlt es.
+     *
+     * Mit dem alten Gate lief eine Headless-Instanz (IsDedicatedServer()==false,
+     * IsHeadless()==true) durch und dereferenzierte den null-Rueckgabewert bei
+     * jedem OnVariablesSynchronized einer brennenden Pfeife. Vanillas eigene
+     * Sollform: FireplaceBase.c:1112 und :1132, Edible_Base.c:936.
+     *
+     * Die Null-Pruefung auf GetInstance() steht unabhaengig vom Gate: der
+     * Rueckgabewert ist als null deklariert moeglich, PlayOnObject ist eine
+     * Instanzmethode (ParticleManager.c:222).
+     */
     protected void ChefZ_UpdateSmoke()
     {
-        if (!g_Game || g_Game.IsDedicatedServer())
+        if (!g_Game || g_Game.IsHeadlessOrDedicatedServer())
             return;
-        if (m_ChefZ_Lit)
+
+        if (!m_ChefZ_Lit)
         {
-            if (!m_ChefZ_Smoke)
-                m_ChefZ_Smoke = ParticleManager.GetInstance().PlayOnObject(ParticleList.CAMP_SMALL_SMOKE, this, Vector(0, 0.15, 0));
+            ChefZ_StopSmoke();
             return;
         }
-        ChefZ_StopSmoke();
+
+        if (m_ChefZ_Smoke)
+            return;
+
+        ParticleManager particleManager = ParticleManager.GetInstance();
+        if (!particleManager)
+            return;
+
+        m_ChefZ_Smoke = particleManager.PlayOnObject(ParticleList.CAMP_SMALL_SMOKE, this, Vector(0, 0.15, 0));
     }
 
     protected void ChefZ_StopSmoke()

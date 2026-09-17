@@ -68,17 +68,23 @@
 
 // SCOUT-GEPRUEFT 2026-08-31: ChefZ-EIGENE Klasse aus ChefZ_Farming, kein
 // Vanilla-Typ - die Kollisionsflaeche gegenueber fremden Mods ist die
-// Klasse selbst, und die kennt ausser ChefZ niemand. super in EEDelete und
-// OnTerjeClientUpdate; IsTerjeClientUpdateRequired ist ein konstanter
-// Bool-Getter und ruft absichtlich keines (Vorbild
-// TerjeSkills/Scripts/4_World/Entities/MushroomBase.c:5-8).
+// Klasse selbst, und die kennt ausser ChefZ niemand. super in EEDelete,
+// OnTerjeClientUpdate und - seit dem 17.09.2026 - auch in
+// IsTerjeClientUpdateRequired (Terjes Vorbild
+// TerjeSkills/Scripts/4_World/Entities/MushroomBase.c:5-8 laesst es dort weg,
+// die Projektregel "override immer mit super" nicht).
 modded class ChefZ_WildThyme
 {
     private Particle m_ChefZ_TerjeHighlight;
 
+    // super wird gerufen und sein Ergebnis fliesst ein (Projektregel "override
+    // immer mit super"). Die Basis liefert false - TerjeMods-experimental/
+    // TerjeCore/Scripts/4_World/Entities/ItemBase.c:54-57, wortgleich in
+    // TerjeMods-master-main -, das Ergebnis bleibt also true.
     override bool IsTerjeClientUpdateRequired()
     {
-        return true;
+        bool baseRequired = super.IsTerjeClientUpdateRequired();
+        return baseRequired || true;
     }
 
     override void EEDelete(EntityAI parent)
@@ -104,9 +110,14 @@ modded class ChefZ_WildRosemary
 {
     private Particle m_ChefZ_TerjeHighlight;
 
+    // super wird gerufen und sein Ergebnis fliesst ein (Projektregel "override
+    // immer mit super"). Die Basis liefert false - TerjeMods-experimental/
+    // TerjeCore/Scripts/4_World/Entities/ItemBase.c:54-57, wortgleich in
+    // TerjeMods-master-main -, das Ergebnis bleibt also true.
     override bool IsTerjeClientUpdateRequired()
     {
-        return true;
+        bool baseRequired = super.IsTerjeClientUpdateRequired();
+        return baseRequired || true;
     }
 
     override void EEDelete(EntityAI parent)
@@ -128,9 +139,14 @@ modded class ChefZ_WildParsley
 {
     private Particle m_ChefZ_TerjeHighlight;
 
+    // super wird gerufen und sein Ergebnis fliesst ein (Projektregel "override
+    // immer mit super"). Die Basis liefert false - TerjeMods-experimental/
+    // TerjeCore/Scripts/4_World/Entities/ItemBase.c:54-57, wortgleich in
+    // TerjeMods-master-main -, das Ergebnis bleibt also true.
     override bool IsTerjeClientUpdateRequired()
     {
-        return true;
+        bool baseRequired = super.IsTerjeClientUpdateRequired();
+        return baseRequired || true;
     }
 
     override void EEDelete(EntityAI parent)

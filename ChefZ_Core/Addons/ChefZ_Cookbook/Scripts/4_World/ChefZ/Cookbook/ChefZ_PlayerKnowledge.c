@@ -19,9 +19,43 @@
 // benutzt, kann seinen Aufbau nie aendern, ohne auf ein Spielupdate zu warten.
 //
 // Beim Lesen gilt: unbekannte Version -> Block ueberspringen ist NICHT moeglich
-// (der Kontext ist ein Strom, nicht ein Verzeichnis). Deshalb wird eine
-// unbekannte Version als Lesefehler behandelt und der Spielerstand verworfen -
-// das ist haesslich, aber ehrlich. Solange die Version stimmt, passiert das nie.
+// (der Kontext ist ein Strom, nicht ein Verzeichnis).
+//
+// ---------------------------------------------------------------------------
+// WARUM EIN MARKER DAVORSTEHT UND WARUM EIN FEHLSCHLAG NICHT MEHR TOEDLICH IST
+// ---------------------------------------------------------------------------
+// Frueher stand hier nur die Versionszahl, und ein falscher erster Wert
+// quittierte mit false. false in OnStoreLoad heisst: DayZ verwirft den ganzen
+// Charakter. Das ist zu scharf, denn der Block steht an einer Stelle, die uns
+// nicht gehoert:
+//
+//   1. DayZ 1.30 haengt in PlayerBase.OnStoreSave einen NEUEN Vanilla-Wert ans
+//      Ende des Vanilla-Teils (m_ThermalBiasHandler,
+//      1.30 scripts/4_World/DayZ/Entities/ManBase/PlayerBase.c:7395) und liest
+//      ihn in OnStoreLoad OHNE Versions-Gate (:7519-7524) - anders als das
+//      direkt darueber stehende "if (version >= 134)" (:7513). In 1.29 gibt es
+//      weder die Zeile noch die Datei ThermalBiasHandler.c; GAME_STORAGE_VERSION
+//      steigt von 142 (1.29 3_Game/DayZ/Global/Game.c:5) auf 144. Bei einem
+//      unter 1.29 geschriebenen Charakter frisst dieser Read die ersten 4 Byte
+//      des ersten MOD-Blocks - also unsere.
+//   2. Die Reihenfolge der modded-PlayerBase-Schichten haengt allein an der
+//      -mod-Zeile des Betreibers. Es gibt keine Kante im Abhaengigkeitsgraphen
+//      zwischen ChefZ und TerjeCore, und es darf keine geben: TerjeCore in
+//      requiredAddons zu schreiben machte Terje zur Pflicht und widerspraeche
+//      dem Zweck des Moduls. Tauscht der Betreiber die Reihenfolge nach dem
+//      ersten Start, liest jede Schicht den Block der anderen.
+//
+// In beiden Faellen kann ChefZ den Strom nicht reparieren - der Schaden
+// entsteht vor der ersten ChefZ-Zeile. Was ChefZ tun kann: nicht noch den
+// Charakter mitreissen. Deshalb gilt jetzt "Wissen verwerfen statt Charakter
+// verwerfen". Der Marker macht den Fehlgriff dabei erkennbar, statt ihn still
+// als Versionszahl fehlzudeuten - dasselbe Mittel, das TerjeCore benutzt.
+//
+// Ehrlich bleibt dabei: das rettet nur, wenn ChefZ die AEUSSERSTE Schicht ist.
+// Ein bereits verschobener Strom trifft jede weitere Schicht ohnehin; liegt
+// TerjeCore hinter uns, faellt dessen eigene Markerpruefung durch. Fuer den
+// Sprung auf 1.30 bleibt die Betriebsanweisung bestehen: Charakterdatenbank
+// leeren, sonst ist der Verlust systematisch.
 //
 // Layer: 4_World. Keine Dabs-Referenz (Regel 3).
 //==============================================================================
@@ -34,8 +68,18 @@
 // im Zweig.
 modded class PlayerBase
 {
+    //! Erkennungsmarke vor dem Block. Willkuerlich, aber fest: die vier
+    //! Buchstaben "CHZK" als int (0x43485A4B). Sie beantwortet beim Lesen die
+    //! Frage "gehoert das hier ueberhaupt uns", die eine blosse Versionszahl
+    //! nicht beantworten kann - eine 1 sieht wie jede andere 1 aus.
+    static const int CHEFZ_KNOWLEDGE_MARKER = 1128815179;
+
     //! Version DIESES Blocks, nicht die von DayZ.
     static const int CHEFZ_KNOWLEDGE_VERSION = 1;
+
+    //! Aufbau vor dem Marker: ein nackter int 1, direkt gefolgt von den Daten.
+    //! Wird nur noch gelesen, nie mehr geschrieben.
+    static const int CHEFZ_KNOWLEDGE_LEGACY_VERSION = 1;
 
     private ref ChefZ_KnowledgeState m_ChefZ_Knowledge;
 
@@ -159,28 +203,79 @@ modded class PlayerBase
     {
         super.OnStoreSave(ctx);
 
+        ctx.Write(CHEFZ_KNOWLEDGE_MARKER);
         ctx.Write(CHEFZ_KNOWLEDGE_VERSION);
         ChefZ_GetKnowledge().Save(ctx);
     }
 
+    /**
+     * Liest den Wissensblock - und gibt niemals false zurueck, sobald super
+     * durch ist.
+     *
+     * Siehe Kopf: was an dieser Stelle im Strom steht, entscheidet nicht
+     * ChefZ. Ein falscher Wert kostet deshalb das Wissen, nicht den Charakter.
+     * false bleibt allein dem Vanilla-Teil vorbehalten.
+     */
     override bool OnStoreLoad(ParamsReadContext ctx, int version)
     {
         if (!super.OnStoreLoad(ctx, version))
             return false;
 
+        int marker;
+        if (!ctx.Read(marker))
+        {
+            ChefZ_DiscardKnowledgeBlock("der Strom endet vor dem Wissensblock");
+            return true;
+        }
+
+        if (marker == CHEFZ_KNOWLEDGE_LEGACY_VERSION)
+        {
+            // Aufbau vor dem Marker: der erste int war die Blockversion.
+            if (!ChefZ_GetKnowledge().Load(ctx))
+                ChefZ_DiscardKnowledgeBlock("der alte Wissensblock liess sich nicht lesen");
+            return true;
+        }
+
+        if (marker != CHEFZ_KNOWLEDGE_MARKER)
+        {
+            ChefZ_DiscardKnowledgeBlock("an dieser Stelle steht kein ChefZ-Block (gelesen: " + marker.ToString() + ")");
+            return true;
+        }
+
         int blockVersion;
         if (!ctx.Read(blockVersion))
-            return false;
+        {
+            ChefZ_DiscardKnowledgeBlock("die Blockversion liess sich nicht lesen");
+            return true;
+        }
 
         if (blockVersion != CHEFZ_KNOWLEDGE_VERSION)
         {
-            string warn = "Kochbuch: gespeicherter Wissensblock hat Version " + blockVersion.ToString();
-            warn = warn + ", erwartet wird " + CHEFZ_KNOWLEDGE_VERSION.ToString() + ".";
-            ChefZ_Log.Warn(ChefZ_LogChannel.CORE, warn);
-            return false;
+            string abweichung = "Blockversion " + blockVersion.ToString();
+            abweichung = abweichung + ", erwartet wird " + CHEFZ_KNOWLEDGE_VERSION.ToString();
+            ChefZ_DiscardKnowledgeBlock(abweichung);
+            return true;
         }
 
-        return ChefZ_GetKnowledge().Load(ctx);
+        if (!ChefZ_GetKnowledge().Load(ctx))
+            ChefZ_DiscardKnowledgeBlock("der Wissensblock brach mitten im Lesen ab");
+
+        return true;
+    }
+
+    /**
+     * Wissen fallen lassen und sagen, warum.
+     *
+     * Der Charakter bleibt. Er faengt beim Kochbuch bei null an, was sich durch
+     * Spielen wieder fuellt - anders als ein geloeschter Spielstand.
+     */
+    private void ChefZ_DiscardKnowledgeBlock(string grund)
+    {
+        ChefZ_GetKnowledge().Clear();
+
+        string warn = "Kochbuch: Wissensblock verworfen, der Charakter bleibt erhalten. Grund: ";
+        warn = warn + grund + ".";
+        ChefZ_Log.Warn(ChefZ_LogChannel.CORE, warn);
     }
 
     //==========================================================================

@@ -17,6 +17,15 @@
 // Die Zeile ist bewusst KEINE Warnung und KEIN Fehler. Ein Comp-Mod ohne
 // seinen Zielmod ist kein Defekt, sondern ein zulaessiger Betriebszustand.
 //
+// SEIT DEM 17.09.2026 IST DAS DER SELTENE FALL. Die config.cpp nennt TerjeCore
+// und TerjeSkills jetzt in requiredAddons (Begruendung dort im Kopf, Abschnitt
+// "AUFGEGEBEN am 17.09.2026"), weil der Perk-Patch in CfgTerjeSkills sonst auf
+// eine offene Ladereihenfolge trifft. Ohne TerjeSkills hat dieses PBO damit
+// eine unerfuellte Abhaengigkeit. Die Datei bleibt trotzdem stehen: sie kostet
+// nichts, sie ist der Beleg, dass die Skriptseite ohne Terje leer und
+// fehlerfrei uebersetzt, und sie spricht genau dann, wenn die Engine das PBO
+// trotz fehlender Abhaengigkeit uebersetzt.
+//
 // ------------------------------------------------------------------------
 // WARUM PrintToRPT UND NICHT ChefZ_Log
 // ------------------------------------------------------------------------

@@ -7,10 +7,16 @@
 // ---------------------------------------------------------------------------
 // WAS DIESES MODUL TUT
 // ---------------------------------------------------------------------------
-// Es haengt an COTs Object Spawner acht ChefZ-Spawnkategorien an. Mehr nicht.
-// Kein Rezept, kein Naehrwert, keine Transform, kein Balancing - dieses Modul
-// ist ein ADMIN-WERKZEUG und veraendert keine Spielmechanik. Der einzige
-// Eingriff ist ein zusaetzlicher Filter in einer Adminmaske.
+// Es haengt an COTs Object Spawner acht ChefZ-Spawnkategorien an - als EINE
+// zusaetzliche Gruppe im Kategoriemenue hinter dem Filterknopf, mit den acht
+// Kategorien in ihrem Untermenue. Mehr nicht. Kein Rezept, kein Naehrwert,
+// keine Transform, kein Balancing - dieses Modul ist ein ADMIN-WERKZEUG und
+// veraendert keine Spielmechanik. Der einzige Eingriff ist ein zusaetzlicher
+// Filter in einer Adminmaske.
+//
+// ZIELSTAND: COT_New. Das alte COT (JM/COT/...) wird nicht mehr bedient - dort
+// hiessen die Haken SetListType und AddObjectType, und beide gibt es in
+// COT_New nicht mehr.
 //
 // ---------------------------------------------------------------------------
 // WARUM ES EIN EIGENER MOD IST UND KEIN TEIL DES HAUPTMODS
@@ -36,10 +42,13 @@
 // Compiler ihn sieht.
 //
 // COT veroeffentlicht sein Symbol selbst:
-//   DayZ-CommunityOnlineTools-production/JM/COT/Scripts/config.cpp:44-46
+//   COT_New/Scripts/config.cpp:38-50, darin Zeile 41
 //       defines[] = { "JM_COT", ... };
-// Nicht zu verwechseln mit "#define JM_COT_LOADED" in Zeile 15 derselben
-// Datei: das ist ein Praeprozessorsymbol des CONFIG-Parsers und im Skript
+// Nicht zu verwechseln mit "#define JM_COT_LOADED"
+// (COT_New/Scripts/3_game/communityonlinetools/staticfunctions.c:2): das ist
+// ein gewoehnliches Skript-#define, und #define-Gueltigkeit ist in Enforce
+// DATEIWEISE, nicht modulweit - COT schreibt genau das selbst in den Kopf von
+// jmobjectspawnerform.c:1. Ausserhalb jener einen Datei ist das Symbol also
 // nicht sichtbar. Benutzt wird deshalb "JM_COT".
 //
 // BELEG, dass im Fremdcode genau so gebaut wird:
@@ -54,15 +63,33 @@
 //     TerjeToDogTagsCompatibility.c:1 - "#ifdef WRDG_DOGTAGS", ebenfalls ohne
 //     Eintrag in requiredAddons.
 //
-// GEGENPROBE: TerjeCompatibilityCOT/config.cpp:7 nennt "JM_COT_Scripts" SEHR
-// WOHL in requiredAddons. Das ist die harte Bauart - zulaessig, aber genau der
-// Startfehler, den dieser Umbau beseitigt.
+// GEGENPROBE: TerjeMods-master-main/TerjeCompatibilityCOT/config.cpp:8 nennt
+// "JM_COT_Scripts" SEHR WOHL in requiredAddons. Das ist die harte Bauart -
+// zulaessig, aber genau der Startfehler, den dieser Umbau beseitigt.
+//
+// OFFENE ENTSCHEIDUNG, DIE ANS GATE GEHOERT
+// -----------------------------------------
+// requiredAddons steuert in DayZ auch, in welcher Reihenfolge die Skriptdateien
+// einer Schicht in den Compiler gehen. Ohne "JM_COT_Scripts" haengt die
+// Position dieses PBOs relativ zu COT_New (CfgPatches-Name JM_COT_Scripts,
+// COT_New/Scripts/config.cpp:3) allein an der -mod-Reihenfolge des Betreibers.
+// Ob der Enforce-Compiler eine "modded class JMObjectSpawnerForm" auch dann
+// aufloest, wenn sie VOR der Basisklasse eingelesen wird, ist hier nicht
+// beweisbar - das zeigt nur ein Start mit -mod=ChefZ_COT_Comp vor COT_New am
+// Testserver.
+//
+// Die weiche Bauart bleibt deshalb stehen, und zwar bewusst: sie tauscht ein
+// UNBEWIESENES Reihenfolgerisiko nicht gegen einen SICHEREN Startfehler fuer
+// jeden Betreiber, der dieses PBO ohne COT im Ordner liegen hat. Faellt am Gate
+// die Gegenprobe aus, ist die Abhilfe eine Zeile: "JM_COT_Scripts" in
+// requiredAddons aufnehmen und ChefZ_CotAbsent.c loeschen, das dann nie mehr
+// greifen kann.
 //
 // VERWORFENE ALTERNATIVEN:
 //   - Laufzeitpruefung: hilft nicht. "modded class JMObjectSpawnerForm",
-//     UIActionManager, UIActionSelectBox und JMObjectSpawnerModule werden vom
-//     Enforce-Compiler aufgeloest, lange bevor irgendeine if-Abfrage laeuft.
-//     Eine Laufzeitpruefung kann ENTSCHEIDEN, nicht KOMPILIEREN.
+//     UIActionManager, JMConstants, JMTheme und JMObjectSpawnerModule werden
+//     vom Enforce-Compiler aufgeloest, lange bevor irgendeine if-Abfrage
+//     laeuft. Eine Laufzeitpruefung kann ENTSCHEIDEN, nicht KOMPILIEREN.
 //   - Weiche Anmeldung ueber eine ChefZ-Registry: es gibt hier nichts
 //     anzumelden. Dieses Modul haengt sich in COTs Formular, nicht in ChefZ.
 //   - requiredAddons ganz leeren: unzulaessig, tools/chefz-validate/
@@ -95,7 +122,7 @@
 //   ChefZ_Farming       Weizen, Gemuese, Kraeuterpflanzen und -saat, seit dem
 //                       Slice "wildplants" auch die vier Wildpflanzen
 //   ChefZ_Ingredients   Schnittgut, Milchwaren, Salz, Trockenkraeuter, Gewuerze
-//   ChefZ_Baking        Hefe, Teige, Pasta, Brot
+//   ChefZ_Baking        Teig, Pasta, Brot, Fladenbrot
 //   ChefZ_Meat          Hackfleisch und Wurst
 //   ChefZ_Preservation  Gesalzenes, Getrocknetes, Geraeuchertes
 //   ChefZ_Processing    Stationen und Werkzeuge, Mehl

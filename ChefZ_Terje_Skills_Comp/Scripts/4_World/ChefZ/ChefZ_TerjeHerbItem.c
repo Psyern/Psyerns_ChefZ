@@ -43,9 +43,10 @@
 //==============================================================================
 
 // SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
-// super in EEDelete und OnTerjeClientUpdate; IsTerjeClientUpdateRequired
-// ist ein konstanter Bool-Getter und ruft absichtlich keines (Vorbild
-// TerjeSkills/MushroomBase.c). ShouldHighlight wurde am selben Tag zu
+// super in EEDelete, OnTerjeClientUpdate und - seit dem 17.09.2026 - auch in
+// IsTerjeClientUpdateRequired (Begruendung an der Methode selbst; Terjes
+// MushroomBase.c:5-8 laesst es dort weg, die Projektregel nicht).
+// ShouldHighlight wurde am selben Tag zu
 // ChefZ_ShouldHighlight praefixiert; am 31.08.2026 ist der Rumpf dieser
 // Methode nach ChefZ_TerjeHerbHighlight.ShouldShow() gewandert - dieselbe
 // Bedingungskette, unveraendert, nur an einer Stelle statt an zweien.
@@ -53,9 +54,21 @@ modded class ChefZ_FreshHerbBase
 {
     private Particle m_ChefZ_TerjeHighlight;
 
+    /**
+     * Anmeldung beim Sekundentakt von TerjeCore.
+     *
+     * super wird gerufen und sein Ergebnis fliesst ein - die Projektregel
+     * "override immer mit super" kennt keine Ausnahme fuer konstante Getter.
+     * Am Verhalten aendert das nichts: die Basis in TerjeCore liefert false
+     * (TerjeMods-experimental/TerjeCore/Scripts/4_World/Entities/ItemBase.c:54-57,
+     * wortgleich in TerjeMods-master-main), und dieses Buendel braucht den Takt
+     * in jedem Fall. Setzt ein anderer Mod die Basis eines Tages auf true,
+     * wird er nicht mehr stillschweigend ueberstimmt.
+     */
     override bool IsTerjeClientUpdateRequired()
     {
-        return true;
+        bool baseRequired = super.IsTerjeClientUpdateRequired();
+        return baseRequired || true;
     }
 
     override void EEDelete(EntityAI parent)

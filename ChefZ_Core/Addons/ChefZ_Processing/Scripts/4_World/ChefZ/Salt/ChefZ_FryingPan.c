@@ -46,38 +46,52 @@
 
 class ChefZ_FryingPan extends ChefZ_ProcessingStation_Base
 {
-    //! Umkreis, in dem eine brennende Feuerstelle als Waermequelle zaehlt.
-    //! 2.5 m ist "unmittelbar daneben" - weit genug, dass der Spieler die
-    //! Pfanne nicht millimetergenau setzen muss, eng genug, dass eine
-    //! Feuerstelle nicht drei Pfannen im Umkreis versorgt, ohne dass man es
-    //! sieht.
-    static const float CHEFZ_HEAT_RADIUS_M = 2.5;
+	//! Umkreis, in dem eine brennende Feuerstelle als Waermequelle zaehlt.
+	//! 2.5 m ist "unmittelbar daneben" - weit genug, dass der Spieler die
+	//! Pfanne nicht millimetergenau setzen muss, eng genug, dass eine
+	//! Feuerstelle nicht drei Pfannen im Umkreis versorgt, ohne dass man es
+	//! sieht.
+	static const float CHEFZ_HEAT_RADIUS_M = 2.5;
 
-    /**
-     * Brennt in Reichweite eine Feuerstelle?
-     *
-     * Rein lesend. Wird von ChefZ_ProcessingStation_Base.ChefZ_BuildContext
-     * gerufen und landet in ChefZ_ProcessContext.hasHeat; ausgewertet wird sie
-     * in ChefZ_CompiledProcess.MeetsEnvironment gegen requiresHeat.
-     *
-     * Bei "nein" PAUSIERT ein laufender Job, er bricht nicht ab und laeuft nie
-     * zurueck (11 §7). Ein ausgehendes Feuer kostet den Spieler damit Zeit,
-     * nie Material.
-     */
-    override bool ChefZ_HasHeat()
-    {
-        array<Object> nearby = new array<Object>();
-        array<CargoBase> proxies = new array<CargoBase>();
+	/**
+	 * Brennt in Reichweite eine Feuerstelle?
+	 *
+	 * Rein lesend. Wird von ChefZ_ProcessingStation_Base.ChefZ_BuildContext
+	 * gerufen und landet in ChefZ_ProcessContext.hasHeat; ausgewertet wird sie
+	 * in ChefZ_CompiledProcess.MeetsEnvironment gegen requiresHeat.
+	 *
+	 * Bei "nein" PAUSIERT ein laufender Job, er bricht nicht ab und laeuft nie
+	 * zurueck (11 §7). Ein ausgehendes Feuer kostet den Spieler damit Zeit,
+	 * nie Material.
+	 *
+	 * super zuerst: die Basis antwortet fest "nein"
+	 * (ChefZ_ProcessingStation_Base.c:385-388), kann also nur ergaenzen, nie
+	 * wegnehmen. Der Umkreisscan laeuft erst, wenn sie verneint hat.
+	 *
+	 * g_Game wird geprueft, bevor darauf zugegriffen wird - GetObjectsAtPosition
+	 * ist proto native auf dem Spielobjekt
+	 * (1.30 3_Game/DayZ/Global/Game.c:923).
+	 */
+	override bool ChefZ_HasHeat()
+	{
+		if (super.ChefZ_HasHeat())
+			return true;
 
-        g_Game.GetObjectsAtPosition(GetPosition(), CHEFZ_HEAT_RADIUS_M, nearby, proxies);
+		if (!g_Game)
+			return false;
 
-        for (int i = 0; i < nearby.Count(); i++)
-        {
-            FireplaceBase fire = FireplaceBase.Cast(nearby.Get(i));
-            if (fire && fire.IsBurning())
-                return true;
-        }
+		array<Object> nearby = new array<Object>();
+		array<CargoBase> proxies = new array<CargoBase>();
 
-        return false;
-    }
+		g_Game.GetObjectsAtPosition(GetPosition(), CHEFZ_HEAT_RADIUS_M, nearby, proxies);
+
+		for (int i = 0; i < nearby.Count(); i++)
+		{
+			FireplaceBase fire = FireplaceBase.Cast(nearby.Get(i));
+			if (fire && fire.IsBurning())
+				return true;
+		}
+
+		return false;
+	}
 }

@@ -43,129 +43,140 @@
 
 class ChefZ_ActionMilkCowCB extends ActionContinuousBaseCB
 {
-    override void CreateActionComponent()
-    {
-        m_ActionData.m_ActionComponent = new CAContinuousTime(ChefZ_ActionMilkCow.MILK_SECONDS);
-    }
+	override void CreateActionComponent()
+	{
+		m_ActionData.m_ActionComponent = new CAContinuousTime(ChefZ_ActionMilkCow.MILK_SECONDS);
+	}
 }
 
 class ChefZ_ActionMilkCow extends ActionContinuousBase
 {
-    //! Wie lange das Melken dauert. Balancingwert - er steht hier als einzige
-    //! Zahl, damit ihn eine Aenderung an einer Stelle trifft.
-    static const float MILK_SECONDS = 8.0;
+	//! Wie lange das Melken dauert. Balancingwert - er steht hier als einzige
+	//! Zahl, damit ihn eine Aenderung an einer Stelle trifft.
+	static const float MILK_SECONDS = 8.0;
 
-    //! Was eine Kuh je Melkgang hergibt.
-    static const string MILK_CLASS = "PowderedMilk";
+	//! Was eine Kuh je Melkgang hergibt.
+	static const string MILK_CLASS = "PowderedMilk";
 
-    static const string TEXT = "#STR_CHEFZ_ACTION_MILK_COW";
+	static const string TEXT = "#STR_CHEFZ_ACTION_MILK_COW";
 
-    void ChefZ_ActionMilkCow()
-    {
-        m_CallbackClass   = ChefZ_ActionMilkCowCB;
-        m_CommandUID      = DayZPlayerConstants.CMD_ACTIONFB_CRAFTING;
-        m_FullBody        = true;
-        m_StanceMask      = DayZPlayerConstants.STANCEMASK_CROUCH;
-        m_SpecialtyWeight = UASoftSkillsWeight.PRECISE_LOW;
-        m_Text            = TEXT;
-        m_LockTargetOnUse = false;
-    }
+	void ChefZ_ActionMilkCow()
+	{
+		m_CallbackClass   = ChefZ_ActionMilkCowCB;
+		m_CommandUID      = DayZPlayerConstants.CMD_ACTIONFB_CRAFTING;
+		m_FullBody        = true;
+		m_StanceMask      = DayZPlayerConstants.STANCEMASK_CROUCH;
+		m_SpecialtyWeight = UASoftSkillsWeight.PRECISE_LOW;
+		m_Text            = TEXT;
+		m_LockTargetOnUse = false;
+	}
 
-    override typename GetInputType()
-    {
-        return ContinuousInteractActionInput;
-    }
+	override typename GetInputType()
+	{
+		return ContinuousInteractActionInput;
+	}
 
-    /**
-     * Dieselben Komponenten, die ActionSkinning fuer ein Tier benutzt
-     * (ActionSkinning.c:44-45), und nicht die eines Gegenstandsziels.
-     *
-     * CCTCursorNoRuinCheck peilt ueber den Cursor und rechnet mit Kopfhoehen
-     * je Haltung (CCTCursorNoRuinCheck.c:6-8); ein Rind ist ein grosses,
-     * bewegliches Ziel, und genau dafuer ist die Komponente da. CCTNonRuined
-     * waere die Wahl fuer ein liegendes Objekt.
-     *
-     * CCINonRuined an der Kanne: eine zerstoerte Kanne haelt nichts. Die
-     * Vorgabe des Konstruktors ist UAMaxDistances.DEFAULT
-     * (CCTCursorNoRuinCheck.c:10), deshalb steht hier keine eigene Zahl.
-     */
-    override void CreateConditionComponents()
-    {
-        m_ConditionItem   = new CCINonRuined;
-        m_ConditionTarget = new CCTCursorNoRuinCheck;
-    }
+	/**
+	 * Dieselben Komponenten, die ActionSkinning fuer ein Tier benutzt
+	 * (ActionSkinning.c:44-45), und nicht die eines Gegenstandsziels.
+	 *
+	 * CCTCursorNoRuinCheck peilt ueber den Cursor und rechnet mit Kopfhoehen
+	 * je Haltung (CCTCursorNoRuinCheck.c:6-8); ein Rind ist ein grosses,
+	 * bewegliches Ziel, und genau dafuer ist die Komponente da. CCTNonRuined
+	 * waere die Wahl fuer ein liegendes Objekt.
+	 *
+	 * CCINonRuined an der Kanne: eine zerstoerte Kanne haelt nichts. Die
+	 * Vorgabe des Konstruktors ist UAMaxDistances.DEFAULT
+	 * (CCTCursorNoRuinCheck.c:10), deshalb steht hier keine eigene Zahl.
+	 */
+	override void CreateConditionComponents()
+	{
+		m_ConditionItem   = new CCINonRuined;
+		m_ConditionTarget = new CCTCursorNoRuinCheck;
+	}
 
-    override bool HasProgress()
-    {
-        return true;
-    }
+	override bool HasProgress()
+	{
+		return true;
+	}
 
-    override string GetText()
-    {
-        return TEXT;
-    }
+	override string GetText()
+	{
+		return TEXT;
+	}
 
-    /**
-     * Vier Bedingungen, in der Reihenfolge ihrer Kosten.
-     *
-     * Die Kanne selbst wird NICHT geprueft: die Aktion haengt ueber
-     * ChefZ_MilkCan.SetActions() an genau diesem Item, und die Engine bietet
-     * sie nur an, wenn es in den Haenden liegt. Eine zweite Pruefung hier
-     * waere eine zweite Stelle, an der dieselbe Regel spaeter auseinanderlaufen
-     * kann.
-     */
-    override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item)
-    {
-        if (!target)
-            return false;
+	/**
+	 * Vier Bedingungen, in der Reihenfolge ihrer Kosten.
+	 *
+	 * Die Kanne selbst wird NICHT geprueft: die Aktion haengt ueber
+	 * ChefZ_MilkCan.SetActions() an genau diesem Item, und die Engine bietet
+	 * sie nur an, wenn es in den Haenden liegt. Eine zweite Pruefung hier
+	 * waere eine zweite Stelle, an der dieselbe Regel spaeter auseinanderlaufen
+	 * kann.
+	 */
+	override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item)
+	{
+		if (!target)
+			return false;
 
-        Object targetObject = target.GetObject();
-        if (!targetObject)
-            return false;
+		Object targetObject = target.GetObject();
+		if (!targetObject)
+			return false;
 
-        if (!targetObject.IsAlive())
-            return false;
+		if (!targetObject.IsAlive())
+			return false;
 
-        Animal_BosTaurusF cow;
-        if (!Class.CastTo(cow, targetObject))
-            return false;
+		Animal_BosTaurusF cow;
+		if (!Class.CastTo(cow, targetObject))
+			return false;
 
-        return cow.ChefZ_CanBeMilked();
-    }
+		return cow.ChefZ_CanBeMilked();
+	}
 
-    /**
-     * Serverseitig: die Kuh sperrt sich, dann entsteht die Milch.
-     *
-     * Reihenfolge mit Absicht. Die Sperre zuerst zu setzen kostet im
-     * Fehlerfall eine Melkgelegenheit; sie zuletzt zu setzen liesse zwei
-     * gleichzeitig fertige Spieler beide Milch ziehen. Der billigere Fehler
-     * gewinnt (02 §8).
-     */
-    override void OnFinishProgressServer(ActionData action_data)
-    {
-        if (!action_data || !action_data.m_Target || !action_data.m_Player)
-            return;
+	/**
+	 * Serverseitig: die Kuh sperrt sich, dann entsteht die Milch.
+	 *
+	 * Reihenfolge mit Absicht. Die Sperre zuerst zu setzen kostet im
+	 * Fehlerfall eine Melkgelegenheit; sie zuletzt zu setzen liesse zwei
+	 * gleichzeitig fertige Spieler beide Milch ziehen. Der billigere Fehler
+	 * gewinnt (02 §8).
+	 */
+	override void OnFinishProgressServer(ActionData action_data)
+	{
+		if (!action_data || !action_data.m_Target || !action_data.m_Player)
+			return;
 
-        Animal_BosTaurusF cow;
-        if (!Class.CastTo(cow, action_data.m_Target.GetObject()))
-            return;
+		Animal_BosTaurusF cow;
+		if (!Class.CastTo(cow, action_data.m_Target.GetObject()))
+			return;
 
-        if (!cow.ChefZ_CanBeMilked())
-            return;
+		if (!cow.ChefZ_CanBeMilked())
+			return;
 
-        cow.ChefZ_MarkMilked();
+		cow.ChefZ_MarkMilked();
 
-        EntityAI created = action_data.m_Player.GetInventory().CreateInInventory(MILK_CLASS);
-        if (created)
-            return;
+		EntityAI created = action_data.m_Player.GetInventory().CreateInInventory(MILK_CLASS);
+		if (created)
+			return;
 
-        // Kein Platz im Inventar: die Milch faellt vor die Fuesse, statt
-        // lautlos zu verschwinden. Vanillas eigenes Muster fuer denselben
-        // Fall (EntityAI.c:2141 legt bei fehlendem Platz in der Welt ab).
-        vector pos = action_data.m_Player.GetPosition();
-        Object dropped = g_Game.CreateObjectEx(MILK_CLASS, pos, ECE_PLACE_ON_SURFACE);
+		// Kein Platz im Inventar: die Milch faellt vor die Fuesse, statt
+		// lautlos zu verschwinden. Vanillas eigenes Muster fuer denselben
+		// Fall (EntityAI.c:2141 legt bei fehlendem Platz in der Welt ab).
+		//
+		// g_Game wird vorher geprueft: die Regel verlangt es, und die
+		// Alternative waere ein Nullzugriff in genau dem Pfad, der ohnehin
+		// schon der Ausnahmefall ist. CreateObjectEx steht im 1.30-Stand
+		// unveraendert (Game.c:703).
+		if (!g_Game)
+		{
+			ChefZ_Log.Warn(ChefZ_LogChannel.CONFIG, "Melken: g_Game ist nicht gesetzt - die Milch laesst sich nicht in der Welt ablegen. Der Melkgang bleibt ohne Ergebnis.");
+			return;
+		}
 
-        if (!dropped)
-            ChefZ_Log.Warn(ChefZ_LogChannel.CONFIG, "Melken: \"" + MILK_CLASS + "\" liess sich weder im Inventar noch in der Welt erzeugen. " + "Die Klasse fehlt oder ist scope=0 - der Melkgang bleibt ohne Ergebnis.");
-    }
+		vector pos = action_data.m_Player.GetPosition();
+		Object dropped = g_Game.CreateObjectEx(MILK_CLASS, pos, ECE_PLACE_ON_SURFACE);
+
+		if (!dropped)
+			ChefZ_Log.Warn(ChefZ_LogChannel.CONFIG, "Melken: \"" + MILK_CLASS + "\" liess sich weder im Inventar noch in der Welt erzeugen. " + "Die Klasse fehlt oder ist scope=0 - der Melkgang bleibt ohne Ergebnis.");
+	}
 }

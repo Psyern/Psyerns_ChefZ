@@ -13,66 +13,99 @@
 // erweitert genau eine Klasse: JMObjectSpawnerForm. Keine COT-Datei wird
 // veraendert; jede Ueberschreibung ruft super auf oder faellt auf super zurueck.
 //
+// STAND: COT_New (COT_New/Scripts/...). Alle Zeilennummern unten beziehen sich
+// auf COT_New/Scripts/5_mission/communityonlinetools/modules/object/
+// jmobjectspawnerform.c, sofern nicht anders genannt. Das alte COT
+// (JM/COT/...) wird nicht mehr bedient: dort hiessen die Haken SetListType und
+// AddObjectType, und der Aktionsstreifen m_SpawnerActionsWrapper - beides gibt
+// es in COT_New nicht mehr.
+//
 // ---------------------------------------------------------------------------
 // WIE COTs OBJECT SPAWNER FILTERT - und warum das hier nicht reicht
 // ---------------------------------------------------------------------------
-// JMObjectSpawnerForm.c:911-982, UpdateList(): COT laeuft ueber CfgVehicles,
-// CfgWeapons und CfgMagazines, verwirft scope 0 (und scope 1 ohne
-// m_AllowRestrictedClassNames), verwirft Eintraege ohne Modell oder mit dem
-// Platzhaltermodell "bmp", ruft m_Module.IsExcludedClassName und filtert
-// zuletzt ueber das Suchfeld. Der Typfilter selbst ist eine Zeile:
+// UpdateList() (:2386-2488) laeuft ueber CfgVehicles, CfgWeapons und
+// CfgMagazines, verwirft scope 0 (und scope 1 ohne
+// m_AllowRestrictedClassNames, :2430), verwirft Eintraege ohne Modell oder mit
+// dem Platzhaltermodell "bmp" (:2434), ruft m_Module.IsExcludedClassName
+// (:2439) und filtert zuletzt ueber das Suchfeld (:2451). Der Typfilter selbst
+// ist eine Zeile (:2437):
 //
 //     if (m_Module.m_CurrentType == "" || g_Game.IsKindOf( strNameLower, m_Module.m_CurrentType ))
 //
 // m_CurrentType ist also ein einzelner BASISKLASSENNAME. Gesetzt wird er in
-// SetListType (Z. 722) aus der Tabelle, die AddObjectType (Z. 494) fuellt -
-// "edible_base", "transport", "weapon_base" und so fort (Z. 96-105).
+// SelectCategory(string) (:935-954, die Zuweisung in :937) aus der Tabelle
+// CategoryTable (:527-560).
 //
 // Warum ein einzelner Basisklassenname die acht ChefZ-Kategorien nicht
 // abbilden kann, steht ausfuehrlich im Kopf von
 // Scripts/4_World/ChefZ/Cot/ChefZ_CotCategories.c. Kurz: Milchprodukte und
-// Stationen haben gar keine gemeinsame Basis, Kraeuter haetten fuenf.
+// Stationen haben gar keine gemeinsame Basis, Kraeuter haetten vier.
 //
 // ---------------------------------------------------------------------------
-// DER EINGRIFF, IN DREI TEILEN
+// DER EINGRIFF: EINE GRUPPE IM KATEGORIEMENUE
 // ---------------------------------------------------------------------------
-// 1. OnInit       haengt EINE Auswahlbox unten an die Aktionsleiste. Sie traegt
-//                 neun Eintraege: "Alle" plus die acht Kategorien.
-// 2. UpdateList   erkennt an m_CurrentType, ob eine ChefZ-Kategorie gewaehlt
-//                 ist. Wenn nein - und das ist der Normalfall - laeuft
-//                 unveraendert super.UpdateList(). Wenn ja, fuellt
-//                 ChefZ_FillClassList die Liste aus der Kategorientabelle.
-// 3. SetListType  setzt die Auswahlbox auf "Alle" zurueck, sobald der Admin
-//                 einen von COTs eigenen Typknoepfen drueckt. Ohne das zeigte
-//                 die Box eine Kategorie an, die laengst nicht mehr gilt.
+// COT_New zeigt seine Kategorien nicht mehr als Knopfstreifen, sondern hinter
+// dem Filterknopf neben dem Suchfeld: ein Kontextmenue mit vier Gruppenzeilen
+// (:760-777), jede oeffnet ein Untermenue (:841-854). ChefZ haengt dort genau
+// EINE weitere Gruppenzeile an und fuellt deren Untermenue mit den acht
+// Kategorien. Kein eigenes Bedienelement, kein eigener Platz im Fenster.
+//
+//   1. RebuildCategoryMenu          super, danach EINMAL die ChefZ-Gruppenzeile
+//                                   anhaengen (:760, Aufrufer :744).
+//   2. RefreshCategoryMenuColors    super, danach die ChefZ-Gruppenzeile
+//                                   einfaerben, wenn eine ChefZ-Kategorie
+//                                   aktiv ist (:779-810).
+//   3. RebuildCategorySubMenu       super, danach - nur fuer die ChefZ-Gruppe -
+//                                   die acht Zeilen (:841-854).
+//   4. RefreshCategorySubMenuColors super, danach die aktive ChefZ-Zeile
+//                                   einfaerben (:856-872).
+//   5. CategoryLabel / CategoryIcon Beschriftung und Symbol fuer die
+//                                   ChefZ-Ids, sonst super (:661-687).
+//   6. UpdateList                   erkennt an m_CurrentType, ob eine
+//                                   ChefZ-Kategorie gewaehlt ist. Wenn nein -
+//                                   und das ist der Normalfall - laeuft
+//                                   unveraendert super.UpdateList(). Wenn ja,
+//                                   fuellt ChefZ_FillClassList die Liste aus
+//                                   der Kategorientabelle.
+//
+// SelectCategory (:935) braucht KEINE Ueberschreibung. Der Klick im Untermenue
+// laeuft ueber COTs unveraenderten Pfad OnClick_CategorySubMenu (:905-912) ->
+// CategoryIdFor (:702, laesst jede Id ausser "__all" unveraendert) ->
+// SelectCategory -> m_CurrentType = "chefz_cot_*" -> UpdateList (:953).
+//
+// GroupOfCategory (:638) braucht ebenfalls keine Ueberschreibung.
+// RefreshCategoryMenuColors faerbt ausschliesslich Zeilen, deren Id aus der
+// statischen CategoryGroupTable (:570-580) stammt; die ChefZ-Gruppe steht dort
+// nicht und wird deshalb in Punkt 2 selbst gefaerbt. Fuer eine ChefZ-Kategorie
+// liefert COTs GroupOfCategory "" - genau richtig, denn dann faerbt super
+// keine der vier COT-Gruppen ein.
 //
 // ---------------------------------------------------------------------------
-// WARUM EINE AUSWAHLBOX UNTEN UND KEINE ACHT KNOEPFE OBEN
+// WARUM KEINE EIGENE AUSWAHLBOX MEHR
 // ---------------------------------------------------------------------------
-// Der Knopfstreifen fuer Typfilter sitzt in "object_types_actions_wrapper".
-// Dieses Panel ist laut JM/COT/GUI/layouts/objectspawner_form.layout Z. 26-35
-// genau 320 Pixel hoch (0.2 Breite mal die Hoehe von
-// object_spawn_wrapper_cont, "size 1 320"). Ein UIActionButton ist laut
-// JM/COT/GUI/layouts/uiactions/UIActionButton.layout Z. 2 genau 30 Pixel hoch.
-// COT setzt dort bereits zehn Knoepfe hin - 300 von 320 Pixeln. Fuer acht
-// weitere ist kein Platz; sie wuerden aus dem Panel herauslaufen und den
-// Bereich darunter ueberdecken.
+// Bis zum Umbau auf COT_New hing hier eine UIActionSelectBox im
+// Aktionsstreifen m_SpawnerActionsWrapper. Dieses Member gibt es in COT_New
+// nicht mehr (die Container heissen jetzt m_SearchWrapper, m_FilterWrapper,
+// m_RecentWrapper und m_ListWrapper, :33-36, und werden in OnResize auf feste
+// Hoehen gepinnt). Eine Box mit eigenem Platz im Fenster waere ausserdem genau
+// das, was COT_New abgeschafft hat. Deshalb: keine Box, kein OnInit-Override.
 //
-// Deshalb eine Auswahlbox als zusaetzliche Zeile in m_SpawnerActionsWrapper.
-// Das ist der GridSpacer, in den COT selbst seine vier Aktionszeilen haengt
-// (JMObjectSpawnerForm.c:110); er traegt "Size To Content V" und waechst mit.
-// Eine Auswahlbox statt einer Aufklappliste, weil eine Aufklappliste sich in
-// der untersten Zeile nach unten aus dem Fenster oeffnen wuerde
-// (UIActionDropdownList.c:178, "m_List.SetPos( xPos, yPos + 21, true )").
+// Nebenbei erledigt sich damit auch eine Falle: UIActionSelectBox.SetSelections
+// reicht seine Eintraege UNUEBERSETZT an OptionSelectorMultistate weiter
+// (gui/actions/uiactionselectbox.c:34-45, nur SetLabel uebersetzt, :65-71).
+// COT uebersetzt seine Optionen deshalb selbst mit Widget.TranslateString
+// (:362-363, :374-375). Die Kontextmenue-Zeilen sind davon nicht betroffen.
 //
 // ---------------------------------------------------------------------------
 // PRIVATE FELDER DER BASISKLASSE
 // ---------------------------------------------------------------------------
-// m_ClassList, m_SearchBox, m_Module und m_SpawnerActionsWrapper sind in
-// JMObjectSpawnerForm als "private" deklariert. In Enforce sind sie aus einer
-// modded class dennoch erreichbar - die modded class IST die Klasse, nicht ihr
-// Nachfahre. TerjeCompatibilityCOT/Scripts/5_Mission/CotCompatibility.c nutzt
-// dasselbe an derselben Klasse (m_ObjItemStateLiquid, m_PreviewItem).
+// m_ClassList (:146), m_ListClasses (:31), m_SearchBox (:125), m_CategoryMenu
+// (:18), m_CategorySubMenu (:19) und m_CurrentGroup (:22) sind in
+// JMObjectSpawnerForm als "private" deklariert (m_Module :169 ist protected).
+// In Enforce sind sie aus einer modded class dennoch erreichbar - die modded
+// class IST die Klasse, nicht ihr Nachfahre. TerjeCompatibilityCOT/Scripts/
+// 5_Mission/CotCompatibility.c nutzt dasselbe an derselben Klasse
+// (m_ObjItemStateLiquid, m_PreviewItem).
 //
 // ---------------------------------------------------------------------------
 // KEINE SPIELMECHANIK
@@ -81,69 +114,223 @@
 // veraendert kein Item, sie fasst weder Rezept noch Naehrwert an. Das Spawnen
 // selbst bleibt vollstaendig COTs unveraenderte Sache - inklusive
 // Rechtepruefung (JMObjectSpawnerModule registriert "Entity.Spawn.Position"
-// und "Entity.Spawn.Inventory"), an der hier bewusst NICHTS vorbeigefuehrt
-// wird. Die Kategorien machen Items auffindbar, nicht spawnbar; wer sie ohne
-// Recht anwaehlt, sieht eine Liste und bekommt beim Spawnen dieselbe Absage
-// wie zuvor.
-// SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
-// super in OnInit und SetListType; UpdateList faellt in zwei von drei
-// Zweigen auf super zurueck und geht nur bei einer der acht
-// ChefZ-Kategorien eigene Wege. TerjeCompatibilityCOT moddet dieselbe
-// Klasse auf OnInit und UpdateItemStateType - keine Feld- oder
-// Methodenueberschneidung.
+// und "Entity.Spawn.Inventory", jmobjectspawnermodule.c:36-37), an der hier
+// bewusst NICHTS vorbeigefuehrt wird. Die Kategorien machen Items auffindbar,
+// nicht spawnbar; wer sie ohne Recht anwaehlt, sieht eine Liste und bekommt
+// beim Spawnen dieselbe Absage wie zuvor.
+//
+// IsExcludedClassName (jmobjectspawnermodule.c:964-984) wird hier aus
+// OBERFLAECHENGLEICHHEIT mitgeprueft, nicht als Rechtegrenze: seine Listen
+// werden nur beim Mission-Host aus JMSpawnerConfig gefuellt (:42-48, :50-66).
+// Ein Eintrag, den COT im Zweig "Alle" verwirft, soll auch in einer
+// ChefZ-Kategorie nicht erscheinen - sonst waere der Filter ein Schleichweg an
+// m_AllowRestrictedClassNames vorbei.
+
+/**
+ * Die Kennungen der ChefZ-Gruppe im COT-Kategoriemenue.
+ *
+ * Eigene Klasse statt static const in der modded class: eine modded class
+ * erweitert eine fremde Klasse, und dort gehoeren nur Member mit Mod-Praefix
+ * hinein - Konstanten, die niemand ausserhalb dieser Datei braucht, bleiben
+ * besser daneben.
+ *
+ * GROUP_ID ist NIE ein Wert von m_CurrentType. Sie ist nur die Id der
+ * Gruppenzeile im Kontextmenue; die Zeilen im Untermenue tragen die FilterIds
+ * aus ChefZ_CotCategories.
+ */
+class ChefZ_CotMenu
+{
+	static const string GROUP_ID = "chefz_cot_group";
+	static const string GROUP_LABEL = "#STR_CHEFZ_COT_GROUP";
+	static const string GROUP_ICON = "chef-hat";
+}
+
+// SCOUT-GEPRUEFT 2026-09-17 (chefz-cot130)
+// Sieben Ueberschreibungen. Vier davon (RebuildCategoryMenu,
+// RefreshCategoryMenuColors, RebuildCategorySubMenu,
+// RefreshCategorySubMenuColors) rufen super als ERSTE Anweisung und haengen
+// danach nur an; CategoryLabel und CategoryIcon geben fuer jede fremde Id
+// super zurueck; UpdateList faellt in zwei von drei Zweigen auf super zurueck
+// und geht nur bei einer der acht ChefZ-Kategorien eigene Wege. Das einzige
+// Member traegt Mod-Praefix. TerjeCompatibilityCOT moddet dieselbe Klasse auf
+// OnInit und UpdateItemStateType - keine Feld- oder Methodenueberschneidung.
 modded class JMObjectSpawnerForm
 {
-	// Die zusaetzliche Auswahlbox. NULL, solange OnInit nicht gelaufen ist -
-	// und UpdateList laeuft am Ende von super.OnInit() bereits einmal. Jeder
-	// Zugriff unten ist deshalb abgesichert.
-	protected UIActionSelectBox m_ChefZCategorySelect;
+	// Die Gruppenzeile wird genau EINMAL angehaengt. Ein eigenes Flag und
+	// nicht GetItemCount(): COTs eigener Aufbau laeuft nur bei
+	// GetItemCount() == 0 (:765), nach super ist der Zaehler also immer
+	// groesser als 0 und taugt nicht als Unterscheidung.
+	// UIActionContextMenu hat kein HasItem (gui/actions/uiactioncontextmenu.c:
+	// 268-396), und AddItem baut bei jedem Aufruf alle Zeilen neu (:300-304) -
+	// eine zweite Gruppenzeile waere also nicht nur doppelt, sondern teuer.
+	protected bool m_ChefZCotGroupInMenu;
 
-	override void OnInit()
+	/**
+	 * Die ChefZ-Gruppenzeile an COTs Kategoriemenue anhaengen.
+	 *
+	 * submenu = true, damit die Zeile den Pfeil traegt und der Klick in
+	 * OnClick_CategoryMenu (:885-903) nicht als Kategorie, sondern als
+	 * Gruppenoeffnung gelesen wird: die Id ist nicht MENU_ID_ALL, also landet
+	 * sie in OpenCategorySubMenu (:902).
+	 */
+	override protected void RebuildCategoryMenu()
 	{
-		super.OnInit();
+		super.RebuildCategoryMenu();
 
-		// Kein Wrapper, keine Box - und COT laeuft weiter wie ohne diesen Mod.
-		// CreateGridSpacer kann NULL liefern, wenn ein Layout fehlt
-		// (UIActionManager.c:9, CheckWidget), und CreateSelectionBox verlangt
-		// "notnull Widget parent". Eine fehlende Adminmaske ist ein Aergernis,
-		// ein Absturz beim Oeffnen des Spawners ist einer mehr.
-		if (!m_SpawnerActionsWrapper)
+		if (!m_CategoryMenu)
 		{
 			return;
 		}
 
-		// Eintrag 0 ist "Alle": kein ChefZ-Filter, COT verhaelt sich exakt wie
-		// ohne diesen Mod. Danach die acht Kategorien in Tabellenreihenfolge.
-		array<string> options = new array<string>;
-		options.Insert("#STR_CHEFZ_COT_CAT_NONE");
+		if (m_ChefZCotGroupInMenu)
+		{
+			return;
+		}
+
+		m_ChefZCotGroupInMenu = true;
+		m_CategoryMenu.AddItem(ChefZ_CotMenu.GROUP_ID, ChefZ_CotMenu.GROUP_LABEL, JMConstants.Lucide(ChefZ_CotMenu.GROUP_ICON), 0, true);
+
+		// super hat seine Farben gesetzt, bevor es die Zeile gab.
+		RefreshCategoryMenuColors();
+	}
+
+	/**
+	 * Die ChefZ-Gruppenzeile markieren, solange eine ChefZ-Kategorie aktiv ist.
+	 *
+	 * super faerbt nur Zeilen, deren Id aus CategoryGroupTable (:570-580)
+	 * stammt (:794-807). Die ChefZ-Gruppe steht dort nicht und wuerde sonst nie
+	 * markiert - der Admin saehe nicht, aus welcher Gruppe seine Liste kommt.
+	 */
+	override protected void RefreshCategoryMenuColors()
+	{
+		super.RefreshCategoryMenuColors();
+
+		if (!m_CategoryMenu || !m_ChefZCotGroupInMenu || !m_Module)
+		{
+			return;
+		}
+
+		// 0 heisst "Menuefarbe benutzen" - genau wie bei COT (:787, :801).
+		int color = 0;
+		if (ChefZ_CotCategories.Find(m_Module.m_CurrentType))
+		{
+			color = JMTheme.ACCENT;
+		}
+
+		m_CategoryMenu.SetItemTextColor(ChefZ_CotMenu.GROUP_ID, color);
+	}
+
+	/**
+	 * Das Untermenue der ChefZ-Gruppe fuellen.
+	 *
+	 * super leert das Menue und fuellt es aus CategoryGroupMembers
+	 * (:585-636). Fuer die ChefZ-Gruppe liefert diese statische Tabelle eine
+	 * LEERE Liste - sie wird bewusst nicht angefasst -, super hinterlaesst
+	 * also ein leeres, sauber geraeumtes Menue, in das hier die acht Zeilen
+	 * gehen.
+	 */
+	override protected void RebuildCategorySubMenu()
+	{
+		super.RebuildCategorySubMenu();
+
+		if (!m_CategorySubMenu || m_CurrentGroup != ChefZ_CotMenu.GROUP_ID)
+		{
+			return;
+		}
 
 		array<ref ChefZ_CotCategory> categories = ChefZ_CotCategories.Get();
-		if (categories)
+		if (!categories)
 		{
-			for (int i = 0; i < categories.Count(); i++)
+			return;
+		}
+
+		ChefZ_CotCategory category;
+		for (int i = 0; i < categories.Count(); i++)
+		{
+			category = categories.Get(i);
+			if (!category)
 			{
-				options.Insert(categories.Get(i).GetLabel());
+				continue;
 			}
+
+			// MenuIdFor (:694) waere hier wirkungslos: es tauscht nur den
+			// leeren Text gegen MENU_ID_ALL, und keine FilterId ist leer.
+			m_CategorySubMenu.AddItem(category.GetFilterId(), category.GetLabel(), JMConstants.Lucide(category.GetIconName()));
 		}
 
-		m_ChefZCategorySelect = UIActionManager.CreateSelectionBox(
-			m_SpawnerActionsWrapper, "#STR_CHEFZ_COT_CATEGORY", options,
-			this, "ChefZ_OnCategoryChanged");
+		RefreshCategorySubMenuColors();
+	}
 
-		if (m_ChefZCategorySelect && m_Module)
+	/** Die aktive ChefZ-Zeile im Untermenue markieren. */
+	override protected void RefreshCategorySubMenuColors()
+	{
+		super.RefreshCategorySubMenuColors();
+
+		if (!m_CategorySubMenu || m_CurrentGroup != ChefZ_CotMenu.GROUP_ID || !m_Module)
 		{
-			m_ChefZCategorySelect.SetSelectorWidth(0.6);
-
-			// JMObjectSpawnerModule lebt laenger als das Formular:
-			// m_CurrentType ueberdauert das Schliessen des Fensters. Stand dort
-			// beim letzten Mal eine ChefZ-Kategorie, zeigt die Box sie wieder
-			// an - sonst stuende sie auf "Alle", waehrend die Liste gefiltert
-			// ist. SetSelection mit sendEvent = false, sonst loeste das
-			// Wiederherstellen ein UpdateList aus, das super.OnInit() gerade
-			// erledigt hat.
-			m_ChefZCategorySelect.SetSelection(
-				ChefZ_CotCategories.IndexOf(m_Module.m_CurrentType) + 1, false);
+			return;
 		}
+
+		array<ref ChefZ_CotCategory> categories = ChefZ_CotCategories.Get();
+		if (!categories)
+		{
+			return;
+		}
+
+		ChefZ_CotCategory category;
+		int color;
+		for (int i = 0; i < categories.Count(); i++)
+		{
+			category = categories.Get(i);
+			if (!category)
+			{
+				continue;
+			}
+
+			color = 0;
+			if (category.GetFilterId() == m_Module.m_CurrentType)
+			{
+				color = JMTheme.ACCENT;
+			}
+
+			m_CategorySubMenu.SetItemTextColor(category.GetFilterId(), color);
+		}
+	}
+
+	/**
+	 * Beschriftung einer ChefZ-Id.
+	 *
+	 * Nicht nur fuer das Untermenue: SelectCategory legt jede gewaehlte Id in
+	 * den Verlauf (:944, PushRecentCategory :962-976), und die Chips holen
+	 * ihre Beschriftung genau hier (:1011). Ohne diese Ueberschreibung liefe
+	 * COTs Suche in der statischen CategoryTable ins Leere und gaebe "" zurueck
+	 * (:672) - der Chip stuende dann ohne Text da.
+	 */
+	override protected string CategoryLabel(string id)
+	{
+		ChefZ_CotCategory category = ChefZ_CotCategories.Find(id);
+		if (category)
+		{
+			return category.GetLabel();
+		}
+
+		return super.CategoryLabel(id);
+	}
+
+	/**
+	 * Symbol einer ChefZ-Id. Ohne diese Ueberschreibung faellt COT auf das
+	 * Sammelsymbol "layers" zurueck (:686), und alle acht Kategorien saehen im
+	 * Verlauf gleich aus.
+	 */
+	override protected string CategoryIcon(string id)
+	{
+		ChefZ_CotCategory category = ChefZ_CotCategories.Find(id);
+		if (category)
+		{
+			return JMConstants.Lucide(category.GetIconName());
+		}
+
+		return super.CategoryIcon(id);
 	}
 
 	/**
@@ -173,90 +360,64 @@ modded class JMObjectSpawnerForm
 	}
 
 	/**
-	 * COTs eigener Typfilter und der ChefZ-Filter schliessen einander aus -
-	 * beide leben in derselben Variablen. Wer oben einen Typknopf drueckt,
-	 * bekommt deshalb hier die Auswahlbox auf "Alle" zurueckgestellt, bevor
-	 * super seinen Wert in m_CurrentType schreibt.
-	 *
-	 * sendEvent = false: der Rueckstellung darf kein UpdateList folgen, sonst
-	 * liefe die Liste einmal ohne den Typ, den super gleich setzt.
-	 */
-	override void SetListType(UIEvent eid, UIActionBase action)
-	{
-		if (eid == UIEvent.CLICK && m_ChefZCategorySelect)
-		{
-			m_ChefZCategorySelect.SetSelection(0, false);
-		}
-
-		super.SetListType(eid, action);
-	}
-
-	/** Rueckruf der Auswahlbox. */
-	void ChefZ_OnCategoryChanged(UIEvent eid, UIActionBase action)
-	{
-		if (eid != UIEvent.CHANGE)
-		{
-			return;
-		}
-
-		if (!m_ChefZCategorySelect || !m_Module)
-		{
-			return;
-		}
-
-		// Eintrag 0 ist "Alle" - der leere Text ist genau der Wert, den COTs
-		// Knopf "ALL" setzt (JMObjectSpawnerForm.c:96). Damit landet der Admin
-		// wieder in COTs unveraendertem Zweig.
-		int index = m_ChefZCategorySelect.GetSelection() - 1;
-		array<ref ChefZ_CotCategory> categories = ChefZ_CotCategories.Get();
-
-		if (index < 0 || index >= categories.Count())
-		{
-			m_Module.m_CurrentType = "";
-		}
-		else
-		{
-			m_Module.m_CurrentType = categories.Get(index).GetFilterId();
-		}
-
-		UpdateList();
-	}
-
-	/**
 	 * Die Liste aus einer ChefZ-Kategorie fuellen.
 	 *
 	 * Bewusst dieselben Pruefungen in derselben Reihenfolge wie COTs
-	 * UpdateList (JMObjectSpawnerForm.c:938-975). Ein Eintrag, den COT im
-	 * Zweig "Alle" verwirft, wird auch hier verworfen - sonst zeigte eine
-	 * ChefZ-Kategorie Items an, die COT sonst nirgends anbietet, und der
-	 * Filter waere ein Schleichweg an m_AllowRestrictedClassNames und
-	 * IsExcludedClassName vorbei.
+	 * UpdateList (:2417-2473) und derselbe Abschluss: m_ListClasses index-
+	 * parallel zu den Zeilen fuellen und die Liste mit EINEM SetItems setzen
+	 * (:2477). Das ist keine Formsache - UIActionItemList kennt weder AddItem
+	 * noch ClearItems (gui/actions/uiactionitemlist.c:290 SetItems, :311
+	 * Clear), und GetCurrentSelection (:2514-2522) liest den Klassennamen
+	 * ausschliesslich aus m_ListClasses[row]. Bliebe das Array ungepflegt,
+	 * spawnte der Admin in einer ChefZ-Kategorie die Klasse, die in der
+	 * vorherigen Liste an derselben Zeile stand, und der Export in die
+	 * Zwischenablage (:2161-2209) lieferte die alte Liste.
+	 *
+	 * Ein Eintrag, den COT im Zweig "Alle" verwirft, wird auch hier verworfen -
+	 * Begruendung im Dateikopf unter "KEINE SPIELMECHANIK".
 	 *
 	 * Der eine Unterschied: hier wird nicht ueber ganz CfgVehicles gelaufen,
 	 * sondern nur ueber die Namen der Kategorie. Deshalb steht ganz vorn
 	 * ConfigIsExisting - ein Name aus einem nicht geladenen ChefZ-Addon faellt
 	 * dort still heraus.
+	 *
+	 * COTs ReportExactClassRejection (:2341, aufgerufen :2480) wird hier
+	 * bewusst NICHT aufgerufen: es durchsucht alle drei Configbaeume nach dem
+	 * Suchtext und meldete dem Admin dann, warum eine Klasse abgelehnt wurde,
+	 * die in dieser Kategorie ohnehin nicht steht. In einer Kategorienliste ist
+	 * das keine Hilfe, sondern eine falsche Faehrte.
 	 */
 	protected void ChefZ_FillClassList(ChefZ_CotCategory category)
 	{
-		if (!m_ClassList)
+		if (!m_ClassList || !m_ListClasses)
 		{
 			return;
 		}
 
-		m_ClassList.ClearItems();
+		m_ListClasses.Clear();
+
+		array<string> rowLabels = new array<string>;
+		array<string> rowSubs = new array<string>;
 
 		string closestMatch;
+		string className;
+		string path;
+		string model;
+		string displayName;
+		string rowText;
+		int scope;
 
 		COT_String search = m_Module.m_SearchText;
 		bool requireAllKeywords;
 		TStringArray keywords = search.KeywordSearch_Prepare(requireAllKeywords);
 
+		COT_String candidate;
+
 		array<string> classNames = category.GetClasses();
 		for (int i = 0; i < classNames.Count(); i++)
 		{
-			string className = classNames.Get(i);
-			string path = CFG_VEHICLESPATH + " " + className;
+			className = classNames.Get(i);
+			path = CFG_VEHICLESPATH + " " + className;
 
 			// Addon nicht geladen -> Eintrag entfaellt, ohne Meldung. Das ist
 			// die Stelle, an der dieses Modul optional wird.
@@ -265,19 +426,18 @@ modded class JMObjectSpawnerForm
 				continue;
 			}
 
-			int scope = g_Game.ConfigGetInt(path + " scope");
+			scope = g_Game.ConfigGetInt(path + " scope");
 			if (scope == 0 || (scope == 1 && !m_Module.m_AllowRestrictedClassNames))
 			{
 				continue;
 			}
 
-			string model;
 			if (!g_Game.ConfigGetText(path + " model", model) || model == string.Empty || model == "bmp")
 			{
 				continue;
 			}
 
-			COT_String candidate = className;
+			candidate = className;
 			candidate.ToLower();
 
 			if (m_Module.IsExcludedClassName(candidate))
@@ -285,9 +445,9 @@ modded class JMObjectSpawnerForm
 				continue;
 			}
 
-			// Dieselbe Umschaltung wie in COT: ist der Haken
-			// "#STR_COT_OBJECT_MODULE_SPAWN_DISPLAYNAME" gesetzt, sucht der
-			// Admin im Anzeigenamen statt im Klassennamen.
+			// Dieselbe Umschaltung wie in COT (:2443-2449): ist der
+			// Anzeigename-Modus gesetzt, sucht der Admin im Anzeigenamen statt
+			// im Klassennamen.
 			if (m_Module.m_FilterWithDisplayName)
 			{
 				if (!g_Game.ConfigGetText(path + " displayName", candidate))
@@ -306,8 +466,36 @@ modded class JMObjectSpawnerForm
 				}
 			}
 
-			m_ClassList.AddItem(className, NULL, 0);
+			// Der Anzeigename aendert, was die Zeile ZEIGT, nicht was sie
+			// bedeutet - genau wie in COT (:2454-2470). Der Klassenname geht in
+			// jedem Fall nach m_ListClasses und rutscht in der Zeile nach
+			// hinten, statt zu verschwinden: er ist das, was der Admin
+			// anderswo eintippen muss.
+			rowText = className;
+
+			if (m_Module.m_FilterWithDisplayName)
+			{
+				if (g_Game.ConfigGetText(path + " displayName", displayName) && displayName != "")
+				{
+					rowText = Widget.TranslateString(displayName);
+				}
+			}
+
+			rowLabels.Insert(rowText);
+
+			if (rowText == className)
+			{
+				rowSubs.Insert("");
+			}
+			else
+			{
+				rowSubs.Insert(className);
+			}
+
+			m_ListClasses.Insert(className);
 		}
+
+		m_ClassList.SetItems(rowLabels, rowSubs);
 
 		if (m_SearchBox)
 		{

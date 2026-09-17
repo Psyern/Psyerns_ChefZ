@@ -11,6 +11,15 @@
             "unitsPerWholeItem": 1
         },
         {
+            "_note": "Neu in DayZ 1.30 (scripts 1.30/4_World/DayZ/Entities/ItemBase/Edible_Base/CatfishFilletMeat.c:1-33, CanBeCooked Z.3-6, IsMeat Z.13-16; in 1.29 existiert die Klasse nicht). Ohne diesen Datensatz hat das Welsfilet keine Kategorie - ChefZ_IngredientManager.Resolve liefert fuer eine Klasse ohne eigenen Eintrag null -, und TR_SaltFish (Salting.json) wie TR_FishToSmoked (Smoking.json) suchen category FISH + state RAW. Es liesse sich also weder salzen noch raeuchern. Aufbau identisch zu CarpFilletMeat.",
+            "id": "CatfishFilletMeat",
+            "categories": ["FISH"],
+            "tags": ["CHEFZ_HIGH_PROTEIN"],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1
+        },
+        {
             "id": "MackerelFilletMeat",
             "categories": ["FISH"],
             "tags": ["CHEFZ_HIGH_PROTEIN"],

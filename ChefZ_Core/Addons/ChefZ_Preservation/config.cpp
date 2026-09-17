@@ -270,6 +270,91 @@ class CfgMods
     };
 };
 
+//------------------------------------------------------------------------------
+// WARUM JEDE DER ACHT KLASSEN IHREN FOOD-BLOCK VOLLSTAENDIG AUSSCHREIBT
+// (17.09.2026; Begruendung noch am selben Tag korrigiert - die erste Fassung
+// behauptete eine Vererbungsregel der Engine, fuer die es keine Lesequelle
+// gibt, und zitierte DayZExpansion falsch. Beides steht hier nicht mehr.)
+//
+// BELEGT ist nur dies: die Engine liest Garstufen und Uebergaenge je
+// ITEM-Klassenname. %1 ist m_FoodItem.GetType() (FoodStage.c:105/156).
+//
+//     "CfgVehicles %1 Food FoodStages %2 visual_properties"    FoodStage.c:119
+//     "CfgVehicles %1 Food FoodStages %2 nutrition_properties" FoodStage.c:126
+//     "CfgVehicles %1 Food FoodStages %2 cooking_properties"   FoodStage.c:133
+//     "CfgVehicles %1 Food FoodStageTransitions %2"            FoodStage.c:167
+//     ohne passenden Uebergang: "return FoodStageType.BURNED"  FoodStage.c:474
+//
+//   Quelle: "scripts (and more) - 1.30"/scripts/4_World/DayZ/Classes/FoodStage/
+//   FoodStage.c. Gegen "scripts - 1.29"/4_World/.../FoodStage.c ist die Datei
+//   BYTEGLEICH (diff -q meldet keinen Unterschied) - dieser Punkt ist also
+//   nicht durch 1.30 entstanden.
+//
+// NICHT BELEGT und hier deshalb auch nicht behauptet: ob der Configleser einen
+// gleichnamigen Unterknoten der Elternklasse mitnimmt, wenn das Kind einen
+// eigenen "class Food" fuehrt. Aus den erlaubten Lesequellen ist das nicht
+// entscheidbar:
+//
+//   - Die Vanilla-Configs liegen nur binarisiert vor.
+//   - Die einzige unbinarisierte Fremdconfig mit nutrition_properties im
+//     Lesebestand ist DayZExpansion/Objects/Gear/Consumables/config.cpp, und
+//     sie entscheidet nichts: ihre Items leiten den Uebergangsblock von einer
+//     Wurzelklasse ab (Z.194 "class FoodStageTransitions: FruitStageTransitions"
+//     mit LEEREM Rumpf), und diese Wurzel ist selbst leer (Z.37-42, ebenso
+//     BaseFoodStageTransitions) - dort wird in keiner Lesart Inhalt geerbt.
+//     Ihre Kaeseitems (Z.311-360, ExpansionCheese1..4) tragen ueberhaupt
+//     keinen Food-Block, ihre Basis Expansion_FoodBase (Z.64) auch nicht.
+//   - Das Projekt selbst nimmt das GEGENTEIL an: tools/chefz-validate/
+//     chefzfood.mjs:173-194 (hasNode) laeuft die Config-Elternkette ab, und
+//     ChefZ_Fishing, ChefZ_Meat, ChefZ_Farming und ChefZ_Baking bauen darauf.
+//
+// Weil die Frage offen ist, steht der Food-Knoten hier so, dass BEIDE Lesarten
+// dasselbe ergeben: jede der acht Klassen fuehrt visual_, nutrition_ und
+// cooking_properties je Stufe und den Uebergangsblock selbst, WERTGLEICH mit
+// ChefZ_PreservedFood_Base. Wird geerbt, ist die Wiederholung ueberfluessig und
+// aendert nichts. Wird nicht geerbt, ist sie noetig. Mehr sagt dieser
+// Abschnitt nicht.
+//
+// OFFEN, GEHOERT ANS GATE - hier nicht entscheidbar:
+//   Stimmt die Vererbung, kann die Wiederholung wieder raus und dieses Modul
+//   schreibt als einziges doppelt. Stimmt sie nicht, fehlt derselbe Knoten
+//   auch rund 50 Items in ChefZ_Fishing, ChefZ_Meat, ChefZ_Farming und
+//   ChefZ_Baking (z.B. ChefZ_PlaiceFillet, ChefZ_Fishing/config.cpp:515 -
+//   eigener Food-Block, Uebergaenge nur auf ChefZ_FishFillet_Base Z.438), und
+//   chefzfood.mjs meldet es per Bauart nicht. Probe im Spiel: ChefZ_SaltedMeat
+//   und ChefZ_PlaiceFillet zusammen in die Pfanne. Gart nur eines von beiden,
+//   ist die Frage beantwortet.
+//
+// Eine gemeinsame Vorlage auf Wurzelebene, von der die acht Bloecke ableiten,
+// waere die kuerzere Schreibweise. Sie steht hier trotzdem nicht: eine
+// Wurzelklasse ausserhalb von CfgVehicles ist fuer den Klassenreferenz-
+// Validator unsichtbar (lib.mjs:245 ueberspringt scope.length === 0), und ein
+// Bauteil, das der Validator nicht sehen kann, ist eine Stelle, an der ein
+// Tippfehler erst im Spiel auffaellt. Der Preis sind acht gleiche
+// Uebergangsbloecke.
+//
+// Die Werte sind unveraendert die der Basis - fachlich aendert sich nichts.
+//
+// transition_to und cooking_method sind ZAHLEN, nicht Namen
+// (SetupFoodStageTransitionMapping liest sie mit ConfigGetInt, FoodStage.c:167ff):
+//   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
+//   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
+//
+// Zwei Uebergaenge, beide AUS "Raw" - gepoekeltes Fleisch laesst sich braten und
+// kochen wie rohes.
+//
+// AUS "Dried" GIBT ES KEINEN, und das ist die eigentliche Aussage dieses Blocks:
+// Doerrfleisch, Trockenfisch, Raeucherwurst sind FERTIG. Wer sie in die Pfanne
+// legt, bekommt Kohle - genau wie GetNextFoodStageType es ohne Eintrag ohnehin
+// tut (FoodStage.c:474, "return FoodStageType.BURNED").
+//
+// DRYING (3) fehlt absichtlich, obwohl dieses Modul das Trocknen baut: Vanillas
+// Trocknen kennt GENAU EINEN Uebergang RAW -> DRIED und sonst BURNED (01 V14).
+// Die Matrix §56 verlangt vier Uebergaenge mit verschiedenen Haltbarkeiten.
+// Deshalb laufen Trocknen und Raeuchern an EIGENEN Stationen (11 E6) - Vanillas
+// Smoking-Slots bleiben unangetastet.
+//------------------------------------------------------------------------------
+
 class CfgVehicles
 {
     class Edible_Base;
@@ -288,7 +373,7 @@ class CfgVehicles
     //                     "Nutrition" ODER "Food" und scope != 0 (01 V7).
     //                     Fehlt beides, saettigt der Bissen lautlos nicht.
     //   FoodStage-        FoodStage.GetNextFoodStageType faellt ohne passenden
-    //   Transitions       Uebergang auf BURNED zurueck (FoodStage.c:472) - eine
+    //   Transitions       Uebergang auf BURNED zurueck (FoodStage.c:474) - eine
     //                     kochbare Klasse OHNE Uebergaenge verbrennt (01 V4).
     //
     // nutrition_properties[] in der Reihenfolge aus FoodStage.c:
@@ -361,29 +446,17 @@ class CfgVehicles
                 };
             };
 
-            // OHNE DIESEN BLOCK VERBRENNT JEDES ITEM DES MODULS (01 V4).
+            // OHNE DIESEN BLOCK VERBRENNT JEDES ITEM DES MODULS (01 V4) -
+            // genauer: es wird gar nicht erst gekocht, weil
+            // ChefZ_Edible_Base.CanBeCooked() denselben Configpfad abfragt.
             //
-            // Zwei Uebergaenge, beide AUS "Raw" - gepoekeltes Fleisch laesst
-            // sich braten und kochen wie rohes.
-            //
-            // AUS "Dried" GIBT ES KEINEN, und das ist die eigentliche Aussage
-            // dieses Blocks: Doerrfleisch, Trockenfisch, Raeucherwurst sind
-            // FERTIG. Wer sie in die Pfanne legt, bekommt Kohle - genau wie in
-            // der Wirklichkeit und genau wie GetNextFoodStageType es ohne
-            // Eintrag ohnehin tut (FoodStage.c:472).
-            //
-            // transition_to und cooking_method sind ZAHLEN, nicht Namen
-            // (SetupFoodStageTransitionMapping liest sie mit ConfigGetInt,
-            // FoodStage.c:167ff):
-            //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
-            //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
-            //
-            // DRYING (3) fehlt absichtlich, obwohl dieses Modul das Trocknen
-            // baut: Vanillas Trocknen kennt GENAU EINEN Uebergang RAW -> DRIED
-            // und sonst BURNED (01 V14). Die Matrix §56 verlangt vier
-            // Uebergaenge mit verschiedenen Haltbarkeiten. Deshalb laufen
-            // Trocknen und Raeuchern an EIGENEN Stationen (11 E6) - Vanillas
-            // Smoking-Slots bleiben unangetastet.
+            // Jedes der acht Items unten wiederholt DIESEN Block wortgleich.
+            // Nicht, weil feststuende, dass sein eigener "class Food" den hier
+            // verdeckt - das ist gerade NICHT belegbar -, sondern damit beide
+            // Lesarten dasselbe ergeben. Die Begruendung mit Datei und Zeile
+            // steht im Abschnitt "WARUM JEDE DER ACHT KLASSEN IHREN FOOD-BLOCK
+            // VOLLSTAENDIG AUSSCHREIBT" ueber class CfgVehicles. Wer hier etwas
+            // aendert, aendert es dort neun Mal.
             class FoodStageTransitions
             {
                 class Raw
@@ -449,12 +522,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.96, 165, 25, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.79, 330, 12, 26, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.87, 300, 40, 26, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.53, 320, 5, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {1.28, 85, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.62, 100, 18, 5, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.96, 165, 25, 16, 0, 4, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.79, 330, 12, 26, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.87, 300, 40, 26, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.53, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.28, 85, 6, 5, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.62, 100, 18, 5, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -490,12 +579,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.50, 300, 35, 30, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.35, 80, 1, 7, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.57, 128, 2, 6, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.50, 300, 35, 30, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.35, 80, 1, 7, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.57, 128, 2, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -530,12 +635,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.72, 285, 42, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.41, 75, 3, 7, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.66, 120, 5, 6, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.72, 285, 42, 28, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.41, 75, 3, 7, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.66, 120, 5, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -588,12 +709,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.52, 130, 22, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.41, 250, 10, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.47, 230, 38, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.28, 260, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.96, 65, 5, 6, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.25, 80, 16, 6, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.52, 130, 22, 20, 0, 4, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.41, 250, 10, 32, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.47, 230, 38, 32, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.28, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.96, 65, 5, 6, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.25, 80, 16, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -629,12 +766,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.28, 245, 32, 34, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.30, 65, 1, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.48, 104, 2, 7, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.28, 245, 32, 34, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.30, 65, 1, 8, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.48, 104, 2, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -672,12 +825,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.44, 232, 36, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.35, 61, 2, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.55, 98, 4, 6, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.44, 232, 36, 32, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.35, 61, 2, 8, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.55, 98, 4, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -723,12 +892,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.45, 480, 44, 33, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.60, 125, 4, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.96, 200, 6, 7, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.45, 480, 44, 33, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.60, 125, 4, 8, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.96, 200, 6, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -762,12 +947,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.27, 520, 36, 35, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.54, 136, 2, 9, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.87, 218, 3, 7, 20, 16, 1}; };
+                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.27, 520, 36, 35, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.54, 136, 2, 9, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.87, 218, 3, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_PreservedRawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_PreservedRawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };

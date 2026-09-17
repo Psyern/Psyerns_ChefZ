@@ -36,11 +36,11 @@
  */
 class ChefZ_MilkCan extends ItemBase
 {
-    override void SetActions()
-    {
-        super.SetActions();
-        AddAction(ChefZ_ActionMilkCow);
-    }
+	override void SetActions()
+	{
+		super.SetActions();
+		AddAction(ChefZ_ActionMilkCow);
+	}
 }
 
 /**
@@ -55,41 +55,95 @@ class ChefZ_MilkCan extends ItemBase
  * wo die Aktion greift, und die greift ausdruecklich nur an weiblichen Rindern
  * (Begruendung in ChefZ_ActionMilkCow).
  */
-// SCOUT-GEPRUEFT 2026-09-07
-// Geprueft wurde: ein protected int und zwei Methoden, alle mit m_ChefZ_/
-// ChefZ_ praefigiert (Namenskonvention, Regel 8). KEIN override, KEIN
-// Konstruktor - ein int ist in Enforce ohnehin 0, und 0 heisst hier "noch nie
-// gemolken". Damit greift diese Erweiterung in keinen Vanilla-Ablauf ein und
-// kann sich mit einem zweiten modded class an derselben Tierklasse nicht
-// widersprechen: sie fuegt hinzu, sie ersetzt nichts.
+// SCOUT-GEPRUEFT 2026-09-07, NACHGEZOGEN 2026-09-17
+// Geprueft wurde: ein synchronisiertes bool, ein Timer und drei Methoden, alle
+// mit m_ChefZ_/ChefZ_ praefigiert (Namenskonvention, Regel 8). KEIN override.
+// Damit greift diese Erweiterung in keinen Vanilla-Ablauf ein und kann sich mit
+// einem zweiten modded class an derselben Tierklasse nicht widersprechen: sie
+// fuegt hinzu, sie ersetzt nichts.
 // Der bekannte Nachbar auf diesem Server ist TerjeSkills; dessen
 // Animals/config.cpp fasst Rinder nur ueber CfgVehicles-Werte an, nicht ueber
 // eine Skriptklasse (nachgelesen in Mod Repositories).
+//
+// ---------------------------------------------------------------------------
+// WARUM EIN SYNCHRONISIERTES BOOL UND KEIN ZEITSTEMPEL (17.09.2026)
+// ---------------------------------------------------------------------------
+// Bis hierher stand hier ein reiner int m_ChefZ_NextMilkTime, gesetzt allein im
+// Serverpfad (OnFinishProgressServer -> ChefZ_MarkMilked) und nie uebertragen.
+// Auf jedem Client blieb er 0, ChefZ_CanBeMilked lieferte dort also immer true.
+// Folge: Der Client bot "Kuh melken" weiter an, der Server lehnte den Start ab
+// (ActionManagerServer.c:168 ruft pickedAction.Can(...), ActionBase.c:954 ruft
+// darin ActionCondition), und der Spieler sah bis zu zehn Minuten lang eine
+// Aktion, die beim Tastendruck kommentarlos abbrach.
+//
+// Ein synchronisierter ZEITSTEMPEL waere die falsche Abhilfe: g_Game.GetTime()
+// (Game.c:1534) zaehlt auf Client und Server getrennt, ein uebertragener Wert
+// bedeutete auf der Gegenseite etwas anderes. Uebertragen wird deshalb der
+// ZUSTAND "leer" als bool; die Uhr laeuft ausschliesslich auf dem Server, als
+// Timer.
+//
+// Belege im 1.30-Stand:
+//   EntityAI.c:2809  proto native void RegisterNetSyncVariableBool(string)
+//   EntityAI.c:3041  proto native void SetSynchDirty()
+//   tools.c:10       const int CALL_CATEGORY_GAMEPLAY = 2
+//   tools.c:576/595  class Timer / Timer.Run(duration, obj, fn_name, ...)
+//                    - Sekunden, "Call is not executed after the Timer object
+//                      is deleted" (tools.c:548): stirbt die Kuh, faellt der
+//                      ref-Timer mit ihr, kein Aufruf ins Leere.
+//   FireplaceBase.c:1812-1813 - dasselbe Muster serverseitig in Vanilla.
+//
+// Ein Konstruktor ist dafuer noetig (die Registrierung muss auf beiden Seiten
+// gleich laufen). Er ruft nichts weiter auf; die Vanilla-Konstruktorkette
+// laeuft in Enforce von selbst - dieselbe Form wie TerjeRadiation/.../
+// AnimalBase.c:7-10 in Mod Repositories.
+//
+// SCOUT-GEPRUEFT 2026-09-17 (Stand mit bool, Timer und Konstruktor)
 modded class Animal_BosTaurusF
 {
-    //! Wie lange eine Kuh nach dem Melken leer bleibt, in Millisekunden.
-    //! Zehn Minuten sind ein Vorschlag, kein Messergebnis - der Wert steht
-    //! als einzige Zahl hier, damit das Balancing ihn an einer Stelle findet.
-    static const int CHEFZ_MILK_COOLDOWN_MS = 600000;
+	//! Wie lange eine Kuh nach dem Melken leer bleibt, in Sekunden.
+	//! Zehn Minuten sind ein Vorschlag, kein Messergebnis - der Wert steht
+	//! als einzige Zahl hier, damit das Balancing ihn an einer Stelle findet.
+	//! Sekunden und nicht Millisekunden, weil Timer.Run Sekunden nimmt
+	//! (tools.c:595).
+	static const float CHEFZ_MILK_COOLDOWN_SEC = 600.0;
 
-    //! Zeitpunkt, ab dem wieder gemolken werden darf. 0 heisst "noch nie
-    //! gemolken" und ist damit sofort frei - Enforce initialisiert einen int
-    //! mit 0, deshalb steht hier ausdruecklich KEIN Konstruktor. Einer in
-    //! einer modded class waere eine zweite Stelle, an der die Kette der
-    //! Erweiterungen brechen kann, und er brauchte nichts zu tun.
-    protected int m_ChefZ_NextMilkTime;
+	//! true heisst "gerade leer". Synchronisiert, damit der Client dieselbe
+	//! Antwort gibt wie der Server. false ist der Ausgangswert, den Enforce
+	//! ohnehin setzt - "noch nie gemolken" ist damit sofort frei.
+	protected bool m_ChefZ_MilkEmpty;
 
-    bool ChefZ_CanBeMilked()
-    {
-        if (m_ChefZ_NextMilkTime <= 0)
-            return true;
-        return g_Game.GetTime() >= m_ChefZ_NextMilkTime;
-    }
+	//! Der Rueckstellzaehler. Laeuft nur auf dem Server, weil nur dort
+	//! ChefZ_MarkMilked aufgerufen wird.
+	protected ref Timer m_ChefZ_MilkRefillTimer;
 
-    void ChefZ_MarkMilked()
-    {
-        m_ChefZ_NextMilkTime = g_Game.GetTime() + CHEFZ_MILK_COOLDOWN_MS;
-    }
+	void Animal_BosTaurusF()
+	{
+		RegisterNetSyncVariableBool("m_ChefZ_MilkEmpty");
+	}
+
+	bool ChefZ_CanBeMilked()
+	{
+		return !m_ChefZ_MilkEmpty;
+	}
+
+	void ChefZ_MarkMilked()
+	{
+		m_ChefZ_MilkEmpty = true;
+		SetSynchDirty();
+
+		if (!m_ChefZ_MilkRefillTimer)
+			m_ChefZ_MilkRefillTimer = new Timer(CALL_CATEGORY_GAMEPLAY);
+
+		m_ChefZ_MilkRefillTimer.Run(CHEFZ_MILK_COOLDOWN_SEC, this, "ChefZ_OnMilkRefilled");
+	}
+
+	//! Ziel des Timers. protected und trotzdem ueber den Namen aufrufbar -
+	//! dasselbe tut Vanilla mit FireplaceBase.Heating (FireplaceBase.c:1825).
+	protected void ChefZ_OnMilkRefilled()
+	{
+		m_ChefZ_MilkEmpty = false;
+		SetSynchDirty();
+	}
 }
 
 //==============================================================================
@@ -118,9 +172,9 @@ modded class Animal_BosTaurusF
 // zehn Expansion-Module tun es auf demselben Server.
 modded class ActionConstructor
 {
-    override void RegisterActions(TTypenameArray actions)
-    {
-        super.RegisterActions(actions);
-        actions.Insert(ChefZ_ActionMilkCow);
-    }
+	override void RegisterActions(TTypenameArray actions)
+	{
+		super.RegisterActions(actions);
+		actions.Insert(ChefZ_ActionMilkCow);
+	}
 }

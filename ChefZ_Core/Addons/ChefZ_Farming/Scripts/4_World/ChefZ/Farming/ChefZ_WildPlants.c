@@ -220,6 +220,16 @@ class ChefZ_WildPlant_Base extends ChefZ_ProcessingStation_Base
 
     //! Vanillas Satz fuer ein unaufnehmbares Weltobjekt - GardenPlot.c:113-131.
     //! Die vollstaendige Begruendung samt Fundstellen steht im Dateikopf.
+    //!
+    //! BEWUSSTE AUSNAHME von "override immer mit super": die vier folgenden
+    //! Haken sind reine Sperr-Praedikate mit festem Rueckgabewert. super
+    //! liefert hier nichts, was das Ergebnis noch aendern koennte -
+    //! ItemBase.c:4368 gibt m_IsTakeable zurueck, das die Sperre nur
+    //! bestaetigen oder aufweichen wuerde. Vanilla macht es an derselben
+    //! Stelle genauso, GardenPlot.c:113-131 ruft in IsTakeable,
+    //! CanPutInCargo, CanRemoveFromCargo und CanPutIntoHands kein super.
+    //! Folge und Absicht: ein fremdes modded CanPutInCargo greift an der
+    //! Wildpflanze nicht. Sie soll unter keinen Umstaenden im Rucksack landen.
     override bool IsTakeable()
     {
         return false;
@@ -248,6 +258,12 @@ class ChefZ_WildPlant_Base extends ChefZ_ProcessingStation_Base
      * fuer einen Fleischwolf und fuer einen Bienenstock; fuer etwas, das aus
      * dem Boden waechst, gilt es nicht. Hologram.c:252 fragt genau diesen
      * Haken, bevor es ein Platzierungshologramm anwirft.
+     *
+     * BEWUSSTE AUSNAHME von "override immer mit super": genau darum steht
+     * hier ein fester Wert. super wuerde die Zusage der Station
+     * zurueckholen, die dieser Haken abschalten soll. Vanillas eigener
+     * Grundwert liegt bei ItemBase.c:4348-4351 (false), GardenPlot.c:113-131
+     * setzt die verwandten Sperren ebenfalls ohne super.
      */
     override bool IsDeployable()
     {
