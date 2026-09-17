@@ -93,7 +93,8 @@ reference to any of them.
 
 ## Compatibility
 
-Built and checked against DayZ 1.29. Class names are checked against Terje,
+Built and checked against DayZ 1.30 (COT_New; the old Community Online Tools is no longer supported).
+The 1.30 rebuild passes the static checks but has not run on a 1.30 server yet. Class names are checked against Terje,
 Expansion, Community Framework, Community Online Tools and Dabs Framework — 16,352
 foreign class names — with one gap noted in
 [Known Limitations](Known-Limitations).

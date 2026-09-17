@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/DayZ-1.29+-0074D9?style=for-the-badge&logo=steam&logoColor=white" alt="DayZ 1.29+">
+  <img src="https://img.shields.io/badge/DayZ-1.30-0074D9?style=for-the-badge&logo=steam&logoColor=white" alt="DayZ 1.30">
   <img src="https://img.shields.io/badge/Enforce_Script-Enfusion-FF851B?style=for-the-badge" alt="Enforce Script">
   <img src="https://img.shields.io/badge/Status-Implemented_%2F_Not_Server--Ready-E67E22?style=for-the-badge" alt="Status: implemented, not server-ready">
   <img src="https://img.shields.io/badge/Scope-ChefZ_V1-2ECC40?style=for-the-badge" alt="Scope V1">
@@ -836,9 +836,9 @@ farmed herbs (they are found, not grown) · cut vegetables · yeast · 3D asset 
 
 | | |
 |---|---|
-| **DayZ** | 1.29+ |
+| **DayZ** | 1.30 — the 1.30 rebuild is in, but nothing has been run in game yet |
 | **Dependencies** | None — `ChefZ_Core` is standalone |
-| **Optional** | [TerjeMods](https://github.com/TerjeBruoygard/TerjeMods) (Skills / Medicine) · Community Online Tools |
+| **Optional** | [TerjeMods](https://github.com/TerjeBruoygard/TerjeMods) (Skills / Medicine) · Community Online Tools (COT_New — the old COT is no longer supported) |
 
 > **Not server-ready.** The mod packs and starts, and then the server dies in the mission's
 > `OnInit` chain. Nothing here has been signed or binarised, and no gate checklist has been
