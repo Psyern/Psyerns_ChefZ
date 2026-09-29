@@ -49,7 +49,9 @@ class CfgPatches
         {
             "DZ_Data",
             "DZ_Gear_Books",
-            "ChefZ_Core"
+            "ChefZ_Core",
+            // PsyCore_RPC (Kochbuch-Nachrichten) und PsyCore_Players
+            "Psyerns_Core_Module"
         };
     };
 };

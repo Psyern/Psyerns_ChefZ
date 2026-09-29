@@ -106,14 +106,14 @@ class ChefZ_CookActor
     static const int NOBODY = 0;
 
     /**
-     * Wiederverwendeter Puffer fuer GetPlayers().
+     * Wiederverwendeter Puffer fuer PsyCore_Players.GetOnline().
      *
      * Die Aufloesung laeuft nur bei einem Bestandszuwachs - also wenn ein
      * Spieler gerade etwas eingelegt hat - und nicht pro Kochtick. Trotzdem
      * kein neues Array je Aufruf: auf einem vollen Server mit vielen
      * Feuerstellen summiert sich auch das, und der Puffer kostet nichts.
      */
-    private static ref array<Man> s_Players;
+    private static ref array<PlayerBase> s_Players;
 
     //==========================================================================
     // Die Regel, ohne Welt
@@ -188,17 +188,13 @@ class ChefZ_CookActor
         }
 
         if (!s_Players)
-            s_Players = new array<Man>();
+            s_Players = new array<PlayerBase>();
 
-        // Ueber eine lokale Zwischenvariable: GetPlayers nimmt die Liste als
-        // out-Parameter, und s_Players ist ein FELD - ein Feld als
-        // out-Parameter ist in Enforce nicht zugesichert (siehe Kopf von
-        // ChefZ_TextList.SymbolsOf). Die Rueckzuweisung ist die Absicherung
-        // fuer den Fall, dass die Engine doch eine neue Liste anlegt.
-        array<Man> players = s_Players;
-        players.Clear();
-        g_Game.GetPlayers(players);
-        s_Players = players;
+        // Psyerns Core Module: GetOnline leert die Liste und fuellt sie mit
+        // jedem PlayerBase, der eine Identitaet hat - genau die Menge, die die
+        // Schleife unten ohnehin nur zaehlt (Cast + IdOf != NOBODY).
+        array<PlayerBase> players = s_Players;
+        PsyCore_Players.GetOnline(players);
 
         vector devicePos = device.GetPosition();
         float  radiusSq  = radiusM * radiusM;
@@ -209,7 +205,7 @@ class ChefZ_CookActor
 
         for (int i = 0; i < players.Count(); i++)
         {
-            PlayerBase player = PlayerBase.Cast(players.Get(i));
+            PlayerBase player = players.Get(i);
             if (!player)
                 continue;
 

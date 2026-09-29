@@ -117,13 +117,11 @@ class ChefZ_ProfileOverlaySource extends ChefZ_IRecordSource
     {
         m_Writable = true;
 
-        // Rueckgabewerte bewusst ignoriert: MakeDirectory meldet auch dann
-        // false, wenn das Verzeichnis schon da ist - das waere kein
-        // brauchbarer Erfolgstest. Ob geschrieben werden kann, entscheidet der
-        // tatsaechliche Schreibversuch weiter unten.
-        MakeDirectory(ChefZ_ProfilePaths.Root());
-        MakeDirectory(ChefZ_ProfilePaths.Logs());
-        MakeDirectory(ChefZ_ProfilePaths.OverlayDir());
+        // Rueckgabewerte bewusst ignoriert: ob geschrieben werden kann,
+        // entscheidet der tatsaechliche Schreibversuch weiter unten.
+        // PsyCore_Paths.EnsureDir legt fehlende Elternordner (Root) mit an.
+        PsyCore_Paths.EnsureDir(ChefZ_ProfilePaths.Logs());
+        PsyCore_Paths.EnsureDir(ChefZ_ProfilePaths.OverlayDir());
 
         EnsureFile(ChefZ_ProfilePaths.CoreSettingsFile(), ChefZ_ProfilePaths.CoreSettingsTemplateInPbo(), report);
         EnsureReadme(report);

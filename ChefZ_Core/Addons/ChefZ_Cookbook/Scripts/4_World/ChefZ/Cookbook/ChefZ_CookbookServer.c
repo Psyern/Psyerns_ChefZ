@@ -124,12 +124,14 @@ class ChefZ_CookbookServer : Managed
         if (identityId <= 0 || !g_Game)
             return null;
 
-        array<Man> spieler = new array<Man>();
-        g_Game.GetPlayers(spieler);
+        // Psyerns Core Module: nur PlayerBase mit Identitaet. Eine Suche nach
+        // GetPlayerId() bietet PsyCore_Players nicht an, daher die Schleife.
+        array<PlayerBase> spieler = new array<PlayerBase>();
+        PsyCore_Players.GetOnline(spieler);
 
         for (int i = 0; i < spieler.Count(); i++)
         {
-            PlayerBase p = PlayerBase.Cast(spieler.Get(i));
+            PlayerBase p = spieler.Get(i);
             if (!p)
                 continue;
             PlayerIdentity id = p.GetIdentity();

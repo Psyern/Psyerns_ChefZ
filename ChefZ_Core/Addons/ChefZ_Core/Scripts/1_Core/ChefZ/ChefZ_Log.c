@@ -16,14 +16,20 @@
 // Stufenpruefung in Debug()/Trace() unten ist ein Sicherheitsnetz, KEIN Ersatz
 // fuer die Wache: sie verhindert die Ausgabe, nicht die Allokation.
 //
-// Ausgabe ueber PrintToRPT und nicht Print (18 E7): Print geht zusaetzlich in
-// die Skriptkonsole, die auf einem Produktivserver irrelevant ist. Die
-// Ausgabefunktion sitzt an genau einer Stelle (Emit), ein Wechsel ist ein
-// Einzeiler.
+// Ausgabe (Core-Migration): die RPT-/Skriptlog-Zeile geht ueber
+// PsyCore_Log (Psyerns Core Module, Tag "ChefZ") - an genau einer Stelle
+// (ToCoreLog). ChefZ filtert weiterhin selbst (Stufe, Kanalmaske, serverOnly);
+// der PsyCore-Logger steht deshalb auf TRACE und schneidet nichts ein zweites
+// Mal weg. Frueher: PrintToRPT (18 E7).
 //
-// Keine Fremdabhaengigkeit (18 E8): ein Logframework aus einem anderen Mod
-// wuerde jeden Server zwingen, diesen Mod mitzuladen. Fuer einen Kochmod ist
-// das eine unangemessene Kopplung.
+// Die Logdatei $profile:ChefZ\Logs\ChefZ_<Datum>.log schreibt weiterhin
+// dieser Logger selbst: PsyCore_Log.EnableFile oeffnet die Datei je Zeile,
+// kennt weder Pufferung (18 §4), Groessenrotation (18 §6) noch das
+// Abschalten bei nicht schreibbarer Datei. Format und Pfad der Datei bleiben
+// dadurch unveraendert.
+//
+// Abhaengigkeit (frueher 18 E8 "keine"): einzig das Psyerns Core Module, das
+// selbst CF-frei ist. Weiterhin kein CF und kein anderes Fremd-Framework.
 //
 // Ein Logproblem darf den Mod nie anhalten (18 §6): schlaegt die Dateiausgabe
 // fehl, wird sie abgeschaltet, einmal gewarnt, und die RPT-Ausgabe laeuft
@@ -35,6 +41,9 @@ class ChefZ_Log
     static const string PREFIX          = "[ChefZ]";
     static const string LOG_DIR         = "$profile:ChefZ\\Logs";
     static const string PROFILE_DIR     = "$profile:ChefZ";
+
+    //! Tag im PsyCore_Log. Ergibt im RPT "[ChefZ][<STUFE>] [<KANAL>] ...".
+    static const string CORE_LOG_TAG    = "ChefZ";
 
     // Defaults, absichtlich als Literale und nicht als Verweis auf
     // ChefZ_LogLevel/ChefZ_LogChannel: statische Initialisierungsreihenfolge
@@ -117,6 +126,7 @@ class ChefZ_Log
     private static ref array<int>    s_PerfTicks;
 
     private static bool s_BannerDone   = false;
+    private static bool s_CoreLogReady = false;
 
     //--------------------------------------------------------------------------
     // Aufbau
@@ -325,9 +335,9 @@ class ChefZ_Log
      */
     static void Banner(string msg)
     {
-        string line = PREFIX + "[" + ChefZ_LogChannel.Name(ChefZ_LogChannel.CORE) + "] " + msg;
-        PrintToRPT(line);
-        BufferLine(line, ChefZ_LogLevel.INFO);
+        string body = "[" + ChefZ_LogChannel.Name(ChefZ_LogChannel.CORE) + "] " + msg;
+        ToCoreLog(-1, body);
+        BufferLine(PREFIX + body, ChefZ_LogLevel.INFO);
         s_BannerDone = true;
     }
 
@@ -357,9 +367,9 @@ class ChefZ_Log
      */
     static void Force(int channel, string msg)
     {
-        string line = PREFIX + "[" + ChefZ_LogChannel.Name(channel) + "] " + msg;
-        PrintToRPT(line);
-        BufferLine(line, ChefZ_LogLevel.INFO);
+        string body = "[" + ChefZ_LogChannel.Name(channel) + "] " + msg;
+        ToCoreLog(-1, body);
+        BufferLine(PREFIX + body, ChefZ_LogLevel.INFO);
     }
 
     //! Blockweise Fassung von Force. Ein Diagnoseblock gehoert zusammen
@@ -400,8 +410,31 @@ class ChefZ_Log
     private static void Emit(int level, int channel, string msg)
     {
         string line = PREFIX + LevelTag(level) + "[" + ChefZ_LogChannel.Name(channel) + "] " + msg;
-        PrintToRPT(line);
+        ToCoreLog(level, "[" + ChefZ_LogChannel.Name(channel) + "] " + msg);
         BufferLine(line, level);
+    }
+
+    /**
+     * Die EINE Stelle, an der eine Zeile ins RPT/Skriptlog geht - ueber
+     * PsyCore_Log. level -1 = ohne Stufe (Banner/Force, PsyCore_Log.Force).
+     * Die Stufenpruefung ist hier bereits gelaufen; der PsyCore-Logger steht
+     * deshalb auf TRACE und filtert nicht ein zweites Mal.
+     */
+    private static void ToCoreLog(int level, string body)
+    {
+        PsyCore_Log core = PsyCore_Log.Get(CORE_LOG_TAG);
+        if (!s_CoreLogReady)
+        {
+            core.SetLevel(PsyCore_LogLevel.TRACE);
+            s_CoreLogReady = true;
+        }
+
+        if (level == ChefZ_LogLevel.ERR)   { core.Error(body); return; }
+        if (level == ChefZ_LogLevel.WARN)  { core.Warn(body);  return; }
+        if (level == ChefZ_LogLevel.INFO)  { core.Info(body);  return; }
+        if (level == ChefZ_LogLevel.DEBUG) { core.Debug(body); return; }
+        if (level == ChefZ_LogLevel.TRACE) { core.Trace(body); return; }
+        core.Force(body);
     }
 
     //! ERR und WARN bekommen eine eigene Marke; INFO/DEBUG/TRACE bleiben
@@ -556,11 +589,9 @@ class ChefZ_Log
 
     private static void EnsureDirectories()
     {
-        // Rueckgabewert bewusst ignoriert: MakeDirectory meldet auch dann
-        // false, wenn das Verzeichnis bereits existiert. Ob geschrieben werden
-        // kann, entscheidet erst OpenFile.
-        MakeDirectory(PROFILE_DIR);
-        MakeDirectory(LOG_DIR);
+        // Rueckgabewert bewusst ignoriert: ob geschrieben werden kann,
+        // entscheidet erst OpenFile. EnsureDir legt auch PROFILE_DIR an.
+        PsyCore_FS.EnsureDir(LOG_DIR);
     }
 
     private static void BufferLine(string line, int level)
@@ -626,7 +657,7 @@ class ChefZ_Log
             s_InFileWrite = false;
             s_Buffer.Clear();
             // Nicht ueber Once(), weil Once() wieder hier landen wuerde.
-            PrintToRPT(PREFIX + "[WARN][CORE] Logdatei \"" + path + "\" ist nicht schreibbar. Dateiausgabe abgeschaltet, RPT-Ausgabe laeuft weiter.");
+            ToCoreLog(ChefZ_LogLevel.WARN, "[CORE] Logdatei \"" + path + "\" ist nicht schreibbar. Dateiausgabe abgeschaltet, RPT-Ausgabe laeuft weiter.");
             s_WarnCount++;
             return;
         }

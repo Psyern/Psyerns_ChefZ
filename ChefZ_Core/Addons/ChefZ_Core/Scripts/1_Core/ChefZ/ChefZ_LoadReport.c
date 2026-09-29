@@ -258,8 +258,7 @@ class ChefZ_LoadReport : Managed
      */
     bool WriteToFile(string path)
     {
-        MakeDirectory(ChefZ_Log.PROFILE_DIR);
-        MakeDirectory(ChefZ_Log.LOG_DIR);
+        PsyCore_FS.EnsureDir(ChefZ_Log.LOG_DIR);
 
         FileHandle fh = OpenFile(path, FileMode.WRITE);
         if (fh == 0)

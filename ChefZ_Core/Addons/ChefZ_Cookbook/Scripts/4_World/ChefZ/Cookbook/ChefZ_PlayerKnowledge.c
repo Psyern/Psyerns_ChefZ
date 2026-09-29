@@ -62,10 +62,14 @@
 
 // SCOUT-GEPRUEFT 2026-08-30 (chefz-conflict-scout)
 // Alle Member und Methoden praefixiert, super in
-// EEInit/OnStoreSave/OnStoreLoad/OnRPC zuerst, RPC-Nummern 10000-10002
-// kollisionsfrei gegen COT (ab 10100), Terje (negativ), Dabs und CF. Der
-// am selben Tag gefundene FULL_STATE-Exploit ist behoben - siehe die Wache
-// im Zweig.
+// EEInit/OnStoreSave/OnStoreLoad zuerst. Der am selben Tag gefundene
+// FULL_STATE-Exploit ist behoben - siehe die Wache in
+// ChefZ_CookbookRpcHandler.OnFullState.
+//
+// CORE-MIGRATION: die Nachrichten laufen nicht mehr als Vanilla-RPC
+// 10000-10002 ueber OnRPC, sondern ueber PsyCore_RPC (Namensraum
+// "ChefZ_Cookbook", siehe ChefZ_CookbookRPC). Der Empfang sitzt in
+// ChefZ_CookbookRpcHandler; der override OnRPC entfaellt.
 modded class PlayerBase
 {
     //! Erkennungsmarke vor dem Block. Willkuerlich, aber fest: die vier
@@ -117,6 +121,7 @@ modded class PlayerBase
     override void EEInit()
     {
         super.EEInit();
+        ChefZ_CookbookRpcHandler.EnsureRegistered();
         ChefZ_CookbookServer.EnsureAttached();
     }
 
@@ -311,60 +316,21 @@ modded class PlayerBase
             rezepte.Insert(ChefZ_SymbolTable.Name(stand.MasteredAt(j)));
 
         Param2<ref array<string>, ref array<string>> daten = new Param2<ref array<string>, ref array<string>>(zutaten, rezepte);
-        g_Game.RPCSingleParam(this, ChefZ_CookbookRPC.FULL_STATE, daten, true, id);
+        PsyCore_RPC.SendParam(ChefZ_CookbookRPC.NS, ChefZ_CookbookRPC.FULL_STATE, daten, true, id, this);
     }
 
     /**
-     * Empfang.
+     * Empfang (Client). Aufgerufen von ChefZ_CookbookRpcHandler.OnFullState.
      *
      * Param6 und Verwandte werden als EIN Objekt gelesen - die Enforce-Skill
      * ist da eindeutig, und feldweises Lesen ist der haeufigste Grund fuer
-     * einen stillen Fehlschlag an dieser Stelle.
+     * einen stillen Fehlschlag an dieser Stelle. Null-deklariert wie im
+     * PsyCore-/CF-Router: die Engine legt das Objekt beim Lesen an.
      */
-    override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
+    void ChefZ_ReceiveFullState(ParamsReadContext ctx)
     {
-        super.OnRPC(sender, rpc_type, ctx);
-
-        if (!ChefZ_CookbookRPC.IsOurs(rpc_type))
-            return;
-
-        if (rpc_type == ChefZ_CookbookRPC.FULL_STATE)
-        {
-            // NUR DER CLIENT NIMMT EINEN STAND ENTGEGEN.
-            //
-            // OnRPC laeuft auf BEIDEN Seiten, und welches Objekt ein RPC
-            // erreicht, bestimmt der Absender. Ohne diese Zeile koennte ein
-            // Client dem Server ein FULL_STATE an seinen eigenen Spieler
-            // schicken: ChefZ_ReceiveFullState ruft stand.Clear() und
-            // schreibt danach die mitgelieferten Listen - jedes Rezept als
-            // gemeistert, oder der Stand geloescht. OnStoreSave schreibt das
-            // anschliessend in den Spielstand.
-            //
-            // FULL_STATE ist Server->Client (ChefZ_SendFullState), also ist
-            // ein FULL_STATE AM SERVER immer gefaelscht und wird verworfen.
-            // Dasselbe Muster wie im Zweig darunter, nur andersherum -
-            // Vanilla klammert seine Server->Client-Zweige in PlayerBase.OnRPC
-            // aus demselben Grund mit #ifndef SERVER.
-            if (g_Game && g_Game.IsDedicatedServer())
-                return;
-
-            ChefZ_ReceiveFullState(ctx);
-            return;
-        }
-
-        if (rpc_type == ChefZ_CookbookRPC.REQUEST_STATE)
-        {
-            // Nur der Server beantwortet das, und nur fuer den Absender.
-            if (g_Game && g_Game.IsDedicatedServer())
-                ChefZ_SendFullState();
-            return;
-        }
-    }
-
-    private void ChefZ_ReceiveFullState(ParamsReadContext ctx)
-    {
-        Param2<ref array<string>, ref array<string>> daten = new Param2<ref array<string>, ref array<string>>(null, null);
-        if (!ctx.Read(daten))
+        Param2<ref array<string>, ref array<string>> daten;
+        if (!ctx.Read(daten) || !daten)
             return;
 
         ChefZ_KnowledgeState stand = ChefZ_GetKnowledge();

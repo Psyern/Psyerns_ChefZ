@@ -30,7 +30,9 @@ class CfgPatches
         units[] = {};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"DZ_Data"};
+        // Psyerns_Core_Module: PsyCore_Log/PsyCore_FS (1_Core), PsyCore_Paths
+        // (3_Game), PsyCore_Players (4_World). CF-frei wie ChefZ selbst.
+        requiredAddons[] = {"DZ_Data", "Psyerns_Core_Module"};
     };
 };
 
