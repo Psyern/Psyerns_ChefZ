@@ -543,8 +543,8 @@ class ChefZ_FishingSelfTest
 
 	private static int HashOf(string name)
 	{
-		string local = name;
-		return local.Hash();
+		string nameCopy = name;
+		return nameCopy.Hash();
 	}
 
 	/**
