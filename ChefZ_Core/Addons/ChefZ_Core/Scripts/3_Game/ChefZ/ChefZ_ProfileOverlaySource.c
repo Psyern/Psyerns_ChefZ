@@ -296,7 +296,7 @@ class ChefZ_ProfileOverlaySource extends ChefZ_IRecordSource
 
         string   fileName;
         FileAttr fileAttr;
-        FindFileHandle handle = FindFile(ChefZ_ProfilePaths.OverlayPattern(), fileName, fileAttr, FindFileFlags.DIRECTORIES);
+        FindFileHandle handle = PsyCore_FindFile.Find(ChefZ_ProfilePaths.OverlayPattern(), fileName, fileAttr, FindFileFlags.DIRECTORIES);
 
         if (fileName != "")
             found.Insert(ChefZ_ProfilePaths.OverlayDir() + "\\" + fileName);
