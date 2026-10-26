@@ -870,7 +870,7 @@ class CfgVehicles
         // Anzuender in eigenen Plaetzen, im Inventar als Gruppen "Brennstoff"
         // und "Zunder" mit Vanillas Symbolen. Die Rinde im Cargo brennt
         // weiterhin mit (aeltere Staende).
-        attachments[] = {"Firewood", "WoodenStick", "Rags", "Paper", "Bark"};
+        attachments[] = {"Firewood", "WoodenStick", "Rags", "MedicalBandage", "Paper", "Bark"};
 
         class GUIInventoryAttachmentsProps
         {
@@ -886,7 +886,7 @@ class CfgVehicles
             {
                 name = "$STR_attachment_Kindling0";
                 description = "";
-                attachmentSlots[] = {"Rags", "Paper", "Bark"};
+                attachmentSlots[] = {"Rags", "MedicalBandage", "Paper", "Bark"};   // wie Vanillas OvenIndoor
                 icon = "set:dayz_inventory image:cat_fp_kindling";
                 view_index = 2;
             };

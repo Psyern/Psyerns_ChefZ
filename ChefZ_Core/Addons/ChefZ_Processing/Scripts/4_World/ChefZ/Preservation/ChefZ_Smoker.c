@@ -459,7 +459,7 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 			return CHEFZ_SECONDS_PER_BARK * 4.0;
 		if (fuel.IsKindOf("WoodenStick"))
 			return CHEFZ_SECONDS_PER_BARK;
-		if (fuel.IsKindOf("Rag") || fuel.IsKindOf("Paper"))
+		if (fuel.IsKindOf("Rag") || fuel.IsKindOf("BandageDressing") || fuel.IsKindOf("Paper"))
 			return CHEFZ_SECONDS_PER_BARK * 0.4;
 		return CHEFZ_SECONDS_PER_BARK;
 	}
@@ -473,8 +473,8 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 			return null;
 
 		// Feuerplaetze in Verbrauchsreihenfolge (config.cpp attachments[])
-		string fuelSlots[5] = {"Bark", "Rags", "Paper", "WoodenStick", "Firewood"};
-		for (int s = 0; s < 5; s++)
+		string fuelSlots[6] = {"Bark", "Rags", "MedicalBandage", "Paper", "WoodenStick", "Firewood"};
+		for (int s = 0; s < 6; s++)
 		{
 			ItemBase att = ItemBase.Cast(FindAttachmentBySlotName(fuelSlots[s]));
 			if (att && !att.IsRuined())

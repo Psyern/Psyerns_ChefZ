@@ -930,7 +930,38 @@ class ChefZ_AT_Runner
     {
         bool immune = m_Player.GetModifiersManager().IsModifierActive(eModifiers.MDF_IMMUNITYBOOST);
         ChefZ_AT_Log.Result("MEAL", "premium.immunity", immune, "Immunschub nach PREMIUM-Gericht");
-        Finish();
+        UiShowcase();
+    }
+
+    //! Sichtpruefung: ein brennender Raeucherschrank vor dem Spieler, der Client
+    //! oeffnet das Inventar (ChefZ_AT_Quit.c) und meldet die Feuerplaetze; das
+    //! Bildschirmfoto macht der Testlauf von aussen.
+    void UiShowcase()
+    {
+        // Innerhalb von VICINITY_DISTANCE 0.5 (VicinityItemManager.c:4), sonst haengt
+        // die Anzeige an der Blickrichtung der Clientkamera.
+        vector at = m_Player.GetPosition() + m_Player.GetDirection() * 0.45;
+        ChefZ_AT_Util.ClearArea(m_Player.GetPosition(), 3);
+        ChefZ_Smoker smoker = ChefZ_Smoker.Cast(g_Game.CreateObjectEx("ChefZ_Smoker", at, ECE_PLACE_ON_SURFACE));
+        if (!smoker || !m_Player.GetIdentity())
+        {
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.ui", false, "kein Schrank oder kein Client");
+            Finish();
+            return;
+        }
+        smoker.GetInventory().CreateAttachment("Firewood");
+        smoker.GetInventory().CreateAttachment("Rag");
+        smoker.GetInventory().CreateEntityInCargo("PigSteakMeat");
+        smoker.OnIgnitedThis(null);
+        // Vergleich: Vanillas Feuerstelle daneben, gleiche Inventar-Umgebung
+        vector firePos = m_Player.GetPosition() + m_Player.GetDirectionAside() * 0.45;
+        firePos[1] = g_Game.SurfaceY(firePos[0], firePos[2]);
+        EntityAI fire = EntityAI.Cast(g_Game.CreateObjectEx("Fireplace", firePos, ECE_CREATEPHYSICS));
+        if (fire)
+            fire.GetInventory().CreateAttachment("Firewood");
+        g_Game.RPCSingleParam(m_Player, ChefZ_AT_Rpc.SHOW_INVENTORY, new Param1<int>(0), true, m_Player.GetIdentity());
+        Print("[CHEFZTEST] INFO ui-showcase bereit brennt=" + smoker.ChefZ_HasHeat().ToString());
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(Finish, 25000, false);
     }
 
     //==========================================================================
