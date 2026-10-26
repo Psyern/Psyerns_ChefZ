@@ -970,6 +970,14 @@ class CfgVehicles
     // liesse ein Gericht, das seinen eigenen vergessen hat, im Validator gruen
     // aussehen. PlayerStomach registriert nur Klassen mit eigenem Naehrwert
     // (01 V7) - der Fehler waere sonst still.
+    //
+    // ENERGIE (26.10.2026): jedes Gericht gibt als ganzes Item mindestens das
+    // 1,3-fache der Energie seiner Pflichtzutaten zurueck (gezaehlt wie
+    // PlayerStomach: energy / 100 je Mengeneinheit). Vorher lag ein Teil der
+    // Gerichte darunter - Kochen kostete Energie, statt sie zu lohnen. Die
+    // Herleitungen an den einzelnen Gerichten nennen die Werte VOR dieser
+    // Anhebung; massgeblich ist tools/chefz-autotest/recipe_energy_check.py,
+    // angehoben hat tools/chefz-autotest/rebalance_energy.py.
     // ------------------------------------------------------------------------
     class ChefZ_ServedDish_Base : Edible_Base
     {
@@ -1191,7 +1199,7 @@ class CfgVehicles
             // 2.35 x 200 Einheiten = 470 - Pfannen-/leichtes Gericht.
             // Alt: 75 x 200 = 15000, das 8-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 2.35;
-            energy = 570;
+            energy = 1365;
             water = 40;
             nutritionalIndex = 55;
             toxicity = 0;
@@ -1242,7 +1250,7 @@ class CfgVehicles
             // 3.25 x 200 Einheiten = 650 - Hauptgericht-Teller.
             // Alt: 103 x 200 = 20600, das 10-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.25;
-            energy = 480;
+            energy = 1260;
             water = 268;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -1292,7 +1300,7 @@ class CfgVehicles
             // 3.0 x 300 Einheiten = 900 - ueppiges Gericht.
             // Alt: 154 x 300 = 46200, das 23-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.0;
-            energy = 650;
+            energy = 1070;
             water = 136;
             nutritionalIndex = 65;
             toxicity = 0;
@@ -1342,7 +1350,7 @@ class CfgVehicles
             // 1.6 x 200 Einheiten = 320 - Snack.
             // Alt: 35 x 200 = 7000, das 4-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 1.6;
-            energy = 375;
+            energy = 600;
             water = 75;
             nutritionalIndex = 50;
             toxicity = 0;
@@ -1392,7 +1400,7 @@ class CfgVehicles
             // 3.3 x 200 Einheiten = 660 - Hauptgericht-Teller.
             // Alt: 110 x 200 = 22000, das 11-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.3;
-            energy = 690;
+            energy = 1640;
             water = 50;
             nutritionalIndex = 55;
             toxicity = 0;
@@ -1443,7 +1451,7 @@ class CfgVehicles
             // 2.0 x 200 Einheiten = 400 - Pfannen-/leichtes Gericht.
             // Alt: 58 x 200 = 11600, das 6-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 2.0;
-            energy = 480;
+            energy = 1285;
             water = 80;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -1493,7 +1501,7 @@ class CfgVehicles
             // 3.1 x 200 Einheiten = 620 - Hauptgericht-Teller.
             // Alt: 93 x 200 = 18600, das 9-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.1;
-            energy = 565;
+            energy = 1195;
             water = 83;
             nutritionalIndex = 55;
             toxicity = 0;
@@ -1544,7 +1552,7 @@ class CfgVehicles
             // 2.7 x 300 Einheiten = 810 - Hauptgericht-Teller.
             // Alt: 140 x 300 = 42000, das 21-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 2.7;
-            energy = 360;
+            energy = 580;
             water = 115;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -1595,7 +1603,7 @@ class CfgVehicles
             // 1.9 x 200 Einheiten = 380 - Pfannen-/leichtes Gericht.
             // Alt: 55 x 200 = 11000, das 6-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 1.9;
-            energy = 280;
+            energy = 995;
             water = 205;
             nutritionalIndex = 50;
             toxicity = 0;
@@ -1645,7 +1653,7 @@ class CfgVehicles
             // 1.4 x 200 Einheiten = 280 - Snack.
             // Alt: 30 x 200 = 6000, das 3-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 1.4;
-            energy = 400;
+            energy = 1165;
             water = 20;
             nutritionalIndex = 45;
             toxicity = 0;
@@ -1744,7 +1752,7 @@ class CfgVehicles
             // 0.67 x 1200 Einheiten = 804 - Bowl.
             // Alt: 90 x 1200 = 108000, das 54-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 0.67;
-            energy = 270;
+            energy = 870;
             water = 160;
             nutritionalIndex = 55;
             toxicity = 0;
@@ -1789,7 +1797,7 @@ class CfgVehicles
             // 0.62 x 1200 Einheiten = 744 - Bowl.
             // Alt: 75 x 1200 = 90000, das 45-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 0.62;
-            energy = 220;
+            energy = 495;
             water = 160;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -1885,7 +1893,7 @@ class CfgVehicles
             // 0.56 x 1200 Einheiten = 672 - Bowl.
             // Alt: 55 x 1200 = 66000, das 33-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 0.56;
-            energy = 180;
+            energy = 305;
             water = 200;
             nutritionalIndex = 70;
             toxicity = 0;
@@ -1942,7 +1950,7 @@ class CfgVehicles
             // 0.70 x 1200 Einheiten = 840 - Bowl.
             // Alt: 105 x 1200 = 126000, das 63-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 0.70;
-            energy = 325;
+            energy = 1100;
             water = 85;
             nutritionalIndex = 50;
             toxicity = 0;
@@ -2016,7 +2024,7 @@ class CfgVehicles
             // 1.65 x 300 Einheiten = 495 - Pfannen-/leichtes Gericht.
             // Alt: 58 x 300 = 17400, das 9-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 1.65;
-            energy = 285;
+            energy = 760;
             water = 115;
             nutritionalIndex = 45;
             toxicity = 0;
@@ -2056,7 +2064,7 @@ class CfgVehicles
             // 2.25 x 200 Einheiten = 450 - Pfannen-/leichtes Gericht.
             // Alt: 72 x 200 = 14400, das 7-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 2.25;
-            energy = 430;
+            energy = 1275;
             water = 35;
             nutritionalIndex = 55;
             toxicity = 0;
@@ -2173,7 +2181,7 @@ class CfgVehicles
             // 4.25 x 200 Einheiten = 850 - Hauptgericht-Teller.
             // Alt: 230 x 200 = 46000, das 23-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 4.25;
-            energy = 1270;
+            energy = 1575;
             water = 70;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -2216,7 +2224,7 @@ class CfgVehicles
             // 3.8 x 200 Einheiten = 760 - Hauptgericht-Teller.
             // Alt: 185 x 200 = 37000, das 18-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.8;
-            energy = 810;
+            energy = 1180;
             water = 145;
             nutritionalIndex = 70;
             toxicity = 0;
@@ -2258,7 +2266,7 @@ class CfgVehicles
             // 3.15 x 200 Einheiten = 630 - Hauptgericht-Teller.
             // Alt: 100 x 200 = 20000, das 10-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.15;
-            energy = 950;
+            energy = 1175;
             water = 250;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -2344,7 +2352,7 @@ class CfgVehicles
             // 4.25 x 200 Einheiten = 850 - Hauptgericht-Teller.
             // Alt: 230 x 200 = 46000, das 23-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 4.25;
-            energy = 1000;
+            energy = 1540;
             water = 65;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -2386,7 +2394,7 @@ class CfgVehicles
             // 3.95 x 200 Einheiten = 790 - Hauptgericht-Teller.
             // Alt: 200 x 200 = 40000, das 20-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.95;
-            energy = 580;
+            energy = 1150;
             water = 145;
             nutritionalIndex = 70;
             toxicity = 0;
@@ -2429,7 +2437,7 @@ class CfgVehicles
             // 4.1 x 200 Einheiten = 820 - Hauptgericht-Teller.
             // Alt: 215 x 200 = 43000, das 22-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 4.1;
-            energy = 780;
+            energy = 1215;
             water = 120;
             nutritionalIndex = 60;
             toxicity = 0;
@@ -2471,7 +2479,7 @@ class CfgVehicles
             // 3.5 x 200 Einheiten = 700 - Hauptgericht-Teller.
             // Alt: 150 x 200 = 30000, das 15-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 3.5;
-            energy = 435;
+            energy = 710;
             water = 110;
             nutritionalIndex = 65;
             toxicity = 0;
@@ -2503,7 +2511,7 @@ class CfgVehicles
         class Nutrition
         {
             fullnessIndex = 3.4;
-            energy = 720;
+            energy = 1060;
             water = 60;
             nutritionalIndex = 70;
             toxicity = 0;
@@ -2536,7 +2544,7 @@ class CfgVehicles
         class Nutrition
         {
             fullnessIndex = 3.6;
-            energy = 700;
+            energy = 1095;
             water = 120;
             nutritionalIndex = 70;
             toxicity = 0;
@@ -2580,7 +2588,7 @@ class CfgVehicles
             // 4.75 x 200 Einheiten = 950 - ueppiges Gericht.
             // Alt: 300 x 200 = 60000, das 30-fache von VOMIT_THRESHOLD 2000.
             fullnessIndex = 4.75;
-            energy = 1220;
+            energy = 1410;
             water = 235;
             nutritionalIndex = 60;
             toxicity = 0;

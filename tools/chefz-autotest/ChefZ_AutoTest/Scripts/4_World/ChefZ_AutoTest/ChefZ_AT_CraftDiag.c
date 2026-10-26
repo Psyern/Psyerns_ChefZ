@@ -41,4 +41,17 @@ modded class ChefZ_GenericCraftRecipe
         }
         return s;
     }
+
+    //! Nimmt dieser Rezeptplatz genau diese zwei Items an? Fuer Gegenproben.
+    bool ChefZ_AT_Accepts(ItemBase a, ItemBase b, PlayerBase player)
+    {
+        if (!CheckIngredientMatch(a, b))
+            return false;
+        ItemBase sorted[2];
+        sorted[0] = m_IngredientsSorted[0];
+        sorted[1] = m_IngredientsSorted[1];
+        if (!CheckConditions(sorted))
+            return false;
+        return CanDo(sorted, player);
+    }
 }

@@ -14,8 +14,14 @@
 // die zu einem Fremdsystem gehoert. Er weiss nicht einmal, ob jemand zuhoert.
 // Ein Comp-Modul abonniert in seiner EIGENEN MissionServer-Initialisierung:
 //
-//     ChefZ_EventBus.Get().Subscribe("ChefZ_OnRecipeCompleted", this,
-//                                    ScriptCaller.Create(OnCooked), "MeinModul");
+//     ScriptCaller cb = ScriptCaller.Create(OnCooked);
+//     ChefZ_EventBus.Get().Subscribe("ChefZ_OnRecipeCompleted", this, cb, "MeinModul");
+//
+// Den ScriptCaller ZUERST in eine benannte Variable legen (26.10.2026): als
+// Ausdruck direkt im Argument ueberlebt er in Enforce den Aufruf nicht - das
+// ref-Feld der Anmeldung ist danach null, die Anmeldung gilt als unrufbar
+// und wird beim ersten Raise entfernt. Gemessen im Selbsttest S13 (9 von 19
+// Gruppen gescheitert, bis er auf benannte Variablen umgestellt wurde).
 //
 // Das Provider-Muster kehrt die Abhaengigkeit um. Es ist die einzige Bauform,
 // bei der Invariante I4 nicht nur eingehalten, sondern unverletzbar ist -
@@ -304,7 +310,8 @@ class ChefZ_EventBus : Managed
      * @param owner          darf null sein. Wird als SCHWACHE Referenz
      *                       gehalten; stirbt er, faellt die Anmeldung beim
      *                       naechsten Raise weg.
-     * @param cb             ScriptCaller.Create(MeineMethode).
+     * @param cb             ScriptCaller.Create(MeineMethode), vorher in eine
+     *                       benannte Variable gelegt (Kopf dieser Datei).
      * @param subscriberName erscheint in jeder Meldung ueber diesen Abonnenten.
      *                       Ohne ihn ist ein Ausreisser nicht zuzuordnen.
      * @param priority       hoeher zuerst; bei Gleichstand in Anmeldereihen-

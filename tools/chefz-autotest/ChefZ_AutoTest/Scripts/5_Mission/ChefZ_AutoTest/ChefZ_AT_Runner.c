@@ -25,6 +25,9 @@ class ChefZ_AT_Runner
     ref ChefZ_AT_Case m_Pending;
     ItemBase m_PendingStation;
     ItemBase m_PendingFire;
+    ItemBase m_PendingTool;
+    float m_PendingToolHp;
+    string m_PendingToolNote;
 
     // Erstes zwischengelagertes Kochergebnis: wandert es im naechsten Frame
     // wirklich ins Gefaess? (ChefZ_Applicator.TakeStaged)
@@ -405,9 +408,42 @@ class ChefZ_AT_Runner
 
         PluginRecipesManager pm = PluginRecipesManager.Cast(GetPlugin(PluginRecipesManager));
         array<int> ids = new array<int>();
-        pm.GetValidRecipes(a, b, ids, m_Player);
         int baseIdx = ChefZ_HandcraftBridge.GetBaseIndex();
         int last = baseIdx + ChefZ_HandcraftBridge.GetSlotCount();
+
+        // Gegenprobe: ohne das Werkzeug (ein Lappen an seiner Stelle) darf
+        // kein Rezeptplatz dieses Transforms greifen.
+        m_PendingTool = tool;
+        m_PendingToolNote = "";
+        if (tool)
+        {
+            m_PendingToolHp = tool.GetHealth("", "");
+            ItemBase stand = ItemBase.Cast(m_Player.GetInventory().CreateInInventory("Rag"));
+            bool without = false;
+            for (int n = baseIdx; n < last; n++)
+            {
+                ChefZ_GenericCraftRecipe probe = ChefZ_GenericCraftRecipe.Cast(pm.m_RecipeList[n]);
+                if (probe && probe.ChefZ_AT_TransformId() == c.id && stand && probe.ChefZ_AT_Accepts(stand, b, m_Player))
+                    without = true;
+            }
+            if (stand)
+                g_Game.ObjectDelete(stand);
+            if (!stand)
+            {
+                m_PendingToolNote = " ohne-Werkzeug=ungeprueft";
+            }
+            else if (without)
+            {
+                ChefZ_AT_Log.Result("PROC", c.id, false, "geht auch ohne Werkzeug " + tool.GetType() + " (Lappen + " + ItemName(b) + ")");
+                return -1;
+            }
+            else
+            {
+                m_PendingToolNote = " ohne-Werkzeug=abgelehnt";
+            }
+        }
+
+        pm.GetValidRecipes(a, b, ids, m_Player);
         foreach (int id : ids)
         {
             if (id >= baseIdx && id < last)
@@ -492,6 +528,9 @@ class ChefZ_AT_Runner
         ChefZ_AT_Util.CollectNear(m_Site, 8, items);
         ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made);
 
+        if (m_PendingTool)
+            how = how + " werkzeug=" + m_PendingTool.GetType() + " hp " + m_PendingToolHp.ToString() + "->" + m_PendingTool.GetHealth("", "").ToString() + m_PendingToolNote;
+        m_PendingTool = null;
         if (made)
             ChefZ_AT_Log.Result("PROC", c.id, true, how + " out=" + made.GetType() + " inputs=" + c.DescribeInputs());
         else

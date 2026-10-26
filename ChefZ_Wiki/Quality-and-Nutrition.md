@@ -422,3 +422,32 @@ Every deviation message ends with the same sentence:
 
 If a dish is 40 % off, the fix is a `CfgVehicles` edit in the content module, or
 a `nutritionModifier` change in the recipe. Not a core setting.
+
+### 2.7 Reading the DEVIATION lines of the shipped recipes
+
+The boot audit compares **densities**: the per-100 `energy` of the dish against
+the per-100 `energy` of each representative ingredient at its RAW stage, times
+its piece count. It ignores the item size. A 200-unit plate made from two raw
+squids (energy 20 per 100 each) therefore reads
+`erwartet 46 ... CfgVehicles sagt 1060`. That is a units mismatch, not
+an unbalanced dish, and the shipped recipes produce about 25 such lines on boot.
+
+The balance of the shipped content is checked per **whole item**, counted the way
+`PlayerStomach` counts (energy / 100 per consumed quantity unit), with
+
+    py -3 tools/chefz-autotest/recipe_energy_check.py [filter]
+
+It lists, per recipe, the energy of the required ingredients (best edible stage,
+median over a slot's candidates) against the energy of what comes out. The rule
+since 26.10.2026: **every served dish returns at least 1.3x the energy of its
+ingredients**, on top of its meal effects. Before, many dishes returned less than
+their ingredients (milk rice 0.37x, Chernarus chili 0.39x): cooking cost energy
+instead of paying off. `tools/chefz-autotest/rebalance_energy.py` raised the 26
+dishes below the line; it only raises, and only finished dishes. Intermediates
+(sauces, curd, cream, minced meat) keep their values. Their loss is the cost of
+the dish they go into, and that dish then pays back 1.3x.
+
+Per item the ingredients themselves stay at vanilla level: fish fillets, steaks
+and minced meat sit at 600-1500 energy per item, against vanilla's 750-2000 for
+steaks and 800-1200 for opened cans (`nutrition_report.py` lists both side by
+side).

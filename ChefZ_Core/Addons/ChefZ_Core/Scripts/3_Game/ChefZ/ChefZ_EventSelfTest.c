@@ -319,7 +319,8 @@ class ChefZ_EventSelfTest
 
     private static int Sub(notnull ChefZ_EventBus bus, string eventId, notnull ChefZ_EventTestSubscriber sub, int priority = 0)
     {
-        return bus.Subscribe(eventId, sub, ScriptCaller.Create(sub.OnEvent), sub.name, priority);
+        ScriptCaller cb322 = ScriptCaller.Create(sub.OnEvent);
+        return bus.Subscribe(eventId, sub, cb322, sub.name, priority);
     }
 
     //==========================================================================
@@ -360,7 +361,8 @@ class ChefZ_EventSelfTest
         // Ein Abonnement ohne ScriptCaller wird abgewiesen, nicht angenommen -
         // sonst stuende eine Anmeldung in der Liste, die nie etwas bekaeme.
         if (bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, null, "leer") != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 362, "bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, null, 'leer') != 0");
-        if (bus.Subscribe("", a, ScriptCaller.Create(a.OnEvent), "leer") != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 363, "bus.Subscribe('', a, ScriptCaller.Create(a.OnEvent), 'leer') != 0");
+        ScriptCaller cb363 = ScriptCaller.Create(a.OnEvent);
+        if (bus.Subscribe("", a, cb363, "leer") != 0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 363, "bus.Subscribe('', a, ScriptCaller.Create(a.OnEvent), 'leer') != 0");
 
         // Ein unbekannter Ereignisname wird ANGENOMMEN (17 §9): Content loest
         // ueber emitEvents eigene Ereignisse aus.
@@ -458,7 +460,8 @@ class ChefZ_EventSelfTest
         blocker.cancelReason = "kein Skill";
         ChefZ_EventTestSubscriber later   = new ChefZ_EventTestSubscriber("Danach");
 
-        bus.Subscribe(ChefZ_EventNames.RECIPE_MATCHED, blocker, ScriptCaller.Create(blocker.OnCancel), blocker.name, 10);
+        ScriptCaller cb461 = ScriptCaller.Create(blocker.OnCancel);
+        bus.Subscribe(ChefZ_EventNames.RECIPE_MATCHED, blocker, cb461, blocker.name, 10);
         Sub(bus, ChefZ_EventNames.RECIPE_MATCHED, later, 0);
 
         string reason;
@@ -506,7 +509,8 @@ class ChefZ_EventSelfTest
         blocker.cancelReason = "zu spaet";
         ChefZ_EventTestSubscriber later   = new ChefZ_EventTestSubscriber("Danach");
 
-        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, blocker, ScriptCaller.Create(blocker.OnCancel), blocker.name, 10);
+        ScriptCaller cb509 = ScriptCaller.Create(blocker.OnCancel);
+        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, blocker, cb509, blocker.name, 10);
         Sub(bus, ChefZ_EventNames.RECIPE_COMPLETED, later, 0);
 
         string reason;
@@ -537,8 +541,10 @@ class ChefZ_EventSelfTest
         a.bonus = 0.75;
         b.bonus = 0.50;
 
-        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, a, ScriptCaller.Create(a.OnBonus), a.name);
-        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, b, ScriptCaller.Create(b.OnBonus), b.name);
+        ScriptCaller cb540 = ScriptCaller.Create(a.OnBonus);
+        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, a, cb540, a.name);
+        ScriptCaller cb541 = ScriptCaller.Create(b.OnBonus);
+        bus.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, b, cb541, b.name);
 
         // Additiv: beide tragen bei, keiner loescht den anderen.
         float sum = bus.RaiseQuery(bus.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0);
@@ -550,7 +556,8 @@ class ChefZ_EventSelfTest
         ChefZ_EventBus greedy = NewBus();
         ChefZ_EventTestSubscriber hog = new ChefZ_EventTestSubscriber("Gierig");
         hog.bonus = 999.0;
-        greedy.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, hog, ScriptCaller.Create(hog.OnBonus), hog.name);
+        ScriptCaller cb553 = ScriptCaller.Create(hog.OnBonus);
+        greedy.Subscribe(ChefZ_EventNames.QUALITY_BONUS_QUERY, hog, cb553, hog.name);
 
         float clamped = greedy.RaiseQuery(greedy.Acquire(ChefZ_EventNames.QUALITY_BONUS_QUERY), 2.0);
         if (clamped != 2.0) return ChefZ_SelfTestTrace.Fail("EventSelfTest", 556, "clamped != 2.0");
@@ -586,7 +593,8 @@ class ChefZ_EventSelfTest
 
         ChefZ_EventTestSubscriber a = new ChefZ_EventTestSubscriber("A");
         a.bonus = 5.0;
-        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, ScriptCaller.Create(a.OnBonus), a.name);
+        ScriptCaller cb589 = ScriptCaller.Create(a.OnBonus);
+        bus.Subscribe(ChefZ_EventNames.RECIPE_COMPLETED, a, cb589, a.name);
 
         ChefZ_EventArgs args = bus.Acquire(ChefZ_EventNames.RECIPE_COMPLETED);
         bus.RaiseKeep(args);
@@ -616,7 +624,8 @@ class ChefZ_EventSelfTest
 
         ChefZ_EventTestSubscriber loop = new ChefZ_EventTestSubscriber("Schleife");
         loop.bus = bus;
-        bus.Subscribe(ChefZ_EventNames.FOOD_STATE_CHANGED, loop, ScriptCaller.Create(loop.OnNested), loop.name);
+        ScriptCaller cb619 = ScriptCaller.Create(loop.OnNested);
+        bus.Subscribe(ChefZ_EventNames.FOOD_STATE_CHANGED, loop, cb619, loop.name);
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_STATE_CHANGED));
 
@@ -650,7 +659,8 @@ class ChefZ_EventSelfTest
         Sub(bus, ChefZ_EventNames.FOOD_PRESERVED, first, 30);
 
         leaver.bus = bus;
-        leaver.selfSubscriptionId = bus.Subscribe(ChefZ_EventNames.FOOD_PRESERVED, leaver, ScriptCaller.Create(leaver.OnUnsubscribeSelf), leaver.name, 20);
+        ScriptCaller cb653 = ScriptCaller.Create(leaver.OnUnsubscribeSelf);
+        leaver.selfSubscriptionId = bus.Subscribe(ChefZ_EventNames.FOOD_PRESERVED, leaver, cb653, leaver.name, 20);
         Sub(bus, ChefZ_EventNames.FOOD_PRESERVED, last, 10);
 
         bus.Raise(bus.Acquire(ChefZ_EventNames.FOOD_PRESERVED));
