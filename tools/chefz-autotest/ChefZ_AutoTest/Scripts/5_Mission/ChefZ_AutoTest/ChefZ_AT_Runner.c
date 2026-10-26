@@ -28,6 +28,8 @@ class ChefZ_AT_Runner
     ItemBase m_PendingTool;
     float m_PendingToolHp;
     string m_PendingToolNote;
+    string m_PendingHow;
+    ref map<string, float> m_PendingBefore;
 
     // Erstes zwischengelagertes Kochergebnis: wandert es im naechsten Frame
     // wirklich ins Gefaess? (ChefZ_Applicator.TakeStaged)
@@ -354,6 +356,7 @@ class ChefZ_AT_Runner
             return -1;
         }
         ItemBase tool = ToolInHands(proc);
+        m_PendingBefore = InputAmounts(c, CollectAround());
 
         // Der Raeucherofen braucht Feuer.
         ChefZ_Smoker smoker = ChefZ_Smoker.Cast(station);
@@ -453,6 +456,7 @@ class ChefZ_AT_Runner
                 ChefZ_GenericCraftRecipe own = ChefZ_GenericCraftRecipe.Cast(pm.m_RecipeList[id]);
                 if (!own || own.ChefZ_AT_TransformId() != c.id)
                     continue;
+                m_PendingBefore = InputAmounts(c, CollectAround());
                 pm.PerformRecipeServer(id, a, b, m_Player);
                 return 1500;
             }
@@ -521,12 +525,79 @@ class ChefZ_AT_Runner
             }
         }
 
-        items.Clear();
-        if (station)
-            ChefZ_AT_Util.CollectCargo(station, items);
+        // Ausgewertet wird einen Frame spaeter: verbrauchte Zutaten loescht die
+        // Engine erst am Ende des Frames, vorher stuenden sie noch im Laderaum.
+        m_PendingHow = how;
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FinishPending, 200, false);
+    }
+
+    //! Alles um den Fall herum: Station, Spieler, Boden.
+    array<EntityAI> CollectAround()
+    {
+        array<EntityAI> items = new array<EntityAI>();
+        if (m_PendingStation)
+            ChefZ_AT_Util.CollectCargo(m_PendingStation, items);
         ChefZ_AT_Util.CollectCargo(m_Player, items);
         ChefZ_AT_Util.CollectNear(m_Site, 8, items);
+        return items;
+    }
+
+    //! Menge je Eingangsklasse: Quantity, bei Items ohne Menge die Stueckzahl.
+    //! Klassen, die auch Ausgang sind, zaehlen nicht - dort hiesse "weniger" nichts.
+    map<string, float> InputAmounts(ChefZ_AT_Case c, array<EntityAI> items)
+    {
+        map<string, float> amounts = new map<string, float>();
+        foreach (ChefZ_AT_Input input : c.inputs)
+        {
+            if (c.outputs.Find(input.cls) >= 0)
+                continue;
+            float sum = 0;
+            foreach (EntityAI e : items)
+            {
+                if (!e || e.GetType() != input.cls || e.IsSetForDeletion())
+                    continue;
+                ItemBase ib = ItemBase.Cast(e);
+                if (ib && ib.HasQuantity())
+                    sum = sum + ib.GetQuantity();
+                else
+                    sum = sum + 1;
+            }
+            amounts.Set(input.cls, sum);
+        }
+        return amounts;
+    }
+
+    void FinishPending()
+    {
+        ChefZ_AT_Case c = m_Pending;
+        if (!c)
+        {
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(NextCase, 100, false);
+            return;
+        }
+        string how = m_PendingHow;
+        string missing;
+        EntityAI made;
+        array<EntityAI> items = CollectAround();
         ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made);
+
+        // Die Zutaten muessen weniger geworden sein (Fleischwolf: das Fleisch
+        // verschwindet und wird zu Hackfleisch).
+        map<string, float> after = InputAmounts(c, items);
+        string used = "";
+        bool consumed = true;
+        foreach (string cls, float was : m_PendingBefore)
+        {
+            float now = after.Get(cls);
+            used = used + " " + cls + " " + was.ToString() + "->" + now.ToString();
+            if (now >= was)
+                consumed = false;
+        }
+        how = how + " verbraucht:" + used;
+        if (made && !consumed)
+            made = null;
+        if (!made && missing == "")
+            missing = "Zutaten nicht verbraucht ";
 
         if (m_PendingTool)
             how = how + " werkzeug=" + m_PendingTool.GetType() + " hp " + m_PendingToolHp.ToString() + "->" + m_PendingTool.GetHealth("", "").ToString() + m_PendingToolNote;
@@ -592,9 +663,13 @@ class ChefZ_AT_Runner
         // Aufstellbare Geraete brauchen Kollision; Wildpflanzen und die Pfanne nicht.
         array<string> placeable = {"ChefZ_GrainMill", "ChefZ_DryingRack", "ChefZ_ButterChurn", "ChefZ_CheesePress", "ChefZ_MeatGrinder", "ChefZ_Smoker", "ChefZ_HoneyExtractor", "ChefZ_Beehive", "ChefZ_BeehiveDouble"};
         array<string> stations = {"ChefZ_GrainMill", "ChefZ_DryingRack", "ChefZ_ButterChurn", "ChefZ_CheesePress", "ChefZ_MeatGrinder", "ChefZ_Smoker", "ChefZ_HoneyExtractor", "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_Mortar", "ChefZ_FryingPan", "ChefZ_WildCorn", "ChefZ_WildThyme", "ChefZ_WildRosemary", "ChefZ_WildParsley", "ChefZ_WildBlackberry", "ChefZ_WildBlueberry", "ChefZ_WildRaspberry", "ChefZ_WildStrawberry"};
+        // Jedes Geraet auf eigenem Platz: geloescht wird erst am Frameende, und
+        // der Kollisionsstrahl traefe sonst das vorige Geraet.
+        int spot = 0;
         foreach (string s : stations)
         {
-            Object o = g_Game.CreateObjectEx(s, m_Site, ECE_PLACE_ON_SURFACE);
+            spot++;
+            Object o = g_Game.CreateObjectEx(s, m_Site + Vector(0, 0, 3 * spot), ECE_PLACE_ON_SURFACE);
             if (!o)
             {
                 ChefZ_AT_Log.Result("DEVICE", s, false, "nicht spawnbar");
@@ -606,8 +681,23 @@ class ChefZ_AT_Runner
                 g_Game.ConfigGetText("CfgVehicles " + s + " physLayer", layer);
                 vector box[2];
                 bool hasBox = o.GetCollisionBox(box);
-                bool ok = layer == "item_large" && hasBox;
-                ChefZ_AT_Log.Result("DEVICE", s + ".collision", ok, "physLayer=" + layer + " box=" + hasBox.ToString() + " min=" + box[0].ToString() + " max=" + box[1].ToString());
+                // Physikstrahl auf der Ebene, auf der auch Zelte, Zaeune und die
+                // Feuerstelle den Spieler aufhalten: waagerecht auf halber Hoehe
+                // quer durch das Geraet. Er muss das Geraet selbst treffen.
+                vector mid = o.GetPosition() + Vector(0, (box[0][1] + box[1][1]) * 0.5, 0);
+                vector from = mid + Vector(2, 0, 0);
+                vector to = mid - Vector(2, 0, 0);
+                Object hitObj;
+                vector hitPos;
+                vector hitNormal;
+                float hitFraction;
+                bool rayHit = DayZPhysics.RayCastBullet(from, to, PhxInteractionLayers.ITEM_LARGE, null, hitObj, hitPos, hitNormal, hitFraction);
+                bool hitsSelf = rayHit && hitObj == o;
+                bool ok = layer == "item_large" && hasBox && hitsSelf;
+                string col = "physLayer=" + layer + " box=" + hasBox.ToString() + " strahl=" + hitsSelf.ToString();
+                col = col + " traf=" + ItemName(EntityAI.Cast(hitObj)) + " bei " + hitPos.ToString();
+                col = col + " pos=" + o.GetPosition().ToString() + " min=" + box[0].ToString() + " max=" + box[1].ToString();
+                ChefZ_AT_Log.Result("DEVICE", s + ".collision", ok, col);
             }
             ChefZ_ProcessingStation_Base st = ChefZ_ProcessingStation_Base.Cast(o);
             if (st)
@@ -618,10 +708,15 @@ class ChefZ_AT_Runner
             }
             g_Game.ObjectDelete(o);
         }
+        // Raeucherschrank und Honigschleuder brauchen echte Zeit (Brenntakt
+        // 5 s) und werden einen Frame nach dem letzten Takt bewertet, weil die
+        // Engine verbrauchte Zutaten erst am Frameende loescht.
         TestSmokerHeat();
-        TestHoneyAutostart();
-        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(RunFishing, 1000, false);
     }
+
+    ChefZ_Smoker m_AtSmoker;
+    EntityAI m_AtSmokerMeat;
+    float m_AtSmokerT0;
 
     void TestSmokerHeat()
     {
@@ -629,30 +724,75 @@ class ChefZ_AT_Runner
         if (!smoker)
         {
             ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.heat", false, "nicht spawnbar");
+            TestHoneyAutostart();
             return;
         }
         EntityAI wood = smoker.GetInventory().CreateAttachment("Firewood");
         EntityAI meat = smoker.GetInventory().CreateEntityInCargo("PigSteakMeat");
         ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.fuelslot", wood != null, "Firewood als Attachment");
-        float t0 = 0;
+        m_AtSmokerT0 = 0;
         if (meat)
-            t0 = meat.GetTemperature();
+            m_AtSmokerT0 = meat.GetTemperature();
         smoker.OnIgnitedThis(null);
-        for (int i = 0; i < 40; i++)
-            smoker.ChefZ_TickJobs(15.0);
-        float t1 = 0;
-        if (meat)
-            t1 = meat.GetTemperature();
         ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.lit", smoker.ChefZ_HasHeat(), "jobs=" + smoker.ChefZ_ActiveJobCount().ToString());
+        m_AtSmoker = smoker;
+        m_AtSmokerMeat = meat;
+        // Drei Brenntakte in Echtzeit, ohne die Auftraege vorzuspulen.
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(SmokerWarmCheck, 16000, false);
+    }
+
+    //! Das Raeuchergut im brennenden Schrank muss warm werden.
+    void SmokerWarmCheck()
+    {
+        ChefZ_Smoker smoker = m_AtSmoker;
+        if (!smoker)
+        {
+            TestHoneyAutostart();
+            return;
+        }
+        float t1 = -1000;
+        string which = "PigSteakMeat";
         array<EntityAI> items = new array<EntityAI>();
         ChefZ_AT_Util.CollectCargo(smoker, items);
-        string missing;
-        EntityAI made;
-        array<string> want = {"ChefZ_SmokedMeat"};
-        ChefZ_AT_Util.HasOutputs(items, want, missing, made);
-        ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.smokes", made != null, "Inhalt: " + DescribeItems(items));
-        ChefZ_AT_Log.Info("smoker meat temperature " + t0.ToString() + " -> " + t1.ToString());
-        g_Game.ObjectDelete(smoker);
+        foreach (EntityAI e : items)
+        {
+            if (e.GetType() == "PigSteakMeat" || e.GetType() == "ChefZ_SmokedMeat")
+            {
+                t1 = e.GetTemperature();
+                which = e.GetType();
+            }
+        }
+        ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.warms", t1 >= m_AtSmokerT0 + 5.0, which + " " + m_AtSmokerT0.ToString() + " -> " + t1.ToString() + " C nach 16 s, Schrank " + smoker.GetTemperature().ToString() + " C, brennt=" + smoker.ChefZ_HasHeat().ToString());
+        for (int i = 0; i < 40; i++)
+            smoker.ChefZ_TickJobs(15.0);
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(SmokerDoneCheck, 300, false);
+    }
+
+    //! Das rohe Fleisch ist weg, geraeuchertes liegt im Schrank.
+    void SmokerDoneCheck()
+    {
+        ChefZ_Smoker smoker = m_AtSmoker;
+        if (smoker)
+        {
+            array<EntityAI> items = new array<EntityAI>();
+            ChefZ_AT_Util.CollectCargo(smoker, items);
+            int raw = 0;
+            int smoked = 0;
+            foreach (EntityAI e : items)
+            {
+                if (e.IsSetForDeletion())
+                    continue;
+                if (e.GetType() == "PigSteakMeat")
+                    raw++;
+                if (e.GetType() == "ChefZ_SmokedMeat")
+                    smoked++;
+            }
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.smokes", raw == 0 && smoked == 1, "roh=" + raw.ToString() + " geraeuchert=" + smoked.ToString() + " Inhalt: " + DescribeItems(items));
+            g_Game.ObjectDelete(smoker);
+        }
+        m_AtSmoker = null;
+        m_AtSmokerMeat = null;
+        TestHoneyAutostart();
     }
 
     void TestHoneyAutostart()
@@ -661,6 +801,7 @@ class ChefZ_AT_Runner
         if (!ex)
         {
             ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.autostart", false, "nicht spawnbar");
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(RunFishing, 1000, false);
             return;
         }
         m_PendingStation = ex;
@@ -674,21 +815,62 @@ class ChefZ_AT_Runner
     {
         ChefZ_HoneyExtractor ex = ChefZ_HoneyExtractor.Cast(m_PendingStation);
         if (!ex)
+        {
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(RunFishing, 1000, false);
             return;
+        }
         int jobs = ex.ChefZ_ActiveJobCount();
+        ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.autostart", jobs > 0, "jobsNachEinlegen=" + jobs.ToString());
+        m_AtHoneyRounds = 0;
+        HoneyRound();
+    }
+
+    int m_AtHoneyRounds;
+
+    //! Ein Schleudergang je Runde. Den naechsten startet die Schleuder selbst
+    //! im Folgeframe (ChefZ_SpinNextJar) - genau das wird hier mitgeprueft.
+    void HoneyRound()
+    {
+        ChefZ_HoneyExtractor ex = ChefZ_HoneyExtractor.Cast(m_PendingStation);
+        if (!ex)
+        {
+            CheckHoneyJars();
+            return;
+        }
         for (int i = 0; i < 200; i++)
             ex.ChefZ_TickJobs(15.0);
-        array<EntityAI> items = new array<EntityAI>();
-        ChefZ_AT_Util.CollectCargo(ex, items);
-        int honey = 0;
-        foreach (EntityAI e : items)
+        m_AtHoneyRounds++;
+        if (m_AtHoneyRounds < 4)
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(HoneyRound, 500, false);
+        else
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CheckHoneyJars, 300, false);
+    }
+
+    //! Eingesetzte Glaeser werden befuellt: zwei leere Glaeser rein, zwei
+    //! Honigglaeser raus, kein leeres Glas bleibt uebrig.
+    void CheckHoneyJars()
+    {
+        ChefZ_HoneyExtractor ex = ChefZ_HoneyExtractor.Cast(m_PendingStation);
+        if (ex)
         {
-            if (e.GetType() == "Honey")
-                honey++;
+            array<EntityAI> items = new array<EntityAI>();
+            ChefZ_AT_Util.CollectCargo(ex, items);
+            int honey = 0;
+            int empty = 0;
+            foreach (EntityAI e : items)
+            {
+                if (e.IsSetForDeletion())
+                    continue;
+                if (e.GetType() == "Honey")
+                    honey++;
+                if (e.GetType() == "ChefZ_EmptyJar")
+                    empty++;
+            }
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.fillsJars", honey == 2 && empty == 0, "leer=" + empty.ToString() + " voll=" + honey.ToString() + " Inhalt: " + DescribeItems(items));
+            g_Game.ObjectDelete(ex);
         }
-        ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.autostart", jobs > 0 && honey >= 1, "jobsNachEinlegen=" + jobs.ToString() + " honig=" + honey.ToString() + " Inhalt: " + DescribeItems(items));
-        g_Game.ObjectDelete(ex);
         m_PendingStation = null;
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(RunFishing, 1000, false);
     }
 
     //==========================================================================

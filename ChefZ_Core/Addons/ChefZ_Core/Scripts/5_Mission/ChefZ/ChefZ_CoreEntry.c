@@ -105,6 +105,16 @@ modded class MissionServer
         ChefZ_PboProbe.RunServer();
         // ----------------------------------------------------------------
     }
+
+    // Beim Beenden das Rezept-Gate loesen (26.10.2026). Es sitzt in einem
+    // static ref von 1_Core, ist aber eine Klasse aus 3_Game: haelt 1_Core
+    // die Instanz noch, wenn 3_Game entladen wird, meldet die Engine
+    // "Leaked 'ChefZ_RegistryCapabilityGate' script instance".
+    override void OnMissionFinish()
+    {
+        super.OnMissionFinish();
+        ChefZ_CapabilityGate.SetActive(null);
+    }
 }
 
 // modded class MissionGameplay
@@ -123,5 +133,15 @@ modded class MissionGameplay
         // ---- TEMPORAER: Vorarbeit V-A ----------------------------------
         ChefZ_PboProbe.RunClient();
         // ----------------------------------------------------------------
+    }
+
+    // Beim Beenden das Rezept-Gate loesen (26.10.2026). Es sitzt in einem
+    // static ref von 1_Core, ist aber eine Klasse aus 3_Game: haelt 1_Core
+    // die Instanz noch, wenn 3_Game entladen wird, meldet die Engine
+    // "Leaked 'ChefZ_RegistryCapabilityGate' script instance".
+    override void OnMissionFinish()
+    {
+        super.OnMissionFinish();
+        ChefZ_CapabilityGate.SetActive(null);
     }
 }

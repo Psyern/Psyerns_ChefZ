@@ -588,7 +588,9 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_BUTTERCHURN";
         descriptionShort = "#STR_CHEFZ_ITEM_BUTTERCHURN_DESC";
         model = "\ChefZ\ChefZ_Devices\models\butterchurn.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
-        rotationFlags = 17;
+        // 26.10.2026: mit rotationFlags 17 bekam das Geraet keinen Physikkoerper,
+        // der Spieler lief durch (Autotest-Strahl auf item_large, wie Trockengestell)
+        rotationFlags = 2;
         itemSize[] = {4, 4};
         weight = 4200;
         absorbency = 0.0;
@@ -615,7 +617,9 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_CHEESEPRESS";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESEPRESS_DESC";
         model = "\ChefZ\ChefZ_Devices\models\cheesepress.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
-        rotationFlags = 17;
+        // 26.10.2026: mit rotationFlags 17 bekam das Geraet keinen Physikkoerper,
+        // der Spieler lief durch (Autotest-Strahl auf item_large, wie Trockengestell)
+        rotationFlags = 2;
         itemSize[] = {5, 4};
         weight = 6800;
         absorbency = 0.0;
@@ -723,7 +727,9 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_MEATGRINDER0";
         descriptionShort = "#STR_CHEFZ_ITEM_MEATGRINDER1";
         model = "\ChefZ\ChefZ_Devices\models\meatgrinder.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
-        rotationFlags = 17;
+        // 26.10.2026: mit rotationFlags 17 bekam das Geraet keinen Physikkoerper,
+        // der Spieler lief durch (Autotest-Strahl auf item_large, wie Trockengestell)
+        rotationFlags = 2;
         itemSize[] = {4, 4};
         weight = 3200;
         absorbency = 0.0;
