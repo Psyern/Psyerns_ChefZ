@@ -123,6 +123,7 @@ class CfgPatches
             "ChefZ_VegetableSoupBowl",
             "ChefZ_BoneBrothSoupBowl",
             "ChefZ_ChernarusChiliBowl",
+            "ChefZ_ShellfishBisqueBowl",
 
             // ### SLICE dishes-a ###   Tellergerichte 1-10 (Production Map §61)
             //
@@ -2554,6 +2555,44 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
+    // Meeresfruechte (26.10.2026) - ChefZ_ShellfishBisqueBowl     Behaelter: BOWL
+    // Das Gericht fuer Krabben, Hummer, Kaisergranat und Garnele; Tintenfisch
+    // und Krake haben die beiden Calamari-Teller.
+    // NAEHRWERTHERLEITUNG aus den Zutaten (Boiled-Stufe ChefZ_Seafood_Base):
+    //    3x Krustentier gekocht   3 x 80 je 100 x 250 = 600 / 240
+    //    1x Butter oder Fett                          600 /  20
+    //    1x Tomate (Vanilla)                          ~60 /  90
+    //    Wasser im Topf                                 0 / 300
+    //    Summe ~1260 Energie. Aufwendiges Gericht: mindestens das 1.3-fache
+    //    der Zutaten (Quality-and-Nutrition.md 2.7) -> 3 x 640 = 1920 (1.5x).
+    //--------------------------------------------------------------------------
+    class ChefZ_ShellfishBisqueBowl : ChefZ_ServedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SHELLFISHBISQUE";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISHBISQUE_DESC";
+        model = "\ChefZ\ChefZ_Food\models\soup.p3d";   // Suppenschuessel, eigene Textur
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\shellfish_bisque_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 480;
+        lifetime = 7200;
+        varQuantityInit = 300;
+        varQuantityMax = 300;
+
+        class Nutrition
+        {
+            // 1.65 x 300 Einheiten = 495 Magenvolumen, wie die Kuerbissuppe
+            fullnessIndex = 1.65;
+            energy = 640;
+            water = 190;
+            nutritionalIndex = 75;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+    };
+
+    //--------------------------------------------------------------------------
     // §61.10 / DME §38.10 - Bohnen-Wurst-Teller        Behaelter: PLATE (Teller)
     //
     // NAEHRWERTHERLEITUNG (Auftrag: aus den Zutaten ableiten, nicht erfinden).
@@ -3232,6 +3271,7 @@ class CfgChefZIngredients
     class ChefZ_VegetableSoupBowl : ChefZ_BowlDishIngredient {};
     class ChefZ_BoneBrothSoupBowl : ChefZ_BowlDishIngredient {};
     class ChefZ_ChernarusChiliBowl : ChefZ_BowlDishIngredient {};
+    class ChefZ_ShellfishBisqueBowl : ChefZ_BowlDishIngredient {};
 
     //==========================================================================
     // ### SLICE dishes-a ###   Zutatenbindung der Tellergerichte 1-10

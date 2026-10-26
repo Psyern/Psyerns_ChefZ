@@ -329,6 +329,179 @@
                 "CHEFZ_HEALTHY_MEAL"
             ],
             "nutritionModifier": 1.25
+        },
+        {
+            "id": "RCP_ChefZ_ShellfishBisque",
+            "_note": "Meeresfruechte (26.10.2026). Das Gericht fuer die neun Krustentiere (Krabben, Hummer, Kaisergranat, Garnele) - Tintenfisch und Krake haben die Calamari-Teller. Im Topf mit Butter oder Fett und Tomate gekocht; Kraut, Salz und Gewuerz heben die Stufe, frische Tiere ebenso. Naehrwert an ChefZ_ShellfishBisqueBowl (ChefZ_Cooking/config.cpp).",
+            "priority": 10,
+            "qualityTierSet": "DISH_DEFAULT",
+            "nutritionModifier": 1.15,
+            "completion": "ON_STAGE",
+            "doneStages": [
+                "Boiled"
+            ],
+            "contexts": [
+                {
+                    "deviceClasses": [
+                        "Pot",
+                        "Cauldron"
+                    ],
+                    "methods": [
+                        "BOILING"
+                    ],
+                    "requiresLiquid": true,
+                    "liquidTypes": [
+                        "Water"
+                    ],
+                    "liquidQuantity": {
+                        "min": 200
+                    }
+                }
+            ],
+            "slots": [
+                {
+                    "slotId": "shellfish",
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_CoastalCrab"
+                            },
+                            {
+                                "cls": "ChefZ_SpinyOrangeCrab"
+                            },
+                            {
+                                "cls": "ChefZ_BlueSentinelCrab"
+                            },
+                            {
+                                "cls": "ChefZ_SnowCrab"
+                            },
+                            {
+                                "cls": "ChefZ_CrimsonKingCrab"
+                            },
+                            {
+                                "cls": "ChefZ_StripedTigerPrawn"
+                            },
+                            {
+                                "cls": "ChefZ_Langoustine"
+                            },
+                            {
+                                "cls": "ChefZ_SpinyLobster"
+                            },
+                            {
+                                "cls": "ChefZ_MidnightLobster"
+                            }
+                        ]
+                    },
+                    "minCount": 2,
+                    "maxCount": 4,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "fat",
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "FAT"
+                            },
+                            {
+                                "category": "BUTTER"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "tomato",
+                    "match": {
+                        "category": "TOMATO"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole",
+                    "gradePoints": 0
+                },
+                {
+                    "slotId": "herb",
+                    "match": {
+                        "tag": "CHEFZ_HERB"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "salt",
+                    "match": {
+                        "category": "SALT"
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": {
+                        "min": 5
+                    },
+                    "consume": "amount",
+                    "consumeAmount": 5,
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": {
+                        "tag": "CHEFZ_SPICE"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "gradeRules": [
+                {
+                    "ruleId": "GR_SB_Fresh",
+                    "when": "anyItem",
+                    "selector": {
+                        "category": "SEAFOOD",
+                        "freshness": {
+                            "min": 0.8
+                        }
+                    },
+                    "points": 1
+                }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
+                "minMatchedHealth01": 0.15,
+                "liquidConsumed": 200
+            },
+            "outputs": [
+                {
+                    "cls": "ChefZ_ShellfishBisqueBowl",
+                    "quantity": 300,
+                    "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyBowl",
+                    "setState": "COOKED",
+                    "inheritQuality": true,
+                    "inheritFreshness": true,
+                    "freshnessCarry": 0.9,
+                    "inheritTemperature": true,
+                    "effects": [
+                        "CHEFZ_WARM_MEAL",
+                        "CHEFZ_HEARTY_MEAL"
+                    ]
+                }
+            ]
         }
     ]
 }

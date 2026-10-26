@@ -870,10 +870,21 @@ class CfgVehicles
         // Anzuender in eigenen Plaetzen, im Inventar als Gruppen "Brennstoff"
         // und "Zunder" mit Vanillas Symbolen. Die Rinde im Cargo brennt
         // weiterhin mit (aeltere Staende).
-        attachments[] = {"Firewood", "WoodenStick", "Rags", "MedicalBandage", "Paper", "Bark"};
+        attachments[] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD", "Firewood", "WoodenStick", "Rags", "MedicalBandage", "Paper", "Bark"};
 
         class GUIInventoryAttachmentsProps
         {
+            // Raeucherhaken wie Vanillas OvenIndoor/Fireplace (26.10.2026): was
+            // dort haengt, raeuchert wie der Cargo (ChefZ_Smoker.c), das
+            // Ergebnis landet im Cargo.
+            class Smoking
+            {
+                name = "$STR_attachment_Smoking";
+                description = "";
+                attachmentSlots[] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD"};
+                icon = "set:dayz_inventory image:cookingequipment";
+                view_index = 0;
+            };
             class Fuel
             {
                 name = "$STR_attachment_Fuel0";

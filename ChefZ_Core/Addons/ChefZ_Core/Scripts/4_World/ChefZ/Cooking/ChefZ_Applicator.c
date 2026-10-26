@@ -404,6 +404,10 @@ class ChefZ_Applicator
      * eines Gefaesses liegen, ohne dass der Hierarchieelternteil die Antwort
      * eindeutig macht (Proxy-Cargo). Die Frage lautet genau "liegt es in
      * diesem Cargo", und dafuer gibt es genau diese Auskunft.
+     *
+     * Ein Item, das direkt AM Geraet haengt (Raeucherhaken, Trockenrahmen),
+     * gilt ebenso: CollectFromStation bindet Anbauten, und ohne diese Zeile
+     * scheiterte jeder Job an seinem eigenen Haken (Autotest 26.10.2026).
      */
     private static bool IsStillIn(notnull ItemBase item, ItemBase device, out string why)
     {
@@ -425,7 +429,7 @@ class ChefZ_Applicator
             return false;
         }
 
-        if (!inv.HasEntityInCargo(item))
+        if (!inv.HasEntityInCargo(item) && !inv.HasAttachment(item))
         {
             why = "liegt nicht mehr im Gefaess";
             return false;

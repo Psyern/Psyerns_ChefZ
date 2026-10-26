@@ -944,6 +944,26 @@ class ChefZ_MatcherSelfTest
         if (result2.bindings.Get(0).handles.Get(0) != 31) return ChefZ_SelfTestTrace.Fail("MatcherSelfTest", 944, "result2.bindings.Get(0).handles.Get(0) != 31");   // B, nicht A
         if (result2.bindings.Get(1).handles.Count() != 2) return ChefZ_SelfTestTrace.Fail("MatcherSelfTest", 945, "result2.bindings.Get(1).handles.Count() != 2");
 
+        // Spanne: ein Pflichtslot x2..x4 nimmt alle drei passenden Items, statt
+        // das dritte als "extra" liegen zu lassen (TopUpRequiredSlots).
+        ChefZ_FactSnapshot snap3 = new ChefZ_FactSnapshot();
+        ChefZ_ItemFacts s1 = AddItem(snap3, 40, "CHEFZ_MT_KLASSE_A");
+        s1.closure.SetBit(BIT_GRUEN);
+        ChefZ_ItemFacts s2 = AddItem(snap3, 41, "CHEFZ_MT_KLASSE_B");
+        s2.closure.SetBit(BIT_GRUEN);
+        ChefZ_ItemFacts s3 = AddItem(snap3, 42, "CHEFZ_MT_KLASSE_C");
+        s3.closure.SetBit(BIT_GRUEN);
+        snap3.SortStable();
+
+        array<ref ChefZ_CompiledSlot> slots3 = new array<ref ChefZ_CompiledSlot>();
+        slots3.Insert(MakeSlot(ctx, "spanne", Leaf("category", "CHEFZ_MT_KAT_GRUEN"), 2, 4, 0));
+
+        ChefZ_BindResult result3;
+        if (!ChefZ_Matcher.Bind(slots3, snap3, 4096, "CHEFZ_MT_SPANNE", null, result3))
+            return ChefZ_SelfTestTrace.Fail("MatcherSelfTest", 964, "!ChefZ_Matcher.Bind(slots3, snap3, 4096, 'CHEFZ_MT_SPANNE', null, result3)");
+        if (result3.bindings.Get(0).handles.Count() != 3) return ChefZ_SelfTestTrace.Fail("MatcherSelfTest", 965, "result3.bindings.Get(0).handles.Count() != 3");
+        if (result3.extraHandles.Count() != 0) return ChefZ_SelfTestTrace.Fail("MatcherSelfTest", 966, "result3.extraHandles.Count() != 0");
+
         return true;
     }
 

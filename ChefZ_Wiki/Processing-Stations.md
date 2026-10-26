@@ -218,6 +218,13 @@ the station record set `"needsFuel": true` against a class with no fuel slot.
 carries its own burn state, fed with bark from its own cargo. Five minutes of full
 burn costs two pieces. The price of smoking is fuel now, not waiting.
 
+**Inventory since 2026-10-26 — like the vanilla oven.** The smoker shows the same
+categories as the vanilla Fireplace and OvenIndoor: *Smoking* (four hooks `SmokingA`–`SmokingD`),
+*Fuel* (Firewood, Wooden Stick) and *Kindling* (Rags, Bandage, Paper, Bark). Meat and fish
+can go on a hook or into the cargo; both get the same heat and both get smoked, the
+result lands in the cargo. The hooks accept only what the cargo accepts (meat and fish).
+Fire starts with kindling and keeps going on firewood; bark in the cargo still burns as before.
+
 > **Smoked Meat was blocked for a second, unrelated reason — fixed the same day.**
 > `TR_SaltedMeatToSmoked` declared no `process` field, unlike its two neighbours in
 > the same file, so `ChefZ_ProcessCompiler.c:355` dropped it at boot and no station

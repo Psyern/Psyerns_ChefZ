@@ -285,6 +285,7 @@ are served on a plate; from PREPARED upwards the plate gives the meal bonus.
 |---|---|---|---|---|---|---|
 | Crispy Fried Calamari | `RCP_ChefZ_CrispyFriedCalamari` | FryingPan | 2–3× Squid, Speckled Squid, Crimson Squid, Northern Crimson Squid or Octopus **+1**<br>1× *FLOUR*<br>1× *FAT* or *BUTTER* **+1** | 1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* (≥ 80 %) **+1** | Crispy Fried Calamari (200, plate) | 1 (PLATE) |
 | Grilled Stuffed Calamari | `RCP_ChefZ_GrilledStuffedCalamari` | FryingPan | 2–3× squid or octopus **+1**<br>1× Rice or *BREAD*<br>1–2× *TOMATO* **+1**<br>1–2× *CHEFZ_HERB* **+1** | 1× Cheese **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* **+1**, wild garlic **+1** | Grilled Stuffed Calamari (200, plate) | 1 (PLATE) |
+| Shellfish Bisque | `RCP_ChefZ_ShellfishBisque` | Pot, Cauldron | 2–4× crab, lobster, langoustine or tiger prawn **+1**<br>1× *FAT* or *BUTTER* **+1**<br>1–2× *TOMATO* | 1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* (5 g) **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* (≥ 80 %) **+1** | Shellfish Bisque (300, bowl) | 3 (BOWL) |
 
 ### Timing
 
@@ -292,6 +293,7 @@ are served on a plate; from PREPARED upwards the plate gives the meal bonus.
 |---|---|---|---|---|---|---|
 | Crispy Fried Calamari | `RCP_ChefZ_CrispyFriedCalamari` | BAKING | TIMED | 180 s | 65 °C | — |
 | Grilled Stuffed Calamari | `RCP_ChefZ_GrilledStuffedCalamari` | BAKING | TIMED | 240 s | 65 °C | — |
+| Shellfish Bisque | `RCP_ChefZ_ShellfishBisque` | BOILING | ON_STAGE | Boiled | — | 200 |
 
 ## Effect IDs
 

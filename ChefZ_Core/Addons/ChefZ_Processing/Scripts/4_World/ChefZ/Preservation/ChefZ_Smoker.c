@@ -423,6 +423,40 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 				continue;
 			item.SetTemperatureEx(new TemperatureDataInterpolated(CHEFZ_SMOKE_TEMP_C, ETemperatureAccessTypes.ACCESS_FIREPLACE, deltaSec, GameConstants.TEMP_COEF_FIREPLACE_HEATING, item.GetHeatPermeabilityCoef()));
 		}
+
+		// Raeucherhaken: dieselbe Hitze wie der Cargo.
+		string hooks[4] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD"};
+		for (int s = 0; s < 4; s++)
+		{
+			ItemBase hung = ItemBase.Cast(FindAttachmentBySlotName(hooks[s]));
+			if (!hung || !hung.CanHaveTemperature())
+				continue;
+			hung.SetTemperatureEx(new TemperatureDataInterpolated(CHEFZ_SMOKE_TEMP_C, ETemperatureAccessTypes.ACCESS_FIREPLACE, deltaSec, GameConstants.TEMP_COEF_FIREPLACE_HEATING, hung.GetHeatPermeabilityCoef()));
+		}
+	}
+
+	//! Raeucherhaken nehmen nur, was auch der Cargo nimmt: Fleisch und Fisch.
+	override bool CanReceiveAttachment(EntityAI attachment, int slotId)
+	{
+		if (!super.CanReceiveAttachment(attachment, slotId))
+			return false;
+		string slot = InventorySlots.GetSlotName(slotId);
+		bool hook = false;
+		string hooks[4] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD"};
+		for (int s = 0; s < 4; s++)
+		{
+			if (hooks[s] == slot)
+				hook = true;
+		}
+		if (!hook)
+			return true;
+		if (!ChefZ_StationGate.ChefZ_RegistryReady())
+			return true;
+		if (ChefZ_StationGate.ChefZ_InCategory(attachment, CHEFZ_CAT_MEAT))
+			return true;
+		if (ChefZ_StationGate.ChefZ_InCategory(attachment, CHEFZ_CAT_FISH))
+			return true;
+		return false;
 	}
 
 	/**

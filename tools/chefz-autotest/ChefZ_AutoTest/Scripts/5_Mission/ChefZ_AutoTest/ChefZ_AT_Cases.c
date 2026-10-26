@@ -349,6 +349,71 @@ class ChefZ_AT_Cases
         c.AddOutput("ChefZ_GrilledStuffedCalamari");
         list.Insert(c);
 
+        // Meeresfruechte: jedes der neun Krustentiere einmal in der Bisque,
+        // Krabben ueber die FISH-Kategorie im Fischereintopf, Krake und Kalmar im Calamari.
+        c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_ShellfishBisque", "Pot", "BOILING", "");
+        c.SetLiquid("Water", 700.0);
+        c.AddInput("ChefZ_CoastalCrab", 1, "", "");
+        c.AddInput("ChefZ_SpinyOrangeCrab", 1, "", "");
+        c.AddInput("ChefZ_BlueSentinelCrab", 1, "", "");
+        c.AddInput("ChefZ_Butter", 1, "", "");
+        c.AddInput("Tomato", 1, "", "");
+        c.AddOutput("ChefZ_ShellfishBisqueBowl");
+        list.Insert(c);
+
+        c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_ShellfishBisque", "Cauldron", "BOILING", "");
+        c.SetLiquid("Water", 1000.0);
+        c.AddInput("ChefZ_SnowCrab", 1, "", "");
+        c.AddInput("ChefZ_CrimsonKingCrab", 1, "", "");
+        c.AddInput("ChefZ_Butter", 1, "", "");
+        c.AddInput("Tomato", 1, "", "");
+        c.AddOutput("ChefZ_ShellfishBisqueBowl");
+        list.Insert(c);
+
+        c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_ShellfishBisque", "Cauldron", "BOILING", "");
+        c.SetLiquid("Water", 1000.0);
+        c.AddInput("ChefZ_SpinyLobster", 1, "", "");
+        c.AddInput("ChefZ_MidnightLobster", 1, "", "");
+        c.AddInput("ChefZ_Butter", 1, "", "");
+        c.AddInput("Tomato", 1, "", "");
+        c.AddOutput("ChefZ_ShellfishBisqueBowl");
+        list.Insert(c);
+
+        c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_ShellfishBisque", "Pot", "BOILING", "");
+        c.SetLiquid("Water", 700.0);
+        c.AddInput("ChefZ_StripedTigerPrawn", 1, "", "");
+        c.AddInput("ChefZ_Langoustine", 1, "", "");
+        c.AddInput("ChefZ_Butter", 1, "", "");
+        c.AddInput("Tomato", 1, "", "");
+        c.AddOutput("ChefZ_ShellfishBisqueBowl");
+        list.Insert(c);
+
+        c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_FishermanStew", "Pot", "BOILING", "");
+        c.SetLiquid("Water", 700.0);
+        c.AddInput("ChefZ_CoastalCrab", 2, "", "");
+        c.AddInput("Potato", 2, "", "");
+        c.AddInput("ChefZ_Carrot", 1, "", "");
+        c.AddOutput("ChefZ_FishermanStewBowl");
+        list.Insert(c);
+
+        // Spanne x2..x4 mit drei Fischen: der Matcher muss alle drei binden.
+        c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_FishermanStew", "Cauldron", "BOILING", "");
+        c.SetLiquid("Water", 1000.0);
+        c.AddInput("CarpFilletMeat", 3, "", "");
+        c.AddInput("Potato", 2, "", "");
+        c.AddInput("ChefZ_Carrot", 1, "", "");
+        c.AddOutput("ChefZ_FishermanStewBowl");
+        list.Insert(c);
+
+        c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_CrispyFriedCalamari", "FryingPan", "BAKING", "");
+        c.seconds = 180.0;
+        c.AddInput("ChefZ_Octopus", 1, "", "");
+        c.AddInput("ChefZ_Squid", 1, "", "");
+        c.AddInput("ChefZ_Flour", 1, "", "");
+        c.AddInput("Lard", 1, "", "");
+        c.AddOutput("ChefZ_CrispyFriedCalamari");
+        list.Insert(c);
+
         c = ChefZ_AT_Case.Make("COOK", "RCP_CookSausage", "FryingPan", "BAKING", "");
         c.AddInput("ChefZ_RawSausage", 1, "", "");
         c.AddOutput("ChefZ_CookedSausage");

@@ -378,6 +378,7 @@ class ChefZ_Matcher
             return false;
         }
 
+        TopUpRequiredSlots(work);
         FillOptionalSlots(work);
         CollectResult(work);
         return true;
@@ -558,6 +559,52 @@ class ChefZ_Matcher
         }
 
         return false;
+    }
+
+    /**
+     * Pflichtslots mit Spanne (minCount < maxCount) bis zur Obergrenze auffuellen.
+     *
+     * Choose() nimmt die KLEINSTE ausreichende Auswahl, damit die Suche schnell
+     * eine Gesamtzuordnung findet. Ohne diesen Schritt blieb danach alles, was
+     * die Spanne noch haette aufnehmen koennen, als "extra" liegen - und bei
+     * extraItems "forbid" lehnte das Rezept genau die Zutat ab, die es selbst
+     * verlangt: drei Krustentiere in einer Bisque "x2..x4" (Autotest 26.10.2026).
+     *
+     * Greedy und ohne Backtracking: aufgefuellt wird nur mit Items, die kein
+     * Slot gebunden hat, jeder Zugriff prueft Anzahl und Menge erneut. Die
+     * gefundene Gesamtzuordnung kann dadurch nicht kippen.
+     */
+    private static void TopUpRequiredSlots(notnull ChefZ_MatchWork work)
+    {
+        for (int position = 0; position < work.order.Count(); position++)
+        {
+            int slotIdx = work.order.Get(position);
+            ChefZ_CompiledSlot slot = work.slots.Get(slotIdx);
+            array<int> chosen = work.assigned.Get(position);
+            array<int> cand   = work.candidates.Get(position);
+
+            for (int p = 0; p < cand.Count(); p++)
+            {
+                if (chosen.Count() >= slot.maxCount)
+                    break;
+
+                int itemIdx = cand.Get(p);
+                ChefZ_ItemFacts facts = work.snapshot.Get(itemIdx);
+                if (!facts || facts.slotBoundTo >= 0)
+                    continue;
+
+                chosen.Insert(itemIdx);
+                float units = 0.0;
+                bool countsOk = ChefZ_SlotEvaluator.CheckCounts(slot, chosen.Count());
+                bool amountOk = ChefZ_SlotEvaluator.CheckAmountIdx(slot, work.snapshot, chosen, units);
+                if (!countsOk || !amountOk)
+                {
+                    chosen.Remove(chosen.Count() - 1);
+                    continue;
+                }
+                facts.slotBoundTo = slotIdx;
+            }
+        }
     }
 
     /**

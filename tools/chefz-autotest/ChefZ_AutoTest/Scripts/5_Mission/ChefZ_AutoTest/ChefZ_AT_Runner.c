@@ -693,7 +693,8 @@ class ChefZ_AT_Runner
                 float hitFraction;
                 bool rayHit = DayZPhysics.RayCastBullet(from, to, PhxInteractionLayers.ITEM_LARGE, null, hitObj, hitPos, hitNormal, hitFraction);
                 bool hitsSelf = rayHit && hitObj == o;
-                bool ok = layer == "item_large" && hasBox && hitsSelf;
+                bool layerOk = (layer == "item_large");
+                bool ok = layerOk && hasBox && hitsSelf;
                 string col = "physLayer=" + layer + " box=" + hasBox.ToString() + " strahl=" + hitsSelf.ToString();
                 col = col + " traf=" + ItemName(EntityAI.Cast(hitObj)) + " bei " + hitPos.ToString();
                 col = col + " pos=" + o.GetPosition().ToString() + " min=" + box[0].ToString() + " max=" + box[1].ToString();
@@ -717,6 +718,10 @@ class ChefZ_AT_Runner
     ChefZ_Smoker m_AtSmoker;
     EntityAI m_AtSmokerMeat;
     float m_AtSmokerT0;
+    EntityAI m_AtSmokerHook;
+    EntityAI m_AtShowSmoker;
+    EntityAI m_AtShowFire;
+    float m_AtSmokerHookT0;
 
     void TestSmokerHeat()
     {
@@ -730,6 +735,19 @@ class ChefZ_AT_Runner
         EntityAI wood = smoker.GetInventory().CreateAttachment("Firewood");
         EntityAI meat = smoker.GetInventory().CreateEntityInCargo("PigSteakMeat");
         ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.fuelslot", wood != null, "Firewood als Attachment");
+        // Raeucherhaken wie Vanillas Ofen: ein Steak haengt, eine Tomate darf nicht.
+        int hookA = InventorySlots.GetSlotIdFromString("SmokingA");
+        int hookB = InventorySlots.GetSlotIdFromString("SmokingB");
+        m_AtSmokerHook = smoker.GetInventory().CreateAttachmentEx("PigSteakMeat", hookA);
+        EntityAI tomato = EntityAI.Cast(g_Game.CreateObjectEx("Tomato", m_Site + Vector(1.5, 0, 0), ECE_PLACE_ON_SURFACE));
+        bool tomatoRefused = tomato && !smoker.CanReceiveAttachment(tomato, hookB);
+        bool steakTaken = m_AtSmokerHook != null;
+        ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.hook", steakTaken && tomatoRefused, "Steak am Haken=" + steakTaken.ToString() + " Tomate abgewiesen=" + tomatoRefused.ToString());
+        if (tomato)
+            g_Game.ObjectDelete(tomato);
+        m_AtSmokerHookT0 = 0;
+        if (m_AtSmokerHook)
+            m_AtSmokerHookT0 = m_AtSmokerHook.GetTemperature();
         m_AtSmokerT0 = 0;
         if (meat)
             m_AtSmokerT0 = meat.GetTemperature();
@@ -763,6 +781,11 @@ class ChefZ_AT_Runner
             }
         }
         ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.warms", t1 >= m_AtSmokerT0 + 5.0, which + " " + m_AtSmokerT0.ToString() + " -> " + t1.ToString() + " C nach 16 s, Schrank " + smoker.GetTemperature().ToString() + " C, brennt=" + smoker.ChefZ_HasHeat().ToString());
+        float hookT1 = -1000;
+        EntityAI hung = smoker.FindAttachmentBySlotName("SmokingA");
+        if (hung)
+            hookT1 = hung.GetTemperature();
+        ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.hookWarms", hookT1 >= m_AtSmokerHookT0 + 5.0, "Haken " + m_AtSmokerHookT0.ToString() + " -> " + hookT1.ToString() + " C nach 16 s");
         for (int i = 0; i < 40; i++)
             smoker.ChefZ_TickJobs(15.0);
         g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(SmokerDoneCheck, 300, false);
@@ -787,11 +810,19 @@ class ChefZ_AT_Runner
                 if (e.GetType() == "ChefZ_SmokedMeat")
                     smoked++;
             }
-            ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.smokes", raw == 0 && smoked == 1, "roh=" + raw.ToString() + " geraeuchert=" + smoked.ToString() + " Inhalt: " + DescribeItems(items));
+            EntityAI stillHung = smoker.FindAttachmentBySlotName("SmokingA");
+            bool hookEmpty = !stillHung || stillHung.IsSetForDeletion();
+            // Einzeln gerechnet: in einer Zeile "a == 0 && b == 2 && flag" lieferte
+            // Enforce true bei b == 1 (Autotest 26.10.2026).
+            bool rawOk = (raw == 0);
+            bool countOk = (smoked == 2);
+            bool smokedOk = rawOk && countOk && hookEmpty;
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.smokes", smokedOk, "roh=" + raw.ToString() + " geraeuchert=" + smoked.ToString() + " (Cargo-Steak + Haken-Steak) Haken leer=" + hookEmpty.ToString() + " Inhalt: " + DescribeItems(items));
             g_Game.ObjectDelete(smoker);
         }
         m_AtSmoker = null;
         m_AtSmokerMeat = null;
+        m_AtSmokerHook = null;
         TestHoneyAutostart();
     }
 
@@ -866,7 +897,9 @@ class ChefZ_AT_Runner
                 if (e.GetType() == "ChefZ_EmptyJar")
                     empty++;
             }
-            ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.fillsJars", honey == 2 && empty == 0, "leer=" + empty.ToString() + " voll=" + honey.ToString() + " Inhalt: " + DescribeItems(items));
+            bool honeyOk = (honey == 2);
+            bool emptyOk = (empty == 0);
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.fillsJars", honeyOk && emptyOk, "leer=" + empty.ToString() + " voll=" + honey.ToString() + " Inhalt: " + DescribeItems(items));
             g_Game.ObjectDelete(ex);
         }
         m_PendingStation = null;
@@ -940,8 +973,17 @@ class ChefZ_AT_Runner
     {
         // Innerhalb von VICINITY_DISTANCE 0.5 (VicinityItemManager.c:4), sonst haengt
         // die Anzeige an der Blickrichtung der Clientkamera.
-        vector at = m_Player.GetPosition() + m_Player.GetDirection() * 0.45;
+        // Erst raeumen, dann zwei Sekunden warten: loescht der Server etwas, das
+        // der Client gerade im Umgebungsinventar zeigt, und das Inventar oeffnet
+        // im selben Moment, greift Vanillas AttachmentCategoriesRow.RefreshSlot
+        // ins Leere (Client-Log 26.10.2026).
         ChefZ_AT_Util.ClearArea(m_Player.GetPosition(), 3);
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(UiShowcasePlace, 2000, false);
+    }
+
+    void UiShowcasePlace()
+    {
+        vector at = m_Player.GetPosition() + m_Player.GetDirection() * 0.45;
         ChefZ_Smoker smoker = ChefZ_Smoker.Cast(g_Game.CreateObjectEx("ChefZ_Smoker", at, ECE_PLACE_ON_SURFACE));
         if (!smoker || !m_Player.GetIdentity())
         {
@@ -953,15 +995,39 @@ class ChefZ_AT_Runner
         smoker.GetInventory().CreateAttachment("Rag");
         smoker.GetInventory().CreateEntityInCargo("PigSteakMeat");
         smoker.OnIgnitedThis(null);
+        m_AtShowSmoker = smoker;
         // Vergleich: Vanillas Feuerstelle daneben, gleiche Inventar-Umgebung
         vector firePos = m_Player.GetPosition() + m_Player.GetDirectionAside() * 0.45;
         firePos[1] = g_Game.SurfaceY(firePos[0], firePos[2]);
         EntityAI fire = EntityAI.Cast(g_Game.CreateObjectEx("Fireplace", firePos, ECE_CREATEPHYSICS));
         if (fire)
             fire.GetInventory().CreateAttachment("Firewood");
+        m_AtShowFire = fire;
         g_Game.RPCSingleParam(m_Player, ChefZ_AT_Rpc.SHOW_INVENTORY, new Param1<int>(0), true, m_Player.GetIdentity());
         Print("[CHEFZTEST] INFO ui-showcase bereit brennt=" + smoker.ChefZ_HasHeat().ToString());
-        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(Finish, 25000, false);
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(UiShowcaseEnd, 25000, false);
+    }
+
+    //! Nichts von der Sichtpruefung bleibt in der Welt (die Persistenz haette es
+    //! sonst beim naechsten Lauf wieder vor den Spieler gestellt).
+    //! Einzeln und eine Sekunde auseinander: verschwinden zwei Behaelter mit
+    //! Inventarkategorien im selben Umgebungstakt (0.25 s), frischt Vanillas
+    //! VicinityContainer beim Entfernen des ersten den zweiten schon ohne Entity
+    //! auf (AttachmentCategoriesRow.RefreshSlot, Client-Log 26.10.2026).
+    void UiShowcaseEnd()
+    {
+        if (m_AtShowFire)
+            g_Game.ObjectDelete(m_AtShowFire);
+        m_AtShowFire = null;
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(UiShowcaseEndSmoker, 1000, false);
+    }
+
+    void UiShowcaseEndSmoker()
+    {
+        if (m_AtShowSmoker)
+            g_Game.ObjectDelete(m_AtShowSmoker);
+        m_AtShowSmoker = null;
+        Finish();
     }
 
     //==========================================================================
