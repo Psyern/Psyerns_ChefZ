@@ -69,6 +69,18 @@ class ChefZ_Spinnerbait extends ChefZ_BaitLure_Base
 {
 }
 
+class ChefZ_CrimsonSquidLure extends ChefZ_BaitLure_Base
+{
+}
+
+class ChefZ_NeonPrawnJig extends ChefZ_BaitLure_Base
+{
+}
+
+class ChefZ_SilverSardineLure extends ChefZ_BaitLure_Base
+{
+}
+
 class ChefZ_BlueBait extends ChefZ_BaitSoft_Base
 {
 }

@@ -613,6 +613,21 @@ class ChefZ_HandcraftBridge
         if (!selector)
             return;
 
+        /**
+         * Ein reiner Behaelterslot ({"isLiquidContainer":true, ...}) nennt
+         * keine Zutat: Wasserflaschen, Kanister und Toepfe sind keine
+         * ChefZ-Zutaten und standen nie in der Liste. Der Slot bekam deshalb
+         * jede bekannte Zutat (LIQUID ist dynamisch, MayMatch sagt "koennte"),
+         * aber keinen einzigen Behaelter - Mehl plus Wasserflasche liess sich
+         * nie kombinieren. Vanillas Rezeptcache prueft per IsKindOf, also
+         * genuegt die Basisklasse aller Fluessigkeitsbehaelter.
+         */
+        if (selector.op == ChefZ_SelectorOp.LIQUID && selector.requireLiquidContainer)
+        {
+            outClasses.Insert("Bottle_Base");
+            return;
+        }
+
         ChefZ_IngredientManager ing = ChefZ_IngredientManager.Get();
         int known = ing.GetKnownCount();
 

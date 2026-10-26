@@ -43,6 +43,42 @@
             "unitsPerWholeItem": 8,
             "decays": false,
             "_note": "Rinde als Brennstoff der Imkerpfeife (TR_FillBeeSmoker). PIECE: Vanilla fuehrt Rinde als Stapel mit Menge; 8 ist die Stapelgroesse von Slot_Bark (scripts - 1.29/config.cpp:685)."
+        },
+        {
+            "id": "ChefZ_HoneycombFrameFull",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 5,
+            "decays": false,
+            "_note": "26.10.2026: nachdeklariert. Der Server warnte, der Selektor nenne eine Klasse, die keine deklarierte Zutat ist."
+        },
+        {
+            "id": "ChefZ_BeeSmoker",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 100,
+            "decays": false,
+            "_note": "26.10.2026: nachdeklariert. Der Server warnte, der Selektor nenne eine Klasse, die keine deklarierte Zutat ist."
+        },
+        {
+            "id": "ChefZ_BeehiveKit",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": false,
+            "_note": "26.10.2026: nachdeklariert. Der Server warnte, der Selektor nenne eine Klasse, die keine deklarierte Zutat ist."
+        },
+        {
+            "id": "ChefZ_EmptyJar",
+            "categories": [],
+            "tags": [],
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": false,
+            "_note": "26.10.2026: nachdeklariert. Der Server warnte, der Selektor nenne eine Klasse, die keine deklarierte Zutat ist."
         }
     ]
 }

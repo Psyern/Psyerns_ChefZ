@@ -1,0 +1,741 @@
+{
+ "manifest": "E:\\DayZ Modding\\Psyerns_ChefZ\\tools\\chefz-assets\\deliveries\\2026-10-25_meshy_sealife.json",
+ "duration": 26.54417634010315,
+ "results": [
+  {
+   "name": "CrimsonSquidLure",
+   "group": "bait",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [
+    "2 face.degenerate: 7 degenerierte Fläche(n) in LOD resolution 0."
+   ],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\bait\\models\\crimsonsquidlure.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\bait\\models\\crimsonsquidlure.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\bait\\data\\CrimsonSquidLure_co.paa",
+   "size_m": [
+    0.1,
+    0.023,
+    0.027
+   ],
+   "source_tris": 2614,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\bait\\data\\CrimsonSquidLure_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: CrimsonSquidLure"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle CrimsonSquidLure_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: CrimsonSquidLure_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: CrimsonSquidLure_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: CrimsonSquidLure_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: CrimsonSquidLure_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:2614f",
+    "resolution1:1828f",
+    "resolution2:1306f",
+    "resolution3:783f",
+    "shadow_volume0:1326f",
+    "geometry0:326f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:326f",
+    "fire_geometry0:326f"
+   ]
+  },
+  {
+   "name": "NeonPrawnJig",
+   "group": "bait",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [
+    "2 face.degenerate: 4 degenerierte Fläche(n) in LOD resolution 0.",
+    "2 face.degenerate: 1 degenerierte Fläche(n) in LOD geometry 0.",
+    "2 face.degenerate: 1 degenerierte Fläche(n) in LOD view_geometry 0.",
+    "2 face.degenerate: 1 degenerierte Fläche(n) in LOD fire_geometry 0."
+   ],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\bait\\models\\neonprawnjig.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\bait\\models\\neonprawnjig.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\bait\\data\\NeonPrawnJig_co.paa",
+   "size_m": [
+    0.021,
+    0.027,
+    0.1
+   ],
+   "source_tris": 2696,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\bait\\data\\NeonPrawnJig_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: NeonPrawnJig"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle NeonPrawnJig_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: NeonPrawnJig_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: NeonPrawnJig_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: NeonPrawnJig_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: NeonPrawnJig_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (88 Prüfungen, 4 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:2696f",
+    "resolution1:1886f",
+    "resolution2:1347f",
+    "resolution3:808f",
+    "shadow_volume0:1376f",
+    "geometry0:270f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:270f",
+    "fire_geometry0:270f"
+   ]
+  },
+  {
+   "name": "SilverSardineLure",
+   "group": "bait",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [
+    "2 face.degenerate: 3 degenerierte Fläche(n) in LOD resolution 0.",
+    "2 face.degenerate: 1 degenerierte Fläche(n) in LOD shadow_volume 0.",
+    "2 face.degenerate: 1 degenerierte Fläche(n) in LOD geometry 0.",
+    "2 face.degenerate: 1 degenerierte Fläche(n) in LOD view_geometry 0.",
+    "2 face.degenerate: 1 degenerierte Fläche(n) in LOD fire_geometry 0."
+   ],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\bait\\models\\silversardinelure.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\bait\\models\\silversardinelure.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\bait\\data\\SilverSardineLure_co.paa",
+   "size_m": [
+    0.1,
+    0.018,
+    0.019
+   ],
+   "source_tris": 2496,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\bait\\data\\SilverSardineLure_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SilverSardineLure"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SilverSardineLure_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SilverSardineLure_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SilverSardineLure_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SilverSardineLure_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SilverSardineLure_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (88 Prüfungen, 5 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (352 Flächen)",
+   "lods": [
+    "resolution0:2496f",
+    "resolution1:1747f",
+    "resolution2:1248f",
+    "resolution3:747f",
+    "shadow_volume0:352f",
+    "geometry0:352f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:352f",
+    "fire_geometry0:352f"
+   ]
+  },
+  {
+   "name": "crispy_fried_calamari",
+   "group": "food",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\models\\crispy_fried_calamari.p3d",
+   "model": "\\ChefZ\\ChefZ_Food\\models\\crispy_fried_calamari.p3d",
+   "texture": "ChefZ\\ChefZ_Food\\data\\crispy_fried_calamari_co.paa",
+   "size_m": [
+    0.22,
+    0.22,
+    0.081
+   ],
+   "source_tris": 2770,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\data\\crispy_fried_calamari_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: crispy_fried_calamari"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle crispy_fried_calamari_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: crispy_fried_calamari_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: crispy_fried_calamari_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: crispy_fried_calamari_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: crispy_fried_calamari_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:2770f",
+    "resolution1:1938f",
+    "resolution2:1384f",
+    "resolution3:830f",
+    "shadow_volume0:1384f",
+    "geometry0:220f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:220f",
+    "fire_geometry0:220f"
+   ]
+  },
+  {
+   "name": "grilled_stuffed_calamari",
+   "group": "food",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\models\\grilled_stuffed_calamari.p3d",
+   "model": "\\ChefZ\\ChefZ_Food\\models\\grilled_stuffed_calamari.p3d",
+   "texture": "ChefZ\\ChefZ_Food\\data\\grilled_stuffed_calamari_co.paa",
+   "size_m": [
+    0.22,
+    0.107,
+    0.084
+   ],
+   "source_tris": 2726,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\data\\grilled_stuffed_calamari_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: grilled_stuffed_calamari"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle grilled_stuffed_calamari_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: grilled_stuffed_calamari_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: grilled_stuffed_calamari_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: grilled_stuffed_calamari_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: grilled_stuffed_calamari_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:2726f",
+    "resolution1:1908f",
+    "resolution2:1362f",
+    "resolution3:816f",
+    "shadow_volume0:1362f",
+    "geometry0:644f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:644f",
+    "fire_geometry0:644f"
+   ]
+  },
+  {
+   "name": "CrimsonSquidB",
+   "group": "squid",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "zweite Variante Crimson Squid (16.09.)",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\squid\\models\\crimsonsquidb.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\squid\\models\\crimsonsquidb.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\squid\\data\\CrimsonSquidB_co.paa",
+   "size_m": [
+    0.5,
+    0.198,
+    0.5
+   ],
+   "source_tris": 2776,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\squid\\data\\CrimsonSquidB_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: CrimsonSquidB"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle CrimsonSquidB_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: CrimsonSquidB_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: CrimsonSquidB_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: CrimsonSquidB_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: CrimsonSquidB_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:2776f",
+    "resolution1:1942f",
+    "resolution2:1388f",
+    "resolution3:832f",
+    "shadow_volume0:1388f",
+    "geometry0:194f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:194f",
+    "fire_geometry0:194f"
+   ]
+  },
+  {
+   "name": "CrimsonSquidC",
+   "group": "squid",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "dritte Variante Crimson Squid (16.09.)",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\squid\\models\\crimsonsquidc.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\squid\\models\\crimsonsquidc.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\squid\\data\\CrimsonSquidC_co.paa",
+   "size_m": [
+    0.5,
+    0.124,
+    0.204
+   ],
+   "source_tris": 2637,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\squid\\data\\CrimsonSquidC_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: CrimsonSquidC"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle CrimsonSquidC_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: CrimsonSquidC_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: CrimsonSquidC_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: CrimsonSquidC_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: CrimsonSquidC_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (270 Flächen)",
+   "lods": [
+    "resolution0:2637f",
+    "resolution1:1844f",
+    "resolution2:1318f",
+    "resolution3:791f",
+    "shadow_volume0:270f",
+    "geometry0:270f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:270f",
+    "fire_geometry0:270f"
+   ]
+  },
+  {
+   "name": "SquidB",
+   "group": "squid",
+   "bind": [],
+   "status": "OK",
+   "selection": "camo",
+   "note": "zweite Variante Squid (16.09.)",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\squid\\models\\squidb.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\squid\\models\\squidb.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\squid\\data\\SquidB_co.paa",
+   "size_m": [
+    0.147,
+    0.5,
+    0.225
+   ],
+   "source_tris": 2724,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\squid\\data\\SquidB_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SquidB"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SquidB_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SquidB_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SquidB_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SquidB_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SquidB_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:2724f",
+    "resolution1:1906f",
+    "resolution2:1362f",
+    "resolution3:816f",
+    "shadow_volume0:1398f",
+    "geometry0:170f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:170f",
+    "fire_geometry0:170f"
+   ]
+  }
+ ]
+}

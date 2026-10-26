@@ -167,6 +167,26 @@ class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
     //! Job-Timer gerade angehalten, und ein Timer.Run aus dem eigenen Rueckruf
     //! heraus ist kein belegter Pfad. CallLater aus derselben Warteschlange
     //! ist es (GeyserArea.c:49, FireplaceBase.c:1767).
+    /**
+     * Selbststart (26.10.2026): Glas oder entdeckelter Rahmen hinein - die Schleuder
+     * laeuft an, ohne dass jemand die Stationsaktion ausloest. Vorher fuellten sich
+     * eingesetzte Glaeser erst nach der Aktion. Ohne beide Zutaten scheitert
+     * ChefZ_BeginJob still (Debug-Log) und die Schleuder steht.
+     */
+    override void EECargoIn(EntityAI item)
+    {
+        super.EECargoIn(item);
+
+        if (!g_Game || !g_Game.IsServer() || !item)
+            return;
+        if (!item.IsKindOf(CHEFZ_JAR_CLASS) && !ChefZ_HoneycombFrameUncapped.Cast(item))
+            return;
+        if (ChefZ_ActiveJobCount() > 0)
+            return;
+
+        g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(ChefZ_SpinNextJar, 250, false);
+    }
+
     override bool ChefZ_CompleteJob(int slotIndex)
     {
         int actorId = 0;

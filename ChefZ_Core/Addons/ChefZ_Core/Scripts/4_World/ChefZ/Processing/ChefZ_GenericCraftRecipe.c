@@ -151,6 +151,14 @@ class ChefZ_GenericCraftRecipe : RecipeBase
     protected ref ChefZ_ProcessContext m_ChefZ_Context;
     protected ref ChefZ_TransformMatch m_ChefZ_Match;
 
+    //! Die Zutaten des laufenden CanDo()/Do(), als eigene Kopie.
+    //! Enforce verliert die Laenge eines statischen Arrays, sobald es als
+    //! Parameter ein ZWEITES Mal weitergereicht wird: Bind(ingredients)
+    //! sah ein leeres Array und warf "Index out of range (0 >= 0)" bei jedem
+    //! Kombinieren (Client-Log 26.10.2026, Entdeckelungsgabel + Rahmen).
+    //! Deshalb wird genau einmal, in CanDo()/Do(), elementweise kopiert.
+    protected ItemBase m_ChefZ_In[MAX_NUMBER_OF_INGREDIENTS];
+
     //==========================================================================
 
     void ChefZ_GenericCraftRecipe()
@@ -642,6 +650,12 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         if (!m_ChefZ_Ready)
             return false;
 
+        // Erst kopieren, dann super: nach dem Weiterreichen des statischen
+        // Arrays an super.CanDo lag im Spieltest (26.10.2026) das Werkzeug auf
+        // Platz 0 - jedes Handrezept mit Werkzeug band 0 Zutaten.
+        m_ChefZ_In[0] = ingredients[0];
+        m_ChefZ_In[1] = ingredients[1];
+
         if (!super.CanDo(ingredients, player))
             return false;
 
@@ -663,7 +677,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         if (!mgr.HasAnyTransformFor(m_ChefZ_ProcessSym))
             return true;
 
-        return Bind(ingredients, player);
+        return Bind(player);
     }
 
     /**
@@ -686,7 +700,10 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         if (!g_Game || !g_Game.IsServer())
             return;
 
-        if (!Bind(ingredients, player))
+        m_ChefZ_In[0] = ingredients[0];
+        m_ChefZ_In[1] = ingredients[1];
+
+        if (!Bind(player))
         {
             /**
              * Praktisch unerreichbar: CheckRecipe() hat CanDo() im selben
@@ -706,7 +723,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         }
 
         string err;
-        if (!ChefZ_ProcessRunner.RunHandcraft(ToolOf(ingredients), m_ChefZ_Match, m_ChefZ_Entities, m_ChefZ_Snapshot, ActorIdOf(player), results, m_ChefZ_ResultDefs, err))
+        if (!ChefZ_ProcessRunner.RunHandcraft(ToolOf(), m_ChefZ_Match, m_ChefZ_Entities, m_ChefZ_Snapshot, ActorIdOf(player), results, m_ChefZ_ResultDefs, err))
         {
             // RunHandcraft verbraucht ZULETZT und bricht davor ab. Bei false
             // ist also nichts verbraucht - dieselbe Lage wie oben.
@@ -744,7 +761,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
      * im Faktensatz koennte einen Slot bedienen, der es gar nicht meint.
      * Seine Rolle steht im ChefZ_ProcessContext, bei den Werkzeuggruppen.
      */
-    protected bool Bind(ItemBase ingredients[], PlayerBase player)
+    protected bool Bind(PlayerBase player)
     {
         if (!m_ChefZ_Snapshot)
             m_ChefZ_Snapshot = new ChefZ_FactSnapshot();
@@ -762,7 +779,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
 
         for (int i = 0; i < m_ChefZ_InputCount; i++)
         {
-            ItemBase item = ingredients[i];
+            ItemBase item = m_ChefZ_In[i];
             if (!item)
                 return false;
 
@@ -784,7 +801,7 @@ class ChefZ_GenericCraftRecipe : RecipeBase
         m_ChefZ_Snapshot.SortStable();
 
         m_ChefZ_Context.actorIdentityId = ActorIdOf(player);
-        AddToolGroups(ToolOf(ingredients), m_ChefZ_Context);
+        AddToolGroups(ToolOf(), m_ChefZ_Context);
 
         ChefZ_ProcessingManager mgr = ChefZ_ProcessingManager.Get();
         if (!mgr.FindTransform(m_ChefZ_ProcessSym, m_ChefZ_Context, m_ChefZ_Snapshot, null, m_ChefZ_Match))
@@ -812,11 +829,11 @@ class ChefZ_GenericCraftRecipe : RecipeBase
     //! Das Werkzeug unter den Zutaten, oder null. Bei zwei Eingaengen gibt es
     //! keines - dann ist der Rueckgabewert null und jede Auswertung, die ihn
     //! benutzt, muss damit umgehen koennen.
-    protected ItemBase ToolOf(ItemBase ingredients[])
+    protected ItemBase ToolOf()
     {
         if (m_ChefZ_ToolIndex < 0 || m_ChefZ_ToolIndex >= MAX_NUMBER_OF_INGREDIENTS)
             return null;
-        return ingredients[m_ChefZ_ToolIndex];
+        return m_ChefZ_In[m_ChefZ_ToolIndex];
     }
 
     /**

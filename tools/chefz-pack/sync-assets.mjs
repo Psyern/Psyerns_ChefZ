@@ -31,6 +31,7 @@ const PAIRS = [
   ['ChefZ/ChefZ_Devices', 'ChefZ_Core/Addons/ChefZ_Devices'],
   ['ChefZ/ChefZ_Food',    'ChefZ_Core/Addons/ChefZ_Food'],
   ['ChefZ/ChefZ_Plants',  'ChefZ_Core/Addons/ChefZ_Plants'],
+  ['ChefZ/ChefZ_Sealife', 'ChefZ_Core/Addons/ChefZ_Sealife'],
 ];
 // cultivation/models gehoert dazu, seit dem 06.09.2026 nachgetragen. Es fehlte,
 // und der Preis war derselbe wie beim vergessenen models/proxies/ am 03.09.:
@@ -45,7 +46,13 @@ const PAIRS = [
 // cultivation/Plant_Wild seit dem 14.09.2026: die vier Wildbeerenbuesche der
 // Lieferung 392857d (wild_<beere>.p3d, Textur in Plant_Wild/data). Die
 // Klassen ChefZ_Wild<Beere> in ChefZ_Farming zeigen dorthin.
-const SUBDIRS = ['models', 'data', 'cultivation/data', 'cultivation/models', 'cultivation/Plant_Wild'];
+// Die Sealife-Gruppen seit dem 25.10.2026: ChefZ_Sealife legt seine Modelle je
+// Tiergruppe ab (fish/models, fish/data, ...), nicht in einem models/ der
+// obersten Ebene. Gebaut werden sie aus der Lieferung "3D Assets.zip" mit
+// tools/chefz-assets/import-delivery.ps1. Die config.cpp der Gruppenordner
+// gehoert zur Lieferung und wird wie alle Lieferungs-Configs nicht kopiert.
+const SEALIFE = ['fish', 'fishfilet', 'bait', 'crab', 'squid'].flatMap((g) => [`${g}/models`, `${g}/data`]);
+const SUBDIRS = ['models', 'data', 'cultivation/data', 'cultivation/models', 'cultivation/Plant_Wild', ...SEALIFE];
 
 let copied = 0;
 let same = 0;

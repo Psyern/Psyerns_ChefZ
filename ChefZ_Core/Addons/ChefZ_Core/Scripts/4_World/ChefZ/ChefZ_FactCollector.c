@@ -460,11 +460,37 @@ class ChefZ_FactCollector
         facts.vanillaFoodStage = stage.GetFoodStageType();
     }
 
+    /**
+     * Zustand 0..1 auf beiden Seiten.
+     *
+     * GetHealth01() ist nur auf dem Server erlaubt; auf dem Client warf es
+     * bei jedem Fadenkreuz-Wechsel an einer Station eine VM-Ausnahme
+     * (Client-Log 26.10.2026, IsProcessUsable -> CollectFromStation) und die
+     * Stationsaktion blieb weg. Der Client kennt nur die synchronisierte
+     * Zustandsstufe; sie wird auf Vanillas Stufengrenzen abgebildet.
+     */
+    private static float Health01Of(notnull ItemBase item)
+    {
+        if (g_Game && g_Game.IsServer())
+            return item.GetHealth01();
+
+        int level = item.GetHealthLevel();
+        if (level == GameConstants.STATE_PRISTINE)
+            return GameConstants.DAMAGE_PRISTINE_VALUE;
+        if (level == GameConstants.STATE_WORN)
+            return GameConstants.DAMAGE_WORN_VALUE;
+        if (level == GameConstants.STATE_DAMAGED)
+            return GameConstants.DAMAGE_DAMAGED_VALUE;
+        if (level == GameConstants.STATE_BADLY_DAMAGED)
+            return GameConstants.DAMAGE_BADLY_DAMAGED_VALUE;
+        return GameConstants.DAMAGE_RUINED_VALUE;
+    }
+
     private static void ApplyPhysical(notnull ItemBase item, notnull ChefZ_ItemFacts facts)
     {
         facts.quantity    = item.GetQuantity();
         facts.quantityMax = item.GetQuantityMax();
-        facts.health01    = item.GetHealth01();
+        facts.health01    = Health01Of(item);
         facts.temperature = item.GetTemperature();
         facts.wetness     = item.GetWet();
         facts.isFrozen    = item.GetIsFrozen();
@@ -595,6 +621,13 @@ class ChefZ_FactCollector
 
         ChefZ_Sym sym = ChefZ_SymbolTable.INVALID;
         string className = Liquid.GetLiquidClassname(liquidType);
+
+        // Salzwasser hat in 1.30 keine Klasse in cfgLiquidDefinitions,
+        // GetLiquidClassname liefert dafuer "" (im Spiel gemessen 26.10.2026).
+        // Ohne diesen Namen koennte kein Rezept Salzwasser benennen.
+        if (className == "" && liquidType == LIQUID_SALTWATER)
+            className = "SaltWater";
+
         if (className != "")
             sym = ChefZ_SymbolTable.Intern(className);
 

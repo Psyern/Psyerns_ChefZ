@@ -60,3 +60,6 @@
 
 # Python bytecode from tooling runs
 __pycache__/
+
+# Python-Bytecode der Werkzeuge
+__pycache__/

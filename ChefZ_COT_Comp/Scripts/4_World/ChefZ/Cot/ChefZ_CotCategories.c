@@ -490,7 +490,7 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_FryingPan");
 		classes.Insert("ChefZ_MeatGrinder");
 		classes.Insert("ChefZ_Smoker");
-		classes.Insert("ChefZ_HandRake");
+		classes.Insert("ChefZ_UncappingFork");
 
 		Add("chefz_cot_stations", "#STR_CHEFZ_COT_CAT_STATIONS", "cooking-pot", classes);
 	}

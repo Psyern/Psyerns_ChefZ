@@ -6,6 +6,7 @@
             "id": "ChefZ_Flour",
             "categories": ["FLOUR"],
             "tags": ["CHEFZ_GRAIN"],
+            "quantityUnit": "GRAM",
             "unitsPerWholeItem": 1000,
             "decays": true
         }

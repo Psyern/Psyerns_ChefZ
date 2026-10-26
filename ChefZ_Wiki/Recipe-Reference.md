@@ -2,7 +2,7 @@
 
 Every cooking recipe ChefZ ships, read straight out of the shipped JSON.
 
-**Totals: 48 recipes** in 8 files across 3 modules.
+**Totals: 49 recipes** in 9 files across 3 modules.
 
 For the same recipes written as `X + Y = Z` without the engine columns, see
 [Recipe-Book](Recipe-Book).
@@ -12,12 +12,13 @@ For the same recipes written as `X + Y = Z` without the engine columns, see
 | Bowl dishes | `BowlDishes.json` | `ChefZ_Cooking` | 12 |
 | Plate dishes A — pasta and plates | `Dishes_A.json` | `ChefZ_Cooking` | 10 |
 | Plate dishes B — pan and breakfast | `DishesB.json` | `ChefZ_Cooking` | 10 |
-| Plate dishes from vanilla produce | `DishesVanilla.json` | `ChefZ_Cooking` | 3 |
+| Plate dishes from vanilla produce | `DishesVanilla.json` | `ChefZ_Cooking` | 2 |
 | Sauces and broth | `Sauces.json` | `ChefZ_Cooking` | 4 |
 | Cheese | `Cheese.json` | `ChefZ_Cooking` | 1 |
 | Sausage — cooking the raw sausages | `Sausage.json` | `ChefZ_Meat` | 6 |
 | Bread | `GrainRecipes.json` | `ChefZ_Baking` | 2 |
-| **Total** | | | **48** |
+| Seafood | `Seafood.json` | `ChefZ_Cooking` | 2 |
+| **Total** | | | **49** |
 
 > A **recipe** runs inside cookware — Pot, Cauldron, Frying Pan, Oven.
 > Everything that happens at a workbench (milling, grinding, drying, smoking,
@@ -172,24 +173,21 @@ The `ON_STAGE` half of the plate dishes. Two of them, Sausage and Bread Plate an
 
 ## Plate dishes from vanilla produce
 
-Three dishes whose required slots are carried mostly by vanilla items — sliced
-pumpkin, small fish, fruit. They still cannot be satisfied by vanilla alone:
+Two dishes whose required slots are carried mostly by vanilla items — sliced
+pumpkin and small fish (the fruit compote was removed in 6f435dc). They still cannot be satisfied by vanilla alone:
 `chefzvanilla.mjs` refuses any recipe that could be, so each one holds at least one
-ChefZ ingredient in a required slot (butter, garlic, dried berries). All three
+ChefZ ingredient in a required slot (butter, garlic). Both
 complete `ON_STAGE`, not on a timer.
 
-**3 recipes** · `ChefZ_Cooking/Config/Recipes/DishesVanilla.json`
+**2 recipes** · `ChefZ_Cooking/Config/Recipes/DishesVanilla.json`
 
 | Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
 |---|---|---|---|---|---|---|
 | Pumpkin Soup | `RCP_ChefZ_PumpkinSoup` | Pot, Cauldron | 3–5× `SlicedPumpkin`<br>1× *BUTTER*<br>250 ml water | 1–3× *ROOT_VEGETABLE* **+1**<br>1× *CREAM* **+2**<br>1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* (6 g) **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Pumpkin Soup | 3 · BOWL |
 | Small Fish Pan | `RCP_ChefZ_SmallFishPan` | FryingPan | 4–6× `Sardines` \| `Bitterlings`<br>1× *FAT* \| *BUTTER*<br>1–2× `ChefZ_Garlic` | 1–2× *CHEFZ_HERB* **+3**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1** | Small Fish Pan | 2 · PLATE |
-| Fruit Compote | `RCP_ChefZ_FruitCompote` | Pot, Cauldron | 4–6× *FRUIT* (not *CHEFZ_PRESERVED*)<br>1–2× `ChefZ_DriedBerries`<br>200 ml water | 1× *SWEETENER* **+3**<br>1× *CANNED_FRUIT* **+1**<br>1× *CREAM* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Fruit Compote | 3 · BOWL |
 
-The fruit slot is one of two slot matches in the mod built on a negated selector:
-`allOf` `FRUIT` **and** `not` `CHEFZ_PRESERVED` — dried berries go in their own
-slot, and putting them in twice is not a compote. The other is the `dairy` slot of
-Milk Rice (*DAIRY* and not *BUTTER*).
+The only slot match in the mod built on a negated selector is now the `dairy`
+slot of Milk Rice (*DAIRY* and not *BUTTER*).
 
 ## Sauces and broth
 
@@ -274,6 +272,26 @@ Both bread recipes take a dough and bake it. The doughs come from handcraft tran
 |---|---|---|---|---|---|---|
 | Bread | `REC_ChefZ_Bread` | BAKING | ON_STAGE | Baked | — | — |
 | Flatbread | `REC_ChefZ_Flatbread` | BAKING | ON_STAGE | Baked | — | — |
+
+## Seafood
+
+Squid and octopus from the sea fishing tables (see the seafood yields in
+`ChefZ_Fishing/Config/Fishing/Seafood.json`). Both are `TIMED` pan dishes and
+are served on a plate; from PREPARED upwards the plate gives the meal bonus.
+
+**2 recipes** · `ChefZ_Cooking/Config/Recipes/Seafood.json`
+
+| Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
+|---|---|---|---|---|---|---|
+| Crispy Fried Calamari | `RCP_ChefZ_CrispyFriedCalamari` | FryingPan | 2–3× Squid, Speckled Squid, Crimson Squid, Northern Crimson Squid or Octopus **+1**<br>1× *FLOUR*<br>1× *FAT* or *BUTTER* **+1** | 1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* (≥ 80 %) **+1** | Crispy Fried Calamari (200, plate) | 1 (PLATE) |
+| Grilled Stuffed Calamari | `RCP_ChefZ_GrilledStuffedCalamari` | FryingPan | 2–3× squid or octopus **+1**<br>1× Rice or *BREAD*<br>1–2× *TOMATO* **+1**<br>1–2× *CHEFZ_HERB* **+1** | 1× Cheese **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* **+1**, wild garlic **+1** | Grilled Stuffed Calamari (200, plate) | 1 (PLATE) |
+
+### Timing
+
+| Dish | Recipe ID | Method | Completion | Done at | Min. temp. | Liquid used |
+|---|---|---|---|---|---|---|
+| Crispy Fried Calamari | `RCP_ChefZ_CrispyFriedCalamari` | BAKING | TIMED | 180 s | 65 °C | — |
+| Grilled Stuffed Calamari | `RCP_ChefZ_GrilledStuffedCalamari` | BAKING | TIMED | 240 s | 65 °C | — |
 
 ## Effect IDs
 

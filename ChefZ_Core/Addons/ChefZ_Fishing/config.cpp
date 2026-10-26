@@ -195,6 +195,22 @@ class CfgPatches
             "ChefZ_Cod", "ChefZ_Sole", "ChefZ_SeaBass",
             "ChefZ_RedMullet", "ChefZ_Conger", "ChefZ_SeaEel",
             "ChefZ_HorseMackerel", "ChefZ_JapaneseSardine", "ChefZ_Rockfish",
+            // Meeresfruechte (26.10.2026)
+            "ChefZ_Seafood_Base",
+            "ChefZ_BlueSentinelCrab",
+            "ChefZ_CoastalCrab",
+            "ChefZ_CrimsonKingCrab",
+            "ChefZ_Langoustine",
+            "ChefZ_MidnightLobster",
+            "ChefZ_SnowCrab",
+            "ChefZ_SpinyLobster",
+            "ChefZ_SpinyOrangeCrab",
+            "ChefZ_StripedTigerPrawn",
+            "ChefZ_CrimsonSquid",
+            "ChefZ_NorthernCrimsonSquid",
+            "ChefZ_Octopus",
+            "ChefZ_SpeckledSquid",
+            "ChefZ_Squid",
             "ChefZ_FishFillet_Base",
             "ChefZ_SeaFillet_Base",
             "ChefZ_FreshFillet_Base",
@@ -240,6 +256,9 @@ class CfgPatches
             "ChefZ_RedTopperBait",
             "ChefZ_Spinnerbait",
             "ChefZ_TroutBait",
+            "ChefZ_CrimsonSquidLure",
+            "ChefZ_NeonPrawnJig",
+            "ChefZ_SilverSardineLure",
 
             // ### SLICE fish-fresh ###
             "ChefZ_FreshwaterFish_Base",
@@ -333,6 +352,9 @@ class CfgMods
         };
     };
 };
+
+// Vanilla-Uebergaenge der ganzen Tiere (DZ_Gear_Food), geerbt von ChefZ_Seafood_Base.
+class AnimalCorpsesStageTransitions;
 
 class CfgVehicles
 {
@@ -534,12 +556,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -567,12 +605,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -600,12 +654,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -633,12 +703,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -666,12 +752,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -699,12 +801,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -732,12 +850,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -765,12 +899,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.5, 205, 32, 22, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.34, 390, 12, 34, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.41, 360, 44, 34, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.12, 405, 4, 36, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.94, 80, 5, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.25, 120, 16, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.5, 205, 32, 22, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.34, 390, 12, 34, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.41, 360, 44, 34, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.12, 405, 4, 36, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.94, 80, 5, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.25, 120, 16, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -798,12 +948,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -831,12 +997,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -864,12 +1046,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -878,6 +1076,16 @@ class CfgVehicles
     class ChefZ_BluefinTunaFillet : ChefZ_SeaFillet_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\tunafillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_BLUEFINTUNAFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_BLUEFINTUNAFILLET1";
         weight = 215;
@@ -897,12 +1105,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -911,6 +1135,16 @@ class CfgVehicles
     class ChefZ_YellowfinTunaFillet : ChefZ_SeaFillet_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\tunafillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TunaFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_YELLOWFINTUNAFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_YELLOWFINTUNAFILLET1";
         weight = 215;
@@ -930,12 +1164,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -944,6 +1194,16 @@ class CfgVehicles
     class ChefZ_RedSnapperFillet : ChefZ_SeaFillet_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\redsnapperfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedSnapperFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedSnapperFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedSnapperFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedSnapperFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedSnapperFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_REDSNAPPERFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_REDSNAPPERFILLET1";
         weight = 200;
@@ -963,12 +1223,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -977,6 +1253,16 @@ class CfgVehicles
     class ChefZ_GiantGrouperFillet : ChefZ_SeaFillet_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\grouperfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GrouperFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GrouperFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GrouperFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GrouperFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GrouperFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_GIANTGROUPERFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_GIANTGROUPERFILLET1";
         weight = 200;
@@ -996,12 +1282,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1010,6 +1312,16 @@ class CfgVehicles
     class ChefZ_MahiMahiFillet : ChefZ_SeaFillet_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\mahimahifillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MahiMahiFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MahiMahiFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MahiMahiFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MahiMahiFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MahiMahiFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_MAHIMAHIFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_MAHIMAHIFILLET1";
         weight = 200;
@@ -1029,12 +1341,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1062,12 +1390,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1095,12 +1439,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1128,12 +1488,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1161,12 +1537,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1194,12 +1586,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1227,12 +1635,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1260,12 +1684,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1293,12 +1733,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1326,12 +1782,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1359,12 +1831,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1392,12 +1880,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.4, 110, 45, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.26, 235, 18, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.33, 215, 52, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.05, 245, 4, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.9, 55, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 70, 20, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1425,12 +1929,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1458,12 +1978,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.45, 165, 38, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.3, 320, 15, 32, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.37, 295, 48, 32, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 335, 4, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.92, 70, 6, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 100, 18, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1472,6 +2008,16 @@ class CfgVehicles
     class ChefZ_EelFillet : ChefZ_FreshFillet_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\eelfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\EelFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\EelFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\EelFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\EelFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\EelFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_EELFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_EELFILLET1";
         weight = 225;
@@ -1491,12 +2037,28 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.5, 205, 32, 22, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.34, 390, 12, 34, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.41, 360, 44, 34, 0, 0, 1}; };
-                class Dried { nutrition_properties[] = {1.12, 405, 4, 36, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.94, 80, 5, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.25, 120, 16, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.5, 205, 32, 22, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.34, 390, 12, 34, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 50, 200}; };
+                class Boiled { nutrition_properties[] = {1.41, 360, 44, 34, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 70, 150}; };
+                class Dried { nutrition_properties[] = {1.12, 405, 4, 36, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { nutrition_properties[] = {0.94, 80, 5, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.25, 120, 16, 5, 20, 16, 1}; visual_properties[] = {0, 4, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1549,6 +2111,9 @@ class CfgVehicles
         scope = 0;
         model = "\dz\gear\crafting\bone_bait.p3d";
         weight = 25;
+        // Hook: direkt an die Rute wie Vanillas Jig (consumables Jig, inventorySlot Hook).
+        // Bait: weiterhin auch an einen Haken.
+        inventorySlot[] = {"Hook", "Bait"};
 
         class Fishing
         {
@@ -1592,14 +2157,53 @@ class CfgVehicles
     class ChefZ_AntiqueSpoonFlasher : ChefZ_BaitLure_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\antiquespoonflasher.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\AntiqueSpoonFlasher_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_BAIT_ANTIQUESPOONFLASHER";
         descriptionShort = "#STR_CHEFZ_BAIT_ANTIQUESPOONFLASHER_DESC";
+    };
+
+    //! Der Tintenfischjig. Leuchtet rot im Dunkeln und lockt Kalmare und Kraken.
+    class ChefZ_CrimsonSquidLure : ChefZ_BaitLure_Base
+    {
+        scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\crimsonsquidlure.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\CrimsonSquidLure_co.paa"};
+        hiddenSelections[] = {"camo"};
+        displayName = "#STR_CHEFZ_BAIT_CRIMSONSQUIDLURE";
+        descriptionShort = "#STR_CHEFZ_BAIT_CRIMSONSQUIDLURE_DESC";
+    };
+
+    //! Der Garnelenjig (Egi). Der klassische Koeder fuer Kalmare, faengt auch Sepien und Brandungsraeuber.
+    class ChefZ_NeonPrawnJig : ChefZ_BaitLure_Base
+    {
+        scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\neonprawnjig.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\NeonPrawnJig_co.paa"};
+        hiddenSelections[] = {"camo"};
+        displayName = "#STR_CHEFZ_BAIT_NEONPRAWNJIG";
+        descriptionShort = "#STR_CHEFZ_BAIT_NEONPRAWNJIG_DESC";
+    };
+
+    //! Der Sardinenblinker. Silbernes Sardinenimitat fuer Makrele, Bonito und Tintenfisch.
+    class ChefZ_SilverSardineLure : ChefZ_BaitLure_Base
+    {
+        scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\silversardinelure.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\SilverSardineLure_co.paa"};
+        hiddenSelections[] = {"camo"};
+        displayName = "#STR_CHEFZ_BAIT_SILVERSARDINELURE";
+        descriptionShort = "#STR_CHEFZ_BAIT_SILVERSARDINELURE_DESC";
     };
 
     //! Der Fischimitat-Wobbler. Raubfisch im Suesswasser und in der Brandung.
     class ChefZ_MinnowLure : ChefZ_BaitLure_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\minnowlure.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\MinnowLure_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_BAIT_MINNOWLURE";
         descriptionShort = "#STR_CHEFZ_BAIT_MINNOWLURE_DESC";
     };
@@ -1608,6 +2212,9 @@ class CfgVehicles
     class ChefZ_RedTopperBait : ChefZ_BaitLure_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\redtopperbait.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\RedTopperBait_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_BAIT_REDTOPPERBAIT";
         descriptionShort = "#STR_CHEFZ_BAIT_REDTOPPERBAIT_DESC";
     };
@@ -1616,6 +2223,9 @@ class CfgVehicles
     class ChefZ_Spinnerbait : ChefZ_BaitLure_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\spinnerbait.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\Spinnerbait_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_BAIT_SPINNERBAIT";
         descriptionShort = "#STR_CHEFZ_BAIT_SPINNERBAIT_DESC";
     };
@@ -1628,6 +2238,9 @@ class CfgVehicles
     class ChefZ_BlueBait : ChefZ_BaitSoft_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\bluebait.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\BlueBait_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_BAIT_BLUEBAIT";
         descriptionShort = "#STR_CHEFZ_BAIT_BLUEBAIT_DESC";
     };
@@ -1636,6 +2249,9 @@ class CfgVehicles
     class ChefZ_PaddleTailBait : ChefZ_BaitSoft_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\paddletailbait.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\PaddleTailBait_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_BAIT_PADDLETAILBAIT";
         descriptionShort = "#STR_CHEFZ_BAIT_PADDLETAILBAIT_DESC";
     };
@@ -1644,6 +2260,9 @@ class CfgVehicles
     class ChefZ_TroutBait : ChefZ_BaitSoft_Base
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\bait\models\troutbait.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\bait\data\TroutBait_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_BAIT_TROUTBAIT";
         descriptionShort = "#STR_CHEFZ_BAIT_TROUTBAIT_DESC";
     };
@@ -1738,7 +2357,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PERCH0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\sardines_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\perch.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Perch_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {2, 1};
         weight = 300;
         varQuantityInit = 150;
@@ -1761,9 +2382,12 @@ class CfgVehicles
     class ChefZ_Muskellunge : ChefZ_FreshwaterFish_Base
     {
         scope = 2;
+        itemBehaviour = 2;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_ITEM_MUSKELLUNGE0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\carp_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\muskellunge.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Muskellunge_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 1400;
         varQuantityInit = 400;
@@ -1788,7 +2412,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SNAKEHEAD0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\walleye_pollock_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\snakehead.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Snakehead_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 2};
         weight = 700;
 
@@ -1810,7 +2436,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAINBOWTROUT0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\steelhead_trout_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\rainbowtrout.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\RainbowTrout_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 2};
         weight = 650;
 
@@ -1832,7 +2460,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHAR0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\steelhead_trout_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\char.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Char_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 2};
         weight = 600;
 
@@ -1878,7 +2508,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SOCKEYESALMON0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\steelhead_trout_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\sockeyesalmon.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\SockeyeSalmon_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 1100;
         varQuantityInit = 400;
@@ -1904,9 +2536,12 @@ class CfgVehicles
     class ChefZ_Eel : ChefZ_FreshwaterFish_Base
     {
         scope = 2;
+        itemBehaviour = 2;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_ITEM_EEL0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\walleye_pollock_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\eel.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Eel_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 2};
         weight = 750;
 
@@ -2088,9 +2723,12 @@ class CfgVehicles
     class ChefZ_Cod : ChefZ_SaltwaterFishA_Base
     {
         scope = 2;
+        itemBehaviour = 2;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_ITEM_COD0";
         descriptionShort = "#STR_CHEFZ_ITEM_COD1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\cod.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Cod_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 1};
         weight = 1100;
         varQuantityInit = 500;
@@ -2136,7 +2774,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SEABASS0";
         descriptionShort = "#STR_CHEFZ_ITEM_SEABASS1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\seabass.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\SeaBass_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 1};
         weight = 1100;
         varQuantityInit = 500;
@@ -2159,7 +2799,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_REDMULLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_REDMULLET1";
-        model = "\dz\gear\food\sardines_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\redmullet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\RedMullet_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {2, 1};
         weight = 400;
         varQuantityInit = 300;
@@ -2205,9 +2847,12 @@ class CfgVehicles
     class ChefZ_SeaEel : ChefZ_SaltwaterFishA_Base
     {
         scope = 2;
+        itemBehaviour = 2;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_ITEM_SEAEEL0";
         descriptionShort = "#STR_CHEFZ_ITEM_SEAEEL1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\seaeel.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\SeaEel_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 1};
         weight = 1100;
         varQuantityInit = 500;
@@ -2276,7 +2921,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_ROCKFISH0";
         descriptionShort = "#STR_CHEFZ_ITEM_ROCKFISH1";
-        model = "\dz\gear\food\sardines_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\rockfish.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Rockfish_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {2, 1};
         weight = 400;
         varQuantityInit = 300;
@@ -2382,9 +3029,12 @@ class CfgVehicles
     class ChefZ_BluefinTuna : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 0;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_BLUEFINTUNA";
         descriptionShort = "#STR_CHEFZ_FISH_BLUEFINTUNA_DESC";
-        model = "\dz\gear\food\mackerel_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\bluefintuna.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\BluefinTuna_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 3};
         weight = 2500;
         varQuantityInit = 600;
@@ -2406,9 +3056,12 @@ class CfgVehicles
     class ChefZ_YellowfinTuna : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 0;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_YELLOWFINTUNA";
         descriptionShort = "#STR_CHEFZ_FISH_YELLOWFINTUNA_DESC";
-        model = "\dz\gear\food\mackerel_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\yellowfintuna.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\YellowfinTuna_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 3};
         weight = 2500;
         varQuantityInit = 600;
@@ -2454,9 +3107,12 @@ class CfgVehicles
     class ChefZ_GiantGrouper : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 0;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_GIANTGROUPER";
         descriptionShort = "#STR_CHEFZ_FISH_GIANTGROUPER_DESC";
-        model = "\dz\gear\food\carp_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\giantgrouper.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\GiantGrouper_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 3};
         weight = 2500;
         varQuantityInit = 600;
@@ -2478,9 +3134,12 @@ class CfgVehicles
     class ChefZ_MahiMahi : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 2;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_MAHIMAHI";
         descriptionShort = "#STR_CHEFZ_FISH_MAHIMAHI_DESC";
-        model = "\dz\gear\food\carp_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\mahimahi.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\MahiMahi_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 1300;
         varQuantityInit = 400;
@@ -2502,9 +3161,12 @@ class CfgVehicles
     class ChefZ_GiantTrevally : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 2;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_GIANTTREVALLY";
         descriptionShort = "#STR_CHEFZ_FISH_GIANTTREVALLY_DESC";
-        model = "\dz\gear\food\carp_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\gianttrevally.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\GiantTrevally_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 1300;
         varQuantityInit = 400;
@@ -2526,9 +3188,12 @@ class CfgVehicles
     class ChefZ_BlueMarlin : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 0;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_BLUEMARLIN";
         descriptionShort = "#STR_CHEFZ_FISH_BLUEMARLIN_DESC";
-        model = "\dz\gear\food\mackerel_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\bluemarlin.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\BlueMarlin_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 3};
         weight = 2500;
         varQuantityInit = 600;
@@ -2550,9 +3215,12 @@ class CfgVehicles
     class ChefZ_Sailfish : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 0;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_SAILFISH";
         descriptionShort = "#STR_CHEFZ_FISH_SAILFISH_DESC";
-        model = "\dz\gear\food\mackerel_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\sailfish.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Sailfish_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 3};
         weight = 2500;
         varQuantityInit = 600;
@@ -2576,7 +3244,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_FISH_BONITO";
         descriptionShort = "#STR_CHEFZ_FISH_BONITO_DESC";
-        model = "\dz\gear\food\mackerel_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\bonito.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Bonito_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 2};
         weight = 700;
         varQuantityInit = 250;
@@ -2598,9 +3268,12 @@ class CfgVehicles
     class ChefZ_Yellowtail : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 2;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_YELLOWTAIL";
         descriptionShort = "#STR_CHEFZ_FISH_YELLOWTAIL_DESC";
-        model = "\dz\gear\food\mackerel_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\yellowtail.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Yellowtail_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 1300;
         varQuantityInit = 400;
@@ -2622,9 +3295,12 @@ class CfgVehicles
     class ChefZ_Tarpon : ChefZ_SeaFishB_Base
     {
         scope = 2;
+        itemBehaviour = 0;   // Haltung: ChefZ_HandProfiles.c
         displayName = "#STR_CHEFZ_FISH_TARPON";
         descriptionShort = "#STR_CHEFZ_FISH_TARPON_DESC";
-        model = "\dz\gear\food\carp_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\tarpon.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Tarpon_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 3};
         weight = 2500;
         varQuantityInit = 600;
@@ -2640,6 +3316,279 @@ class CfgVehicles
             agents = 4;
             digestibility = 1;
         };
+    };
+
+    //--------------------------------------------------------------------------
+    // MEERESFRUECHTE (Lieferung 25.10.2026, Klassen 26.10.2026).
+    // Krebse, Hummer, Garnelen und Tintenfische mit eigenen Modellen aus
+    // ChefZ_Sealife. Sie werden GANZ gegart wie Vanillas Sardines - in Pfanne,
+    // Topf, am Spiess und im Raeucherofen. Garstufen und Naehrwerte sind die
+    // von Sardines (P:\DZ\gear\food\config.cpp), je 100 Einheiten.
+    // Fang: Config/Fishing/Seafood.json, Zutat: Config/Ingredients/Seafood.json.
+    //
+    // Die Modelle haben EINE Textur (camo) und kein rvmat. FoodStage.
+    // UpdateVisualsEx setzt trotzdem Textur und Material je Stufe; deshalb
+    // steht die eine Textur und ein neutrales Material in den Listen, und alle
+    // Stufen zeigen auf Index 0.
+    //--------------------------------------------------------------------------
+    class ChefZ_Seafood_Base : Edible_Base
+    {
+        scope = 0;
+        rotationFlags = 17;
+        itemSize[] = {2, 2};
+        weight = 400;
+        absorbency = 0.7;
+        isMeleeWeapon = 0;
+        soundImpactType = "organic";
+        lifetime = 14400;
+        varQuantityInit = 250;
+        varQuantityMin = 0;
+        varQuantityMax = 250;
+        varQuantityDestroyOnMin = 1;
+        quantityBar = 1;
+        canBeSplit = 0;
+        inventorySlot[] = {"DirectCookingA", "DirectCookingB", "DirectCookingC", "SmokingA", "SmokingB", "SmokingC", "SmokingD"};
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsMaterials[] = {"dz\data\data\default.rvmat"};
+
+        class Nutrition
+        {
+            fullnessIndex = 5;
+            energy = 20;
+            water = 20;
+            nutritionalIndex = 1;
+            toxicity = 0;
+            agents = 16;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw
+                {
+                    visual_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {5, 20, 20, 1, 0, 16, 1, 8};
+                    cooking_properties[] = {0, 0};
+                };
+                class Rotten
+                {
+                    visual_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {10, 10, 8, 1, 0, 20, 1, 16};
+                    cooking_properties[] = {0, 0};
+                };
+                class Baked
+                {
+                    visual_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {1, 100, 12, 1, 0};
+                    cooking_properties[] = {70, 45};
+                };
+                class Boiled
+                {
+                    visual_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {1, 80, 32, 1, 0};
+                    cooking_properties[] = {105, 55};
+                };
+                class Dried
+                {
+                    visual_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {2, 80, 4, 1, 0};
+                    cooking_properties[] = {70, 45, 80};
+                };
+                class Burned
+                {
+                    visual_properties[] = {0, 0, 0};
+                    nutrition_properties[] = {5, 20, 0, 1, 0, 16, 1, 3};
+                    cooking_properties[] = {100, 30};
+                };
+            };
+            class FoodStageTransitions : AnimalCorpsesStageTransitions
+            {
+            };
+        };
+    };
+
+    class ChefZ_BlueSentinelCrab : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_BLUESENTINELCRAB";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\bluesentinelcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\BlueSentinelCrab_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 400;
+        varQuantityInit = 250;
+        varQuantityMax = 250;
+    };
+
+    class ChefZ_CoastalCrab : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_COASTALCRAB";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\coastalcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\CoastalCrab_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 400;
+        varQuantityInit = 250;
+        varQuantityMax = 250;
+    };
+
+    class ChefZ_CrimsonKingCrab : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CRIMSONKINGCRAB";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\crimsonkingcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\CrimsonKingCrab_co.paa"};
+        itemSize[] = {3, 3};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
+    };
+
+    class ChefZ_Langoustine : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_LANGOUSTINE";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\langoustine.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\Langoustine_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 400;
+        varQuantityInit = 250;
+        varQuantityMax = 250;
+    };
+
+    class ChefZ_MidnightLobster : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MIDNIGHTLOBSTER";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\midnightlobster.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\MidnightLobster_co.paa"};
+        itemSize[] = {3, 3};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
+    };
+
+    class ChefZ_SnowCrab : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SNOWCRAB";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\snowcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SnowCrab_co.paa"};
+        itemSize[] = {3, 3};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
+    };
+
+    class ChefZ_SpinyLobster : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPINYLOBSTER";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\spinylobster.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SpinyLobster_co.paa"};
+        itemSize[] = {3, 3};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
+    };
+
+    class ChefZ_SpinyOrangeCrab : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPINYORANGECRAB";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\spinyorangecrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SpinyOrangeCrab_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 400;
+        varQuantityInit = 250;
+        varQuantityMax = 250;
+    };
+
+    class ChefZ_StripedTigerPrawn : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_STRIPEDTIGERPRAWN";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
+        model = "\ChefZ\ChefZ_Sealife\crab\models\stripedtigerprawn.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\StripedTigerPrawn_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 400;
+        varQuantityInit = 250;
+        varQuantityMax = 250;
+    };
+
+    class ChefZ_CrimsonSquid : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CRIMSONSQUID";
+        descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
+        model = "\ChefZ\ChefZ_Sealife\squid\models\crimsonsquid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\CrimsonSquid_co.paa"};
+        itemSize[] = {3, 2};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
+    };
+
+    class ChefZ_NorthernCrimsonSquid : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_NORTHERNCRIMSONSQUID";
+        descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
+        model = "\ChefZ\ChefZ_Sealife\squid\models\northerncrimsonsquid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\NorthernCrimsonSquid_co.paa"};
+        itemSize[] = {3, 2};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
+    };
+
+    class ChefZ_Octopus : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_OCTOPUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
+        model = "\ChefZ\ChefZ_Sealife\squid\models\octopus.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\Octopus_co.paa"};
+        itemSize[] = {3, 2};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
+    };
+
+    class ChefZ_SpeckledSquid : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPECKLEDSQUID";
+        descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
+        model = "\ChefZ\ChefZ_Sealife\squid\models\speckledsquid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\SpeckledSquid_co.paa"};
+        itemSize[] = {3, 2};
+        weight = 400;
+        varQuantityInit = 250;
+        varQuantityMax = 250;
+    };
+
+    class ChefZ_Squid : ChefZ_Seafood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SQUID";
+        descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
+        model = "\ChefZ\ChefZ_Sealife\squid\models\squid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\Squid_co.paa"};
+        itemSize[] = {3, 2};
+        weight = 1500;
+        varQuantityInit = 450;
+        varQuantityMax = 450;
     };
 };
 
@@ -2846,6 +3795,21 @@ class CfgChefZ
             "ChefZ_Fishing/Config/Fishing/Fish_Sea_B.json",
             "ChefZ_Fishing/Config/Ingredients/Fish_Sea_B.json",
             "ChefZ_Fishing/Config/Processing/Fillet_Sea_B.json"
+        };
+    };
+
+    // ### SLICE seafood ### (26.10.2026)
+    // loadOrder 410: nach Registry (Kategorie SEAFOOD) und den Fischslices, vor
+    // den Koedern (420), die die Tintenfisch-IDs in "targets" nennen.
+    class ChefZ_seafood
+    {
+        chefzApiVersion      = 1;
+        loadOrder            = 410;
+        handcraftRecipeSlots = 0;
+        dataFiles[] =
+        {
+            "ChefZ_Fishing/Config/Fishing/Seafood.json",
+            "ChefZ_Fishing/Config/Ingredients/Seafood.json"
         };
     };
 };

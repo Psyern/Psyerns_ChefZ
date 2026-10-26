@@ -698,7 +698,7 @@ class ChefZ_Log
 
         // Die Literaldefaults muessen zu den Konstanten passen.
         if (1      != ChefZ_LogLevel.ERR)       ok = false;
-        if (0x1FFF != ChefZ_LogChannel.ALL)     ok = false;
+        if (0x3FFF != ChefZ_LogChannel.ALL)     ok = false;   // Bits 0..13, seit FISHING
 
         s_Level       = ChefZ_LogLevel.DEBUG;
         s_ChannelMask = ChefZ_LogChannel.MATCH | ChefZ_LogChannel.COOK;

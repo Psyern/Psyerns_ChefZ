@@ -52,6 +52,10 @@
 //==============================================================================
 // VERTRAEGLICHKEIT MIT ANDEREN MODS (10 §8)
 //==============================================================================
+// UpdateCookingState, ProcessItemToCook und GetItemTypeFromCargo (26.10.2026)
+// greifen nur bei einem
+// gebundenen ChefZ-Rezept und rufen sonst super unveraendert.
+//
 // modded class kettet. Unser super-Aufruf ist die erste Anweisung, und wir
 // geben dessen Rueckgabewert zurueck - das vertraeglichste moegliche Verhalten.
 // Ruft ein anderer Mod in seiner Kette super nicht, bricht er ohnehin Vanilla;
@@ -100,11 +104,88 @@ modded class Cooking
     }
 
     /**
+     * Garhalten fuer gebundene ChefZ-Rezepte (26.10.2026).
+     *
+     * Die einzige Stelle, an der ChefZ Vanillas Garen beeinflusst, und sie ist
+     * eng: nur ein Item, das in einem Gefaess mit GEBUNDENEM ON_STAGE-Rezept
+     * schon in dessen Endstufe steht, gart nicht weiter (es bleibt warm). So
+     * werden Zutaten mit verschiedenen Garzeiten gemeinsam fertig, statt dass
+     * die schnellen verbrennen, waehrend die langsamen noch roh sind
+     * (Begruendung an ChefZ_CookingDeviceAdapter.HoldsDoneStage). Ohne Treffer
+     * - und damit ohne ChefZ-Daten oder bei einem Fehler im Matcher - laeuft
+     * Vanilla unveraendert.
+     */
+    override protected int UpdateCookingState(Edible_Base item_to_cook, CookingMethodType cooking_method, ItemBase cooking_equipment, float cooking_time_coef)
+    {
+        if (cooking_equipment && cooking_equipment != item_to_cook && ChefZ_CookingDeviceAdapter.Get().HoldsDoneStage(cooking_equipment, item_to_cook))
+        {
+            AddTemperatureToItem(item_to_cook, cooking_equipment, 0);
+            return 0;
+        }
+
+        return super.UpdateCookingState(item_to_cook, cooking_method, cooking_equipment, cooking_time_coef);
+    }
+
+    /**
+     * Brandschutz fuer Zutaten ohne FoodStage in einem gebundenen Gefaess
+     * (26.10.2026, Begruendung an ChefZ_CookingDeviceAdapter.ProtectsContents).
+     *
+     * Eng wie das Garhalten darueber: nur Items, die Vanilla NICHT garen kann,
+     * nur ausserhalb des Gefaesses selbst und nur mit gebundenem Rezept. Sie
+     * werden gewaermt wie bei Vanilla, verlieren aber keine Lebenspunkte und
+     * kein Volumen. Alles andere laeuft unveraendert durch Vanilla.
+     */
+    override void ProcessItemToCook(notnull ItemBase pItem, ItemBase cookingEquip, Param2<CookingMethodType, float> pCookingMethod, out Param2<bool, bool> pStateFlags)
+    {
+        if (cookingEquip && pItem != cookingEquip)
+        {
+            Edible_Base edible = Edible_Base.Cast(pItem);
+            bool cookable = false;
+            if (edible && edible.CanBeCooked())
+                cookable = true;
+            if (!cookable && ChefZ_CookingDeviceAdapter.Get().ProtectsContents(cookingEquip))
+            {
+                AddTemperatureToItem(pItem, null, 0);
+                return;
+            }
+        }
+
+        super.ProcessItemToCook(pItem, cookingEquip, pCookingMethod, pStateFlags);
+    }
+
+    /**
+     * Bratfett in einem gebundenen Gefaess (26.10.2026).
+     *
+     * Vanilla zieht dem Fett in der Pfanne je Stufenwechsel eines anderen
+     * Items 25 Einheiten ab (UpdateCookingState, COOKING_LARD_DECREASE_COEF).
+     * Die Suche vergleicht Type(), und Klassen ohne eigene Skriptklasse -
+     * ChefZ_Butter - tragen die von Lard. Drei Pilze verbrauchten damit die
+     * ganze Butter der Pilzpfanne, die Bindung fiel, das Gericht kam nie
+     * (Autotest). Ist ein Rezept gebunden, gibt Vanilla das Fett deshalb nur
+     * heraus, solange danach ein Rest bleibt; sonst traegt das gegarte Item
+     * den Verlust selbst, genau wie Vanilla ohne Fett.
+     */
+    override protected ItemBase GetItemTypeFromCargo(typename item_type, ItemBase cooking_equipment)
+    {
+        ItemBase found = super.GetItemTypeFromCargo(item_type, cooking_equipment);
+        if (!found || item_type != COOKING_INGREDIENT_LARD)
+            return found;
+
+        if (found.GetQuantity() > COOKING_LARD_DECREASE_COEF)
+            return found;
+
+        if (ChefZ_CookingDeviceAdapter.Get().ProtectsContents(cooking_equipment))
+            return null;
+
+        return found;
+    }
+
+    /**
      * S18: dieselbe Methodenauskunft fuer die DIAGNOSE.
      *
      * ADDITIV und ausdruecklich KEIN override. Die Kollisionsflaeche dieser
-     * modded class bleibt damit genau das eine CookWithEquipment darueber -
-     * eine hinzugefuegte Methode kann keine fremde ueberschreiben.
+     * modded class bleibt damit CookWithEquipment, UpdateCookingState, ProcessItemToCook und GetItemTypeFromCargo
+     * darueber - eine hinzugefuegte Methode kann keine fremde ueberschreiben.
      *
      * Warum sie noetig ist: GetCookingMethodWithTimeOverride ist protected und
      * NUR aus einer Cooking-Ableitung erreichbar. "chefz match" muss dieselbe

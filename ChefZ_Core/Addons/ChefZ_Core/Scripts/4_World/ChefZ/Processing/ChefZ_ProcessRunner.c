@@ -585,6 +585,7 @@ class ChefZ_ProcessRunner
 
         ChefZ_MatchResult result = new ChefZ_MatchResult();
         result.matched   = true;
+        result.ownedRecipe = recipe;
         result.recipe    = recipe;
         result.recipeSym = tr.transformSym;
         result.recipeId  = tr.id;

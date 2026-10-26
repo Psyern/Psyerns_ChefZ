@@ -54,6 +54,14 @@ class ChefZ_MatchResult : Managed
     //! waere hier ein Zyklus in Wartestellung.
     ChefZ_CompiledRecipe recipe;
 
+    //! Haelt ein SYNTHETISCHES Rezept am Leben, das niemandem sonst gehoert
+    //! (ChefZ_ProcessRunner.BuildResult fuer Stations-Transforms). Ohne
+    //! diesen Halter starb das Rezept beim Verlassen von BuildResult, und
+    //! jeder Stationsjob endete mit "kein gebundenes Rezept" - Fleischwolf,
+    //! Raeucherschrank und Honigschleuder erzeugten nie etwas (Server-Log
+    //! 26.10.2026). Kein Zyklus: das Rezept kennt das Ergebnis nicht.
+    ref ChefZ_CompiledRecipe ownedRecipe;
+
     //--- Bewertung (09 §4.2) -------------------------------------------------
     float     score;
     float     gradeScore;
@@ -118,6 +126,7 @@ class ChefZ_MatchResult : Managed
         recipeSym       = ChefZ_SymbolTable.INVALID;
         recipeId        = "";
         recipe          = null;
+        ownedRecipe     = null;
 
         score           = 0.0;
         gradeScore      = 0.0;
@@ -299,7 +308,7 @@ class ChefZ_SlotShortfall : Managed
  * Er entsteht ausschliesslich auf Anforderung (Adminkommando, Cookbook) und
  * nie im Kochtick.
  */
-class ChefZ_PartialMatchReport
+class ChefZ_PartialMatchReport : Managed
 {
     ChefZ_Sym recipeSym;
     string    recipeId;

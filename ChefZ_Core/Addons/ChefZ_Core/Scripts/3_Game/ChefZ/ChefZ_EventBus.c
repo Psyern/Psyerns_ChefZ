@@ -687,11 +687,13 @@ class ChefZ_EventBus : Managed
 
             if (!sub.IsAlive())
             {
+                m_CountSkipDead++;
                 sawDead = true;
                 continue;
             }
             if (!sub.IsCallable())
             {
+                m_CountSkipUncallable++;
                 sawDead = true;
                 continue;
             }
@@ -859,6 +861,12 @@ class ChefZ_EventBus : Managed
     //! ChefZ haengt - das ist die haeufigste Frage bei "warum tut Modul X
     //! nichts".
     int GetSubscriptionCount() { return m_ById.Count(); }
+
+    //! Diagnose (26.10.2026): warum eine Anmeldung beim Zustellen uebersprungen wurde.
+    protected int m_CountSkipDead;
+    protected int m_CountSkipUncallable;
+    int GetSkipDeadCount()       { return m_CountSkipDead; }
+    int GetSkipUncallableCount() { return m_CountSkipUncallable; }
 
     int GetRaisedCount()     { return m_CountRaised; }
     int GetDeliveredCount()  { return m_CountDelivered; }

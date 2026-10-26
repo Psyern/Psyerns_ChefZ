@@ -121,7 +121,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_Bread",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "inheritFreshness": false,
                     "inheritTemperature": true
@@ -156,7 +156,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_Flatbread",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "inheritFreshness": false,
                     "inheritTemperature": true

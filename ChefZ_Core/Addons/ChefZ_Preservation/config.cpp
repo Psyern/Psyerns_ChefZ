@@ -389,7 +389,7 @@ class CfgVehicles
     class ChefZ_PreservedFood_Base : Edible_Base
     {
         scope = 0;
-        model = "\dz\gear\food\steak.p3d";
+        model = "\dz\gear\food\meat_steak.p3d";
         rotationFlags = 17;
         itemSize[] = {2, 1};
         weight = 220;
@@ -483,13 +483,13 @@ class CfgVehicles
     // Raw Meat + Salz. Wasser wird entzogen, die Energie bleibt - deshalb
     // weniger water und ein hoeherer Energiewert als am rohen Stueck.
     // agents 4: Poekeln ist keine Hitze (06 §3).
-    // PROXY: steak.p3d. Ziel: ein Stueck Fleisch mit Salzkruste.
+    // PROXY: meat_steak.p3d. Ziel: ein Stueck Fleisch mit Salzkruste.
     class ChefZ_SaltedMeat : ChefZ_PreservedFood_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SALTEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_SALTEDMEAT1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\dz\gear\food\meat_steak.p3d";
         itemSize[] = {2, 1};
         weight = 240;
 
@@ -550,13 +550,13 @@ class CfgVehicles
 
     // SaltedMeat am Trockenrahmen. Der Vorratsartikel schlechthin: sehr wenig
     // Wasser, sehr viel Energie je Platz. Kein Kochbedarf mehr.
-    // PROXY: steak.p3d. Ziel: dunkles, geschrumpftes Doerrfleisch.
+    // PROXY: meat_steak.p3d. Ziel: dunkles, geschrumpftes Doerrfleisch.
     class ChefZ_DriedMeat : ChefZ_PreservedFood_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_DRIEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_DRIEDMEAT1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\dz\gear\food\meat_steak.p3d";
         itemSize[] = {2, 1};
         weight = 120;
 
@@ -607,13 +607,13 @@ class CfgVehicles
 
     // SaltedMeat im Raeucherschrank. Zwischen frisch und doerr: mehr Wasser als
     // Doerrfleisch, laenger haltbar als gesalzenes - der Reiseproviant aus §41.
-    // PROXY: steak.p3d. Ziel: dunkel geraeuchertes Stueck mit Rauchrand.
+    // PROXY: meat_steak.p3d. Ziel: dunkel geraeuchertes Stueck mit Rauchrand.
     class ChefZ_SmokedMeat : ChefZ_PreservedFood_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SMOKEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_SMOKEDMEAT1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\dz\gear\food\meat_steak.p3d";
         itemSize[] = {2, 1};
         weight = 180;
 
@@ -671,13 +671,13 @@ class CfgVehicles
 
     // Fischfilet + Salz. Fisch traegt weniger Energie und mehr Naehrwertindex
     // als Fleisch - das bleibt ueber die ganze Kette so.
-    // PROXY: steak.p3d. Ziel: ein flaches Salzfilet.
+    // PROXY: meat_steak.p3d. Ziel: ein flaches Salzfilet.
     class ChefZ_SaltedFish : ChefZ_PreservedFood_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SALTEDFISH0";
         descriptionShort = "#STR_CHEFZ_ITEM_SALTEDFISH1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\dz\gear\food\meat_steak.p3d";
         itemSize[] = {2, 1};
         weight = 200;
 
@@ -737,13 +737,13 @@ class CfgVehicles
 
     // SaltedFish am Trockenrahmen. Stockfisch: leicht, trocken, extrem lange
     // haltbar.
-    // PROXY: steak.p3d. Ziel: hartes, helles Trockenfilet.
+    // PROXY: meat_steak.p3d. Ziel: hartes, helles Trockenfilet.
     class ChefZ_DriedFish : ChefZ_PreservedFood_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_DRIEDFISH0";
         descriptionShort = "#STR_CHEFZ_ITEM_DRIEDFISH1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\dz\gear\food\meat_steak.p3d";
         itemSize[] = {2, 1};
         weight = 95;
 
@@ -796,13 +796,13 @@ class CfgVehicles
     // Salzschritt davor, anders als beim Fleisch. Das ist kein Versehen der
     // Vorlage, sondern der kuerzeste Weg zu haltbarem Fisch und der Grund,
     // warum sich Raeuchern lohnt, bevor man Salz hat.
-    // PROXY: steak.p3d. Ziel: goldbraun geraeuchertes Filet.
+    // PROXY: meat_steak.p3d. Ziel: goldbraun geraeuchertes Filet.
     class ChefZ_SmokedFish : ChefZ_PreservedFood_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SMOKEDFISH0";
         descriptionShort = "#STR_CHEFZ_ITEM_SMOKEDFISH1";
-        model = "\dz\gear\food\steak.p3d";
+        model = "\dz\gear\food\meat_steak.p3d";
         itemSize[] = {2, 1};
         weight = 150;
 

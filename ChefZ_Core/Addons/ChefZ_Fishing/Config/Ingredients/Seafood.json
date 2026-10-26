@@ -1,0 +1,203 @@
+{
+    "kind": "ingredient",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_CoastalCrab",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true,
+            "_note": "Meeresfruechte: Kategorie SEAFOOD (Elternkategorie FISH, ChefZ_Registry/Config/Categories.json). Damit passen sie in jeden Fisch-Slot und zusaetzlich in die eigenen Meeresfruechte-Rezepte."
+        },
+        {
+            "id": "ChefZ_SpinyOrangeCrab",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_BlueSentinelCrab",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SnowCrab",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_CrimsonKingCrab",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_StripedTigerPrawn",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Langoustine",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SpinyLobster",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_MidnightLobster",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Squid",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_SpeckledSquid",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_CrimsonSquid",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_NorthernCrimsonSquid",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
+            "id": "ChefZ_Octopus",
+            "categories": [
+                "SEAFOOD"
+            ],
+            "tags": [
+                "CHEFZ_FRESH",
+                "CHEFZ_HIGH_PROTEIN"
+            ],
+            "defaultState": "RAW",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        }
+    ]
+}

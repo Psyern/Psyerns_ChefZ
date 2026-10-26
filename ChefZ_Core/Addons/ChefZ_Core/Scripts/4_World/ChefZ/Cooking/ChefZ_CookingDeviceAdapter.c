@@ -1224,6 +1224,68 @@ class ChefZ_CookingDeviceAdapter : Managed
         return session;
     }
 
+    /**
+     * Garhalten (26.10.2026): soll Vanilla dieses Item gerade NICHT weitergaren?
+     *
+     * ON_STAGE verlangt, dass JEDE Pflichtzutat zugleich in einer Endstufe
+     * steht. Vanilla gart aber jedes Item fuer sich weiter - eine Kartoffel ist
+     * nach 45 s gekocht und 20 s spaeter verbrannt, das gewuerfelte Fleisch
+     * braucht 80 s. Ohne Halten wurde ein Eintopf aus gemischten Zutaten nie
+     * fertig: wenn das Fleisch gar war, war das Gemuese schon verbrannt
+     * (Autotest, alle Eintoepfe und Suppen).
+     *
+     * Gehalten wird nur, solange eine Sitzung ein Rezept GEBUNDEN hat und das
+     * Item bereits in einer Endstufe steht: bei ON_STAGE in einer des Rezepts,
+     * bei TIMED in einer gegarten Vanilla-Stufe (Baked, Boiled, Dried) - sonst
+     * verbrennen die Tomaten, bevor die Uhr der Sosse ablaeuft. Ohne
+     * ChefZ-Treffer - ein Steak allein im Topf - antwortet diese Methode false,
+     * und Vanilla gart wie immer (I2).
+     */
+    bool HoldsDoneStage(ItemBase vessel, Edible_Base item)
+    {
+        if (!vessel || !item)
+            return false;
+        if (!item.HasFoodStage())
+            return false;
+
+        ChefZ_CompiledRecipe recipe = BoundRecipe(vessel);
+        if (!recipe)
+            return false;
+
+        int stage = item.GetFoodStageType();
+        if (recipe.completion == ChefZ_Completion.ON_STAGE)
+            return recipe.AcceptsDoneStage(stage);
+
+        return stage == ChefZ_VanillaStage.BAKED || stage == ChefZ_VanillaStage.BOILED || stage == ChefZ_VanillaStage.DRIED;
+    }
+
+    /**
+     * Brandschutz (26.10.2026): Vanilla zieht jedem Item ohne FoodStage im
+     * Kochgeschirr je Takt 5 Lebenspunkte ab (Cooking.ProcessItemToCook,
+     * Cooking.c:101). Salz, Sahne, getrocknete Kraeuter und Milchpulver waren
+     * damit nach rund 20 Takten zerstoert, die Bindung fiel, und das Gericht
+     * kam nie (Autotest: Tomatensosse, Ruehrei, Rahmsosse). Solange ein Rezept
+     * gebunden ist, sind diese Zutaten Teil des Gerichts und werden nur warm.
+     */
+    bool ProtectsContents(ItemBase vessel)
+    {
+        return BoundRecipe(vessel) != null;
+    }
+
+    private ChefZ_CompiledRecipe BoundRecipe(ItemBase vessel)
+    {
+        if (!vessel)
+            return null;
+
+        ChefZ_CookSession session = PeekSession(vessel);
+        if (!session || session.state != ChefZ_ESessionState.MATCHED)
+            return null;
+        if (!session.outcome)
+            return null;
+
+        return session.outcome.recipe;
+    }
+
     void DropSession(int vesselId)
     {
         m_Sessions.Remove(vesselId);

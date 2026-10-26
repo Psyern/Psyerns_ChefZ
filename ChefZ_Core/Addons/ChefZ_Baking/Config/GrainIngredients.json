@@ -13,6 +13,7 @@
             "id": "ChefZ_RawPasta",
             "categories": ["PASTA"],
             "tags": ["CHEFZ_GRAIN"],
+            "quantityUnit": "GRAM",
             "unitsPerWholeItem": 500,
             "decays": true
         },
@@ -20,6 +21,7 @@
             "id": "ChefZ_DriedPasta",
             "categories": ["PASTA"],
             "tags": ["CHEFZ_GRAIN"],
+            "quantityUnit": "GRAM",
             "unitsPerWholeItem": 500,
             "decays": true
         },

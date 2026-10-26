@@ -218,7 +218,12 @@ class CfgVehicles
     //--------------------------------------------------------------------------
     class ChefZ_GrainMill : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
+        itemBehaviour = 2;
         displayName = "#STR_CHEFZ_GRAINMILL";
         descriptionShort = "#STR_CHEFZ_GRAINMILL_DESC";
         model = "\ChefZ\ChefZ_Devices\models\grainmill.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -322,6 +327,10 @@ class CfgVehicles
     //--------------------------------------------------------------------------
     class ChefZ_PastaMachine : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
         displayName = "#STR_CHEFZ_PASTAMACHINE";
         descriptionShort = "#STR_CHEFZ_PASTAMACHINE_DESC";
@@ -378,6 +387,7 @@ class CfgVehicles
     class ChefZ_HerbStationBase : Inventory_Base
     {
         scope = 0;
+        itemBehaviour = 2;
         rotationFlags = 17;
         canBeDigged = 0;
         absorbency = 0.0;
@@ -395,6 +405,10 @@ class CfgVehicles
     // Seasoning. PROXY: Kochtopf - eine Schale in der richtigen Groessenordnung.
     class ChefZ_Mortar : ChefZ_HerbStationBase
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MORTAR";
         descriptionShort = "#STR_CHEFZ_ITEM_MORTAR_DESC";
@@ -408,6 +422,10 @@ class CfgVehicles
     // Parallelplaetze, damit sich das Warten lohnt. PROXY: Holzregal.
     class ChefZ_DryingRack : ChefZ_HerbStationBase
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_DRYINGRACK";
         descriptionShort = "#STR_CHEFZ_ITEM_DRYINGRACK_DESC";
@@ -561,7 +579,12 @@ class CfgVehicles
     // Muster wie bei der Honigschleuder.
     class ChefZ_ButterChurn : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
+        itemBehaviour = 2;
         displayName = "#STR_CHEFZ_ITEM_BUTTERCHURN";
         descriptionShort = "#STR_CHEFZ_ITEM_BUTTERCHURN_DESC";
         model = "\ChefZ\ChefZ_Devices\models\butterchurn.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -583,7 +606,12 @@ class CfgVehicles
     // §50: Die Kaesepresse.
     class ChefZ_CheesePress : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
+        itemBehaviour = 2;
         displayName = "#STR_CHEFZ_ITEM_CHEESEPRESS";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESEPRESS_DESC";
         model = "\ChefZ\ChefZ_Devices\models\cheesepress.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -646,11 +674,13 @@ class CfgVehicles
         // Der Cargo-Bereich IST die Eingangsseite der Station:
         // ChefZ_ProcessingStation_Base liest seine Zutaten ueber
         // ChefZ_FactCollector.CollectFromCargo aus genau diesem Bereich.
-        // 3x2 fasst zwei Feldflaschen oder einen Kanister nebst Rohsalz - mehr
-        // waere ein Lager, weniger ein Flaschenhals ohne Aussage.
+        // 4x3: Rohsalz (2x2) und das fertige Salz (2x2) muessen GLEICHZEITIG
+        // Platz haben - die Anwendung legt den Ausgang an, bevor sie den
+        // Eingang verbraucht. Mit 3x2 brach TR_RawSaltToSalt mit "kein Platz"
+        // ab (Testlauf 26.10.2026). Ebenso Wasserflasche (1x3) nebst Rohsalz.
         class Cargo
         {
-            itemsCargoSize[] = {3, 2};
+            itemsCargoSize[] = {4, 3};
             openable = 0;
         };
     };
@@ -684,7 +714,12 @@ class CfgVehicles
 
     class ChefZ_MeatGrinder : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
+        itemBehaviour = 2;
         displayName = "#STR_CHEFZ_ITEM_MEATGRINDER0";
         descriptionShort = "#STR_CHEFZ_ITEM_MEATGRINDER1";
         model = "\ChefZ\ChefZ_Devices\models\meatgrinder.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -713,9 +748,15 @@ class CfgVehicles
         // voller Cargo laesst den Job ohne Verbrauch enden. Wer wolfen will,
         // raeumt zwischendurch aus - das ist der Preis der Selbstnachstartung
         // von PROCESS_GRIND_MEAT, siehe dort.
+        //
+        // 6x4 SEIT 26.10.2026: Guts ist in Vanilla 3x2, nicht 2x2. Mit 5x3
+        // waren die Jaeger- und die scharfe Wurst unmachbar - Darm, Fleisch und
+        // zwei Gewuerze fuellten den Wolf, und das Ergebnis fand keinen Platz
+        // (Autotest: "outputs[0] passt nicht ins Gefaess"). 24 Zellen lassen
+        // fuer jede Wurst Platz fuer das Ergebnis; ein Lager ist es weiterhin nicht.
         class Cargo
         {
-            itemsCargoSize[] = {5, 3};
+            itemsCargoSize[] = {6, 4};
             openable = 0;
         };
     };
@@ -801,7 +842,13 @@ class CfgVehicles
     //==========================================================================
     class ChefZ_Smoker : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
+        itemBehaviour = 0;
+        heavyItem = 1;
         displayName = "#STR_CHEFZ_ITEM_SMOKER0";
         descriptionShort = "#STR_CHEFZ_ITEM_SMOKER1";
         model = "\ChefZ\ChefZ_Devices\models\smoker.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -812,6 +859,32 @@ class CfgVehicles
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
         lifetime = 172800;
+
+        // Feuerstelle wie bei Vanillas Fireplace (26.10.2026): Brennstoff und
+        // Anzuender in eigenen Plaetzen, im Inventar als Gruppen "Brennstoff"
+        // und "Zunder" mit Vanillas Symbolen. Die Rinde im Cargo brennt
+        // weiterhin mit (aeltere Staende).
+        attachments[] = {"Firewood", "WoodenStick", "Rags", "Paper", "Bark"};
+
+        class GUIInventoryAttachmentsProps
+        {
+            class Fuel
+            {
+                name = "$STR_attachment_Fuel0";
+                description = "";
+                attachmentSlots[] = {"Firewood", "WoodenStick"};
+                icon = "set:dayz_inventory image:cat_fp_fuel";
+                view_index = 1;
+            };
+            class Kindling
+            {
+                name = "$STR_attachment_Kindling0";
+                description = "";
+                attachmentSlots[] = {"Rags", "Paper", "Bark"};
+                icon = "set:dayz_inventory image:cat_fp_kindling";
+                view_index = 2;
+            };
+        };
 
         class Cargo
         {
@@ -907,7 +980,13 @@ class CfgVehicles
     //==========================================================================
     class ChefZ_HoneyExtractor : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
+        itemBehaviour = 0;
+        heavyItem = 1;
         displayName = "#STR_CHEFZ_ITEM_HONEYEXTRACTOR";
         descriptionShort = "#STR_CHEFZ_ITEM_HONEYEXTRACTOR_DESC";
         model = "\ChefZ\ChefZ_Devices\models\honey_extractor.p3d";   // EIGENES MODELL (06.09.2026, Lieferung 449b70f)

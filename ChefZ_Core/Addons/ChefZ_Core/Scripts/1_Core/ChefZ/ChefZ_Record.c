@@ -129,7 +129,7 @@ class ChefZ_SourceRank
  * Registries pruefbar ist; die Referenzintegritaet gegen Kategorien, Tags und
  * Zustaende kommt mit S3/S4 dazu und haengt sich an denselben Kontext.
  */
-class ChefZ_ValidationContext
+class ChefZ_ValidationContext : Managed
 {
     private ChefZ_LoadReport m_Report;      // gehalten vom Config Manager, hier
                                             // bewusst OHNE ref: der Kontext ist

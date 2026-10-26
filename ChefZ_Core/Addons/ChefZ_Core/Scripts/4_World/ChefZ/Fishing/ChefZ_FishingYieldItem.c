@@ -136,6 +136,10 @@ class ChefZ_FishingYieldItem extends FishYieldItemBase
             return 0;
 
         EntityAI bait = rodCtx.ChefZ_GetBaitEntity();
+        // Kunstkoeder sitzt wie ein Jig im Hook-Slot. Ein Vanilla-Haken steht
+        // nicht in der Koeder-Registry und ergibt Faktor 1.0.
+        if (!bait)
+            bait = rodCtx.ChefZ_GetHookEntity();
         if (!bait)
             return 0;
 

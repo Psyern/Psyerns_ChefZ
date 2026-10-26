@@ -138,6 +138,8 @@ class CfgPatches
             "ChefZ_HunterPlate",
             "ChefZ_BloodSausagePlate",
             "ChefZ_FishPotatoPlate",
+            "ChefZ_CrispyFriedCalamari",
+            "ChefZ_GrilledStuffedCalamari",
             "ChefZ_BeanSausagePlate",
 
             // ### SLICE dishes-vanilla ###   zwei Gerichte (bis 14.09.2026 drei -
@@ -397,10 +399,13 @@ class CfgVehicles
     class ChefZ_BoneBroth : ChefZ_SauceItemBase
     {
         scope = 2;
+        model = "\ChefZ\ChefZ_Food\models\bone_broth.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\bone_broth_co.paa"};
+        hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_ITEM_BONEBROTH";
         descriptionShort = "#STR_CHEFZ_ITEM_BONEBROTH_DESC";
         weight = 520;
-        itemSize[] = {2, 3};
+        itemSize[] = {2, 2};
         // Gekocht = mittlere Haltbarkeit (DME §33). Eine wasserreiche Bruehe
         // steht am unteren Rand dieser Stufe.
         lifetime = 14400;
@@ -423,11 +428,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {3.0, 158, 280, 45, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.75, 38, 40, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.2, 60, 128, 9, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {3.0, 158, 280, 45, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.75, 38, 40, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 60, 128, 9, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -466,11 +487,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {2.3, 130, 105, 35, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {2.3, 135, 85, 35, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.3, 130, 125, 35, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.58, 33, 13, 7, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.92, 52, 42, 7, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {2.3, 130, 105, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {2.3, 135, 85, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {2.3, 130, 125, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.58, 33, 13, 7, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 52, 42, 7, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -508,11 +545,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {2.0, 620, 90, 20, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {2.0, 635, 70, 20, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.0, 620, 100, 20, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.5, 155, 12, 4, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.8, 248, 36, 4, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {2.0, 620, 90, 20, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {2.0, 635, 70, 20, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {2.0, 620, 100, 20, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.5, 155, 12, 4, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {0.8, 248, 36, 4, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -550,11 +603,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {2.3, 330, 130, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {2.3, 340, 110, 40, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.3, 330, 140, 40, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.58, 83, 16, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.92, 132, 52, 8, 20, 16, 1}; };
+                class Raw    { nutrition_properties[] = {2.3, 330, 130, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {2.3, 340, 110, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {2.3, 330, 140, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.58, 83, 16, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 132, 52, 8, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -589,6 +658,30 @@ class CfgVehicles
 
     class Inventory_Base;
     class Edible_Base;
+    class Bottle_Base;
+
+    // ------------------------------------------------------------------------
+    // Kochgefaesse: groesserer Laderaum.
+    //
+    // Vanillas Topf, Kessel und Pfanne haben alle 4x3 Laderaum (12 Felder).
+    // Die Eintoepfe, das Chili und die Calamari brauchen schon in der kleinsten
+    // erlaubten Menge mehr - 14 Rezepte waren unkochbar (gemessen mit
+    // tools/chefz-autotest/check_vessel_fit.py). Topf und Pfanne bekommen 5x4,
+    // der Kessel als Gefaess der Gruppengerichte 6x5. Nur der Laderaum waechst,
+    // die Gefaesse selbst bleiben 4x3 gross.
+    // ------------------------------------------------------------------------
+    class FryingPan : Inventory_Base
+    {
+        itemsCargoSize[] = {5, 4};
+    };
+    class Pot : Bottle_Base
+    {
+        itemsCargoSize[] = {5, 4};
+    };
+    class Cauldron : Bottle_Base
+    {
+        itemsCargoSize[] = {6, 5};
+    };
 
     // ------------------------------------------------------------------------
     // Gemeinsame Configbasis der Behaelter.
@@ -2388,6 +2481,71 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
+    // Meeresfruechte (26.10.2026) - ChefZ_CrispyFriedCalamari        Behaelter: PLATE (Teller)
+    // NAEHRWERTHERLEITUNG aus den Zutaten (wie ChefZ_FishPotatoPlate):
+    //    2x Tintenfisch gebacken   2 x 250 = 500 / 60 / 10   (Sardines-Werte je 100)
+    //    100 g Mehl                          350 / 10 / 40
+    //    1x Fett                             400 /  0 / 20
+    //    Summe x 1.15 / 2 Portionen ->        720 / 40 / 80
+    //--------------------------------------------------------------------------
+    class ChefZ_CrispyFriedCalamari : ChefZ_ServedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CRISPYFRIEDCALAMARI";
+        descriptionShort = "#STR_CHEFZ_ITEM_CRISPYFRIEDCALAMARI_DESC";
+        model = "\ChefZ\ChefZ_Food\models\crispy_fried_calamari.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\crispy_fried_calamari_co.paa"};
+        weight = 470;
+        lifetime = 10800;
+        varQuantityInit = 200;
+        varQuantityMax = 200;
+
+        class Nutrition
+        {
+            fullnessIndex = 3.4;
+            energy = 720;
+            water = 60;
+            nutritionalIndex = 70;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Meeresfruechte (26.10.2026) - ChefZ_GrilledStuffedCalamari        Behaelter: PLATE (Teller)
+    // NAEHRWERTHERLEITUNG aus den Zutaten (wie ChefZ_FishPotatoPlate):
+    //    2x Tintenfisch gebacken   2 x 250 = 500 / 60 / 10
+    //    1x Reis oder Brot                   500 / 40 / 60
+    //    1x Tomate + 1x Kraut                115 / 90 / 15
+    //    Kaese optional                      (Stufe, nicht Pflicht)
+    //    Summe x 1.25 / 2 Portionen ->        700 /120 / 85
+    //--------------------------------------------------------------------------
+    class ChefZ_GrilledStuffedCalamari : ChefZ_ServedDish_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_GRILLEDSTUFFEDCALAMARI";
+        descriptionShort = "#STR_CHEFZ_ITEM_GRILLEDSTUFFEDCALAMARI_DESC";
+        model = "\ChefZ\ChefZ_Food\models\grilled_stuffed_calamari.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\grilled_stuffed_calamari_co.paa"};
+        weight = 470;
+        lifetime = 10800;
+        varQuantityInit = 200;
+        varQuantityMax = 200;
+
+        class Nutrition
+        {
+            fullnessIndex = 3.6;
+            energy = 700;
+            water = 120;
+            nutritionalIndex = 70;
+            toxicity = 0;
+            agents = 0;
+            digestibility = 1;
+        };
+    };
+
+    //--------------------------------------------------------------------------
     // §61.10 / DME §38.10 - Bohnen-Wurst-Teller        Behaelter: PLATE (Teller)
     //
     // NAEHRWERTHERLEITUNG (Auftrag: aus den Zutaten ableiten, nicht erfinden).
@@ -3114,6 +3272,8 @@ class CfgChefZIngredients
     class ChefZ_HunterPlate : ChefZ_DishesAPlate {};
     class ChefZ_BloodSausagePlate : ChefZ_DishesAPlate {};
     class ChefZ_FishPotatoPlate : ChefZ_DishesAPlate {};
+    class ChefZ_CrispyFriedCalamari : ChefZ_DishesAPlate {};
+    class ChefZ_GrilledStuffedCalamari : ChefZ_DishesAPlate {};
     class ChefZ_BeanSausagePlate : ChefZ_DishesAPlate {};
 
     //==========================================================================
@@ -3425,4 +3585,16 @@ class CfgChefZ
         };
     };
 
+    // Meeresfruechte-Gerichte (26.10.2026). loadOrder 450: nach dem Slice
+    // ChefZ_seafood (ChefZ_Fishing, 410), dessen Zutaten die Rezepte per cls nennen.
+    class ChefZ_DishesSeafood
+    {
+        chefzApiVersion = 1;
+        loadOrder = 450;
+        handcraftRecipeSlots = 0;
+        dataFiles[] =
+        {
+            "ChefZ_Cooking/Config/Recipes/Seafood.json"
+        };
+    };
 };

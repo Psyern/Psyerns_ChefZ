@@ -190,10 +190,23 @@ class ChefZ_Applicator
         }
 
         //--- 2. PLATZ PRUEFEN -------------------------------------------------
+        //
+        // Passt das Ergebnis nicht NEBEN die Zutaten, wird es ZWISCHENGELAGERT
+        // (26.10.2026): neben dem Gefaess erzeugt, die Zutaten verbraucht und
+        // das Ergebnis danach hineingelegt. Vorher brach "kein Platz" jedes
+        // Rezept ab, dessen Zutaten das Gefaess fuellen - ein Topf mit drei
+        // Kuerbisscheiben und Butter hatte fuer die Suppe keine 2x2 Felder
+        // mehr frei, und herausnehmen konnte der Spieler nichts, ohne das
+        // Rezept zu brechen (Autotest). I5 bleibt gewahrt: verbraucht wird
+        // erst, wenn das Ergebnis existiert.
+        bool staged = false;
         if (!HasRoomForAll(device, planned, why))
         {
-            err = "kein Platz: " + why;
-            return Failure(err);
+            staged = true;
+            if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.DEBUG))
+            {
+                ChefZ_Log.Debug(ChefZ_LogChannel.COOK, recipe.id + ": " + why + " - Ergebnis wird zwischengelagert und nach dem Verbrauch eingelegt.");
+            }
         }
 
         //--- 4. ERZEUGEN ------------------------------------------------------
@@ -202,7 +215,11 @@ class ChefZ_Applicator
             ChefZ_PlannedOutput p = planned.Get(i);
 
             string spawnErr;
-            ItemBase item = SpawnOutput(p.def, result.qualityTier, device, spawnErr);
+            ItemBase item;
+            if (staged)
+                item = SpawnStaged(p.def, result.qualityTier, device, spawnErr);
+            else
+                item = SpawnOutput(p.def, result.qualityTier, device, spawnErr);
             if (!item)
             {
                 // 08 §8: "CreateInInventory liefert null -> Abbruch VOR dem
@@ -231,6 +248,9 @@ class ChefZ_Applicator
         //--- 6. VERBRAUCHEN - ZULETZT (Invariante I5) ------------------------
         ConsumeInputs(result, entities);
         ConsumeLiquid(device, liquidNeeded);
+
+        if (staged)
+            MoveStagedIntoDevice(created, device, recipe.id);
 
         //--- 7. EVENTS --------------------------------------------------------
         //
@@ -612,10 +632,11 @@ class ChefZ_Applicator
     /**
      * Schritt 2: passt JEDES Ergebnis ins Gefaess? (08 §6, 10 §8)
      *
-     * Negativtest N1. Ist kein Platz, ist "Rezept loest nicht aus" die
-     * richtige Antwort (08 §6) - der Spieler nimmt etwas heraus und es klappt.
-     * Ein stiller Notausgang (Boden, Spielerinventar, anderes Gefaess) waere
-     * genau das Gegenteil dessen, was 10 §8 verlangt.
+     * Negativtest N1. Frueher hiess kein Platz "Rezept loest nicht aus"
+     * (08 §6). Seit 26.10.2026 lagert Apply das Ergebnis dann zwischen: die
+     * Zutaten selbst belegen den Platz, und der Spieler kann keine
+     * herausnehmen, ohne das Rezept zu brechen. Diese Pruefung entscheidet nur
+     * noch, ob zwischengelagert wird.
      *
      * EHRLICH BENANNTE GRENZE: FindFirstFreeLocationForNewEntity beantwortet
      * "passt EIN Stueck dieser Klasse", nicht "passen diese drei zusammen".
@@ -725,6 +746,70 @@ class ChefZ_Applicator
         }
 
         return item;
+    }
+
+    /**
+     * Erzeugt EIN Ergebnis neben dem Gefaess statt darin (Zwischenlager, siehe
+     * Schritt 2 in Apply). Gleiche Zusage wie SpawnOutput: bei null ist nichts
+     * entstanden.
+     */
+    static ItemBase SpawnStaged(notnull ChefZ_OutputDef outDef, ChefZ_Sym tier, notnull ItemBase device, out string err)
+    {
+        err = "";
+
+        string cls = ResolveOutputClass(outDef, tier);
+        if (cls == "")
+        {
+            err = "keine Ergebnisklasse";
+            return null;
+        }
+
+        Object obj = g_Game.CreateObjectEx(cls, device.GetPosition(), ECE_PLACE_ON_SURFACE);
+        if (!obj)
+        {
+            err = "die Engine hat nichts erzeugt";
+            return null;
+        }
+
+        ItemBase item = ItemBase.Cast(obj);
+        if (!item)
+        {
+            g_Game.ObjectDelete(obj);
+            err = "die erzeugte Klasse ist kein ItemBase";
+            return null;
+        }
+
+        return item;
+    }
+
+    /**
+     * Legt zwischengelagerte Ergebnisse nach dem Verbrauch ins Gefaess.
+     *
+     * Im NAECHSTEN Frame: verbrauchte Zutaten loescht die Engine erst am
+     * Ende des laufenden, ihr Platz ist bis dahin belegt. Ist auch dann kein
+     * Platz - mehrere Ergebnisse, ungluecklich verteilte Reste -, bleibt das
+     * Gericht neben dem Gefaess liegen: verloren geht es nie, und die Zutaten
+     * sind bereits verbraucht.
+     */
+    private static void MoveStagedIntoDevice(notnull array<ItemBase> created, notnull ItemBase device, string recipeId)
+    {
+        for (int i = 0; i < created.Count(); i++)
+        {
+            ItemBase item = created.Get(i);
+            if (!item || item.IsSetForDeletion())
+                continue;
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(ChefZ_Applicator.TakeStaged, 1, false, device, item, recipeId);
+        }
+    }
+
+    static void TakeStaged(ItemBase device, ItemBase item, string recipeId)
+    {
+        if (!device || !item || item.IsSetForDeletion() || device.IsSetForDeletion())
+            return;
+        if (device.ServerTakeEntityToCargo(item))
+            return;
+
+        ChefZ_Log.Warn(ChefZ_LogChannel.COOK, recipeId + ": " + item.GetType() + " passt auch nach dem Verbrauch nicht ins Gefaess und liegt daneben.");
     }
 
     //==========================================================================

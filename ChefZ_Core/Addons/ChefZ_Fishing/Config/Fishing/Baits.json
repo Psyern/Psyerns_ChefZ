@@ -27,7 +27,8 @@
         "ChefZ_GiltheadBream",
         "ChefZ_RedSnapper",
         "ChefZ_GiantGrouper",
-        "ChefZ_Rockfish"
+        "ChefZ_Rockfish",
+        "ChefZ_RedMullet"
       ]
     },
     {
@@ -57,7 +58,9 @@
         "ChefZ_Conger",
         "ChefZ_GiantGrouper",
         "ChefZ_Rockfish",
-        "ChefZ_SeaEel"
+        "ChefZ_SeaEel",
+        "ChefZ_Eel",
+        "ChefZ_RedMullet"
       ]
     },
     {
@@ -99,7 +102,45 @@
         "ChefZ_Salmon",
         "ChefZ_SockeyeSalmon",
         "ChefZ_HorseMackerel",
-        "ChefZ_JapaneseSardine"
+        "ChefZ_JapaneseSardine",
+        "ChefZ_Eel"
+      ]
+    },
+    {
+      "id": "ChefZ_CrimsonSquidLure",
+      "baitKind": "lure",
+      "weightMultiplier": 3.0,
+      "lureWearPerUse": 1.5,
+      "targets": [
+        "ChefZ_CrimsonSquid",
+        "ChefZ_NorthernCrimsonSquid",
+        "ChefZ_Octopus",
+        "ChefZ_Squid"
+      ]
+    },
+    {
+      "id": "ChefZ_NeonPrawnJig",
+      "baitKind": "lure",
+      "weightMultiplier": 3.0,
+      "lureWearPerUse": 1.5,
+      "targets": [
+        "ChefZ_Squid",
+        "ChefZ_SpeckledSquid",
+        "ChefZ_Octopus",
+        "ChefZ_SeaBass"
+      ]
+    },
+    {
+      "id": "ChefZ_SilverSardineLure",
+      "baitKind": "lure",
+      "weightMultiplier": 3.0,
+      "lureWearPerUse": 1.5,
+      "targets": [
+        "Mackerel",
+        "ChefZ_Bonito",
+        "ChefZ_HorseMackerel",
+        "ChefZ_SpeckledSquid",
+        "ChefZ_NorthernCrimsonSquid"
       ]
     }
   ]

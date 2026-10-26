@@ -458,10 +458,58 @@ class ChefZ_ProcessingManager : Managed
                     continue;
                 if (ta.priority != tb.priority)
                     continue;
+                if (CannotShareInput(ta, tb))
+                    continue;
 
                 report.AddWarn(tb.sourceRef, tb.id, "hat dieselbe Spezifitaet (" + ta.specificity.ToString() + ") und dieselbe priority wie \"" + ta.id + "\" am selben Prozess \"" + ChefZ_SymbolTable.NameOrMark(ta.processSym) + "\". Passen beide auf " + "dieselben Eingaben, entscheidet allein die ID - \"" + ta.id + "\" gewinnt. Wenn das nicht gewollt ist, hilft \"priority\".");
             }
         }
+    }
+
+    /**
+     * Zwei Transformationen mit je EINEM Eingang, die verschiedene, nicht
+     * verwandte Klassen verlangen, koennen nie auf dieselbe Eingabe passen.
+     * Ohne diese Pruefung meldete jeder Filetierschritt jeden anderen - 529
+     * Warnungen bei jedem Start, keine davon ein echter Konflikt (Autotest
+     * 26.10.2026).
+     */
+    private static bool CannotShareInput(notnull ChefZ_CompiledTransform ta, notnull ChefZ_CompiledTransform tb)
+    {
+        if (!ta.inputs || !tb.inputs || ta.inputs.Count() != 1 || tb.inputs.Count() != 1)
+            return false;
+
+        ChefZ_Sym ca = RequiredClass(ta.inputs.Get(0).selector);
+        ChefZ_Sym cb = RequiredClass(tb.inputs.Get(0).selector);
+        if (!ChefZ_SymbolTable.IsValid(ca) || !ChefZ_SymbolTable.IsValid(cb) || ca == cb)
+            return false;
+        if (!g_Game)
+            return false;
+
+        string na = ChefZ_SymbolTable.Name(ca);
+        string nb = ChefZ_SymbolTable.Name(cb);
+        if (g_Game.IsKindOf(na, nb) || g_Game.IsKindOf(nb, na))
+            return false;
+
+        return true;
+    }
+
+    //! Klasse, die ein Selektor zwingend verlangt (direkt oder in allOf), sonst INVALID.
+    private static ChefZ_Sym RequiredClass(ChefZ_CompiledSelector sel)
+    {
+        if (!sel)
+            return ChefZ_SymbolTable.INVALID;
+        if (sel.op == ChefZ_SelectorOp.CLASS)
+            return sel.sym;
+        if (sel.op != ChefZ_SelectorOp.ALL_OF || !sel.children)
+            return ChefZ_SymbolTable.INVALID;
+
+        for (int i = 0; i < sel.children.Count(); i++)
+        {
+            ChefZ_Sym s = RequiredClass(sel.children.Get(i));
+            if (ChefZ_SymbolTable.IsValid(s))
+                return s;
+        }
+        return ChefZ_SymbolTable.INVALID;
     }
 
     private void ReportSummary(ChefZ_LoadReport report)

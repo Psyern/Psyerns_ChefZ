@@ -322,6 +322,11 @@ class ChefZ_FishingYieldDef extends ChefZ_Record
             return false;
         }
 
+        // Der JSON-Leser legt fuer ein fehlendes Feld ein LEERES Array an. Leer heisst
+        // "nicht angegeben" und ist kein Fehler - sonst warnt jeder Record ohne Kurve.
+        if (hourlyCoefs && hourlyCoefs.Count() == 0)
+            hourlyCoefs = null;
+
         if (hourlyCoefs && hourlyCoefs.Count() != ChefZ_FishingLimits.HOURLY_COEF_COUNT)
         {
             if (ctx)
@@ -629,7 +634,9 @@ class ChefZ_BaitDef extends ChefZ_Record
             weightMultiplier = ChefZ_FishingLimits.MAX_WEIGHT_MULT;
         }
 
-        if (ChefZ_BaitKind.FromName(baitKind) == ChefZ_BaitKind.SOFT && HasLureWear())
+        // HasExplicit und nicht HasLureWear(): ResolveDefaults hat die Vorgabe schon
+        // eingesetzt, gewarnt wird nur ueber ein Feld, das wirklich im Record steht.
+        if (ChefZ_BaitKind.FromName(baitKind) == ChefZ_BaitKind.SOFT && HasExplicit("lureWearPerUse"))
         {
             if (ctx)
                 ctx.Warn(this, "\"lureWearPerUse\" steht an einem Koeder der Art \"" + ChefZ_BaitKind.SOFT_NAME + "\" und wirkt dort nicht - er wird verbraucht, nicht abgenutzt. " + "Feld ignoriert.");

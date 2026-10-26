@@ -19,7 +19,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_DriedBerries",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "setState": "DRIED",
                     "inheritFreshness": true
@@ -45,7 +45,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_DriedBerries",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "setState": "DRIED",
                     "inheritFreshness": true

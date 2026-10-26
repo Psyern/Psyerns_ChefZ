@@ -519,7 +519,7 @@ class ChefZ_PreservationSelfTest
 
         // Und bei unbekannter Temperatur ebenfalls nicht (02 §8: "Richtung
         // weniger ChefZ, nie Richtung falsches ChefZ").
-        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, ChefZ_Undefined.FLOAT, trace), 1.0))
+        if (!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, EmptyClosure(), tags, 1.0, ChefZ_PreservationDef.TEMPERATURE_UNKNOWN, trace), 1.0))
             return ChefZ_SelfTestTrace.Fail("PreservationSelfTest", 523, "!Near(mgr.ComputeDecayScale(ChefZ_SymbolTable.INVALID, ChefZ_SymbolTable.INVALID, ChefZ...");
 
         return true;
@@ -795,10 +795,13 @@ class ChefZ_PreservationSelfTest
         AddRule(reg, "CHEFZ_PR_KEINESTUFE",  ChefZ_PreservationScope.NAME_QUALITY, 0.1);
         AddRule(reg, "CHEFZ_PR_TAG_A",       ChefZ_PreservationScope.NAME_TAG, 0.5);
 
-        ChefZ_PreservationManager mgr = NewManager(NewCats(), NewStates(), NewQuality());
+        ChefZ_CategoryManager rejCats = NewCats();
+        ChefZ_StateManager rejStates = NewStates();
+        ChefZ_QualityManager rejQuality = NewQuality();
+        ChefZ_PreservationManager mgr = NewManager(rejCats, rejStates, rejQuality);
         mgr.Build(reg, null, NewSettings(1.0));
 
-        if (mgr.GetRejectedCount() != 4) return ChefZ_SelfTestTrace.Fail("PreservationSelfTest", 801, "mgr.GetRejectedCount() != 4");
+        if (mgr.GetRejectedCount() != 4) return ChefZ_SelfTestTrace.Fail("PreservationSelfTest", 801, "mgr.GetRejectedCount() != 4: rejected=" + mgr.GetRejectedCount().ToString() + " rules=" + mgr.GetRuleCount().ToString() + " catsReady=" + rejCats.IsReady().ToString() + " statesReady=" + rejStates.IsReady().ToString() + " qualityReady=" + rejQuality.IsReady().ToString());
         if (mgr.GetRuleCount() != 1) return ChefZ_SelfTestTrace.Fail("PreservationSelfTest", 802, "mgr.GetRuleCount() != 1");
 
         // Der ueberlebende Record wirkt.

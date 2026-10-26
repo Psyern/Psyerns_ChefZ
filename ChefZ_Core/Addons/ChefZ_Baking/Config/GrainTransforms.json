@@ -26,7 +26,7 @@
             "outputs": [
                 {
                     "cls": "ChefZ_Dough",
-                    "quantity": 1,
+                    "quantity": 100,
                     "quantityMode": "fixed",
                     "inheritFreshness": true,
                     "freshnessCarry": 1.0

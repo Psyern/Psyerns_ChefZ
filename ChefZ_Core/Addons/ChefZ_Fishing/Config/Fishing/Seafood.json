@@ -1,0 +1,284 @@
+{
+    "kind": "fishingYield",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "ChefZ_CoastalCrab",
+            "baseWeight": 20,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE",
+                "TRAP_SMALL",
+                "ROD"
+            ],
+            "lureOnly": false,
+            "quality": 0.35,
+            "_note": "Meeresfruechte (26.10.2026). Krebse, Garnelen und Hummer gehen vor allem in die Reusen (Vanilla-Koeder Wurm), die Strandkrabbe auch an die Rute. Tintenfische unten nur mit Kunstkoeder."
+        },
+        {
+            "id": "ChefZ_SpinyOrangeCrab",
+            "baseWeight": 14,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE",
+                "TRAP_SMALL"
+            ],
+            "lureOnly": false,
+            "quality": 0.4
+        },
+        {
+            "id": "ChefZ_BlueSentinelCrab",
+            "baseWeight": 12,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE",
+                "TRAP_SMALL"
+            ],
+            "lureOnly": false,
+            "quality": 0.45
+        },
+        {
+            "id": "ChefZ_SnowCrab",
+            "baseWeight": 10,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.55
+        },
+        {
+            "id": "ChefZ_CrimsonKingCrab",
+            "baseWeight": 4,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.8
+        },
+        {
+            "id": "ChefZ_StripedTigerPrawn",
+            "baseWeight": 22,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_SMALL",
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.35
+        },
+        {
+            "id": "ChefZ_Langoustine",
+            "baseWeight": 12,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE",
+                "TRAP_SMALL"
+            ],
+            "lureOnly": false,
+            "quality": 0.55
+        },
+        {
+            "id": "ChefZ_SpinyLobster",
+            "baseWeight": 6,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.7
+        },
+        {
+            "id": "ChefZ_MidnightLobster",
+            "baseWeight": 4,
+            "enviro": "SEA",
+            "methods": [
+                "TRAP_LARGE"
+            ],
+            "lureOnly": false,
+            "quality": 0.8
+        },
+        {
+            "id": "ChefZ_Squid",
+            "baseWeight": 18,
+            "enviro": "SEA",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": true,
+            "quality": 0.4,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.2,
+                0.6,
+                0.9,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                0.9,
+                0.6,
+                0.2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "_note": "Kopffuesser nur an der Rute mit Kunstkoeder (lureOnly) und vor allem nachts. hourlyCoefs wie Vanilla (YieldsFish.c): 0 = schnellster Biss."
+        },
+        {
+            "id": "ChefZ_SpeckledSquid",
+            "baseWeight": 12,
+            "enviro": "SEA",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": true,
+            "quality": 0.5,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.2,
+                0.6,
+                0.9,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                0.9,
+                0.6,
+                0.2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "ChefZ_CrimsonSquid",
+            "baseWeight": 8,
+            "enviro": "SEA",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": true,
+            "quality": 0.6,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.2,
+                0.6,
+                0.9,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                0.9,
+                0.6,
+                0.2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "ChefZ_NorthernCrimsonSquid",
+            "baseWeight": 5,
+            "enviro": "SEA",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": true,
+            "quality": 0.7,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.2,
+                0.6,
+                0.9,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                0.9,
+                0.6,
+                0.2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "ChefZ_Octopus",
+            "baseWeight": 6,
+            "enviro": "SEA",
+            "methods": [
+                "ROD"
+            ],
+            "lureOnly": true,
+            "quality": 0.65,
+            "hourlyCoefs": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.2,
+                0.6,
+                0.9,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                0.9,
+                0.6,
+                0.2,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        }
+    ]
+}

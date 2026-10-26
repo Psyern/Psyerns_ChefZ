@@ -1,0 +1,334 @@
+{
+    "kind": "recipe",
+    "schemaVersion": 1,
+    "records": [
+        {
+            "id": "RCP_ChefZ_CrispyFriedCalamari",
+            "_note": "Meeresfruechte (26.10.2026). Tintenfisch in Mehl, in Fett ausgebacken. Kraut, Salz und Gewuerz heben die Stufe - ab PREPARED gibt der Teller den Mahlzeitbonus (ChefZ_ServedDish_Base).",
+            "priority": 10,
+            "contexts": [
+                {
+                    "deviceClasses": [
+                        "FryingPan"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 180,
+            "minTemperature": 65,
+            "slots": [
+                {
+                    "slotId": "squid",
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_Squid"
+                            },
+                            {
+                                "cls": "ChefZ_SpeckledSquid"
+                            },
+                            {
+                                "cls": "ChefZ_CrimsonSquid"
+                            },
+                            {
+                                "cls": "ChefZ_NorthernCrimsonSquid"
+                            },
+                            {
+                                "cls": "ChefZ_Octopus"
+                            }
+                        ]
+                    },
+                    "minCount": 2,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "flour",
+                    "match": {
+                        "category": "FLOUR"
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "GRAM",
+                    "amount": {
+                        "min": 100
+                    },
+                    "consume": "amount",
+                    "consumeAmount": 100
+                },
+                {
+                    "slotId": "fat",
+                    "match": {
+                        "anyOf": [
+                            {
+                                "category": "FAT"
+                            },
+                            {
+                                "category": "BUTTER"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herb",
+                    "match": {
+                        "tag": "CHEFZ_HERB"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "salt",
+                    "match": {
+                        "category": "SALT"
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": {
+                        "min": 5
+                    },
+                    "consume": "amount",
+                    "consumeAmount": 5,
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": {
+                        "tag": "CHEFZ_SPICE"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "gradeRules": [
+                {
+                    "ruleId": "GR_SQ_Fresh",
+                    "when": "anyItem",
+                    "selector": {
+                        "category": "SEAFOOD",
+                        "freshness": {
+                            "min": 0.8
+                        }
+                    },
+                    "points": 1
+                }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
+                "minMatchedHealth01": 0.15
+            },
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_CrispyFriedCalamari",
+                    "quantity": 200,
+                    "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
+                    "setState": "COOKED",
+                    "inheritQuality": true,
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_HEARTY_MEAL"
+            ],
+            "nutritionModifier": 1.15
+        },
+        {
+            "id": "RCP_ChefZ_GrilledStuffedCalamari",
+            "_note": "Meeresfruechte (26.10.2026). Tintenfisch gefuellt mit Reis oder Brot, Tomate und Kraeutern, in der Pfanne gegrillt. Kaese ist Kuer.",
+            "priority": 10,
+            "contexts": [
+                {
+                    "deviceClasses": [
+                        "FryingPan"
+                    ],
+                    "methods": [
+                        "BAKING"
+                    ]
+                }
+            ],
+            "completion": "TIMED",
+            "cookSeconds": 240,
+            "minTemperature": 65,
+            "slots": [
+                {
+                    "slotId": "squid",
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_Squid"
+                            },
+                            {
+                                "cls": "ChefZ_SpeckledSquid"
+                            },
+                            {
+                                "cls": "ChefZ_CrimsonSquid"
+                            },
+                            {
+                                "cls": "ChefZ_NorthernCrimsonSquid"
+                            },
+                            {
+                                "cls": "ChefZ_Octopus"
+                            }
+                        ]
+                    },
+                    "minCount": 2,
+                    "maxCount": 3,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "filling",
+                    "match": {
+                        "anyOf": [
+                            {
+                                "cls": "Rice"
+                            },
+                            {
+                                "category": "BREAD"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                },
+                {
+                    "slotId": "tomato",
+                    "match": {
+                        "category": "TOMATO"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "herb",
+                    "match": {
+                        "tag": "CHEFZ_HERB"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "consume": "whole",
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "cheese",
+                    "match": {
+                        "cls": "ChefZ_Cheese"
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 2
+                },
+                {
+                    "slotId": "salt",
+                    "match": {
+                        "category": "SALT"
+                    },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "optional": true,
+                    "unit": "GRAM",
+                    "amount": {
+                        "min": 5
+                    },
+                    "consume": "amount",
+                    "consumeAmount": 5,
+                    "gradePoints": 1
+                },
+                {
+                    "slotId": "spice",
+                    "match": {
+                        "tag": "CHEFZ_SPICE"
+                    },
+                    "minCount": 1,
+                    "maxCount": 2,
+                    "optional": true,
+                    "consume": "whole",
+                    "gradePoints": 1
+                }
+            ],
+            "gradeRules": [
+                {
+                    "ruleId": "GR_SQ_Fresh",
+                    "when": "anyItem",
+                    "selector": {
+                        "category": "SEAFOOD",
+                        "freshness": {
+                            "min": 0.8
+                        }
+                    },
+                    "points": 1
+                },
+                {
+                    "ruleId": "GR_SQ_Garlic",
+                    "when": "anyItem",
+                    "selector": {
+                        "anyOf": [
+                            {
+                                "cls": "ChefZ_WildGarlic"
+                            },
+                            {
+                                "cls": "ChefZ_DriedWildGarlic"
+                            }
+                        ]
+                    },
+                    "points": 1
+                }
+            ],
+            "policy": {
+                "extraItems": "forbid",
+                "forbiddenStates": [
+                    "BURNT",
+                    "ROTTEN"
+                ],
+                "minMatchedHealth01": 0.15
+            },
+            "qualityTierSet": "DISH_DEFAULT",
+            "outputs": [
+                {
+                    "cls": "ChefZ_GrilledStuffedCalamari",
+                    "quantity": 200,
+                    "quantityMode": "fixed",
+                    "returnContainer": "ChefZ_EmptyPlate",
+                    "setState": "COOKED",
+                    "inheritQuality": true,
+                    "inheritFreshness": false,
+                    "inheritTemperature": true
+                }
+            ],
+            "effects": [
+                "CHEFZ_WARM_MEAL",
+                "CHEFZ_HEALTHY_MEAL"
+            ],
+            "nutritionModifier": 1.25
+        }
+    ]
+}

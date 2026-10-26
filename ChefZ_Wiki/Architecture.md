@@ -445,10 +445,20 @@ Seven `modded class` declarations exist in `ChefZ_Core`:
 
 | Class | File | Purpose |
 |---|---|---|
-| `Cooking` | `ChefZ_ModdedCooking.c` | the cooking hook (section 5.1) |
+| `Cooking` | `ChefZ_ModdedCooking.c` | the cooking hook (section 5.1), plus three narrow guards that only act while a ChefZ recipe is **bound** in the vessel (see below) |
 | `PluginRecipesManagerBase` | `ChefZ_ModdedRecipes.c` | reserve handcraft slots; `super` first, additive only — `UnregisterRecipe` appears nowhere in the core |
 | `ActionWorldCraft`, `WorldCraftActionData`, `WorldCraftActionReciveData` | `ChefZ_ModdedWorldCraft.c` | carry a position-independent recipe identifier alongside vanilla's position, and let the server refuse an action whose position means different things on the two sides |
 | `MissionServer`, `MissionGameplay` | `ChefZ_CoreEntry.c` | boot entry points |
+
+The three guards in `Cooking` (added 26.10.2026 after the in-game autotest) keep
+vanilla from destroying a dish while it is being cooked. Without a bound recipe
+each of them calls `super` unchanged:
+
+| Override | Without the guard |
+|---|---|
+| `UpdateCookingState` | ingredients with different cook times never finish together — the potato burns while the meat is still raw. A bound ingredient that already sits in a done stage is held there and only kept warm. |
+| `ProcessItemToCook` | vanilla takes 5 HP per tick from every item without a FoodStage (salt, cream, dried herbs, milk powder) and destroys it within ~20 ticks. |
+| `GetItemTypeFromCargo` | vanilla uses 25 units of frying fat per stage change and finds it by `Type()`, so `ChefZ_Butter` (a config child of `Lard`) was used up before the dish was done. Bound: the fat is only drawn while a rest remains. |
 
 Item state is *not* done by overriding vanilla. `ChefZ_Edible_Base` and
 `ChefZ_Item_Base` are **derivations**, not `modded class Edible_Base`. The
@@ -464,6 +474,8 @@ creates or consumes items. Its order is fixed:
 ```
 1. REVALIDATE   handles still present, same vessel, quantity sufficient?
 2. CHECK SPACE  does every output fit into the target?
+                no -> STAGED: create beside the vessel, move it in
+                      on the next frame after step 6
 3. CONTAINER    containerCategory required? find one
 4. CREATE       spawn outputs and by-products
                 failure -> RollbackCreated(), NOTHING consumed
@@ -478,9 +490,17 @@ ingredients are an angry player."* The residual risk of this ordering — a
 duplicate if something fails between step 4 and step 6 — is what
 `RollbackCreated()` covers.
 
-Three negative tests are named as acceptance conditions: full cargo, ingredient
-removed mid-flight, missing output class. Each must consume nothing and create
-nothing. None has been run — see [Known Limitations](Known-Limitations).
+Staging exists because the ingredients themselves occupy the space: three
+pumpkin slices and butter leave no free 2x2 field in a pot, and the player can
+take nothing out without breaking the recipe. Consumption still comes after
+creation, so the rule above holds; the dish only waits one frame beside the
+vessel, because the engine deletes consumed items at the end of the frame.
+
+Negative tests named as acceptance conditions: ingredient removed mid-flight,
+missing output class — each must consume nothing and create nothing. "Full
+cargo" now means staging. The in-game autotest (`tools/chefz-autotest`) covers
+49 cooking cases, 94 processing cases, every station and all fish; see
+[Known Limitations](Known-Limitations).
 
 ## 9. Extension points
 

@@ -144,6 +144,16 @@ class ChefZ_RecipeEvaluator
     // 2e - Policy
     //==========================================================================
 
+    //! ChefZ-Zustand, den eine Vanilla-Endstufe bedeutet, oder INVALID.
+    private static ChefZ_Sym StateOfVanillaStage(int stage)
+    {
+        if (stage == ChefZ_VanillaStage.BURNED)
+            return ChefZ_SymbolTable.Intern("BURNT");
+        if (stage == ChefZ_VanillaStage.ROTTEN)
+            return ChefZ_SymbolTable.Intern("ROTTEN");
+        return ChefZ_SymbolTable.INVALID;
+    }
+
     private static bool CheckPolicy(notnull ChefZ_CompiledRecipe recipe, notnull ChefZ_FactSnapshot snapshot, notnull ChefZ_BindResult bind, out string reason)
     {
         reason = "";
@@ -164,6 +174,17 @@ class ChefZ_RecipeEvaluator
                 if (policy.IsStateForbidden(facts.chefzState))
                 {
                     reason = ChefZ_SymbolTable.NameOrMark(facts.classSym) + " ist im Zustand " + ChefZ_SymbolTable.NameOrMark(facts.chefzState) + ", den dieses Rezept ausschliesst";
+                    return false;
+                }
+
+                // Vanilla-Items fuehren keinen ChefZ-Zustand, der dem Garen
+                // folgt: eine verbrannte Kartoffel steht weiter auf RAW. Ihre
+                // FoodStage sagt es trotzdem (Autotest 26.10.2026: Suppe aus
+                // verbrannten Kartoffeln wurde neu gebunden).
+                ChefZ_Sym stageState = StateOfVanillaStage(facts.vanillaFoodStage);
+                if (policy.IsStateForbidden(stageState))
+                {
+                    reason = ChefZ_SymbolTable.NameOrMark(facts.classSym) + " ist " + ChefZ_VanillaStage.Name(facts.vanillaFoodStage) + ", das schliesst dieses Rezept aus";
                     return false;
                 }
             }
@@ -354,6 +375,14 @@ class ChefZ_RecipeEvaluator
                     reason = "eine gebundene Zutat ist nicht mehr da";
                     return false;
                 }
+
+                // Eine Pflichtzutat OHNE FoodStage - Dosenspeck, Bohnen aus
+                // der Dose, Milchpulver - kann keine Endstufe erreichen und
+                // zaehlt deshalb wie ein Gewuerz nicht mit. Vorher wartete
+                // etwa das Speckfruehstueck ewig auf "Baked" fuer die Dose
+                // (Autotest 26.10.2026).
+                if (facts.vanillaFoodStage == ChefZ_VanillaStage.NONE)
+                    continue;
 
                 if (!recipe.AcceptsDoneStage(facts.vanillaFoodStage))
                 {

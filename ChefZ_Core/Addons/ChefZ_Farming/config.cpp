@@ -78,7 +78,6 @@ class CfgPatches
             "ChefZ_HoneycombFrameEmpty",
             "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
             "ChefZ_UncappingFork", "ChefZ_BeeSmoker",
-            "ChefZ_HandRake",
             // ### SLICE wildplants ###
             "ChefZ_WildPlant_Base",
             "ChefZ_WildCorn", "ChefZ_WildThyme", "ChefZ_WildRosemary", "ChefZ_WildParsley",
@@ -290,10 +289,13 @@ class CfgVehicles
         //     Eigentuemer jener Module gemeldet; hier wird bewusst der
         //     UNGEFAEHRLICHE Wert gesetzt - zu wenig Saettigung ist laestig,
         //     zu viel laesst den Spieler beim ersten Bissen erbrechen.
+        // ENERGIE AN VANILLA (26.10.2026): Vanillas Reis (Rice) traegt 100
+        // Energie je 100 Einheiten. Mehl und Korn lagen mit 200/300 beim
+        // Doppelten bis Dreifachen; sie folgen jetzt dem Reis (geroestet 120).
         class Nutrition
         {
             fullnessIndex = 0.25;
-            energy = 200;
+            energy = 100;
             water = 10;
             nutritionalIndex = 20;
             toxicity = 0;
@@ -349,14 +351,14 @@ class CfgVehicles
                 class Raw
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
-                    nutrition_properties[] = {0.25, 200.0, 10.0, 20.0, 0.0, 0.0, 0.0};
+                    nutrition_properties[] = {0.25, 100.0, 10.0, 20.0, 0.0, 0.0, 0.0};
                     cooking_properties[] = {0.0, 0.0, 0.0};
                 };
                 class Baked
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
                     // 25.0 * 0.0125 = 0.31
-                    nutrition_properties[] = {0.31, 300.0, 10.0, 25.0, 0.0, 0.0, 0.0};
+                    nutrition_properties[] = {0.31, 120.0, 10.0, 25.0, 0.0, 0.0, 0.0};
                     cooking_properties[] = {100.0, 40.0, 200.0};
                 };
                 class Burned
@@ -371,6 +373,7 @@ class CfgVehicles
                     visual_properties[] = {0.0, 0.0, 0.0};
                     // 5.0 * 0.0125 = 0.06
                     nutrition_properties[] = {0.06, 10.0, 0.0, 0.0, 20.0, 0.0, 0.0};
+                    cooking_properties[] = {0, 0};
                 };
             };
 
@@ -459,9 +462,11 @@ class CfgVehicles
         weight = 150;
         itemSize[] = {1, 1};
         rotationFlags = 17;
-        varQuantityInit = 1;
+        varQuantityInit = 100;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 100;
+        quantityBar = 1;
+        stackedUnit = "g";
         varQuantityDestroyOnMin = 1;
         absorbency = 0.0;
         isMeleeWeapon = 0;
@@ -573,9 +578,16 @@ class CfgVehicles
     // haengt daran: unitsPerWholeItem 1, ChefZ_FactCollector rechnet
     // quantity / quantityMax * unitsPerWholeItem). Bei qtyMax = 1 IST der
     // fullnessIndex das Volumen - deshalb dreistellige Werte, die dasselbe
-    // aussagen wie Vanillas 2 bei 125 Gramm. Die Quantity wird NICHT
-    // angefasst; sie umzustellen hiesse, jede Zutatenmenge des Projekts
-    // nachzuziehen.
+    // aussagen wie Vanillas 2 bei 125 Gramm.
+    //
+    // NACHTRAG 26.10.2026: Menge 1 war im Spieltest falsch. Vanillas Essaktion
+    // nimmt 15 Menge pro Sekunde (ActionEat.c, ActionEatFruit.c), ein Item mit
+    // Menge 1 ist nach einem Tick weg, und energy/water werden durch 100
+    // geteilt (PlayerStomach.c:92-93), also fast nichts. Gemuese und Beeren
+    // fuehren jetzt 100 g (6,7 s wie Vanillas Tomate), Kraeuter 50 g; der
+    // fullnessIndex ist durch qtyMax geteilt, das Volumen je Item bleibt.
+    // Die Zutatenrechnung ist ein Verhaeltnis (quantity / quantityMax) und
+    // bleibt gleich; TR_CornToFlour (ratio) ist nachgezogen.
     //
     // DIE RELATIVE ORDNUNG DER ALTEN WERTE BLEIBT ERHALTEN:
     //   Pfefferbeeren 4 < Kraeuter 5 < Knoblauch 8 < Zwiebel 25 <
@@ -610,9 +622,9 @@ class CfgVehicles
         weight = 160;
         class Nutrition
         {
-            // 120 (Zielvolumen) / 1 (varQuantityMax) = 120. Faktor 4.8
+            // 120 (Zielvolumen) / 100 (varQuantityMax) = 1.2. Faktor 4.8
             // gegenueber der alten 25 (PlayerStomach.c:86).
-            fullnessIndex = 120;
+            fullnessIndex = 1.2;
             energy = 90;
             water = 55;
             nutritionalIndex = 30;
@@ -630,11 +642,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {120, 90, 55, 30, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {106, 105, 25, 32, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {115, 95, 63, 26, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {29, 14, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {29, 14, 11, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {1.2, 90, 55, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {1.06, 105, 25, 32, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.15, 95, 63, 26, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.29, 14, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.29, 14, 11, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -650,9 +678,9 @@ class CfgVehicles
         weight = 60;
         class Nutrition
         {
-            // 70 (Zielvolumen) / 1 (varQuantityMax) = 70. Faktor 8.75
+            // 70 (Zielvolumen) / 100 (varQuantityMax) = 0.7. Faktor 8.75
             // gegenueber der alten 8 (PlayerStomach.c:86).
-            fullnessIndex = 70;
+            fullnessIndex = 0.7;
             energy = 40;
             water = 15;
             nutritionalIndex = 40;
@@ -670,11 +698,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {70, 40, 15, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {61, 46, 7, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {70, 42, 17, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {18, 6, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {18, 6, 3, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {0.7, 40, 15, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {0.61, 46, 7, 42, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {0.7, 42, 17, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.18, 6, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.18, 6, 3, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -691,9 +735,9 @@ class CfgVehicles
         weight = 120;
         class Nutrition
         {
-            // 140 (Zielvolumen) / 1 (varQuantityMax) = 140. Faktor 4.667
+            // 140 (Zielvolumen) / 100 (varQuantityMax) = 1.4. Faktor 4.667
             // gegenueber der alten 30 (PlayerStomach.c:86).
-            fullnessIndex = 140;
+            fullnessIndex = 1.4;
             energy = 100;
             water = 60;
             nutritionalIndex = 45;
@@ -711,11 +755,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {140, 100, 60, 45, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {126, 115, 27, 47, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {135, 105, 69, 38, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {37, 15, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {37, 15, 12, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {1.4, 100, 60, 45, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {1.26, 115, 27, 47, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.35, 105, 69, 38, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.37, 15, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.37, 15, 12, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -752,11 +812,11 @@ class CfgVehicles
         };
         class Nutrition
         {
-            // 220 (Zielvolumen) / 1 (varQuantityMax) = 220. Faktor 3.667
+            // 220 (Zielvolumen) / 100 (varQuantityMax) = 2.2. Faktor 3.667
             // gegenueber der alten 60 (PlayerStomach.c:86). Der Kolben bleibt
             // das saettigendste Fundgut dieses Moduls - die Ordnung der alten
             // Werte ist erhalten.
-            fullnessIndex = 220;
+            fullnessIndex = 2.2;
             energy = 180;
             water = 40;
             nutritionalIndex = 40;
@@ -774,11 +834,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {220, 180, 40, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {198, 205, 18, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {213, 190, 46, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {55, 27, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {55, 27, 8, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {2.2, 180, 40, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {1.98, 205, 18, 42, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {2.13, 190, 46, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.55, 27, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.55, 27, 8, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -795,9 +871,9 @@ class CfgVehicles
         itemSize[] = {2, 2};
         class Nutrition
         {
-            // 180 (Zielvolumen) / 1 (varQuantityMax) = 180. Faktor 4.0
+            // 180 (Zielvolumen) / 100 (varQuantityMax) = 1.8. Faktor 4.0
             // gegenueber der alten 45 (PlayerStomach.c:86).
-            fullnessIndex = 180;
+            fullnessIndex = 1.8;
             energy = 110;
             water = 80;
             nutritionalIndex = 40;
@@ -815,11 +891,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {180, 110, 80, 40, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {160, 125, 36, 42, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {172, 115, 92, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {44, 17, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {44, 17, 16, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {1.8, 110, 80, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {1.6, 125, 36, 42, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.72, 115, 92, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.44, 17, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.44, 17, 16, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -862,7 +954,7 @@ class CfgVehicles
         weight = 100;
         class Nutrition
         {
-            fullnessIndex = 60;
+            fullnessIndex = 0.6;
             energy = 45;
             water = 45;
             nutritionalIndex = 35;
@@ -873,11 +965,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {0.6, 45, 45, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {0.54, 52, 20, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {0.58, 47, 50, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.15, 5, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.15, 5, 3, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -891,7 +999,7 @@ class CfgVehicles
         weight = 100;
         class Nutrition
         {
-            fullnessIndex = 60;
+            fullnessIndex = 0.6;
             energy = 45;
             water = 45;
             nutritionalIndex = 35;
@@ -902,11 +1010,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {0.6, 45, 45, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {0.54, 52, 20, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {0.58, 47, 50, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.15, 5, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.15, 5, 3, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -920,7 +1044,7 @@ class CfgVehicles
         weight = 100;
         class Nutrition
         {
-            fullnessIndex = 60;
+            fullnessIndex = 0.6;
             energy = 45;
             water = 45;
             nutritionalIndex = 35;
@@ -931,11 +1055,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {0.6, 45, 45, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {0.54, 52, 20, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {0.58, 47, 50, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.15, 5, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.15, 5, 3, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -949,7 +1089,7 @@ class CfgVehicles
         weight = 100;
         class Nutrition
         {
-            fullnessIndex = 60;
+            fullnessIndex = 0.6;
             energy = 45;
             water = 45;
             nutritionalIndex = 35;
@@ -960,11 +1100,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {60, 45, 45, 35, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {54, 52, 20, 36, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {58, 47, 50, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {15, 5, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {15, 5, 3, 0, 15, 0, 1}; };
+                class Raw    { nutrition_properties[] = {0.6, 45, 45, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {0.54, 52, 20, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {0.58, 47, 50, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.15, 5, 0, 0, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.15, 5, 3, 0, 15, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1009,9 +1165,11 @@ class CfgVehicles
         weight = 20;
         itemSize[] = {1, 1};
         rotationFlags = 17;
-        varQuantityInit = 1;
+        varQuantityInit = 50;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 50;
+        quantityBar = 1;
+        stackedUnit = "g";
         lifetime = 14400;
 
         // KEINE FoodStages an dieser Basis (siehe Bannerkommentar oben) -
@@ -1019,12 +1177,12 @@ class CfgVehicles
         // erschoepft sich in dieser einen Zahl.
         class Nutrition
         {
-            // 55 (Zielvolumen) / 1 (varQuantityMax) = 55. Faktor 11
+            // 55 (Zielvolumen) / 50 (varQuantityMax) = 1.1. Faktor 11
             // gegenueber der alten 5 (PlayerStomach.c:86). Kraeuter bleiben
             // das leichteste Fundgut nach den Pfefferbeeren.
-            fullnessIndex = 55;
-            energy = 15;
-            water = 12;
+            fullnessIndex = 1.1;
+            energy = 30;
+            water = 24;
             nutritionalIndex = 25;
             toxicity = 0;
             digestibility = 1;
@@ -1059,7 +1217,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_WILDGARLIC";
         descriptionShort = "#STR_CHEFZ_ITEM_WILDGARLIC_DESC";
-        model = "\dz\gear\food\cannabis_seedman.p3d";
+        model = "\ChefZ\ChefZ_Food\models\wild_garlic.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\wild_garlic_co.paa"};
+        hiddenSelections[] = {"camo"};
     };
 
     // Pfefferbeeren: Rohstoff, kein Gewuerz - erst der Trockenrahmen macht
@@ -1072,12 +1232,12 @@ class CfgVehicles
         model = "\dz\gear\food\Sambucus_nigra.p3d";
         class Nutrition
         {
-            // 50 (Zielvolumen) / 1 (varQuantityMax) = 50. Faktor 12.5
+            // 50 (Zielvolumen) / 50 (varQuantityMax) = 1. Faktor 12.5
             // gegenueber der alten 4 (PlayerStomach.c:86). Der kleinste Wert
             // des Moduls - so war es vorher, so bleibt es.
-            fullnessIndex = 50;
-            energy = 12;
-            water = 8;
+            fullnessIndex = 1.0;
+            energy = 24;
+            water = 16;
             nutritionalIndex = 10;
             toxicity = 0;
             digestibility = 1;
@@ -1110,9 +1270,9 @@ class CfgVehicles
             // Zwischen Pfefferbeere (50) und Kraut (55): eine Schote hat mehr
             // Substanz als eine Beere, bleibt aber Wuerzgut. Herleitung wie an
             // ChefZ_FreshHerbBase - Zielvolumen / varQuantityMax (= 1).
-            fullnessIndex = 52;
-            energy = 14;
-            water = 14;
+            fullnessIndex = 1.04;
+            energy = 28;
+            water = 28;
             nutritionalIndex = 18;
             toxicity = 0;
             digestibility = 1;
@@ -1276,7 +1436,13 @@ class CfgVehicles
     //--------------------------------------------------------------------------
     class ChefZ_Beehive : Inventory_Base
     {
+        // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
+        // Aufstellbares (Fireplace, Zelte, Zaun) auf item_large (26.10.2026)
+        physLayer = "item_large";
+        carveNavmesh = 1;
         scope = 2;
+        itemBehaviour = 0;
+        heavyItem = 1;
         displayName = "#STR_CHEFZ_ITEM_BEEHIVE";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DESC";
         // EIGENES MODELL (29.08.2026). Die Datei heisst "beekeeper", nicht
@@ -1336,11 +1502,13 @@ class CfgVehicles
     // (Hologram.c:104-109), damit der Name nicht aus einer Zeichenkette
     // zusammengesetzt werden muss.
     //
-    // scope = 0: sie ist nie Loot, nie handelbar, nie im Inventar.
+    // scope = 1 (wie Vanillas MediumTentPlacing): Hologram.c erzeugt die Klasse
+    // per CreateObjectEx, mit scope = 0 scheitert das ("abstract type"). Auch
+    // scope = 1 ist nie Loot und nie handelbar.
     //--------------------------------------------------------------------------
     class ChefZ_BeehivePlacing : Inventory_Base
     {
-        scope = 0;
+        scope = 1;
         displayName = "#STR_CHEFZ_ITEM_BEEHIVE";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DESC";
         model = "\ChefZ\ChefZ_Devices\models\beekeeper.p3d";
@@ -1671,18 +1839,18 @@ class CfgVehicles
     // ein Kuechenmesser waere ein zweiter Weg zum selben Ziel und machte die
     // Gabel ueberfluessig.
     //
-    // PROXY: Meat_Tenderizer.p3d - ein metallenes Kuechengeraet mit Griff.
-    // Derselbe Pfad, den ChefZ_PastaMachine traegt und den Asset-Backlog
-    // §10.1 als den korrekten ausweist.
+    // MODELL: handrake.p3d aus der Lieferung c09900f. Es kam als "Handrechen"
+    // (ChefZ_HandRake), ist aber die Entdeckelungsgabel des Imkers; die
+    // Klasse ChefZ_HandRake ist entfallen (26.10.2026).
     //--------------------------------------------------------------------------
     class ChefZ_UncappingFork : Inventory_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_UNCAPPINGFORK";
         descriptionShort = "#STR_CHEFZ_ITEM_UNCAPPINGFORK_DESC";
-        model = "\dz\gear\tools\Meat_Tenderizer.p3d";
+        model = "\ChefZ\ChefZ_Items\models\handrake.p3d";   // EIGENES MODELL (geliefert als handrake.p3d)
         rotationFlags = 17;
-        itemSize[] = {1, 3};
+        itemSize[] = {3, 1};
         weight = 340;
         repairableWithKits[] = {};
         lifetime = 43200;
@@ -1741,24 +1909,6 @@ class CfgVehicles
         varQuantityDestroyOnMin = 0;
         quantityBar = 1;
         quantityShow = 0;
-    };
-
-    //--------------------------------------------------------------------------
-    // Der Handrechen (Lieferung c09900f). Gartengeraet; noch ohne eigenen
-    // Prozess - er existiert, damit das gelieferte Modell im Spiel ist und
-    // ein spaeterer Beet-Slice ihn als Werkzeug fassen kann.
-    //--------------------------------------------------------------------------
-    class ChefZ_HandRake : Inventory_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_HANDRAKE";
-        descriptionShort = "#STR_CHEFZ_ITEM_HANDRAKE_DESC";
-        model = "\ChefZ\ChefZ_Items\models\handrake.p3d";   // EIGENES MODELL (30.08.2026)
-        rotationFlags = 17;
-        itemSize[] = {3, 1};
-        weight = 700;
-        lifetime = 43200;
-        repairableWithKits[] = {};
     };
 
     //--------------------------------------------------------------------------

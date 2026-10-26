@@ -241,9 +241,9 @@ class CfgVehicles
         itemSize[] = {1, 1};
         weight = 40;
         absorbency = 0.0;
-        varQuantityInit = 1;
+        varQuantityInit = 100;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 100;
         varQuantityDestroyOnMin = 1;
         canBeSplit = 0;
         isMeleeWeapon = 0;
@@ -262,9 +262,14 @@ class CfgVehicles
         // praktisch nicht vorhanden. Nur die Klassen mit varQuantityMax = 100
         // waren zu hoch. Das ist der Unterschied zwischen "die Invariante
         // anwenden" und "alles durch hundert teilen".
+        //
+        // ENERGIE UND WASSER (26.10.2026): anders als das Volumen teilt der Magen
+        // sie durch 100 (PlayerStomach.c:92-93). Mit 130 brachte das ganze Glas
+        // 1.3 Energie. 13000 ergibt 130 - ein Viertel von Vanillas Marmelade
+        // (150 x 400 / 100 = 600) fuer ein Zehntel ihres Gewichts.
         class Nutrition
         {
-            fullnessIndex = 60;
+            fullnessIndex = 0.6;
             energy = 130;
             water = 4;
             nutritionalIndex = 45;
@@ -287,37 +292,37 @@ class CfgVehicles
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {60, 130, 4, 45, 0, 0, 1};
+                    nutrition_properties[] = {0.6, 130, 4, 45, 0, 0, 1};
                 };
                 class Baked
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {100, 40, 200};
-                    nutrition_properties[] = {60, 130, 2, 40, 0, 0, 1};
+                    nutrition_properties[] = {0.6, 130, 2, 40, 0, 0, 1};
                 };
                 class Boiled
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {100, 60, 150};
-                    nutrition_properties[] = {90, 125, 55, 42, 0, 0, 1};
+                    nutrition_properties[] = {0.9, 125, 55, 42, 0, 0, 1};
                 };
                 class Dried
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {60, 130, 4, 45, 0, 0, 1};
+                    nutrition_properties[] = {0.6, 130, 4, 45, 0, 0, 1};
                 };
                 class Burned
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {200, 20, 0};
-                    nutrition_properties[] = {15, 20, 0, 0, 0, 0, 1};
+                    nutrition_properties[] = {0.15, 20, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {15, 20, 2, 0, 20, 16, 1};
+                    nutrition_properties[] = {0.15, 20, 2, 0, 20, 16, 1};
                 };
             };
 
@@ -508,26 +513,31 @@ class CfgVehicles
                 {
                     cooking_properties[] = {0, 0, 0};
                     nutrition_properties[] = {2.0, 600, 20, 8, 0, 0, 1};
+                    visual_properties[] = {0, 0, 0};
                 };
                 class Baked
                 {
                     cooking_properties[] = {80, 30, 200};
                     nutrition_properties[] = {1.9, 620, 8, 8, 0, 0, 1};
+                    visual_properties[] = {0, 1, 1};
                 };
                 class Boiled
                 {
                     cooking_properties[] = {80, 40, 150};
                     nutrition_properties[] = {1.9, 610, 15, 8, 0, 0, 1};
+                    visual_properties[] = {0, 2, 2};
                 };
                 class Burned
                 {
                     cooking_properties[] = {200, 20, 0};
                     nutrition_properties[] = {0.5, 90, 0, 0, 0, 0, 1};
+                    visual_properties[] = {0, 4, 4};
                 };
                 class Rotten
                 {
                     cooking_properties[] = {0, 0, 0};
                     nutrition_properties[] = {0.5, 90, 4, 0, 15, 0, 1};
+                    visual_properties[] = {-1, -1, 5};
                 };
             };
 
@@ -566,6 +576,13 @@ class CfgVehicles
         varQuantityMax = 100;
         varQuantityDestroyOnMin = 1;
         lifetime = 86400;
+
+        // varTemperatureMax 120 statt der 80 der Basis BoxCerealCrunchin: ein
+        // Item ueberhitzt an seinem Maximum und verliert dann je Kochtakt 25
+        // Einheiten (Cooking.UpdateCookingState). Mit 80 schmolz der Kaese in
+        // der Pfanne weg, bevor er gebacken war (Autotest 26.10.2026, Kaese-
+        // Fladenbrot). 120 ist der Wert der kochbaren Vanilla-Lebensmittel.
+        varTemperatureMax = 120;
 
         // fullnessIndex 3.5 (vorher 35): varQuantityMax = 100, also
         //     3.5 * 100 = 350 Volumen fuer den ganzen Laib
@@ -874,26 +891,31 @@ class CfgVehicles
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
                     nutrition_properties[] = {1.0, 90, 40, 12, 0, 0, 1};
+                    cooking_properties[] = {0, 0};
                 };
                 class Baked
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
                     nutrition_properties[] = {1.2, 105, 25, 18, 0, 0, 1};
+                    cooking_properties[] = {70, 45};
                 };
                 class Boiled
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
                     nutrition_properties[] = {1.2, 100, 35, 18, 0, 0, 1};
+                    cooking_properties[] = {105, 55};
                 };
                 class Burned
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
                     nutrition_properties[] = {0.5, 20, 5, 0, 0, 0, 1};
+                    cooking_properties[] = {100, 20};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0.0, 0.0, 0.0};
                     nutrition_properties[] = {0.5, 20, 10, 0, 15, 0, 1};
+                    cooking_properties[] = {0, 0};
                 };
             };
 
@@ -1174,6 +1196,9 @@ class CfgVehicles
 
     class ChefZ_PaprikaPowder : ChefZ_SpiceBase
     {
+        varQuantityInit = 100;
+        varQuantityMin = 0;
+        varQuantityMax = 100;
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PAPRIKAPOWDER";
         descriptionShort = "#STR_CHEFZ_ITEM_PAPRIKAPOWDER_DESC";
@@ -1207,31 +1232,31 @@ class CfgVehicles
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {0.1, 10, 0, 10, 0, 0, 1};
+                    nutrition_properties[] = {0.001, 0.1, 0, 10, 0, 0, 1};
                 };
                 class Baked
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {90, 30, 200};
-                    nutrition_properties[] = {0.1, 10, 0, 9, 0, 0, 1};
+                    nutrition_properties[] = {0.001, 0.1, 0, 9, 0, 0, 1};
                 };
                 class Boiled
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {90, 40, 150};
-                    nutrition_properties[] = {0.1, 10, 0, 9, 0, 0, 1};
+                    nutrition_properties[] = {0.001, 0.1, 0, 9, 0, 0, 1};
                 };
                 class Burned
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {200, 15, 0};
-                    nutrition_properties[] = {0.05, 2, 0, 0, 0, 0, 1};
+                    nutrition_properties[] = {0.0005, 0.02, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {0.05, 2, 0, 0, 15, 0, 1};
+                    nutrition_properties[] = {0.0005, 0.02, 0, 0, 15, 0, 1};
                 };
             };
 

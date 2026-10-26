@@ -10,7 +10,7 @@
 // ---------------------------------------------------------------------------
 // Die drei Negativtests aus 19 S8 lauten:
 //
-//   N1  voller Cargo             -> nichts verbraucht, nichts erzeugt
+//   N1  voller Cargo             -> Ergebnis wird zwischengelagert (seit 26.10.2026)
 //   N2  Zutat zwischenzeitlich entfernt -> nichts verbraucht, nichts erzeugt
 //   N3  fehlende Ergebnisklasse  -> nichts verbraucht, nichts erzeugt
 //

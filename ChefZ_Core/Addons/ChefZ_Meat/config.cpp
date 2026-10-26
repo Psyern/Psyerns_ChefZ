@@ -523,11 +523,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {2.68, 265, 85, 26, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {2.44, 570, 46, 44, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.5, 535, 112, 44, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {1.4, 150, 18, 10, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {2.1, 175, 55, 10, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {2.68, 265, 85, 26, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {2.44, 570, 46, 44, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {2.5, 535, 112, 44, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {1.4, 150, 18, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {2.1, 175, 55, 10, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -560,11 +576,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {2.8, 350, 72, 28, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {2.56, 685, 34, 46, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.62, 640, 98, 46, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {1.46, 170, 18, 10, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {2.22, 210, 46, 10, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {2.8, 350, 72, 28, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {2.56, 685, 34, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {2.62, 640, 98, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {1.46, 170, 18, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {2.22, 210, 46, 10, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -599,11 +631,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {2.4, 275, 84, 38, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {2.2, 570, 42, 58, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {2.28, 535, 110, 58, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {1.22, 148, 18, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.94, 178, 52, 12, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {2.4, 275, 84, 38, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {2.2, 570, 42, 58, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {2.28, 535, 110, 58, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {1.22, 148, 18, 12, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.94, 178, 52, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -640,11 +688,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.34, 140, 45, 15, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.22, 300, 25, 25, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.28, 280, 60, 25, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.9, 80, 10, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.12, 90, 30, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.34, 140, 45, 15, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.22, 300, 25, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.28, 280, 60, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.9, 80, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.12, 90, 30, 5, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -700,11 +764,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.22, 150, 40, 15, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.1, 310, 20, 25, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.16, 290, 55, 25, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.78, 80, 10, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.06, 95, 25, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.22, 150, 40, 15, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.1, 310, 20, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.16, 290, 55, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.78, 80, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.06, 95, 25, 5, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -736,11 +816,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.28, 185, 38, 16, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.16, 360, 18, 26, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.22, 335, 52, 26, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.8, 90, 10, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.1, 110, 24, 5, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.28, 185, 38, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.16, 360, 18, 26, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.22, 335, 52, 26, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.8, 90, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.1, 110, 24, 5, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -772,11 +868,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.2, 145, 44, 22, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.08, 300, 22, 34, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.14, 280, 58, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.78, 78, 10, 6, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.04, 92, 27, 6, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.2, 145, 44, 22, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.08, 300, 22, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.14, 280, 58, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.78, 78, 10, 6, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.04, 92, 27, 6, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -808,11 +920,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.24, 165, 40, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.12, 325, 20, 30, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.18, 305, 55, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.78, 84, 10, 6, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.06, 100, 25, 6, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.24, 165, 40, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.12, 325, 20, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.18, 305, 55, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.78, 84, 10, 6, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.06, 100, 25, 6, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -844,11 +972,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.06, 120, 46, 18, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {0.94, 250, 24, 28, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.0, 235, 60, 28, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.66, 65, 10, 5, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.92, 76, 28, 5, 25, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.06, 120, 46, 18, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {0.94, 250, 24, 28, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.0, 235, 60, 28, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.66, 65, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 76, 28, 5, 25, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -880,11 +1024,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.44, 205, 36, 20, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.32, 400, 16, 30, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.38, 370, 50, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.88, 100, 10, 6, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {1.22, 122, 22, 6, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.44, 205, 36, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.32, 400, 16, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.38, 370, 50, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.88, 100, 10, 6, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 122, 22, 6, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -935,11 +1095,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.74, 230, 35, 18, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.7, 92, 14, 7, 0, 4, 1}; };
-                class Rotten { nutrition_properties[] = {0.88, 115, 18, 9, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.74, 230, 35, 18, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.7, 92, 14, 7, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.88, 115, 18, 9, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -981,11 +1157,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.8, 265, 33, 19, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.72, 106, 13, 8, 0, 4, 1}; };
-                class Rotten { nutrition_properties[] = {0.9, 133, 17, 10, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.8, 265, 33, 19, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.72, 106, 13, 8, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.9, 133, 17, 10, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1027,11 +1219,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.72, 235, 36, 26, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.68, 94, 14, 10, 0, 4, 1}; };
-                class Rotten { nutrition_properties[] = {0.86, 118, 18, 13, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.72, 235, 36, 26, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.68, 94, 14, 10, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.86, 118, 18, 13, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1073,11 +1281,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.76, 250, 34, 23, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.7, 100, 14, 9, 0, 4, 1}; };
-                class Rotten { nutrition_properties[] = {0.88, 125, 17, 12, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.76, 250, 34, 23, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.7, 100, 14, 9, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.88, 125, 17, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1119,11 +1343,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.84, 260, 33, 30, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.74, 104, 13, 12, 0, 4, 1}; };
-                class Rotten { nutrition_properties[] = {0.92, 130, 17, 15, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.84, 260, 33, 30, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.74, 104, 13, 12, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 130, 17, 15, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1166,11 +1406,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.74, 245, 34, 22, 0, 4, 1}; };
-                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.7, 98, 14, 9, 0, 4, 1}; };
-                class Rotten { nutrition_properties[] = {0.88, 123, 17, 11, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.74, 245, 34, 22, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.7, 98, 14, 9, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.88, 123, 17, 11, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1202,11 +1458,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.4, 118, 5, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.64, 188, 7, 12, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.4, 118, 5, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.64, 188, 7, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1238,11 +1510,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.42, 133, 4, 8, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.68, 212, 6, 12, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.42, 133, 4, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.68, 212, 6, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1274,11 +1562,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.4, 120, 5, 10, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.64, 192, 7, 16, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.4, 120, 5, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.64, 192, 7, 16, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1310,11 +1614,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.42, 126, 4, 9, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.66, 202, 7, 14, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.42, 126, 4, 9, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.66, 202, 7, 14, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1346,11 +1666,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.42, 131, 4, 12, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.68, 210, 6, 18, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.42, 131, 4, 12, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.68, 210, 6, 18, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -1382,11 +1718,27 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; };
-                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; };
-                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.4, 124, 4, 9, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.64, 198, 7, 14, 20, 16, 1}; };
+                class Raw { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Burned { nutrition_properties[] = {0.4, 124, 4, 9, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.64, 198, 7, 14, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };

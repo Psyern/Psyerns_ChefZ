@@ -45,7 +45,7 @@
                 {
                     "cls": "ChefZ_Flour",
                     "quantityMode": "ratio",
-                    "ratio": 120,
+                    "ratio": 1.2,
                     "inheritFreshness": true,
                     "freshnessCarry": 1.0
                 }

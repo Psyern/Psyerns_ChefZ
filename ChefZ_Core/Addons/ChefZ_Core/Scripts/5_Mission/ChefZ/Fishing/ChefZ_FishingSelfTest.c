@@ -543,8 +543,8 @@ class ChefZ_FishingSelfTest
 
 	private static int HashOf(string name)
 	{
-		string local = name;
-		return local.Hash();
+		string copy = name;
+		return copy.Hash();
 	}
 
 	/**
@@ -569,12 +569,12 @@ class ChefZ_FishingSelfTest
 		array<string> lureTargets = new array<string>();
 		lureTargets.Insert(Y_A);
 		lureTargets.Insert(Y_B);
-		baits.Add(Bait(B_LURE, ChefZ_BaitKind.LURE_NAME, 3.0, lureTargets));
+		baits.Add(MakeBait(B_LURE, ChefZ_BaitKind.LURE_NAME, 3.0, lureTargets));
 
 		array<string> softTargets = new array<string>();
 		softTargets.Insert(Y_C);
 		softTargets.Insert("CHEFZ_FS_YIELD_GIBTSNICHT");    // faellt weg, Koeder bleibt
-		baits.Add(Bait(B_SOFT, ChefZ_BaitKind.SOFT_NAME, 2.0, softTargets));
+		baits.Add(MakeBait(B_SOFT, ChefZ_BaitKind.SOFT_NAME, 2.0, softTargets));
 
 		ChefZ_FishingRegistryProbe reg = new ChefZ_FishingRegistryProbe();
 		reg.DeclareClass(Y_A);
@@ -607,7 +607,7 @@ class ChefZ_FishingSelfTest
 		return def;
 	}
 
-	private static ChefZ_BaitDef Bait(string id, string kind, float multiplier, array<string> targets)
+	private static ChefZ_BaitDef MakeBait(string id, string kind, float multiplier, array<string> targets)
 	{
 		ChefZ_BaitDef def = new ChefZ_BaitDef();
 		def.id               = id;

@@ -1,0 +1,21 @@
+{
+ "_comment": "Meshy-Export vom 25.10.2026 (drei ZIPs Meshy_AI_assets_20261025_2251*.zip). Krebse, Hummer, Tintenfische und Oktopus sind byte-gleich mit der Lieferung 2026-10-25_sealife (gleiche FBX-Groessen) und sind dort schon gebaut. Hier stehen nur die neuen Modelle: 3 Kunstkoeder, 2 Calamari-Gerichte, 3 weitere Tintenfisch-Varianten. Fuer keines gibt es bisher eine ChefZ-Klasse (bind leer).",
+ "source_root": "E:/DayZ Modding/Deliveries/2026-10-25_meshy_sealife",
+ "project_root": "../../..",
+ "defaults": {"template": "food", "texture_size": 1024, "selection": "camo"},
+ "groups": {
+  "bait":  {"target": "ChefZ\\ChefZ_Sealife\\bait", "template": "item"},
+  "squid": {"target": "ChefZ\\ChefZ_Sealife\\squid"},
+  "food":  {"target": "ChefZ\\ChefZ_Food"}
+ },
+ "assets": [
+  {"name": "CrimsonSquidLure",  "group": "bait", "source": "225107/Meshy_AI_Crimson_Squid_Lure_20260916_texture_c42e67c9/Meshy_AI_model.fbx",  "texture": "225107/Meshy_AI_Crimson_Squid_Lure_20260916_texture_c42e67c9/Meshy_AI_Crimson_Squid_Lure_1025225103_texture.png",  "length": 0.1,  "bind": []},
+  {"name": "NeonPrawnJig",      "group": "bait", "source": "225107/Meshy_AI_Neon_Prawn_Jig_20260916_texture_1dcba534/Meshy_AI_model.fbx",      "texture": "225107/Meshy_AI_Neon_Prawn_Jig_20260916_texture_1dcba534/Meshy_AI_Neon_Prawn_Jig_1025225103_texture.png",      "length": 0.1,  "bind": []},
+  {"name": "SilverSardineLure", "group": "bait", "source": "225107/Meshy_AI_Silver_Sardine_Lure_20260916_texture_5c764d8a/Meshy_AI_model.fbx", "texture": "225107/Meshy_AI_Silver_Sardine_Lure_20260916_texture_5c764d8a/Meshy_AI_Silver_Sardine_Lure_1025225105_texture.png", "length": 0.1,  "bind": []},
+  {"name": "crispy_fried_calamari",   "group": "food", "source": "225107/Meshy_AI_Crispy_Fried_Calamari_20260916_texture_8575177e/Meshy_AI_model.fbx",   "texture": "225107/Meshy_AI_Crispy_Fried_Calamari_20260916_texture_8575177e/Meshy_AI_Crispy_Fried_Calamari_1025225103_texture.png",   "length": 0.22, "bind": []},
+  {"name": "grilled_stuffed_calamari", "group": "food", "source": "225107/Meshy_AI_Grilled_Stuffed_Calamari_20260916_texture_b2f7ebec/Meshy_AI_model.fbx", "texture": "225107/Meshy_AI_Grilled_Stuffed_Calamari_20260916_texture_b2f7ebec/Meshy_AI_Grilled_Stuffed_Calam_1025225105_texture.png", "length": 0.22, "bind": []},
+  {"name": "CrimsonSquidB", "group": "squid", "source": "225107/Meshy_AI_Crimson_Squid_20260916_texture_1ff0137f/Meshy_AI_model.fbx", "texture": "225107/Meshy_AI_Crimson_Squid_20260916_texture_1ff0137f/Meshy_AI_Crimson_Squid_1025225103_texture.png", "length": 0.5, "bind": [], "note": "zweite Variante Crimson Squid (16.09.)"},
+  {"name": "CrimsonSquidC", "group": "squid", "source": "225107/Meshy_AI_Crimson_Squid_20260916_texture_a33d34fc/Meshy_AI_model.fbx", "texture": "225107/Meshy_AI_Crimson_Squid_20260916_texture_a33d34fc/Meshy_AI_Crimson_Squid_1025225107_texture.png", "length": 0.5, "bind": [], "note": "dritte Variante Crimson Squid (16.09.)"},
+  {"name": "SquidB",        "group": "squid", "source": "225107/Meshy_AI_Squid_20260916_texture_a6ccbd12/Meshy_AI_model.fbx",        "texture": "225107/Meshy_AI_Squid_20260916_texture_a6ccbd12/Meshy_AI_Squid_1025225107_texture.png",        "length": 0.5, "bind": [], "note": "zweite Variante Squid (16.09.)"}
+ ]
+}

@@ -186,7 +186,7 @@ class ChefZ_BindResult : Managed
  * Aufrufreihenfolge auftritt. Das Objekt lebt einen Aufruf lang, die Rekursion
  * traegt ihren Zustand darin, und danach ist es fort.
  */
-class ChefZ_MatchWork
+class ChefZ_MatchWork : Managed
 {
     ref array<ref ChefZ_CompiledSlot> slots;
     ChefZ_FactSnapshot snapshot;        // ohne ref: gehoert dem Aufrufer
@@ -214,6 +214,20 @@ class ChefZ_MatchWork
         budget     = 0;
         nodes      = 0;
         exhausted  = false;
+    }
+
+    //! Gibt die Arbeitslisten frei. Bind() ruft das vor der Rueckkehr: das
+    //! Serverlog meldete beim Beenden tausende uebrig gebliebene
+    //! ChefZ_MatchWork samt array<int> (Autotest 26.10.2026).
+    void Release()
+    {
+        slots      = null;
+        snapshot   = null;
+        trace      = null;
+        result     = null;
+        order      = null;
+        candidates = null;
+        assigned   = null;
     }
 
     //! true, solange noch Knoten uebrig sind. Jeder Aufruf verbraucht einen.
@@ -301,6 +315,9 @@ class ChefZ_Matcher
         // halb markiert zurueckbleiben. Alles, was das Ergebnis braucht, steht
         // im ChefZ_BindResult.
         snapshot.ClearBindings();
+
+        work.Release();
+        work = null;
 
         return ok;
     }

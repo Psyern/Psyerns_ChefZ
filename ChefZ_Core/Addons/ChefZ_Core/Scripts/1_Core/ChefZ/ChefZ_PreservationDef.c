@@ -450,7 +450,9 @@ class ChefZ_PreservationDef extends ChefZ_Record
      * Untergrenze. Vanilla nimmt fuer Temperaturschwellen float.LOWEST
      * (EntityAI.c:264/269) - dieselbe Wahl wie hier.
      */
-    static const float TEMPERATURE_UNKNOWN = float.LOWEST;
+    // Literal statt float.LOWEST: der Verweis kam im static const als 0 an (S11,
+    // PreservationDef:566, 26.10.2026). Liegt sicher unter IsTemperatureUnknown().
+    static const float TEMPERATURE_UNKNOWN = -1000000000000.0;
 
     /**
      * Ist das die "unbekannt"-Marke und keine Messung?

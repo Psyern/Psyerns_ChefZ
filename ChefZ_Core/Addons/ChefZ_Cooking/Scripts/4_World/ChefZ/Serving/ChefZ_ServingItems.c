@@ -115,4 +115,80 @@ class ChefZ_ServedDish_Base extends ChefZ_Edible_Base
         AddAction(ActionForceFeed);
         AddAction(ActionEatBig);
     }
+
+    //! Mahlzeitbonus je voller Portion (26.10.2026). Der Bissen bekommt den
+    //! Anteil amount / Maximalmenge. Vanillas Nahrung kennt nichts davon - ein
+    //! sorgfaeltig gekochtes Gericht soll spuerbar mehr bringen als eine Dose.
+    static const float CHEFZ_BONUS_HEALTH_PREPARED = 10.0;
+    static const float CHEFZ_BONUS_BLOOD_PREPARED  = 150.0;
+    static const float CHEFZ_BONUS_HEALTH_WARM     = 15.0;
+    static const float CHEFZ_BONUS_HEATBUFFER_WARM = 15.0;    // HeatBuffer -30..30 (PlayerStatsPCO.c)
+    static const float CHEFZ_BONUS_BLOOD_HEARTY    = 400.0;
+    static const int   CHEFZ_BONUS_MIN_RANK        = 2;       // PREPARED (CfgChefZQualityTiers)
+
+    /**
+     * Die Qualitaetsstufe wird hier zum ersten Mal SPUERBAR. Bisher reichte der
+     * Core die Effekte der Stufe nur weiter (ChefZ_QualityManager.
+     * GetGrantedEffects: "der Core wertet keine einzige aus"). Ausgewertet wird:
+     *
+     *   Rang >= PREPARED   Gesundheit und Blut
+     *   CHEFZ_WARM_MEAL    zusaetzlich Gesundheit und Waermepuffer (SEASONED, PREMIUM)
+     *   CHEFZ_HEARTY_MEAL  zusaetzlich Blut und Immunschub wie Vanillas
+     *                      VitaminBottle.OnConsume (PREMIUM)
+     */
+    override void OnConsume(float amount, PlayerBase consumer)
+    {
+        super.OnConsume(amount, consumer);
+
+        if (!g_Game || !g_Game.IsServer() || !consumer || amount <= 0)
+            return;
+
+        ChefZ_ApplyMealBonus(amount, consumer);
+    }
+
+    protected void ChefZ_ApplyMealBonus(float amount, PlayerBase consumer)
+    {
+        ChefZ_ItemStateComponent comp = ChefZ_ItemStateComponent.Of(this);
+        ChefZ_QualityManager qm = ChefZ_QualityManager.Get();
+        if (!comp || !qm)
+            return;
+
+        ChefZ_Sym tier = comp.ResolveQualitySym();
+        ChefZ_QualityTierDef def = qm.GetDef(tier);
+        if (!def || def.rank < CHEFZ_BONUS_MIN_RANK)
+            return;
+
+        float maxQty = GetQuantityMax();
+        if (maxQty <= 0)
+            return;
+        float share = Math.Clamp(amount / maxQty, 0.0, 1.0);
+
+        array<string> effects;
+        qm.GetGrantedEffects(tier, effects);
+
+        float health = CHEFZ_BONUS_HEALTH_PREPARED;
+        float blood = CHEFZ_BONUS_BLOOD_PREPARED;
+        if (effects.Find("CHEFZ_WARM_MEAL") >= 0)
+        {
+            health = health + CHEFZ_BONUS_HEALTH_WARM;
+            float heat = consumer.GetStatHeatBuffer().Get() + CHEFZ_BONUS_HEATBUFFER_WARM * share;
+            consumer.GetStatHeatBuffer().Set(heat);
+        }
+        if (effects.Find("CHEFZ_HEARTY_MEAL") >= 0)
+        {
+            blood = blood + CHEFZ_BONUS_BLOOD_HEARTY;
+            if (!consumer.GetModifiersManager().IsModifierActive(eModifiers.MDF_IMMUNITYBOOST))
+                consumer.GetModifiersManager().ActivateModifier(eModifiers.MDF_IMMUNITYBOOST);
+        }
+
+        consumer.AddHealth("", "Health", health * share);
+        consumer.AddHealth("", "Blood", blood * share);
+
+        if (ChefZ_Log.Enabled(ChefZ_LogChannel.COOK, ChefZ_LogLevel.INFO))
+        {
+            string line = "Mahlzeitbonus " + GetType() + " Stufe " + ChefZ_SymbolTable.Name(tier) + " Anteil " + share.ToString();
+            line = line + ": Gesundheit +" + (health * share).ToString() + ", Blut +" + (blood * share).ToString() + ", Effekte " + effects.Count().ToString();
+            ChefZ_Log.Info(ChefZ_LogChannel.COOK, line);
+        }
+    }
 }

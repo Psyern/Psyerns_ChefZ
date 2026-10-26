@@ -60,7 +60,9 @@ class ChefZ_CookSession : Managed
      * im Sekundentakt ein- und auslagert, nicht den, der einmal etwas
      * hineinlegt.
      */
-    static const int LONG_AGO = 1 << 20;
+    // Literal statt "1 << 20": der berechnete Initialisierer kam in Instanzmethoden als 0
+    // an (Selbsttest S7, CookSession:358, 26.10.2026). 1048576 = 2^20.
+    static const int LONG_AGO = 1048576;
 
     /**
      * Startwert von claimItemCount: "noch nie gemessen".

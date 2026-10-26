@@ -148,6 +148,12 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 	//! lang, und der Job-Timer der Basis tickt selbst nur alle 2 s.
 	static const float CHEFZ_BURN_TICK_SEC = 5.0;
 
+	//! Zieltemperatur des Raeucherguts: Heissraeuchern, 60-80 Grad.
+	static const float CHEFZ_SMOKE_TEMP_C = 70.0;
+
+	static const string CHEFZ_SMOKE_PROCESS = "PROCESS_SMOKE";
+
+
 	//! Die beiden Kategorien, die ins Raeuchergut gehoeren. MEAT trifft ueber
 	//! die Closure auch SAUSAGE und alle Wildarten - siehe ChefZ_StationGate.
 	static const string CHEFZ_CAT_MEAT = "MEAT";
@@ -236,7 +242,7 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 	//! kann die Antwort also nur ergaenzen, nie kippen.
 	override bool HasFlammableMaterial()
 	{
-		return super.HasFlammableMaterial() || ChefZ_CountBark() > 0;
+		return super.HasFlammableMaterial() || ChefZ_HasFuel();
 	}
 
 	//! super fragt nur m_EM.IsWorking ab und liefert sonst false
@@ -270,7 +276,7 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 
 		if (m_ChefZ_Lit)
 			return false;
-		if (ChefZ_CountBark() <= 0)
+		if (!ChefZ_HasFuel())
 			return false;
 		if (GetWet() >= GameConstants.STATE_DAMP)
 			return false;
@@ -297,11 +303,13 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 
 		if (!g_Game || !g_Game.IsServer())
 			return;
-		if (!ChefZ_ConsumeOneBark())
+		float burn = ChefZ_ConsumeFuel();
+		if (burn <= 0.0)
 			return;
 
-		m_ChefZ_FuelLeftSec = CHEFZ_SECONDS_PER_BARK;
+		m_ChefZ_FuelLeftSec = burn;
 		ChefZ_SetLit(true);
+		ChefZ_StartSmoking();
 	}
 
 	//==========================================================================
@@ -333,10 +341,17 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 	/**
 	 * Timer-Rueckruf, deshalb oeffentlich.
 	 *
-	 * Ist das schwelende Stueck herunter, kommt das naechste aus dem Cargo.
-	 * Liegt keines mehr da, geht der Schrank aus - und ein laufender
-	 * Raeucherjob pausiert ab dem naechsten Tick der Basis, weil
-	 * ChefZ_HasHeat und ChefZ_IsPowered dann beide "nein" sagen.
+	 * 26.10.2026: der Takt tut drei Dinge.
+	 *   1. Brennstoff: ist das schwelende Stueck herunter, kommt das naechste -
+	 *      zuerst aus den Feuerplaetzen (Rinde, Stock, Feuerholz, Lappen,
+	 *      Papier wie an Vanillas Fireplace), dann Rinde aus dem Cargo.
+	 *   2. Waerme: Schrank und Raeuchergut ziehen auf CHEFZ_SMOKE_TEMP_C, mit
+	 *      Vanillas Interpolation der Feuerstelle. Vorher blieb das Fleisch
+	 *      kalt (Testbericht 26.10.2026).
+	 *   3. Anlauf: brennt der Schrank und ist ein Platz frei, beginnt der
+	 *      naechste Raeuchergang von selbst. Vorher musste der Spieler jeden
+	 *      Gang einzeln anstossen, und ein Stueck Fleisch im brennenden
+	 *      Schrank wurde nie geraeuchert.
 	 */
 	void ChefZ_OnBurnTick()
 	{
@@ -346,51 +361,125 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 			return;
 
 		m_ChefZ_FuelLeftSec = m_ChefZ_FuelLeftSec - CHEFZ_BURN_TICK_SEC;
-		if (m_ChefZ_FuelLeftSec > 0.0)
-			return;
-
-		if (ChefZ_ConsumeOneBark())
+		if (m_ChefZ_FuelLeftSec <= 0.0)
 		{
-			m_ChefZ_FuelLeftSec = CHEFZ_SECONDS_PER_BARK;
-			return;
+			float burn = ChefZ_ConsumeFuel();
+			if (burn <= 0.0)
+			{
+				m_ChefZ_FuelLeftSec = 0.0;
+				ChefZ_SetLit(false);
+				return;
+			}
+			m_ChefZ_FuelLeftSec = burn;
 		}
 
-		m_ChefZ_FuelLeftSec = 0.0;
-		ChefZ_SetLit(false);
+		ChefZ_HeatContents(CHEFZ_BURN_TICK_SEC);
+		ChefZ_StartSmoking();
+	}
+
+	//! Startet Raeuchergaenge, solange ein Platz frei ist und etwas passt.
+	//! Oeffentlich, weil auch der Test ihn ruft.
+	void ChefZ_StartSmoking()
+	{
+		if (!g_Game || !g_Game.IsServer())
+			return;
+		if (!m_ChefZ_Lit)
+			return;
+
+		ChefZ_Sym process = ChefZ_SymbolTable.Lookup(CHEFZ_SMOKE_PROCESS);
+		if (!ChefZ_SymbolTable.IsValid(process))
+			return;
+
+		int slots = ChefZ_GetSlotCount();
+		for (int i = 0; i < slots; i++)
+		{
+			if (ChefZ_ActiveJobCount() >= slots)
+				return;
+			string err;
+			if (!ChefZ_BeginJob(process, null, 0, err))
+				return;
+		}
+	}
+
+	//! Schrank und Cargo auf Raeuchertemperatur ziehen.
+	protected void ChefZ_HeatContents(float deltaSec)
+	{
+		SetTemperatureEx(new TemperatureDataInterpolated(CHEFZ_SMOKE_TEMP_C, ETemperatureAccessTypes.ACCESS_FIREPLACE, deltaSec, GameConstants.TEMP_COEF_FIREPLACE_HEATING, 1.0));
+
+		GameInventory inventory = GetInventory();
+		if (!inventory)
+			return;
+		CargoBase cargo = inventory.GetCargo();
+		if (!cargo)
+			return;
+
+		int n = cargo.GetItemCount();
+		for (int i = 0; i < n; i++)
+		{
+			ItemBase item = ItemBase.Cast(cargo.GetItem(i));
+			if (!item || !item.CanHaveTemperature())
+				continue;
+			if (Bark_ColorBase.Cast(item))
+				continue;
+			item.SetTemperatureEx(new TemperatureDataInterpolated(CHEFZ_SMOKE_TEMP_C, ETemperatureAccessTypes.ACCESS_FIREPLACE, deltaSec, GameConstants.TEMP_COEF_FIREPLACE_HEATING, item.GetHeatPermeabilityCoef()));
+		}
 	}
 
 	/**
-	 * Nimmt EIN Stueck Rinde aus dem Cargo.
+	 * Verbrennt EIN Stueck Brennstoff und liefert seine Brenndauer in
+	 * Sekunden, oder 0, wenn nichts mehr da ist.
 	 *
-	 * Rinde ist im Cargo Stueckware ohne eigene Menge - Vanilla stapelt sie
-	 * ueber den Anhangsslot (CfgSlots Slot_Bark stackMax = 8,
-	 * scripts - 1.29/config.cpp:680-686), nicht ueber varQuantity. Der
-	 * Mengenzweig steht trotzdem da: sollte ein Stapel doch einmal eine Menge
-	 * tragen, wird davon abgezogen statt der ganze Stapel geloescht.
+	 * Reihenfolge: Zunder vor Holz, damit das Feuerholz am laengsten haelt.
+	 * Stueckware mit Menge (Stapel im Slot) verliert eine Einheit, der letzte
+	 * Rest wird geloescht - wie FireplaceBase.SpendFireConsumable.
 	 */
-	protected bool ChefZ_ConsumeOneBark()
+	protected float ChefZ_ConsumeFuel()
 	{
-		ItemBase bark = ChefZ_FindBark();
-		if (!bark)
-			return false;
+		ItemBase fuel = ChefZ_FindFuel();
+		if (!fuel)
+			return 0.0;
 
-		float quantity = bark.GetQuantity();
-		if (quantity > 1.0)
+		float seconds = ChefZ_BurnSecondsOf(fuel);
+
+		if (fuel.GetQuantity() > 1.0)
 		{
-			bark.AddQuantity(-1.0);
-			return true;
+			fuel.AddQuantity(-1.0);
+			return seconds;
 		}
 
-		bark.Delete();
-		return true;
+		fuel.Delete();
+		return seconds;
 	}
 
-	//! Das erste Stueck Rinde im Cargo, oder null.
-	protected ItemBase ChefZ_FindBark()
+	//! Brenndauer je Einheit. Rinde 150 s (Herleitung im Dateikopf), ein Stock
+	//! ebenso, Feuerholz das Vierfache, Lappen und Papier nur zum Anfachen.
+	static float ChefZ_BurnSecondsOf(ItemBase fuel)
+	{
+		if (fuel.IsKindOf("Firewood"))
+			return CHEFZ_SECONDS_PER_BARK * 4.0;
+		if (fuel.IsKindOf("WoodenStick"))
+			return CHEFZ_SECONDS_PER_BARK;
+		if (fuel.IsKindOf("Rag") || fuel.IsKindOf("Paper"))
+			return CHEFZ_SECONDS_PER_BARK * 0.4;
+		return CHEFZ_SECONDS_PER_BARK;
+	}
+
+	//! Der naechste Brennstoff: Feuerplaetze in fester Reihenfolge, dann Rinde
+	//! im Cargo. null, wenn nichts mehr da ist.
+	protected ItemBase ChefZ_FindFuel()
 	{
 		GameInventory inventory = GetInventory();
 		if (!inventory)
 			return null;
+
+		// Feuerplaetze in Verbrauchsreihenfolge (config.cpp attachments[])
+		string fuelSlots[5] = {"Bark", "Rags", "Paper", "WoodenStick", "Firewood"};
+		for (int s = 0; s < 5; s++)
+		{
+			ItemBase att = ItemBase.Cast(FindAttachmentBySlotName(fuelSlots[s]));
+			if (att && !att.IsRuined())
+				return att;
+		}
 
 		CargoBase cargo = inventory.GetCargo();
 		if (!cargo)
@@ -406,28 +495,10 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 		return null;
 	}
 
-	//! Stuecke Rinde im Cargo. Bark_ColorBase und nicht die beiden
-	//! Einzelklassen: Eiche und Birke sind fuer den Schrank dasselbe, und ein
-	//! Mod, der eine dritte Rinde mitbringt, wird ohne Zutun mitgezaehlt.
-	protected int ChefZ_CountBark()
+	//! Liegt irgendetwas Brennbares im Schrank?
+	protected bool ChefZ_HasFuel()
 	{
-		int count = 0;
-
-		GameInventory inventory = GetInventory();
-		if (!inventory)
-			return count;
-
-		CargoBase cargo = inventory.GetCargo();
-		if (!cargo)
-			return count;
-
-		int n = cargo.GetItemCount();
-		for (int i = 0; i < n; i++)
-		{
-			if (Bark_ColorBase.Cast(cargo.GetItem(i)))
-				count = count + 1;
-		}
-		return count;
+		return ChefZ_FindFuel() != null;
 	}
 
 	//==========================================================================

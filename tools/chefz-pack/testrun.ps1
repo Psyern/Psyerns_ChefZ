@@ -124,6 +124,10 @@ $serverArgs = @(
 $before = @{}
 foreach ($f in Get-ChildItem $profiles -File -ErrorAction SilentlyContinue) { $before[$f.Name] = $true }
 
+# Versionssperre: nie 1.29 oder aelter, nie hinter dem DayZ-Stable-Client
+. "E:\DayZ Modding\TestServer\tools\DayZVersionGuard.ps1"
+$serverVersion = Assert-DayZServerCurrent -Exe (Join-Path $Deployment "DayZServer_x64.exe")
+Write-Host "DayZServer $serverVersion"
 $srv = Start-Process -FilePath (Join-Path $Deployment "DayZServer_x64.exe") `
   -ArgumentList $serverArgs -WorkingDirectory $Deployment -PassThru
 Write-Host "Gestartet: PID $($srv.Id)"

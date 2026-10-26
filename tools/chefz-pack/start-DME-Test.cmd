@@ -17,4 +17,7 @@ REM   D:\Agent\deployments\DME-Test\profiles\script_*.log   (Skriptfehler)
 REM   D:\Agent\deployments\DME-Test\profiles\DayZServer_x64_*.RPT
 REM ---------------------------------------------------------------------------
 cd /d "D:\Agent\deployments\DME-Test"
+REM Versionssperre: nie 1.29 oder aelter, nie hinter dem DayZ-Stable-Client
+powershell -NoProfile -ExecutionPolicy Bypass -Command ". 'E:\DayZ Modding\TestServer\tools\DayZVersionGuard.ps1'; Assert-DayZServerCurrent -Exe 'D:\Agent\deployments\DME-Test\DayZServer_x64.exe'"
+if errorlevel 1 exit /b 1
 start "" /D "D:\Agent\deployments\DME-Test" "D:\Agent\deployments\DME-Test\DayZServer_x64.exe" -config=serverDZ.cfg -port=2602 -profiles=profiles -adminlog -netlog -freezeCheck -dologs "-serverMod=@2464526692;" "-mod=@3689057982;@2536780687;@2931560672;@2918418331;@2276010135;@2572331007;@2116157322;@1564026768;@2545327648;@1559212036;@3571685323;@3649957186;@3649958757;@3649957536;@3649959707;@1646187754;@3164839000;@2651195301;@1832448183;@1710977250;@1932611410;@2170927235;@3690289718;@3354681846;@2471347750;@3616635518;@3759357431;@3786175534;@3783149286;@3623510671;@3627848296;@3646233886;@3780383282;@3786176249;@ChefZ;"

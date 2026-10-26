@@ -30,6 +30,11 @@
             "displayName": "#STR_CHEFZ_CAT_WHOLE_FISH"
         },
         {
+            "id": "SEAFOOD",
+            "parent": "FISH",
+            "displayName": "#STR_CHEFZ_CAT_SEAFOOD"
+        },
+        {
             "id": "BREAD",
             "displayName": "#STR_CHEFZ_CAT_BREAD"
         },

@@ -96,6 +96,12 @@
 // 200/100 = 2 Energie. Deshalb fuehrt JEDE Klasse hier ihren eigenen,
 // VOLLSTAENDIGEN Stufensatz - inklusive Raw.
 //
+// MENGE 100 STATT 1 (26.10.2026). Teig, Brot und Fladenbrot fuehren
+// varQuantityMax 100 und Naehrwerte je Einheit. Vanilla zieht bei JEDEM
+// Stufenwechsel ohne Fett 25 Einheiten ab
+// (COOKING_FOOD_QUANTITY_DECREASE_AMOUNT_NONE); ein Item mit Menge 1 war
+// danach leer und wurde geloescht, statt zu Brot zu werden.
+//
 // VOLLSTAENDIG ist woertlich gemeint. Eine Stufe, die im Stufenbestand der
 // Klasse fehlt, liefert 0 (FoodStage.GetNutritionPropertyFromIndex,
 // FoodStage.c:262-263) - nicht den Wert der Basis. Zwar erbt ein
@@ -217,15 +223,15 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\dough.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 450;
         itemSize[] = {2, 2};
-        varQuantityInit = 1;
+        varQuantityInit = 100;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 100;
         lifetime = 7200;
 
-        // RECHNUNG (Herleitung im Dateikopf), varQuantityMax = 1:
-        //   Volumen  = 120 * 1   = 120   (Zielband roher Teig 100..150)
-        //   Energie  = 40000/100 = 400
-        //   Wasser   = 9000/100  =  90   (150 ml Teigwasser, teils gebunden)
+        // RECHNUNG (Herleitung im Dateikopf), varQuantityMax = 100:
+        //   Volumen  = 1.2 * 100 = 120   (Zielband roher Teig 100..150)
+        //   Energie  = 400/100 * 100 = 400
+        //   Wasser   = 90/100 * 100  =  90   (150 ml Teigwasser, teils gebunden)
         //
         // Roher Teig SOLL unattraktiv sein, aber nicht wertlos: 400 gegen die
         // 900 des Brotes, das aus demselben Klumpen wird. Wer ihn roh isst,
@@ -233,9 +239,9 @@ class CfgVehicles
         // Strafe. Vorher (geerbte Basis): Volumen 0.25, Energie 2.
         class Nutrition
         {
-            fullnessIndex = 120;
-            energy = 40000;
-            water = 9000;
+            fullnessIndex = 1.2;
+            energy = 400;
+            water = 90;
             nutritionalIndex = 15;
             toxicity = 0;
             agents = 0;
@@ -252,16 +258,37 @@ class CfgVehicles
         //
         //   Raw    120 / 400 kcal / 90 ml
         //   Baked  150 / 450 kcal / 40 ml   (gart durch, trocknet aus)
+        //   Boiled 140 / 420 kcal / 110 ml  (Knoedel, Teigtaschen: nimmt Wasser auf)
         //   Burned  30 / 100 kcal /  0 ml   (25 % von Raw)
         //   Rotten  48 / 160 kcal / 36 ml   (40 % von Raw, toxicity 20)
         class Food
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {120, 40000, 9000, 15, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {150, 45000, 4000, 18, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {30, 10000, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {48, 16000, 3600, 0, 20, 0, 1}; };
+                class Raw    { nutrition_properties[] = {1.2, 400, 90, 15, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {1.5, 450, 40, 18, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Boiled { nutrition_properties[] = {1.4, 420, 110, 16, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {105.0, 45.0}; };
+                class Burned { nutrition_properties[] = {0.3, 100, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {0.48, 160, 36, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    // Im Topf wird Teig gekocht statt gebacken - ohne diesen
+                    // Uebergang blieb er dort ewig roh, und Teigtaschen
+                    // (RCP_ChefZ_MeatDumplings) wurden nie fertig.
+                    class Boiling
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
+                };
             };
         };
     };
@@ -276,7 +303,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_RAWPASTA";
         descriptionShort = "#STR_CHEFZ_RAWPASTA_DESC";
-        model = "\dz\gear\food\Rice.p3d";
+        model = "\ChefZ\ChefZ_Food\models\lasagne_pasta.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\lasagne_pasta_co.paa"};
+        hiddenSelections[] = {"camo"};
         weight = 400;
         itemSize[] = {2, 2};
         stackedUnit = "grams";
@@ -306,7 +335,7 @@ class CfgVehicles
         class Nutrition
         {
             fullnessIndex = 0.75;
-            energy = 220;
+            energy = 100;
             water = 35;
             nutritionalIndex = 25;
             toxicity = 0;
@@ -322,10 +351,21 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {0.75, 220, 35, 25, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {0.79, 233, 16, 25, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.19, 55, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.30, 88, 14, 0, 20, 0, 1}; };
+                class Raw    { nutrition_properties[] = {0.75, 100, 35, 25, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {0.79, 110, 16, 25, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {0.19, 55, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {0.30, 88, 14, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                };
             };
         };
     };
@@ -365,7 +405,7 @@ class CfgVehicles
         class Nutrition
         {
             fullnessIndex = 0.80;
-            energy = 300;
+            energy = 100;
             water = 3;
             nutritionalIndex = 22;
             toxicity = 0;
@@ -381,10 +421,21 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {0.80, 300, 3, 22, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {0.84, 318, 2, 22, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {0.20, 75, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {0.32, 120, 1, 0, 20, 0, 1}; };
+                class Raw    { nutrition_properties[] = {0.80, 100, 3, 22, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {0.84, 110, 2, 22, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {0.20, 75, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {0.32, 120, 1, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                };
             };
         };
     };
@@ -403,15 +454,15 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\bread.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         weight = 700;
         itemSize[] = {3, 2};
-        varQuantityInit = 1;
+        varQuantityInit = 100;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 100;
         lifetime = 21600;
 
-        // RECHNUNG (Herleitung im Dateikopf), varQuantityMax = 1:
-        //   Volumen  = 400 * 1    = 400   (Zielband ganzes Brot 350..450)
-        //   Energie  = 90000/100  = 900   (Zielband 700..1200)
-        //   Wasser   = 3000/100   =  30   (Brot loescht keinen Durst)
+        // RECHNUNG (Herleitung im Dateikopf), varQuantityMax = 100:
+        //   Volumen  = 4 * 100    = 400   (Zielband ganzes Brot 350..450)
+        //   Energie  = 900/100 * 100 = 900   (Zielband 700..1200)
+        //   Wasser   = 30/100 * 100  =  30   (Brot loescht keinen Durst)
         //
         // 900 gegen SL_ENERGY_MAX 5000 (PlayerConstants.c:44): ein Laib
         // deckt knapp ein Fuenftel. Das Volumen 400 liegt bei zwei Fuenfteln
@@ -422,9 +473,9 @@ class CfgVehicles
         // ganzes Brot war damit ernaehrungsphysiologisch ein Krumen.
         class Nutrition
         {
-            fullnessIndex = 400;
-            energy = 90000;
-            water = 3000;
+            fullnessIndex = 4;
+            energy = 900;
+            water = 30;
             nutritionalIndex = 30;
             toxicity = 0;
             agents = 0;
@@ -444,10 +495,21 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {400, 90000, 3000, 30, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {420, 95000, 1500, 30, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {100, 22500, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {160, 36000, 1200, 0, 20, 0, 1}; };
+                class Raw    { nutrition_properties[] = {4, 900, 30, 30, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {4.2, 950, 15, 30, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {1, 225, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {1.6, 360, 12, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                };
             };
         };
     };
@@ -465,15 +527,15 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Food\models\flatbread.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
         weight = 300;
         itemSize[] = {2, 2};
-        varQuantityInit = 1;
+        varQuantityInit = 100;
         varQuantityMin = 0;
-        varQuantityMax = 1;
+        varQuantityMax = 100;
         lifetime = 14400;
 
-        // RECHNUNG (Herleitung im Dateikopf), varQuantityMax = 1:
-        //   Volumen  = 275 * 1    = 275   (Zielband Fladenbrot 250..300)
-        //   Energie  = 60000/100  = 600
-        //   Wasser   = 2500/100   =  25
+        // RECHNUNG (Herleitung im Dateikopf), varQuantityMax = 100:
+        //   Volumen  = 2.75 * 100 = 275   (Zielband Fladenbrot 250..300)
+        //   Energie  = 600/100 * 100 = 600
+        //   Wasser   = 25/100 * 100  =  25
         //
         // Derselbe Teigklumpen wie beim Brot, nur flach in der Pfanne: die
         // Masse ist dieselbe, die Kruste groesser, der Wasseranteil kleiner.
@@ -484,9 +546,9 @@ class CfgVehicles
         // Vorher (geerbte Basis): Volumen 0.25, Energie 2, Wasser 0.1.
         class Nutrition
         {
-            fullnessIndex = 275;
-            energy = 60000;
-            water = 2500;
+            fullnessIndex = 2.75;
+            energy = 600;
+            water = 25;
             nutritionalIndex = 28;
             toxicity = 0;
             agents = 0;
@@ -504,10 +566,21 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {275, 60000, 2500, 28, 0, 0, 1}; };
-                class Baked  { nutrition_properties[] = {290, 63000, 1200, 28, 0, 0, 1}; };
-                class Burned { nutrition_properties[] = {69, 15000, 0, 0, 0, 0, 1}; };
-                class Rotten { nutrition_properties[] = {110, 24000, 1000, 0, 20, 0, 1}; };
+                class Raw    { nutrition_properties[] = {2.75, 600, 25, 28, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {2.9, 630, 12, 28, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {0.69, 150, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {1.1, 240, 10, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                };
             };
         };
     };

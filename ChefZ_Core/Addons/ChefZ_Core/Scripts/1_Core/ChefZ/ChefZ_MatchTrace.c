@@ -25,7 +25,7 @@
 // Layer: 1_Core. Keine Spielabhaengigkeit; die Zeilen gehen an ChefZ_Log.
 //==============================================================================
 
-class ChefZ_MatchTrace
+class ChefZ_MatchTrace : Managed
 {
     /**
      * Obergrenze der gesammelten Zeilen.
