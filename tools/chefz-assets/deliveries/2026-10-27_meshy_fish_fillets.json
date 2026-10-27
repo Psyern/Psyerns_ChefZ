@@ -1,0 +1,48 @@
+{
+ "_comment": "Lieferung Meshy vom 27.10.2026: 9 ganze Fische (ChefZ_Fisch_Referenzbilder) und 24 Filets (ChefZ_Fillet_Referenzbilder, Pakete 1-10 / 11-20 / 21-30 = je ein ZIP). Entpackt nach E:/DayZ Modding/Deliveries/2026-10-27_Meshy_Fish/<Fish|Fillet>/<Meshy-Name>/{model.fbx,texture.png}. Die Meshy-Namen der Filets sind generisch; zugeordnet ueber die Referenzbilder des jeweiligen Pakets (Fleischfarbe + Haut). Laengen und Haltung wie vergleichbare Arten in 2026-10-25_sealife.json.",
+ "source_root": "E:/DayZ Modding/Deliveries/2026-10-27_Meshy_Fish",
+ "project_root": "../../..",
+ "defaults": {"template": "food", "texture_size": 1024, "selection": "camo"},
+ "groups": {
+  "fish":      {"target": "ChefZ\\ChefZ_Sealife\\fish"},
+  "fishfilet": {"target": "ChefZ\\ChefZ_Sealife\\fishfilet", "selection": "cs_raw", "states": ["baked", "boiled", "dried", "burnt"]}
+ },
+ "assets": [
+  {"name": "Plaice",          "group": "fish", "source": "Fish/Orange_Spotted_Flatfish_29878c33/model.fbx", "texture": "Fish/Orange_Spotted_Flatfish_29878c33/texture.png", "length": 0.4,  "hold": "1h",    "bind": ["ChefZ_Plaice"]},
+  {"name": "Sole",            "group": "fish", "source": "Fish/Speckled_Sole_71567ecf/model.fbx",           "texture": "Fish/Speckled_Sole_71567ecf/texture.png",           "length": 0.35, "hold": "1h",    "bind": ["ChefZ_Sole"]},
+  {"name": "Halibut",         "group": "fish", "source": "Fish/Halibut_on_White_ef56172d/model.fbx",        "texture": "Fish/Halibut_on_White_ef56172d/texture.png",        "length": 1.0,  "hold": "2h",    "bind": ["ChefZ_Halibut"]},
+  {"name": "GiltheadBream",   "group": "fish", "source": "Fish/Silver_Sea_Bream_c9523613/model.fbx",        "texture": "Fish/Silver_Sea_Bream_c9523613/texture.png",        "length": 0.4,  "hold": "1h",    "bind": ["ChefZ_GiltheadBream"]},
+  {"name": "Conger",          "group": "fish", "source": "Fish/Serpentine_Eel_922150dd/model.fbx",          "texture": "Fish/Serpentine_Eel_922150dd/texture.png",          "length": 1.2,  "hold": "heavy", "bind": ["ChefZ_Conger"]},
+  {"name": "HorseMackerel",   "group": "fish", "source": "Fish/Blue_Mackerel_f4ee1e47/model.fbx",           "texture": "Fish/Blue_Mackerel_f4ee1e47/texture.png",           "length": 0.3,  "hold": "1h",    "bind": ["ChefZ_HorseMackerel"], "note": "Blue Mackerel = Stoecker (Referenzbild 06)"},
+  {"name": "JapaneseSardine", "group": "fish", "source": "Fish/Silver_Sardine_18121fda/model.fbx",          "texture": "Fish/Silver_Sardine_18121fda/texture.png",          "length": 0.22, "hold": "1h",    "bind": ["ChefZ_JapaneseSardine"]},
+  {"name": "RedSnapper",      "group": "fish", "source": "Fish/Crimson_Snapper_d86e773a/model.fbx",         "texture": "Fish/Crimson_Snapper_d86e773a/texture.png",         "length": 0.6,  "hold": "1h",    "bind": ["ChefZ_RedSnapper"]},
+  {"name": "Salmon",          "group": "fish", "source": "Fish/Silver_Salmon_91faa610/model.fbx",           "texture": "Fish/Silver_Salmon_91faa610/texture.png",           "length": 0.8,  "hold": "2h",    "bind": ["ChefZ_Salmon"]},
+
+  {"name": "PlaiceFillet",          "group": "fishfilet", "source": "Fillet/Raw_Fish_Fillet_0be0f1d3/model.fbx",         "texture": "Fillet/Raw_Fish_Fillet_0be0f1d3/texture.png",         "length": 0.28, "bind": ["ChefZ_PlaiceFillet"]},
+  {"name": "GiltheadBreamFillet",   "group": "fishfilet", "source": "Fillet/Silver_Sea_Fillet_1054aa0d/model.fbx",       "texture": "Fillet/Silver_Sea_Fillet_1054aa0d/texture.png",       "length": 0.25, "bind": ["ChefZ_GiltheadBreamFillet"]},
+  {"name": "HalibutFillet",         "group": "fishfilet", "source": "Fillet/Whitefish_Fillet_02d0c053/model.fbx",        "texture": "Fillet/Whitefish_Fillet_02d0c053/texture.png",        "length": 0.3,  "bind": ["ChefZ_HalibutFillet"]},
+  {"name": "CodFillet",             "group": "fishfilet", "source": "Fillet/Cod_Fillet_0936c98b/model.fbx",              "texture": "Fillet/Cod_Fillet_0936c98b/texture.png",              "length": 0.3,  "bind": ["ChefZ_CodFillet"]},
+  {"name": "SoleFillet",            "group": "fishfilet", "source": "Fillet/Raw_Fish_Fillet_f97f7e1f/model.fbx",         "texture": "Fillet/Raw_Fish_Fillet_f97f7e1f/texture.png",         "length": 0.25, "bind": ["ChefZ_SoleFillet"]},
+  {"name": "SeaBassFillet",         "group": "fishfilet", "source": "Fillet/Silver_Sea_Bass_Fillet_33d18e99/model.fbx",  "texture": "Fillet/Silver_Sea_Bass_Fillet_33d18e99/texture.png",  "length": 0.28, "bind": ["ChefZ_SeaBassFillet"]},
+  {"name": "RedMulletFillet",       "group": "fishfilet", "source": "Fillet/Crimson_Scale_Fillet_fe97ffbd/model.fbx",    "texture": "Fillet/Crimson_Scale_Fillet_fe97ffbd/texture.png",    "length": 0.2,  "bind": ["ChefZ_RedMulletFillet"]},
+  {"name": "CongerFillet",          "group": "fishfilet", "source": "Fillet/Cod_Loin_Fillet_4b0cbeb8/model.fbx",         "texture": "Fillet/Cod_Loin_Fillet_4b0cbeb8/texture.png",         "length": 0.32, "bind": ["ChefZ_CongerFillet"], "note": "Cod Loin = Meeraal (dunkle Haut, Referenzbild 08)"},
+  {"name": "HorseMackerelFillet",   "group": "fishfilet", "source": "Fillet/Raw_Fish_Fillet_2fd4f96c/model.fbx",         "texture": "Fillet/Raw_Fish_Fillet_2fd4f96c/texture.png",         "length": 0.2,  "bind": ["ChefZ_HorseMackerelFillet"]},
+  {"name": "JapaneseSardineFillet", "group": "fishfilet", "source": "Fillet/Marinated_Herring_Fillet_6bcbb019/model.fbx","texture": "Fillet/Marinated_Herring_Fillet_6bcbb019/texture.png","length": 0.15, "bind": ["ChefZ_JapaneseSardineFillet"]},
+
+  {"name": "RockfishFillet",        "group": "fishfilet", "source": "Fillet/Red_Snapper_Fillet_312ec1cf/model.fbx",      "texture": "Fillet/Red_Snapper_Fillet_312ec1cf/texture.png",      "length": 0.25, "bind": ["ChefZ_RockfishFillet"], "note": "Meshy-Name Red Snapper, Referenzbild 11 Rockfish (orange Haut)"},
+  {"name": "GiantTrevallyFillet",   "group": "fishfilet", "source": "Fillet/Fresh_Swordfish_Steak_e9bad28b/model.fbx",   "texture": "Fillet/Fresh_Swordfish_Steak_e9bad28b/texture.png",   "length": 0.35, "bind": ["ChefZ_GiantTrevallyFillet"]},
+  {"name": "BlueMarlinFillet",      "group": "fishfilet", "source": "Fillet/Raw_Tuna_Steak_cd78c4b9/model.fbx",          "texture": "Fillet/Raw_Tuna_Steak_cd78c4b9/texture.png",          "length": 0.35, "bind": ["ChefZ_BlueMarlinFillet"]},
+  {"name": "SailfishFillet",        "group": "fishfilet", "source": "Fillet/Raw_Tuna_Loin_839ca839/model.fbx",           "texture": "Fillet/Raw_Tuna_Loin_839ca839/texture.png",           "length": 0.35, "bind": ["ChefZ_SailfishFillet"]},
+  {"name": "BonitoFillet",          "group": "fishfilet", "source": "Fillet/Fresh_Mackerel_Fillet_97dc5f2a/model.fbx",   "texture": "Fillet/Fresh_Mackerel_Fillet_97dc5f2a/texture.png",   "length": 0.28, "bind": ["ChefZ_BonitoFillet"]},
+  {"name": "YellowtailFillet",      "group": "fishfilet", "source": "Fillet/Raw_fish_fillet_50e5eb39/model.fbx",         "texture": "Fillet/Raw_fish_fillet_50e5eb39/texture.png",         "length": 0.3,  "bind": ["ChefZ_YellowtailFillet"]},
+  {"name": "TarponFillet",          "group": "fishfilet", "source": "Fillet/Silver_Scale_Fillet_3185931d/model.fbx",     "texture": "Fillet/Silver_Scale_Fillet_3185931d/texture.png",     "length": 0.32, "bind": ["ChefZ_TarponFillet"]},
+  {"name": "SalmonFillet",          "group": "fishfilet", "source": "Fillet/Fresh_Salmon_Fillet_e5e46864/model.fbx",     "texture": "Fillet/Fresh_Salmon_Fillet_e5e46864/texture.png",     "length": 0.3,  "bind": ["ChefZ_SalmonFillet"]},
+  {"name": "SockeyeSalmonFillet",   "group": "fishfilet", "source": "Fillet/Fresh_Salmon_Fillet_fe4f7101/model.fbx",     "texture": "Fillet/Fresh_Salmon_Fillet_fe4f7101/texture.png",     "length": 0.3,  "bind": ["ChefZ_SockeyeSalmonFillet"]},
+  {"name": "PerchFillet",           "group": "fishfilet", "source": "Fillet/Raw_Fish_Fillet_5a30d6e0/model.fbx",         "texture": "Fillet/Raw_Fish_Fillet_5a30d6e0/texture.png",         "length": 0.18, "bind": ["ChefZ_PerchFillet"]},
+
+  {"name": "MuskellungeFillet",     "group": "fishfilet", "source": "Fillet/Fresh_Fish_Fillet_8c89c3b5/model.fbx",       "texture": "Fillet/Fresh_Fish_Fillet_8c89c3b5/texture.png",       "length": 0.32, "bind": ["ChefZ_MuskellungeFillet"]},
+  {"name": "SnakeheadFillet",       "group": "fishfilet", "source": "Fillet/Fresh_Fish_Fillet_a0690ee7/model.fbx",       "texture": "Fillet/Fresh_Fish_Fillet_a0690ee7/texture.png",       "length": 0.28, "bind": ["ChefZ_SnakeheadFillet"]},
+  {"name": "RainbowTroutFillet",    "group": "fishfilet", "source": "Fillet/Salmon_Fillet_94981fbb/model.fbx",           "texture": "Fillet/Salmon_Fillet_94981fbb/texture.png",           "length": 0.25, "bind": ["ChefZ_RainbowTroutFillet"]},
+  {"name": "CharFillet",            "group": "fishfilet", "source": "Fillet/Salmon_Fillet_6207084d/model.fbx",           "texture": "Fillet/Salmon_Fillet_6207084d/texture.png",           "length": 0.22, "bind": ["ChefZ_CharFillet"]}
+ ]
+}

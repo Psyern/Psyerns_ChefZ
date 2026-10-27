@@ -33,11 +33,7 @@
 
     "nutrition": [
         { "class": "ChefZ_SaltedMeat", "energy": 165, "water": 25, "stomach": 115 },
-        { "class": "ChefZ_DriedMeat", "energy": 320, "water": 5, "stomach": 90 },
-        { "class": "ChefZ_SmokedMeat", "energy": 300, "water": 12, "stomach": 100 },
         { "class": "ChefZ_SaltedFish", "energy": 130, "water": 22, "stomach": 95 },
-        { "class": "ChefZ_DriedFish", "energy": 260, "water": 4, "stomach": 80 },
-        { "class": "ChefZ_SmokedFish", "energy": 245, "water": 10, "stomach": 88 },
         { "class": "ChefZ_SmokedSausage", "energy": 500, "water": 14, "stomach": 135 },
         { "class": "ChefZ_DrySausage", "energy": 545, "water": 6, "stomach": 125 }
     ],
@@ -45,11 +41,7 @@
     "classes": [
         "ChefZ_PreservedFood_Base",
         "ChefZ_SaltedMeat",
-        "ChefZ_DriedMeat",
-        "ChefZ_SmokedMeat",
         "ChefZ_SaltedFish",
-        "ChefZ_DriedFish",
-        "ChefZ_SmokedFish",
         "ChefZ_SmokedSausage",
         "ChefZ_DrySausage",
         "ChefZ_Smoker"

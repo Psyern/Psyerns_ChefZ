@@ -221,6 +221,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_DOUGH";
         descriptionShort = "#STR_CHEFZ_DOUGH_DESC";
         model = "\ChefZ\ChefZ_Food\models\dough.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dough_co.paa", "\ChefZ\ChefZ_Food\data\dough_baked_co.paa", "\ChefZ\ChefZ_Food\data\dough_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dough_dried_co.paa", "\ChefZ\ChefZ_Food\data\dough_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 450;
         itemSize[] = {2, 2};
         varQuantityInit = 100;
@@ -265,11 +270,11 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {1.2, 400, 90, 15, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
-                class Baked  { nutrition_properties[] = {1.5, 450, 40, 18, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
-                class Boiled { nutrition_properties[] = {1.4, 420, 110, 16, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {105.0, 45.0}; };
-                class Burned { nutrition_properties[] = {0.3, 100, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
-                class Rotten { nutrition_properties[] = {0.48, 160, 36, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+                class Raw    { nutrition_properties[] = {1.2, 400, 90, 15, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {1.5, 450, 40, 18, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Boiled { nutrition_properties[] = {1.4, 420, 110, 16, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {105.0, 45.0}; };
+                class Burned { nutrition_properties[] = {0.3, 100, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {0.48, 160, 36, 0, 20, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -304,8 +309,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_RAWPASTA";
         descriptionShort = "#STR_CHEFZ_RAWPASTA_DESC";
         model = "\ChefZ\ChefZ_Food\models\lasagne_pasta.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\lasagne_pasta_co.paa"};
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
         hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\lasagne_pasta_co.paa", "\ChefZ\ChefZ_Food\data\lasagne_pasta_baked_co.paa", "\ChefZ\ChefZ_Food\data\lasagne_pasta_boiled_co.paa", "\ChefZ\ChefZ_Food\data\lasagne_pasta_dried_co.paa", "\ChefZ\ChefZ_Food\data\lasagne_pasta_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 400;
         itemSize[] = {2, 2};
         stackedUnit = "grams";
@@ -351,10 +359,10 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {0.75, 100, 35, 25, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
-                class Baked  { nutrition_properties[] = {0.79, 110, 16, 25, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
-                class Burned { nutrition_properties[] = {0.19, 55, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
-                class Rotten { nutrition_properties[] = {0.30, 88, 14, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+                class Raw    { nutrition_properties[] = {0.75, 100, 35, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {0.79, 110, 16, 25, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {0.19, 55, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {0.30, 88, 14, 0, 20, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -381,6 +389,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_DRIEDPASTA";
         descriptionShort = "#STR_CHEFZ_DRIEDPASTA_DESC";
         model = "\ChefZ\ChefZ_Food\models\dried_pasta.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dried_pasta_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_baked_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_dried_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 350;
         itemSize[] = {2, 2};
         stackedUnit = "grams";
@@ -421,10 +434,10 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {0.80, 100, 3, 22, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
-                class Baked  { nutrition_properties[] = {0.84, 110, 2, 22, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
-                class Burned { nutrition_properties[] = {0.20, 75, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
-                class Rotten { nutrition_properties[] = {0.32, 120, 1, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+                class Raw    { nutrition_properties[] = {0.80, 100, 3, 22, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {0.84, 110, 2, 22, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {0.20, 75, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {0.32, 120, 1, 0, 20, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -452,6 +465,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_BREAD";
         descriptionShort = "#STR_CHEFZ_BREAD_DESC";
         model = "\ChefZ\ChefZ_Food\models\bread.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\bread_co.paa", "\ChefZ\ChefZ_Food\data\bread_baked_co.paa", "\ChefZ\ChefZ_Food\data\bread_boiled_co.paa", "\ChefZ\ChefZ_Food\data\bread_dried_co.paa", "\ChefZ\ChefZ_Food\data\bread_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 700;
         itemSize[] = {3, 2};
         varQuantityInit = 100;
@@ -495,10 +513,10 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {4, 900, 30, 30, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
-                class Baked  { nutrition_properties[] = {4.2, 950, 15, 30, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
-                class Burned { nutrition_properties[] = {1, 225, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
-                class Rotten { nutrition_properties[] = {1.6, 360, 12, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+                class Raw    { nutrition_properties[] = {4, 900, 30, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {4.2, 950, 15, 30, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {1, 225, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {1.6, 360, 12, 0, 20, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -525,6 +543,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_FLATBREAD";
         descriptionShort = "#STR_CHEFZ_FLATBREAD_DESC";
         model = "\ChefZ\ChefZ_Food\models\flatbread.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\flatbread_co.paa", "\ChefZ\ChefZ_Food\data\flatbread_baked_co.paa", "\ChefZ\ChefZ_Food\data\flatbread_boiled_co.paa", "\ChefZ\ChefZ_Food\data\flatbread_dried_co.paa", "\ChefZ\ChefZ_Food\data\flatbread_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 300;
         itemSize[] = {2, 2};
         varQuantityInit = 100;
@@ -566,10 +589,10 @@ class CfgVehicles
         {
             class FoodStages
             {
-                class Raw    { nutrition_properties[] = {2.75, 600, 25, 28, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
-                class Baked  { nutrition_properties[] = {2.9, 630, 12, 28, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {100.0, 40.0, 200.0}; };
-                class Burned { nutrition_properties[] = {0.69, 150, 0, 0, 0, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {200.0, 60.0, 250.0}; };
-                class Rotten { nutrition_properties[] = {1.1, 240, 10, 0, 20, 0, 1}; visual_properties[] = {0.0, 0.0, 0.0}; cooking_properties[] = {0, 0}; };
+                class Raw    { nutrition_properties[] = {2.75, 600, 25, 28, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
+                class Baked  { nutrition_properties[] = {2.9, 630, 12, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                class Burned { nutrition_properties[] = {0.69, 150, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200.0, 60.0, 250.0}; };
+                class Rotten { nutrition_properties[] = {1.1, 240, 10, 0, 20, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0}; };
             };
             class FoodStageTransitions
             {

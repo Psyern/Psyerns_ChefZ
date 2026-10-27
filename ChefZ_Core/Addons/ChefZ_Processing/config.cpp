@@ -166,6 +166,26 @@ class CfgSlots
     class Slot_ChefZ_DryHook04 { name = "ChefZ_DryHook04"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
     class Slot_ChefZ_DryHook05 { name = "ChefZ_DryHook05"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
 
+    // Die Raeucherhaken 5-12 des Raeucherschranks (27.10.2026, Spieltest
+    // "von 4 auf 12 Plaetze"). Vanilla kennt nur SmokingA-D; die Haken 1-4
+    // bleiben diese vier, damit Vanillas Fleisch weiter ohne Zutun haengt.
+    // Spieltest 27.10.2026 nachmittags: alle Haken mit Vanillas Rauchsymbol
+    // (vorher Topf), und 18 statt 12 Haken.
+    class Slot_ChefZ_SmokeHook05 { name = "ChefZ_SmokeHook05"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook06 { name = "ChefZ_SmokeHook06"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook07 { name = "ChefZ_SmokeHook07"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook08 { name = "ChefZ_SmokeHook08"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook09 { name = "ChefZ_SmokeHook09"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook10 { name = "ChefZ_SmokeHook10"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook11 { name = "ChefZ_SmokeHook11"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook12 { name = "ChefZ_SmokeHook12"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook13 { name = "ChefZ_SmokeHook13"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook14 { name = "ChefZ_SmokeHook14"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook15 { name = "ChefZ_SmokeHook15"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook16 { name = "ChefZ_SmokeHook16"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook17 { name = "ChefZ_SmokeHook17"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+    class Slot_ChefZ_SmokeHook18 { name = "ChefZ_SmokeHook18"; displayName = "#STR_CfgSmoking0"; ghostIcon = "set:dayz_inventory image:smoking"; };
+
     // Die fuenf Raehmchenplaetze der Honigschleuder (07.09.2026).
     //
     // Fuenf, weil der Kopf von ChefZ_HoneyExtractor genau damit rechnet:
@@ -203,6 +223,41 @@ class CfgVehicles
     // Deklaration ohne Rumpf ersetzt nichts. Siehe den ausfuehrlichen Vermerk
     // in ChefZ_Baking/config.cpp.
     class ChefZ_GrainFoodBase;
+
+    // Vanillas Fleisch und Fisch an die Raeucherhaken 5-12 (27.10.2026).
+    // += haengt an Vanillas Liste an (SmokingA-D, DirectCooking...), statt sie
+    // zu ersetzen - dasselbe Muster wie FryingPan in ChefZ_Items. Nur
+    // DZ_Gear_Food-Klassen; Takistan-Fleisch (Hund, Echse) haengt an 1-4.
+    class Edible_Base;
+    class HumanSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class GoatSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class MouflonSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class BoarSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class PigSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class DeerSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class ReindeerSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class WolfSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class BearSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class CowSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class SheepSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class FoxSteakMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class ChickenBreastMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class RabbitLegMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class CarpFilletMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class CatfishFilletMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class MackerelFilletMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class WalleyePollockFilletMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class SteelheadTroutFilletMeat : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class Sardines : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+
+    // Obst an die Raeucherhaken (27.10.2026, Spieltest "Fruechte sollte man auch
+    // raeuchern koennen, diese werden dann einfach getrocknet"). Apfel, Birne,
+    // Pflaume haengen bei Vanilla schon an SmokingA-D, Beeren an keinem Haken.
+    class Apple : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class Plum : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class Pear : Edible_Base { inventorySlot[] += {"ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class SambucusBerry : Edible_Base { inventorySlot[] += {"SmokingA", "SmokingB", "SmokingC", "SmokingD", "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
+    class CaninaBerry : Edible_Base { inventorySlot[] += {"SmokingA", "SmokingB", "SmokingC", "SmokingD", "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"}; };
 
     //--------------------------------------------------------------------------
     // Die Getreidemuehle (Production Map §57).
@@ -864,13 +919,17 @@ class CfgVehicles
         absorbency = 0.0;
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
+        // Temperaturbereich (27.10.2026): ohne ihn verwirft EntityAI.SetTemperatureEx
+        // jeden Aufruf ("does not have temperature range defined", 5-s-Takt im
+        // Log) - der Schrank selbst blieb kalt. 200 wie Vanillas Kochgefaesse.
+        varTemperatureMax = 200;
         lifetime = 172800;
 
         // Feuerstelle wie bei Vanillas Fireplace (26.10.2026): Brennstoff und
         // Anzuender in eigenen Plaetzen, im Inventar als Gruppen "Brennstoff"
         // und "Zunder" mit Vanillas Symbolen. Die Rinde im Cargo brennt
         // weiterhin mit (aeltere Staende).
-        attachments[] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD", "Firewood", "WoodenStick", "Rags", "MedicalBandage", "Paper", "Bark"};
+        attachments[] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD", "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18", "Firewood", "WoodenStick", "Rags", "MedicalBandage", "Paper", "Bark"};
 
         class GUIInventoryAttachmentsProps
         {
@@ -881,8 +940,8 @@ class CfgVehicles
             {
                 name = "$STR_attachment_Smoking";
                 description = "";
-                attachmentSlots[] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD"};
-                icon = "set:dayz_inventory image:cookingequipment";
+                attachmentSlots[] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD", "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"};
+                icon = "set:dayz_inventory image:smoking";   // Rauch statt Topf (Spieltest 27.10.2026)
                 view_index = 0;
             };
             class Fuel
@@ -905,7 +964,7 @@ class CfgVehicles
 
         class Cargo
         {
-            itemsCargoSize[] = {5, 5};
+            itemsCargoSize[] = {10, 5};   // 50 Plaetze (Spieltest 27.10.2026, vorher 5x5); nur Ausgabe, siehe CanReceiveItemIntoCargo
             openable = 0;
         };
     };

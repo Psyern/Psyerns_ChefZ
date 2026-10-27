@@ -1,0 +1,41 @@
+FrameWidgetClass "{5A1C0F3B7E2D4A20}" {
+ Name "ATCell"
+ visible 1
+ ignorepointer 1
+ position 0 0
+ size 0.1 0.1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+  ItemPreviewWidgetClass "{5A1C0F3B7E2D4A21}" {
+   Name "ATPreview"
+   ignorepointer 1
+   clipchildren 1
+   inheritalpha 0
+   color 0.702 0.702 0.702 1
+   scaled 1
+   position 0 0
+   size 1 0.8
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+  }
+  TextWidgetClass "{5A1C0F3B7E2D4A22}" {
+   Name "ATLabel"
+   ignorepointer 1
+   position 0 0.8
+   size 1 0.2
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   text "x"
+   "exact text" 0
+   "text halign" center
+   "text valign" center
+  }
+ }
+}

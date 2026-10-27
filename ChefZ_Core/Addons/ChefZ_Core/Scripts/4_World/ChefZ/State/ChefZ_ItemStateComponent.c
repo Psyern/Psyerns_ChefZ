@@ -318,8 +318,22 @@ class ChefZ_ItemStateComponent : Managed
         // nicht an der Variablen: liegt der Zustand bereits ueber die Klasse
         // an, waere das Setzen der Variablen eine Doppelung, die spaeter
         // niemand mehr von einem echten Uebergang unterscheiden kann.
+        //
+        // Die Projektion laeuft trotzdem (27.10.2026, Spieltest "geraeuchert,
+        // aber ROH"): ChefZ_SmokedMeat & Co. tragen SMOKED als Klassenvorgabe,
+        // ihre frisch erzeugte FoodStage steht aber auf RAW. Ohne diesen Schritt
+        // erreichte nichts je ProjectOnto - Name geraeuchert, Optik, Verfall und
+        // Essen roh. ProjectOnto ist idempotent (gleiche Stufe = Ruecksprung).
         if (current == state)
+        {
+            ChefZ_StateDef sameDef = mgr.GetDef(state);
+            if (sameDef)
+            {
+                comp.ProjectOnto(item, sameDef, false);
+                item.SetSynchDirty();
+            }
             return true;
+        }
 
         if (ChefZ_SymbolTable.IsValid(current) && mgr.IsTerminal(current))
         {
@@ -702,12 +716,27 @@ class ChefZ_ItemStateComponent : Managed
         }
 
         // Schritt 2 - der V1-Normalfall: die Klasse IST der Zustand (06 E2).
+        // Spieltest 27.10.2026 (Raeucherjob "kein einziger Eingang konnte den
+        // Zustand wechseln"): ein Vanilla-Steak traegt keinen eigenen Zustand,
+        // nur seine FoodStage. Geraeuchert steht es auf DRIED, las sich hier
+        // aber weiter als RAW (defaultState) - der Schrank startete den naechsten
+        // Job, der beim Abschluss nichts mehr zu wechseln fand. Der defaultState
+        // gilt deshalb nur, solange die FoodStage noch auf seine Projektion
+        // zeigt; hat sie gewechselt, entscheidet Schritt 3. Nur fuer
+        // Vanilla-Items: ChefZ-Klassen tragen ihren Zustand selbst (Schritt 1),
+        // und z. B. die Raeucherwurst startet mit SMOKED auf der Stufe Raw.
+        Edible_Base edible = Edible_Base.Cast(item);
         ChefZ_IngredientInfo info = ChefZ_IngredientManager.Get().ResolveByName(item.GetType());
         if (info && ChefZ_SymbolTable.IsValid(info.defaultState))
-            return info.defaultState;
+        {
+            bool vanillaStageMoved = false;
+            if (!comp && edible && edible.GetFoodStage())
+                vanillaStageMoved = StageLeftDefault(info.defaultState, edible.GetFoodStage().GetFoodStageType());
+            if (!vanillaStageMoved)
+                return info.defaultState;
+        }
 
         // Schritt 3
-        Edible_Base edible = Edible_Base.Cast(item);
         if (edible)
         {
             // ACHTUNG: Edible_Base.GetFoodStageType() greift ohne Nullpruefung
@@ -720,6 +749,17 @@ class ChefZ_ItemStateComponent : Managed
 
         // Schritt 4
         return ChefZ_SymbolTable.INVALID;
+    }
+
+    //! true = die FoodStage steht nicht mehr auf der Stufe, auf die der
+    //! defaultState projiziert (gebraten, gekocht, getrocknet, verdorben).
+    //! Ein Zustand ohne Projektion legt nichts fest - dann bleibt er.
+    private static bool StageLeftDefault(ChefZ_Sym defaultState, int stage)
+    {
+        ChefZ_StateDef def = ChefZ_StateManager.Get().GetDef(defaultState);
+        if (!def || !def.HasProjection())
+            return false;
+        return def.projectedStage != stage;
     }
 
     //==========================================================================

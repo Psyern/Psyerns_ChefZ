@@ -53,48 +53,12 @@
             "unitsPerWholeItem": 1,
             "decays": true
         },
-        {
-            "id": "ChefZ_DriedMeat",
-            "categories": ["MEAT"],
-            "tags": ["CHEFZ_HIGH_PROTEIN", "CHEFZ_PRESERVED"],
-            "defaultState": "DRIED",
-            "quantityUnit": "PIECE",
-            "unitsPerWholeItem": 1,
-            "decays": true
-        },
-        {
-            "id": "ChefZ_SmokedMeat",
-            "categories": ["MEAT"],
-            "tags": ["CHEFZ_HIGH_PROTEIN", "CHEFZ_PRESERVED"],
-            "defaultState": "SMOKED",
-            "quantityUnit": "PIECE",
-            "unitsPerWholeItem": 1,
-            "decays": true
-        },
 
         {
             "id": "ChefZ_SaltedFish",
             "categories": ["FISH"],
             "tags": ["CHEFZ_HIGH_PROTEIN", "CHEFZ_PRESERVED"],
             "defaultState": "SALTED",
-            "quantityUnit": "PIECE",
-            "unitsPerWholeItem": 1,
-            "decays": true
-        },
-        {
-            "id": "ChefZ_DriedFish",
-            "categories": ["FISH"],
-            "tags": ["CHEFZ_HIGH_PROTEIN", "CHEFZ_PRESERVED"],
-            "defaultState": "DRIED",
-            "quantityUnit": "PIECE",
-            "unitsPerWholeItem": 1,
-            "decays": true
-        },
-        {
-            "id": "ChefZ_SmokedFish",
-            "categories": ["FISH"],
-            "tags": ["CHEFZ_HIGH_PROTEIN", "CHEFZ_PRESERVED"],
-            "defaultState": "SMOKED",
             "quantityUnit": "PIECE",
             "unitsPerWholeItem": 1,
             "decays": true

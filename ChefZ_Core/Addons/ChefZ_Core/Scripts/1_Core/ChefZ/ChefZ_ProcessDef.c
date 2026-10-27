@@ -100,7 +100,7 @@ class ChefZ_ProcessExec
 class ChefZ_ProcessingLimits
 {
     static const int   HANDCRAFT_MAX_INPUTS = 2;
-    static const int   MAX_PARALLEL_SLOTS   = 8;
+    static const int   MAX_PARALLEL_SLOTS   = 12;   // 8 -> 12 (27.10.2026): Raeucherschrank mit zwoelf Haken
     static const int   PROCESS_ORDINAL_MAX  = 15;
     static const float MIN_DURATION_SEC     = 0.5;
 

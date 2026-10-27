@@ -746,9 +746,19 @@ class ChefZ_ProcessRunner
             {
                 ItemBase item = ChefZ_Applicator.EntityOf(entities, match.boundHandles.Get(b));
                 if (!item)
+                {
+                    StateDiag(tr, "Handle " + b.ToString() + " loest auf kein Item auf (" + entities.Count().ToString() + " Entities)");
                     continue;
+                }
                 if (!ChefZ_ItemStateComponent.IsManaged(item))
-                    continue;           // ein Vanilla-Item hat keinen Zustand
+                {
+                    // Ein Vanilla-Item hat keinen ChefZ-Zustand, aber eine
+                    // FoodStage: es bekommt die Stufe, auf die der Zustand
+                    // projiziert (SMOKED -> DRIED).
+                    if (ProjectOntoVanillaStage(item, state))
+                        changed++;
+                    continue;
+                }
 
                 ChefZ_ItemStateComponent.SetState(item, state, false);
                 ApplyCarry(item, def);
@@ -758,6 +768,55 @@ class ChefZ_ProcessRunner
         }
 
         return changed;
+    }
+
+    /**
+     * Zustandswechsel an einem Vanilla-Item (27.10.2026, Spieltest "jeder
+     * Fisch hat als Filet seine geraeucherte Form, wir brauchen keinen
+     * allgemeinen Raeucherfisch mehr"): Raeuchern und Trocknen lassen das Item
+     * bestehen. Ein Vanilla-Steak kann den ChefZ-Zustand nicht tragen, wohl
+     * aber dessen Projektion - mit der vollen Vanilla-Kette (ChangeFoodStage),
+     * denn hier wurde wirklich verarbeitet.
+     *
+     * @return true, wenn die Stufe tatsaechlich gewechselt hat.
+     */
+    private static bool ProjectOntoVanillaStage(notnull ItemBase item, ChefZ_Sym state)
+    {
+        Edible_Base edible = Edible_Base.Cast(item);
+        if (!edible || !edible.GetFoodStage())
+        {
+            StateDiag(null, item.GetType() + " ist kein Lebensmittel mit FoodStage");
+            return false;
+        }
+
+        ChefZ_StateDef def = ChefZ_StateManager.Get().GetDef(state);
+        if (!def || !def.HasProjection())
+        {
+            StateDiag(null, "Zustand " + ChefZ_SymbolTable.NameOrMark(state) + " hat keine Vanilla-Projektion");
+            return false;
+        }
+
+        FoodStageType target = def.projectedStage;
+        if (edible.GetFoodStage().GetFoodStageType() == target)
+        {
+            StateDiag(null, item.GetType() + " hat die Stufe " + typename.EnumToString(FoodStageType, target) + " schon");
+            return false;
+        }
+
+        edible.ChangeFoodStage(target);
+        item.SetSynchDirty();
+        return true;
+    }
+
+    //! Spieltest 27.10.2026: ein Raeucherjob scheiterte mit "kein einziger
+    //! Eingang konnte den Zustand wechseln", ohne zu sagen, warum. Nennt den
+    //! Grund je gebundenem Item. Wieder entfernen, sobald Raeuchern bestaetigt ist.
+    private static void StateDiag(ChefZ_CompiledTransform tr, string msg)
+    {
+        string prefix = "Zustandswechsel-Diagnose: ";
+        if (tr)
+            prefix = prefix + tr.id + ": ";
+        ChefZ_Log.Warn(ChefZ_LogChannel.PROCESS, prefix + msg);
     }
 
     //! freshnessCarry auf einem Item, das BESTEHEN bleibt: die eigene Frische

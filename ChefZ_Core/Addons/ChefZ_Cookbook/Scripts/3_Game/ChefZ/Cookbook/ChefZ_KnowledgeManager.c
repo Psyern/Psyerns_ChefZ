@@ -158,7 +158,8 @@ class ChefZ_KnowledgeManager : Managed
      * zweite Implementierung derselben Frage waere der sicherste Weg zu einem
      * Buch, das etwas anderes behauptet als der Topf tut.
      */
-    private bool SlotIsKnown(ChefZ_KnowledgeState stand, ChefZ_CompiledSlot slot)
+    //! Oeffentlich seit 27.10.2026: das Kochbuchmenue zeigt je Slot, ob er bekannt ist.
+    bool SlotIsKnown(ChefZ_KnowledgeState stand, ChefZ_CompiledSlot slot)
     {
         if (!slot.selector)
             return false;

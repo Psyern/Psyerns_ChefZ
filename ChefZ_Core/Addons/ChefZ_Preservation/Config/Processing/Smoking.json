@@ -17,13 +17,11 @@
                         "cls": "ChefZ_SaltedMeat"
                     },
                     "minCount": 1,
-                    "consume": "whole"
+                    "consume": "none"
                 }
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_SmokedMeat",
-                    "quantityMode": "fromInput",
                     "setState": "SMOKED",
                     "inheritFreshness": true
                 }
@@ -31,7 +29,8 @@
             "freshnessCarry": 1.0,
             "qualityRule": "MIN",
             "priority": 110,
-            "_note2": "priority 110 (26.10.2026): vorher Gleichstand mit TR_FishToSmoked, entschieden nur ueber die id (Server-Log). Gepoekeltes geht jetzt immer diesen Weg."
+            "_note2": "priority 110 (26.10.2026): vorher Gleichstand mit TR_FishToSmoked, entschieden nur ueber die id (Server-Log). Gepoekeltes geht jetzt immer diesen Weg.",
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
         },
         {
             "id": "TR_RawMeatToSmoked",
@@ -60,21 +59,19 @@
                         ]
                     },
                     "minCount": 1,
-                    "consume": "whole"
+                    "consume": "none"
                 }
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_SmokedMeat",
-                    "quantityMode": "fromInput",
                     "setState": "SMOKED",
                     "inheritFreshness": true
                 }
             ],
             "freshnessCarry": 1.0,
             "qualityRule": "MIN",
-            "qualityDelta": -1,
-            "priority": 60
+            "priority": 60,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
         },
         {
             "id": "TR_FishToSmoked",
@@ -97,21 +94,19 @@
                         ]
                     },
                     "minCount": 1,
-                    "consume": "whole"
+                    "consume": "none"
                 }
             ],
             "outputs": [
                 {
-                    "cls": "ChefZ_SmokedFish",
-                    "quantity": 250,
-                    "quantityMode": "fixed",
                     "setState": "SMOKED",
                     "inheritFreshness": true
                 }
             ],
             "freshnessCarry": 1.0,
             "qualityRule": "MIN",
-            "priority": 100
+            "priority": 100,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
         },
         {
             "id": "TR_RawSausageToSmoked",
@@ -129,7 +124,14 @@
                                 "category": "SAUSAGE"
                             },
                             {
-                                "state": "RAW"
+                                "anyOf": [
+                                    {
+                                        "state": "RAW"
+                                    },
+                                    {
+                                        "state": "COOKED"
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -149,6 +151,222 @@
             "freshnessCarry": 1.0,
             "qualityRule": "MIN",
             "priority": 100
+        },
+        {
+            "id": "TR_PrimalCutToSmoked",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": [
+                "ChefZ_Smoker"
+            ],
+            "_note": "27.10.2026, Spieltest 'Wild-, Schweine-, Rinderkeule koennen nicht in den Raeucherofen': Keulen (PRIMAL_CUT) haengen jetzt an den Haken und werden zu Raeucherfleisch, wie rohes Fleisch.",
+            "durationOverrideSec": 300,
+            "inputs": [
+                {
+                    "slotId": "leg",
+                    "match": {
+                        "allOf": [
+                            {
+                                "category": "PRIMAL_CUT"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "none"
+                }
+            ],
+            "outputs": [
+                {
+                    "setState": "SMOKED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 60,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
+        },
+        {
+            "id": "TR_AppleSmokeDried",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": [
+                "ChefZ_Smoker"
+            ],
+            "_note": "27.10.2026, Spieltest 'Fruechte sollte man auch raeuchern koennen, diese werden dann einfach getrocknet': dieselbe Frucht kommt in der Stufe DRIED zurueck.",
+            "durationOverrideSec": 300,
+            "inputs": [
+                {
+                    "slotId": "fruit",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "Apple"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "none"
+                }
+            ],
+            "outputs": [
+                {
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
+        },
+        {
+            "id": "TR_PearSmokeDried",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": [
+                "ChefZ_Smoker"
+            ],
+            "_note": "27.10.2026, Spieltest 'Fruechte sollte man auch raeuchern koennen, diese werden dann einfach getrocknet': dieselbe Frucht kommt in der Stufe DRIED zurueck.",
+            "durationOverrideSec": 300,
+            "inputs": [
+                {
+                    "slotId": "fruit",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "Pear"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "none"
+                }
+            ],
+            "outputs": [
+                {
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
+        },
+        {
+            "id": "TR_PlumSmokeDried",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": [
+                "ChefZ_Smoker"
+            ],
+            "_note": "27.10.2026, Spieltest 'Fruechte sollte man auch raeuchern koennen, diese werden dann einfach getrocknet': dieselbe Frucht kommt in der Stufe DRIED zurueck.",
+            "durationOverrideSec": 300,
+            "inputs": [
+                {
+                    "slotId": "fruit",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "Plum"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "none"
+                }
+            ],
+            "outputs": [
+                {
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
+        },
+        {
+            "id": "TR_CaninaBerrySmokeDried",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": [
+                "ChefZ_Smoker"
+            ],
+            "_note": "27.10.2026, Spieltest 'Fruechte sollte man auch raeuchern koennen, diese werden dann einfach getrocknet': dieselbe Frucht kommt in der Stufe DRIED zurueck.",
+            "durationOverrideSec": 300,
+            "inputs": [
+                {
+                    "slotId": "fruit",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "CaninaBerry"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "none"
+                }
+            ],
+            "outputs": [
+                {
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
+        },
+        {
+            "id": "TR_SambucusBerrySmokeDried",
+            "process": "PROCESS_SMOKE",
+            "stationsAllowed": [
+                "ChefZ_Smoker"
+            ],
+            "_note": "27.10.2026, Spieltest 'Fruechte sollte man auch raeuchern koennen, diese werden dann einfach getrocknet': dieselbe Frucht kommt in der Stufe DRIED zurueck.",
+            "durationOverrideSec": 300,
+            "inputs": [
+                {
+                    "slotId": "fruit",
+                    "match": {
+                        "allOf": [
+                            {
+                                "cls": "SambucusBerry"
+                            },
+                            {
+                                "state": "RAW"
+                            }
+                        ]
+                    },
+                    "minCount": 1,
+                    "consume": "none"
+                }
+            ],
+            "outputs": [
+                {
+                    "setState": "DRIED",
+                    "inheritFreshness": true
+                }
+            ],
+            "freshnessCarry": 1.0,
+            "qualityRule": "MIN",
+            "priority": 100,
+            "_notePureState": "27.10.2026, Spieltest 'Smoked Fisch hat jetzt jeder einzelne Fisch als Fillet seine geraeucherte Form, weshalb wir keinen allgemeinen geraeucherten Fisch mehr brauchen, genauso DriedFish, SmokedMeat': reiner Zustandswechsel - das Item bleibt (eigenes Modell, eigene Trocken-/Raeucheroptik), nur der Zustand wechselt. Vanilla-Items bekommen die projizierte FoodStage (ChefZ_ProcessRunner.ProjectOntoVanillaStage)."
         }
     ]
 }

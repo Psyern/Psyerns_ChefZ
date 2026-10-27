@@ -425,11 +425,7 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_HunterSausage");
 		classes.Insert("ChefZ_SpicySausage");
 		classes.Insert("ChefZ_SaltedMeat");
-		classes.Insert("ChefZ_DriedMeat");
-		classes.Insert("ChefZ_SmokedMeat");
 		classes.Insert("ChefZ_SaltedFish");
-		classes.Insert("ChefZ_DriedFish");
-		classes.Insert("ChefZ_SmokedFish");
 		classes.Insert("ChefZ_SmokedSausage");
 		classes.Insert("ChefZ_DrySausage");
 

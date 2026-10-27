@@ -401,8 +401,11 @@ class CfgVehicles
     {
         scope = 2;
         model = "\ChefZ\ChefZ_Food\models\bone_broth.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\bone_broth_co.paa"};
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
         hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\bone_broth_co.paa", "\ChefZ\ChefZ_Food\data\bone_broth_baked_co.paa", "\ChefZ\ChefZ_Food\data\bone_broth_boiled_co.paa", "\ChefZ\ChefZ_Food\data\bone_broth_dried_co.paa", "\ChefZ\ChefZ_Food\data\bone_broth_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         displayName = "#STR_CHEFZ_ITEM_BONEBROTH";
         descriptionShort = "#STR_CHEFZ_ITEM_BONEBROTH_DESC";
         weight = 520;
@@ -430,10 +433,10 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw    { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked  { nutrition_properties[] = {3.0, 158, 280, 45, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
-                class Boiled { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
-                class Burned { nutrition_properties[] = {0.75, 38, 40, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
-                class Rotten { nutrition_properties[] = {1.2, 60, 128, 9, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {3.0, 158, 280, 45, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {3.0, 150, 320, 45, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.75, 38, 40, 8, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {1.2, 60, 128, 9, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -466,6 +469,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_TOMATOSAUCE";
         descriptionShort = "#STR_CHEFZ_ITEM_TOMATOSAUCE_DESC";
         model = "\ChefZ\ChefZ_Items\models\tomato_sauce.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Items\data\tomato_sauce_co.paa", "\ChefZ\ChefZ_Items\data\tomato_sauce_baked_co.paa", "\ChefZ\ChefZ_Items\data\tomato_sauce_boiled_co.paa", "\ChefZ\ChefZ_Items\data\tomato_sauce_dried_co.paa", "\ChefZ\ChefZ_Items\data\tomato_sauce_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 420;
         // Eingekochtes Fruchtfleisch im Glas haelt laenger als die Bruehe.
         lifetime = 28800;
@@ -489,10 +497,10 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw    { nutrition_properties[] = {2.3, 130, 105, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked  { nutrition_properties[] = {2.3, 135, 85, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
-                class Boiled { nutrition_properties[] = {2.3, 130, 125, 35, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
-                class Burned { nutrition_properties[] = {0.58, 33, 13, 7, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
-                class Rotten { nutrition_properties[] = {0.92, 52, 42, 7, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {2.3, 135, 85, 35, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {2.3, 130, 125, 35, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.58, 33, 13, 7, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 52, 42, 7, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -807,6 +815,13 @@ class CfgVehicles
     // TR_BoxFromPaper in Config/Processing/Containers.json. Zwei Blatt Papier,
     // kein Werkzeug - der Transform hat damit zwei Zutatenplaetze und ist
     // genau ausgereizt (01 V12).
+    //
+    // CARGO (27.10.2026, Spieltest: "es kann nichts in die Lebensmittelbox
+    // gelegt werden"): die Box ist die einzige ChefZ-Lagerung fuer Nahrung.
+    // Kein Rezept fordert die Behaelterkategorie BOX, also kollidiert das
+    // Cargo nicht mit ChefZ_ContainerService.IsEmpty() beim Servieren - eine
+    // gefuellte Box wird schlicht nicht als leerer Behaelter genommen. Was
+    // hinein darf, filtert ChefZ_EmptyBox.CanReceiveItemIntoCargo (nur Nahrung).
     class ChefZ_EmptyBox : ChefZ_ContainerItemBase
     {
         scope = 2;
@@ -815,6 +830,7 @@ class CfgVehicles
         // PROXY: Kartonsilhouette. Bedarf: eigenes Boxmesh (P3, V2).
         model = "\ChefZ\ChefZ_Items\models\box_open.p3d";   // EIGENES MODELL (30.08.2026): die offene Box; box.p3d (zu) bleibt Reserve
         itemSize[] = {2, 2};
+        itemsCargoSize[] = {4, 3};
         weight = 110;
     };
 

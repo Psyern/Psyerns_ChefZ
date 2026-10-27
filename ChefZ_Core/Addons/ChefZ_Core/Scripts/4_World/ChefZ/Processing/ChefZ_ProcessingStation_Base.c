@@ -497,10 +497,35 @@ class ChefZ_ProcessingStation_Base extends ItemBase
         return true;
     }
 
-    //! Erster freier Slot, oder -1.
+    /**
+     * Erster freier Slot, oder -1.
+     *
+     * AUF DEM CLIENT (27.10.2026): die Jobliste lebt nur auf dem Server -
+     * auf dem Client stehen hier ausschliesslich leere Jobs aus EnsureSlots(),
+     * die Antwort war dort also IMMER "Slot 0 ist frei". Die Folge war eine
+     * Aktion, die der Client anbot und der Server beim Start ablehnte
+     * (ActionManagerServer.c:168 ruft pickedAction.Can(), und die
+     * ActionCondition fragt hier nach einem freien Slot): "F halten bricht
+     * ab" am Raeucherschrank, "nochmal ankurbeln tut manchmal nichts" am
+     * Fleischwolf.
+     *
+     * Was der Client WISSEN kann, ist m_ChefZ_ActiveProcessOrdinal (synchron,
+     * > 0 heisst "ein Job laeuft"). Bei EINEM Slot ist das genau die Antwort.
+     * Bei mehreren Slots sagt der Ordinal nicht, wie viele belegt sind - dort
+     * bleibt der Client grosszuegig und der Server entscheidet, wie bisher.
+     */
     int ChefZ_FreeSlotIndex()
     {
         EnsureSlots();
+
+        if (g_Game && !g_Game.IsServer())
+        {
+            bool clientSeesJob = m_ChefZ_ActiveProcessOrdinal > 0;
+            bool singleSlot = ChefZ_GetSlotCount() <= 1;
+            if (clientSeesJob && singleSlot)
+                return -1;
+        }
+
         for (int i = 0; i < m_ChefZ_Jobs.Count(); i++)
         {
             if (!m_ChefZ_Jobs.Get(i).IsActive())

@@ -60,6 +60,13 @@ class ChefZ_CookbookInput
         if (!g_Game)
             return;
 
+        // Aufschlagen ueber die Aktion am Buch oder die Taste (Opener-Flag).
+        if (ChefZ_CookbookOpener.s_OpenRequested)
+        {
+            ChefZ_CookbookOpener.s_OpenRequested = false;
+            ChefZ_CookbookMenuOpener.Show();
+        }
+
         UAInputAPI api = GetUApi();
         if (!api)
             return;

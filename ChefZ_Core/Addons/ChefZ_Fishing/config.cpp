@@ -336,11 +336,30 @@ class CfgMods
         extra = 0;
         type = "mod";
 
-        // Nur World: dieses Modul bringt ausschliesslich Entitaetsklassen mit.
-        dependencies[] = {"World"};
+        // Bis 26.10.2026 nur World (Entitaetsklassen).
+        // Angel-Minispiel (27.10.2026): 3_Game (Konstanten, Bruecke), 5_Mission
+        // (HUD) und die Tasten. Jede gelistete Ebene hat Dateien.
+        inputs = "ChefZ_Fishing/Scripts/Data/Inputs.xml";
+        dependencies[] = {"Game", "World", "Mission"};
 
         class defs
         {
+            class gameScriptModule
+            {
+                value = "";
+                files[] =
+                {
+                    "ChefZ_Fishing/Scripts/3_Game"
+                };
+            };
+            class missionScriptModule
+            {
+                value = "";
+                files[] =
+                {
+                    "ChefZ_Fishing/Scripts/5_Mission"
+                };
+            };
             class worldScriptModule
             {
                 value = "";
@@ -378,6 +397,15 @@ class CfgVehicles
         scope = 0;
         rotationFlags = 17;
         itemSize[] = {2, 1};
+        // Raeucher- und Bratplaetze wie Vanillas Filets (CarpFilletMeat) plus
+        // die Haken 5-12 des Raeucherschranks (27.10.2026, Spieltest "man kann
+        // keine Fische raeuchern": ohne dieses Feld nahm kein Haken ein Filet).
+        inventorySlot[] =
+        {
+            "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         weight = 200;
         absorbency = 0.5;
 
@@ -536,7 +564,18 @@ class CfgVehicles
     // Plaice - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_PlaiceFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\plaicefillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PlaiceFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PlaiceFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PlaiceFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PlaiceFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PlaiceFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_PLAICEFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_PLAICEFILLET1";
         weight = 200;
@@ -585,7 +624,18 @@ class CfgVehicles
     // GiltheadBream - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_GiltheadBreamFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\giltheadbreamfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiltheadBreamFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiltheadBreamFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiltheadBreamFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiltheadBreamFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiltheadBreamFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_GILTHEADBREAMFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_GILTHEADBREAMFILLET1";
         weight = 200;
@@ -634,7 +684,18 @@ class CfgVehicles
     // Halibut - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_HalibutFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\halibutfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HalibutFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HalibutFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HalibutFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HalibutFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HalibutFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_HALIBUTFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_HALIBUTFILLET1";
         weight = 200;
@@ -683,7 +744,18 @@ class CfgVehicles
     // Cod - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_CodFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\codfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CodFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CodFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CodFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CodFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CodFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_CODFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_CODFILLET1";
         weight = 200;
@@ -732,7 +804,18 @@ class CfgVehicles
     // Sole - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_SoleFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\solefillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SoleFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SoleFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SoleFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SoleFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SoleFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_SOLEFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_SOLEFILLET1";
         weight = 200;
@@ -781,7 +864,18 @@ class CfgVehicles
     // SeaBass - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_SeaBassFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\seabassfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SeaBassFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SeaBassFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SeaBassFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SeaBassFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SeaBassFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_SEABASSFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_SEABASSFILLET1";
         weight = 200;
@@ -830,7 +924,18 @@ class CfgVehicles
     // RedMullet - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_RedMulletFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\redmulletfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedMulletFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedMulletFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedMulletFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedMulletFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RedMulletFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_REDMULLETFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_REDMULLETFILLET1";
         weight = 200;
@@ -879,7 +984,18 @@ class CfgVehicles
     // Conger - sehr fettes Fleisch, Proxy mackerel_fillet.
     class ChefZ_CongerFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\congerfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CongerFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CongerFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CongerFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CongerFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CongerFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_CONGERFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_CONGERFILLET1";
         weight = 225;
@@ -928,7 +1044,18 @@ class CfgVehicles
     // HorseMackerel - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_HorseMackerelFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\horsemackerelfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HorseMackerelFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HorseMackerelFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HorseMackerelFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HorseMackerelFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\HorseMackerelFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_HORSEMACKERELFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_HORSEMACKERELFILLET1";
         weight = 215;
@@ -977,7 +1104,18 @@ class CfgVehicles
     // JapaneseSardine - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_JapaneseSardineFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\japanesesardinefillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\JapaneseSardineFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\JapaneseSardineFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\JapaneseSardineFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\JapaneseSardineFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\JapaneseSardineFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_JAPANESESARDINEFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_JAPANESESARDINEFILLET1";
         weight = 215;
@@ -1026,7 +1164,18 @@ class CfgVehicles
     // Rockfish - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_RockfishFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\rockfishfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RockfishFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RockfishFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RockfishFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RockfishFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RockfishFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_ROCKFISHFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_ROCKFISHFILLET1";
         weight = 200;
@@ -1075,6 +1224,7 @@ class CfgVehicles
     // BluefinTuna - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_BluefinTunaFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         model = "\ChefZ\ChefZ_Sealife\fishfilet\models\tunafillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
         hiddenSelectionsTextures[] =
@@ -1134,6 +1284,7 @@ class CfgVehicles
     // YellowfinTuna - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_YellowfinTunaFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         model = "\ChefZ\ChefZ_Sealife\fishfilet\models\tunafillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
         hiddenSelectionsTextures[] =
@@ -1193,6 +1344,7 @@ class CfgVehicles
     // RedSnapper - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_RedSnapperFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         model = "\ChefZ\ChefZ_Sealife\fishfilet\models\redsnapperfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
         hiddenSelectionsTextures[] =
@@ -1252,6 +1404,7 @@ class CfgVehicles
     // GiantGrouper - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_GiantGrouperFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         model = "\ChefZ\ChefZ_Sealife\fishfilet\models\grouperfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
         hiddenSelectionsTextures[] =
@@ -1311,6 +1464,7 @@ class CfgVehicles
     // MahiMahi - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_MahiMahiFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         model = "\ChefZ\ChefZ_Sealife\fishfilet\models\mahimahifillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
         hiddenSelectionsTextures[] =
@@ -1370,7 +1524,18 @@ class CfgVehicles
     // GiantTrevally - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_GiantTrevallyFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\gianttrevallyfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiantTrevallyFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiantTrevallyFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiantTrevallyFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiantTrevallyFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\GiantTrevallyFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_GIANTTREVALLYFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_GIANTTREVALLYFILLET1";
         weight = 200;
@@ -1419,7 +1584,18 @@ class CfgVehicles
     // BlueMarlin - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_BlueMarlinFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\bluemarlinfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BlueMarlinFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BlueMarlinFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BlueMarlinFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BlueMarlinFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BlueMarlinFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_BLUEMARLINFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_BLUEMARLINFILLET1";
         weight = 200;
@@ -1468,7 +1644,18 @@ class CfgVehicles
     // Sailfish - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_SailfishFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\sailfishfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SailfishFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SailfishFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SailfishFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SailfishFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SailfishFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_SAILFISHFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_SAILFISHFILLET1";
         weight = 200;
@@ -1517,7 +1704,18 @@ class CfgVehicles
     // Bonito - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_BonitoFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\bonitofillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BonitoFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BonitoFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BonitoFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BonitoFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\BonitoFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_BONITOFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_BONITOFILLET1";
         weight = 215;
@@ -1566,7 +1764,18 @@ class CfgVehicles
     // Yellowtail - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_YellowtailFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\yellowtailfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\YellowtailFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\YellowtailFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\YellowtailFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\YellowtailFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\YellowtailFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_YELLOWTAILFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_YELLOWTAILFILLET1";
         weight = 215;
@@ -1615,7 +1824,18 @@ class CfgVehicles
     // Tarpon - mageres Weissfleisch, Proxy mackerel_fillet.
     class ChefZ_TarponFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\tarponfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TarponFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TarponFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TarponFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TarponFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\TarponFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_TARPONFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_TARPONFILLET1";
         weight = 200;
@@ -1664,7 +1884,18 @@ class CfgVehicles
     // Salmon - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_SalmonFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\salmonfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SalmonFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SalmonFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SalmonFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SalmonFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SalmonFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_SALMONFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_SALMONFILLET1";
         weight = 215;
@@ -1713,7 +1944,18 @@ class CfgVehicles
     // SockeyeSalmon - fettreicher Schwimmer, Proxy mackerel_fillet.
     class ChefZ_SockeyeSalmonFillet : ChefZ_SeaFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\sockeyesalmonfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SockeyeSalmonFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SockeyeSalmonFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SockeyeSalmonFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SockeyeSalmonFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SockeyeSalmonFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_SOCKEYESALMONFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_SOCKEYESALMONFILLET1";
         weight = 215;
@@ -1762,7 +2004,18 @@ class CfgVehicles
     // Perch - mageres Weissfleisch, Proxy carp_fillet.
     class ChefZ_PerchFillet : ChefZ_FreshFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\perchfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PerchFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PerchFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PerchFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PerchFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\PerchFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_PERCHFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_PERCHFILLET1";
         weight = 200;
@@ -1811,7 +2064,18 @@ class CfgVehicles
     // Muskellunge - mageres Weissfleisch, Proxy carp_fillet.
     class ChefZ_MuskellungeFillet : ChefZ_FreshFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\muskellungefillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MuskellungeFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MuskellungeFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MuskellungeFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MuskellungeFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\MuskellungeFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_MUSKELLUNGEFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_MUSKELLUNGEFILLET1";
         weight = 200;
@@ -1860,7 +2124,18 @@ class CfgVehicles
     // Snakehead - mageres Weissfleisch, Proxy carp_fillet.
     class ChefZ_SnakeheadFillet : ChefZ_FreshFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\snakeheadfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SnakeheadFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SnakeheadFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SnakeheadFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SnakeheadFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\SnakeheadFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_SNAKEHEADFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_SNAKEHEADFILLET1";
         weight = 200;
@@ -1909,7 +2184,18 @@ class CfgVehicles
     // RainbowTrout - fettreicher Schwimmer, Proxy carp_fillet.
     class ChefZ_RainbowTroutFillet : ChefZ_FreshFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\rainbowtroutfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RainbowTroutFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RainbowTroutFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RainbowTroutFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RainbowTroutFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\RainbowTroutFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_RAINBOWTROUTFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAINBOWTROUTFILLET1";
         weight = 215;
@@ -1958,7 +2244,18 @@ class CfgVehicles
     // Char - fettreicher Schwimmer, Proxy carp_fillet.
     class ChefZ_CharFillet : ChefZ_FreshFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\charfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CharFillet_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CharFillet_baked_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CharFillet_boiled_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CharFillet_dried_co.paa",
+            "ChefZ\ChefZ_Sealife\fishfilet\data\CharFillet_burnt_co.paa"
+        };
+        hiddenSelections[] = {"cs_raw"};
         displayName = "#STR_CHEFZ_ITEM_CHARFILLET0";
         descriptionShort = "#STR_CHEFZ_ITEM_CHARFILLET1";
         weight = 215;
@@ -2007,6 +2304,7 @@ class CfgVehicles
     // Eel - sehr fettes Fleisch, Proxy carp_fillet.
     class ChefZ_EelFillet : ChefZ_FreshFillet_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         model = "\ChefZ\ChefZ_Sealife\fishfilet\models\eelfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
         hiddenSelectionsTextures[] =
@@ -2484,7 +2782,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SALMON0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\dz\gear\food\steelhead_trout_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\salmon.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Salmon_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 1200;
         varQuantityInit = 400;
@@ -2656,7 +2956,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PLAICE0";
         descriptionShort = "#STR_CHEFZ_ITEM_PLAICE1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\plaice.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Plaice_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 1};
         weight = 1100;
         varQuantityInit = 500;
@@ -2679,7 +2981,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_GILTHEADBREAM0";
         descriptionShort = "#STR_CHEFZ_ITEM_GILTHEADBREAM1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\giltheadbream.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\GiltheadBream_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 1};
         weight = 1100;
         varQuantityInit = 500;
@@ -2702,7 +3006,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HALIBUT0";
         descriptionShort = "#STR_CHEFZ_ITEM_HALIBUT1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\halibut.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Halibut_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 3000;
         varQuantityInit = 800;
@@ -2751,7 +3057,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SOLE0";
         descriptionShort = "#STR_CHEFZ_ITEM_SOLE1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\sole.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Sole_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 1};
         weight = 1100;
         varQuantityInit = 500;
@@ -2824,7 +3132,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CONGER0";
         descriptionShort = "#STR_CHEFZ_ITEM_CONGER1";
-        model = "\dz\gear\food\mackerel_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\conger.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Conger_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
         weight = 3000;
         varQuantityInit = 800;
@@ -2875,7 +3185,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_HORSEMACKEREL0";
         descriptionShort = "#STR_CHEFZ_ITEM_HORSEMACKEREL1";
-        model = "\dz\gear\food\sardines_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\horsemackerel.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\HorseMackerel_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {2, 1};
         weight = 400;
         varQuantityInit = 300;
@@ -2898,7 +3210,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_JAPANESESARDINE0";
         descriptionShort = "#STR_CHEFZ_ITEM_JAPANESESARDINE1";
-        model = "\dz\gear\food\sardines_live.p3d";   // VANILLA-PROXY
+        model = "\ChefZ\ChefZ_Sealife\fish\models\japanesesardine.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\JapaneseSardine_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {2, 1};
         weight = 400;
         varQuantityInit = 300;
@@ -3085,7 +3399,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_FISH_REDSNAPPER";
         descriptionShort = "#STR_CHEFZ_FISH_REDSNAPPER_DESC";
-        model = "\dz\gear\food\carp_live.p3d";
+        model = "\ChefZ\ChefZ_Sealife\fish\models\redsnapper.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\RedSnapper_co.paa"};
+        hiddenSelections[] = {"camo"};
         itemSize[] = {3, 2};
         weight = 700;
         varQuantityInit = 250;
@@ -3347,9 +3663,12 @@ class CfgVehicles
         varQuantityDestroyOnMin = 1;
         quantityBar = 1;
         canBeSplit = 0;
-        inventorySlot[] = {"DirectCookingA", "DirectCookingB", "DirectCookingC", "SmokingA", "SmokingB", "SmokingC", "SmokingD"};
+        inventorySlot[] = {"DirectCookingA", "DirectCookingB", "DirectCookingC", "SmokingA", "SmokingB", "SmokingC", "SmokingD", "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"};
         hiddenSelections[] = {"camo"};
-        hiddenSelectionsMaterials[] = {"dz\data\data\default.rvmat"};
+        // Garstufen (27.10.2026): visual_properties[1] waehlt die Textur der Klasse
+        // (roh, gebraten, gekocht, geraeuchert, verbrannt); Material 0-4 neutral,
+        // Material 5 = Vanillas Faeulnis-Material (Rotten zeigt das Faeulnis-Overlay).
+        hiddenSelectionsMaterials[] = {"dz\data\data\default.rvmat", "dz\data\data\default.rvmat", "dz\data\data\default.rvmat", "dz\data\data\default.rvmat", "dz\data\data\default.rvmat", "dz\gear\food\data\meat_steak_rotten.rvmat"};
 
         class Nutrition
         {
@@ -3374,31 +3693,31 @@ class CfgVehicles
                 };
                 class Rotten
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 0, 5};
                     nutrition_properties[] = {10, 10, 8, 1, 0, 20, 1, 16};
                     cooking_properties[] = {0, 0};
                 };
                 class Baked
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 1, 0};
                     nutrition_properties[] = {1, 100, 12, 1, 0};
                     cooking_properties[] = {70, 45};
                 };
                 class Boiled
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 2, 0};
                     nutrition_properties[] = {1, 80, 32, 1, 0};
                     cooking_properties[] = {105, 55};
                 };
                 class Dried
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 3, 0};
                     nutrition_properties[] = {2, 80, 4, 1, 0};
                     cooking_properties[] = {70, 45, 80};
                 };
                 class Burned
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 4, 0};
                     nutrition_properties[] = {5, 20, 0, 1, 0, 16, 1, 3};
                     cooking_properties[] = {100, 30};
                 };
@@ -3411,11 +3730,12 @@ class CfgVehicles
 
     class ChefZ_BlueSentinelCrab : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BLUESENTINELCRAB";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\bluesentinelcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\BlueSentinelCrab_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\BlueSentinelCrab_co.paa", "ChefZ\ChefZ_Sealife\crab\data\BlueSentinelCrab_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\BlueSentinelCrab_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\BlueSentinelCrab_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\BlueSentinelCrab_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {2, 2};
         weight = 400;
         varQuantityInit = 250;
@@ -3424,11 +3744,12 @@ class CfgVehicles
 
     class ChefZ_CoastalCrab : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_COASTALCRAB";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\coastalcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\CoastalCrab_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\CoastalCrab_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CoastalCrab_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CoastalCrab_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CoastalCrab_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CoastalCrab_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {2, 2};
         weight = 400;
         varQuantityInit = 250;
@@ -3437,11 +3758,12 @@ class CfgVehicles
 
     class ChefZ_CrimsonKingCrab : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CRIMSONKINGCRAB";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\crimsonkingcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\CrimsonKingCrab_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\CrimsonKingCrab_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CrimsonKingCrab_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CrimsonKingCrab_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CrimsonKingCrab_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\CrimsonKingCrab_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 3};
         weight = 1500;
         varQuantityInit = 450;
@@ -3450,11 +3772,12 @@ class CfgVehicles
 
     class ChefZ_Langoustine : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_LANGOUSTINE";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\langoustine.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\Langoustine_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\Langoustine_co.paa", "ChefZ\ChefZ_Sealife\crab\data\Langoustine_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\Langoustine_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\Langoustine_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\Langoustine_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {2, 2};
         weight = 400;
         varQuantityInit = 250;
@@ -3463,11 +3786,12 @@ class CfgVehicles
 
     class ChefZ_MidnightLobster : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MIDNIGHTLOBSTER";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\midnightlobster.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\MidnightLobster_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\MidnightLobster_co.paa", "ChefZ\ChefZ_Sealife\crab\data\MidnightLobster_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\MidnightLobster_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\MidnightLobster_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\MidnightLobster_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 3};
         weight = 1500;
         varQuantityInit = 450;
@@ -3476,11 +3800,12 @@ class CfgVehicles
 
     class ChefZ_SnowCrab : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SNOWCRAB";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\snowcrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SnowCrab_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SnowCrab_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SnowCrab_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SnowCrab_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SnowCrab_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SnowCrab_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 3};
         weight = 1500;
         varQuantityInit = 450;
@@ -3489,11 +3814,12 @@ class CfgVehicles
 
     class ChefZ_SpinyLobster : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SPINYLOBSTER";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\spinylobster.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SpinyLobster_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SpinyLobster_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyLobster_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyLobster_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyLobster_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyLobster_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 3};
         weight = 1500;
         varQuantityInit = 450;
@@ -3502,11 +3828,12 @@ class CfgVehicles
 
     class ChefZ_SpinyOrangeCrab : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SPINYORANGECRAB";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\spinyorangecrab.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SpinyOrangeCrab_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\SpinyOrangeCrab_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyOrangeCrab_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyOrangeCrab_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyOrangeCrab_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\SpinyOrangeCrab_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {2, 2};
         weight = 400;
         varQuantityInit = 250;
@@ -3515,11 +3842,12 @@ class CfgVehicles
 
     class ChefZ_StripedTigerPrawn : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_STRIPEDTIGERPRAWN";
         descriptionShort = "#STR_CHEFZ_ITEM_SHELLFISH_DESC";
         model = "\ChefZ\ChefZ_Sealife\crab\models\stripedtigerprawn.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\StripedTigerPrawn_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\crab\data\StripedTigerPrawn_co.paa", "ChefZ\ChefZ_Sealife\crab\data\StripedTigerPrawn_baked_co.paa", "ChefZ\ChefZ_Sealife\crab\data\StripedTigerPrawn_boiled_co.paa", "ChefZ\ChefZ_Sealife\crab\data\StripedTigerPrawn_dried_co.paa", "ChefZ\ChefZ_Sealife\crab\data\StripedTigerPrawn_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {2, 2};
         weight = 400;
         varQuantityInit = 250;
@@ -3528,11 +3856,12 @@ class CfgVehicles
 
     class ChefZ_CrimsonSquid : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CRIMSONSQUID";
         descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
         model = "\ChefZ\ChefZ_Sealife\squid\models\crimsonsquid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\CrimsonSquid_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\CrimsonSquid_co.paa", "ChefZ\ChefZ_Sealife\squid\data\CrimsonSquid_baked_co.paa", "ChefZ\ChefZ_Sealife\squid\data\CrimsonSquid_boiled_co.paa", "ChefZ\ChefZ_Sealife\squid\data\CrimsonSquid_dried_co.paa", "ChefZ\ChefZ_Sealife\squid\data\CrimsonSquid_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 2};
         weight = 1500;
         varQuantityInit = 450;
@@ -3541,11 +3870,12 @@ class CfgVehicles
 
     class ChefZ_NorthernCrimsonSquid : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_NORTHERNCRIMSONSQUID";
         descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
         model = "\ChefZ\ChefZ_Sealife\squid\models\northerncrimsonsquid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\NorthernCrimsonSquid_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\NorthernCrimsonSquid_co.paa", "ChefZ\ChefZ_Sealife\squid\data\NorthernCrimsonSquid_baked_co.paa", "ChefZ\ChefZ_Sealife\squid\data\NorthernCrimsonSquid_boiled_co.paa", "ChefZ\ChefZ_Sealife\squid\data\NorthernCrimsonSquid_dried_co.paa", "ChefZ\ChefZ_Sealife\squid\data\NorthernCrimsonSquid_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 2};
         weight = 1500;
         varQuantityInit = 450;
@@ -3554,11 +3884,12 @@ class CfgVehicles
 
     class ChefZ_Octopus : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_OCTOPUS";
         descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
         model = "\ChefZ\ChefZ_Sealife\squid\models\octopus.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\Octopus_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\Octopus_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Octopus_baked_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Octopus_boiled_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Octopus_dried_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Octopus_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 2};
         weight = 1500;
         varQuantityInit = 450;
@@ -3567,11 +3898,12 @@ class CfgVehicles
 
     class ChefZ_SpeckledSquid : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SPECKLEDSQUID";
         descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
         model = "\ChefZ\ChefZ_Sealife\squid\models\speckledsquid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\SpeckledSquid_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\SpeckledSquid_co.paa", "ChefZ\ChefZ_Sealife\squid\data\SpeckledSquid_baked_co.paa", "ChefZ\ChefZ_Sealife\squid\data\SpeckledSquid_boiled_co.paa", "ChefZ\ChefZ_Sealife\squid\data\SpeckledSquid_dried_co.paa", "ChefZ\ChefZ_Sealife\squid\data\SpeckledSquid_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 2};
         weight = 400;
         varQuantityInit = 250;
@@ -3580,11 +3912,12 @@ class CfgVehicles
 
     class ChefZ_Squid : ChefZ_Seafood_Base
     {
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SQUID";
         descriptionShort = "#STR_CHEFZ_ITEM_SQUID_DESC";
         model = "\ChefZ\ChefZ_Sealife\squid\models\squid.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\Squid_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\squid\data\Squid_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Squid_baked_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Squid_boiled_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Squid_dried_co.paa", "ChefZ\ChefZ_Sealife\squid\data\Squid_burnt_co.paa"};   // roh, gebraten, gekocht, geraeuchert, verbrannt (27.10.2026)
         itemSize[] = {3, 2};
         weight = 1500;
         varQuantityInit = 450;

@@ -195,6 +195,10 @@ def recipe_cases(ix):
     return out
 
 
+# Vanilla-Stufe, auf die ein ChefZ-Zustand projiziert (ChefZ_StateManager).
+STAGE_OF_STATE = {"SMOKED": "DRIED", "DRIED": "DRIED"}
+
+
 def transform_cases(ix):
     stations = {}
     for s in ix.kind("station"):
@@ -210,11 +214,18 @@ def transform_cases(ix):
                 named.setdefault(t["process"], {}).setdefault(c, set()).add(t["id"])
     out = []
     for t in ix.kind("transform"):
-        outs = [o["cls"] for o in t.get("outputs", [])]
+        outs = [o["cls"] for o in t.get("outputs", []) if o.get("cls")]
+        # Reiner Zustandswechsel (kein Output nennt eine Klasse): der Eingang
+        # bleibt und steht danach in der projizierten Vanilla-Stufe.
+        pure = not outs
         avoid = {c for c, ids in named.get(t["process"], {}).items() if ids - {t["id"]}}
         st = (t.get("stationsAllowed") or stations.get(t["process"]) or [""])[0]
         case = {"kind": "PROC", "id": t["id"], "device": st, "method": "", "liquid": "", "liquidQty": 0,
-                "inputs": [], "outputs": outs, "note": "", "process": t["process"], "seconds": t.get("durationOverrideSec", 0)}
+                "inputs": [], "outputs": outs, "note": "", "process": t["process"], "seconds": t.get("durationOverrideSec", 0),
+                "byproducts": [b["cls"] for b in t.get("byproducts", [])], "expectStage": ""}
+        if pure:
+            states = [o.get("setState", "") for o in t.get("outputs", [])]
+            case["expectStage"] = STAGE_OF_STATE.get(states[0] if states else "", "")
         for s in t["inputs"]:
             if s.get("optional") or s.get("minCount", 1) <= 0:
                 continue
@@ -229,6 +240,8 @@ def transform_cases(ix):
                 case["note"] += "kein Kandidat fuer Slot " + s["slotId"] + "; "
                 continue
             case["inputs"].append((p, max(1, s.get("minCount", 1))))
+        if pure:
+            case["outputs"] = sorted({p.cls for p, n in case["inputs"]})
         if st:
             sort_by_size(case)
         out.append(case)
@@ -271,6 +284,10 @@ def emit(cases):
                 lines.append("        c.SetLastQtyPct(" + str(float(p.qpct)) + ");")
         for o in c["outputs"]:
             lines.append("        c.AddOutput(" + q(o) + ");")
+        if c.get("expectStage"):
+            lines.append("        c.expectStage = " + q(c["expectStage"]) + ";")
+        for o in c.get("byproducts", []):
+            lines.append("        c.AddByproduct(" + q(o) + ");")
         if c["note"]:
             lines.append("        c.note = " + q(c["note"]) + ";")
         lines.append("        list.Insert(c);")

@@ -85,8 +85,11 @@
 //
 // Die Aktion sitzt am ZUENDER, nicht am Ziel: Matchbox.c:37, PetrolLighter.c:37,
 // HandDrillKit.c:29, Torch.c:765, Roadflare.c:482 rufen AddAction(
-// ActionLightItemOnFire). Der Schrank braucht deshalb kein SetActions und
-// bekommt auch keines.
+// ActionLightItemOnFire). Das SetActions des Schranks nimmt nur etwas WEG:
+// ChefZ_ActionProcessAtStation (27.10.2026, Spieltest "F halten zum Raeuchern
+// bricht immer ab"). Der Schrank startet seine Jobs beim Anzuenden und in
+// jedem Brenntakt selbst; die Aktion sah auf dem Client freie Slots, der
+// Server hatte sie laengst belegt und brach ab.
 //
 // Die vier Haken selbst stehen als leere Vorgaben in EntityAI (scripts - 1.29/
 // 3_Game/DayZ/Entities/EntityAI.c:540-621) und sind ausdruecklich zum
@@ -153,11 +156,20 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 
 	static const string CHEFZ_SMOKE_PROCESS = "PROCESS_SMOKE";
 
+	//! Achtzehn Raeucherhaken (27.10.2026: vier, dann zwoelf, dann achtzehn):
+	//! SmokingA-D von Vanilla, dahinter ChefZ_SmokeHook05-18 (CfgSlots in
+	//! ChefZ_Processing/config.cpp).
+	static const int CHEFZ_HOOK_COUNT = 18;
+
 
 	//! Die beiden Kategorien, die ins Raeuchergut gehoeren. MEAT trifft ueber
 	//! die Closure auch SAUSAGE und alle Wildarten - siehe ChefZ_StationGate.
 	static const string CHEFZ_CAT_MEAT = "MEAT";
 	static const string CHEFZ_CAT_FISH = "FISH";
+	//! Keulen (Spieltest 27.10.2026) und Obst, das im Rauch nur trocknet
+	//! (FRUIT trifft ueber die Closure auch BERRY).
+	static const string CHEFZ_CAT_PRIMAL = "PRIMAL_CUT";
+	static const string CHEFZ_CAT_FRUIT = "FRUIT";
 
 	//! Hoehe des Rauchpartikels ueber dem Objektursprung. GESCHAETZT am
 	//! Platzhaltermodell: der Rauch soll oben aus dem Schrank kommen, nicht
@@ -390,7 +402,13 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 		if (!ChefZ_SymbolTable.IsValid(process))
 			return;
 
+		// Nicht mehr Jobs als Raeuchergut da ist (27.10.2026): Jobs reservieren
+		// keine Items (ChefZ_ProcessingStation_Base, Kopf), und mit zwoelf
+		// Slots haette ein einzelnes Stueck sonst zwoelf Jobs gebunden.
 		int slots = ChefZ_GetSlotCount();
+		int pending = ChefZ_CountPendingGoods();
+		if (pending < slots)
+			slots = pending;
 		for (int i = 0; i < slots; i++)
 		{
 			if (ChefZ_ActiveJobCount() >= slots)
@@ -399,6 +417,67 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 			if (!ChefZ_BeginJob(process, null, 0, err))
 				return;
 		}
+	}
+
+	//! Fleisch und Fisch an den Haken und im Cargo, das noch nicht geraeuchert ist.
+	protected int ChefZ_CountPendingGoods()
+	{
+		ChefZ_Sym smoked = ChefZ_SymbolTable.Lookup("SMOKED");
+		ChefZ_Sym dried = ChefZ_SymbolTable.Lookup("DRIED");
+		int count = 0;
+
+		for (int s = 0; s < CHEFZ_HOOK_COUNT; s++)
+		{
+			ItemBase hung = ItemBase.Cast(FindAttachmentBySlotName(ChefZ_HookSlotName(s)));
+			if (ChefZ_IsPendingGood(hung, smoked, dried))
+				count++;
+		}
+
+		GameInventory inventory = GetInventory();
+		if (!inventory)
+			return count;
+		CargoBase cargo = inventory.GetCargo();
+		if (!cargo)
+			return count;
+
+		int n = cargo.GetItemCount();
+		for (int i = 0; i < n; i++)
+		{
+			ItemBase item = ItemBase.Cast(cargo.GetItem(i));
+			if (ChefZ_IsPendingGood(item, smoked, dried))
+				count++;
+		}
+		return count;
+	}
+
+	protected bool ChefZ_IsPendingGood(ItemBase item, ChefZ_Sym smoked, ChefZ_Sym dried)
+	{
+		if (!item)
+			return false;
+		ChefZ_Sym state = ChefZ_ItemStateComponent.GetState(item);
+		// Obst raeuchert nicht, es trocknet - fertig ist es mit DRIED.
+		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_FRUIT))
+			return state != dried;
+		if (!ChefZ_IsSmokable(item))
+			return false;
+		// Ein geraeuchertes Vanilla-Steak traegt keinen ChefZ-Zustand, nur die
+		// Projektion DRIED (27.10.2026, Raeuchern als reiner Zustandswechsel):
+		// auch das ist fertig, sonst startete der Schrank ewig neue Auftraege.
+		if (state == dried)
+			return false;
+		return state != smoked;
+	}
+
+	//! Was an die Haken darf: Fleisch, Fisch, Keulen, Obst.
+	static bool ChefZ_IsSmokable(EntityAI item)
+	{
+		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_MEAT))
+			return true;
+		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_FISH))
+			return true;
+		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_PRIMAL))
+			return true;
+		return ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_FRUIT);
 	}
 
 	//! Schrank und Cargo auf Raeuchertemperatur ziehen.
@@ -425,38 +504,47 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 		}
 
 		// Raeucherhaken: dieselbe Hitze wie der Cargo.
-		string hooks[4] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD"};
-		for (int s = 0; s < 4; s++)
+		for (int s = 0; s < CHEFZ_HOOK_COUNT; s++)
 		{
-			ItemBase hung = ItemBase.Cast(FindAttachmentBySlotName(hooks[s]));
+			ItemBase hung = ItemBase.Cast(FindAttachmentBySlotName(ChefZ_HookSlotName(s)));
 			if (!hung || !hung.CanHaveTemperature())
 				continue;
 			hung.SetTemperatureEx(new TemperatureDataInterpolated(CHEFZ_SMOKE_TEMP_C, ETemperatureAccessTypes.ACCESS_FIREPLACE, deltaSec, GameConstants.TEMP_COEF_FIREPLACE_HEATING, hung.GetHeatPermeabilityCoef()));
 		}
 	}
 
-	//! Raeucherhaken nehmen nur, was auch der Cargo nimmt: Fleisch und Fisch.
+	//! Slotname des Hakens index (0-basiert).
+	static string ChefZ_HookSlotName(int index)
+	{
+		if (index == 0) return "SmokingA";
+		if (index == 1) return "SmokingB";
+		if (index == 2) return "SmokingC";
+		if (index == 3) return "SmokingD";
+		int nummer = index + 1;
+		return "ChefZ_SmokeHook" + nummer.ToStringLen(2);
+	}
+
+	static bool ChefZ_IsHookSlot(string slot)
+	{
+		for (int i = 0; i < CHEFZ_HOOK_COUNT; i++)
+		{
+			if (ChefZ_HookSlotName(i) == slot)
+				return true;
+		}
+		return false;
+	}
+
+	//! Raeucherhaken nehmen Fleisch, Fisch, Keulen und Obst (ChefZ_IsSmokable).
 	override bool CanReceiveAttachment(EntityAI attachment, int slotId)
 	{
 		if (!super.CanReceiveAttachment(attachment, slotId))
 			return false;
 		string slot = InventorySlots.GetSlotName(slotId);
-		bool hook = false;
-		string hooks[4] = {"SmokingA", "SmokingB", "SmokingC", "SmokingD"};
-		for (int s = 0; s < 4; s++)
-		{
-			if (hooks[s] == slot)
-				hook = true;
-		}
-		if (!hook)
+		if (!ChefZ_IsHookSlot(slot))
 			return true;
 		if (!ChefZ_StationGate.ChefZ_RegistryReady())
 			return true;
-		if (ChefZ_StationGate.ChefZ_InCategory(attachment, CHEFZ_CAT_MEAT))
-			return true;
-		if (ChefZ_StationGate.ChefZ_InCategory(attachment, CHEFZ_CAT_FISH))
-			return true;
-		return false;
+		return ChefZ_IsSmokable(attachment);
 	}
 
 	/**
@@ -540,18 +628,12 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 	//==========================================================================
 
 	/**
-	 * Rinde und Raeuchergut hinein, sonst nichts.
-	 *
-	 * Der Cargo ist zugleich Brennstofflager und Raeucherkammer - getrennte
-	 * Bereiche gibt die Engine nicht her (siehe Kopf von ChefZ_StationGate).
-	 * Deshalb muessen hier BEIDE Sorten durch, und genau darauf ist zu achten:
-	 * ein Torwaechter, der nur an das Raeuchergut denkt, sperrt den eigenen
-	 * Brennstoff aus und macht den Schrank ein zweites Mal unbenutzbar.
-	 *
-	 * Fleisch UND Fisch, weil Smoking.json beides raeuchert; die Ergebnisse
-	 * (ChefZ_SmokedMeat, ChefZ_SmokedFish, ChefZ_SmokedSausage) liegen in
-	 * denselben beiden Kategorien und duerfen deshalb im Cargo entstehen und
-	 * liegen bleiben.
+	 * Der Cargo ist reine Ausgabe (Spieltest 27.10.2026: "Inventar soll nur
+	 * entnehmbar sein, aber nichts hineinlegbar"). Raeuchergut kommt an die
+	 * 18 Haken, Brennstoff in die Feuerplaetze; in den Cargo legt nur der
+	 * Applicator die fertigen Stuecke (ChefZ_Applicator.s_ChefZ_Placing).
+	 * Rinde aus aelteren Staenden, die noch im Cargo liegt, brennt weiter
+	 * (ChefZ_FindFuel) und laesst sich herausnehmen.
 	 *
 	 * Beleg: EntityAI.CanReceiveItemIntoCargo, scripts - 1.29/3_Game/DayZ/
 	 * Entities/EntityAI.c:1550-1559; Ueberschreibung wie Barrel_ColorBase.c:512.
@@ -560,24 +642,42 @@ class ChefZ_Smoker extends ChefZ_ProcessingStation_Base
 	{
 		if (!super.CanReceiveItemIntoCargo(item))
 			return false;
-		if (!item)
+		return ChefZ_Applicator.s_ChefZ_Placing;
+	}
+
+	//! Die Stationsaktion faellt weg, siehe Dateikopf (Zuenden).
+	override void SetActions()
+	{
+		super.SetActions();
+		RemoveAction(ChefZ_ActionProcessAtStation);
+	}
+
+	/**
+	 * Ein aktiver Schrank bleibt stehen (27.10.2026, Spieltest): brennend oder
+	 * mit laufendem Raeuchergang laesst er sich weder in die Haende noch in
+	 * ein Inventar nehmen - wie Vanillas Fireplace (Fireplace.c:379-432).
+	 * m_ChefZ_Lit und die Prozessordinale sind netzsynchron, die Pruefung
+	 * stimmt also auf Client und Server.
+	 */
+	bool ChefZ_IsActive()
+	{
+		if (m_ChefZ_Lit)
+			return true;
+		return ChefZ_GetActiveProcessOrdinal() > 0;
+	}
+
+	override bool CanPutIntoHands(EntityAI parent)
+	{
+		if (!super.CanPutIntoHands(parent))
 			return false;
+		return !ChefZ_IsActive();
+	}
 
-		// Brennstoff.
-		if (Bark_ColorBase.Cast(item))
-			return true;
-
-		// Solange die Register nicht stehen, wird nichts abgewiesen - sonst
-		// naehme der Schrank in genau diesem Fenster gar nichts an.
-		if (!ChefZ_StationGate.ChefZ_RegistryReady())
-			return true;
-
-		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_MEAT))
-			return true;
-		if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_FISH))
-			return true;
-
-		return false;
+	override bool CanPutInCargo(EntityAI parent)
+	{
+		if (!super.CanPutInCargo(parent))
+			return false;
+		return !ChefZ_IsActive();
 	}
 
 	/**

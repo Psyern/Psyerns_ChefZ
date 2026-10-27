@@ -70,6 +70,9 @@ class ChefZ_AT_Runner
             m_Site[1] = g_Game.SurfaceY(m_Site[0], m_Site[2]);
             m_Player.SetPosition(m_Site + Vector(0, 0, -4));
             m_Player.SetAllowDamage(false);
+            // Clientpruefung (Kochbuch-Menue, Angel-QTE-HUD) laeuft parallel auf dem Testclient.
+            if (m_Player.GetIdentity())
+                g_Game.RPCSingleParam(m_Player, ChefZ_AT_Rpc.CLIENT_PROBE, new Param1<int>(0), true, m_Player.GetIdentity());
             g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(NextCase, 3000, false);
             return;
         }
@@ -196,14 +199,14 @@ class ChefZ_AT_Runner
                     lastStages = stages;
                 }
             }
-            if (ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made))
+            if (ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made, c.expectStage))
                 break;
             // Zwischengelagerte Ergebnisse (ChefZ_Applicator, kein Platz neben
             // den Zutaten) liegen bis zum naechsten Frame neben dem Gefaess -
             // diese Schleife laeuft aber in EINEM Frame.
             array<EntityAI> near = new array<EntityAI>();
             ChefZ_AT_Util.CollectNear(dev.GetPosition(), 1.5, near);
-            if (ChefZ_AT_Util.HasOutputs(near, c.outputs, missing, made))
+            if (ChefZ_AT_Util.HasOutputs(near, c.outputs, missing, made, c.expectStage))
                 break;
         }
 
@@ -512,7 +515,7 @@ class ChefZ_AT_Runner
                     station.ChefZ_TickJobs(15.0);
                     items.Clear();
                     ChefZ_AT_Util.CollectCargo(station, items);
-                    if (ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made))
+                    if (ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made, c.expectStage))
                         break;
                 }
             }
@@ -539,6 +542,16 @@ class ChefZ_AT_Runner
             ChefZ_AT_Util.CollectCargo(m_PendingStation, items);
         ChefZ_AT_Util.CollectCargo(m_Player, items);
         ChefZ_AT_Util.CollectNear(m_Site, 8, items);
+        // Was bei vollem Inventar neben dem Spieler landet (SpawnGround), liegt
+        // nicht immer im Radius um m_Site: sonst zaehlt ein Eingang "0->0"
+        // (TR_AssemblePastaMachine, 27.10.2026). Doppelte nicht mitzaehlen.
+        array<EntityAI> nearPlayer = new array<EntityAI>();
+        ChefZ_AT_Util.CollectNear(m_Player.GetPosition(), 3, nearPlayer);
+        foreach (EntityAI np : nearPlayer)
+        {
+            if (items.Find(np) < 0)
+                items.Insert(np);
+        }
         return items;
     }
 
@@ -579,7 +592,7 @@ class ChefZ_AT_Runner
         string missing;
         EntityAI made;
         array<EntityAI> items = CollectAround();
-        ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made);
+        ChefZ_AT_Util.HasOutputs(items, c.outputs, missing, made, c.expectStage);
 
         // Die Zutaten muessen weniger geworden sein (Fleischwolf: das Fleisch
         // verschwindet und wird zu Hackfleisch).
@@ -599,6 +612,16 @@ class ChefZ_AT_Runner
         if (!made && missing == "")
             missing = "Zutaten nicht verbraucht ";
 
+        // Nichts Unbestelltes im Laderaum (27.10.2026, Spieltest: der
+        // Fleischwolf warf Lard ab, das niemand wollte). Erlaubt sind nur
+        // Eingaenge, Ausgaenge und die byproducts[] des Transforms.
+        string stray = StrayInStation(c);
+        if (made && stray != "")
+        {
+            made = null;
+            missing = "nichts - aber unerwartet im Laderaum: " + stray;
+        }
+
         if (m_PendingTool)
             how = how + " werkzeug=" + m_PendingTool.GetType() + " hp " + m_PendingToolHp.ToString() + "->" + m_PendingTool.GetHealth("", "").ToString() + m_PendingToolNote;
         m_PendingTool = null;
@@ -617,6 +640,32 @@ class ChefZ_AT_Runner
         m_PendingFire = null;
         m_Pending = null;
         g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(NextCase, 300, false);
+    }
+
+    //! Klassen im Laderaum der Station, die der Fall nicht erwartet - "" wenn keine.
+    //! Nur der Laderaum: Anbauteile (Brennholz am Raeucherofen) zaehlen nicht.
+    string StrayInStation(ChefZ_AT_Case c)
+    {
+        string stray = "";
+        if (!m_PendingStation)
+            return stray;
+        GameInventory inv = m_PendingStation.GetInventory();
+        if (!inv)
+            return stray;
+        CargoBase cargo = inv.GetCargo();
+        if (!cargo)
+            return stray;
+        int n = cargo.GetItemCount();
+        for (int i = 0; i < n; i++)
+        {
+            EntityAI e = cargo.GetItem(i);
+            if (!e || e.IsSetForDeletion())
+                continue;
+            if (c.IsExpectedInCargo(e.GetType()))
+                continue;
+            stray = stray + e.GetType() + " ";
+        }
+        return stray;
     }
 
     //! Wie ChefZ_ActionProcessAtStation.RunImmediate, ohne ActionData.
@@ -709,6 +758,12 @@ class ChefZ_AT_Runner
             }
             g_Game.ObjectDelete(o);
         }
+        ChefZ_AT_Fixes.FoodBox(m_Site + Vector(-3, 0, 0));
+        ChefZ_AT_Fixes.MeatTextures(m_Site + Vector(-4, 0, 2));
+        ChefZ_AT_Fixes.StageTextureAudit(m_Site + Vector(-6, 0, 2));
+        ChefZ_AT_Fixes.NewSealifeModels(m_Site + Vector(-6, 0, -2));
+        // Kochbuch-Platz: eigene Kette (~5 s), laeuft neben dem Raeucherschrank.
+        ChefZ_AT_CookbookSlot.Start(m_Player, m_Site + Vector(-2, 0, -4));
         // Raeucherschrank und Honigschleuder brauchen echte Zeit (Brenntakt
         // 5 s) und werden einen Frame nach dem letzten Takt bewertet, weil die
         // Engine verbrauchte Zutaten erst am Frameende loescht.
@@ -733,7 +788,9 @@ class ChefZ_AT_Runner
             return;
         }
         EntityAI wood = smoker.GetInventory().CreateAttachment("Firewood");
-        EntityAI meat = smoker.GetInventory().CreateEntityInCargo("PigSteakMeat");
+        // Cargo ist seit 27.10.2026 reine Ausgabe: das zweite Steak haengt am letzten Haken.
+        int hookLast = InventorySlots.GetSlotIdFromString(ChefZ_Smoker.ChefZ_HookSlotName(ChefZ_Smoker.CHEFZ_HOOK_COUNT - 1));
+        EntityAI meat = smoker.GetInventory().CreateAttachmentEx("PigSteakMeat", hookLast);
         ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.fuelslot", wood != null, "Firewood als Attachment");
         // Raeucherhaken wie Vanillas Ofen: ein Steak haengt, eine Tomate darf nicht.
         int hookA = InventorySlots.GetSlotIdFromString("SmokingA");
@@ -743,8 +800,10 @@ class ChefZ_AT_Runner
         bool tomatoRefused = tomato && !smoker.CanReceiveAttachment(tomato, hookB);
         bool steakTaken = m_AtSmokerHook != null;
         ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.hook", steakTaken && tomatoRefused, "Steak am Haken=" + steakTaken.ToString() + " Tomate abgewiesen=" + tomatoRefused.ToString());
+        ChefZ_AT_Fixes.SmokerInputs(smoker, tomato, m_Site);
         if (tomato)
             g_Game.ObjectDelete(tomato);
+        ChefZ_AT_Fixes.SmokerHooks(smoker);
         m_AtSmokerHookT0 = 0;
         if (m_AtSmokerHook)
             m_AtSmokerHookT0 = m_AtSmokerHook.GetTemperature();
@@ -768,13 +827,16 @@ class ChefZ_AT_Runner
             TestHoneyAutostart();
             return;
         }
+        ChefZ_AT_Fixes.SmokerPickup(smoker, m_Player);
         float t1 = -1000;
         string which = "PigSteakMeat";
+        if (m_AtSmokerMeat && !m_AtSmokerMeat.IsSetForDeletion())
+            t1 = m_AtSmokerMeat.GetTemperature();
         array<EntityAI> items = new array<EntityAI>();
         ChefZ_AT_Util.CollectCargo(smoker, items);
         foreach (EntityAI e : items)
         {
-            if (e.GetType() == "PigSteakMeat" || e.GetType() == "ChefZ_SmokedMeat")
+            if (e.GetType() == "PigSteakMeat")
             {
                 t1 = e.GetTemperature();
                 which = e.GetType();
@@ -805,19 +867,28 @@ class ChefZ_AT_Runner
             {
                 if (e.IsSetForDeletion())
                     continue;
-                if (e.GetType() == "PigSteakMeat")
-                    raw++;
-                if (e.GetType() == "ChefZ_SmokedMeat")
+                // 27.10.2026: das Steak bleibt und wechselt nur die Stufe
+                // (Smoking.json, reiner Zustandswechsel).
+                if (e.GetType() != "PigSteakMeat")
+                    continue;
+                if (ChefZ_AT_Util.InStage(e, "DRIED"))
                     smoked++;
+                else
+                    raw++;
             }
+            // Das Haken-Steak haengt weiter, jetzt geraeuchert (gezaehlt ist es
+            // oben schon: EnumerateInventory liefert auch die Anhaenge).
             EntityAI stillHung = smoker.FindAttachmentBySlotName("SmokingA");
-            bool hookEmpty = !stillHung || stillHung.IsSetForDeletion();
+            bool hookEmpty = false;
+            if (stillHung)
+                hookEmpty = ChefZ_AT_Util.InStage(stillHung, "DRIED");
             // Einzeln gerechnet: in einer Zeile "a == 0 && b == 2 && flag" lieferte
             // Enforce true bei b == 1 (Autotest 26.10.2026).
             bool rawOk = (raw == 0);
             bool countOk = (smoked == 2);
             bool smokedOk = rawOk && countOk && hookEmpty;
-            ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.smokes", smokedOk, "roh=" + raw.ToString() + " geraeuchert=" + smoked.ToString() + " (Cargo-Steak + Haken-Steak) Haken leer=" + hookEmpty.ToString() + " Inhalt: " + DescribeItems(items));
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_Smoker.smokes", smokedOk, "roh=" + raw.ToString() + " geraeuchert=" + smoked.ToString() + " (Cargo-Steak + Haken-Steak) Haken geraeuchert=" + hookEmpty.ToString() + " Inhalt: " + DescribeItems(items));
+            ChefZ_AT_Fixes.SmokedStates(smoker);
             g_Game.ObjectDelete(smoker);
         }
         m_AtSmoker = null;
@@ -913,6 +984,9 @@ class ChefZ_AT_Runner
     void RunFishing()
     {
         ChefZ_AT_Fishing.Run(m_Player, m_Site);
+        ChefZ_AT_Fixes.QteTiers();
+        ChefZ_AT_Fixes.QteResolve(m_Player, m_Site, 0.9, true);
+        ChefZ_AT_Fixes.QteResolve(m_Player, m_Site, 0.1, false);
         g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(RunMeal, 1000, false);
     }
 
@@ -969,8 +1043,60 @@ class ChefZ_AT_Runner
     //! Sichtpruefung: ein brennender Raeucherschrank vor dem Spieler, der Client
     //! oeffnet das Inventar (ChefZ_AT_Quit.c) und meldet die Feuerplaetze; das
     //! Bildschirmfoto macht der Testlauf von aussen.
+    bool m_AtFilletShown;
+    ref array<Object> m_AtFillets;
+
+    //! Sichtpruefung Filets: Varianten in Augenhoehe vor dem Spieler, das
+    //! Bildschirmfoto macht der Testlauf von aussen (Log "fillet-showcase").
+    void FilletShowcase()
+    {
+        m_AtFilletShown = true;
+        m_AtFillets = new array<Object>();
+        ChefZ_AT_Util.ClearArea(m_Player.GetPosition(), 3);
+        TStringArray cls = {"CarpFilletMeat", "ChefZ_SeaBassFillet", "ChefZ_SeaBassFillet", "ChefZ_RedMulletFillet", "ChefZ_BeefLeg", "ChefZ_SmokedSausage", "ChefZ_CoastalCrab", "ChefZ_Bread", "ChefZ_Carrot"};
+        // In einen Rucksack des Spielers: die Inventarkacheln rendern das echte
+        // Modell samt Textur, ein unsichtbares Modell gibt eine leere Kachel.
+        EntityAI bag = m_Player.GetInventory().CreateAttachment("MountainBag_Blue");
+        if (bag)
+            m_AtFillets.Insert(bag);
+        string order = "";
+        for (int i = 0; i < cls.Count(); i++)
+        {
+            EntityAI o = m_Player.GetInventory().CreateInInventory(cls.Get(i));
+            if (o)
+                m_AtFillets.Insert(o);
+            // Das zweite SeaBass-Filet gebraten: Stufen-Textur ohne Material.
+            Edible_Base food = Edible_Base.Cast(o);
+            if (food)
+            {
+                if (i == 2)
+                    food.ChangeFoodStage(FoodStageType.BAKED);
+            }
+            bool made = o != null;
+            order = order + cls.Get(i) + "=" + made.ToString() + " ";
+        }
+        Print("[CHEFZTEST] INFO fillet-showcase bereit (links->rechts aus Spielersicht gespiegelt pruefen) " + order);
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FilletShowcaseEnd, 60000, false);
+    }
+
+    void FilletShowcaseEnd()
+    {
+        foreach (Object o : m_AtFillets)
+        {
+            if (o)
+                g_Game.ObjectDelete(o);
+        }
+        m_AtFillets = null;
+        UiShowcase();
+    }
+
     void UiShowcase()
     {
+        if (!m_AtFilletShown)
+        {
+            FilletShowcase();
+            return;
+        }
         // Innerhalb von VICINITY_DISTANCE 0.5 (VicinityItemManager.c:4), sonst haengt
         // die Anzeige an der Blickrichtung der Clientkamera.
         // Erst raeumen, dann zwei Sekunden warten: loescht der Server etwas, das

@@ -11,11 +11,14 @@
 // in CfgChefZStates - ein Zustand ohne Uebergang waere eine Zusage ohne Weg.
 //
 //   Raw Meat    + Salz   --HANDCRAFT-->      ChefZ_SaltedMeat      §43
-//   SaltedMeat  + Rahmen --PROCESS_DRY-->    ChefZ_DriedMeat       §43
-//   SaltedMeat  + Schrank--PROCESS_SMOKE-->  ChefZ_SmokedMeat      §43
+//   SaltedMeat  + Rahmen --PROCESS_DRY-->    bleibt, Zustand DRIED §43
+//   Fleisch     + Schrank--PROCESS_SMOKE-->  bleibt, Zustand SMOKED §43
 //   Fischfilet  + Salz   --HANDCRAFT-->      ChefZ_SaltedFish      §45
-//   SaltedFish  + Rahmen --PROCESS_DRY-->    ChefZ_DriedFish       §45
-//   Fischfilet  + Schrank--PROCESS_SMOKE-->  ChefZ_SmokedFish      §46
+//   SaltedFish  + Rahmen --PROCESS_DRY-->    bleibt, Zustand DRIED §45
+//   Fischfilet  + Schrank--PROCESS_SMOKE-->  bleibt, Zustand SMOKED §46
+//   (27.10.2026: die Sammelklassen ChefZ_DriedMeat/SmokedMeat/DriedFish/
+//   SmokedFish sind entfallen - jedes Filet hat seine eigene Raeucher- und
+//   Trockenoptik.)
 //   Raw Sausage + Schrank--PROCESS_SMOKE-->  ChefZ_SmokedSausage   §41
 //   Raw Sausage + Rahmen --PROCESS_DRY-->    ChefZ_DrySausage      §42
 //
@@ -194,14 +197,13 @@ class CfgPatches
     {
         units[] =
         {
-            // Die Basis der acht haltbar gemachten Waren.
+            // Die Basis der vier haltbar gemachten Waren. Raeucher- und
+            // Trockenfleisch/-fisch sind keine eigenen Klassen mehr (27.10.2026):
+            // Filet und Fleisch bleiben, nur ihr Zustand wechselt (Smoking.json,
+            // Drying.json).
             "ChefZ_PreservedFood_Base",
             "ChefZ_SaltedMeat",
-            "ChefZ_DriedMeat",
-            "ChefZ_SmokedMeat",
             "ChefZ_SaltedFish",
-            "ChefZ_DriedFish",
-            "ChefZ_SmokedFish",
             "ChefZ_SmokedSausage",
             "ChefZ_DrySausage"
         };
@@ -254,7 +256,7 @@ class CfgMods
         extra = 0;
         type = "mod";
 
-        dependencies[] = {"World"};
+        dependencies[] = {"World", "Mission"};
 
         class defs
         {
@@ -264,6 +266,15 @@ class CfgMods
                 files[] =
                 {
                     "ChefZ_Preservation/Scripts/4_World"
+                };
+            };
+            // Inventar-Anzeige "Geraeuchert" (27.10.2026)
+            class missionScriptModule
+            {
+                value = "";
+                files[] =
+                {
+                    "ChefZ_Preservation/Scripts/5_Mission"
                 };
             };
         };
@@ -487,6 +498,10 @@ class CfgVehicles
     class ChefZ_SaltedMeat : ChefZ_PreservedFood_Base
     {
         scope = 2;
+        // Garstufen-Texturen (27.10.2026): Grundzustand, gebraten, gekocht, getrocknet/geraeuchert, verbrannt.
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsTextures[] = {"dz\gear\food\data\meat_steak_raw_CO.paa", "dz\gear\food\data\meat_steak_baked_CO.paa", "dz\gear\food\data\meat_steak_boiled_co.paa", "dz\gear\food\data\meat_steak_dried_CO.paa", "dz\gear\food\data\meat_steak_burned_CO.paa"};
+        hiddenSelectionsMaterials[] = {"dz\gear\food\data\meat_steak_raw.rvmat", "dz\gear\food\data\meat_steak_baked.rvmat", "dz\gear\food\data\meat_steak_boiled.rvmat", "dz\gear\food\data\meat_steak_dried.rvmat", "dz\gear\food\data\meat_steak_burnt.rvmat", "dz\gear\food\data\meat_steak_rotten.rvmat"};
         displayName = "#STR_CHEFZ_ITEM_SALTEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_SALTEDMEAT1";
         model = "\dz\gear\food\meat_steak.p3d";
@@ -497,10 +512,14 @@ class CfgVehicles
         // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
         // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
         // das Stueck an, und es meldet das nirgends.
+        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
+        // die Raeucherkammer").
         inventorySlot[] =
         {
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
         };
 
         // VOLUMEN: 1.96 * 250 = 490. Das schwerste Stueck Fleisch der Kette,
@@ -523,124 +542,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.96, 165, 25, 16, 0, 4, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.79, 330, 12, 26, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.87, 300, 40, 26, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.53, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.28, 85, 6, 5, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.62, 100, 18, 5, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
-            };
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class ChefZ_PreservedRawToBaked
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class ChefZ_PreservedRawToBoiled
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
-
-    // SaltedMeat am Trockenrahmen. Der Vorratsartikel schlechthin: sehr wenig
-    // Wasser, sehr viel Energie je Platz. Kein Kochbedarf mehr.
-    // PROXY: meat_steak.p3d. Ziel: dunkles, geschrumpftes Doerrfleisch.
-    class ChefZ_DriedMeat : ChefZ_PreservedFood_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDMEAT0";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDMEAT1";
-        model = "\dz\gear\food\meat_steak.p3d";
-        itemSize[] = {2, 1};
-        weight = 120;
-
-        // VOLUMEN: 1.42 * 250 = 355. Doerrfleisch hat sein Wasser verloren und
-        // fuellt entsprechend weniger als das gepoekelte Stueck - der alte Wert
-        // 90 sagte dasselbe, nur in der falschen Einheit.
-        // Faktor auf alle Garstufen: 1.42 / 90.
-        class Nutrition
-        {
-            fullnessIndex = 1.42;
-            energy = 320;
-            water = 5;
-            nutritionalIndex = 30;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.50, 300, 35, 30, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.42, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.35, 80, 1, 7, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.57, 128, 2, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
-            };
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class ChefZ_PreservedRawToBaked
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class ChefZ_PreservedRawToBoiled
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
-
-    // SaltedMeat im Raeucherschrank. Zwischen frisch und doerr: mehr Wasser als
-    // Doerrfleisch, laenger haltbar als gesalzenes - der Reiseproviant aus §41.
-    // PROXY: meat_steak.p3d. Ziel: dunkel geraeuchertes Stueck mit Rauchrand.
-    class ChefZ_SmokedMeat : ChefZ_PreservedFood_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SMOKEDMEAT0";
-        descriptionShort = "#STR_CHEFZ_ITEM_SMOKEDMEAT1";
-        model = "\dz\gear\food\meat_steak.p3d";
-        itemSize[] = {2, 1};
-        weight = 180;
-
-        // VOLUMEN: 1.64 * 250 = 410. Zwischen Doerr- (355) und Poekelfleisch
-        // (490), so wie der alte Wert 100 zwischen 90 und 115 stand.
-        // Faktor auf alle Garstufen: 1.64 / 100.
-        class Nutrition
-        {
-            fullnessIndex = 1.64;
-            energy = 300;
-            water = 12;
-            nutritionalIndex = 28;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.72, 285, 42, 28, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.64, 300, 12, 28, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.41, 75, 3, 7, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.66, 120, 5, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.79, 330, 12, 26, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.87, 300, 40, 26, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {1.53, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {1.28, 85, 6, 5, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 5}; nutrition_properties[] = {1.62, 100, 18, 5, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -675,6 +581,10 @@ class CfgVehicles
     class ChefZ_SaltedFish : ChefZ_PreservedFood_Base
     {
         scope = 2;
+        // Garstufen-Texturen (27.10.2026): Grundzustand, gebraten, gekocht, getrocknet/geraeuchert, verbrannt.
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsTextures[] = {"dz\gear\food\data\meat_steak_raw_CO.paa", "dz\gear\food\data\meat_steak_baked_CO.paa", "dz\gear\food\data\meat_steak_boiled_co.paa", "dz\gear\food\data\meat_steak_dried_CO.paa", "dz\gear\food\data\meat_steak_burned_CO.paa"};
+        hiddenSelectionsMaterials[] = {"dz\gear\food\data\meat_steak_raw.rvmat", "dz\gear\food\data\meat_steak_baked.rvmat", "dz\gear\food\data\meat_steak_boiled.rvmat", "dz\gear\food\data\meat_steak_dried.rvmat", "dz\gear\food\data\meat_steak_burnt.rvmat", "dz\gear\food\data\meat_steak_rotten.rvmat"};
         displayName = "#STR_CHEFZ_ITEM_SALTEDFISH0";
         descriptionShort = "#STR_CHEFZ_ITEM_SALTEDFISH1";
         model = "\dz\gear\food\meat_steak.p3d";
@@ -710,127 +620,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.52, 130, 22, 20, 0, 4, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.41, 250, 10, 32, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.47, 230, 38, 32, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.28, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.96, 65, 5, 6, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.25, 80, 16, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
-            };
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class ChefZ_PreservedRawToBaked
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class ChefZ_PreservedRawToBoiled
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
-
-    // SaltedFish am Trockenrahmen. Stockfisch: leicht, trocken, extrem lange
-    // haltbar.
-    // PROXY: meat_steak.p3d. Ziel: hartes, helles Trockenfilet.
-    class ChefZ_DriedFish : ChefZ_PreservedFood_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDFISH0";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDFISH1";
-        model = "\dz\gear\food\meat_steak.p3d";
-        itemSize[] = {2, 1};
-        weight = 95;
-
-        // VOLUMEN: 1.20 * 250 = 300, die UNTERE Kante des Bandes. Stockfisch ist
-        // das leichteste und trockenste Stueck der Matrix und trug schon vorher
-        // den kleinsten Wert (80).
-        // Faktor auf alle Garstufen: 1.20 / 80 (glatt 0.015).
-        class Nutrition
-        {
-            fullnessIndex = 1.20;
-            energy = 260;
-            water = 4;
-            nutritionalIndex = 34;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.28, 245, 32, 34, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.20, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.30, 65, 1, 8, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.48, 104, 2, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
-            };
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class ChefZ_PreservedRawToBaked
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class ChefZ_PreservedRawToBoiled
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
-
-    // Fischfilet direkt in den Raeucherschrank - §46 kennt hier KEINEN
-    // Salzschritt davor, anders als beim Fleisch. Das ist kein Versehen der
-    // Vorlage, sondern der kuerzeste Weg zu haltbarem Fisch und der Grund,
-    // warum sich Raeuchern lohnt, bevor man Salz hat.
-    // PROXY: meat_steak.p3d. Ziel: goldbraun geraeuchertes Filet.
-    class ChefZ_SmokedFish : ChefZ_PreservedFood_Base
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_SMOKEDFISH0";
-        descriptionShort = "#STR_CHEFZ_ITEM_SMOKEDFISH1";
-        model = "\dz\gear\food\meat_steak.p3d";
-        itemSize[] = {2, 1};
-        weight = 150;
-
-        // VOLUMEN: 1.38 * 250 = 345. Geraeucherter Fisch behaelt mehr Wasser als
-        // Stockfisch (300) und bleibt unter dem Salzfilet (380) - dieselbe
-        // Reihenfolge wie 88 zwischen 80 und 95.
-        // Faktor auf alle Garstufen: 1.38 / 88.
-        class Nutrition
-        {
-            fullnessIndex = 1.38;
-            energy = 245;
-            water = 10;
-            nutritionalIndex = 32;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.44, 232, 36, 32, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.38, 245, 10, 32, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.35, 61, 2, 8, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.55, 98, 4, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.41, 250, 10, 32, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.47, 230, 38, 32, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {1.28, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {0.96, 65, 5, 6, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 5}; nutrition_properties[] = {1.25, 80, 16, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -866,11 +660,25 @@ class CfgVehicles
     class ChefZ_SmokedSausage : ChefZ_PreservedFood_Base
     {
         scope = 2;
+        // Garstufen-Texturen (27.10.2026): Grundzustand, gebraten, gekocht, getrocknet/geraeuchert, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_smoked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_smoked_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_smoked_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_smoked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_smoked_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         displayName = "#STR_CHEFZ_ITEM_SMOKEDSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_SMOKEDSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_smoked.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 260;
+
+        // Haken (27.10.2026, Spieltest 13:17): Das Ergebnis haengt wieder am
+        // Haken des Raeucherofens/Trockenrahmens - ohne dieses Feld lag es daneben.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
 
         // VOLUMEN: 2.40 * 250 = 600, die OBERE Kante des Bandes. Die
         // Raeucherwurst war schon vorher der groesste Wert der Matrix (135) und
@@ -893,11 +701,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.45, 480, 44, 33, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.60, 125, 4, 8, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.96, 200, 6, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {2.45, 480, 44, 33, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {2.40, 500, 14, 33, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {0.60, 125, 4, 8, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 5}; nutrition_properties[] = {0.96, 200, 6, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -923,11 +731,25 @@ class CfgVehicles
     class ChefZ_DrySausage : ChefZ_PreservedFood_Base
     {
         scope = 2;
+        // Garstufen-Texturen (27.10.2026): Grundzustand, gebraten, gekocht, getrocknet/geraeuchert, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_dry_co.paa", "\ChefZ\ChefZ_Food\data\sausage_dry_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_dry_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_dry_co.paa", "\ChefZ\ChefZ_Food\data\sausage_dry_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         displayName = "#STR_CHEFZ_ITEM_DRYSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_DRYSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_dry.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
         itemSize[] = {2, 1};
         weight = 200;
+
+        // Haken (27.10.2026, Spieltest 13:17): Das Ergebnis haengt wieder am
+        // Haken des Raeucherofens/Trockenrahmens - ohne dieses Feld lag es daneben.
+        inventorySlot[] =
+        {
+            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
 
         // VOLUMEN: 2.18 * 250 = 545. Dichter als die Raeucherwurst, aber
         // getrocknet und damit kleiner - alter Wert 125 gegen 135.
@@ -948,11 +770,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.27, 520, 36, 35, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.54, 136, 2, 9, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {0.87, 218, 3, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {2.27, 520, 36, 35, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {2.18, 545, 6, 35, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {0.54, 136, 2, 9, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { visual_properties[] = {0, 0, 5}; nutrition_properties[] = {0.87, 218, 3, 7, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {

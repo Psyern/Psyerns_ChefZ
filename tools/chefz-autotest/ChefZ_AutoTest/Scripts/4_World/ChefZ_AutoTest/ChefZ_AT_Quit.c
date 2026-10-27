@@ -11,6 +11,11 @@ class ChefZ_AT_Rpc
     static const int QUIT = 0x43AE2101;
     //! Sichtpruefung: Inventar vor dem brennenden Raeucherschrank oeffnen.
     static const int SHOW_INVENTORY = 0x43AE2102;
+    //! Clientpruefung: Kochbuch-Menue und Angel-QTE-HUD (ChefZ_AT_ClientProbe.c).
+    static const int CLIENT_PROBE = 0x43AE2103;
+
+    //! Gesetzt vom RPC, abgeholt in 5_Mission (4_World kennt die Menues nicht).
+    static bool s_ProbeRequested;
 }
 
 modded class PlayerBase
@@ -25,6 +30,11 @@ modded class PlayerBase
         {
             g_Game.GetMission().ShowInventory();
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(ChefZ_AT_ReportInventory, 4000, false);
+            return;
+        }
+        if (rpc_type == ChefZ_AT_Rpc.CLIENT_PROBE)
+        {
+            ChefZ_AT_Rpc.s_ProbeRequested = true;
             return;
         }
         if (rpc_type != ChefZ_AT_Rpc.QUIT)

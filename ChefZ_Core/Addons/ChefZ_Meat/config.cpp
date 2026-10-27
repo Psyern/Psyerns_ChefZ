@@ -332,6 +332,14 @@ class CfgVehicles
     class ChefZ_MeatItemBase : Edible_Base
     {
         scope = 0;
+        // Raeucherhaken (27.10.2026): Vanillas Steaks haengen an SmokingA-D,
+        // ChefZ-Fleisch bekommt dieselben Haken plus die Haken 5-12 des Schranks.
+        // Rohwuerste ueberschreiben das mit Trocken- UND Raeucherhaken.
+        inventorySlot[] =
+        {
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         model = "\dz\gear\food\steak.p3d";
         rotationFlags = 17;
         itemSize[] = {2, 1};
@@ -405,6 +413,11 @@ class CfgVehicles
                     visual_properties[] = {0, 0, 0};
                     cooking_properties[] = {100, 80, 150};
                 };
+                class Dried
+                {
+                    visual_properties[] = {0, 0, 0};
+                    cooking_properties[] = {70, 120, 80};
+                };
                 class Burned
                 {
                     visual_properties[] = {0, 0, 0};
@@ -431,9 +444,13 @@ class CfgVehicles
             //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
             //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
             //
-            // DRYING fehlt absichtlich: Trocknen und Raeuchern laufen in ChefZ
-            // an eigenen Stationen (11 E6) und nicht in Vanillas Smoking-Slots.
-            // Der Slice "preservation" bringt sie mit.
+            // DRYING (27.10.2026): Fleisch trocknet jetzt auch in Vanillas Smoking-Slots
+            // zur Stufe Dried, wie Vanillas Steaks (Entscheidung Alex). Die ChefZ-
+            // Stationen (Trockenrahmen, Raeucherschrank) bleiben der Weg zu den eigenen
+            // Produkten DriedMeat/SmokedMeat.
+            // Die Stufe Dried steht seit 27.10.2026 trotzdem in FoodStages (alle Fleisch-
+            // klassen, visual {0, 3, 3}): ohne Uebergang per Kochen nicht erreichbar, aber eine
+            // gesetzte/projizierte Dried-Stufe zeigt damit die *_dried_co-Textur (Index 3).
             class FoodStageTransitions
             {
                 class Raw
@@ -447,6 +464,13 @@ class CfgVehicles
                     {
                         transition_to = 3;
                         cooking_method = 2;
+                    };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
                     };
                 };
             };
@@ -503,6 +527,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_BEEFLEG0";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEFLEG1";
         model = "\ChefZ\ChefZ_Food\models\leg_beef.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\leg_beef_co.paa", "\ChefZ\ChefZ_Food\data\leg_beef_baked_co.paa", "\ChefZ\ChefZ_Food\data\leg_beef_boiled_co.paa", "\ChefZ\ChefZ_Food\data\leg_beef_dried_co.paa", "\ChefZ\ChefZ_Food\data\leg_beef_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 2};
         weight = 700;
 
@@ -524,10 +553,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {2.68, 265, 85, 26, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {2.44, 570, 46, 44, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {2.5, 535, 112, 44, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {1.4, 150, 18, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {2.1, 175, 55, 10, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {2.44, 570, 46, 44, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {2.5, 535, 112, 44, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.61, 570, 13, 44, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {1.4, 150, 18, 10, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {2.1, 175, 55, 10, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -543,6 +573,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -556,6 +593,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_PORKLEG0";
         descriptionShort = "#STR_CHEFZ_ITEM_PORKLEG1";
         model = "\ChefZ\ChefZ_Food\models\leg_pork.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\leg_pork_co.paa", "\ChefZ\ChefZ_Food\data\leg_pork_baked_co.paa", "\ChefZ\ChefZ_Food\data\leg_pork_boiled_co.paa", "\ChefZ\ChefZ_Food\data\leg_pork_dried_co.paa", "\ChefZ\ChefZ_Food\data\leg_pork_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 2};
         weight = 700;
 
@@ -577,10 +619,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {2.8, 350, 72, 28, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {2.56, 685, 34, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {2.62, 640, 98, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {1.46, 170, 18, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {2.22, 210, 46, 10, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {2.56, 685, 34, 46, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {2.62, 640, 98, 46, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.68, 685, 11, 46, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {1.46, 170, 18, 10, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {2.22, 210, 46, 10, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -595,6 +638,13 @@ class CfgVehicles
                     {
                         transition_to = 3;
                         cooking_method = 2;
+                    };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
                     };
                 };
             };
@@ -611,6 +661,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_VENISONLEG0";
         descriptionShort = "#STR_CHEFZ_ITEM_VENISONLEG1";
         model = "\ChefZ\ChefZ_Food\models\leg_venison.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\leg_venison_co.paa", "\ChefZ\ChefZ_Food\data\leg_venison_baked_co.paa", "\ChefZ\ChefZ_Food\data\leg_venison_boiled_co.paa", "\ChefZ\ChefZ_Food\data\leg_venison_dried_co.paa", "\ChefZ\ChefZ_Food\data\leg_venison_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 2};
         weight = 620;
 
@@ -632,10 +687,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {2.4, 275, 84, 38, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {2.2, 570, 42, 58, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {2.28, 535, 110, 58, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {1.22, 148, 18, 12, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {1.94, 178, 52, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {2.2, 570, 42, 58, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {2.28, 535, 110, 58, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.44, 570, 13, 58, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {1.22, 148, 18, 12, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.94, 178, 52, 12, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -650,6 +706,13 @@ class CfgVehicles
                     {
                         transition_to = 3;
                         cooking_method = 2;
+                    };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
                     };
                 };
             };
@@ -667,6 +730,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_DICEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_DICEDMEAT1";
         model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dicedmeat_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_baked_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_dried_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 260;
 
@@ -689,10 +757,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.34, 140, 45, 15, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.22, 300, 25, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.28, 280, 60, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.9, 80, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {1.12, 90, 30, 5, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.22, 300, 25, 25, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.28, 280, 60, 25, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.8, 300, 7, 25, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.9, 80, 10, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.12, 90, 30, 5, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -707,6 +776,13 @@ class CfgVehicles
                     {
                         transition_to = 3;
                         cooking_method = 2;
+                    };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
                     };
                 };
             };
@@ -728,14 +804,11 @@ class CfgVehicles
     // bleiben auf steak.p3d. Gleiche Bauform wie die elf Wuerste auf
     // sausage_cooked.p3d - ein Mesh, mehrere Klassen.
     //
-    // KEINE hiddenSelectionsTextures, obwohl das Mesh eine "camo"-Selektion
-    // traegt: ChefZ_Food/models/model.cfg fuehrt sections[] = {"camo"} nur
-    // fuer panfood_base, nicht fuer dicedmeat. Ohne den Eintrag greift eine
-    // Texturzuweisung nicht (dieselbe Anmerkung wie an den Tellergerichten in
-    // ChefZ_Cooking). model.cfg gehoert der Lieferung (sync-assets.mjs
-    // kopiert es); der Eintrag plus sechs Texturen sind als Asset-Bedarf
-    // gemeldet. Bis dahin sehen alle sieben gleich aus - und sind im Inventar
-    // ueber den Namen zu unterscheiden, wie die sechs gekochten Wuerste.
+    // Garstufen (27.10.2026): model.cfg fuehrt jetzt sections[] = {"camo"}
+    // auch fuer dicedmeat, die Keulen und die Rohwuerste. Damit greifen
+    // hiddenSelectionsTextures: roh, gebraten, gekocht, geraeuchert,
+    // verbrannt (visual_properties[1] = Index). Die sieben Hacksorten teilen
+    // sich die dicedmeat-Texturen und bleiben ueber den Namen unterscheidbar.
     //--------------------------------------------------------------------------
     // §30: das gattungsneutrale Hack. Entsteht, wenn keine Sorte greift.
     class ChefZ_MincedMeat : ChefZ_MeatItemBase
@@ -744,6 +817,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_MINCEDMEAT0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDMEAT1";
         model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dicedmeat_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_baked_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_dried_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 250;
 
@@ -765,10 +843,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.22, 150, 40, 15, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.1, 310, 20, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.16, 290, 55, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.78, 80, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {1.06, 95, 25, 5, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.1, 310, 20, 25, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.16, 290, 55, 25, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.73, 310, 6, 25, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.78, 80, 10, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.06, 95, 25, 5, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -784,6 +863,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -796,6 +882,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_MINCEDPORK0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDPORK1";
         model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dicedmeat_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_baked_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_dried_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 250;
 
@@ -817,10 +908,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.28, 185, 38, 16, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.16, 360, 18, 26, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.22, 335, 52, 26, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.8, 90, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {1.1, 110, 24, 5, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.16, 360, 18, 26, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.22, 335, 52, 26, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.77, 360, 6, 26, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.8, 90, 10, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.1, 110, 24, 5, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -836,6 +928,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -848,6 +947,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_MINCEDVENISON0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDVENISON1";
         model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dicedmeat_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_baked_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_dried_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 245;
 
@@ -869,10 +973,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.2, 145, 44, 22, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.08, 300, 22, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.14, 280, 58, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.78, 78, 10, 6, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {1.04, 92, 27, 6, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.08, 300, 22, 34, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.14, 280, 58, 34, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.72, 300, 7, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.78, 78, 10, 6, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.04, 92, 27, 6, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -888,6 +993,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -900,6 +1012,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_MINCEDBOAR0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDBOAR1";
         model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dicedmeat_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_baked_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_dried_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 250;
 
@@ -921,10 +1038,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.24, 165, 40, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.12, 325, 20, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.18, 305, 55, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.78, 84, 10, 6, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {1.06, 100, 25, 6, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.12, 325, 20, 30, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.18, 305, 55, 30, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.74, 325, 6, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.78, 84, 10, 6, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.06, 100, 25, 6, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -940,6 +1058,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -952,6 +1077,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_MINCEDCHICKEN0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDCHICKEN1";
         model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dicedmeat_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_baked_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_dried_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 220;
 
@@ -973,10 +1103,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.06, 120, 46, 18, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {0.94, 250, 24, 28, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.0, 235, 60, 28, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.66, 65, 10, 5, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.92, 76, 28, 5, 25, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {0.94, 250, 24, 28, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.0, 235, 60, 28, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.64, 250, 7, 28, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.66, 65, 10, 5, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 76, 28, 5, 25, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -992,6 +1123,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1004,6 +1142,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_MINCEDBEAR0";
         descriptionShort = "#STR_CHEFZ_ITEM_MINCEDBEAR1";
         model = "\ChefZ\ChefZ_Food\models\dicedmeat.p3d";   // GETEILTES MESH (14.09.2026), siehe Kopf von ChefZ_MincedMeat
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dicedmeat_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_baked_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_dried_co.paa", "\ChefZ\ChefZ_Food\data\dicedmeat_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 280;
 
@@ -1025,10 +1168,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.44, 205, 36, 20, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.32, 400, 16, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.38, 370, 50, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.88, 100, 10, 6, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {1.22, 122, 22, 6, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.32, 400, 16, 30, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.38, 370, 50, 30, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.86, 400, 5, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.88, 100, 10, 6, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {1.22, 122, 22, 6, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1043,6 +1187,13 @@ class CfgVehicles
                     {
                         transition_to = 3;
                         cooking_method = 2;
+                    };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
                     };
                 };
             };
@@ -1065,6 +1216,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_RAWSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_raw.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_raw_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -1072,10 +1228,14 @@ class CfgVehicles
         // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
         // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
         // das Stueck an, und es meldet das nirgends.
+        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
+        // die Raeucherkammer").
         inventorySlot[] =
         {
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
         };
 
         // VOLUMEN: 435 (ganzes Fleischprodukt, 320 g - der Bezugswert aller
@@ -1096,10 +1256,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.74, 230, 35, 18, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.7, 92, 14, 7, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.88, 115, 18, 9, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.04, 470, 5, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.7, 92, 14, 7, 0, 4, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.88, 115, 18, 9, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1115,6 +1276,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1127,6 +1295,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_RAWPORKSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWPORKSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_pork.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_raw_pork.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_pork_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_pork_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_pork_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_pork_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -1134,10 +1307,14 @@ class CfgVehicles
         // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
         // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
         // das Stueck an, und es meldet das nirgends.
+        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
+        // die Raeucherkammer").
         inventorySlot[] =
         {
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
         };
 
         // VOLUMEN: 450 (ganzes Fleischprodukt, 320 g - fetter als die Basiswurst).
@@ -1158,10 +1335,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.8, 265, 33, 19, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.72, 106, 13, 8, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.9, 133, 17, 10, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.08, 530, 5, 31, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.72, 106, 13, 8, 0, 4, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.9, 133, 17, 10, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1177,6 +1355,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1189,6 +1374,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_RAWVENISONSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWVENISONSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_venison.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_raw_venison_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_venison_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_venison_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_venison_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_venison_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -1196,10 +1386,14 @@ class CfgVehicles
         // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
         // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
         // das Stueck an, und es meldet das nirgends.
+        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
+        // die Raeucherkammer").
         inventorySlot[] =
         {
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
         };
 
         // VOLUMEN: 430 (ganzes Fleischprodukt, 320 g - magerste Rohwurst).
@@ -1220,10 +1414,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.72, 235, 36, 26, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.68, 94, 14, 10, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.86, 118, 18, 13, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.03, 480, 5, 40, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.68, 94, 14, 10, 0, 4, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.86, 118, 18, 13, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1239,6 +1434,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1251,6 +1453,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_RAWBOARSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWBOARSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_boar.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_raw_boar_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_boar_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_boar_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_boar_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_boar_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -1258,10 +1465,14 @@ class CfgVehicles
         // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
         // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
         // das Stueck an, und es meldet das nirgends.
+        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
+        // die Raeucherkammer").
         inventorySlot[] =
         {
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
         };
 
         // VOLUMEN: 440 (ganzes Fleischprodukt, 320 g - zwischen Wild und Schwein).
@@ -1282,10 +1493,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.76, 250, 34, 23, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.7, 100, 14, 9, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.88, 125, 17, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.06, 505, 5, 36, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.7, 100, 14, 9, 0, 4, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.88, 125, 17, 12, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1301,6 +1513,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1313,6 +1532,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_RAWHUNTERSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWHUNTERSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_hunter.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_raw_hunter_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_hunter_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_hunter_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_hunter_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_hunter_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -1320,10 +1544,14 @@ class CfgVehicles
         // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
         // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
         // das Stueck an, und es meldet das nirgends.
+        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
+        // die Raeucherkammer").
         inventorySlot[] =
         {
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
         };
 
         // VOLUMEN: 460 (fuelligste Rohwurst des Moduls, 320 g mit voller Wuerzung).
@@ -1344,10 +1572,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.84, 260, 33, 30, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.74, 104, 13, 12, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.92, 130, 17, 15, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.1, 525, 5, 46, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.74, 104, 13, 12, 0, 4, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 130, 17, 15, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1363,6 +1592,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1375,6 +1611,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_RAWSPICYSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWSPICYSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_raw_spicy.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): roh, gebraten, gekocht, geraeuchert, verbrannt.
+        // Index = visual_properties[1]; Materialien wie Vanillas Steak.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_raw_spicy.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_spicy_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_spicy_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_spicy_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_raw_spicy_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 320;
 
@@ -1382,10 +1623,14 @@ class CfgVehicles
         // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
         // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
         // das Stueck an, und es meldet das nirgends.
+        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
+        // die Raeucherkammer").
         inventorySlot[] =
         {
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
+            "ChefZ_DryHook04", "ChefZ_DryHook05",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
         };
 
         // VOLUMEN: 435 (ganzes Fleischprodukt, 320 g - wie die Basiswurst; die
@@ -1407,10 +1652,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.74, 245, 34, 22, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.7, 98, 14, 9, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.88, 123, 17, 11, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.04, 495, 5, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.7, 98, 14, 9, 0, 4, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.88, 123, 17, 11, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1426,6 +1672,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1438,6 +1691,10 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_COOKEDSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_COOKEDSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
+        // Garstufen-Texturen (27.10.2026): gekocht (Grundzustand), nachgebraten, gekocht, -, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_cooked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1459,10 +1716,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.4, 118, 5, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.64, 188, 7, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 470, 18, 30, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 470, 48, 30, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.97, 470, 3, 30, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.4, 118, 5, 8, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.64, 188, 7, 12, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1478,6 +1736,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1490,6 +1755,10 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_PORKSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_PORKSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
+        // Garstufen-Texturen (27.10.2026): gekocht (Grundzustand), nachgebraten, gekocht, -, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_cooked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1511,10 +1780,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.42, 133, 4, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.68, 212, 6, 12, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.68, 530, 16, 31, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.68, 530, 46, 31, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.01, 530, 2, 31, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.42, 133, 4, 8, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.68, 212, 6, 12, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1530,6 +1800,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1542,6 +1819,10 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_VENISONSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_VENISONSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
+        // Garstufen-Texturen (27.10.2026): gekocht (Grundzustand), nachgebraten, gekocht, -, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_cooked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1563,10 +1844,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.4, 120, 5, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.64, 192, 7, 16, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.6, 480, 18, 40, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.6, 480, 48, 40, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.96, 480, 3, 40, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.4, 120, 5, 10, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.64, 192, 7, 16, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1582,6 +1864,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1594,6 +1883,10 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_BOARSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_BOARSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
+        // Garstufen-Texturen (27.10.2026): gekocht (Grundzustand), nachgebraten, gekocht, -, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_cooked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1615,10 +1908,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.42, 126, 4, 9, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.66, 202, 7, 14, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.64, 505, 17, 36, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.64, 505, 47, 36, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.98, 505, 3, 36, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.42, 126, 4, 9, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.66, 202, 7, 14, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1634,6 +1928,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1646,6 +1947,10 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_HUNTERSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
+        // Garstufen-Texturen (27.10.2026): gekocht (Grundzustand), nachgebraten, gekocht, -, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_cooked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1667,10 +1972,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.42, 131, 4, 12, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.68, 210, 6, 18, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.72, 525, 16, 46, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.72, 525, 46, 46, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {1.03, 525, 2, 46, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.42, 131, 4, 12, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.68, 210, 6, 18, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1686,6 +1992,13 @@ class CfgVehicles
                         transition_to = 3;
                         cooking_method = 2;
                     };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
                 };
             };
         };
@@ -1698,6 +2011,10 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_SPICYSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_SPICYSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
+        // Garstufen-Texturen (27.10.2026): gekocht (Grundzustand), nachgebraten, gekocht, -, verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\sausage_cooked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_baked_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_boiled_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_dried_co.paa", "\ChefZ\ChefZ_Food\data\sausage_cooked_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         itemSize[] = {2, 1};
         weight = 300;
 
@@ -1719,10 +2036,11 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
-                class Burned { nutrition_properties[] = {0.4, 124, 4, 9, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.64, 198, 7, 14, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {1.62, 495, 17, 34, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {1.62, 495, 47, 34, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.97, 495, 3, 34, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.4, 124, 4, 9, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.64, 198, 7, 14, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -1737,6 +2055,13 @@ class CfgVehicles
                     {
                         transition_to = 3;
                         cooking_method = 2;
+                    };
+                    // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
+                    // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
                     };
                 };
             };

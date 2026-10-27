@@ -23,8 +23,17 @@ class ChefZ_AT_Case
     float  liquidQty;
     float  seconds;
     string note;
+    //! Reiner Zustandswechsel (27.10.2026): der Eingang bleibt und muss danach
+    //! in dieser Vanilla-Garstufe stehen (Name aus FoodStageType, z. B.
+    //! "DRIED"). "" = keine Stufenpruefung.
+    string expectStage;
     ref array<ref ChefZ_AT_Input> inputs;
     ref array<string> outputs;
+    //! Erlaubte Nebenprodukte (byproducts[] des Transforms). Alles, was nach
+    //! einem Stationsfall im Laderaum liegt und weder Eingang, Ausgang noch
+    //! Nebenprodukt ist, laesst den Fall scheitern (27.10.2026: der
+    //! Fleischwolf darf kein Lard mehr abwerfen).
+    ref array<string> byproducts;
 
     static ChefZ_AT_Case Make(string pKind, string pId, string pDevice, string pMethod, string pProcess)
     {
@@ -38,8 +47,10 @@ class ChefZ_AT_Case
         c.liquidQty = 0;
         c.seconds = 0;
         c.note = "";
+        c.expectStage = "";
         c.inputs = new array<ref ChefZ_AT_Input>();
         c.outputs = new array<string>();
+        c.byproducts = new array<string>();
         return c;
     }
 
@@ -68,6 +79,26 @@ class ChefZ_AT_Case
     void AddOutput(string cls)
     {
         outputs.Insert(cls);
+    }
+
+    void AddByproduct(string cls)
+    {
+        byproducts.Insert(cls);
+    }
+
+    //! Darf diese Klasse nach dem Fall im Laderaum der Station liegen?
+    bool IsExpectedInCargo(string cls)
+    {
+        if (outputs.Find(cls) >= 0)
+            return true;
+        if (byproducts.Find(cls) >= 0)
+            return true;
+        foreach (ChefZ_AT_Input i : inputs)
+        {
+            if (i.cls == cls)
+                return true;
+        }
+        return false;
     }
 
     string DescribeInputs()

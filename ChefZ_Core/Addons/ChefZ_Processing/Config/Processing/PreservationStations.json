@@ -6,7 +6,7 @@
             "id": "ChefZ_Smoker",
             "stationCategories": ["SMOKER"],
             "processes": ["PROCESS_SMOKE"],
-            "parallelSlots": 2,
+            "parallelSlots": 12,
             "speedMultiplier": 1.0,
             "needsFuel": true
         }

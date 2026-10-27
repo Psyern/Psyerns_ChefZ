@@ -96,7 +96,7 @@
         {
             "id": "TR_MeatToMinced",
             "process": "PROCESS_GRIND_MEAT",
-            "_note": "MENGENSKALA 250 seit dem 31.08.2026: quantity ist eine ROHE Menge, quantityMode fromInput ist hier gestrichen, weil der Eingang Vanilla-Fleisch mit fremder Skala ist. Begruendung in README.md, Abschnitt Mengenskala. SELEKTOR: state RAW plus not(MINCED_MEAT|SAUSAGE) schliessen das eigene Erzeugnis aus - ohne sie wolfte der Wolf sein Hack erneut. Begruendung in README.md, Abschnitt Selbstbezug.",
+            "_note": "MENGENSKALA 250 seit dem 31.08.2026: quantity ist eine ROHE Menge, quantityMode fromInput ist hier gestrichen, weil der Eingang Vanilla-Fleisch mit fremder Skala ist. Begruendung in README.md, Abschnitt Mengenskala. SELEKTOR: state RAW plus not(MINCED_MEAT|SAUSAGE) schliessen das eigene Erzeugnis aus - ohne sie wolfte der Wolf sein Hack erneut. Begruendung in README.md, Abschnitt Selbstbezug. KEIN NEBENPRODUKT seit dem 27.10.2026 (Spieltest Alex: 'Es sollte dabei auch kein Fett entstehen, sondern nur das Hackfleisch'): alle sechs Wolf-Transforms liefern ausschliesslich Hackfleisch. Lard gibt es weiter beim Zerlegen der Schweinekeule (TR_CutPorkLeg).",
             "stationsAllowed": ["ChefZ_MeatGrinder"],
             "inputs": [
                 {
@@ -120,13 +120,6 @@
                     "inheritFreshness": true
                 }
             ],
-            "byproducts": [
-                {
-                    "cls": "Lard",
-                    "quantityMode": "fixed",
-                    "chance": 0.35
-                }
-            ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 0
         },
@@ -144,9 +137,6 @@
             ],
             "outputs": [
                 { "cls": "ChefZ_MincedPork", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
-            ],
-            "byproducts": [
-                { "cls": "Lard", "quantityMode": "fixed", "chance": 0.5 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
@@ -184,9 +174,6 @@
             "outputs": [
                 { "cls": "ChefZ_MincedBoar", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
             ],
-            "byproducts": [
-                { "cls": "Lard", "quantityMode": "fixed", "chance": 0.35 }
-            ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20
         },
@@ -222,9 +209,6 @@
             ],
             "outputs": [
                 { "cls": "ChefZ_MincedBear", "quantity": 250, "quantityMode": "fixed", "setState": "PREPARED", "inheritFreshness": true }
-            ],
-            "byproducts": [
-                { "cls": "Lard", "quantityMode": "fixed", "chance": 0.6 }
             ],
             "qualityRule": "WEIGHTED_MEAN",
             "priority": 20

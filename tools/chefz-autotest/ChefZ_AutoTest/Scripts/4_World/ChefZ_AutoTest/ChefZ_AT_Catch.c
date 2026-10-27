@@ -44,6 +44,55 @@ class ChefZ_AT_RodCtx : CatchingContextFishingRodAction
         int idx;
         return SpawnAndSetupCatch(idx, pos);
     }
+
+    //! Legt den Ertrag fest, ohne zu fangen - fuer den Angel-QTE-Test, der
+    //! ueber ChefZ_FishingQteServer.Resolve den echten Spawnweg nimmt.
+    bool ChefZ_AT_SetYield(string type)
+    {
+        YieldItemBase y = m_YieldsMapAll.Get(type.Hash());
+        if (!y)
+            return false;
+        m_Result.SetYieldItem(y);
+        return true;
+    }
+}
+
+//------------------------------------------------------------------------------
+// Echter Ausloeseweg des Angel-QTE (Clientprobe, 27.10.2026)
+//------------------------------------------------------------------------------
+
+//! Kontext an einer LOKALEN Rute (Clientprobe). Die Rute gehoert keinem
+//! Spieler, m_Player bleibt null - Vanillas Hakenverlust wuerfelt ueber
+//! m_Player und fiele dort mit einem Nullzeiger aus. Der Wurf ist hier
+//! bewusst leer (kein super): getestet wird, was DANACH passiert.
+class ChefZ_AT_ClientRodCtx : ChefZ_AT_RodCtx
+{
+    override void OnBeforeSpawnSignalHit()
+    {
+    }
+}
+
+//! Die Angel-Komponente mit Blick auf ihre Zykluslaenge.
+class ChefZ_AT_FishCA : CAContinuousRepeatFishing
+{
+    float ChefZ_AT_TimeToComplete()
+    {
+        return m_TimeToComplete;
+    }
+}
+
+//! Spielt COTs Schnellaktionen nach (COT cacontinuousrepeat.c: Setup setzt
+//! m_TimeToComplete = 0.1), nur solange die Clientprobe den Schalter haelt.
+modded class CAContinuousRepeat
+{
+    static bool s_ChefZ_AT_Quick;
+
+    override void Setup(ActionData action_data)
+    {
+        super.Setup(action_data);
+        if (s_ChefZ_AT_Quick)
+            m_TimeToComplete = 0.1;
+    }
 }
 
 class ChefZ_AT_TrapSmallCtx : CatchingContextTrapFishSmall

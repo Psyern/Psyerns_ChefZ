@@ -51,8 +51,39 @@ class ChefZ_EmptyCan extends ChefZ_Container_Base {}
 //! JAR - Eingemachtes haelt laenger; der Faktor steht am Behaelter (16 E7).
 class ChefZ_EmptyJar extends ChefZ_Container_Base {}
 
-//! BOX - Trockenware, DME-Plan §32.
-class ChefZ_EmptyBox extends ChefZ_Container_Base {}
+//! BOX - Trockenware, DME-Plan §32. Die einzige der fuenf mit Cargo
+//! (27.10.2026): Lagerbox fuer Nahrung. Keine Behaelter hinein, sonst landen
+//! Teller und Boxen ineinander und das Servieren findet sie nicht mehr.
+class ChefZ_EmptyBox extends ChefZ_Container_Base
+{
+    override bool CanReceiveItemIntoCargo(EntityAI item)
+    {
+        if (!super.CanReceiveItemIntoCargo(item))
+            return false;
+
+        return ChefZ_IsStorableFood(item);
+    }
+
+    override bool CanLoadItemIntoCargo(EntityAI item)
+    {
+        if (!super.CanLoadItemIntoCargo(item))
+            return false;
+
+        return ChefZ_IsStorableFood(item);
+    }
+
+    protected bool ChefZ_IsStorableFood(EntityAI item)
+    {
+        if (!item || ChefZ_Container_Base.Cast(item))
+            return false;
+        // Kochtopf und Kessel erben in Vanilla von Edible_Base (ueber
+        // Bottle_Base) - Kochgeschirr und Behaelter sind aber kein Essen.
+        if (item.IsCookware() || item.IsContainer())
+            return false;
+
+        return Edible_Base.Cast(item) != null;
+    }
+}
 
 //------------------------------------------------------------------------------
 // 2. Die beiden Skriptbasen der Gerichte

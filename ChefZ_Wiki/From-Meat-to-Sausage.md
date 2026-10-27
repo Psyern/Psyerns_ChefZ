@@ -107,15 +107,18 @@ meat accepts diced meat too**, including the sausage stuffing.
 At the **Meat Grinder**. `PROCESS_GRIND_MEAT`, `STATION_TIMED`, **30 s**, no tool.
 
 ```
-1x Pig Steak       =  1x Minced Pork      (+ Lard, 50%)
+1x Pig Steak       =  1x Minced Pork
 1x Deer Steak      =  1x Minced Venison
-1x Boar Steak      =  1x Minced Boar      (+ Lard, 35%)
+1x Boar Steak      =  1x Minced Boar
 1x Chicken Breast  =  1x Minced Chicken
-1x Bear Steak      =  1x Minced Bear      (+ Lard, 60%)
-1x any other raw meat  =  1x Minced Meat  (+ Lard, 35%)
+1x Bear Steak      =  1x Minced Bear
+1x any other raw meat  =  1x Minced Meat
 ```
 
-One steak in, one full 250-unit pack out. The five species transforms sit at
+One steak in, one full 250-unit pack out — and nothing else: the grinder
+makes no lard (only cutting a pork leg does). The crank action grinds the first
+piece right away; every further piece in the cargo follows on its own, one every
+30 s, until no raw meat is left. The five species transforms sit at
 priority 20 and the catch-all `TR_MeatToMinced` at 0, so pork becomes *Minced Pork*
 rather than generic mince — the specific transform always wins.
 
@@ -251,7 +254,7 @@ preserved.
 ```
 1. Shoot and skin a pig            ->  1x Pork Leg  (+ vanilla pig steaks)
 2. Knife, 4 s                      ->  2x Pig Steak  + 1x Lard
-3. Grinder, 30 s, twice            ->  2x Minced Pork  (+ lard, 50% each)
+3. Grinder, crank once            ->  2x Minced Pork
 4. Grinder, 15 s, twice            ->  2x Raw Pork Sausage
    each: 1x Minced Pork + 2 g Salt + 1x Guts
 5. Frying pan                      ->  2x Pork Sausage
@@ -261,7 +264,7 @@ preserved.
 ```
 
 Total cost beyond the pig: two guts, 2 g of salt, some potatoes and a fire.
-Total time at the stations: 2 × 30 s + 2 × 15 s = **90 seconds**.
+Total time at the stations: 3 s crank + 30 s for the second piece + 2 × 15 s = **about 63 seconds**.
 
 ## Where sausage goes from here
 

@@ -1,0 +1,3295 @@
+{
+ "manifest": "E:\\DayZ Modding\\Psyerns_ChefZ\\tools\\chefz-assets\\deliveries\\2026-10-27_meshy_fish_fillets.json",
+ "duration": 171.72706747055054,
+ "results": [
+  {
+   "name": "Plaice",
+   "group": "fish",
+   "bind": [
+    "ChefZ_Plaice"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\plaice.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\plaice.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\Plaice_co.paa",
+   "size_m": [
+    0.4,
+    0.055,
+    0.221
+   ],
+   "hold": "1h (head at -X, thickness +X 0.006 / -X 0.035)",
+   "source_tris": 434,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\Plaice_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Plaice"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Plaice_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Plaice_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Plaice_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Plaice_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Plaice_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:434f",
+    "resolution1:302f",
+    "resolution2:216f",
+    "resolution3:130f",
+    "shadow_volume0:216f",
+    "geometry0:146f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:146f",
+    "fire_geometry0:146f"
+   ]
+  },
+  {
+   "name": "Sole",
+   "group": "fish",
+   "bind": [
+    "ChefZ_Sole"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\sole.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\sole.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\Sole_co.paa",
+   "size_m": [
+    0.35,
+    0.063,
+    0.13
+   ],
+   "hold": "1h (head at -X, thickness +X 0.004 / -X 0.026)",
+   "source_tris": 436,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\Sole_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Sole"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Sole_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Sole_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Sole_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Sole_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Sole_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:436f",
+    "resolution1:304f",
+    "resolution2:218f",
+    "resolution3:130f",
+    "shadow_volume0:218f",
+    "geometry0:122f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:122f",
+    "fire_geometry0:122f"
+   ]
+  },
+  {
+   "name": "Halibut",
+   "group": "fish",
+   "bind": [
+    "ChefZ_Halibut"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\halibut.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\halibut.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\Halibut_co.paa",
+   "size_m": [
+    1.0,
+    0.226,
+    0.546
+   ],
+   "hold": "2h",
+   "source_tris": 436,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\Halibut_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Halibut"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Halibut_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Halibut_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Halibut_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Halibut_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Halibut_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:436f",
+    "resolution1:304f",
+    "resolution2:218f",
+    "resolution3:130f",
+    "shadow_volume0:218f",
+    "geometry0:104f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:104f",
+    "fire_geometry0:104f"
+   ]
+  },
+  {
+   "name": "GiltheadBream",
+   "group": "fish",
+   "bind": [
+    "ChefZ_GiltheadBream"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\giltheadbream.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\giltheadbream.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\GiltheadBream_co.paa",
+   "size_m": [
+    0.4,
+    0.13,
+    0.175
+   ],
+   "hold": "1h (head at -X, thickness +X 0.002 / -X 0.042)",
+   "source_tris": 422,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\GiltheadBream_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: GiltheadBream"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle GiltheadBream_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: GiltheadBream_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: GiltheadBream_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: GiltheadBream_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: GiltheadBream_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:422f",
+    "resolution1:294f",
+    "resolution2:210f",
+    "resolution3:126f",
+    "shadow_volume0:210f",
+    "geometry0:102f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:102f",
+    "fire_geometry0:102f"
+   ]
+  },
+  {
+   "name": "Conger",
+   "group": "fish",
+   "bind": [
+    "ChefZ_Conger"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\conger.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\conger.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\Conger_co.paa",
+   "size_m": [
+    1.197,
+    1.2,
+    0.316
+   ],
+   "hold": "heavy",
+   "source_tris": 406,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\Conger_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Conger"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Conger_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Conger_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Conger_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Conger_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Conger_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (132 Flächen)",
+   "lods": [
+    "resolution0:406f",
+    "resolution1:284f",
+    "resolution2:202f",
+    "resolution3:121f",
+    "shadow_volume0:132f",
+    "geometry0:132f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:132f",
+    "fire_geometry0:132f"
+   ]
+  },
+  {
+   "name": "HorseMackerel",
+   "group": "fish",
+   "bind": [
+    "ChefZ_HorseMackerel"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "Blue Mackerel = Stoecker (Referenzbild 06)",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\horsemackerel.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\horsemackerel.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\HorseMackerel_co.paa",
+   "size_m": [
+    0.3,
+    0.104,
+    0.097
+   ],
+   "hold": "1h (head at -X, thickness +X 0.001 / -X 0.028)",
+   "source_tris": 428,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\HorseMackerel_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: HorseMackerel"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle HorseMackerel_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: HorseMackerel_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: HorseMackerel_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: HorseMackerel_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: HorseMackerel_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (122 Flächen)",
+   "lods": [
+    "resolution0:428f",
+    "resolution1:298f",
+    "resolution2:214f",
+    "resolution3:128f",
+    "shadow_volume0:122f",
+    "geometry0:122f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:122f",
+    "fire_geometry0:122f"
+   ]
+  },
+  {
+   "name": "JapaneseSardine",
+   "group": "fish",
+   "bind": [
+    "ChefZ_JapaneseSardine"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\japanesesardine.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\japanesesardine.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\JapaneseSardine_co.paa",
+   "size_m": [
+    0.22,
+    0.045,
+    0.051
+   ],
+   "hold": "1h (head at -X, thickness +X 0.002 / -X 0.015)",
+   "source_tris": 422,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\JapaneseSardine_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: JapaneseSardine"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle JapaneseSardine_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: JapaneseSardine_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: JapaneseSardine_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: JapaneseSardine_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: JapaneseSardine_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:422f",
+    "resolution1:294f",
+    "resolution2:210f",
+    "resolution3:126f",
+    "shadow_volume0:210f",
+    "geometry0:124f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:124f",
+    "fire_geometry0:124f"
+   ]
+  },
+  {
+   "name": "RedSnapper",
+   "group": "fish",
+   "bind": [
+    "ChefZ_RedSnapper"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\redsnapper.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\redsnapper.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\RedSnapper_co.paa",
+   "size_m": [
+    0.6,
+    0.328,
+    0.294
+   ],
+   "hold": "1h (head at -X, thickness +X 0.004 / -X 0.078)",
+   "source_tris": 412,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\RedSnapper_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: RedSnapper"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle RedSnapper_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: RedSnapper_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: RedSnapper_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: RedSnapper_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: RedSnapper_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (86 Flächen)",
+   "lods": [
+    "resolution0:412f",
+    "resolution1:287f",
+    "resolution2:206f",
+    "resolution3:122f",
+    "shadow_volume0:86f",
+    "geometry0:86f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:86f",
+    "fire_geometry0:86f"
+   ]
+  },
+  {
+   "name": "Salmon",
+   "group": "fish",
+   "bind": [
+    "ChefZ_Salmon"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\models\\salmon.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fish\\models\\salmon.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fish\\data\\Salmon_co.paa",
+   "size_m": [
+    0.8,
+    0.163,
+    0.232
+   ],
+   "hold": "2h",
+   "source_tris": 438,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fish\\data\\Salmon_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Salmon"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Salmon_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Salmon_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Salmon_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Salmon_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Salmon_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:438f",
+    "resolution1:306f",
+    "resolution2:218f",
+    "resolution3:130f",
+    "shadow_volume0:218f",
+    "geometry0:132f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:132f",
+    "fire_geometry0:132f"
+   ]
+  },
+  {
+   "name": "PlaiceFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_PlaiceFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\plaicefillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\plaicefillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_co.paa",
+   "size_m": [
+    0.114,
+    0.28,
+    0.146
+   ],
+   "source_tris": 216,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PlaiceFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: PlaiceFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle PlaiceFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: PlaiceFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: PlaiceFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: PlaiceFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: PlaiceFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:216f",
+    "resolution1:150f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:128f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:128f",
+    "fire_geometry0:128f"
+   ]
+  },
+  {
+   "name": "GiltheadBreamFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_GiltheadBreamFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\giltheadbreamfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\giltheadbreamfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_co.paa",
+   "size_m": [
+    0.104,
+    0.25,
+    0.1
+   ],
+   "source_tris": 208,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiltheadBreamFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: GiltheadBreamFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle GiltheadBreamFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: GiltheadBreamFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: GiltheadBreamFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: GiltheadBreamFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: GiltheadBreamFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:208f",
+    "resolution1:144f",
+    "resolution2:104f",
+    "resolution3:62f",
+    "shadow_volume0:104f",
+    "geometry0:144f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:144f",
+    "fire_geometry0:144f"
+   ]
+  },
+  {
+   "name": "HalibutFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_HalibutFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\halibutfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\halibutfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_co.paa",
+   "size_m": [
+    0.3,
+    0.176,
+    0.061
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HalibutFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: HalibutFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle HalibutFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: HalibutFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: HalibutFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: HalibutFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: HalibutFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:112f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:112f",
+    "fire_geometry0:112f"
+   ]
+  },
+  {
+   "name": "CodFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_CodFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\codfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\codfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_co.paa",
+   "size_m": [
+    0.3,
+    0.105,
+    0.093
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CodFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: CodFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle CodFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: CodFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: CodFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: CodFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: CodFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:142f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:142f",
+    "fire_geometry0:142f"
+   ]
+  },
+  {
+   "name": "SoleFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_SoleFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\solefillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\solefillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_co.paa",
+   "size_m": [
+    0.089,
+    0.25,
+    0.077
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SoleFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SoleFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SoleFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SoleFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SoleFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SoleFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SoleFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:130f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:130f",
+    "fire_geometry0:130f"
+   ]
+  },
+  {
+   "name": "SeaBassFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_SeaBassFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\seabassfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\seabassfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_co.paa",
+   "size_m": [
+    0.28,
+    0.046,
+    0.111
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SeaBassFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SeaBassFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SeaBassFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SeaBassFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SeaBassFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SeaBassFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SeaBassFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:160f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:160f",
+    "fire_geometry0:160f"
+   ]
+  },
+  {
+   "name": "RedMulletFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_RedMulletFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\redmulletfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\redmulletfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_co.paa",
+   "size_m": [
+    0.09,
+    0.2,
+    0.091
+   ],
+   "source_tris": 212,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RedMulletFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: RedMulletFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle RedMulletFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: RedMulletFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: RedMulletFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: RedMulletFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: RedMulletFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:212f",
+    "resolution1:148f",
+    "resolution2:106f",
+    "resolution3:62f",
+    "shadow_volume0:106f",
+    "geometry0:140f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:140f",
+    "fire_geometry0:140f"
+   ]
+  },
+  {
+   "name": "CongerFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_CongerFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "Cod Loin = Meeraal (dunkle Haut, Referenzbild 08)",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\congerfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\congerfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_co.paa",
+   "size_m": [
+    0.32,
+    0.099,
+    0.045
+   ],
+   "source_tris": 210,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CongerFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: CongerFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle CongerFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: CongerFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: CongerFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: CongerFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: CongerFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (96 Flächen)",
+   "lods": [
+    "resolution0:210f",
+    "resolution1:146f",
+    "resolution2:104f",
+    "resolution3:62f",
+    "shadow_volume0:96f",
+    "geometry0:96f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:96f",
+    "fire_geometry0:96f"
+   ]
+  },
+  {
+   "name": "HorseMackerelFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_HorseMackerelFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\horsemackerelfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\horsemackerelfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_co.paa",
+   "size_m": [
+    0.131,
+    0.2,
+    0.13
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\HorseMackerelFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: HorseMackerelFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle HorseMackerelFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: HorseMackerelFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: HorseMackerelFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: HorseMackerelFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: HorseMackerelFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:138f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:138f",
+    "fire_geometry0:138f"
+   ]
+  },
+  {
+   "name": "JapaneseSardineFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_JapaneseSardineFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\japanesesardinefillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\japanesesardinefillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_co.paa",
+   "size_m": [
+    0.047,
+    0.15,
+    0.066
+   ],
+   "source_tris": 220,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\JapaneseSardineFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: JapaneseSardineFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle JapaneseSardineFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: JapaneseSardineFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: JapaneseSardineFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: JapaneseSardineFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: JapaneseSardineFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:220f",
+    "resolution1:154f",
+    "resolution2:110f",
+    "resolution3:66f",
+    "shadow_volume0:110f",
+    "geometry0:174f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:174f",
+    "fire_geometry0:174f"
+   ]
+  },
+  {
+   "name": "RockfishFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_RockfishFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "Meshy-Name Red Snapper, Referenzbild 11 Rockfish (orange Haut)",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\rockfishfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\rockfishfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_co.paa",
+   "size_m": [
+    0.129,
+    0.25,
+    0.076
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RockfishFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: RockfishFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle RockfishFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: RockfishFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: RockfishFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: RockfishFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: RockfishFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:154f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:154f",
+    "fire_geometry0:154f"
+   ]
+  },
+  {
+   "name": "GiantTrevallyFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_GiantTrevallyFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\gianttrevallyfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\gianttrevallyfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_co.paa",
+   "size_m": [
+    0.257,
+    0.35,
+    0.059
+   ],
+   "source_tris": 216,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\GiantTrevallyFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: GiantTrevallyFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle GiantTrevallyFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: GiantTrevallyFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: GiantTrevallyFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: GiantTrevallyFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: GiantTrevallyFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:216f",
+    "resolution1:150f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:142f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:142f",
+    "fire_geometry0:142f"
+   ]
+  },
+  {
+   "name": "BlueMarlinFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_BlueMarlinFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\bluemarlinfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\bluemarlinfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_co.paa",
+   "size_m": [
+    0.35,
+    0.213,
+    0.095
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BlueMarlinFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: BlueMarlinFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle BlueMarlinFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: BlueMarlinFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: BlueMarlinFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: BlueMarlinFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: BlueMarlinFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:154f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:154f",
+    "fire_geometry0:154f"
+   ]
+  },
+  {
+   "name": "SailfishFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_SailfishFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\sailfishfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\sailfishfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_co.paa",
+   "size_m": [
+    0.35,
+    0.148,
+    0.062
+   ],
+   "source_tris": 220,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SailfishFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SailfishFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SailfishFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SailfishFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SailfishFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SailfishFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SailfishFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:220f",
+    "resolution1:154f",
+    "resolution2:110f",
+    "resolution3:66f",
+    "shadow_volume0:110f",
+    "geometry0:94f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:94f",
+    "fire_geometry0:94f"
+   ]
+  },
+  {
+   "name": "BonitoFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_BonitoFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\bonitofillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\bonitofillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_co.paa",
+   "size_m": [
+    0.28,
+    0.083,
+    0.08
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\BonitoFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: BonitoFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle BonitoFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: BonitoFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: BonitoFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: BonitoFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: BonitoFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:152f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:152f",
+    "fire_geometry0:152f"
+   ]
+  },
+  {
+   "name": "YellowtailFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_YellowtailFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\yellowtailfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\yellowtailfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_co.paa",
+   "size_m": [
+    0.3,
+    0.135,
+    0.07
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\YellowtailFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: YellowtailFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle YellowtailFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: YellowtailFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: YellowtailFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: YellowtailFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: YellowtailFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:188f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:188f",
+    "fire_geometry0:188f"
+   ]
+  },
+  {
+   "name": "TarponFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_TarponFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\tarponfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\tarponfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_co.paa",
+   "size_m": [
+    0.108,
+    0.32,
+    0.097
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\TarponFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: TarponFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle TarponFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: TarponFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: TarponFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: TarponFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: TarponFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:142f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:142f",
+    "fire_geometry0:142f"
+   ]
+  },
+  {
+   "name": "SalmonFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_SalmonFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\salmonfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\salmonfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_co.paa",
+   "size_m": [
+    0.166,
+    0.3,
+    0.132
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SalmonFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SalmonFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SalmonFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SalmonFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SalmonFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SalmonFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SalmonFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:184f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:184f",
+    "fire_geometry0:184f"
+   ]
+  },
+  {
+   "name": "SockeyeSalmonFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_SockeyeSalmonFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\sockeyesalmonfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\sockeyesalmonfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_co.paa",
+   "size_m": [
+    0.3,
+    0.136,
+    0.039
+   ],
+   "source_tris": 210,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SockeyeSalmonFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SockeyeSalmonFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SockeyeSalmonFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SockeyeSalmonFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SockeyeSalmonFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SockeyeSalmonFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SockeyeSalmonFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:210f",
+    "resolution1:146f",
+    "resolution2:104f",
+    "resolution3:62f",
+    "shadow_volume0:104f",
+    "geometry0:174f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:174f",
+    "fire_geometry0:174f"
+   ]
+  },
+  {
+   "name": "PerchFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_PerchFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\perchfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\perchfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_co.paa",
+   "size_m": [
+    0.18,
+    0.044,
+    0.128
+   ],
+   "source_tris": 218,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\PerchFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: PerchFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle PerchFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: PerchFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: PerchFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: PerchFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: PerchFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:118f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:118f",
+    "fire_geometry0:118f"
+   ]
+  },
+  {
+   "name": "MuskellungeFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_MuskellungeFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\muskellungefillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\muskellungefillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_co.paa",
+   "size_m": [
+    0.32,
+    0.068,
+    0.082
+   ],
+   "source_tris": 108,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\MuskellungeFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: MuskellungeFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle MuskellungeFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: MuskellungeFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: MuskellungeFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: MuskellungeFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: MuskellungeFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:108f",
+    "resolution1:74f",
+    "resolution2:54f",
+    "resolution3:32f",
+    "shadow_volume0:54f",
+    "geometry0:92f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:92f",
+    "fire_geometry0:92f"
+   ]
+  },
+  {
+   "name": "SnakeheadFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_SnakeheadFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\snakeheadfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\snakeheadfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_co.paa",
+   "size_m": [
+    0.28,
+    0.094,
+    0.027
+   ],
+   "source_tris": 108,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\SnakeheadFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SnakeheadFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SnakeheadFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SnakeheadFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SnakeheadFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SnakeheadFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SnakeheadFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:108f",
+    "resolution1:74f",
+    "resolution2:54f",
+    "resolution3:32f",
+    "shadow_volume0:54f",
+    "geometry0:108f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:108f",
+    "fire_geometry0:108f"
+   ]
+  },
+  {
+   "name": "RainbowTroutFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_RainbowTroutFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\rainbowtroutfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\rainbowtroutfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_co.paa",
+   "size_m": [
+    0.062,
+    0.25,
+    0.079
+   ],
+   "source_tris": 108,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\RainbowTroutFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: RainbowTroutFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle RainbowTroutFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: RainbowTroutFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: RainbowTroutFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: RainbowTroutFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: RainbowTroutFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:108f",
+    "resolution1:74f",
+    "resolution2:54f",
+    "resolution3:32f",
+    "shadow_volume0:54f",
+    "geometry0:78f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:78f",
+    "fire_geometry0:78f"
+   ]
+  },
+  {
+   "name": "CharFillet",
+   "group": "fishfilet",
+   "bind": [
+    "ChefZ_CharFillet"
+   ],
+   "status": "OK",
+   "selection": "cs_raw",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\charfillet.p3d",
+   "model": "\\ChefZ\\ChefZ_Sealife\\fishfilet\\models\\charfillet.p3d",
+   "texture": "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_co.paa",
+   "size_m": [
+    0.22,
+    0.055,
+    0.135
+   ],
+   "source_tris": 108,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_baked_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_boiled_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_dried_co.paa",
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_burnt_co.paa"
+   ],
+   "state_textures": [
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_baked_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_boiled_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_dried_co.paa",
+    "ChefZ\\ChefZ_Sealife\\fishfilet\\data\\CharFillet_burnt_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: CharFillet"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle CharFillet_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: CharFillet_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: CharFillet_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: CharFillet_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: CharFillet_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:108f",
+    "resolution1:74f",
+    "resolution2:54f",
+    "resolution3:32f",
+    "shadow_volume0:54f",
+    "geometry0:100f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:100f",
+    "fire_geometry0:100f"
+   ]
+  }
+ ]
+}

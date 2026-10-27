@@ -34,11 +34,15 @@ class CfgPatches
         };
         weapons[] = {};
         requiredVersion = 0.1;
-        // Genau drei Eintraege, und jeder wird tatsaechlich gebraucht:
+        // Genau vier Eintraege, und jeder wird tatsaechlich gebraucht:
         //   DZ_Data          Grundlage von allem
         //   DZ_Gear_Books    liefert book_kniga.p3d als Proxy-Modell und die
         //                    zugehoerige Textur (Asset-Backlog: eigene
         //                    Geometrie fuer das Kochbuch steht dort offen)
+        //   DZ_Characters    definiert SurvivorBase mit attachments[] und
+        //                    InventoryEquipment.playerSlots[]. Unser "+=" auf
+        //                    beide (Kochbuch-Platz, siehe CfgVehicles) greift
+        //                    nur, wenn Vanilla vorher geladen ist.
         //   ChefZ_Core       ChefZ_Sym, ChefZ_SymbolTable, ChefZ_EventBus,
         //                    ChefZ_RecipeRegistry, ChefZ_Log
         //
@@ -49,8 +53,32 @@ class CfgPatches
         {
             "DZ_Data",
             "DZ_Gear_Books",
+            "DZ_Characters",
             "ChefZ_Core"
         };
+    };
+};
+
+//==============================================================================
+// Der Kochbuch-Platz am Spieler
+//
+// Ein eigener Anbauplatz, in den ausschliesslich ChefZ_CookbookItem passt
+// (inventorySlot[] unten). Sobald ein Spieler das Buch bekommt, legt der Server
+// es dort ab (ChefZ_CookbookItem.c, "Kochbuch-Platz") - so liegt es nie im
+// Rucksack herum und blockiert keine 2x2 Felder.
+//
+// ghostIcon: "book" existiert im Vanilla-Imageset
+// (gui/imagesets/dayz_inventory.imageset, Name "book") und wird von Vanillas
+// eigenem Slot_Book benutzt (scripts/config.cpp).
+//==============================================================================
+class CfgSlots
+{
+    class Slot_ChefZ_Cookbook
+    {
+        name = "ChefZ_Cookbook";
+        displayName = "#STR_CHEFZ_SLOT_COOKBOOK";
+        ghostIcon = "set:dayz_inventory image:book";
+        stackMax = 1;
     };
 };
 
@@ -129,9 +157,10 @@ class CfgMods
             // Bildlauf der Mission (MissionGameplay.OnUpdate) und damit die
             // einzige Ebene, auf der es ihn gibt.
             //
-            // Das bleibt die einzige Datei hier, solange das Kochbuch keine
-            // Oberflaeche hat: die gehoert nach ChefZ_Cookbook_UI, und dieses
-            // Addon darf Dabs nicht kennen (Workflow §3).
+            // Seit 27.10.2026 auch die Oberflaeche selbst
+            // (ChefZ_CookbookMenu.c, GUI/layouts/chefz_cookbook.layout): ein
+            // Vanilla-UIScriptedMenu, kein Dabs - das geplante Addon
+            // ChefZ_Cookbook_UI gab es nie.
             class missionScriptModule
             {
                 value = "";
@@ -147,6 +176,39 @@ class CfgMods
 class CfgVehicles
 {
     class Inventory_Base;
+    class Man;
+
+    //==========================================================================
+    // Den Kochbuch-Platz am Spieler anmelden
+    //
+    // attachments[]  macht den Platz fuer die Engine real (FindAttachment,
+    //                CanAddAttachmentEx, FindFreeLocationFor).
+    // playerSlots[]  macht ihn im Inventar sichtbar: Vanillas PlayerContainer
+    //                baut seine Platzreihe ausschliesslich aus
+    //                "CfgVehicles SurvivorBase InventoryEquipment playerSlots"
+    //                (1.30 scripts/5_Mission/DayZ/GUI/InventoryNew/Inherited/
+    //                PlayerContainer.c:58 und :682). Ein Platz, der nur in
+    //                attachments[] steht, funktioniert, bleibt aber unsichtbar
+    //                - so wie Vanillas "Splint_Right".
+    //
+    // Beides mit "+=", damit andere Mods, die ebenfalls Spielerplaetze
+    // anhaengen, nichts verlieren. Muster: A6_SecureContainers
+    // (assets/config.cpp, Slot_SecureContainer) - dieselben zwei Zeilen.
+    //==========================================================================
+    class SurvivorBase : Man
+    {
+        attachments[] +=
+        {
+            "ChefZ_Cookbook"
+        };
+        class InventoryEquipment
+        {
+            playerSlots[] +=
+            {
+                "Slot_ChefZ_Cookbook"
+            };
+        };
+    };
 
     //==========================================================================
     // Das Kochbuch
@@ -167,6 +229,9 @@ class CfgVehicles
         rotationFlags = 1;
         weight = 400;
         itemSize[] = {2, 2};
+        // Der eigene Platz am Spieler (CfgSlots oben). Cargo bleibt erlaubt -
+        // inventorySlot schraenkt nur ein, in welche Anbauplaetze es passt.
+        inventorySlot[] = {"ChefZ_Cookbook"};
         hiddenSelections[] = {"camoGround"};
         hiddenSelectionsTextures[] = {"dz\gear\books\data\book_TheWarOfTheWorlds_co.paa"};
         varQuantityDestroyOnMin = 0;

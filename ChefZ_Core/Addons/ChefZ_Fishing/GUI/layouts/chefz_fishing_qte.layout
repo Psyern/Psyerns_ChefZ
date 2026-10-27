@@ -1,0 +1,53 @@
+FrameWidgetClass ChefZFishingQteRoot {
+ ignorepointer 1
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ priority 900
+ {
+  CanvasWidgetClass Canvas {
+   ignorepointer 1
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+  }
+  TextWidgetClass Title {
+   ignorepointer 1
+   color 1 0.92 0.7 1
+   position 0 0.16
+   size 1 0.05
+   halign center_ref
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   text ""
+   font "gui/fonts/sdf_MetronBook72"
+   "exact text" 0
+   "text halign" center
+   "text valign" center
+  }
+  TextWidgetClass Info {
+   ignorepointer 1
+   color 0.95 0.95 0.95 1
+   position 0 0.215
+   size 1 0.035
+   halign center_ref
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   text ""
+   font "gui/fonts/sdf_MetronLight42"
+   "exact text" 0
+   "text halign" center
+   "text valign" center
+  }
+ }
+}

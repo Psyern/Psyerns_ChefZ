@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+	ChefZ_Fishing - Tasten des Angel-Minispiels (27.10.2026)
+
+	Datengetrieben wie ChefZ_Cookbook/Scripts/Data/Inputs.xml (dort steht,
+	warum RegisterInput aus dem Skript nicht traegt). Pfad in CfgMods:
+	"ChefZ_Fishing/Scripts/Data/Inputs.xml" (PBO-Prefix ChefZ_Fishing).
+
+	Pfeiltasten und Leertaste. Waehrend das Minispiel laeuft, sperrt das HUD
+	die Vanilla-Gruppen movement/stances/inventory - die Leertaste springt
+	dann nicht, die Pfeiltasten laufen nicht.
+-->
+<modded_inputs>
+	<inputs>
+		<actions>
+			<input name="UAChefZQteUp" loc="STR_CHEFZ_INPUT_QTE_UP" />
+			<input name="UAChefZQteDown" loc="STR_CHEFZ_INPUT_QTE_DOWN" />
+			<input name="UAChefZQteLeft" loc="STR_CHEFZ_INPUT_QTE_LEFT" />
+			<input name="UAChefZQteRight" loc="STR_CHEFZ_INPUT_QTE_RIGHT" />
+			<input name="UAChefZQteHit" loc="STR_CHEFZ_INPUT_QTE_HIT" />
+		</actions>
+
+		<sorting name="chefzfishing" loc="STR_CHEFZ_INPUT_GROUP_FISHING">
+			<input name="UAChefZQteUp" />
+			<input name="UAChefZQteDown" />
+			<input name="UAChefZQteLeft" />
+			<input name="UAChefZQteRight" />
+			<input name="UAChefZQteHit" />
+		</sorting>
+	</inputs>
+	<preset>
+		<input name="UAChefZQteUp">
+			<btn name="kUp" />
+		</input>
+		<input name="UAChefZQteDown">
+			<btn name="kDown" />
+		</input>
+		<input name="UAChefZQteLeft">
+			<btn name="kLeft" />
+		</input>
+		<input name="UAChefZQteRight">
+			<btn name="kRight" />
+		</input>
+		<input name="UAChefZQteHit">
+			<btn name="kSpace" />
+		</input>
+	</preset>
+</modded_inputs>

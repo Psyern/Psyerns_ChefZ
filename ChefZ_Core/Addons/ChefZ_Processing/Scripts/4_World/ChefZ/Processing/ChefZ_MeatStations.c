@@ -40,6 +40,12 @@
 //      Hackfleisch, solange Fleisch im Cargo liegt". Der Spieler kurbelt
 //      EINMAL an, danach gehoert der Takt der Station.
 //
+//      Seit dem 27.10.2026 wolft das Ankurbeln selbst das ERSTE Stueck
+//      sofort (ChefZ_OnStationActionFinished) - vorher sah der Spieler nach
+//      dem Balken 30 Sekunden lang unveraendertes Fleisch und hielt den Wolf
+//      fuer kaputt. Ab dem zweiten Stueck bleibt es beim 30-s-Takt. Seit
+//      demselben Tag wirft der Wolf auch kein Lard mehr ab.
+//
 // Das Muster des Nachstarts ist nicht neu und ausdruecklich nicht neu
 // erfunden: es ist woertlich das der Honigschleuder
 // (ChefZ_HoneyExtractor.ChefZ_CompleteJob, dieselbe Ordnerebene). Auch die
@@ -75,16 +81,16 @@ class ChefZ_MeatGrinder extends ChefZ_ProcessingStation_Base
     //!   CASING  die Daerme (Guts, SmallGuts) - Pflichteingang jeder Wurst.
     //!   SPICE   trifft ueber die Closure auch SALT.
     //!   HERB    trifft ueber die Closure auch DRIED_HERB.
-    //!   FAT     Lard. KEIN Eingang, sondern ein NEBENPRODUKT von
-    //!           TR_MeatToMinced, TR_PorkToMinced, TR_BoarToMinced und
-    //!           TR_BearToMinced. Es entsteht IM Cargo, und was im Cargo
-    //!           entstehen soll, muss durch denselben Torwaechter - sonst
-    //!           faellt das Nebenprodukt lautlos aus.
+    //!
+    //! FAT steht hier seit dem 27.10.2026 NICHT mehr. Lard war nie Eingang,
+    //! sondern das Nebenprodukt der Wolf-Transforms und musste deshalb durch
+    //! den Torwaechter. Die Nebenprodukte sind gestrichen (Spieltest Alex: "es
+    //! sollte kein Fett entstehen, sondern nur das Hackfleisch"), damit gibt es
+    //! fuer Fett im Wolf keinen Grund mehr.
     static const string CHEFZ_CAT_MEAT   = "MEAT";
     static const string CHEFZ_CAT_CASING = "CASING";
     static const string CHEFZ_CAT_SPICE  = "SPICE";
     static const string CHEFZ_CAT_HERB   = "HERB";
-    static const string CHEFZ_CAT_FAT    = "FAT";
 
     //! Die beiden Unterkategorien von MEAT, die NICHT noch einmal durch den
     //! Wolf sollen. Sie stehen hier wegen ChefZ_HasUngroundMeat - Begruendung
@@ -132,8 +138,6 @@ class ChefZ_MeatGrinder extends ChefZ_ProcessingStation_Base
             return true;
         if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_HERB))
             return true;
-        if (ChefZ_StationGate.ChefZ_InCategory(item, CHEFZ_CAT_FAT))
-            return true;
 
         return false;
     }
@@ -171,6 +175,67 @@ class ChefZ_MeatGrinder extends ChefZ_ProcessingStation_Base
             g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(ChefZ_GrindNextPiece, 0, false);
 
         return true;
+    }
+
+    /**
+     * Das ANKURBELN wolft das erste Stueck sofort (27.10.2026).
+     *
+     * Spieltest Alex: "Rohes Fleisch im Fleischwolf bleibt nach der Wolfung
+     * unveraendert. Fuehre ich die Aktion nochmal aus, passiert manchmal
+     * etwas, aber nicht immer."
+     *
+     * Die Ursache war kein verlorener Job, sondern die Bauform: die Aktion
+     * eines STATION_TIMED-Prozesses dauert nur den Handgriff
+     * (ChefZ_ActionProcessAtStationCB.FALLBACK_SEC, 3 s), und danach lief der
+     * Job STILL 30 Sekunden weiter (baseDurationSec von PROCESS_GRIND_MEAT).
+     * Wer nach dem Balken in den Wolf sah, fand das Fleisch unveraendert; wer
+     * nochmal ankurbelte, wurde vom Server abgewiesen (der einzige Slot war
+     * belegt), und irgendwann danach lief der erste Job durch - "manchmal".
+     *
+     * Jetzt gilt: der Balken des Spielers IST der erste Wolfgang. Ist der Job
+     * eben angelegt worden (JOB_STARTED), wird er hier sofort abgeschlossen.
+     * ChefZ_CompleteJob oben stoesst danach wie bisher den naechsten an - fuer
+     * jedes WEITERE Stueck bleibt es bei 30 Sekunden Takt der Station.
+     *
+     * Sofort abschliessen ist an dieser Stelle ein belegter Pfad und kein
+     * neuer: STATION_ACTION (das Wurstfuellen am selben Wolf) verbraucht und
+     * erzeugt in genau demselben Rueckruf (ChefZ_ActionProcessAtStation.
+     * RunImmediate aus OnFinishProgressServer).
+     */
+    override void ChefZ_OnStationActionFinished(PlayerBase actor, ItemBase inHands, ChefZ_Sym process, int outcome)
+    {
+        super.ChefZ_OnStationActionFinished(actor, inHands, process, outcome);
+
+        if (!g_Game || !g_Game.IsServer())
+            return;
+        if (outcome != ChefZ_StationActionOutcome.JOB_STARTED)
+            return;
+
+        ChefZ_Sym grind = ChefZ_SymbolTable.Lookup(CHEFZ_GRIND_PROCESS);
+        if (!ChefZ_SymbolTable.IsValid(grind))
+            return;
+        if (process != grind)
+            return;
+
+        int slot = ChefZ_FindGrindSlot(grind);
+        if (slot < 0)
+            return;
+
+        ChefZ_CompleteJob(slot);
+    }
+
+    //! Der Slot des laufenden Wolfgangs, oder -1.
+    protected int ChefZ_FindGrindSlot(ChefZ_Sym grind)
+    {
+        for (int i = 0; i < m_ChefZ_Jobs.Count(); i++)
+        {
+            ChefZ_ProcessJob job = m_ChefZ_Jobs.Get(i);
+            if (!job.IsActive())
+                continue;
+            if (job.processSym == grind)
+                return i;
+        }
+        return -1;
     }
 
     /**
@@ -218,9 +283,8 @@ class ChefZ_MeatGrinder extends ChefZ_ProcessingStation_Base
      * Solange ein Spieler jeden Vorgang einzeln anstiess (STATION_ACTION), war
      * das eine Kuriositaet - er haette es von Hand tun muessen. Mit dem
      * Selbstnachstart waere es ein Perpetuum mobile: der Wolf wolfte sein
-     * eigenes Hack alle 30 Sekunden neu, ewig, und wuerfe dabei in 35 % der
-     * Faelle Lard als Nebenprodukt ab. Ein Fleischwolf, der aus einem einzigen
-     * Steak unbegrenzt Speck macht.
+     * eigenes Hack alle 30 Sekunden neu, ewig (bis zum 27.10.2026 warf er
+     * dabei sogar Lard ab - die Nebenprodukte sind inzwischen gestrichen).
      *
      * Die SAUBERE Loesung waere ein engerer Selektor im Transform -
      * { state: "RAW" } statt { vanillaStage: "Raw" }, denn Hackfleisch hat

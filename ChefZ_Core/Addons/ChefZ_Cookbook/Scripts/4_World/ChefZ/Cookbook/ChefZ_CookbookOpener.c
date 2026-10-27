@@ -27,6 +27,13 @@ class ChefZ_CookbookOpener
 {
     private static bool s_MissingReported;
 
+    //! Client: ein Aufschlagen ist angefordert. ChefZ_CookbookInput.Poll
+    //! (5_Mission) nimmt es im naechsten Bild auf und zeigt ChefZ_CookbookMenu.
+    //! Ein Flag statt eines modded class aus 5_Mission: eine Klasse aus
+    //! 4_World laesst sich in 5_Mission nicht modden ("Unknown type",
+    //! 27.10.2026), und 4_World darf das Menue nicht kennen.
+    static bool s_OpenRequested;
+
     /**
      * Von ChefZ_Cookbook_UI ueberschrieben. Hier absichtlich nur eine Meldung.
      *
@@ -37,6 +44,12 @@ class ChefZ_CookbookOpener
      */
     bool Open(PlayerBase spieler)
     {
+        if (g_Game && !g_Game.IsDedicatedServer() && spieler && spieler == g_Game.GetPlayer())
+        {
+            s_OpenRequested = true;
+            return true;
+        }
+
         if (!s_MissingReported)
         {
             s_MissingReported = true;

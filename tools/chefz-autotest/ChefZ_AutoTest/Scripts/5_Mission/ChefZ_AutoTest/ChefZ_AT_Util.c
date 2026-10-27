@@ -122,8 +122,13 @@ class ChefZ_AT_Util
 
     static void CollectCargo(notnull EntityAI container, notnull array<EntityAI> outItems)
     {
+        // Frisch geloeschte Objekte haben kein Inventar mehr (VM-Exception im
+        // Autotest 27.10.2026, QteResolve direkt nach den Spawn-Pruefungen).
+        GameInventory inv = container.GetInventory();
+        if (!inv)
+            return;
         array<EntityAI> all = new array<EntityAI>();
-        container.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, all);
+        inv.EnumerateInventory(InventoryTraversalType.PREORDER, all);
         foreach (EntityAI e : all)
         {
             if (e != container)
@@ -132,7 +137,7 @@ class ChefZ_AT_Util
     }
 
     //! Alle Ausgaben vorhanden? missing nennt die fehlenden.
-    static bool HasOutputs(notnull array<EntityAI> items, notnull array<string> outputs, out string missing, out EntityAI first)
+    static bool HasOutputs(notnull array<EntityAI> items, notnull array<string> outputs, out string missing, out EntityAI first, string stage = "")
     {
         missing = "";
         first = null;
@@ -141,7 +146,7 @@ class ChefZ_AT_Util
             bool found = false;
             foreach (EntityAI e : items)
             {
-                if (e && e.GetType() == o)
+                if (e && e.GetType() == o && InStage(e, stage))
                 {
                     found = true;
                     if (!first)
@@ -153,6 +158,17 @@ class ChefZ_AT_Util
                 missing = missing + o + " ";
         }
         return missing == "";
+    }
+
+    //! true ohne Stufenvorgabe, sonst nur in dieser Vanilla-Garstufe.
+    static bool InStage(EntityAI e, string stage)
+    {
+        if (stage == "")
+            return true;
+        Edible_Base food = Edible_Base.Cast(e);
+        if (!food || !food.GetFoodStage())
+            return false;
+        return typename.EnumToString(FoodStageType, food.GetFoodStage().GetFoodStageType()) == stage;
     }
 
     static void CollectNear(vector pos, float radius, notnull array<EntityAI> outItems)

@@ -1,0 +1,158 @@
+FrameWidgetClass ChefZCookbookRoot {
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ priority 50
+ {
+  PanelWidgetClass Dim {
+   ignorepointer 1
+   color 0 0 0 0.55
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+  }
+  PanelWidgetClass Book {
+   color 0.2 0.14 0.09 0.97
+   position 0 0
+   size 0.72 0.8
+   halign center_ref
+   valign center_ref
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+   {
+    TextWidgetClass Title {
+     ignorepointer 1
+     color 0.96 0.88 0.68 1
+     position 0.03 0.025
+     size 0.6 0.06
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text "#STR_CHEFZ_BOOK_COOKING"
+     font "gui/fonts/AmorSerifPro"
+     "exact text" 0
+     "text valign" center
+    }
+    TextWidgetClass Progress {
+     ignorepointer 1
+     color 0.85 0.76 0.58 1
+     position 0.03 0.085
+     size 0.6 0.035
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text ""
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 0
+     "text valign" center
+    }
+    ButtonWidgetClass CloseButton {
+     color 0.45 0.3 0.18 1
+     position 0.025 0.025
+     size 0.12 0.05
+     halign right_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "#STR_CHEFZ_COOKBOOK_CLOSE"
+     font "gui/fonts/sdf_MetronBook24"
+    }
+    PanelWidgetClass ListBack {
+     ignorepointer 1
+     color 0.12 0.08 0.05 0.9
+     position 0.03 0.14
+     size 0.42 0.8
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_colorable
+    }
+    TextListboxWidgetClass RecipeList {
+     ignorepointer 0
+     clipchildren 1
+     position 0.035 0.15
+     size 0.41 0.78
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     "title visible" 0
+     colums "text;100"
+     lines 20
+     font "gui/fonts/sdf_MetronBook24"
+    }
+    PanelWidgetClass Page {
+     ignorepointer 1
+     color 0.88 0.81 0.66 1
+     position 0.47 0.14
+     size 0.5 0.8
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_colorable
+     {
+      TextWidgetClass DetailName {
+       ignorepointer 1
+       color 0.2 0.12 0.06 1
+       position 0.04 0.03
+       size 0.92 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text ""
+       font "gui/fonts/AmorSerifPro"
+       "exact text" 0
+       "text valign" center
+      }
+      TextWidgetClass DetailStatus {
+       ignorepointer 1
+       color 0.42 0.27 0.12 1
+       position 0.04 0.11
+       size 0.92 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text ""
+       font "gui/fonts/sdf_MetronLight24"
+       "exact text" 0
+       "text valign" center
+      }
+      MultilineTextWidgetClass DetailBody {
+       ignorepointer 1
+       color 0.15 0.1 0.06 1
+       position 0.04 0.18
+       size 0.92 0.79
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text ""
+       font "gui/fonts/sdf_MetronBook24"
+       "exact text" 0
+       wrap 1
+      }
+     }
+    }
+   }
+  }
+ }
+}

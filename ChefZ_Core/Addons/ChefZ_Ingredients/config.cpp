@@ -455,6 +455,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_BUTTER";
         descriptionShort = "#STR_CHEFZ_ITEM_BUTTER_DESC";
         model = "\ChefZ\ChefZ_Food\models\butter.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\butter_co.paa", "\ChefZ\ChefZ_Food\data\butter_baked_co.paa", "\ChefZ\ChefZ_Food\data\butter_boiled_co.paa", "\ChefZ\ChefZ_Food\data\butter_dried_co.paa", "\ChefZ\ChefZ_Food\data\butter_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 250;
         itemSize[] = {2, 1};
         varQuantityInit = 100;
@@ -492,8 +497,8 @@ class CfgVehicles
         // Werte in class Nutrition oben waeren wirkungslos
         // (Edible_Base.c:394-503). Hier stehen sie jetzt ausdruecklich.
         //
-        // visual_properties fehlen absichtlich: das Modell kommt von Lard, und
-        // seine Selection-Indizes kennt nur Lards eigener Block.
+        // visual_properties: seit 27.10.2026 eigene Garstufen-Texturen auf der
+        // Selektion "camo" des Butter-Modells (Lards cs_raw/cs_dried gibt es dort nicht).
         //
         // Die Skriptklasse ist Lard (dieser Slice bringt keine eigene mit),
         // und Lard.c ueberschreibt CanBeCooked() mit true - Butter ist damit
@@ -537,7 +542,7 @@ class CfgVehicles
                 {
                     cooking_properties[] = {0, 0, 0};
                     nutrition_properties[] = {0.5, 90, 4, 0, 15, 0, 1};
-                    visual_properties[] = {-1, -1, 5};
+                    visual_properties[] = {0, 0, 5};
                 };
             };
 
@@ -569,6 +574,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_CHEESE";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESE_DESC";
         model = "\ChefZ\ChefZ_Food\models\cheese.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\cheese_co.paa", "\ChefZ\ChefZ_Food\data\cheese_baked_co.paa", "\ChefZ\ChefZ_Food\data\cheese_boiled_co.paa", "\ChefZ\ChefZ_Food\data\cheese_dried_co.paa", "\ChefZ\ChefZ_Food\data\cheese_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 220;
         itemSize[] = {2, 2};
         varQuantityInit = 100;
@@ -631,25 +641,25 @@ class CfgVehicles
                 };
                 class Baked
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 1, 1};
                     cooking_properties[] = {90, 45, 200};
                     nutrition_properties[] = {3.2, 470, 35, 26, 0, 0, 1};
                 };
                 class Boiled
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 2, 2};
                     cooking_properties[] = {90, 60, 150};
                     nutrition_properties[] = {3.3, 455, 70, 22, 0, 0, 1};
                 };
                 class Burned
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 4, 4};
                     cooking_properties[] = {200, 20, 0};
                     nutrition_properties[] = {0.9, 68, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 0, 5};
                     cooking_properties[] = {0, 0, 0};
                     nutrition_properties[] = {0.9, 68, 12, 0, 15, 0, 1};
                 };
@@ -843,6 +853,11 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_EGG";
         descriptionShort = "#STR_CHEFZ_ITEM_EGG_DESC";
         model = "\ChefZ\ChefZ_Food\models\egg.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
+        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
+        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\egg_co.paa", "\ChefZ\ChefZ_Food\data\egg_baked_co.paa", "\ChefZ\ChefZ_Food\data\egg_boiled_co.paa", "\ChefZ\ChefZ_Food\data\egg_dried_co.paa", "\ChefZ\ChefZ_Food\data\egg_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         weight = 60;
         itemSize[] = {1, 1};
         varQuantityInit = 100;
@@ -889,31 +904,31 @@ class CfgVehicles
             {
                 class Raw
                 {
-                    visual_properties[] = {0.0, 0.0, 0.0};
+                    visual_properties[] = {0, 0, 0};
                     nutrition_properties[] = {1.0, 90, 40, 12, 0, 0, 1};
                     cooking_properties[] = {0, 0};
                 };
                 class Baked
                 {
-                    visual_properties[] = {0.0, 0.0, 0.0};
+                    visual_properties[] = {0, 1, 1};
                     nutrition_properties[] = {1.2, 105, 25, 18, 0, 0, 1};
                     cooking_properties[] = {70, 45};
                 };
                 class Boiled
                 {
-                    visual_properties[] = {0.0, 0.0, 0.0};
+                    visual_properties[] = {0, 2, 2};
                     nutrition_properties[] = {1.2, 100, 35, 18, 0, 0, 1};
                     cooking_properties[] = {105, 55};
                 };
                 class Burned
                 {
-                    visual_properties[] = {0.0, 0.0, 0.0};
+                    visual_properties[] = {0, 4, 4};
                     nutrition_properties[] = {0.5, 20, 5, 0, 0, 0, 1};
                     cooking_properties[] = {100, 20};
                 };
                 class Rotten
                 {
-                    visual_properties[] = {0.0, 0.0, 0.0};
+                    visual_properties[] = {0, 0, 5};
                     nutrition_properties[] = {0.5, 20, 10, 0, 15, 0, 1};
                     cooking_properties[] = {0, 0};
                 };

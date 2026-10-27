@@ -844,20 +844,6 @@
             "fullness": 138
         },
         {
-            "id": "ChefZ_DriedFish",
-            "scope": "class",
-            "energy": 260,
-            "water": 4,
-            "fullness": 80
-        },
-        {
-            "id": "ChefZ_DriedMeat",
-            "scope": "class",
-            "energy": 320,
-            "water": 5,
-            "fullness": 90
-        },
-        {
             "id": "ChefZ_DrySausage",
             "scope": "class",
             "energy": 545,
@@ -877,20 +863,6 @@
             "energy": 165,
             "water": 25,
             "fullness": 115
-        },
-        {
-            "id": "ChefZ_SmokedFish",
-            "scope": "class",
-            "energy": 245,
-            "water": 10,
-            "fullness": 88
-        },
-        {
-            "id": "ChefZ_SmokedMeat",
-            "scope": "class",
-            "energy": 300,
-            "water": 12,
-            "fullness": 100
         },
         {
             "id": "ChefZ_SmokedSausage",

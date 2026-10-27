@@ -10,7 +10,7 @@ class CfgPatches
         units[] = {};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"DZ_Data", "DZ_Scripts", "ChefZ_Core", "ChefZ_Cooking", "ChefZ_Processing", "ChefZ_Fishing", "ChefZ_Farming", "ChefZ_Preservation", "ChefZ_Meat"};
+        requiredAddons[] = {"DZ_Data", "DZ_Scripts", "ChefZ_Core", "ChefZ_Cooking", "ChefZ_Processing", "ChefZ_Fishing", "ChefZ_Farming", "ChefZ_Preservation", "ChefZ_Meat", "ChefZ_Cookbook"};
     };
 };
 

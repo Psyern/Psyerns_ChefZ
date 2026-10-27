@@ -33,7 +33,7 @@ ruft `AddResult()` je Eintrag. `quantity` fehlt bewusst ganz — der Sentinel la
 die Klassenvorgabe stehen, und die kennt nur Vanilla.
 
 **Warum kein `setState` und kein `inheritFreshness`:** aus demselben Grund, der
-weiter unten beim `Lard` aus `TR_MeatToMinced` steht. Beide werden in
+fuer Vanilla-Ausgaenge allgemein gilt. Beide werden in
 `ApplyHandcraftLayer` nur innerhalb von `if (ChefZ_ItemStateComponent.IsManaged(item))`
 angewandt; ein Vanilla-Steak ist dort nicht drin. Der Eintrag waere wirkungslose
 Daten.
@@ -48,13 +48,13 @@ siehe `../Ingredients/README.md`, Abschnitt "Keulen".
 §30/§57: Meat -> Minced Meat am Fleischwolf. Der gattungsneutrale Fall mit
 `priority 0` — jede Sortenregel unten schlaegt ihn.
 
-**Zum Nebenausgang `Lard` in `byproducts[]`:** §31: Tierfett faellt beim
-Wolfen an. Nicht bei jedem Durchgang — `chance 0.35` — sonst waere Fett kein Fund,
-sondern eine Selbstverstaendlichkeit. Ausgegeben wird Vanillas `Lard` und keine
-eigene Fettklasse (Vanilla-Audit §2): alle Fett-Slots matchen ueber die Kategorie
-`FAT`, und `Lard` traegt sie bereits. `setState` fehlt hier bewusst — ein
-Vanilla-Item kann keinen ChefZ-Zustand tragen (`ChefZ_ItemStateComponent.Of()`
-liefert `null`), der Eintrag waere wirkungslose Daten.
+**Kein Nebenausgang mehr (27.10.2026).** Bis hierher warfen `TR_MeatToMinced`
+(35 %), `TR_PorkToMinced` (50 %), `TR_BoarToMinced` (35 %) und `TR_BearToMinced`
+(60 %) Vanillas `Lard` als `byproducts[]` ab (§31). Spieltest Alex: "Es sollte
+dabei auch kein Fett entstehen, sondern nur das Hackfleisch." Alle sechs
+Wolf-Transforms liefern seitdem ausschliesslich Hackfleisch. `Lard` gibt es
+weiterhin beim Zerlegen der Schweinekeule (`TR_CutPorkLeg`), die Fett-Slots der
+Gerichte (Kategorie `FAT`) bleiben damit bedienbar.
 
 ### `TR_PorkToMinced`, `TR_VenisonToMinced`, `TR_BoarToMinced`, `TR_ChickenToMinced`, `TR_BearToMinced`
 
@@ -132,7 +132,9 @@ einer fremden Skala steht; `fromInput` haette diese fremde Zahl in eine
 250er-Klasse geschrieben. `fromInput` bleibt nur, wo Ein- und Ausgang dieselbe
 Skala fuehren — das ist `Config/Recipes/Sausage.json`, siehe die README dort.
 
-Die drei `Lard`-Beiprodukte haben ihr `quantity`-Feld ganz verloren. `Lard` ist
+Die `Lard`-Beiprodukte der Wolf-Transforms gibt es seit dem 27.10.2026 nicht
+mehr (siehe `TR_MeatToMinced`). Das `Lard` an `TR_CutPorkLeg` traegt aus
+demselben Grund kein `quantity`-Feld. `Lard` ist
 eine VANILLA-Klasse mit eigener Skala, die dieses Projekt nicht belegen kann;
 ohne das Feld bleibt `value` auf `-1` (`ChefZ_ProcessRunner.c:329`) und der
 Klassendefault steht. Genau so halten es die drei Keulen-Transforms mit `Bone`

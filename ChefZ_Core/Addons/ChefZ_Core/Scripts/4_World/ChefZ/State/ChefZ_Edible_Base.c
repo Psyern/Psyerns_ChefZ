@@ -56,6 +56,9 @@ class ChefZ_Edible_Base extends Edible_Base
     //! warum die Felder dort liegen und nicht hier.
     protected ref ChefZ_ItemStateComponent m_ChefZ_State;
 
+    //! Zuletzt dargestellte Stufe der Textur-Optik (ChefZ_StageVisuals).
+    protected int m_ChefZ_VisualStageLast = FoodStageType.NONE;
+
     //! Klassenname -> "deklariert Food > FoodStageTransitions?".
     //! Siehe ChefZ_DeclaresCookTransitions(); die Antwort ist eine
     //! KLASSENeigenschaft und aendert sich zur Laufzeit nie.
@@ -277,6 +280,28 @@ class ChefZ_Edible_Base extends Edible_Base
         // (Edible_Base.c:91); eine Klasse ohne FoodStages laeuft hier also
         // ins Leere statt in einen Nullzugriff.
         UpdateVisualsEx();
+    }
+
+    //! Klassen ohne Materialliste (MLOD-Modelle) wechseln die Stufen-Optik nur
+    //! ueber Texturen - siehe Kopf von ChefZ_StageVisuals.
+    override void UpdateVisualsEx(bool forced = false)
+    {
+        if (!ChefZ_StageVisuals.UsesTextureOnly(this))
+        {
+            super.UpdateVisualsEx(forced);
+            return;
+        }
+        FoodStage stage = GetFoodStage();
+        if (!stage)
+            return;
+        int stageType = stage.GetFoodStageType();
+        if (!forced)
+        {
+            if (stageType == m_ChefZ_VisualStageLast)
+                return;
+        }
+        m_ChefZ_VisualStageLast = stageType;
+        ChefZ_StageVisuals.Apply(this, stageType);
     }
 
     //==========================================================================

@@ -1,0 +1,29 @@
+PanelWidgetClass "{5A1C0F3B7E2D4A10}" {
+ Name "ATGalleryRoot"
+ visible 1
+ ignorepointer 1
+ color 0.25 0.27 0.3 1
+ style rover_sim_colorable
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ priority 900
+ {
+  TextWidgetClass "{5A1C0F3B7E2D4A11}" {
+   Name "ATGalleryTitle"
+   ignorepointer 1
+   position 0.005 0
+   size 0.99 0.03
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   text "gallery"
+   "exact text" 0
+   "text valign" center
+  }
+ }
+}

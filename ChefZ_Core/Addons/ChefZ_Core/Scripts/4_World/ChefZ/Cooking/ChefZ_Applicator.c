@@ -59,6 +59,13 @@
 class ChefZ_Applicator
 {
     /**
+     * Steht, solange der Applicator selbst ein Ergebnis in ein Gefaess legt
+     * (27.10.2026). Gefaesse mit reinem Ausgabe-Cargo (Raeucherschrank:
+     * "nur entnehmbar") lassen in CanReceiveItemIntoCargo nur dann etwas zu.
+     */
+    static bool s_ChefZ_Placing;
+
+    /**
      * Mengenschwelle. Unterhalb davon gilt eine Menge als "keine Menge".
      *
      * Derselbe Wert wie im ChefZ_SlotEvaluator, aus demselben Grund: die
@@ -680,7 +687,10 @@ class ChefZ_Applicator
     private static InventoryLocation FindCargoSpot(notnull GameInventory inv, string cls)
     {
         InventoryLocation loc = new InventoryLocation();
-        if (!inv.FindFirstFreeLocationForNewEntity(cls, FindInventoryLocationType.CARGO, loc))
+        s_ChefZ_Placing = true;
+        bool found = inv.FindFirstFreeLocationForNewEntity(cls, FindInventoryLocationType.CARGO, loc);
+        s_ChefZ_Placing = false;
+        if (!found)
             return null;
         return loc;
     }
@@ -731,7 +741,9 @@ class ChefZ_Applicator
             return null;
         }
 
+        s_ChefZ_Placing = true;
         EntityAI spawned = parent.GetInventory().CreateEntityInCargoEx( cls, loc.GetIdx(), loc.GetRow(), loc.GetCol(), loc.GetFlip());
+        s_ChefZ_Placing = false;
 
         if (!spawned)
         {
@@ -810,7 +822,13 @@ class ChefZ_Applicator
     {
         if (!device || !item || item.IsSetForDeletion() || device.IsSetForDeletion())
             return;
-        if (device.ServerTakeEntityToCargo(item))
+        s_ChefZ_Placing = true;
+        bool inCargo = device.ServerTakeEntityToCargo(item);
+        s_ChefZ_Placing = false;
+        if (inCargo)
+            return;
+        // Raeucherofen und Trockenrahmen haben keinen Laderaum, nur Haken.
+        if (device.GetInventory().CanAddAttachment(item) && device.ServerTakeEntityAsAttachment(item))
             return;
 
         ChefZ_Log.Warn(ChefZ_LogChannel.COOK, recipeId + ": " + item.GetType() + " passt auch nach dem Verbrauch nicht ins Gefaess und liegt daneben.");
