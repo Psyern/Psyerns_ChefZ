@@ -45,7 +45,9 @@
 // ---------------------------------------------------------------------------
 // SYSTEMGRENZEN
 // ---------------------------------------------------------------------------
-// Alles hier zahlt in "surv" ein, ausnahmslos. Tierzerlegung gehoert Terje
+// Alles hier zahlt in "surv" ein (Config "skill"), ausser den Prozessen in
+// ChefZ_ProcessSkills: Imkerei, Mehl und Saatgut gehen nach Terje Farming
+// ("farm"), sofern der Server ihn hat - sonst ebenfalls "surv". Tierzerlegung gehoert Terje
 // Hunting (PrepareAnimal.c), Fischfiletieren Terje Fishing (PrepareFish.c) -
 // beide werden hier nicht angefasst. Die Wurstherstellung ist
 // WEITERVERARBEITUNG und gibt deshalb Survival-XP, niemals Hunting-XP.
@@ -93,6 +95,10 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         // ProcessDamperKey().
         string damperKey = "";
 
+        // Das Konto. Kochen zahlt immer in den Standard-Skill, ein Prozess
+        // kann per ChefZ_ProcessSkills umgelenkt werden (Imkerei -> "farm").
+        string skillId = ChefZ_TerjeSkillsConfig.SkillId();
+
         // Name() und nicht NameOrMark(): ein leerer Name heisst "der Core
         // konnte den Vorgang nicht benennen". Dann gibt es hier nichts -
         // weder eine sinnvolle Ausnahmeliste noch einen Schluessel fuer die
@@ -118,6 +124,7 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
 
             xp = ProcessXp(key, processId);
             damperKey = ProcessDamperKey(key, processId);
+            skillId = ChefZ_TerjeSkillsConfig.ProcessSkill(processId, skillId);
         }
         else
         {
@@ -160,12 +167,13 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
         // auf EINER Zeile, und ein Aufruf als Argument eines Aufrufs zwingt
         // die Zeile sonst zum Umbruch.
         bool notify = ChefZ_TerjeSkillsConfig.ShowNotification();
-        if (!ChefZ_TerjeSkillsBridge.AddSurvivalXp(player, xp, notify))
+        string paid = ChefZ_TerjeSkillsBridge.AddXp(player, skillId, xp, notify);
+        if (paid == "")
             return;
 
         if (ChefZ_Log.Enabled(ChefZ_LogChannel.EVENT, ChefZ_LogLevel.DEBUG))
         {
-            string line = "TerjeSkills: +" + xp.ToString() + " surv fuer " + progressKind + " \"" + key;
+            string line = "TerjeSkills: +" + xp.ToString() + " " + paid + " fuer " + progressKind + " \"" + key;
             line = line + "\" (Spieler " + args.identityId.ToString() + ", Ergebnisse " + produced.ToString();
             line = line + ", Daempfung " + percent.ToString() + "% auf \"" + damperKey + "\")";
             ChefZ_Log.Debug(ChefZ_LogChannel.EVENT, line);
@@ -290,7 +298,7 @@ class ChefZ_TerjeProgressSink extends ChefZ_IProgressSink
      *
      * Gleichfalls betroffen, aber unauffaellig: PROCESS_STUFF_SAUSAGE (6),
      * PROCESS_GRIND_MEAT (6), PROCESS_GRIND_SPICE (4), PROCESS_CUT_MEAT (4),
-     * PROCESS_SMOKE (2), PROCESS_SALT_CURE (2), PROCESS_MILL (2). Alle
+     * PROCESS_SMOKE (2), PROCESS_MILL (2). Alle
      * uebrigen Prozesse fuehren genau eine Transform; fuer sie aendert sich
      * nichts ausser dem Namen im Debuglog.
      *

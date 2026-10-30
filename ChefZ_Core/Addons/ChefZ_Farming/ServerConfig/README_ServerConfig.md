@@ -81,8 +81,9 @@ Vier Events nach Vanillas Pilz- und Obstbauform (`db\events.xml`,
 | `ChefZTrajectoryHerbs` | 140 | `ChefZ_WildThyme`, `ChefZ_WildRosemary`, `ChefZ_WildParsley` |
 | `ChefZTrajectoryWheat` | 40 | `ChefZ_Wheat` |
 | `ChefZTrajectoryBerries` | 140 | `ChefZ_WildBlackberry`, `ChefZ_WildBlueberry`, `ChefZ_WildRaspberry`, `ChefZ_WildStrawberry` (seit 14.09.2026) |
+| `ChefZTrajectoryMushrooms` | 80 | `ChefZ_Chanterelle`, `ChefZ_HedgehogMushroom`, `ChefZ_Morel`, `ChefZ_ShaggyInkCap` (seit 30.10.2026) |
 
-Alle vier `position=player`, `limit=mixed`, `active=1`, `lifetime=180`,
+Alle fünf `position=player`, `limit=mixed`, `active=1`, `lifetime=180`,
 `saferadius=25`, `distanceradius=100`, `cleanupradius=25`. Das heißt: die
 Engine sucht sich einen Fleck im Ring 25–100 m um einen Spieler und legt dort
 etwas hin. **Wo genau, entscheidet die Engine** — Mais steht damit nicht
@@ -236,3 +237,32 @@ bekommt Maispflanzen im Loot von Gebäuden.
 
 Die Ausbeute je Pflanze steht **nicht** hier — sie steht im Mod
 (`Config/Processing/README_WildPlants.md`).
+
+---
+
+## Waschbär (`ChefZ_Raccoon`, 30.10.2026)
+
+Der Waschbär ist ein Fuchs mit eigenem Modell: er erbt von `Animal_VulpesVulpes`
+Skelett, Animationen, KI (`AmbientLife_Vulpes_Vulpes`) und Verhalten. Er braucht
+deshalb **keine eigene Territoriumsdatei** - er läuft in den Fuchs-Revieren mit.
+
+Zwei Zeilen in der Mission, beide neben die vorhandenen Fuchs-Einträge:
+
+**`cfgenvironment.xml`**, im Block `<territory type="Ambient" name="AmbientFox" …>`,
+in **beiden** `<agent>`-Blöcken (Male und Female):
+
+```xml
+<spawn configName="Animal_VulpesVulpes" chance="1" />
+<spawn configName="ChefZ_Raccoon" chance="0.5" />   <!-- neu: jedes dritte Tier ein Waschbär -->
+```
+
+**`db/events.xml`**, im Event `AmbientFox`, unter `<children>`:
+
+```xml
+<child lootmax="0" lootmin="0" max="0" min="100" type="Animal_VulpesVulpes"/>
+<child lootmax="0" lootmin="0" max="0" min="100" type="ChefZ_Raccoon"/>   <!-- neu -->
+```
+
+`chance` ist ein Gewicht innerhalb des Agenten: 1 : 0.5 heißt zwei Füchse auf
+einen Waschbären. Ohne diesen Einbau gibt es den Waschbären nur über COT
+(Kategorie „ChefZ / Tiere“) oder per Skript.

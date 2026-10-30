@@ -26,8 +26,11 @@ Related pages: [Recipes](Recipes), [Food-States](Food-States),
 > cauldron produces. Before this it spawned full at 1200, which handed out three
 > pots' worth for free.
 >
-> `returnContainer` on a dish is now a fixed class
-> (`ChefZ_EmptyBowl` / `ChefZ_EmptyPlate`), never `"AUTO"`.
+> `returnContainer` on a dish is now a fixed class (`ChefZ_EmptyBowl`), never
+> `"AUTO"`. Since 2026-10-30 plate dishes carry no `returnContainer` and no
+> `containerCategory` at all: the wooden plate (`ChefZ_EmptyPlate`) and the
+> category `PLATE` were removed, so a plate dish is eaten without a container and
+> returns nothing.
 
 ## 1. One class per dish
 
@@ -252,7 +255,7 @@ case the player has exactly what they had before.
 
 The creation order is hands → inventory → ground, deliberately *not* vanilla's
 (`HumanInventory.CreateInInventory` tries inventory, then hands). Whoever takes a
-portion usually wants to eat it, and a plate landing in the backpack would be a
+portion usually wants to eat it, and a bowl landing in the backpack would be a
 second handling step. Dropping to the ground is the last resort and explicitly
 **not** an error; only if that also fails does the take abort, and then without
 any effect.
@@ -298,11 +301,13 @@ appear to the player even though the server would allow it.
 
 | Class | Category | `emptyClass` | `reusable` | `consumedOnServe` | `spoilageModifier` | `searchScope` |
 |---|---|---|---|---|---|---|
-| `ChefZ_EmptyPlate` | `PLATE` | `ChefZ_EmptyPlate` | yes | yes | `1.00` | 3 |
 | `ChefZ_EmptyBowl` | `BOWL` | `ChefZ_EmptyBowl` | yes | yes | `1.00` | 3 |
 | `ChefZ_EmptyCan` | `CAN` | *(none)* | **no** | yes | `0.15` | 3 |
 | `ChefZ_EmptyJar` | `JAR` | `ChefZ_EmptyJar` | yes | yes | `0.10` | 3 |
 | `ChefZ_EmptyBox` | `BOX` | `ChefZ_EmptyBox` | yes | yes | `0.80` | 3 |
+
+Four containers since 2026-10-30 — `ChefZ_EmptyPlate` and the category `PLATE`
+were removed then.
 
 `ChefZ_EmptyCan` is the preserve case: `reusable = 0`, nothing comes back, and
 that is not an error. Its `spoilageModifier = 0.15` is the reason preserves are
@@ -334,13 +339,13 @@ player would lose containers the author never heard of.
 
 Default is `3` (`HANDS | INVENTORY`). `NEARBY_CARGO` is deliberately not in the
 default: it gets expensive at bases with many crates and makes the selection
-opaque for the player — they cannot see which barrel their plate came from.
+opaque for the player — they cannot see which barrel their bowl came from.
 Unknown bits are reported at build time and masked out rather than accepted.
 
 **The search order is fixed and not configurable**
 (`ChefZ_ContainerService`): hands → inventory → environment. Within a level,
 health decides, then class name — deterministic, not slot-dependent. Two players
-with the same inventory get the same plate, and the same player gets the same
+with the same inventory get the same bowl, and the same player gets the same
 answer twice.
 
 Settings in `.../ChefZ_Core/Config/Core.json`:
@@ -403,8 +408,8 @@ if (dish.HasQuantity() && dish.GetQuantity() > EMPTY_EPSILON)
 `EMPTY_EPSILON = 0.01`, matching vanilla: `ActionConsume.OnEndServer` checks
 `GetQuantity() <= 0.01` and then sets the amount to 0
 (`ActionConsume.c:51`). A continuous eat action regularly leaves fractions
-standing, so aligning this number is the difference between "the plate comes
-back" and "the plate almost always comes back". A partially eaten dish returns
+standing, so aligning this number is the difference between "the bowl comes
+back" and "the bowl almost always comes back". A partially eaten dish returns
 nothing.
 
 The binding is then read and **immediately invalidated** before anything is

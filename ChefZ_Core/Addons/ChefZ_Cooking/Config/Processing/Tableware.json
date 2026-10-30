@@ -3,26 +3,6 @@
     "schemaVersion": 1,
     "records": [
         {
-            "id": "TR_CarveWoodenPlate",
-            "process": "PROCESS_CARVE_PLATE",
-            "inputs": [
-                {
-                    "slotId": "wood",
-                    "match": { "cls": "Firewood" },
-                    "minCount": 1,
-                    "consume": "whole"
-                }
-            ],
-            "outputs": [
-                {
-                    "cls": "ChefZ_EmptyPlate",
-                    "quantity": 1,
-                    "quantityMode": "fixed"
-                }
-            ],
-            "priority": 0
-        },
-        {
             "id": "TR_CarveWoodenBowl",
             "process": "PROCESS_CARVE_BOWL",
             "inputs": [

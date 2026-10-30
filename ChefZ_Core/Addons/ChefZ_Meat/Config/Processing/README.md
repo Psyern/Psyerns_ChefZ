@@ -213,6 +213,12 @@ Ebenen aus `ChefZ_SelectorLevels.c`. Jeder Knoten trägt genau ein Prädikat —
 
 ### Konservenklassen: bewusst NICHT wolfbar
 
+> Stand 30.10.2026: `ChefZ_SaltedMeat` ist mit dem Pökeln entfallen, die
+> Sammelklassen `ChefZ_DriedMeat`/`ChefZ_SmokedMeat` schon am 27.10.2026.
+> Geräuchertes Fleisch ist seitdem dasselbe Item im Zustand `SMOKED`; der
+> `state: "RAW"`-Filter schließt es weiterhin aus. Der Abschnitt bleibt als
+> Begründung stehen.
+
 `ChefZ_SaltedMeat`, `ChefZ_DriedMeat` und `ChefZ_SmokedMeat` (Slice
 `preservation`) tragen `category: MEAT` und wären über `vanillaStage: Raw`
 erreichbar gewesen. Der zusätzliche `state: "RAW"` schließt sie aus, denn ihr

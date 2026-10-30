@@ -398,7 +398,20 @@ export function parseConfigTree(file) {
       let j = i + assign[0].length;
       let value;
       if (assign[2] || src[j] === '{') {
-        const close = src.indexOf('}', j);
+        // Bis zur PASSENDEN schliessenden Klammer, nicht zur ersten: ein
+        // verschachteltes Array wie healthLevels[] = {{1.0, {}}, ...} schloss
+        // sonst bei der inneren "}", und die uebrigen "}" poppten Klassen vom
+        // Stapel - alles danach fehlte im Index (Befund 30.10.2026, Slice
+        // mushrooms; dieselbe Form steht in ChefZ_Cookbook/config.cpp).
+        let close = -1;
+        let depth = 0;
+        for (let k = j; k < n; k++) {
+          if (src[k] === '{') depth++;
+          else if (src[k] === '}') {
+            depth--;
+            if (depth === 0) { close = k; break; }
+          }
+        }
         const body = close < 0 ? '' : src.slice(j + 1, close);
         value = body.split(',').map(s => s.trim().replace(/^"|"$/g, '')).filter(s => s.length > 0);
         j = close < 0 ? n : close + 1;

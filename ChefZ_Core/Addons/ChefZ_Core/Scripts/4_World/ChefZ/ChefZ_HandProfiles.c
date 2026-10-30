@@ -78,7 +78,6 @@ modded class ModItemRegisterCallbacks
 		pType.AddItemInHandsProfileIK("ChefZ_CookedSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
 
 		// Geraete und Behaelter
-		pType.AddItemInHandsProfileIK("ChefZ_EmptyPlate", asiPipe, pBehavior, ik + "frying_pan.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_FryingPan", asiPipe, pBehavior, ik + "frying_pan.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_HoneycombFrame_Base", asiOneHand, pBehavior, ik + "TireRepairKit.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_EmptyJar", asiOneHand, pBehavior, ik + "marmalade.anm");

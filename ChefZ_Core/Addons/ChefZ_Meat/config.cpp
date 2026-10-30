@@ -216,7 +216,9 @@ class CfgPatches
             "ChefZ_VenisonSausage",
             "ChefZ_BoarSausage",
             "ChefZ_HunterSausage",
-            "ChefZ_SpicySausage"
+            "ChefZ_SpicySausage",
+            // Ein neues Tier (30.10.2026), siehe unten am Ende von CfgVehicles.
+            "ChefZ_Raccoon"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -252,7 +254,9 @@ class CfgPatches
             "DZ_Animals_cervus_elaphus",
             "DZ_Animals_cervus_elaphus_feminam",
             "DZ_Animals_capreolus_capreolus",
-            "DZ_Animals_capreolus_capreolus_fem"
+            "DZ_Animals_capreolus_capreolus_fem",
+            // ChefZ_Raccoon erbt vom Fuchs - Skelett, Animationen und KI.
+            "DZ_Animals_vulpes_vulpes"
         };
     };
 };
@@ -316,6 +320,7 @@ class CfgVehicles
     // macht den Namen sichtbar, damit die Erweiterungen am Ende dieser Datei
     // ihre Elternklasse nennen koennen, ohne sie neu zu erfinden.
     class AnimalBase;
+    class Animal_VulpesVulpes;
 
     // ------------------------------------------------------------------------
     // Gemeinsame Configbasis dieses Moduls.
@@ -2264,6 +2269,47 @@ class CfgVehicles
                 count = 1;
                 transferToolDamageCoef = 1;
             };
+        };
+    };
+    // ------------------------------------------------------------------------
+    // WASCHBAER (30.10.2026). Ein eigenes Tier auf dem Skelett des Fuchses. Es
+    // ERBT vom Fuchs:
+    //   aiAgentTemplate  AmbientLife_Vulpes_Vulpes (Verhalten, Flucht)
+    //   DamageSystem, Skinning, AnimEvents (Schritte), Sounds
+    // und nutzt dessen Animationssystem (Skelett vulpes_vulpes_skeleton.xob,
+    // Graph AmbientLife_Graph.agr) mit EIGENER Instanz:
+    //   ChefZ_Items/raccoon/anims/ChefZ_Raccoon.asi erbt die Fuchsinstanz
+    //   (#parent VulpesVulpes_Skeleton.asi, 33 Animationen) und ersetzt den
+    //   Slot "Default.Normal.walk" durch raccoon_walk.anm - die Laufanimation
+    //   der Meshy-Lieferung, mit tools/chefz-assets/animal_anim_from_meshy.py
+    //   auf das Fuchsskelett uebertragen (Laenge, Wurzelbewegung und
+    //   Schritt-Events vom Fuchs-Walk). Alle uebrigen Slots bleiben die des
+    //   Fuchses. Ein eigener Graph (agr/ast) wird damit nicht gebraucht.
+    // class enfanimsys steht ganz da: eine neu deklarierte Unterklasse erbt
+    // die Felder der gleichnamigen Elternklasse nicht.
+    //
+    // DAS MODELL: Meshy-Lieferung "Masked Wanderer" (Waschbaer mit Meshy-Rig),
+    // mit tools/chefz-assets/animal_retarget_fox.py auf die 32 Fuchsknochen in
+    // der Fuchs-Bindpose umgeformt und neu gewichtet; Trefferzonen zone_head,
+    // zone_chest und zone_legs in Fire- und View-Geometry, am Knochen
+    // mitbewegt. Skelett in ChefZ_Items/raccoon/models/model.cfg.
+    //
+    // Fleisch und Fell sind die des Fuchses (geerbt). Ein eigenes
+    // Waschbaerfell ist nicht bestellt.
+    // ------------------------------------------------------------------------
+    class ChefZ_Raccoon : Animal_VulpesVulpes
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ANIMAL_RACCOON";
+        descriptionShort = "#STR_CHEFZ_ANIMAL_RACCOON_DESC";
+        model = "\ChefZ\ChefZ_Items\raccoon\models\raccoon.p3d";
+        class enfanimsys
+        {
+            meshObject = "dz\animals\vulpes_vulpes\data\vulpes_vulpes_skeleton.xob";
+            graphname = "dz\animals\animations\!graph_files\AmbientLife\AmbientLife_Graph.agr";
+            defaultinstance = "ChefZ\ChefZ_Items\raccoon\anims\ChefZ_Raccoon.asi";
+            startnode = "Master_SM";
+            skeletonName = "vulpes_vulpes_skeleton.xob";
         };
     };
 };

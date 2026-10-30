@@ -11,10 +11,11 @@ data — a *transform* at a station or in the handcraft menu, or a *recipe* in c
 | [Vegetables](#vegetables) | no transforms since 29.08.2026 | none | `ROOT_VEGETABLE`, `LEAF_VEGETABLE`, `TOMATO` |
 | [Meat and sausage](#meat-and-sausage) | 16 transforms + 6 recipes | Meat Grinder | Six cooked sausages |
 | [Milk](#milk) | 3 transforms | Butter Churn, Cheese Press | Cream, Butter, Cheese |
-| [Fish](#fish) | 3 transforms | Drying Rack, Smoker | `FISH`, preserved fish |
-| [Preservation](#preservation) | 7 transforms, plus the 3 fish steps above | Drying Rack, Smoker | `CHEFZ_PRESERVED` |
-| [Tableware](#tableware) | 5 transforms | none — handcraft | The five empty containers |
+| [Fish](#fish) | 1 transform (3 before 2026-10-30) | Smoker | `FISH`, smoked fish |
+| [Preservation](#preservation) | 5 transforms, plus the fish step above | Drying Rack, Smoker | `CHEFZ_PRESERVED` |
+| [Tableware](#tableware) | 4 transforms | none — handcraft | The four empty containers |
 | [Honey](#honey) | 7 handcraft transforms + 1 station transform + the hive script | Beehive, Honey Extractor | vanilla `Honey` |
+| [Mushrooms](#mushrooms) | 15 handcraft transforms + 15 station transforms + the shelf script | Drying Rack, Mortar, Mushroom Shelf | `MUSHROOM` — four new species and seven edible cultivated forms |
 
 **Read the diagrams like this:** rounded boxes are items, the label on an arrow is
 the station or the tool, and `[]` boxes are the dishes a chain feeds into.
@@ -122,7 +123,6 @@ graph LR
   SW(["Sea water<br/>in any container"]) -->|"Frying Pan<br/>15 min + burning fire"| RS(["Raw Salt"])
   RS -->|"Frying Pan<br/>20 min, no fire"| SA(["Salt"])
   SA --> R["category SALT<br/>33 recipes"]
-  SA --> C["Salt Cure<br/>meat and fish"]
 ```
 
 | Step | Input | Output | Where | Tool | Duration |
@@ -137,8 +137,8 @@ brine. Drying does not need heat, so the fire may go out for the second half.
 
 **Where it feeds in.** `SALT` appears in 35 of the 47 recipes — almost always as
 an optional slot worth +1 or +2 grade points, at 3 to 12 g per dish. It is also a
-hard requirement of the three sauces and of both salt-curing transforms in the
-[preservation chain](#preservation), which take 20 units each.
+hard requirement of the three sauces. (The two salt-curing transforms of the
+[preservation chain](#preservation), 20 units each, were removed on 2026-10-30.)
 
 ## Herbs and spices
 
@@ -418,21 +418,17 @@ a preservation path.
 ```mermaid
 graph LR
   F(["Carp, Mackerel,<br/>Steelhead Trout,<br/>Walleye Pollock Fillet"]) --> CAT["category FISH"]
-  CAT -->|"Salt Cure<br/>20 salt, 6 s"| SF(["Salted Fish"])
-  SF -->|"Drying Rack<br/>45 min"| DF(["Dried Fish"])
   CAT -->|"Smoker<br/>5 min"| SMF(["Smoked Fish"])
   CAT --> R["Fisherman's Stew<br/>Fish and Potatoes"]
 ```
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_SaltFish` | 1× *FISH* + state RAW + 1× *SALT* (20) | Salted Fish (1×) | *handcraft* | — | 6 s |
-| `TR_SaltedFishToDried` | 1× Salted Fish | Dried Fish (1:1) | Drying Rack | — | 45 min |
-| `TR_FishToSmoked` | 1× *FISH* + state RAW | Smoked Fish (1:1) | Smoker | — | 5 min + bark |
+| `TR_FishToSmoked` | 1× *FISH* + state RAW | the same fillet, state Smoked | Smoker | — | 5 min + bark |
 
 **Where it feeds in.** `FISH` is used by 4 recipes: the three Fisherman's Stew
-variants and Fish and Potatoes. Salted, Dried and Smoked Fish all keep the `FISH`
-category, so a preserved fillet still cooks.
+variants and Fish and Potatoes. A smoked fillet keeps the `FISH` category, so it
+still cooks. Salted and dried fish were removed on 2026-10-30 — fish is only smoked.
 
 Smoked Fish became reachable on 2026-08-31, when `ChefZ_Smoker` gained its own
 burn state — see [preservation](#preservation).
@@ -445,21 +441,15 @@ preserved item still matches the recipes its fresh form matched.
 
 ```mermaid
 graph LR
-  M(["Raw meat"]) -->|"Salt Cure<br/>20 salt"| SM(["Salted Meat<br/>SALTED"])
-  SM -->|"Drying Rack 60 min"| DM(["Dried Meat<br/>DRIED"])
-  SM -->|"Smoker 5 min"| SMM(["Smoked Meat<br/>SMOKED"])
-  F(["Raw fish"]) -->|"Salt Cure<br/>20 salt"| SF(["Salted Fish"])
-  SF -->|"Drying Rack 45 min"| DF(["Dried Fish"])
-  F -->|"Smoker 5 min"| SMF(["Smoked Fish"])
+  M(["Raw meat"]) -->|"Smoker 5 min"| SMM(["Smoked meat<br/>SMOKED"])
+  F(["Raw fish"]) -->|"Smoker 5 min"| SMF(["Smoked fish<br/>SMOKED"])
   RS(["Raw sausage"]) -->|"Drying Rack 90 min"| DS(["Dry Sausage"])
   RS -->|"Smoker 5 min"| SMS(["Smoked Sausage"])
 ```
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat (1×) | *handcraft* | — | 6 s |
-| `TR_SaltedMeatToDried` | 1× Salted Meat | Dried Meat (1:1) | Drying Rack | — | 60 min |
-| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat (1:1) | Smoker | — | 5 min + bark |
+| `TR_RawMeatToSmoked` | 1× *MEAT* + state RAW + not *SAUSAGE* | the same meat, state Smoked | Smoker | — | 5 min + bark |
 | `TR_RawSausageToDry` | 1× *SAUSAGE* + state RAW | Dry Sausage (1:1) | Drying Rack | — | 90 min |
 | `TR_RawSausageToSmoked` | 1× *SAUSAGE* + state RAW | Smoked Sausage (1:1) | Smoker | — | 5 min + bark |
 | `TR_CaninaBerriesToDried` | 2× `CaninaBerry` | Dried Berries (1×) | Drying Rack | — | 7 min |
@@ -471,19 +461,22 @@ they converge on the same output. `ChefZ_DriedBerries` is category `BERRY`, tag
 `CHEFZ_PRESERVED`, default state `DRIED`, and it is a **required** slot of Fruit
 Compote, which makes seven minutes at the rack the price of that dish.
 
-Salt curing is handcraft: no station, no tool, 6 seconds, 20 units of salt. After
-that it splits: the smoker is quick but wants fuel (5 minutes, two pieces of bark),
-the drying rack is slow but free (7 to 90 minutes).
+Since 2026-10-30 there is no salt curing: Salted Meat, Salted Fish and the dried
+meat and fish made from them were removed, and meat and fish are **only smoked**.
+The smoker is quick but wants fuel (5 minutes, two pieces of bark); the drying rack
+is slow but free (7 to 90 minutes) and takes sausage and berries, not meat or fish.
 
-All nine outputs carry the tag `CHEFZ_PRESERVED`, and the six that are meat or fish
-keep their `MEAT` or `FISH` category. Smoking is the only path that skips the salt
-step for fish; meat and sausage cannot be smoked without curing or stuffing first.
+Smoked meat and fish keep their `MEAT` or `FISH` category — the item stays, only its
+state changes.
 
 **The smoker runs since 2026-08-31.** `ChefZ_Smoker` now overrides both
 `ChefZ_HasHeat()` and `ChefZ_IsPowered()`
 (`ChefZ_Processing/Scripts/4_World/ChefZ/Preservation/ChefZ_Smoker.c:202,216`) and
 carries its own burn state: it consumes bark from its own cargo, and five minutes
 of full burn costs two pieces. Smoked Fish and Smoked Sausage work.
+
+*History — `TR_SaltedMeatToSmoked` was removed with Salted Meat on 2026-10-30; raw
+meat goes straight into the smoker through `TR_RawMeatToSmoked`.*
 
 **Closed — Smoked Meat exists since 2026-08-31.** `TR_SaltedMeatToSmoked` declared
 no `process` field at all, so `ChefZ_ProcessCompiler.c:355` dropped it at boot and
@@ -556,6 +549,85 @@ size in the cargo and whether it takes the jar's exact cell cannot be promised.
 The nail ingredient is vanilla `Nail` (`Nails` is a script-only class,
 assumption A5).
 
+## Mushrooms
+
+Added 2026-10-30 with the Meshy delivery "Neue 3D Assets" (nine mushrooms, a
+shelf, a growing tray). Like honey, the middle step is a script, not a
+transform: the shelf lets its trays grow.
+
+```mermaid
+graph LR
+  W(["Mushroom<br/>wild or cultivated"]) -->|"pot without water<br/>or Drying Rack 600 s"| DR(["Dried mushroom"])
+  DR -->|"Mortar 20 s"| SP(["Spores<br/>of that species"])
+  SP -->|"+ 100 g Wheat<br/>handcraft 8 s"| M(["Mycelium<br/>grain spawn bag"])
+  P(["Wooden Plank<br/>+ Nail"]) -->|"handcraft 12 s"| T(["Growing Tray"])
+  P -->|"handcraft 30 s"| S(["Mushroom Shelf<br/>6 trays"])
+  M -->|"into the tray"| T
+  T -->|"on the shelf<br/>2-8 h"| C(["up to 3 mushrooms<br/>in the tray"])
+  C --> W
+```
+
+| Step | Input | Output | Where | Duration |
+|---|---|---|---|---|
+| `TR_BuildMushroomShelf` | 8× Wooden Plank + 16× Nail | Mushroom Shelf | handcraft | 30 s |
+| `TR_BuildMushroomTray` | 2× Wooden Plank + 6× Nail | Growing Tray | handcraft | 12 s |
+| `TR_MushroomToDried` | any `MUSHROOM`, raw | same item, stage Dried | Drying Rack | 600 s |
+| `TR_ToxicMushroomToDried` | Fly Agaric / Liberty Cap (wild or cultivated), raw | same item, stage Dried | Drying Rack | 600 s |
+| `TR_Dried<Species>ToSpores` (13×) | 1 dried mushroom of the species | 1 sachet of Spores of the species | Mortar (`PROCESS_GRIND_MYCELIUM`, "Grind spores") | 20 s |
+| `TR_Spores<Species>ToMycelium` (13×) | 1 Spores + 100 g Wheat | 1 Mycelium (grain spawn bag) | handcraft (`PROCESS_INOCULATE_SPAWN`) | 8 s |
+| *(script, no transform)* | Mycelium in a tray on the shelf | up to 3 mushrooms, mycelium used up | Mushroom Shelf | per species, below |
+
+| Mycelium | Grows | Time | Yield |
+|---|---|---|---|
+| Oyster Mushroom | `ChefZ_CultivatedPleurotus` | 2 h | 3 |
+| Shaggy Ink Cap | `ChefZ_ShaggyInkCap` | 2 h | 3 |
+| Button Mushroom | `ChefZ_CultivatedAgaricus` | 3 h | 3 |
+| Saffron Milk Cap | `ChefZ_CultivatedLactarius` | 4 h | 3 |
+| Parasol | `ChefZ_CultivatedMacrolepiota` | 4 h | 3 |
+| Hedgehog Mushroom | `ChefZ_HedgehogMushroom` | 5 h | 3 |
+| Porcini | `ChefZ_CultivatedBoletus` | 6 h | 3 |
+| Chanterelle | `ChefZ_Chanterelle` | 6 h | 3 |
+| Morel | `ChefZ_Morel` | 8 h | 2 |
+| Wood Ear | `ChefZ_CultivatedAuricularia` | 3 h | 3 |
+| Liberty Cap | `ChefZ_CultivatedPsilocybe` | 4 h | 3 |
+| Black Trumpet | `ChefZ_CultivatedCraterellus` | 6 h | 3 |
+| Fly Agaric | `ChefZ_CultivatedAmanita` | 6 h | 3 |
+
+**On the shelf.** Six tray places, visible through the proxies of the shelf model;
+the mushrooms in a tray are visible through the tray's own three proxies. A
+server timer (10 s) raises the tray's `quantityBar` while mycelium is in the tray
+and at least one of its three harvest places is free. A full bar puts up to three
+mushrooms into the free harvest places and consumes the mycelium. Trays only grow
+on a shelf that stands in the world - not in a backpack, not while the shelf is
+carried. The bar is stored with the tray; while the server is down no time
+passes, like the beehive. Taking the mycelium out resets the bar.
+
+**What grows.** Four new species (Chanterelle, Hedgehog Mushroom, Morel, Shaggy
+Ink Cap) and nine *cultivated forms* of vanilla mushrooms. A cultivated form is a
+subclass of the vanilla mushroom: vanilla actions and every `MUSHROOM` recipe accept
+it like the wild one. Five carry the new meshes; Wood Ear, Black Trumpet, Fly Agaric
+and Liberty Cap (added 2026-10-30 afternoon) keep the vanilla mesh. Fly Agaric and
+Liberty Cap stay poison and drug - they inherit the vanilla script behaviour and have
+no `MUSHROOM` category, so no recipe takes them.
+
+Every cultivated form has its **own** ingredient binding. `ChefZ_IngredientManager`
+inherits fields only for a class that is itself declared; an undeclared subclass is
+no ingredient at all (found on the test server: the first five forms had no binding
+and would never have matched the mortar).
+
+**Where the first mushroom comes from.** Vanilla mushrooms are world loot, and 40 %
+of them spawn already dried (`MushroomBase.EEOnCECreate`). The four new species
+need the template event `ChefZTrajectoryMushrooms` from
+`ChefZ_Farming/ServerConfig/` installed on the server.
+
+**Models.** Spores are a paper sachet (`ChefZ_Devices/mycelium/models/sporepacket.p3d`)
+with one label texture per species, built by `tools/chefz-assets/spore_labels.py` from
+the label renders of the delivery. Mycelium is a grow bag (`myceliumbag.p3d`), one
+texture for all species.
+
+**Gaps.** Nothing of this has been tested in game yet (2026-10-30); a server-only
+start with a mission self-test passed (17/17).
+
 ## Tableware
 
 Not food, but the chain everything portioned depends on: without a bowl there is
@@ -563,24 +635,21 @@ nothing to serve a stew into.
 
 ```mermaid
 graph LR
-  FW(["Firewood"]) -->|"knife, 20 s"| PL(["Empty Plate"])
-  FW -->|"knife, 25 s"| BO(["Empty Bowl"])
+  FW(["Firewood"]) -->|"knife, 25 s"| BO(["Empty Bowl"])
   BK(["Birch / Oak Bark"]) -->|"knife or axe, 30 s"| BO
   PA(["2x Paper"]) -->|"12 s, no tool"| BX(["Empty Box"])
   MP(["Metal Plate"]) -->|"saw, 45 s"| CN(["10x Empty Can"])
-  PL --> D1["container category PLATE"]
   BO --> D2["container category BOWL"]
 ```
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_CarveWoodenPlate` | 1× Firewood | Empty Plate (1×) | *handcraft* | `CUTTING_TOOL` | 20 s |
 | `TR_CarveWoodenBowl` | 1× Firewood | Empty Bowl (1×) | *handcraft* | `CUTTING_TOOL` | 25 s |
 | `TR_BowlFromBark` | 1× `Bark_Birch` | `Bark_Oak` | Empty Bowl (1×) | *handcraft* | `CUTTING_TOOL` or `AXE_TOOL` | 30 s |
 | `TR_BoxFromPaper` | 2× `Paper` | Empty Box (1×) | *handcraft* | — | 12 s |
 | `TR_CansFromMetalSheet` | 1× `MetalPlate` | Empty Can (**10×**) | *handcraft* | `SAWING_TOOL` | 45 s |
 
-All five are handcraft. The plate, bowl, jar and box are marked reusable: they come
+All four are handcraft. The bowl, jar and box are marked reusable: they come
 back when the dish is fully eaten, so they are permanent equipment rather than
 consumables. The can is not — it is cut open and stays open. See
 [Portions-and-Containers](Portions-and-Containers).
@@ -588,12 +657,12 @@ consumables. The can is not — it is cut open and stays open. See
 **Gaps.** `ChefZ_EmptyJar` is the one container with **no source at all** in V1:
 nothing crafts it and nothing spawns it — the mod's only CE template covers the wild
 plants and wheat, not containers. The other
-four are craftable from vanilla materials, which is why the bark bowl and the metal
+three are craftable from vanilla materials, which is why the bark bowl and the metal
 cans were added — a bowl should not depend on finding firewood alone.
 
 ## Chain coverage
 
-All 61 transforms are accounted for above.
+All 61 transforms (before 2026-10-30) are accounted for above.
 
 | | |
 |---|---|
@@ -601,10 +670,13 @@ All 61 transforms are accounted for above.
 | Of those, at a station | 39 |
 | Of those, handcraft | 22 |
 | Recipes fed by these chains | 47 |
-| Chains blocked at least in part | 3 — grain (mill has no cargo), meat/sausage (no cargo), everything upstream of loot. Preservation dropped off the list on 31.08.2026: the smoker burns bark and `TR_SaltedMeatToSmoked` names its process. The last one shrank on 31.08.2026: wheat, corn and three of the herbs now have CE events, but only as a **template a human still has to install** — see the box at the top of this page |
+| Chains blocked at least in part | 3 — grain (mill has no cargo), meat/sausage (no cargo), everything upstream of loot. Preservation dropped off the list on 31.08.2026: the smoker burns bark and `TR_SaltedMeatToSmoked` (removed 2026-10-30) names its process. The last one shrank on 31.08.2026: wheat, corn and three of the herbs now have CE events, but only as a **template a human still has to install** — see the box at the top of this page |
 
 Recounted 2026-08-29 after the apiary, the bee smoker fuel step and the return of
-diced meat: 61 transforms, 9 of them in the apiary. The honey chain is the one chain
+diced meat: 61 transforms, 9 of them in the apiary. Six of those 61 were removed on
+2026-10-30 (`TR_SaltMeat`, `TR_SaltFish`, `TR_SaltedMeatToDried`,
+`TR_SaltedFishToDried`, `TR_SaltedMeatToSmoked`, `TR_CarveWoodenPlate`). The 12 mushroom transforms of
+2026-10-30 are not in that count; it has not been recounted since. The honey chain is the one chain
 that is not blocked upstream — planks, nails and tuna cans are vanilla loot.
 
 ## See also

@@ -48,8 +48,8 @@ unter HANDCRAFT ohnehin unerfüllbar: Vanillas `RecipeBase` führt genau zwei
 Zutaten**plätze**, und `ChefZ_GenericCraftRecipe` bindet je Platz **ein** Item.
 Der Transform hätte nie gematcht — ohne Fehlermeldung.
 
-Richtig ist die Form, die `TR_SaltMeat` und die Salzslots der Schüsselgerichte
-bereits benutzen:
+Richtig ist die Form, die die Salzslots der Schüsselgerichte bereits benutzen
+(ebenso `TR_SaltMeat`, bis es am 30.10.2026 entfiel):
 
 ```json
 "minCount": 1, "maxCount": 1,

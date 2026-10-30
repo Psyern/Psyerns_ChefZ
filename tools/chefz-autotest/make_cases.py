@@ -20,7 +20,7 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ChefZ_AutoTest",
 
 # Classes that must never be chosen as a generic candidate: the test spawns raw items,
 # so prefer things that exist as simple spawnable items.
-AVOID = {"ChefZ_EmptyPlate", "ChefZ_EmptyBowl", "ChefZ_EmptyCan"}
+AVOID = {"ChefZ_EmptyBowl", "ChefZ_EmptyCan"}
 
 # Overrides for slots where the cheapest candidate is a poor representative.
 PREFER = ["Fillet", "Potato", "Water"]

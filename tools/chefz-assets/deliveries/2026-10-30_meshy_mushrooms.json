@@ -1,0 +1,26 @@
+{
+ "_comment": "Lieferung Meshy vom 30.10.2026: neun Speisepilze (ChefZ_Plants/mushrooms, Garstufen + rotten ueber cs_raw), Pilzregal mit 6 Tray-Plaetzen und Anzuchtschale mit 3 Pilz-Plaetzen (ChefZ_Devices/mushroom, camo). Quelle C:/Users/Administrator/Downloads/Neue 3D Assets/<Meshy-Ordner>/{Meshy_AI_model.fbx,*_texture.png}. Porcini: Variante c20c3cb6 (dicker, heller, bauchiger Stiel = typischer Steinpilz); 3ef84182 hat einen duennen, dunklen, gebogenen Stiel und liest sich eher wie ein Maronenroehrling. Gebaut lokal mit tools/chefz-assets/build_delivery_local.py (der Suite-Runner import_delivery.py fehlt auf dieser Maschine). Alle Modelle stehen nach dem Import aufrecht (Hut oben), keine Drehung.",
+ "source_root": "C:/Users/Administrator/Downloads/Neue 3D Assets",
+ "project_root": "../../..",
+ "defaults": {"template": "food", "texture_size": 512, "selection": "cs_raw"},
+ "groups": {
+  "mushrooms": {"target": "ChefZ\\ChefZ_Plants\\mushrooms", "selection": "cs_raw", "states": ["baked", "boiled", "dried", "burnt", "rotten"]},
+  "mushroom":  {"target": "ChefZ\\ChefZ_Devices\\mushroom", "template": "item", "texture_size": 1024, "selection": "camo", "states": []}
+ },
+ "assets": [
+  {"name": "ButtonMushroom",   "file": "buttonmushroom",   "group": "mushrooms", "source": "Meshy_AI_Button_Mushroom_20261030_texture_ff233eb0/Meshy_AI_model.fbx",         "texture": "Meshy_AI_Button_Mushroom_20261030_texture_ff233eb0/Meshy_AI_Button_Mushroom_1030105907_texture.png",           "length": 0.08, "bind": []},
+  {"name": "Chanterelle",      "file": "chanterelle",      "group": "mushrooms", "source": "Meshy_AI_Golden_Chanterelle_20261030_texture_f6146c30/Meshy_AI_model.fbx",      "texture": "Meshy_AI_Golden_Chanterelle_20261030_texture_f6146c30/Meshy_AI_Golden_Chanterelle_1030105906_texture.png",     "length": 0.08, "bind": []},
+  {"name": "HedgehogMushroom", "file": "hedgehogmushroom", "group": "mushrooms", "source": "Meshy_AI_Hedgehog_Mushroom_20261030_texture_df2e5621/Meshy_AI_model.fbx",       "texture": "Meshy_AI_Hedgehog_Mushroom_20261030_texture_df2e5621/Meshy_AI_Hedgehog_Mushroom_1030105907_texture.png",       "length": 0.09, "bind": []},
+  {"name": "Morel",            "file": "morel",            "group": "mushrooms", "source": "Meshy_AI_Honeycomb_Morel_20261030_texture_99dc812c/Meshy_AI_model.fbx",         "texture": "Meshy_AI_Honeycomb_Morel_20261030_texture_99dc812c/Meshy_AI_Honeycomb_Morel_1030105910_texture.png",           "length": 0.10, "bind": []},
+  {"name": "OysterMushroom",   "file": "oystermushroom",   "group": "mushrooms", "source": "Meshy_AI_Oyster_Mushroom_20261030_texture_bc64d11c/Meshy_AI_model.fbx",         "texture": "Meshy_AI_Oyster_Mushroom_20261030_texture_bc64d11c/Meshy_AI_Oyster_Mushroom_1030105910_texture.png",           "length": 0.12, "bind": []},
+  {"name": "Porcini",          "file": "porcini",          "group": "mushrooms", "source": "Meshy_AI_Porcini_Mushroom_20261030_texture_c20c3cb6/Meshy_AI_model.fbx",        "texture": "Meshy_AI_Porcini_Mushroom_20261030_texture_c20c3cb6/Meshy_AI_Porcini_Mushroom_1030105909_texture.png",         "length": 0.14, "bind": [], "note": "Variante c20c3cb6 statt 3ef84182 (siehe _comment)"},
+  {"name": "SaffronMilkCap",   "file": "saffronmilkcap",   "group": "mushrooms", "source": "Meshy_AI_Saffron_Milk_Cap_20261030_texture_00d02a2f/Meshy_AI_model.fbx",        "texture": "Meshy_AI_Saffron_Milk_Cap_20261030_texture_00d02a2f/Meshy_AI_Saffron_Milk_Cap_1030105906_texture.png",         "length": 0.10, "bind": []},
+  {"name": "ShaggyInkCap",     "file": "shaggyinkcap",     "group": "mushrooms", "source": "Meshy_AI_Shaggy_Ink_Cap_Mushroom_20261030_texture_c17d6708/Meshy_AI_model.fbx",  "texture": "Meshy_AI_Shaggy_Ink_Cap_Mushroom_20261030_texture_c17d6708/Meshy_AI_Shaggy_Ink_Cap_Mushro_1030105908_texture.png", "length": 0.14, "bind": []},
+  {"name": "ShaggyParasol",    "file": "shaggyparasol",    "group": "mushrooms", "source": "Meshy_AI_Shaggy_Parasol_Mushroom_20261030_texture_53966340/Meshy_AI_model.fbx",  "texture": "Meshy_AI_Shaggy_Parasol_Mushroom_20261030_texture_53966340/Meshy_AI_Shaggy_Parasol_Mushro_1030105909_texture.png", "length": 0.20, "bind": []},
+
+  {"name": "MushroomTray",  "file": "mushroomtray",  "group": "mushroom", "source": "Meshy_AI_Seedling_Tray_with_Soil_20261030_texture_cebbfbcf/Meshy_AI_model.fbx", "texture": "Meshy_AI_Seedling_Tray_with_Soil_20261030_texture_cebbfbcf/Meshy_AI_Seedling_Tray_with_So_1030111006_texture.png", "length": 0.50, "mass": 2.0, "mycelium": "MushroomTray_inoculated", "bind": [],
+   "proxies": {"layout": "tray_soil", "path": "\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_traymushroom_", "count": 3, "item": "Porcini", "file_content": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\buttonmushroom"}},
+  {"name": "MushroomShelf", "file": "mushroomshelf", "group": "mushroom", "source": "Meshy_AI_Rustic_Wooden_Shelf_20261030_texture_8dffbd55/Meshy_AI_model.fbx",     "texture": "Meshy_AI_Rustic_Wooden_Shelf_20261030_texture_8dffbd55/Meshy_AI_Rustic_Wooden_Shelf_1030111006_texture.png",     "length": 1.60, "mass": 25.0, "bind": [],
+   "proxies": {"layout": "shelf_boards", "path": "\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_", "count": 6, "item": "MushroomTray", "file_content": "\\ChefZ\\ChefZ_Devices\\mushroom\\models\\mushroomtray"}}
+ ]
+}

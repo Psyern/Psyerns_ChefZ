@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------------------
 // WAS DIESES MODUL TUT
 // ---------------------------------------------------------------------------
-// Es haengt an COTs Object Spawner acht ChefZ-Spawnkategorien an - als EINE
+// Es haengt an COTs Object Spawner neun ChefZ-Spawnkategorien an - als EINE
 // zusaetzliche Gruppe im Kategoriemenue hinter dem Filterknopf, mit den acht
 // Kategorien in ihrem Untermenue. Mehr nicht. Kein Rezept, kein Naehrwert,
 // keine Transform, kein Balancing - dieses Modul ist ein ADMIN-WERKZEUG und
@@ -103,7 +103,7 @@
 // ---------------------------------------------------------------------------
 // requiredAddons[] - und warum die ChefZ-Addons NICHT mehr darin stehen
 // ---------------------------------------------------------------------------
-// Die acht Kategorien fuehren nur KLASSENNAMEN als Zeichenketten, und jeder
+// Die neun Kategorien fuehren nur KLASSENNAMEN als Zeichenketten, und jeder
 // einzelne wird zur Laufzeit gegen CfgVehicles geprueft, bevor er in der Liste
 // landet (Scripts/4_World/ChefZ/Cot/ChefZ_CotCategories.c, g_Game.ConfigIs-
 // Existing). Kein einziger dieser Namen ist ein Bezeichner im Quelltext.

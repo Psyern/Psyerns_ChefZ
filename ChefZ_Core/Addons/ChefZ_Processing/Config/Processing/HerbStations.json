@@ -5,7 +5,7 @@
     {
       "id": "ChefZ_Mortar",
       "stationCategories": ["MORTAR"],
-      "processes": ["PROCESS_GRIND_SPICE", "PROCESS_GRIND_HERB"],
+      "processes": ["PROCESS_GRIND_SPICE", "PROCESS_GRIND_HERB", "PROCESS_GRIND_MYCELIUM"],
       "parallelSlots": 1,
       "speedMultiplier": 1.0,
       "needsFuel": false

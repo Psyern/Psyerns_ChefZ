@@ -140,20 +140,55 @@ class ChefZ_TerjeSkillsBridge
      */
     static bool AddSurvivalXp(PlayerBase player, int value, bool showNotification)
     {
+        return AddXp(player, SKILL_SURVIVAL, value, showNotification) != "";
+    }
+
+    /**
+     * Ist der Skill auf diesem Server registriert?
+     *
+     * Es gibt keinen Define je Skill - "farm" etwa existiert nur in
+     * TerjeMods-experimental, TERJE_SKILLS_MOD aber in beiden Staenden. Die
+     * Registry ist deshalb die einzige verlaessliche Auskunft. Abgeschaltete
+     * Skills registriert Terje gar nicht (TerjeSkills/.../TerjeSkillsRegistry.c:16).
+     * TerjeCore/.../TerjeSkillsRegistry.c:63 FindSkill(string, out TerjeSkillCfg).
+     */
+    static bool HasSkill(string skillId)
+    {
+        if (skillId == "")
+            return false;
+
+        TerjeSkillCfg cfg;
+        return GetTerjeSkillsRegistry().FindSkill(skillId, cfg);
+    }
+
+    /**
+     * Erfahrung in einen beliebigen Skill gutschreiben.
+     *
+     * Gibt es skillId hier nicht, landet die XP in "surv" - eine Config, die
+     * auf "farm" zeigt, darf auf einem stable-Server nichts verschlucken.
+     *
+     * @return der Skill, der tatsaechlich bezahlt wurde, oder "".
+     */
+    static string AddXp(PlayerBase player, string skillId, int value, bool showNotification)
+    {
         if (value <= 0)
-            return false;
+            return "";
         if (!g_Game || !g_Game.IsServer())
-            return false;
+            return "";
 
         TerjePlayerSkillsAccessor skills = SkillsOf(player);
         if (!skills)
-            return false;
+            return "";
+
+        string target = skillId;
+        if (!HasSkill(target))
+            target = SKILL_SURVIVAL;
 
         // affectModifiers = true: der Betreiber soll seinen globalen
         // SKILLS_EXPERIENCE_GAIN_MODIFIER auch auf ChefZ-XP anwenden koennen,
         // genau wie Terje es fuer Jagd und Fischerei tut.
-        skills.AddSkillExperience(SKILL_SURVIVAL, value, true, showNotification);
-        return true;
+        skills.AddSkillExperience(target, value, true, showNotification);
+        return target;
     }
 
     //! Skill-Level, 0 wenn nicht ermittelbar.

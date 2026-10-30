@@ -1,0 +1,71 @@
+{
+  "slice": "mushrooms",
+  "categories": [],
+  "tags": [],
+  "processes": [
+    {
+      "id": "PROCESS_BUILD_MUSHROOM_SHELF",
+      "durationSec": 30
+    },
+    {
+      "id": "PROCESS_BUILD_MUSHROOM_TRAY",
+      "durationSec": 12
+    },
+    {
+      "id": "PROCESS_GRIND_MYCELIUM",
+      "station": "ChefZ_Mortar",
+      "durationSec": 20
+    },
+    {
+      "id": "PROCESS_INOCULATE_SPAWN",
+      "durationSec": 8
+    }
+  ],
+  "nutrition": [],
+  "classes": [
+    "ChefZ_MushroomShelf",
+    "ChefZ_MushroomTray",
+    "ChefZ_MushroomFood_Base",
+    "ChefZ_Chanterelle",
+    "ChefZ_HedgehogMushroom",
+    "ChefZ_Morel",
+    "ChefZ_ShaggyInkCap",
+    "ChefZ_CultivatedAgaricus",
+    "ChefZ_CultivatedPleurotus",
+    "ChefZ_CultivatedBoletus",
+    "ChefZ_CultivatedLactarius",
+    "ChefZ_CultivatedMacrolepiota",
+    "ChefZ_Mycelium_Base",
+    "ChefZ_MyceliumAgaricus",
+    "ChefZ_MyceliumPleurotus",
+    "ChefZ_MyceliumBoletus",
+    "ChefZ_MyceliumLactarius",
+    "ChefZ_MyceliumMacrolepiota",
+    "ChefZ_MyceliumChanterelle",
+    "ChefZ_MyceliumHedgehog",
+    "ChefZ_MyceliumMorel",
+    "ChefZ_MyceliumShaggyInkCap",
+    "ChefZ_CultivatedAuricularia",
+    "ChefZ_CultivatedCraterellus",
+    "ChefZ_CultivatedAmanita",
+    "ChefZ_CultivatedPsilocybe",
+    "ChefZ_MyceliumAuricularia",
+    "ChefZ_MyceliumCraterellus",
+    "ChefZ_MyceliumAmanita",
+    "ChefZ_MyceliumPsilocybe",
+    "ChefZ_Spores_Base",
+    "ChefZ_SporesChanterelle",
+    "ChefZ_SporesHedgehog",
+    "ChefZ_SporesMorel",
+    "ChefZ_SporesShaggyInkCap",
+    "ChefZ_SporesAgaricus",
+    "ChefZ_SporesPleurotus",
+    "ChefZ_SporesBoletus",
+    "ChefZ_SporesLactarius",
+    "ChefZ_SporesMacrolepiota",
+    "ChefZ_SporesAuricularia",
+    "ChefZ_SporesCraterellus",
+    "ChefZ_SporesAmanita",
+    "ChefZ_SporesPsilocybe"
+  ]
+}

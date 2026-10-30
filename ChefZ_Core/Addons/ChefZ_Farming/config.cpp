@@ -83,7 +83,28 @@ class CfgPatches
             "ChefZ_WildCorn", "ChefZ_WildThyme", "ChefZ_WildRosemary", "ChefZ_WildParsley",
             // ### SLICE berries ### (14.09.2026)
             "ChefZ_Blackberry", "ChefZ_Blueberry", "ChefZ_Raspberry", "ChefZ_Strawberry",
-            "ChefZ_WildBlackberry", "ChefZ_WildBlueberry", "ChefZ_WildRaspberry", "ChefZ_WildStrawberry"
+            "ChefZ_WildBlackberry", "ChefZ_WildBlueberry", "ChefZ_WildRaspberry", "ChefZ_WildStrawberry",
+            // ### SLICE mushrooms ### (30.10.2026) Pilzzucht: Regal, Zuchtkasten,
+            // Myzel, vier neue Arten und fuenf Zuchtformen von Vanilla-Pilzen.
+            "ChefZ_MushroomShelf", "ChefZ_MushroomTray",
+            "ChefZ_MushroomFood_Base",
+            "ChefZ_Chanterelle", "ChefZ_HedgehogMushroom", "ChefZ_Morel", "ChefZ_ShaggyInkCap",
+            "ChefZ_CultivatedAgaricus", "ChefZ_CultivatedPleurotus", "ChefZ_CultivatedBoletus",
+            "ChefZ_CultivatedLactarius", "ChefZ_CultivatedMacrolepiota",
+            "ChefZ_CultivatedAuricularia", "ChefZ_CultivatedCraterellus",
+            "ChefZ_CultivatedAmanita", "ChefZ_CultivatedPsilocybe",
+            "ChefZ_Mycelium_Base",
+            "ChefZ_MyceliumAgaricus", "ChefZ_MyceliumPleurotus", "ChefZ_MyceliumBoletus",
+            "ChefZ_MyceliumLactarius", "ChefZ_MyceliumMacrolepiota", "ChefZ_MyceliumChanterelle",
+            "ChefZ_MyceliumHedgehog", "ChefZ_MyceliumMorel", "ChefZ_MyceliumShaggyInkCap",
+            "ChefZ_MyceliumAuricularia", "ChefZ_MyceliumCraterellus",
+            "ChefZ_MyceliumAmanita", "ChefZ_MyceliumPsilocybe",
+            "ChefZ_Spores_Base",
+            "ChefZ_SporesAgaricus", "ChefZ_SporesPleurotus", "ChefZ_SporesBoletus",
+            "ChefZ_SporesLactarius", "ChefZ_SporesMacrolepiota", "ChefZ_SporesChanterelle",
+            "ChefZ_SporesHedgehog", "ChefZ_SporesMorel", "ChefZ_SporesShaggyInkCap",
+            "ChefZ_SporesAuricularia", "ChefZ_SporesCraterellus",
+            "ChefZ_SporesAmanita", "ChefZ_SporesPsilocybe"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -243,7 +264,63 @@ class CfgSlots
     class Slot_ChefZ_Frame18 { name = "ChefZ_Frame18"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
     class Slot_ChefZ_Frame19 { name = "ChefZ_Frame19"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
     class Slot_ChefZ_Frame20 { name = "ChefZ_Frame20"; displayName = "#STR_CHEFZ_SLOT_FRAME"; };
+
+    // ### SLICE mushrooms ### (30.10.2026) Die sechs Kastenplaetze des
+    // Pilzregals, der Myzelplatz im Zuchtkasten und seine drei Fruchtplaetze.
+    // Gegen Kollision geprueft wie die Raehmchenslots: weder Vanilla
+    // (scripts - 1.30/config.cpp) noch ein Repo unter "Mod Repositories" fuehrt
+    // diese Namen. Sichtbar werden Kasten und Pilze ueber die Proxys der
+    // Modelle - die Zuordnung Proxy -> Slot steht in class CfgNonAIVehicles
+    // gleich darunter.
+    class Slot_ChefZ_MushroomTray1 { name = "ChefZ_MushroomTray1"; displayName = "#STR_CHEFZ_SLOT_MUSHROOMTRAY"; };
+    class Slot_ChefZ_MushroomTray2 { name = "ChefZ_MushroomTray2"; displayName = "#STR_CHEFZ_SLOT_MUSHROOMTRAY"; };
+    class Slot_ChefZ_MushroomTray3 { name = "ChefZ_MushroomTray3"; displayName = "#STR_CHEFZ_SLOT_MUSHROOMTRAY"; };
+    class Slot_ChefZ_MushroomTray4 { name = "ChefZ_MushroomTray4"; displayName = "#STR_CHEFZ_SLOT_MUSHROOMTRAY"; };
+    class Slot_ChefZ_MushroomTray5 { name = "ChefZ_MushroomTray5"; displayName = "#STR_CHEFZ_SLOT_MUSHROOMTRAY"; };
+    class Slot_ChefZ_MushroomTray6 { name = "ChefZ_MushroomTray6"; displayName = "#STR_CHEFZ_SLOT_MUSHROOMTRAY"; };
+    class Slot_ChefZ_TrayMycel { name = "ChefZ_TrayMycel"; displayName = "#STR_CHEFZ_SLOT_MYCEL"; };
+    class Slot_ChefZ_TrayMushroom1 { name = "ChefZ_TrayMushroom1"; displayName = "#STR_CHEFZ_SLOT_TRAYMUSHROOM"; };
+    class Slot_ChefZ_TrayMushroom2 { name = "ChefZ_TrayMushroom2"; displayName = "#STR_CHEFZ_SLOT_TRAYMUSHROOM"; };
+    class Slot_ChefZ_TrayMushroom3 { name = "ChefZ_TrayMushroom3"; displayName = "#STR_CHEFZ_SLOT_TRAYMUSHROOM"; };
 };
+
+//==============================================================================
+// ### SLICE mushrooms ###   Welcher Modell-Proxy zu welchem Slot gehoert
+//
+// Ein Attachment erscheint nur dann sichtbar am Elternmodell, wenn ein Proxy im
+// Modell auf eine Datei zeigt, fuer die es hier eine Klasse "Proxy<Dateiname>"
+// gibt, und diese Klasse den Slot nennt. Vanillas Vorbild: der Ofen traegt den
+// Proxy \dz\gear\cooking\proxy\direct_cooking_a, und DZ/gear/cooking/config.cpp
+// bindet ihn mit class Proxydirect_cooking_a : ProxyAttachment an den Slot
+// DirectCookingA. ProxyAttachment selbst steht in der Engine-Config
+// (bin/config.cpp) und ist immer geladen.
+//
+// Die Proxy-Dateien liegen im Asset-PBO ChefZ_Devices unter mushroom/proxies/;
+// mushroomshelf.p3d traegt sechs Kastenproxys, mushroomtray.p3d drei
+// Pilzproxys. Der Myzelplatz hat bewusst KEINEN Proxy - das Myzel steckt in
+// der Erde und ist am Kasten nur als Texturwechsel zu sehen
+// (ChefZ_MushroomTray.ChefZ_UpdateTrayVisual).
+//==============================================================================
+class CfgNonAIVehicles
+{
+    class ProxyAttachment;
+    class Proxychefz_mushroomtray_1 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_MushroomTray1"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_mushroomtray_1.p3d"; };
+    class Proxychefz_mushroomtray_2 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_MushroomTray2"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_mushroomtray_2.p3d"; };
+    class Proxychefz_mushroomtray_3 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_MushroomTray3"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_mushroomtray_3.p3d"; };
+    class Proxychefz_mushroomtray_4 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_MushroomTray4"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_mushroomtray_4.p3d"; };
+    class Proxychefz_mushroomtray_5 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_MushroomTray5"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_mushroomtray_5.p3d"; };
+    class Proxychefz_mushroomtray_6 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_MushroomTray6"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_mushroomtray_6.p3d"; };
+    class Proxychefz_traymushroom_1 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_TrayMushroom1"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_traymushroom_1.p3d"; };
+    class Proxychefz_traymushroom_2 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_TrayMushroom2"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_traymushroom_2.p3d"; };
+    class Proxychefz_traymushroom_3 : ProxyAttachment { scope = 2; inventorySlot[] = {"ChefZ_TrayMushroom3"}; model = "\ChefZ\ChefZ_Devices\mushroom\proxies\chefz_traymushroom_3.p3d"; };
+};
+
+// ### SLICE mushrooms ### Vanillas Garstufenuebergaenge und Lebensmittel-
+// Animationsquellen der Pilze. Beide stehen in Vanilla auf oberster Ebene
+// (DZ/gear/food/config.cpp:167 und :170), nicht in CfgVehicles - die
+// Vorwaertsdeklaration gehoert deshalb ebenfalls hierher.
+class MushroomsStageTransitions;
+class FoodAnimationSources;
 
 class CfgVehicles
 {
@@ -405,7 +482,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_WHEAT";
         descriptionShort = "#STR_CHEFZ_WHEAT_DESC";
-        model = "\dz\gear\food\Rice.p3d";
+        model = "\ChefZ\ChefZ_Items\grainsack\models\grainsack.p3d";   // EIGENES MODELL (Higgsfield 30.10.2026, deliveries/2026-10-30_higgsfield_salt_grain_thyme.json)
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Items\grainsack\data\GrainSack_co.paa"};
         weight = 400;
         itemSize[] = {2, 2};
         stackedUnit = "grams";
@@ -1318,13 +1397,22 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_PEPPERBERRIES";
         descriptionShort = "#STR_CHEFZ_ITEM_PEPPERBERRIES_DESC";
-        model = "\dz\gear\food\Sambucus_nigra.p3d";
-        // Vanillas Holunder-Modell ist binarisiert: Selektionen, Texturen und
-        // Materialien wie SambucusBerry (DZ/gear/food); getrocknet zeigt die
-        // zweite Selektion cs_dried (visual_properties unten).
-        hiddenSelections[] = {"cs_raw", "cs_dried"};
-        hiddenSelectionsTextures[] = {"dz\gear\food\data\sambucus_nigra_CO.paa", "dz\gear\food\data\sambucus_nigra_dried_CO.paa", "dz\gear\food\data\sambucus_nigra_dried_CO.paa", "dz\gear\food\data\sambucus_nigra_dried_CO.paa", "dz\gear\food\data\sambucus_nigra_burnt_CO.paa"};
-        hiddenSelectionsMaterials[] = {"dz\gear\food\data\sambucus_nigra_raw.rvmat", "dz\gear\food\data\sambucus_nigra_boiled.rvmat", "dz\gear\food\data\sambucus_nigra_baked.rvmat", "dz\gear\food\data\sambucus_nigra_dried.rvmat", "dz\gear\food\data\sambucus_nigra_burnt.rvmat", "dz\gear\food\data\sambucus_nigra_rotten.rvmat"};
+        // EIGENES MODELL (Lieferung 30.10.2026, deliveries/2026-10-30_meshy_mycelium_pepper.json):
+        // eine Handvoll Pfefferkoerner. Garstufen nur ueber die Textur der einen
+        // Selektion cs_raw, ohne Materialwechsel - dieselbe Bauform wie die
+        // Pilze, deshalb visual_properties {0, i, i} unten.
+        model = "\ChefZ\ChefZ_Food\peppercorns\models\peppercorns.p3d";
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsMaterials[] = {};
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Food\peppercorns\data\Peppercorns_co.paa",
+            "ChefZ\ChefZ_Food\peppercorns\data\Peppercorns_baked_co.paa",
+            "ChefZ\ChefZ_Food\peppercorns\data\Peppercorns_boiled_co.paa",
+            "ChefZ\ChefZ_Food\peppercorns\data\Peppercorns_dried_co.paa",
+            "ChefZ\ChefZ_Food\peppercorns\data\Peppercorns_burnt_co.paa",
+            "ChefZ\ChefZ_Food\peppercorns\data\Peppercorns_rotten_co.paa"
+        };
         class Nutrition
         {
             // 50 (Zielvolumen) / 50 (varQuantityMax) = 1. Faktor 12.5
@@ -1344,9 +1432,9 @@ class CfgVehicles
                 class Raw    { nutrition_properties[] = {1.0, 24, 16, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
                 class Baked  { nutrition_properties[] = {0.9, 24, 5, 10, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 30, 200}; };
                 class Boiled { nutrition_properties[] = {1.0, 24, 30, 10, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 45, 150}; };
-                class Dried  { nutrition_properties[] = {1.0, 24, 1, 10, 0, 0, 1}; visual_properties[] = {1, 3, 3}; cooking_properties[] = {70, 45, 80}; };
+                class Dried  { nutrition_properties[] = {1.0, 24, 1, 10, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 45, 80}; };
                 class Burned { nutrition_properties[] = {0.3, 5, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { nutrition_properties[] = {0.3, 5, 3, 0, 15, 0, 1}; visual_properties[] = {-1, -1, 5}; cooking_properties[] = {0, 0, 0}; };
+                class Rotten { nutrition_properties[] = {0.3, 5, 3, 0, 15, 0, 1}; visual_properties[] = {0, 5, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -2269,15 +2357,16 @@ class CfgVehicles
     // Kauf genommene Preis, und er kostet keine Spielbarkeit, nur Optik.
     //==========================================================================
 
-    //! Thymian. Das einzige der vier Kraeuter ohne eigenes Mesh im Projekt
-    //! (Spec Kap. 2) - deshalb Vanillas Pflanzenmaterial, dasselbe, das
-    //! ChefZ_FreshHerbBase traegt. Haesslich, aber getroffen.
+    //! Thymian. Eigenes Mesh seit dem 30.10.2026: ein Thymianpolster auf
+    //! einem Erdhuegel (Higgsfield, deliveries/2026-10-30_higgsfield_salt_grain_thyme.json).
     class ChefZ_WildThyme : ChefZ_WildPlant_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_WILDTHYME";
         descriptionShort = "#STR_CHEFZ_ITEM_WILDTHYME_DESC";
-        model = "\dz\gear\cultivation\plant_material.p3d";
+        model = "\ChefZ\ChefZ_Plants\wildthyme\models\wildthyme.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Plants\wildthyme\data\WildThyme_co.paa"};
     };
 
     //! Rosmarin auf dem Item-Mesh der Ernte (Dateiname der Lieferung ohne e).
@@ -2351,6 +2440,963 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_WILDSTRAWBERRY";
         descriptionShort = "#STR_CHEFZ_ITEM_WILDSTRAWBERRY_DESC";
         model = "\ChefZ\ChefZ_Plants\cultivation\Plant_Wild\models\wild_strawberry.p3d";
+    };
+
+    //==========================================================================
+    // ### SLICE mushrooms ###   Pilzzucht (30.10.2026, Meshy-Lieferung "Neue 3D
+    // Assets": neun Pilze, ein Regal, ein Anzuchtkasten)
+    //
+    // DER KREISLAUF in einem Satz: Pilz trocknen (Topf ohne Wasser wie in
+    // Vanilla, oder am Trockenrahmen) -> im Moerser zu Myzel der Art moersern
+    // -> Myzel in einen Zuchtkasten legen -> Kasten ins Pilzregal stellen ->
+    // nach der Wachstumszeit der Art stehen bis zu drei Pilze im Kasten.
+    //
+    // WAS HIER ENTSTEHT
+    //   ChefZ_MushroomShelf   Regal mit sechs Kastenplaetzen (Proxys im Modell)
+    //   ChefZ_MushroomTray    Anzuchtkasten: ein Myzelplatz, drei Fruchtplaetze,
+    //                         Wachstumsbalken = varQuantity 0..100
+    //   ChefZ_Mycelium*       das Saatgut, eines je zuechtbarer Art
+    //   vier NEUE Arten       Pfifferling, Semmelstoppelpilz, Speisemorchel,
+    //                         Schopftintling - wild ueber ChefZTrajectoryMushrooms
+    //                         (ServerConfig) und aus der Zucht
+    //   fuenf ZUCHTFORMEN     von Vanilla-Pilzen (Champignon, Austernseitling,
+    //                         Steinpilz, Reizker, Riesenschirmling)
+    //
+    // WARUM ZUCHTFORMEN UND NICHT VANILLAS PILZE MIT NEUEM MODELL: Vanilla-
+    // Klassen werden nie veraendert, nur erweitert (Workflow §10.5). Eine
+    // Zuchtform ist eine UNTERKLASSE des Vanilla-Pilzes - sie ist IsKindOf
+    // ihres Wildpilzes, Vanillas Rezepte und Aktionen nehmen sie also wie ihn,
+    // und der ChefZ-Zutatenindex findet sie ueber die Elternkette
+    // (ChefZ_IngredientManager, ResolveConfigParent): Kategorie MUSHROOM und
+    // die Tags erbt sie von der Vanilla-Deklaration in
+    // ChefZ_Ingredients/Config/Ingredients/Mushrooms.json, ohne eigene Zeile.
+    // Der Wildpilz behaelt sein Vanilla-Modell; was aus dem Regal kommt, traegt
+    // die neuen Meshes. Ein Spieler erkennt Zuchtware damit auf einen Blick.
+    //
+    // NICHT ZUECHTBAR: Fliegenpilz und Kahlkopf (Gift- und Rauschpilz, dieselbe
+    // Grenze wie TR_RottenMushroomToCulture in ChefZ_Processing), Judasohr
+    // (waechst auf Holz, nicht im Erdkasten) und Vanillas Trompetenpfifferling
+    // (CraterellusMushroom) - fuer keinen der vier gibt es ein Modell der
+    // Lieferung, und eine Zuchtform ohne eigenes Aussehen waere vom Wildpilz
+    // nicht zu unterscheiden.
+    //
+    // GARSTUFEN: die Meshes tragen die Selektion cs_raw (model.cfg im
+    // Asset-PBO, ChefZ_Plants/mushrooms/models), sechs Texturen je Art und
+    // KEINE Materialliste. Damit laeuft die Optik ueber ChefZ_StageVisuals
+    // (ChefZ_Core, 4_World/ChefZ/State) - ein gesetztes Material macht
+    // MLOD-Modelle unsichtbar, siehe dort. Vanillas zweite Selektion
+    // cs_dried (die geschrumpfte Form) haben die neuen Meshes nicht; getrocknet
+    // heisst hier: gleiche Form, getrocknete Textur.
+    //==========================================================================
+
+    class MushroomBase;
+    class AgaricusMushroom;
+    class PleurotusMushroom;
+    class BoletusMushroom;
+    class LactariusMushroom;
+    class MacrolepiotaMushroom;
+    class AuriculariaMushroom;
+    class CraterellusMushroom;
+    class AmanitaMushroom;
+    class PsilocybeMushroom;
+
+    //--------------------------------------------------------------------------
+    // Gemeinsame Basis der vier neuen Arten. Woertlich Vanillas
+    // AgaricusMushroom (DZ/gear/food/config.cpp:13971-14181), bis auf drei
+    // Dinge: die drei Fruchtplaetze des Zuchtkastens in inventorySlot[], eine
+    // Selektion statt zwei (siehe Bannerkommentar) und eine eigene
+    // Rotten-Textur (Index 5) statt Vanillas -1 - ohne Material gaebe -1 den
+    // rohen Pilz zurueck, und verdorben saehe wie frisch aus.
+    //
+    // Die Naehrwerte sind Vanillas Wiesen-Champignon mit der Vergiftungszeile
+    // des Austernseitlings an Rotten und Burned (Agent 16 = FOOD_POISON), wie
+    // sie alle uebrigen Vanilla-Speisepilze tragen.
+    //--------------------------------------------------------------------------
+    class ChefZ_MushroomFood_Base : MushroomBase
+    {
+        scope = 0;
+        weight = 0;
+        itemSize[] = {1, 2};
+        varTemperatureFreezePoint = -0.5;
+        varTemperatureThawPoint = -0.5;
+        varTemperatureFreezeTime = 1980;
+        varTemperatureThawTime = 1980;
+        varQuantityInit = 150;
+        varQuantityMin = 0;
+        varQuantityMax = 150;
+        varTemperatureMax = 110;
+        temperaturePerQuantityWeight = 1;
+        stackedUnit = "";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals)
+
+        class DamageSystem
+        {
+            class GlobalHealth
+            {
+                class Health
+                {
+                    hitpoints = 10;
+                    healthLevels[] =
+                    {
+                        {1.0, {}},
+                        {0.7, {}},
+                        {0.5, {}},
+                        {0.3, {}},
+                        {0.0, {}}
+                    };
+                };
+            };
+        };
+        class AnimationSources : FoodAnimationSources {};
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 100, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {0, 5, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16, 1, 9}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0, 16, 1, 3}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+        class Trapping
+        {
+            baitTypes[] = {5};
+            baitTypeChances[] = {0.6};
+            resultQuantityBaseMod = 0;
+            resultQuantityDispersionMin = 0;
+            resultQuantityDispersionMax = 0;
+        };
+        class InventorySlotsOffsets
+        {
+            class DirectCookingA { position[] = {0.08, 0.01, 0}; orientation[] = {100, 65, 0}; };
+            class DirectCookingB { position[] = {0.04, 0.01, 0}; orientation[] = {30, 65, 0}; };
+            class DirectCookingC { position[] = {0.06, 0.01, 0}; orientation[] = {140, 65, 0}; };
+        };
+        class AnimEvents
+        {
+            class SoundWeapon
+            {
+                class openTunaCan { soundSet = "openTunaCan_SoundSet"; id = 204; };
+                class Eating_TakeFood { soundSet = "Eating_TakeFood_Soundset"; id = 889; };
+                class Eating_BoxOpen { soundSet = "Eating_BoxOpen_Soundset"; id = 893; };
+                class Eating_BoxShake { soundSet = "Eating_BoxShake_Soundset"; id = 894; };
+                class Eating_BoxEnd { soundSet = "Eating_BoxEnd_Soundset"; id = 895; };
+                class animalSkinning_in { soundSet = "animalSkinning_in_SoundSet"; id = 516; };
+                class animalSkinning { soundSet = "animalSkinning_SoundSet"; id = 517; };
+                class animalSkinning_out { soundSet = "animalSkinning_out_SoundSet"; id = 518; };
+            };
+        };
+    };
+
+    // Die vier neuen Arten. Wild findet man sie ueber das Event
+    // ChefZTrajectoryMushrooms (ServerConfig/ChefZ_events.xml), gezogen kommen
+    // sie aus dem Zuchtkasten - es ist dieselbe Klasse.
+    class ChefZ_Chanterelle : ChefZ_MushroomFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CHANTERELLE";
+        descriptionShort = "#STR_CHEFZ_ITEM_CHANTERELLE_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\chanterelle.p3d";
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\Chanterelle_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Chanterelle_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Chanterelle_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Chanterelle_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Chanterelle_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Chanterelle_rotten_co.paa"
+        };
+    };
+
+    class ChefZ_HedgehogMushroom : ChefZ_MushroomFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_HEDGEHOGMUSHROOM";
+        descriptionShort = "#STR_CHEFZ_ITEM_HEDGEHOGMUSHROOM_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\hedgehogmushroom.p3d";
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\HedgehogMushroom_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\HedgehogMushroom_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\HedgehogMushroom_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\HedgehogMushroom_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\HedgehogMushroom_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\HedgehogMushroom_rotten_co.paa"
+        };
+    };
+
+    class ChefZ_Morel : ChefZ_MushroomFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MOREL";
+        descriptionShort = "#STR_CHEFZ_ITEM_MOREL_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\morel.p3d";
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\Morel_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Morel_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Morel_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Morel_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Morel_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Morel_rotten_co.paa"
+        };
+    };
+
+    class ChefZ_ShaggyInkCap : ChefZ_MushroomFood_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SHAGGYINKCAP";
+        descriptionShort = "#STR_CHEFZ_ITEM_SHAGGYINKCAP_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\shaggyinkcap.p3d";
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyInkCap_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyInkCap_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyInkCap_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyInkCap_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyInkCap_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyInkCap_rotten_co.paa"
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Die fuenf Zuchtformen. Jede erbt ALLES von ihrem Vanilla-Pilz und
+    // ersetzt nur Modell, Texturen, Name, die Fruchtplaetze und den Food-Block.
+    //
+    // WARUM DER GANZE Food-Block noch einmal dasteht: eine Unterklasse, die
+    // class Food neu deklariert, erbt dessen Inhalt NICHT - sie ersetzt ihn.
+    // Und neu deklariert werden MUSS er, weil visual_properties auf die
+    // Texturliste zeigen und die neuen Meshes eine andere Liste tragen als
+    // Vanilla. Die Zahlen sind Zeile fuer Zeile die des Vanilla-Pilzes
+    // (DZ/gear/food/config.cpp, jeweilige Klasse).
+    //
+    // inventorySlot[] vollstaendig statt "+=": Vanillas Liste plus die drei
+    // Fruchtplaetze. Keine andere Datei des Projekts erweitert die Slots der
+    // Vanilla-Pilze (geprueft 30.10.2026), es geht also nichts verloren.
+    //--------------------------------------------------------------------------
+    class ChefZ_CultivatedAgaricus : AgaricusMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_AGARICUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_AGARICUS_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\buttonmushroom.p3d";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsMaterials[] = {};
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\ButtonMushroom_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ButtonMushroom_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ButtonMushroom_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ButtonMushroom_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ButtonMushroom_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ButtonMushroom_rotten_co.paa"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 100, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {0, 5, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    class ChefZ_CultivatedPleurotus : PleurotusMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_PLEUROTUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_PLEUROTUS_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\oystermushroom.p3d";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsMaterials[] = {};
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\OysterMushroom_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\OysterMushroom_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\OysterMushroom_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\OysterMushroom_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\OysterMushroom_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\OysterMushroom_rotten_co.paa"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 100, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {0, 5, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16, 1, 9}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0, 16, 1, 3}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    class ChefZ_CultivatedBoletus : BoletusMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_BOLETUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_BOLETUS_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\porcini.p3d";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsMaterials[] = {};
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\Porcini_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Porcini_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Porcini_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Porcini_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Porcini_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\Porcini_rotten_co.paa"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 100, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {0, 5, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16, 1, 9}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0, 16, 1, 3}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    class ChefZ_CultivatedLactarius : LactariusMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_LACTARIUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_LACTARIUS_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\saffronmilkcap.p3d";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsMaterials[] = {};
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\SaffronMilkCap_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\SaffronMilkCap_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\SaffronMilkCap_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\SaffronMilkCap_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\SaffronMilkCap_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\SaffronMilkCap_rotten_co.paa"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 100, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {0, 5, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16, 1, 9}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0, 16, 1, 3}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    class ChefZ_CultivatedMacrolepiota : MacrolepiotaMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_MACROLEPIOTA";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_MACROLEPIOTA_DESC";
+        model = "\ChefZ\ChefZ_Plants\mushrooms\models\shaggyparasol.p3d";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        hiddenSelections[] = {"cs_raw"};
+        hiddenSelectionsMaterials[] = {};
+        hiddenSelectionsTextures[] =
+        {
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyParasol_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyParasol_baked_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyParasol_boiled_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyParasol_dried_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyParasol_burnt_co.paa",
+            "ChefZ\ChefZ_Plants\mushrooms\data\ShaggyParasol_rotten_co.paa"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 100, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {0, 5, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16, 1, 9}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0, 16, 1, 3}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Vier weitere Zuchtformen (30.10.2026): Judasohr, Herbsttrompete,
+    // Fliegenpilz und Kahlkopf. Fuer sie gibt es kein eigenes Pilzmodell - sie
+    // tragen Vanillas Mesh und Texturen unveraendert. Der Food-Block steht
+    // trotzdem da, Zahl fuer Zahl der des Vanilla-Pilzes (DZ/gear/food/
+    // config.cpp, 1.30): geerbt wuerde er auch, aber der Validator
+    // (chefzcookable) sieht nur, was in dieser Datei steht, und ein kochbares
+    // Item ohne sichtbaren FoodStages-Knoten ist dort ein Fehler.
+    //
+    // Fliegenpilz und Kahlkopf bleiben, was sie in Vanilla sind - giftig bzw.
+    // berauschend; das Verhalten steckt in den Skriptklassen AmanitaMushroom
+    // und PsilocybeMushroom und wird mitgeerbt. Sie tragen keine Kategorie
+    // MUSHROOM und fallen deshalb in kein Rezept.
+    //--------------------------------------------------------------------------
+    class ChefZ_CultivatedAuricularia : AuriculariaMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_AURICULARIA";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_AURICULARIA_DESC";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 100, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {-1, -1, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16, 1, 9}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0, 16, 1, 3}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    class ChefZ_CultivatedCraterellus : CraterellusMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_CRATERELLUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_CRATERELLUS_DESC";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 195, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {-1, -1, 5}; nutrition_properties[] = {2, 90, 78, 1, 0, 16, 1, 9}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {1, 1, 1}; nutrition_properties[] = {1.75, 300, 117, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {1, 2, 2}; nutrition_properties[] = {1.5, 250, 312, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {2, 3, 3}; nutrition_properties[] = {0.75, 250, 39, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {1, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0, 16, 1, 3}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    class ChefZ_CultivatedAmanita : AmanitaMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_AMANITA";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_AMANITA_DESC";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 150, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {-1, -1, 5}; nutrition_properties[] = {2, 90, 40, 1, 0, 16}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {1, 1, 1}; nutrition_properties[] = {1.75, 300, 60, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {1, 2, 2}; nutrition_properties[] = {1.5, 250, 160, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {1, 3, 3}; nutrition_properties[] = {0.75, 250, 20, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {1, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    class ChefZ_CultivatedPsilocybe : PsilocybeMushroom
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_CULT_PSILOCYBE";
+        descriptionShort = "#STR_CHEFZ_ITEM_CULT_PSILOCYBE_DESC";
+        inventorySlot[] =
+        {
+            "Ingredient", "DirectCookingA", "DirectCookingB", "DirectCookingC",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD", "Trap_Bait_2",
+            "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {2.5, 120, 60, 1, 0}; cooking_properties[] = {0, 0}; };
+                class Rotten { visual_properties[] = {-1, -1, 5}; nutrition_properties[] = {2, 90, 24, 1, 0, 16}; cooking_properties[] = {0, 0}; };
+                class Baked  { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.75, 300, 36, 1, 0}; cooking_properties[] = {70, 35}; };
+                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.5, 250, 96, 1, 0}; cooking_properties[] = {105, 45}; };
+                class Dried  { visual_properties[] = {1, 3, 3}; nutrition_properties[] = {0.75, 250, 12, 1, 0}; cooking_properties[] = {70, 30, 80}; };
+                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {2, 90, 0, 1, 0}; cooking_properties[] = {100, 20}; };
+            };
+            class FoodStageTransitions : MushroomsStageTransitions {};
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Das Pilzregal. Gebaut aus Brettern und Naegeln (TR_BuildMushroomShelf),
+    // aufgestellt wie jede Station des Projekts ueber Vanillas Hologramm
+    // (ChefZ_MushroomShelf.SetActions, ActionTogglePlaceObject +
+    // ActionPlaceObject). Es ist KEINE Verarbeitungsstation: es hat keinen
+    // Vorgang, nur einen Takt, der die Kaesten wachsen laesst
+    // (Scripts/4_World/ChefZ/Farming/ChefZ_MushroomFarm.c).
+    //
+    // Sechs Kastenplaetze. Jeder hat einen Proxy im Modell
+    // (chefz_mushroomtray_1..6, gebunden in class CfgNonAIVehicles) - ein
+    // eingestellter Kasten STEHT also sichtbar im Regal, und die Pilze in ihm
+    // ebenso (Proxy im Proxy).
+    //
+    // physLayer item_large und heavyItem wie der Bienenstock: man laeuft nicht
+    // hindurch, und man traegt es mit beiden Armen.
+    //--------------------------------------------------------------------------
+    class ChefZ_MushroomShelf : Inventory_Base
+    {
+        physLayer = "item_large";
+        carveNavmesh = 1;
+        scope = 2;
+        itemBehaviour = 0;
+        heavyItem = 1;
+        displayName = "#STR_CHEFZ_ITEM_MUSHROOMSHELF";
+        descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMSHELF_DESC";
+        model = "\ChefZ\ChefZ_Devices\mushroom\models\mushroomshelf.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mushroom\data\MushroomShelf_co.paa"};
+        rotationFlags = 2;
+        itemSize[] = {6, 8};
+        weight = 25000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        varQuantityDestroyOnMin = 0;
+        // Laenger als jede Wachstumszeit, wie am Bienenstock begruendet: ein
+        // Regal, das verschwindet, bevor seine Pilze stehen, waere sinnlos.
+        lifetime = 1209600;
+        // Hologramm ohne eigenes Material - Begruendung am ChefZ_Beehive.
+        hologramMaterial = "";
+        hologramMaterialPath = "";
+
+        attachments[] =
+        {
+            "ChefZ_MushroomTray1", "ChefZ_MushroomTray2", "ChefZ_MushroomTray3",
+            "ChefZ_MushroomTray4", "ChefZ_MushroomTray5", "ChefZ_MushroomTray6"
+        };
+
+        class GUIInventoryAttachmentsProps
+        {
+            class Trays
+            {
+                name = "#STR_CHEFZ_SLOT_MUSHROOMTRAY";
+                description = "";
+                attachmentSlots[] =
+                {
+                    "ChefZ_MushroomTray1", "ChefZ_MushroomTray2", "ChefZ_MushroomTray3",
+                    "ChefZ_MushroomTray4", "ChefZ_MushroomTray5", "ChefZ_MushroomTray6"
+                };
+                icon = "set:dayz_inventory image:cat_common_cargo";
+                view_index = 0;
+            };
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Der Anzuchtkasten.
+    //
+    // DER BALKEN ist varQuantity 0..100 mit quantityBar - dieselbe Bauform wie
+    // das Leerraehmchen der Imkerei: das Regal zaehlt ihn serverseitig hoch,
+    // die Engine synchronisiert und speichert ihn selbst (ItemBase.c,
+    // m_VarQuantity). Init 0, canBeSplit 0, varQuantityDestroyOnMin 0 - ein
+    // leerer Kasten ist ein Kasten, kein verbrauchter Stapel.
+    //
+    // Er waechst NUR im Regal. Ein Kasten im Rucksack oder am Boden haelt
+    // seinen Balken an, verliert ihn aber nicht.
+    //
+    // Die Fruchtplaetze nehmen jeden Pilz, der sie in inventorySlot[] fuehrt -
+    // die vier neuen Arten und die fuenf Zuchtformen. Wildpilze von Vanilla
+    // fuehren sie nicht und passen deshalb nicht hinein.
+    //--------------------------------------------------------------------------
+    class ChefZ_MushroomTray : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MUSHROOMTRAY";
+        descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMTRAY_DESC";
+        model = "\ChefZ\ChefZ_Devices\mushroom\models\mushroomtray.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mushroom\data\MushroomTray_co.paa"};
+        itemSize[] = {4, 3};
+        weight = 2000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        canBeSplit = 0;
+        varQuantityInit = 0;
+        varQuantityMin = 0;
+        varQuantityMax = 100;
+        varQuantityDestroyOnMin = 0;
+        quantityBar = 1;
+        quantityShow = 0;
+        lifetime = 1209600;
+        repairableWithKits[] = {};
+
+        inventorySlot[] =
+        {
+            "ChefZ_MushroomTray1", "ChefZ_MushroomTray2", "ChefZ_MushroomTray3",
+            "ChefZ_MushroomTray4", "ChefZ_MushroomTray5", "ChefZ_MushroomTray6"
+        };
+        attachments[] = {"ChefZ_TrayMycel", "ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"};
+
+        class GUIInventoryAttachmentsProps
+        {
+            class Mycel
+            {
+                name = "#STR_CHEFZ_SLOT_MYCEL";
+                description = "";
+                attachmentSlots[] = {"ChefZ_TrayMycel"};
+                icon = "set:dayz_inventory image:cat_common_cargo";
+                view_index = 0;
+            };
+            class Harvest
+            {
+                name = "#STR_CHEFZ_SLOT_TRAYMUSHROOM";
+                description = "";
+                attachmentSlots[] = {"ChefZ_TrayMushroom1", "ChefZ_TrayMushroom2", "ChefZ_TrayMushroom3"};
+                icon = "set:dayz_inventory image:food";
+                view_index = 1;
+            };
+        };
+    };
+
+    //--------------------------------------------------------------------------
+    // Das Myzel - das Saatgut der Pilzzucht, eines je zuechtbarer Art, als
+    // Brutbeutel (Koernerbrut). Die Kette seit dem 30.10.2026:
+    //   getrockneter Pilz --Moerser--> Sporen (Mushroom_Transforms.json)
+    //   Sporen + 100 g Weizen --Hand--> Myzel (Mushroom_Crafts.json)
+    // Das Myzel wird im Zuchtkasten verbraucht, sobald die Pilze stehen.
+    //
+    // DREI EIGENE FELDER tragen die Zuchtregel, gelesen von
+    // ChefZ_Mycelium_Base im Skript:
+    //   chefzMushroomClass   was im Kasten waechst
+    //   chefzGrowSeconds     Serverlaufzeit bis zur Ernte (Regal-Takt)
+    //   chefzFruitCount      wie viele Pilze, hoechstens so viele wie freie
+    //                        Fruchtplaetze (drei)
+    // Eine neue Art braucht damit eine Config-Klasse und eine Moerserzeile,
+    // keine Skriptzeile.
+    //
+    // Die Zeiten liegen zwischen zwei und acht Stunden - schnelle Zuchtpilze
+    // (Austernseitling, Schopftintling) vorn, Mykorrhizapilze, die in
+    // Wirklichkeit kaum zu zuechten sind (Steinpilz, Pfifferling, Morchel),
+    // hinten. Zum Vergleich: ein Bienenraehmchen braucht vier Stunden.
+    //
+    // MODELL: eigener Brutbeutel (Lieferung 30.10.2026,
+    // deliveries/2026-10-30_meshy_mycelium_pepper.json), eine Textur fuer alle
+    // Arten - die Art steht im Namen, das Etikett traegt schon das Tuetchen.
+    //--------------------------------------------------------------------------
+    class ChefZ_Mycelium_Base : Inventory_Base
+    {
+        scope = 0;
+        model = "\ChefZ\ChefZ_Devices\mycelium\models\myceliumbag.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\MyceliumBag_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 1000;
+        absorbency = 0.2;
+        canBeDigged = 0;
+        lifetime = 43200;
+        inventorySlot[] = {"ChefZ_TrayMycel"};
+        chefzMushroomClass = "";
+        chefzGrowSeconds = 14400;
+        chefzFruitCount = 3;
+    };
+
+    class ChefZ_MyceliumAgaricus : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_AGARICUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedAgaricus";
+        chefzGrowSeconds = 10800;
+    };
+
+    class ChefZ_MyceliumPleurotus : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_PLEUROTUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedPleurotus";
+        chefzGrowSeconds = 7200;
+    };
+
+    class ChefZ_MyceliumBoletus : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_BOLETUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedBoletus";
+        chefzGrowSeconds = 21600;
+    };
+
+    class ChefZ_MyceliumLactarius : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_LACTARIUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedLactarius";
+        chefzGrowSeconds = 14400;
+    };
+
+    class ChefZ_MyceliumMacrolepiota : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_MACROLEPIOTA";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedMacrolepiota";
+        chefzGrowSeconds = 14400;
+    };
+
+    class ChefZ_MyceliumChanterelle : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_CHANTERELLE";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_Chanterelle";
+        chefzGrowSeconds = 21600;
+    };
+
+    class ChefZ_MyceliumHedgehog : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_HEDGEHOG";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_HedgehogMushroom";
+        chefzGrowSeconds = 18000;
+    };
+
+    class ChefZ_MyceliumMorel : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_MOREL";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_Morel";
+        chefzGrowSeconds = 28800;
+        chefzFruitCount = 2;
+    };
+
+    class ChefZ_MyceliumShaggyInkCap : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_SHAGGYINKCAP";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_ShaggyInkCap";
+        chefzGrowSeconds = 7200;
+    };
+
+    class ChefZ_MyceliumAuricularia : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_AURICULARIA";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedAuricularia";
+        chefzGrowSeconds = 10800;
+    };
+
+    class ChefZ_MyceliumCraterellus : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_CRATERELLUS";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedCraterellus";
+        chefzGrowSeconds = 21600;
+    };
+
+    class ChefZ_MyceliumAmanita : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_AMANITA";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedAmanita";
+        chefzGrowSeconds = 21600;
+    };
+
+    class ChefZ_MyceliumPsilocybe : ChefZ_Mycelium_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_PSILOCYBE";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_DESC";
+        chefzMushroomClass = "ChefZ_CultivatedPsilocybe";
+        chefzGrowSeconds = 14400;
+    };
+
+    //--------------------------------------------------------------------------
+    // Die Sporen - das Vorprodukt des Myzels, ein Papiertuetchen je Art.
+    // Entstehen im Moerser aus einem GETROCKNETEN Pilz der Art
+    // (Config/Processing/Mushroom_Transforms.json); mit 100 g Weizen werden sie
+    // von Hand zum Myzel angesetzt (Mushroom_Crafts.json).
+    //
+    // MODELL: eigenes Tuetchen (Lieferung 30.10.2026). Ein Mesh, eine Textur
+    // je Art: das Etikett zeigt die Zeichnung des Pilzes, erzeugt von
+    // tools/chefz-assets/spore_labels.py aus den Etikett-Renderings der
+    // Lieferung.
+    //
+    // Kein Food-Block: Sporen isst man nicht. lifetime eine Woche wie Saatgut.
+    //--------------------------------------------------------------------------
+    class ChefZ_Spores_Base : Inventory_Base
+    {
+        scope = 0;
+        descriptionShort = "#STR_CHEFZ_ITEM_SPORES_DESC";
+        model = "\ChefZ\ChefZ_Devices\mycelium\models\sporepacket.p3d";
+        hiddenSelections[] = {"camo"};
+        itemSize[] = {1, 1};
+        weight = 20;
+        absorbency = 0.5;
+        canBeDigged = 0;
+        lifetime = 604800;
+    };
+
+    class ChefZ_SporesAgaricus : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_AGARICUS";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesAgaricus_co.paa"};
+    };
+
+    class ChefZ_SporesPleurotus : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_PLEUROTUS";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesPleurotus_co.paa"};
+    };
+
+    class ChefZ_SporesBoletus : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_BOLETUS";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesBoletus_co.paa"};
+    };
+
+    class ChefZ_SporesLactarius : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_LACTARIUS";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesLactarius_co.paa"};
+    };
+
+    class ChefZ_SporesMacrolepiota : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_MACROLEPIOTA";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesMacrolepiota_co.paa"};
+    };
+
+    class ChefZ_SporesChanterelle : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_CHANTERELLE";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesChanterelle_co.paa"};
+    };
+
+    class ChefZ_SporesHedgehog : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_HEDGEHOG";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesHedgehog_co.paa"};
+    };
+
+    class ChefZ_SporesMorel : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_MOREL";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesMorel_co.paa"};
+    };
+
+    class ChefZ_SporesShaggyInkCap : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_SHAGGYINKCAP";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesShaggyInkCap_co.paa"};
+    };
+
+    class ChefZ_SporesAuricularia : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_AURICULARIA";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesAuricularia_co.paa"};
+    };
+
+    class ChefZ_SporesCraterellus : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_CRATERELLUS";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesCraterellus_co.paa"};
+    };
+
+    class ChefZ_SporesAmanita : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_AMANITA";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesAmanita_co.paa"};
+    };
+
+    class ChefZ_SporesPsilocybe : ChefZ_Spores_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SPORES_PSILOCYBE";
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\SporesPsilocybe_co.paa"};
     };
 };
 
@@ -2487,6 +3533,31 @@ class CfgChefZ
             "ChefZ_Farming/Config/Processing/WildPlant_Stations.json"
         };
     };
+
+    // ### SLICE mushrooms ### Pilzzucht (30.10.2026).
+    //
+    // loadOrder 285 und nicht im 21x-Block dieses Moduls: die Transforms
+    // nennen ChefZ_Mortar und ChefZ_DryingRack als Station, und deren
+    // Stationsdatensatz laedt ChefZ_Processing erst mit 230
+    // (ChefZ_HerbProcessing). 285 liegt hinter allen Stationen des Projekts
+    // (Honig 275) und ist frei.
+    //
+    // handcraftRecipeSlots = 2: TR_BuildMushroomShelf und TR_BuildMushroomTray.
+    // Moersern und Trocknen sind Stationsvorgaenge und brauchen keinen Platz.
+    class ChefZ_MushroomFarming
+    {
+        chefzApiVersion = 1;
+        loadOrder = 285;
+        // 2 Bauschritte (Regal, Kasten) + 13 Ansetz-Transforms, je Art einer
+        // (TR_Spores*ToMycelium). Seit dem 30.10.2026 15 statt 2.
+        handcraftRecipeSlots = 15;
+        dataFiles[] =
+        {
+            "ChefZ_Farming/Config/Ingredients/Mushroom_Wild.json",
+            "ChefZ_Farming/Config/Processing/Mushroom_Crafts.json",
+            "ChefZ_Farming/Config/Processing/Mushroom_Transforms.json"
+        };
+    };
 };
 
 //==============================================================================
@@ -2537,6 +3608,84 @@ class CfgChefZIngredients
     class ChefZ_Blueberry : ChefZ_ProduceIngredient  { categories[] = {"BERRY"}; };
     class ChefZ_Raspberry : ChefZ_ProduceIngredient  { categories[] = {"BERRY"}; };
     class ChefZ_Strawberry : ChefZ_ProduceIngredient { categories[] = {"BERRY"}; };
+
+    // ### SLICE mushrooms ### Die vier neuen Arten - dieselbe Bindung wie die
+    // Vanilla-Speisepilze in ChefZ_Ingredients/Config/Ingredients/Mushrooms.json.
+    // Jedes Rezept mit einem MUSHROOM-Slot nimmt sie damit ohne Aenderung.
+    //
+    // Die Zuchtformen stehen hier AUCH (Korrektur 30.10.2026). Die Vererbung
+    // des ChefZ_IngredientManager (CollectChain) greift nur fuer eine Klasse,
+    // die selbst eine Bindung hat - sie fuellt deren Felder aus den Vorfahren.
+    // Eine Klasse OHNE eigene Bindung ist gar keine Zutat (Resolve sucht exakt):
+    // keine Kategorie MUSHROOM, und der cls-Selektor am Moerser fuellt nie einen
+    // Slot. Belegt auf dem Testserver: ResolveByName("ChefZ_CultivatedAmanita")
+    // lieferte null.
+    class ChefZ_MushroomIngredient
+    {
+        template          = "ChefZ_MushroomIngredient";
+        categories[]      = {"MUSHROOM"};
+        tags[]            = {"CHEFZ_MUSHROOM", "CHEFZ_FRESH"};
+        defaultState      = "RAW";
+        quantityUnit      = "PIECE";
+        unitsPerWholeItem = 1;
+        decays            = 1;
+    };
+
+    class ChefZ_Chanterelle : ChefZ_MushroomIngredient {};
+    class ChefZ_HedgehogMushroom : ChefZ_MushroomIngredient {};
+    class ChefZ_Morel : ChefZ_MushroomIngredient {};
+    class ChefZ_ShaggyInkCap : ChefZ_MushroomIngredient {};
+    class ChefZ_CultivatedAgaricus : ChefZ_MushroomIngredient {};
+    class ChefZ_CultivatedPleurotus : ChefZ_MushroomIngredient {};
+    class ChefZ_CultivatedBoletus : ChefZ_MushroomIngredient {};
+    class ChefZ_CultivatedLactarius : ChefZ_MushroomIngredient {};
+    class ChefZ_CultivatedMacrolepiota : ChefZ_MushroomIngredient {};
+    class ChefZ_CultivatedAuricularia : ChefZ_MushroomIngredient {};
+    class ChefZ_CultivatedCraterellus : ChefZ_MushroomIngredient {};
+
+    // Fliegenpilz und Kahlkopf in Zucht: gebunden wie ihre Wildform
+    // (Config/Ingredients/Mushroom_Wild.json) - ohne Kategorie und Tag, damit
+    // sie in keinen MUSHROOM-Slot eines Rezepts fallen; nur Trockenrahmen und
+    // Moerser waehlen sie ueber cls.
+    class ChefZ_ToxicMushroomIngredient
+    {
+        template          = "ChefZ_ToxicMushroomIngredient";
+        categories[]      = {};
+        tags[]            = {};
+        defaultState      = "RAW";
+        quantityUnit      = "PIECE";
+        unitsPerWholeItem = 1;
+        decays            = 1;
+    };
+    class ChefZ_CultivatedAmanita : ChefZ_ToxicMushroomIngredient {};
+    class ChefZ_CultivatedPsilocybe : ChefZ_ToxicMushroomIngredient {};
+
+    // Die Sporen (30.10.2026). Keine Kategorie und kein Tag: sie gehoeren in
+    // keinen Topf. Gebunden werden sie nur, weil der Ansetz-Transform sie ueber
+    // cls waehlt, und ein cls-Selektor auf eine undeklarierte Klasse fuellt nie
+    // einen Slot (Vorfall 31.08.2026, ChefZ_Cooking/Config/Ingredients/Craftables.json).
+    class ChefZ_SporeIngredient
+    {
+        template          = "ChefZ_SporeIngredient";
+        categories[]      = {};
+        tags[]            = {};
+        quantityUnit      = "PIECE";
+        unitsPerWholeItem = 1;
+        decays            = 0;
+    };
+    class ChefZ_SporesAgaricus : ChefZ_SporeIngredient {};
+    class ChefZ_SporesPleurotus : ChefZ_SporeIngredient {};
+    class ChefZ_SporesBoletus : ChefZ_SporeIngredient {};
+    class ChefZ_SporesLactarius : ChefZ_SporeIngredient {};
+    class ChefZ_SporesMacrolepiota : ChefZ_SporeIngredient {};
+    class ChefZ_SporesChanterelle : ChefZ_SporeIngredient {};
+    class ChefZ_SporesHedgehog : ChefZ_SporeIngredient {};
+    class ChefZ_SporesMorel : ChefZ_SporeIngredient {};
+    class ChefZ_SporesShaggyInkCap : ChefZ_SporeIngredient {};
+    class ChefZ_SporesAuricularia : ChefZ_SporeIngredient {};
+    class ChefZ_SporesCraterellus : ChefZ_SporeIngredient {};
+    class ChefZ_SporesAmanita : ChefZ_SporeIngredient {};
+    class ChefZ_SporesPsilocybe : ChefZ_SporeIngredient {};
 };
 
 //==============================================================================
@@ -2573,9 +3722,10 @@ class CfgChefZProcesses
     // stuenden drei gleichnamige Eintraege im Kontextmenue, und der Spieler
     // haette keine Moeglichkeit, den richtigen zu treffen.
     //
-    // Die Vorlage dafuer steht im Projekt: PROCESS_CARVE_PLATE und
-    // PROCESS_CARVE_BOWL in ChefZ_Cooking sind derselbe Vorgang am selben
-    // Material und trotzdem zwei Prozesse - aus genau diesem Grund. Ein Objekt
+    // Die Vorlage dafuer stand im Projekt: PROCESS_CARVE_PLATE und
+    // PROCESS_CARVE_BOWL in ChefZ_Cooking waren derselbe Vorgang am selben
+    // Material und trotzdem zwei Prozesse - aus genau diesem Grund (der Teller
+    // ist am 30.10.2026 entfallen). Ein Objekt
     // im Prozessnamen ist der Preis dafuer, dass der Spieler sieht, was er
     // baut.
     //--------------------------------------------------------------------------
@@ -2586,7 +3736,7 @@ class CfgChefZProcesses
     // ausdruecklich KEINE toolGroups-Zeile: Vanillas RecipeBase kennt genau
     // MAX_NUMBER_OF_INGREDIENTS = 2, und beide Plaetze sind mit Zutaten
     // belegt. Ein Werkzeug waere der dritte Platz, und den gibt es nicht
-    // (01 V12). Dieselbe Form traegt PROCESS_SALT_CURE in ChefZ_Processing.
+    // (01 V12).
     //
     // Der vierte - PROCESS_BUILD_BEE_SMOKER - hat EINEN Eingang und deshalb
     // eine Werkzeuggruppe. Beides ist zwingend miteinander verknuepft: ein
@@ -2864,6 +4014,59 @@ class CfgChefZProcesses
         exec = "STATION_ACTION";
         displayName = "#STR_CHEFZ_PROC_HARVEST_WILD";
         baseDurationSec = 5.0;
+        toolDamage = 0;
+    };
+
+    //--------------------------------------------------------------------------
+    // ### SLICE mushrooms ### Drei Verben der Pilzzucht.
+    //
+    // Regal und Kasten bauen sind HANDCRAFT mit Brettern und Naegeln wie die
+    // Bauschritte der Imkerei - je ein eigener Prozess, damit das Kontextmenue
+    // zwei unterscheidbare Eintraege zeigt (Begruendung oben bei
+    // PROCESS_BUILD_HIVE_KIT).
+    //
+    // Myzel moersern ist ein STATION_ACTION am Moerser. Ein eigener Prozess
+    // und nicht PROCESS_GRIND_SPICE, weil der Spieler den Aktionstext liest:
+    // "Gewuerz moersern" ueber einem getrockneten Steinpilz waere eine Luege.
+    // Der Moerser fuehrt ihn in seinem Stationsdatensatz
+    // (ChefZ_Processing/Config/Processing/HerbStations.json).
+    //--------------------------------------------------------------------------
+    class PROCESS_BUILD_MUSHROOM_SHELF
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_BUILD_MUSHROOM_SHELF";
+        baseDurationSec = 30.0;
+        animationLength = 4.0;
+        specialty = 0.03;
+        toolDamage = 0;
+    };
+
+    class PROCESS_BUILD_MUSHROOM_TRAY
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_BUILD_MUSHROOM_TRAY";
+        baseDurationSec = 12.0;
+        animationLength = 2.0;
+        specialty = 0.02;
+        toolDamage = 0;
+    };
+
+    class PROCESS_GRIND_MYCELIUM
+    {
+        exec = "STATION_ACTION";
+        displayName = "#STR_CHEFZ_PROC_GRIND_MYCELIUM";
+        baseDurationSec = 20.0;
+    };
+
+    // Sporen + Weizen -> Myzel (Koernerbrut). HANDCRAFT mit zwei Eingaengen
+    // und deshalb ohne Werkzeug, dieselbe Form wie die Bauschritte darueber.
+    class PROCESS_INOCULATE_SPAWN
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_INOCULATE_SPAWN";
+        baseDurationSec = 8.0;
+        animationLength = 1.0;
+        specialty = 0.02;
         toolDamage = 0;
     };
 };

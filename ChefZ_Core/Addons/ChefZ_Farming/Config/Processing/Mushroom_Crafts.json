@@ -1,0 +1,521 @@
+{
+  "kind": "transform",
+  "schemaVersion": 1,
+  "_note": "### SLICE mushrooms ### (30.10.2026) Die beiden Bauschritte der Pilzzucht und (seit 30.10.2026) das Ansetzen der Koernerbrut. Dieselbe Form wie TR_BuildBeehiveKit (Apiary_Crafts.json): zwei Eingaenge, Bretter und Naegel als Mengen (consume amount), kein Werkzeug - Vanillas RecipeBase kennt zwei Zutatenplaetze, und beide sind belegt (01 V12). Reserviert ueber handcraftRecipeSlots = 15 am Knoten ChefZ_MushroomFarming.",
+  "records": [
+    {
+      "id": "TR_BuildMushroomShelf",
+      "_note": "Ein Regal mit drei Boeden und vier Pfosten: acht Bretter, sechzehn Naegel - doppelt so viel Holz wie der Bienenstock-Bausatz, weil es doppelt so viel Regal ist.",
+      "process": "PROCESS_BUILD_MUSHROOM_SHELF",
+      "inputs": [
+        {
+          "slotId": "planks",
+          "match": {
+            "cls": "WoodenPlank"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "unit": "PIECE",
+          "amount": {
+            "min": 8.0
+          },
+          "consume": "amount",
+          "consumeAmount": 8.0
+        },
+        {
+          "slotId": "nails",
+          "match": {
+            "cls": "Nail"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "unit": "PIECE",
+          "amount": {
+            "min": 16.0
+          },
+          "consume": "amount",
+          "consumeAmount": 16.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MushroomShelf",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_BuildMushroomTray",
+      "_note": "Ein flacher Kasten: zwei Bretter, sechs Naegel. Die Erde darin ist Teil des Kastens - DayZ kennt kein Erde-Item, und ein Kasten, den man erst befuellen muesste, haette keinen Schritt, der etwas bedeutet. Ohne quantity: der Kasten beginnt bei varQuantityInit 0, also leerem Wachstumsbalken.",
+      "process": "PROCESS_BUILD_MUSHROOM_TRAY",
+      "inputs": [
+        {
+          "slotId": "planks",
+          "match": {
+            "cls": "WoodenPlank"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "unit": "PIECE",
+          "amount": {
+            "min": 2.0
+          },
+          "consume": "amount",
+          "consumeAmount": 2.0
+        },
+        {
+          "slotId": "nails",
+          "match": {
+            "cls": "Nail"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "unit": "PIECE",
+          "amount": {
+            "min": 6.0
+          },
+          "consume": "amount",
+          "consumeAmount": 6.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MushroomTray"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesAgaricusToMycelium",
+      "_note": "Koernerbrut: Sporen auf 100 g Weizen ergeben einen Brutbeutel Myzel. Je Art ein Transform, weil das Ergebnis die Art traegt. Weizen und nicht Reis: ChefZ_Wheat ist in Gramm gebunden (GrainIngredients.json, GRAM, 1000), Reis nur als ganzes Stueck - 100 g aus einem Reispaket liessen sich nicht abziehen. Zwei Eingaenge, kein Werkzeug (Vanillas RecipeBase kennt zwei Zutatenplaetze, 01 V12).",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesAgaricus"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumAgaricus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesPleurotusToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesPleurotus"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumPleurotus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesBoletusToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesBoletus"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumBoletus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesLactariusToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesLactarius"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumLactarius",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesMacrolepiotaToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesMacrolepiota"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumMacrolepiota",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesChanterelleToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesChanterelle"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumChanterelle",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesHedgehogToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesHedgehog"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumHedgehog",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesMorelToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesMorel"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumMorel",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesShaggyInkCapToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesShaggyInkCap"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumShaggyInkCap",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesAuriculariaToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesAuricularia"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumAuricularia",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesCraterellusToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesCraterellus"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumCraterellus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesAmanitaToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesAmanita"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumAmanita",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
+      "id": "TR_SporesPsilocybeToMycelium",
+      "process": "PROCESS_INOCULATE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "spores",
+          "match": {
+            "cls": "ChefZ_SporesPsilocybe"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        },
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_MyceliumPsilocybe",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    }
+  ]
+}

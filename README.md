@@ -198,7 +198,7 @@ single integrator merges it. See [Registry Delta Protocol](#registry-delta-proto
 - Pepper berries → Peppercorns → Black pepper
 - Bell pepper → Dried paprika → Powder
 - Milk → Cream → Butter / Cheese
-- Fish → Salted / dried / smoked fish
+- Fish / meat → Smoked fish / meat
 - Hive → Frame → Uncapped → Honey
 - Bones → Bone broth
 - Tomato / cream / mushroom sauces
@@ -218,9 +218,9 @@ single integrator merges it. See [Registry Delta Protocol](#registry-delta-proto
 - Herb mix, hunter seasoning
 - Cream, butter, cheese, eggs
 - Beekeeping — hive, frames, extractor
-- 18 preserving transforms
+- 20 drying and smoking transforms
 - Portioned group meals
-- 5 returnable containers
+- 4 returnable containers
 
 </td>
 </tr>
@@ -237,8 +237,8 @@ the four wild-plant harvest points (since 31.08.2026) run no transform and are l
 |---|---|---|
 | `ChefZ_GrainMill` | `PROCESS_MILL` | Wheat / Corn → Flour |
 | `ChefZ_MeatGrinder` | `PROCESS_GRIND_MEAT`, `PROCESS_STUFF_SAUSAGE` | Meat → Minced meat → Raw sausage |
-| `ChefZ_Mortar` | `PROCESS_GRIND_SPICE`, `PROCESS_GRIND_HERB` | Peppercorns → Black pepper · Dried paprika → Powder · Dried herbs → Herb mix |
-| `ChefZ_DryingRack` | `PROCESS_DRY` | Herbs, berries, pepper, paprika, pasta, meat, fish, sausage — 4 parallel slots |
+| `ChefZ_Mortar` | `PROCESS_GRIND_SPICE`, `PROCESS_GRIND_HERB`, `PROCESS_GRIND_MYCELIUM` | Peppercorns → Black pepper · Dried paprika → Powder · Dried herbs → Herb mix · Dried mushroom → Spores |
+| `ChefZ_DryingRack` | `PROCESS_DRY` | Herbs, berries, pepper, paprika, pasta, sausage, mushrooms — 4 parallel slots |
 | `ChefZ_Smoker` | `PROCESS_SMOKE` | Meat, fish, sausage — 2 slots, needs fuel |
 | `ChefZ_FryingPan` | `PROCESS_BOIL_BRINE`, `PROCESS_DRY_SALT` | Saltwater → Raw salt → Salt |
 | `ChefZ_ButterChurn` | `PROCESS_SEPARATE_CREAM`, `PROCESS_CHURN_BUTTER` | Milk → Cream → Butter |
@@ -247,23 +247,39 @@ the four wild-plant harvest points (since 31.08.2026) run no transform and are l
 | `ChefZ_BeehiveDouble` | `PROCESS_HARVEST_HIVE` | The extended hive |
 | `ChefZ_HoneyExtractor` | `PROCESS_SPIN_HONEY` | Uncapped frame → Honey, runs itself |
 
+**Mushroom farming** (2026-10-30) is not a station but works next to them: the
+`ChefZ_MushroomShelf` holds six `ChefZ_MushroomTray`s, and a tray with mycelium in
+it grows up to three mushrooms of that species in two to eight hours. A dried
+mushroom ground in the mortar gives a sachet of spores; spores plus 100 g of wheat
+make a bag of mycelium. Thirteen species can be grown. Details in
+[Production-Chains](ChefZ_Wiki/Production-Chains.md#mushrooms).
+
 `ChefZ_FryingPan` is a **station**, not the vanilla `FryingPan` cooking device listed
 further down — same idea, different class. It boils brine over a fire and dries the
 raw salt afterwards; the fire is only needed for the first half.
 
+**Raccoon** (2026-10-30): `ChefZ_Raccoon` in `ChefZ_Meat` is a new animal on the fox
+skeleton. It inherits vanilla's `Animal_VulpesVulpes` - ambient-life AI, hit zones, skinning -
+and brings its own model (`ChefZ_Items/raccoon`) and its own animation instance
+`ChefZ_Raccoon.asi`: it inherits the fox set (33 clips) and replaces the walking slots
+(`walk`, `walk_eating`, `walk_eating_idle_1`) with the Meshy walk cycle of the delivery,
+converted by `tools/chefz-assets/animal_anim_from_meshy.py` (step phase follows the fox clip's
+root motion, standing phases blend into the fox pose). The Meshy mesh was re-shaped onto the 32 fox bones in the
+fox bind pose and re-weighted by `tools/chefz-assets/animal_retarget_fox.py`;
+`tools/chefz-assets/animal_anim_preview.py` poses it with the real fox `.anm` files for a
+check. It joins the fox territories with one line in `cfgenvironment.xml`
+(see `ChefZ_Farming/ServerConfig/README_ServerConfig.md`).
+
 ### Preservation Matrix
 
-Eighteen transforms across three processes. Drying is the widest: it takes anything
-that keeps better dry, not just meat.
+Two processes, drying and smoking. Drying is the widest: it takes anything that keeps
+better dry — but no longer meat or fish. Since 2026-10-30 meat and fish are **only
+smoked**; salt-curing, Salted Meat, Salted Fish and dried meat/fish were removed.
 
 | Input | Process | Output |
 |---|---|---|
-| Raw Meat + Salt | Salt-cure | Salted Meat |
-| Fish Fillet + Salt | Salt-cure | Salted Fish |
-| Salted Meat | Dry | Dried Meat |
-| Salted Fish | Dry | Dried Fish |
-| Salted Meat | Smoke | Smoked Meat |
-| Fish Fillet | Smoke | Smoked Fish |
+| Raw Meat | Smoke | the same meat, state Smoked |
+| Fish Fillet | Smoke | the same fillet, state Smoked |
 | Raw Sausage | Smoke | Smoked Sausage |
 | Raw Sausage | Dry | Dry Sausage |
 | Raw Pasta | Dry | Dried Pasta |
@@ -358,7 +374,7 @@ Cooking Pot
 ├── Tomato Sauce       slot "sauce"     optional, +2 grade points
 └── Salt               slot "salt"      optional, 5 g, +2 grade points
 
-→ RCP_ChefZ_SausagePasta, quality SEASONED, 2 portions on a plate
+→ RCP_ChefZ_SausagePasta, quality SEASONED, 2 portions
 ```
 
 A slot matches by **`cls`** (one exact class), **`category`**, **`tag`**, or **`anyOf`**
@@ -445,7 +461,6 @@ from the real `RCP_ChefZ_SausagePasta` — optional slots and grade rules remove
     {
       "cls": "ChefZ_SausagePasta",
       "quantity": 200, "quantityMode": "fixed",
-      "returnContainer": "ChefZ_EmptyPlate",
       "setState": "COOKED"
     }
   ],
@@ -751,12 +766,13 @@ anywhere in the module's scripts.
 
 | XP | Processes |
 |---:|---|
-| 1 | `CUT_MEAT` · `CARVE_BOWL` · `CARVE_PLATE` |
-| 2 | `GRIND_MEAT` · `GRIND_HERB` · `GRIND_SPICE` · `SEPARATE_CREAM` · `ROLL` · `DRY_SALT` · `SALT_CURE` |
+| 1 | `CUT_MEAT` · `CARVE_BOWL` |
+| 2 | `GRIND_MEAT` · `GRIND_HERB` · `GRIND_SPICE` · `SEPARATE_CREAM` · `ROLL` · `DRY_SALT` |
 | 3 | `MILL` · `KNEAD` · `CHURN_BUTTER` · `PRESS_CHEESE` · `BOIL_BRINE` · `DRY` · `SMOKE` |
 | 5 | `STUFF_SAUSAGE` · and the transforms `TR_DoughToRawPasta`, `TR_FishToSmoked` |
 
-Eighteen of the 31 process IDs in the data set are named there. The other thirteen —
+Sixteen process IDs are named there (eighteen before 2026-10-30, when `SALT_CURE` and
+`CARVE_PLATE` were removed with salt-curing and the wooden plate). The rest —
 beekeeping, the container crafts, the pasta machine — fall through to `defaultXp = 1`.
 That is the fallback working as designed, not a gap that breaks anything, but it does
 mean raising a hive pays the same as folding a box.

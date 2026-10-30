@@ -384,7 +384,8 @@ class CfgChefZTerjeSkills
         enabled = 1;
 
         // Terje-Skill, in den alles hier einzahlt. "surv" laut
-        // TerjeSkills/survival.hpp.
+        // TerjeSkills/survival.hpp. Einzelne Prozesse lenkt
+        // ChefZ_Process/ChefZ_ProcessSkills auf einen anderen Skill um.
         skill = "surv";
 
         // Sichtbare Notification bei jedem Gewinn. 0 = still. Terje reicht
@@ -469,7 +470,6 @@ class CfgChefZTerjeSkills
         //
         //   Salz          PROCESS_BOIL_BRINE 3 + PROCESS_DRY_SALT 2   = 5
         //   Nudeln        TR_DoughToRawPasta 5 (einstufig seit 29.08.2026) = 5
-        //   Trockenfleisch PROCESS_SALT_CURE 2 + PROCESS_DRY 3        = 5
         //   Raeucherwurst PROCESS_STUFF_SAUSAGE 5 + PROCESS_SMOKE 3   = 8
         //   Fisch raeuchern  TR_FishToSmoked 5 (einstufig, kein Salzen) = 5
         //
@@ -487,7 +487,6 @@ class CfgChefZTerjeSkills
                 // Zerkleinern und Zurichten - Handgriffe, kein Erzeugnis.
                 PROCESS_CUT_MEAT       = 1;
                 PROCESS_CARVE_BOWL     = 1;
-                PROCESS_CARVE_PLATE    = 1;
 
                 PROCESS_GRIND_MEAT     = 2;
                 PROCESS_SEPARATE_CREAM = 2;
@@ -513,11 +512,7 @@ class CfgChefZTerjeSkills
                 // "Wurst herstellen 5".
                 PROCESS_STUFF_SAUSAGE  = 5;
 
-                // Vorstufe des Konservierens.
-                PROCESS_SALT_CURE      = 2;
-
-                // "Kraeuter trocknen 3" / "Pfeffer trocknen 3" - und zugleich
-                // der zweite Schritt von "Trockenfleisch 5".
+                // "Kraeuter trocknen 3" / "Pfeffer trocknen 3".
                 PROCESS_DRY            = 3;
 
                 // Zweiter Schritt von "Raeucherwurst 8".
@@ -537,6 +532,34 @@ class CfgChefZTerjeSkills
                 // Salzschritt in den Raeucherofen, deshalb traegt dieser
                 // eine Transform die ganzen 5.
                 TR_FishToSmoked = 5;
+            };
+
+            // In welchen Terje-Skill ein PROZESS einzahlt. Was hier nicht
+            // steht, zahlt in "skill" oben (Vorgabe "surv"). Die Menge aendert
+            // sich dadurch nicht - nur das Konto.
+            //
+            // "farm" gibt es nur in TerjeMods-experimental (farming.hpp) und
+            // keinen eigenen Define dafuer: TERJE_SKILLS_MOD steht in stable
+            // wie experimental. Deshalb prueft ChefZ_TerjeSkillsBridge.AddXp
+            // zur Laufzeit ueber GetTerjeSkillsRegistry().FindSkill(). Fehlt
+            // der Skill oder hat der Betreiber ihn abgeschaltet (dann
+            // registriert Terje ihn nicht, TerjeSkills/.../
+            // TerjeSkillsRegistry.c:16), geht die XP unveraendert nach "surv".
+            //
+            // Auswahl nach Terje-Experimental-Analyse §4 (F4): Imkerei,
+            // Getreide, Saatgut. Bauen von Imkereiteilen bleibt Handwerk
+            // (surv), Trocknen bleibt surv, weil PROCESS_DRY auch Fleisch fuehrt.
+            class ChefZ_ProcessSkills
+            {
+                PROCESS_HARVEST_HIVE = "farm";
+                PROCESS_UNCAP_COMB   = "farm";
+                PROCESS_SPIN_HONEY   = "farm";
+                PROCESS_EXTEND_HIVE  = "farm";
+                PROCESS_RAISE_HIVE   = "farm";
+                PROCESS_PACK_HIVE    = "farm";
+                PROCESS_FILL_SMOKER  = "farm";
+                PROCESS_MILL         = "farm";
+                PROCESS_CUT_OUT_SEEDS = "farm";
             };
         };
 

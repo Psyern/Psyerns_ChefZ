@@ -1,0 +1,609 @@
+{
+  "kind": "transform",
+  "schemaVersion": 1,
+  "_note": "### SLICE mushrooms ### (30.10.2026) Trocknen und Moersern - der Weg vom Pilz zu den Sporen (und von dort per Hand zum Myzel, Mushroom_Crafts.json). Getrocknet wird ENTWEDER wie in Vanilla (Topf ohne Wasser ueber dem Feuer, MushroomsStageTransitions) ODER hier am Trockenrahmen; der Moerser fragt nur die Vanilla-Garstufe Dried ab und ist der Herkunft gegenueber blind. Vanillas Wildpilze kommen zu 40 Prozent bereits getrocknet aus der Welt (MushroomBase.EEOnCECreate, scripts - 1.30), der Einstieg ist also nicht an eine Feuerstelle gebunden.",
+  "records": [
+    {
+      "id": "TR_MushroomToDried",
+      "_note": "Alle Speisepilze am Trockenrahmen, ueber die KATEGORIE MUSHROOM: damit gelten die sieben Vanilla-Speisepilze aus ChefZ_Ingredients/Config/Ingredients/Mushrooms.json, die vier neuen Arten (CfgChefZIngredients dieses Moduls) und die sieben essbaren Zuchtformen (eigene Bindung in der config.cpp dieses Moduls - geerbt wird nur, wer selbst gebunden ist). Fliegenpilz und Kahlkopf sind nicht deklariert und fallen heraus - dieselbe Grenze wie bei TR_RottenMushroomToCulture. Form woertlich TR_ParsleyToDried (ChefZ_Processing/Config/Processing/HerbDrying.json): consume none, die Stufe wird am Item gesetzt. 600 s wie PROCESS_DRY ohne Ueberschreibung - ein Pilz ist nasser als ein Kraut, aber duenner als eine Paprika (900).",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": [
+        "ChefZ_DryingRack"
+      ],
+      "durationOverrideSec": 600,
+      "qualityRule": "MIN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "category": "MUSHROOM"
+              },
+              {
+                "vanillaStage": "Raw"
+              }
+            ]
+          },
+          "minCount": 1,
+          "consume": "none"
+        }
+      ],
+      "outputs": [
+        {
+          "setState": "DRIED",
+          "inheritFreshness": true
+        }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_ToxicMushroomToDried",
+      "_note": "30.10.2026: Fliegenpilz und Kahlkopf tragen keine Kategorie MUSHROOM (Mushroom_Wild.json) und fallen deshalb aus TR_MushroomToDried heraus. Seit sie zuechtbar sind, muessen sie trocknen koennen - eigene Zeile ueber cls, sonst dieselbe Form und Dauer.",
+      "process": "PROCESS_DRY",
+      "stationsAllowed": [
+        "ChefZ_DryingRack"
+      ],
+      "durationOverrideSec": 600,
+      "qualityRule": "MIN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "AmanitaMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedAmanita"
+                  },
+                  {
+                    "cls": "PsilocybeMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedPsilocybe"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Raw"
+              }
+            ]
+          },
+          "minCount": 1,
+          "consume": "none"
+        }
+      ],
+      "outputs": [
+        {
+          "setState": "DRIED",
+          "inheritFreshness": true
+        }
+      ],
+      "freshnessCarry": 1.0,
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedAgaricusToSpores",
+      "_note": "Je Art ein Transform: der Moerser muss wissen, WELCHE Sporen herauskommen, und das steht nur in der Klasse des Pilzes. Wild- und Zuchtform ueber anyOf - cls vergleicht exakt (ChefZ_CompiledSelector, CLASS), die Vererbung allein reicht dem Selektor nicht. maxCount 1: ein Pilz, ein Tuetchen. Bis 30.10.2026 kam hier direkt das Myzel heraus (TR_Dried*ToMycelium); seitdem Sporen, und das Myzel entsteht erst mit Weizen.",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "AgaricusMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedAgaricus"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesAgaricus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedPleurotusToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "PleurotusMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedPleurotus"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesPleurotus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedBoletusToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "BoletusMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedBoletus"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesBoletus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedLactariusToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "LactariusMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedLactarius"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesLactarius",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedMacrolepiotaToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "MacrolepiotaMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedMacrolepiota"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesMacrolepiota",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedChanterelleToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "cls": "ChefZ_Chanterelle"
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesChanterelle",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedHedgehogToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "cls": "ChefZ_HedgehogMushroom"
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesHedgehog",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedMorelToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "cls": "ChefZ_Morel"
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesMorel",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedShaggyInkCapToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "cls": "ChefZ_ShaggyInkCap"
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesShaggyInkCap",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedAuriculariaToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "AuriculariaMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedAuricularia"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesAuricularia",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedCraterellusToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "CraterellusMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedCraterellus"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesCraterellus",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedAmanitaToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "AmanitaMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedAmanita"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesAmanita",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    },
+    {
+      "id": "TR_DriedPsilocybeToSpores",
+      "process": "PROCESS_GRIND_MYCELIUM",
+      "stationsAllowed": [
+        "ChefZ_Mortar"
+      ],
+      "durationOverrideSec": 20,
+      "qualityRule": "MEAN",
+      "inputs": [
+        {
+          "slotId": "mushroom",
+          "match": {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "cls": "PsilocybeMushroom"
+                  },
+                  {
+                    "cls": "ChefZ_CultivatedPsilocybe"
+                  }
+                ]
+              },
+              {
+                "vanillaStage": "Dried"
+              }
+            ]
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "whole"
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_SporesPsilocybe",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 100
+    }
+  ]
+}

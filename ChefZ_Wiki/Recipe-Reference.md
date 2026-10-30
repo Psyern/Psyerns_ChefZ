@@ -35,7 +35,7 @@ For the same recipes written as `X + Y = Z` without the engine columns, see
 | **Required** | Mandatory slots. `3–5×` is the min/max item count. *Italic* names are categories or tags; plain names are exact classes. |
 | **Optional** | Optional slots. **+n** is the grade points that slot contributes. |
 | **Result** | The output class. For a portioned dish: bulk class → portion count × portion class. |
-| **Portions** | Portion count and container category. |
+| **Portions** | Portion count and container category. `(none)`: a plate dish — since 2026-10-30 it is eaten without a container and returns nothing (the wooden plate and the category `PLATE` were removed). |
 
 ### Quality
 
@@ -111,16 +111,16 @@ The `TIMED` half of the plate dishes: they finish after a fixed number of second
 
 | Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
 |---|---|---|---|---|---|---|
-| Survivor Spaghetti | `RCP_ChefZ_SurvivorSpaghetti` | Pot, Cauldron | 1–3× *PASTA*<br>1–2× *TOMATO_SAUCE* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1** | Survivor Spaghetti (Cookware)<br>→ 2× Survivor Spaghetti | 2 (PLATE) |
-| Sausage Pasta | `RCP_ChefZ_SausagePasta` | FryingPan, Pot | 1–3× *PASTA*<br>1–3× *SAUSAGE*<br>1× *FAT* or *BUTTER* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1**<br>1× *SAUCE* **+2**<br>1–3× *MUSHROOM* **+1** | Sausage Pasta (Cookware)<br>→ 2× Sausage Pasta | 2 (PLATE) |
-| Hunter Pasta | `RCP_ChefZ_HunterPasta` | FryingPan, Pot, Cauldron | 1–3× *PASTA*<br>1–3× *WILD_MEAT* + not *SAUSAGE*<br>1–4× *MUSHROOM*<br>1–2× *CHEFZ_HERB* | 1× *CREAM* or *CREAM_SAUCE* **+2**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1** | Hunter Pasta (Cookware)<br>→ 2× Hunter Pasta | 2 (PLATE) |
-| Creamy Mushroom Pasta | `RCP_ChefZ_CreamMushroomPasta` | FryingPan, Pot, Cauldron | 1–3× *PASTA*<br>2–5× *MUSHROOM*<br>1–2× *CREAM*<br>1–2× *CHEFZ_HERB* | 1× *SALT* (5 g) **+2**<br>1× *BUTTER* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Creamy Mushroom Pasta (Cookware)<br>→ 2× Creamy Mushroom Pasta | 2 (PLATE) |
-| Chernarus Mac and Cheese | `RCP_ChefZ_MacAndCheese` | Pot, Cauldron | 1–3× *PASTA*<br>2–3× *DAIRY* + not *BUTTER* | 1× *BUTTER* **+1**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1** | Chernarus Mac and Cheese (Cookware)<br>→ 2× Chernarus Mac and Cheese | 2 (PLATE) |
-| Sausage and Potatoes | `RCP_ChefZ_SausagePotatoes` | FryingPan, Pot | 1–4× Potato<br>1–3× *SAUSAGE*<br>1× *FAT* or *BUTTER* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_HERB* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *ROOT_VEGETABLE* **+1** | Sausage and Potatoes (Cookware)<br>→ 2× Sausage and Potatoes | 2 (PLATE) |
-| Hunter Plate | `RCP_ChefZ_HunterPlate` | FryingPan, Pot, Cauldron | 1–3× *WILD_MEAT* + not *SAUSAGE*<br>1–3× Potato<br>1–4× *MUSHROOM*<br>1–2× *CHEFZ_HERB* | 1× *SALT* (5 g) **+2**<br>1× *FAT* or *BUTTER* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Hunter Plate (Cookware)<br>→ 2× Hunter Plate | 2 (PLATE) |
-| Blood Sausage Plate | `RCP_ChefZ_BloodSausagePlate` | FryingPan, Pot | 1–3× *SAUSAGE*<br>1–3× Potato<br>1–2× *ROOT_VEGETABLE* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_HERB* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Blood Sausage Plate (Cookware)<br>→ 2× Blood Sausage Plate | 2 (PLATE) |
-| Fish and Potatoes | `RCP_ChefZ_FishPotatoPlate` | FryingPan, Pot | 1–3× *FISH*<br>1–4× Potato<br>1–2× *CHEFZ_HERB* | 1× *SALT* (5 g) **+2**<br>1× *FAT* or *BUTTER* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Fish and Potatoes (Cookware)<br>→ 2× Fish and Potatoes | 2 (PLATE) |
-| Beans and Sausage | `RCP_ChefZ_BeanSausagePlate` | FryingPan, Pot, Cauldron | 1–2× *BEANS*<br>1–3× *SAUSAGE*<br>1–2× *ROOT_VEGETABLE* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1** | Beans and Sausage (Cookware)<br>→ 2× Beans and Sausage | 2 (PLATE) |
+| Survivor Spaghetti | `RCP_ChefZ_SurvivorSpaghetti` | Pot, Cauldron | 1–3× *PASTA*<br>1–2× *TOMATO_SAUCE* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1** | Survivor Spaghetti (Cookware)<br>→ 2× Survivor Spaghetti | 2 (none) |
+| Sausage Pasta | `RCP_ChefZ_SausagePasta` | FryingPan, Pot | 1–3× *PASTA*<br>1–3× *SAUSAGE*<br>1× *FAT* or *BUTTER* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1**<br>1× *SAUCE* **+2**<br>1–3× *MUSHROOM* **+1** | Sausage Pasta (Cookware)<br>→ 2× Sausage Pasta | 2 (none) |
+| Hunter Pasta | `RCP_ChefZ_HunterPasta` | FryingPan, Pot, Cauldron | 1–3× *PASTA*<br>1–3× *WILD_MEAT* + not *SAUSAGE*<br>1–4× *MUSHROOM*<br>1–2× *CHEFZ_HERB* | 1× *CREAM* or *CREAM_SAUCE* **+2**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1** | Hunter Pasta (Cookware)<br>→ 2× Hunter Pasta | 2 (none) |
+| Creamy Mushroom Pasta | `RCP_ChefZ_CreamMushroomPasta` | FryingPan, Pot, Cauldron | 1–3× *PASTA*<br>2–5× *MUSHROOM*<br>1–2× *CREAM*<br>1–2× *CHEFZ_HERB* | 1× *SALT* (5 g) **+2**<br>1× *BUTTER* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Creamy Mushroom Pasta (Cookware)<br>→ 2× Creamy Mushroom Pasta | 2 (none) |
+| Chernarus Mac and Cheese | `RCP_ChefZ_MacAndCheese` | Pot, Cauldron | 1–3× *PASTA*<br>2–3× *DAIRY* + not *BUTTER* | 1× *BUTTER* **+1**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1** | Chernarus Mac and Cheese (Cookware)<br>→ 2× Chernarus Mac and Cheese | 2 (none) |
+| Sausage and Potatoes | `RCP_ChefZ_SausagePotatoes` | FryingPan, Pot | 1–4× Potato<br>1–3× *SAUSAGE*<br>1× *FAT* or *BUTTER* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_HERB* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *ROOT_VEGETABLE* **+1** | Sausage and Potatoes (Cookware)<br>→ 2× Sausage and Potatoes | 2 (none) |
+| Hunter Plate | `RCP_ChefZ_HunterPlate` | FryingPan, Pot, Cauldron | 1–3× *WILD_MEAT* + not *SAUSAGE*<br>1–3× Potato<br>1–4× *MUSHROOM*<br>1–2× *CHEFZ_HERB* | 1× *SALT* (5 g) **+2**<br>1× *FAT* or *BUTTER* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Hunter Plate (Cookware)<br>→ 2× Hunter Plate | 2 (none) |
+| Blood Sausage Plate | `RCP_ChefZ_BloodSausagePlate` | FryingPan, Pot | 1–3× *SAUSAGE*<br>1–3× Potato<br>1–2× *ROOT_VEGETABLE* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_HERB* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Blood Sausage Plate (Cookware)<br>→ 2× Blood Sausage Plate | 2 (none) |
+| Fish and Potatoes | `RCP_ChefZ_FishPotatoPlate` | FryingPan, Pot | 1–3× *FISH*<br>1–4× Potato<br>1–2× *CHEFZ_HERB* | 1× *SALT* (5 g) **+2**<br>1× *FAT* or *BUTTER* **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Fish and Potatoes (Cookware)<br>→ 2× Fish and Potatoes | 2 (none) |
+| Beans and Sausage | `RCP_ChefZ_BeanSausagePlate` | FryingPan, Pot, Cauldron | 1–2× *BEANS*<br>1–3× *SAUSAGE*<br>1–2× *ROOT_VEGETABLE* | 1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1**<br>1–2× *CHEFZ_HERB* **+1** | Beans and Sausage (Cookware)<br>→ 2× Beans and Sausage | 2 (none) |
 
 ### Timing
 
@@ -145,16 +145,16 @@ The `ON_STAGE` half of the plate dishes. Two of them, Sausage and Bread Plate an
 
 | Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
 |---|---|---|---|---|---|---|
-| Tactical Bacon Breakfast | `RCP_ChefZ_TacticalBreakfast` | FryingPan, Pot | 1× Tactical Bacon (opened) or Tactical Bacon (can)<br>1–2× *EGG*<br>1× *BREAD* | 1× *TOMATO* **+1**<br>*SALT* (4 g) **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Tactical Bacon Breakfast (Cookware)<br>→ 2× Tactical Bacon Breakfast | 2 (PLATE) |
-| Scrambled Eggs with Sausage | `RCP_ChefZ_ScrambledEggSausage` | FryingPan, Pot | 2–4× *EGG*<br>1× *DAIRY*<br>1–2× *SAUSAGE* | *SALT* (4 g) **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Scrambled Eggs with Sausage (Cookware)<br>→ 2× Scrambled Eggs with Sausage | 2 (PLATE) |
-| Farmer's Breakfast | `RCP_ChefZ_FarmersBreakfast` | FryingPan, Pot, Cauldron | 2–4× Potato<br>1–2× *EGG*<br>1–2× *SAUSAGE*<br>1–2× Onion | 1× *FAT* or *BUTTER* **+1**<br>*SALT* (5 g) **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Farmer's Breakfast (Cookware)<br>→ 3× Farmer's Breakfast | 3 (PLATE) |
-| Cheese Flatbread | `RCP_ChefZ_CheeseFlatbread` | FryingPan, Pot | 1–2× *DOUGH*<br>1–2× Cheese | *SALT* (4 g) **+1**<br>1–2× *HERB* or *DRIED_HERB* **+1**<br>0–2× *SPICE* **+1** | Cheese Flatbread (Cookware)<br>→ 2× Cheese Flatbread | 2 (PLATE) |
-| Sausage and Bread Plate | `RCP_ChefZ_SausageBreadPlate` | FryingPan, Pot | 1–2× *BREAD*<br>1–2× *SAUSAGE*<br>1× Cheese | 1× *BUTTER* **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Sausage and Bread Plate (Cookware)<br>→ 2× Sausage and Bread Plate | 2 (PLATE) |
-| Mushroom Pan | `RCP_ChefZ_MushroomPan` | FryingPan, Pot | 3–6× *MUSHROOM*<br>1× *BUTTER* | *SALT* (4 g) **+1**<br>1–2× *HERB* or *DRIED_HERB* **+1**<br>1–2× *ROOT_VEGETABLE* **+1**<br>0–2× *SPICE* **+1** | Mushroom Pan (Cookware)<br>→ 2× Mushroom Pan | 2 (PLATE) |
-| Potato Pancakes | `RCP_ChefZ_PotatoPancakes` | FryingPan, Pot | 2–4× Potato<br>1× *FLOUR* (100 g)<br>1–2× *EGG*<br>1× *FAT* or *BUTTER* | *SALT* (4 g) **+1**<br>1× Onion **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Potato Pancakes (Cookware)<br>→ 2× Potato Pancakes | 2 (PLATE) |
-| Meat Dumplings | `RCP_ChefZ_MeatDumplings` | Pot, Cauldron, FryingPan | 1–2× *DOUGH*<br>1–2× *MINCED_MEAT*<br>1× Onion | *SALT* (5 g) **+1**<br>1–2× *SPICE* **+1**<br>0–2× *HERB* or *DRIED_HERB* **+1** | Meat Dumplings (Cookware)<br>→ 3× Meat Dumplings | 3 (PLATE) |
+| Tactical Bacon Breakfast | `RCP_ChefZ_TacticalBreakfast` | FryingPan, Pot | 1× Tactical Bacon (opened) or Tactical Bacon (can)<br>1–2× *EGG*<br>1× *BREAD* | 1× *TOMATO* **+1**<br>*SALT* (4 g) **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Tactical Bacon Breakfast (Cookware)<br>→ 2× Tactical Bacon Breakfast | 2 (none) |
+| Scrambled Eggs with Sausage | `RCP_ChefZ_ScrambledEggSausage` | FryingPan, Pot | 2–4× *EGG*<br>1× *DAIRY*<br>1–2× *SAUSAGE* | *SALT* (4 g) **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Scrambled Eggs with Sausage (Cookware)<br>→ 2× Scrambled Eggs with Sausage | 2 (none) |
+| Farmer's Breakfast | `RCP_ChefZ_FarmersBreakfast` | FryingPan, Pot, Cauldron | 2–4× Potato<br>1–2× *EGG*<br>1–2× *SAUSAGE*<br>1–2× Onion | 1× *FAT* or *BUTTER* **+1**<br>*SALT* (5 g) **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Farmer's Breakfast (Cookware)<br>→ 3× Farmer's Breakfast | 3 (none) |
+| Cheese Flatbread | `RCP_ChefZ_CheeseFlatbread` | FryingPan, Pot | 1–2× *DOUGH*<br>1–2× Cheese | *SALT* (4 g) **+1**<br>1–2× *HERB* or *DRIED_HERB* **+1**<br>0–2× *SPICE* **+1** | Cheese Flatbread (Cookware)<br>→ 2× Cheese Flatbread | 2 (none) |
+| Sausage and Bread Plate | `RCP_ChefZ_SausageBreadPlate` | FryingPan, Pot | 1–2× *BREAD*<br>1–2× *SAUSAGE*<br>1× Cheese | 1× *BUTTER* **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Sausage and Bread Plate (Cookware)<br>→ 2× Sausage and Bread Plate | 2 (none) |
+| Mushroom Pan | `RCP_ChefZ_MushroomPan` | FryingPan, Pot | 3–6× *MUSHROOM*<br>1× *BUTTER* | *SALT* (4 g) **+1**<br>1–2× *HERB* or *DRIED_HERB* **+1**<br>1–2× *ROOT_VEGETABLE* **+1**<br>0–2× *SPICE* **+1** | Mushroom Pan (Cookware)<br>→ 2× Mushroom Pan | 2 (none) |
+| Potato Pancakes | `RCP_ChefZ_PotatoPancakes` | FryingPan, Pot | 2–4× Potato<br>1× *FLOUR* (100 g)<br>1–2× *EGG*<br>1× *FAT* or *BUTTER* | *SALT* (4 g) **+1**<br>1× Onion **+1**<br>0–2× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Potato Pancakes (Cookware)<br>→ 2× Potato Pancakes | 2 (none) |
+| Meat Dumplings | `RCP_ChefZ_MeatDumplings` | Pot, Cauldron, FryingPan | 1–2× *DOUGH*<br>1–2× *MINCED_MEAT*<br>1× Onion | *SALT* (5 g) **+1**<br>1–2× *SPICE* **+1**<br>0–2× *HERB* or *DRIED_HERB* **+1** | Meat Dumplings (Cookware)<br>→ 3× Meat Dumplings | 3 (none) |
 | Milk Rice | `RCP_ChefZ_MilkRice` | Pot, Cauldron | 1× Rice<br>1–2× *DAIRY* + not *BUTTER* | 1× Honey **+2**<br>1× *BUTTER* **+1**<br>*SALT* (3 g) **+1** | Milk Rice (Cookware)<br>→ 2× Milk Rice | 2 (BOWL) |
-| Honey Bread Platter | `RCP_ChefZ_HoneyBreadPlate` | FryingPan, Pot | 1–2× *BREAD*<br>1× Honey | 1× *BUTTER* **+2**<br>0–1× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Honey Bread Platter (Cookware)<br>→ 2× Honey Bread Platter | 2 (PLATE) |
+| Honey Bread Platter | `RCP_ChefZ_HoneyBreadPlate` | FryingPan, Pot | 1–2× *BREAD*<br>1× Honey | 1× *BUTTER* **+2**<br>0–1× *SPICE* or *HERB* or *DRIED_HERB* **+1** | Honey Bread Platter (Cookware)<br>→ 2× Honey Bread Platter | 2 (none) |
 
 ### Timing
 
@@ -184,7 +184,7 @@ complete `ON_STAGE`, not on a timer.
 | Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
 |---|---|---|---|---|---|---|
 | Pumpkin Soup | `RCP_ChefZ_PumpkinSoup` | Pot, Cauldron | 3–5× `SlicedPumpkin`<br>1× *BUTTER*<br>250 ml water | 1–3× *ROOT_VEGETABLE* **+1**<br>1× *CREAM* **+2**<br>1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* (6 g) **+1**<br>1–2× *CHEFZ_SPICE* **+1** | Pumpkin Soup | 3 · BOWL |
-| Small Fish Pan | `RCP_ChefZ_SmallFishPan` | FryingPan | 4–6× `Sardines` \| `Bitterlings`<br>1× *FAT* \| *BUTTER*<br>1–2× `ChefZ_Garlic` | 1–2× *CHEFZ_HERB* **+3**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1** | Small Fish Pan | 2 · PLATE |
+| Small Fish Pan | `RCP_ChefZ_SmallFishPan` | FryingPan | 4–6× `Sardines` \| `Bitterlings`<br>1× *FAT* \| *BUTTER*<br>1–2× `ChefZ_Garlic` | 1–2× *CHEFZ_HERB* **+3**<br>1× *SALT* (5 g) **+2**<br>1–2× *CHEFZ_SPICE* **+1** | Small Fish Pan | 2 · none |
 
 The only slot match in the mod built on a negated selector is now the `dairy`
 slot of Milk Rice (*DAIRY* and not *BUTTER*).
@@ -277,14 +277,14 @@ Both bread recipes take a dough and bake it. The doughs come from handcraft tran
 
 Squid and octopus from the sea fishing tables (see the seafood yields in
 `ChefZ_Fishing/Config/Fishing/Seafood.json`). Both are `TIMED` pan dishes and
-are served on a plate; from PREPARED upwards the plate gives the meal bonus.
+are plate dishes, eaten without a container since 2026-10-30; from PREPARED upwards the dish gives the meal bonus.
 
 **2 recipes** · `ChefZ_Cooking/Config/Recipes/Seafood.json`
 
 | Dish | Recipe ID | Cookware | Required | Optional (grade points) | Result | Portions |
 |---|---|---|---|---|---|---|
-| Crispy Fried Calamari | `RCP_ChefZ_CrispyFriedCalamari` | FryingPan | 2–3× Squid, Speckled Squid, Crimson Squid, Northern Crimson Squid or Octopus **+1**<br>1× *FLOUR*<br>1× *FAT* or *BUTTER* **+1** | 1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* (≥ 80 %) **+1** | Crispy Fried Calamari (200, plate) | 1 (PLATE) |
-| Grilled Stuffed Calamari | `RCP_ChefZ_GrilledStuffedCalamari` | FryingPan | 2–3× squid or octopus **+1**<br>1× Rice or *BREAD*<br>1–2× *TOMATO* **+1**<br>1–2× *CHEFZ_HERB* **+1** | 1× Cheese **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* **+1**, wild garlic **+1** | Grilled Stuffed Calamari (200, plate) | 1 (PLATE) |
+| Crispy Fried Calamari | `RCP_ChefZ_CrispyFriedCalamari` | FryingPan | 2–3× Squid, Speckled Squid, Crimson Squid, Northern Crimson Squid or Octopus **+1**<br>1× *FLOUR*<br>1× *FAT* or *BUTTER* **+1** | 1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* (≥ 80 %) **+1** | Crispy Fried Calamari (200) | 1 (none) |
+| Grilled Stuffed Calamari | `RCP_ChefZ_GrilledStuffedCalamari` | FryingPan | 2–3× squid or octopus **+1**<br>1× Rice or *BREAD*<br>1–2× *TOMATO* **+1**<br>1–2× *CHEFZ_HERB* **+1** | 1× Cheese **+2**<br>1× *SALT* **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* **+1**, wild garlic **+1** | Grilled Stuffed Calamari (200) | 1 (none) |
 | Shellfish Bisque | `RCP_ChefZ_ShellfishBisque` | Pot, Cauldron | 2–4× crab, lobster, langoustine or tiger prawn **+1**<br>1× *FAT* or *BUTTER* **+1**<br>1–2× *TOMATO* | 1–2× *CHEFZ_HERB* **+2**<br>1× *SALT* (5 g) **+1**<br>1–2× *CHEFZ_SPICE* **+1**<br>fresh *SEAFOOD* (≥ 80 %) **+1** | Shellfish Bisque (300, bowl) | 3 (BOWL) |
 
 ### Timing
@@ -317,7 +317,7 @@ never evaluates them; they exist so an effect module can pick them up later.
 | Sausage slots without `maxCount` | All six recipes in `Sausage.json` declare `"minCount": 1` and no `maxCount`. That is not open-ended: `ChefZ_Selector.ResolveDefaults` sets `maxCount = DefaultInt("maxCount", maxCount, minCount)` (`ChefZ_Selector.c:257`), so the slot takes exactly one. |
 | Paprika bound by class, not category | `RCP_ChefZ_ChernarusChili` and its group variant match `GreenBellPepper` and `ChefZ_PaprikaPowder` by class, because no `PAPRIKA` category exists and the three ingredient records belong to other modules. The recipe file states this openly. |
 | Ingredients with no in-game source | `Rice` and `Honey` (required by Milk Rice and Honey Bread Platter) are vanilla loot. `ChefZ_Egg` is a loot-only ChefZ class (milk is vanilla `PowderedMilk`), and since 2026-08-29 so are wheat, the four vegetables and the six herbs (found like mushrooms) — and the mod packs **no `types.xml`**, so nothing spawns without an admin — except wheat, corn, thyme, rosemary and parsley: the CE templates in `ChefZ_Farming/ServerConfig/`, once installed into the mission, drop wheat sheaves on the ground (nominal 40) and spawn harvest points for the other four (corn 60, the three herbs 140 together). Nobody has installed that fragment on a running server yet. See [Known-Limitations](Known-Limitations#wild-plants-wildwuchs--31082026). |
-| Salted Meat can be smoked since 31.08.2026 | `TR_SaltedMeatToSmoked` (`ChefZ_Preservation/Config/Processing/Smoking.json`) declared no `process` and was dropped at boot by `ChefZ_ProcessCompiler.c:355`. It now names `PROCESS_SMOKE` and pins `stationsAllowed: ["ChefZ_Smoker"]`, like the two neighbours that were never affected. See [Known-Limitations](Known-Limitations). |
+| Salted Meat can be smoked since 31.08.2026 *(history — Salted Meat and `TR_SaltedMeatToSmoked` were removed on 2026-10-30; raw meat is smoked directly)* | `TR_SaltedMeatToSmoked` (`ChefZ_Preservation/Config/Processing/Smoking.json`) declared no `process` and was dropped at boot by `ChefZ_ProcessCompiler.c:355`. It now names `PROCESS_SMOKE` and pins `stationsAllowed: ["ChefZ_Smoker"]`, like the two neighbours that were never affected. See [Known-Limitations](Known-Limitations). |
 
 ## See also
 

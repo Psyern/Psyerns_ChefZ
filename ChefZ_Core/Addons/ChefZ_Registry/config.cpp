@@ -52,9 +52,9 @@ class CfgPatches
         //
         // Zugekommen mit dem Merge der ERSTEN WELLE (Slices preservation,
         // serving, sauces):
-        // ChefZ_Preservation: ChefZ_SaltedMeat, ChefZ_SaltedFish,
-        //                     ChefZ_SmokedSausage, ChefZ_DrySausage
-        //                     (Dried/Smoked Meat/Fish entfallen 27.10.2026).
+        // ChefZ_Preservation: ChefZ_SmokedSausage, ChefZ_DrySausage
+        //                     (Dried/Smoked Meat/Fish entfallen 27.10.2026,
+        //                     Salted Meat/Fish 30.10.2026).
         // ChefZ_Cooking:      ChefZ_BoneBroth, ChefZ_TomatoSauce,
         //                     ChefZ_CreamSauce, ChefZ_MushroomCreamSauce.
         //

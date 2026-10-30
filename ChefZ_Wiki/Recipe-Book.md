@@ -30,7 +30,7 @@ planning documents.
 | `(6 g)` | Only that much is drawn, the rest of the item stays. Everything else is consumed whole |
 | `optional` | Leave it out and the recipe still works — it just comes out worse |
 | `+2` | Grade points that slot adds. Points decide the quality tier, which decides yield and shelf life |
-| `(4 helpings)` | The dish is one item you eat down. 100 units is one helping, one bite is a quarter of that. The empty bowl or plate comes back with the last bite |
+| `(4 helpings)` | The dish is one item you eat down. 100 units is one helping, one bite is a quarter of that. A bowl dish gives the empty bowl back with the last bite; plate dishes have no container since 2026-10-30 |
 
 **The rule behind all of it:** if no ChefZ recipe matches what is in the pot,
 **vanilla cooking runs and nothing is lost**. A recipe that does not fire is not an
@@ -45,7 +45,7 @@ error — it is the normal case. See [Recipes](Recipes#1-the-one-rule-that-matte
 | *wild meat* | Deer, Boar and Rabbit steak · Minced Venison and Minced Boar · the raw and cooked Venison, Boar and Hunter sausages. **Wolf and Bear are not in it** — they are category `PREDATOR_MEAT`, and so is Minced Bear |
 | *sausage* | All fourteen sausage classes — raw, cooked, dry and smoked |
 | *casing* | Guts · Small Guts |
-| *fish* | Carp, Mackerel, Steelhead Trout, Walleye Pollock fillet · Sardines · Bitterlings · Salted, Dried and Smoked Fish |
+| *fish* | Carp, Mackerel, Steelhead Trout, Walleye Pollock fillet · Sardines · Bitterlings — smoked fillets too |
 | *canned fish* | Opened Crab, Sardines and Tuna cans |
 | *canned meat* | Brisket Spread · Lunchmeat · Pajka · Pate · Opened Pork Can |
 | *root vegetable* | Potato · Carrot · Onion · Garlic |
@@ -176,11 +176,7 @@ Frame — the frame survives the harvest and goes back into the hive.
 ## Preserving meat and fish
 
 ```
-1× raw meat (not sausage)  +  Salt (20 g)   =  Salted Meat    by hand, 6 s
-1× raw fish                +  Salt (20 g)   =  Salted Fish    by hand, 6 s
-
-1× Salted Meat   =  Dried Meat       Drying Rack, 60 min
-1× Salted Fish   =  Dried Fish       Drying Rack, 45 min
+1× raw meat (not sausage)  =  Smoked meat   Smoker,       5 min
 1× raw fish      =  Smoked Fish      Smoker,       5 min
 1× raw sausage   =  Smoked Sausage   Smoker,       5 min
 1× raw sausage   =  Dry Sausage      Drying Rack, 90 min
@@ -189,17 +185,16 @@ Frame — the frame survives the harvest and goes back into the hive.
 2× Elderberry    =  Dried Berries    Drying Rack,  7 min
 ```
 
+Meat and fish are **only smoked** since 2026-10-30: salt-curing, Salted Meat,
+Salted Fish and dried meat and fish were removed. Smoking keeps the item and only
+changes its state.
+
 Spoilage multipliers by state: `DRIED` ×0.15 · `SMOKED` ×0.25 · `SALTED` ×0.50 ·
-`COOKED` ×0.80.
+`COOKED` ×0.80. (`SALTED` is still declared, but since 2026-10-30 nothing sets it.)
 
-> **Salted Meat reaches Smoked Meat since 31.08.2026.** The transform existed in
-> the data but named no process and was rejected at boot; it now names
-> `PROCESS_SMOKE` and the smoker. See [Known-Limitations](Known-Limitations).
-
-## Plates, bowls, boxes and cans
+## Bowls, boxes and cans
 
 ```
-1× Firewood                  =  Empty Plate     by hand + knife, 20 s
 1× Firewood                  =  Empty Bowl      by hand + knife, 25 s
 1× Birch or Oak Bark         =  Empty Bowl      by hand + knife or axe, 30 s
 2× Paper                     =  Empty Food Box  by hand, 12 s

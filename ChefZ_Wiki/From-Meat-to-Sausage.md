@@ -292,6 +292,10 @@ and nothing is lost. It also means a failed ChefZ recipe is silent. If you expec
 a Pork Sausage and got a burnt one, check that the class was `ChefZ_RawPorkSausage`
 and not the generic raw sausage.
 
+**Meat is only smoked since 2026-10-30.** Salt-curing and Salted Meat were removed;
+raw meat goes straight into the smoker (`TR_RawMeatToSmoked`, five minutes, bark as
+fuel). The note below is history.
+
 **Smoked Meat works since 2026-08-31.** `TR_SaltedMeatToSmoked` in
 `ChefZ_Preservation/Config/Processing/Smoking.json` carried no `process` field, so
 the process compiler dropped it at boot (`ChefZ_ProcessCompiler.c:355`) and Salted

@@ -1,0 +1,15 @@
+{
+ "_comment": "Lieferung Meshy vom 30.10.2026 (Nachmittag): Sporentuetchen (ChefZ_Spores_*, ein Etikett je Art - die Arttexturen baut tools/chefz-assets/spore_labels.py aus den Etikett-Renderings der Lieferung auf die Tuetchen-UV), Myzel-Brutbeutel (ChefZ_Mycelium_*) und schwarze Pfefferkoerner (ChefZ_PepperBerries). Eigene Gruppenordner, weil build_delivery_local.py je Gruppe die model.cfg neu schreibt - im Ordner mushroom stehen Regal und Kasten. Quelle C:/Users/Administrator/Downloads/Neue 3D Assets/<Meshy-Ordner>/{Meshy_AI_model.fbx,*_texture.png}.",
+ "source_root": "C:/Users/Administrator/Downloads/Neue 3D Assets",
+ "project_root": "../../..",
+ "defaults": {"template": "item", "texture_size": 512, "selection": "camo"},
+ "groups": {
+  "mycelium":    {"target": "ChefZ\\ChefZ_Devices\\mycelium", "template": "item", "texture_size": 512, "selection": "camo", "states": []},
+  "peppercorns": {"target": "ChefZ\\ChefZ_Food\\peppercorns", "template": "food", "texture_size": 512, "selection": "cs_raw", "states": ["baked", "boiled", "dried", "burnt", "rotten"]}
+ },
+ "assets": [
+  {"name": "SporePacket",  "file": "sporepacket",  "group": "mycelium", "source": "Meshy_AI_Mushroom_Packet_20261030_texture_6842cf0a/Meshy_AI_model.fbx",   "texture": "Meshy_AI_Mushroom_Packet_20261030_texture_6842cf0a/Meshy_AI_Mushroom_Packet_1030150011_texture.png",     "length": 0.12, "mass": 0.02, "rotate": [-90, 0, 0], "bind": []},
+  {"name": "MyceliumBag",  "file": "myceliumbag",  "group": "mycelium", "source": "Meshy_AI_Mycelium_Grow_Bag_20261030_texture_b16552a7/Meshy_AI_model.fbx", "texture": "Meshy_AI_Mycelium_Grow_Bag_20261030_texture_b16552a7/Meshy_AI_Mycelium_Grow_Bag_1030150011_texture.png", "length": 0.28, "mass": 1.0, "bind": []},
+  {"name": "Peppercorns",  "file": "peppercorns",  "group": "peppercorns", "source": "Meshy_AI_Black_Peppercorns_20261030_texture_3b35a4c5/Meshy_AI_model.fbx", "texture": "Meshy_AI_Black_Peppercorns_20261030_texture_3b35a4c5/Meshy_AI_Black_Peppercorns_1030150012_texture.png", "length": 0.07, "mass": 0.05, "bind": ["ChefZ_PepperBerries"]}
+ ]
+}

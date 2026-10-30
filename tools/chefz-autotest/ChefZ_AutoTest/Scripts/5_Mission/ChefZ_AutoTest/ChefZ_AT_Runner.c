@@ -762,6 +762,8 @@ class ChefZ_AT_Runner
         ChefZ_AT_Fixes.StickSkewer(m_Site + Vector(-3, 0, 3));
         ChefZ_AT_Fixes.MillFill(m_Site + Vector(-5, 0, 3));
         ChefZ_AT_Fixes.MilkPress(m_Site + Vector(-7, 0, 3));
+        ChefZ_AT_Fixes.MushroomFarm(m_Site + Vector(-9, 0, 3));
+        ChefZ_AT_Fixes.MushroomTextures(m_Site + Vector(-9, 0, 0));
         ChefZ_AT_Fixes.MeatTextures(m_Site + Vector(-4, 0, 2));
         ChefZ_AT_Fixes.StageTextureAudit(m_Site + Vector(-6, 0, 2));
         ChefZ_AT_Fixes.NewSealifeModels(m_Site + Vector(-6, 0, -2));

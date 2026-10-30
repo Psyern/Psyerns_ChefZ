@@ -473,6 +473,10 @@ burn for two pieces. Smoked Fish and Smoked Sausage work.
 
 ### `TR_SaltedMeatToSmoked` was rejected at boot — fixed 2026-08-31
 
+> **Removed 2026-10-30.** Salted Meat, Salted Fish, salt-curing and this transform
+> no longer exist; raw meat is smoked directly (`TR_RawMeatToSmoked`). The section
+> below is kept as history.
+
 Found 2026-08-31 while compiling [Recipe-Book](Recipe-Book).
 
 The transform in `ChefZ_Preservation/Config/Processing/Smoking.json` declared **no

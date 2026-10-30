@@ -298,7 +298,17 @@ class ChefZ_ProfileOverlaySource extends ChefZ_IRecordSource
 
         string   fileName;
         FileAttr fileAttr;
-        FindFileHandle handle = FindFile(ChefZ_ProfilePaths.OverlayPattern(), fileName, fileAttr, FindFileFlags.DIRECTORIES);
+        // DayZ 1.30 (DZEXP-134): FindFile only resolves $profile: with a forward-slash
+        // pattern and flags -1 (as CF/Dabs do); 1.29 finds nothing there and falls through.
+        string overlayPattern = ChefZ_ProfilePaths.OverlayPattern();
+        string forwardPattern = overlayPattern;
+        forwardPattern.Replace("\\", "/");
+        FindFileHandle handle = FindFile(forwardPattern, fileName, fileAttr, -1);
+        if (fileName == "")
+        {
+            CloseFindFile(handle);
+            handle = FindFile(overlayPattern, fileName, fileAttr, FindFileFlags.DIRECTORIES);
+        }
 
         if (fileName != "")
             found.Insert(ChefZ_ProfilePaths.OverlayDir() + "\\" + fileName);

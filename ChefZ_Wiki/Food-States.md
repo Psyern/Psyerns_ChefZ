@@ -52,8 +52,9 @@ Notes that are load-bearing:
 * `FRIED` and `BAKED` share a projection. For vanilla, pan equals oven; for a
   recipe, it does not.
 * `SALTED` projects onto **`Raw`**, not onto `Dried`. Salting does not kill
-  bacteria — salted meat stays raw, it just keeps longer. Consequently
-  `ChefZ_SaltedMeat` also carries `agents = 4`.
+  bacteria — salted meat stays raw, it just keeps longer. (`ChefZ_SaltedMeat`,
+  which carried `agents = 4` for that reason, was removed on 2026-10-30 together
+  with salt-curing. `SALTED` remains declared, but nothing sets it any more.)
 * `SMOKED` and `DRIED` share the vanilla stage `Dried`. That costs nothing:
   ChefZ keeps them apart via its own state.
 * `BURNT` is inedible but **not** terminal — charcoal can still rot.

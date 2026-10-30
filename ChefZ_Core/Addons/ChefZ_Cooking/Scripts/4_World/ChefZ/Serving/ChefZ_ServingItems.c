@@ -30,17 +30,14 @@
 // 1. Die Behaelter (Production Map §60, Architekturplan §18)
 //
 // ChefZ_Container_Base leitet von ItemBase ab, nicht von ChefZ_Item_Base
-// (16 §3.2): ein leerer Teller braucht weder Zustand noch Qualitaet noch
+// (16 §3.2): eine leere Schuessel braucht weder Zustand noch Qualitaet noch
 // Frische, und jedes dieser Felder waere Sync- und Spielstandslast auf einem
 // Item, dessen ganzer Zweck es ist, leer zu sein.
 //
 // ChefZ_IsEmpty() wird bewusst NICHT ueberschrieben: die allgemeine Antwort
 // des ChefZ_ContainerService ("kein Cargo und keine Menge") trifft auf alle
-// fuenf zu. Keiner von ihnen hat Cargo, keiner traegt eine Fluessigkeit.
+// vier zu. Keiner von ihnen hat Cargo, keiner traegt eine Fluessigkeit.
 //------------------------------------------------------------------------------
-
-//! PLATE - Traeger der Tellergerichte (§61). reusable, siehe CfgChefZContainers.
-class ChefZ_EmptyPlate extends ChefZ_Container_Base {}
 
 //! BOWL - Traeger der Suppen, Eintoepfe und aller Portionsgerichte (§62, §17).
 class ChefZ_EmptyBowl extends ChefZ_Container_Base {}
@@ -51,9 +48,9 @@ class ChefZ_EmptyCan extends ChefZ_Container_Base {}
 //! JAR - Eingemachtes haelt laenger; der Faktor steht am Behaelter (16 E7).
 class ChefZ_EmptyJar extends ChefZ_Container_Base {}
 
-//! BOX - Trockenware, DME-Plan §32. Die einzige der fuenf mit Cargo
+//! BOX - Trockenware, DME-Plan §32. Die einzige der vier mit Cargo
 //! (27.10.2026): Lagerbox fuer Nahrung. Keine Behaelter hinein, sonst landen
-//! Teller und Boxen ineinander und das Servieren findet sie nicht mehr.
+//! Schuesseln und Boxen ineinander und das Servieren findet sie nicht mehr.
 class ChefZ_EmptyBox extends ChefZ_Container_Base
 {
     override bool CanReceiveItemIntoCargo(EntityAI item)

@@ -802,20 +802,6 @@
             "fullness": 125
         },
         {
-            "id": "ChefZ_SaltedFish",
-            "scope": "class",
-            "energy": 130,
-            "water": 22,
-            "fullness": 95
-        },
-        {
-            "id": "ChefZ_SaltedMeat",
-            "scope": "class",
-            "energy": 165,
-            "water": 25,
-            "fullness": 115
-        },
-        {
             "id": "ChefZ_SmokedSausage",
             "scope": "class",
             "energy": 500,

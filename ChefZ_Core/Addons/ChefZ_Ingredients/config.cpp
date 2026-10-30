@@ -569,6 +569,12 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CHEESECURD";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESECURD_DESC";
+        model = "\ChefZ\ChefZ_Items\models\tomato_sauce.p3d";   // ChefZ-Glas, Inhalt umgefaerbt (tools/chefz-assets/jar_recolor.py, 30.10.2026)
+        // Vanillas Marmeladenglas hat keine Textur-Selektion (binarisiert) - deshalb das eigene Glas
+        // mit "camo". Stufen wie ChefZ_TomatoSauce: Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Items\data\cheese_curd_co.paa", "\ChefZ\ChefZ_Items\data\cheese_curd_baked_co.paa", "\ChefZ\ChefZ_Items\data\cheese_curd_boiled_co.paa", "\ChefZ\ChefZ_Items\data\cheese_curd_dried_co.paa", "\ChefZ\ChefZ_Items\data\cheese_curd_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};
         weight = 240;
         itemSize[] = {2, 2};
         varQuantityInit = 100;
@@ -623,25 +629,25 @@ class CfgVehicles
                 };
                 class Baked
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 1, 1};
                     cooking_properties[] = {90, 45, 200};
                     nutrition_properties[] = {2.6, 215, 70, 15, 0, 0, 1};
                 };
                 class Boiled
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 2, 2};
                     cooking_properties[] = {90, 60, 150};
                     nutrition_properties[] = {2.7, 205, 135, 13, 0, 0, 1};
                 };
                 class Burned
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 4, 4};
                     cooking_properties[] = {200, 20, 0};
                     nutrition_properties[] = {0.7, 30, 0, 0, 0, 0, 1};
                 };
                 class Rotten
                 {
-                    visual_properties[] = {0, 0, 0};
+                    visual_properties[] = {0, 0, 5};
                     cooking_properties[] = {0, 0, 0};
                     nutrition_properties[] = {0.7, 30, 20, 0, 15, 0, 1};
                 };
@@ -861,16 +867,17 @@ class CfgVehicles
     // CHEFZ_SPICE und passt deshalb in kein Gewuerzrezept. Erst das Trocknen
     // macht daraus ChefZ_Salt.
     //
-    // MODELL: Vanilla-Proxy GardenLime (Pulverbeutel). Ziel laut Production
-    // Map §71 (Shared Mesh Strategy): EIN gemeinsames Gewuerzbehaelter-Mesh
-    // fuer Salz, Pfeffer, Paprikapulver und Kraeutermix, hier mit der Textur
-    // "grobes, feuchtes Salz".
+    // MODELL: Salzstreuer (30.10.2026), dasselbe Mesh wie ChefZ_Salt, die
+    // Textur grauer und matter - grobes, feuchtes Salz (tools/chefz-assets/
+    // salt_variants.py).
     class ChefZ_RawSalt : GardenLime
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_RAWSALT";
         descriptionShort = "#STR_CHEFZ_ITEM_RAWSALT_DESC";
-        model = "\dz\gear\consumables\garden_lime.p3d";
+        model = "\ChefZ\ChefZ_Items\saltshaker\models\saltshaker.p3d";   // EIGENES MODELL (Higgsfield 30.10.2026, deliveries/2026-10-30_higgsfield_salt_grain_thyme.json)
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Items\saltshaker\data\RawSalt_co.paa"};
         rotationFlags = 17;
         itemSize[] = {2, 2};
         weight = 140;
@@ -899,14 +906,15 @@ class CfgVehicles
     // Bequemlichkeit, sondern die Voraussetzung dafuer, dass es ueberhaupt
     // eine Handelswaehrung sein kann - eine verderbende Waehrung ist keine.
     //
-    // MODELL: Vanilla-Proxy GardenLime. Ziel: dasselbe gemeinsame
-    // Gewuerzbehaelter-Mesh (§71), Textur "feines weisses Salz".
+    // MODELL: Salzstreuer (30.10.2026), Textur "feines weisses Salz".
     class ChefZ_Salt : GardenLime
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SALT";
         descriptionShort = "#STR_CHEFZ_ITEM_SALT_DESC";
-        model = "\dz\gear\consumables\garden_lime.p3d";
+        model = "\ChefZ\ChefZ_Items\saltshaker\models\saltshaker.p3d";   // EIGENES MODELL (Higgsfield 30.10.2026, deliveries/2026-10-30_higgsfield_salt_grain_thyme.json)
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Items\saltshaker\data\SaltShaker_co.paa"};
         rotationFlags = 17;
         itemSize[] = {2, 2};
         weight = 90;
@@ -1155,7 +1163,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MUSHROOMCULTURE";
         descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMCULTURE_DESC";
-        model = "\dz\gear\food\Rice.p3d";
+        model = "\ChefZ\ChefZ_Items\grainsack\models\grainsack.p3d";   // EIGENES MODELL (Higgsfield 30.10.2026, deliveries/2026-10-30_higgsfield_salt_grain_thyme.json) - Koernerbeutel wie ChefZ_Wheat
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Items\grainsack\data\GrainSack_co.paa"};
         weight = 30;
 
         // fullnessIndex 0.1: varQuantityMax = 1 (Stueckware aus der Basis, ein

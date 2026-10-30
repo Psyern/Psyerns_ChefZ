@@ -25,9 +25,10 @@ ausschliesslich hier.
 (`scripts (and more) - 1.30/scripts/4_World/DayZ/Entities/ItemBase/Edible_Base/DogSteakMeat.c:1`
 und `.../LizardMeat.c:1`, beide `extends Edible_Base`; im 1.29-Baum gibt es
 keine der beiden Dateien). Ohne Eintrag hier waeren sie in ChefZ weder
-wuerfelbar noch faschierbar noch salzbar, denn `TR_DicedMeat`,
-`TR_MeatToMinced` und `TR_SaltMeat` matchen ueber die Kategorie `MEAT`, nicht
-ueber Klassennamen. Vanilla-Braten und -Essen war davon nie betroffen.
+wuerfelbar noch faschierbar noch raeucherbar, denn `TR_DicedMeat`,
+`TR_MeatToMinced` und `TR_RawMeatToSmoked` matchen ueber die Kategorie `MEAT`,
+nicht ueber Klassennamen. (`TR_SaltMeat` ist am 30.10.2026 mit dem Poekeln
+entfallen.) Vanilla-Braten und -Essen war davon nie betroffen.
 
 `DogSteakMeat` steht unter `PREDATOR_MEAT` wie `WolfSteakMeat`, traegt aber
 **nicht** den Tag `CHEFZ_WILD_MEAT`: der Haushund (`AnimalBase.c`,

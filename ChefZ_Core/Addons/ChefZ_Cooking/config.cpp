@@ -86,7 +86,6 @@ class CfgPatches
 
             // ### SLICE serving ###
             "ChefZ_ContainerItemBase",
-            "ChefZ_EmptyPlate",
             "ChefZ_EmptyBowl",
             "ChefZ_EmptyCan",
             "ChefZ_EmptyJar",
@@ -532,6 +531,12 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_CREAMSAUCE";
         descriptionShort = "#STR_CHEFZ_ITEM_CREAMSAUCE_DESC";
+        model = "\ChefZ\ChefZ_Items\models\tomato_sauce.p3d";   // ChefZ-Glas, Inhalt umgefaerbt (tools/chefz-assets/jar_recolor.py, 30.10.2026)
+        // Vanillas Marmeladenglas hat keine Textur-Selektion (binarisiert) - deshalb das eigene Glas
+        // mit "camo". Stufen wie ChefZ_TomatoSauce: Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Items\data\cream_sauce_co.paa", "\ChefZ\ChefZ_Items\data\cream_sauce_baked_co.paa", "\ChefZ\ChefZ_Items\data\cream_sauce_boiled_co.paa", "\ChefZ\ChefZ_Items\data\cream_sauce_dried_co.paa", "\ChefZ\ChefZ_Items\data\cream_sauce_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};
         weight = 400;
         // Milchfett verdirbt schneller als eingekochtes Gemuese.
         lifetime = 18000;
@@ -555,10 +560,10 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw    { nutrition_properties[] = {2.0, 620, 90, 20, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked  { nutrition_properties[] = {2.0, 635, 70, 20, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
-                class Boiled { nutrition_properties[] = {2.0, 620, 100, 20, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
-                class Burned { nutrition_properties[] = {0.5, 155, 12, 4, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
-                class Rotten { nutrition_properties[] = {0.8, 248, 36, 4, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {2.0, 635, 70, 20, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {2.0, 620, 100, 20, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.5, 155, 12, 4, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {0.8, 248, 36, 4, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -591,6 +596,12 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MUSHROOMCREAMSAUCE";
         descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMCREAMSAUCE_DESC";
+        model = "\ChefZ\ChefZ_Items\models\tomato_sauce.p3d";   // ChefZ-Glas, Inhalt umgefaerbt (tools/chefz-assets/jar_recolor.py, 30.10.2026)
+        // Vanillas Marmeladenglas hat keine Textur-Selektion (binarisiert) - deshalb das eigene Glas
+        // mit "camo". Stufen wie ChefZ_TomatoSauce: Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt.
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Items\data\mushroom_cream_sauce_co.paa", "\ChefZ\ChefZ_Items\data\mushroom_cream_sauce_baked_co.paa", "\ChefZ\ChefZ_Items\data\mushroom_cream_sauce_boiled_co.paa", "\ChefZ\ChefZ_Items\data\mushroom_cream_sauce_dried_co.paa", "\ChefZ\ChefZ_Items\data\mushroom_cream_sauce_burnt_co.paa"};
+        hiddenSelectionsMaterials[] = {};
         weight = 440;
         lifetime = 18000;
 
@@ -613,10 +624,10 @@ class CfgVehicles
             class FoodStages
             {
                 class Raw    { nutrition_properties[] = {2.3, 330, 130, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
-                class Baked  { nutrition_properties[] = {2.3, 340, 110, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 200}; };
-                class Boiled { nutrition_properties[] = {2.3, 330, 140, 40, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 150}; };
-                class Burned { nutrition_properties[] = {0.58, 83, 16, 8, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 40, 0}; };
-                class Rotten { nutrition_properties[] = {0.92, 132, 52, 8, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {2.3, 340, 110, 40, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {70, 120, 200}; };
+                class Boiled { nutrition_properties[] = {2.3, 330, 140, 40, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {70, 120, 150}; };
+                class Burned { nutrition_properties[] = {0.58, 83, 16, 8, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 40, 0}; };
+                class Rotten { nutrition_properties[] = {0.92, 132, 52, 8, 20, 16, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
             };
             class FoodStageTransitions
             {
@@ -661,7 +672,7 @@ class CfgVehicles
     // ein Behaelter wird genau dann gebraucht, wenn etwas hineinkommt.
     //
     // MODELLE: Vanilla-Proxys. Bedarf im Slice-Bericht und im Asset-Backlog
-    // (§4 der 3D-Asset-Liste fuehrt EmptyPlate und EmptyBowl als P1). Kein
+    // (§4 der 3D-Asset-Liste fuehrt EmptyBowl als P1). Kein
     // Item wartet auf ein Modell.
     //==========================================================================
 
@@ -724,23 +735,6 @@ class CfgVehicles
         canBeSplit = 0;
         isMeleeWeapon = 0;
         varQuantityDestroyOnMin = 0;
-    };
-
-    // §60, §18: Teller. Traeger der Tellergerichte aus §61.
-    //
-    // reusable = 1 (OF-04): der Teller kommt beim vollstaendigen Verzehr
-    // zurueck und ist damit dauerhafte Ausruestung statt Verbrauchsgut. Der
-    // Frustfall "mein Eintopf ist fertig, aber ich habe keine Schuessel"
-    // trifft einmal, nicht bei jeder Mahlzeit.
-    class ChefZ_EmptyPlate : ChefZ_ContainerItemBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_EMPTYPLATE0";
-        descriptionShort = "#STR_CHEFZ_ITEM_EMPTYPLATE1";
-        // PROXY: flache runde Silhouette. Bedarf: eigenes Tellermesh (P1).
-        model = "\dz\gear\cooking\FryingPan.p3d";
-        itemSize[] = {2, 2};
-        weight = 240;
     };
 
     // §60, §18: Schuessel. Traeger der Suppen und Eintoepfe aus §62 und damit
@@ -2668,7 +2662,7 @@ class CfgVehicles
 //
 // id == Klassenname des LEEREN Behaelters (16 §3.2).
 //
-// HIER - und nur hier - entstehen die fuenf Kategorien aus Architekturplan
+// HIER - und nur hier - entstehen die Kategorien aus Architekturplan
 // §18. Es gibt keine eigene Kategorieregistry fuer Behaelter: eine Kategorie
 // existiert genau dann, wenn ein Behaelter sich zu ihr bekennt. Ein spaeter
 // hinzugefuegter Holznapf traegt containerCategories[] = {"BOWL"} ein und
@@ -2682,18 +2676,8 @@ class CfgVehicles
 //==============================================================================
 class CfgChefZContainers
 {
-    // PLATE - Tellergerichte (§61). Wiederverwendbar (OF-04):
-    // ChefZ_SurvivorSpaghetti -> consume -> ChefZ_EmptyPlate.
-    class ChefZ_EmptyPlate
-    {
-        containerCategories[] = {"PLATE"};
-        emptyClass            = "ChefZ_EmptyPlate";
-        displayName           = "#STR_CHEFZ_ITEM_EMPTYPLATE0";
-        reusable              = 1;
-        consumedOnServe       = 1;
-        spoilageModifier      = 1.0;
-        searchScope           = 3;
-    };
+    // PLATE gibt es nicht mehr (30.10.2026, Vorgabe Alex): ChefZ_EmptyPlate
+    // ist entfallen, Tellergerichte werden ohne Behaelter gegessen.
 
     // BOWL - Suppen, Eintoepfe, Portionsgerichte (§62, §17).
     class ChefZ_EmptyBowl
@@ -2796,8 +2780,9 @@ class CfgChefZDevices
 //
 // Ohne eine Quelle waere das ganze Servieren an Loot gebunden - und ein
 // Spieler, dessen Eintopf fertig ist und der keine Schuessel hat, kann nichts
-// tun (genau der Frustfall, den OF-04 benennt). Zwei Schnitzvorgaenge loesen
-// das mit Vanilla-Mitteln: Brennholz plus Messer.
+// tun (genau der Frustfall, den OF-04 benennt). Ein Schnitzvorgang loest
+// das mit Vanilla-Mitteln: Brennholz plus Messer. (Der zweite, der Holzteller,
+// ist am 30.10.2026 mit ChefZ_EmptyPlate entfallen.)
 //
 // exec = "HANDCRAFT": ein Eingang plus Werkzeuggruppe. Vanillas Craftsystem
 // kombiniert immer ZWEI Dinge und kennt MAX_NUMBER_OF_INGREDIENTS = 2
@@ -2813,14 +2798,6 @@ class CfgChefZDevices
 //==============================================================================
 class CfgChefZProcesses
 {
-    class PROCESS_CARVE_PLATE
-    {
-        exec = "HANDCRAFT";
-        displayName = "#STR_CHEFZ_PROC_CARVE_PLATE";
-        toolGroups[] = {"CUTTING_TOOL"};
-        baseDurationSec = 20.0;
-    };
-
     class PROCESS_CARVE_BOWL
     {
         exec = "HANDCRAFT";
@@ -3184,12 +3161,11 @@ class CfgChefZIngredients
     //
     // Ein Basisrecord je Slice:
     //
-    //   ChefZ_DishesBPlate   das Gericht. containerCategory sagt, WORAUF es
-    //                        liegt; returnContainer nennt die FESTE Klasse, die
-    //                        beim letzten Bissen zurueckkommt. "AUTO" ginge
-    //                        nicht mehr: es loest ueber den beim Servieren
-    //                        benutzten Behaelter auf, und seit 29.08.2026 wird
-    //                        keiner mehr benutzt - das Gericht entsteht direkt.
+    //   ChefZ_DishesBPlate   das Gericht. Seit dem 30.10.2026 ohne Behaelter
+    //                        (der Teller ist entfallen); nur Gerichte in der
+    //                        Schuessel nennen containerCategory und die FESTE
+    //                        returnContainer-Klasse, die beim letzten Bissen
+    //                        zurueckkommt.
     //
     // Die Basisknoten heissen slice-eindeutig (ChefZ_DishesB...), weil dieses
     // Modul ein GETEILTER Ordner ist: dishes-a und dishes-c legen ihre Gerichte
@@ -3217,9 +3193,8 @@ class CfgChefZIngredients
         defaultState      = "COOKED";
         quantityUnit      = "PIECE";
         unitsPerWholeItem = 1;
-        containerCategory = "PLATE";
-        returnContainer   = "ChefZ_EmptyPlate";
         decays            = 1;
+        // Kein Behaelter: der Teller ist am 30.10.2026 entfallen.
     };
 
     class ChefZ_TacticalBreakfast : ChefZ_DishesBPlate {};
@@ -3310,9 +3285,8 @@ class CfgChefZIngredients
     // anderes Rezept es als Nachschub aufsaugen - genau der stille Kreis, den
     // die Pilzrahmsauce weiter oben ausdruecklich vermeidet.
     //
-    // returnContainer "AUTO" und nicht "ChefZ_EmptyPlate": zurueck kommt genau
-    // der Behaelter, der benutzt wurde (16 §4). Ein spaeter hinzugefuegter
-    // Holzteller funktioniert damit sofort, ohne dass hier eine Zeile faellt.
+    // Kein returnContainer und keine containerCategory: seit dem 30.10.2026
+    // gibt es keinen Teller mehr, Tellergerichte kommen ohne Behaelter.
     //==========================================================================
 
     class ChefZ_DishesAPlate
@@ -3325,8 +3299,7 @@ class CfgChefZIngredients
         quantityUnit      = "PIECE";
         unitsPerWholeItem = 1;
         decays            = 1;
-        containerCategory = "PLATE";
-        returnContainer   = "ChefZ_EmptyPlate";
+        // Kein Behaelter: der Teller ist am 30.10.2026 entfallen.
     };
 
     class ChefZ_SurvivorSpaghetti : ChefZ_DishesAPlate {};
@@ -3389,8 +3362,7 @@ class CfgChefZIngredients
         quantityUnit      = "PIECE";
         unitsPerWholeItem = 1;
         decays            = 1;
-        containerCategory = "PLATE";
-        returnContainer   = "ChefZ_EmptyPlate";
+        // Kein Behaelter: der Teller ist am 30.10.2026 entfallen.
     };
 
     class ChefZ_PumpkinSoupBowl : ChefZ_DishesVanillaBowl {};
@@ -3432,11 +3404,11 @@ class CfgChefZ
     // Eigener Knoten, weil CfgChefZ genau einen Knoten je SLICE traegt
     // (02 §4) - nicht je Modul. Dieses Modul ist ein geteilter Ordner.
     //
-    // handcraftRecipeSlots = 5: dieser Slice bringt GENAU FUENF Transforms
-    // mit, deren Prozess exec = "HANDCRAFT" hat -
+    // handcraftRecipeSlots = 4: dieser Slice bringt GENAU VIER Transforms
+    // mit, deren Prozess exec = "HANDCRAFT" hat (TR_CarveWoodenPlate ist am
+    // 30.10.2026 mit dem Teller entfallen) -
     //
-    //   Tableware.json   TR_CarveWoodenPlate    PROCESS_CARVE_PLATE
-    //                    TR_CarveWoodenBowl     PROCESS_CARVE_BOWL
+    //   Tableware.json   TR_CarveWoodenBowl     PROCESS_CARVE_BOWL
     //   Containers.json  TR_BowlFromBark        PROCESS_CARVE_BOWL_BARK
     //                    TR_BoxFromPaper        PROCESS_FOLD_BOX
     //                    TR_CansFromMetalSheet  PROCESS_CUT_CANS
@@ -3457,7 +3429,7 @@ class CfgChefZ
     // von den Gerichteslices gelesen, nicht umgekehrt. Der Core haengt
     // Records nicht voneinander ab; die Reihenfolge ist Vorsorge.
     //
-    // ZWEI dataFiles: Tableware.json bringt die beiden Schnitzvorgaenge aus
+    // ZWEI dataFiles: Tableware.json bringt den Schnitzvorgang aus
     // Brennholz, Containers.json die drei craftbaren Verpackungen aus
     // DME-Plan §32. Getrennte Dateien, weil ein Teller kein Verpackungs-
     // material ist und die beiden Gruppen verschiedene Fragen beantworten.
@@ -3465,7 +3437,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 310;
-        handcraftRecipeSlots = 5;
+        handcraftRecipeSlots = 4;
         dataFiles[] =
         {
             // DREI dataFiles seit dem 31.08.2026. Craftables.json bindet die

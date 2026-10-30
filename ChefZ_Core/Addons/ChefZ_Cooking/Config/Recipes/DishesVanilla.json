@@ -303,7 +303,6 @@
                     "cls": "ChefZ_SmallFishPan",
                     "quantity": 200,
                     "quantityMode": "fixed",
-                    "returnContainer": "ChefZ_EmptyPlate",
                     "setState": "COOKED",
                     "inheritQuality": true,
                     "inheritFreshness": false,

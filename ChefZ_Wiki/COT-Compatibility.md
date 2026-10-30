@@ -101,13 +101,18 @@ in **exactly one** category.
 |---:|---|---|---:|
 | 1 | `chefz_cot_ingredients` | ChefZ / Ingredients | **13** |
 | 2 | `chefz_cot_herbs` | ChefZ / Herbs and Spices | **17** |
-| 3 | `chefz_cot_meat` | ChefZ / Meat and Sausage | **26** |
+| 3 | `chefz_cot_meat` | ChefZ / Meat and Sausage | **20** |
 | 4 | `chefz_cot_baking` | ChefZ / Dough, Bread and Pasta | **5** |
 | 5 | `chefz_cot_dairy` | ChefZ / Dairy | **3** |
 | 6 | `chefz_cot_stations` | ChefZ / Stations and Tools | **9** |
 | 7 | `chefz_cot_dishes` | ChefZ / Dishes | **50** |
 | 8 | `chefz_cot_containers` | ChefZ / Containers | **5** |
-| | | **Total** | **128** |
+| | | **Total** | **122** |
+
+> **2026-10-30:** only the Meat and Sausage and the Containers rows were recounted
+> from the file (Salted Meat, Salted Fish and the wooden plate were removed; the
+> dried/smoked meat and fish classes had already gone on 2026-10-27). The other rows
+> are from 2026-08-29 and have not been recounted since.
 
 > **Recounted 2026-08-29.** The table above stood at 168 and had not been counted
 > since before the vanilla swap: the cut vegetables, the ChefZ milk and casing and
@@ -192,9 +197,9 @@ ChefZ_BlackPepper      ChefZ_HerbMix          ChefZ_HunterSeasoning
 Deliberately **not** split by processing stage. An admin looks for "thyme", not for
 "thyme, stage 2 of 3"; the four base classes behind these are not their problem.
 
-### 3. Meat and Sausage (26)
+### 3. Meat and Sausage (20)
 
-Minced meat, fat, casing, raw and cooked sausage — plus the eight preserved goods.
+Minced meat, raw and cooked sausage — plus the two preserved sausages.
 
 ```
 ChefZ_MincedMeat       ChefZ_MincedPork       ChefZ_MincedVenison
@@ -203,10 +208,13 @@ ChefZ_RawSausage       ChefZ_RawPorkSausage   ChefZ_RawVenisonSausage
 ChefZ_RawBoarSausage   ChefZ_RawHunterSausage ChefZ_RawSpicySausage
 ChefZ_CookedSausage    ChefZ_PorkSausage      ChefZ_VenisonSausage
 ChefZ_BoarSausage      ChefZ_HunterSausage    ChefZ_SpicySausage
-ChefZ_SaltedMeat       ChefZ_DriedMeat        ChefZ_SmokedMeat
-ChefZ_SaltedFish       ChefZ_DriedFish        ChefZ_SmokedFish
 ChefZ_SmokedSausage    ChefZ_DrySausage
 ```
+
+Since 2026-10-30 there is no salted, dried or separately classed smoked meat or fish
+any more: `ChefZ_SaltedMeat` and `ChefZ_SaltedFish` were removed, and smoking
+keeps the original item and only changes its state. What follows is history for the
+sausages that remain.
 
 **Note the compromise.** The preserved goods from `ChefZ_Preservation` have their
 own base class (`ChefZ_PreservedFood_Base`) and their own addon, and they are still
@@ -216,8 +224,8 @@ and sausage. Adding a ninth category would have been an unilateral extension of 
 brief.
 
 The price of that decision, stated openly: **`ChefZ_SaltedFish`, `ChefZ_DriedFish`
-and `ChefZ_SmokedFish` are therefore also under "Meat and Sausage".** If you are
-looking for fish, that is where it is.
+and `ChefZ_SmokedFish` were therefore also under "Meat and Sausage"** — all three
+classes are gone now (the last, `ChefZ_SaltedFish`, on 2026-10-30).
 
 ### 4. Dough, Bread and Pasta (5)
 
@@ -301,12 +309,13 @@ a recipe produces the dish directly. See
 ### 8. Containers (5)
 
 ```
-ChefZ_EmptyPlate       ChefZ_EmptyBowl        ChefZ_EmptyCan
-ChefZ_EmptyJar         ChefZ_EmptyBox
+ChefZ_EmptyBowl        ChefZ_EmptyCan         ChefZ_EmptyJar
+ChefZ_EmptyBox         ChefZ_MilkCan
 ```
 
-Separated from Stations and Tools even though both are inedible: a plate is a
-consumable handed out in quantity, a cheese press is a single item.
+Separated from Stations and Tools even though both are inedible: a bowl is a
+consumable handed out in quantity, a cheese press is a single item. `ChefZ_EmptyPlate`
+was removed on 2026-10-30.
 
 ## Why class lists and not base classes
 

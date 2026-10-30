@@ -1,0 +1,16 @@
+{
+ "_comment": "Higgsfield-Lieferung vom 30.10.2026 (Abend): Referenzbild gpt_image_2_5 -> image_to_3d (Meshy, texturiert). Salzstreuer fuer ChefZ_Salt/ChefZ_RawSalt (Rohsalz = getoente Textur), Koernerbeutel fuer ChefZ_Wheat und ChefZ_MushroomCulture, Thymian-Wildpflanze fuer ChefZ_WildThyme. Quelle C:/Users/Administrator/Downloads/Neue 3D Assets/Higgsfield_20261030/<name>.glb, Textur per tools/chefz-assets/glb_texture.py aus der GLB gezogen. Higgsfield-Jobs: Bild 8006551a/b3efe8ae/3286cc87, 3D 1ac20d9b/2cf5c401/695b5cf8. Eigene Gruppenordner, weil build_delivery_local.py je Gruppe die model.cfg neu schreibt.",
+ "source_root": "C:/Users/Administrator/Downloads/Neue 3D Assets/Higgsfield_20261030",
+ "project_root": "../../..",
+ "defaults": {"template": "item", "texture_size": 512, "selection": "camo", "states": []},
+ "groups": {
+  "saltshaker": {"target": "ChefZ\\ChefZ_Items\\saltshaker", "template": "item", "texture_size": 512, "selection": "camo", "states": []},
+  "grainsack":  {"target": "ChefZ\\ChefZ_Items\\grainsack",  "template": "item", "texture_size": 512, "selection": "camo", "states": []},
+  "wildthyme":  {"target": "ChefZ\\ChefZ_Plants\\wildthyme", "template": "item", "texture_size": 512, "selection": "camo", "states": []}
+ },
+ "assets": [
+  {"name": "SaltShaker", "file": "saltshaker", "group": "saltshaker", "source": "saltshaker.glb", "texture": "saltshaker_texture.jpg", "length": 0.11, "mass": 0.15, "bind": ["ChefZ_Salt", "ChefZ_RawSalt"]},
+  {"name": "GrainSack",  "file": "grainsack",  "group": "grainsack",  "source": "grainsack.glb",  "texture": "grainsack_texture.jpg",  "length": 0.30, "mass": 1.0,  "bind": ["ChefZ_Wheat", "ChefZ_MushroomCulture"]},
+  {"name": "WildThyme",  "file": "wildthyme",  "group": "wildthyme",  "source": "thyme.glb",      "texture": "thyme_texture.jpg",      "length": 0.30, "mass": 0.3,  "bind": ["ChefZ_WildThyme"]}
+ ]
+}

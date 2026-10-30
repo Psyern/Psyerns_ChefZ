@@ -122,15 +122,16 @@ class ChefZ_DishesAPlate
     quantityUnit      = "PIECE";
     unitsPerWholeItem = 1;
     decays            = 1;
-    containerCategory = "PLATE";
-    returnContainer   = "ChefZ_EmptyPlate";
+    // no container: the wooden plate was removed on 2026-10-30
 };
 ```
 
-`returnContainer` is what leaves the empty plate behind on the last bite; it is a
-fixed class, never `"AUTO"` (nothing is served any more, so there is no "used
-container" to resolve). Change it to `"ChefZ_EmptyBowl"` and the dish leaves a
-bowl instead — `ChefZ_MilkRice` does exactly that.
+A plate dish has no `containerCategory` and no `returnContainer` since 2026-10-30
+(the wooden plate and the category `PLATE` were removed): it is eaten without a
+container and returns nothing. To leave a bowl behind on the last bite, set
+`containerCategory = "BOWL"` and `returnContainer = "ChefZ_EmptyBowl"` —
+`ChefZ_MilkRice` does exactly that. `returnContainer` is a fixed class, never
+`"AUTO"` (nothing is served any more, so there is no "used container" to resolve).
 
 ### Step 3 — the recipe
 
@@ -165,7 +166,6 @@ eight slots and two grade rules):
     {
       "cls": "ChefZ_SausagePasta",
       "quantity": 200, "quantityMode": "fixed",
-      "returnContainer": "ChefZ_EmptyPlate",
       "inheritQuality": true, "inheritState": true,
       "setState": "COOKED"
     }
@@ -503,7 +503,7 @@ If you add a food class outside that chain, add the action yourself.
 nourishes nothing. There is no error message for this.
 
 `chefznut.mjs` reports it as a warning — currently 8 of them, all for classes
-that arguably should not be eaten anyway (seeds, empty plates, raw salt).
+that arguably should not be eaten anyway (seeds, empty bowls, raw salt).
 
 ### `handcraftRecipeSlots` must be declared, or no craft recipe appears
 

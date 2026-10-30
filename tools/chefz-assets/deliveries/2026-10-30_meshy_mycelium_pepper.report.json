@@ -1,0 +1,327 @@
+{
+ "manifest": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\tools\\chefz-assets\\deliveries\\2026-10-30_meshy_mycelium_pepper.json",
+ "runner": "tools/chefz-assets/build_delivery_local.py",
+ "duration": 4.7,
+ "blender_exit": 0,
+ "mirrored_files": 26,
+ "results": [
+  {
+   "name": "SporePacket",
+   "group": "mycelium",
+   "bind": [],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Devices\\mycelium\\models\\sporepacket.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\mycelium\\data\\SporePacket_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mycelium\\data\\SporePacket_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 0.02 kg"
+   ],
+   "source_tris": 210,
+   "size_m": [
+    0.094,
+    0.12,
+    0.027
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SporePacket"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SporePacket_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SporePacket_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SporePacket_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SporePacket_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SporePacket_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mycelium\\models\\sporepacket.p3d",
+   "lods": [
+    "resolution0:210f",
+    "resolution1:146f",
+    "resolution2:104f",
+    "resolution3:62f",
+    "shadow_volume0:104f",
+    "geometry0:96f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:96f",
+    "fire_geometry0:96f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "MyceliumBag",
+   "group": "mycelium",
+   "bind": [],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Devices\\mycelium\\models\\myceliumbag.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\mycelium\\data\\MyceliumBag_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mycelium\\data\\MyceliumBag_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 1.0 kg"
+   ],
+   "source_tris": 218,
+   "size_m": [
+    0.273,
+    0.226,
+    0.28
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: MyceliumBag"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle MyceliumBag_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: MyceliumBag_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: MyceliumBag_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: MyceliumBag_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: MyceliumBag_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mycelium\\models\\myceliumbag.p3d",
+   "lods": [
+    "resolution0:218f",
+    "resolution1:152f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:118f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:118f",
+    "fire_geometry0:118f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "Peppercorns",
+   "group": "peppercorns",
+   "bind": [
+    "ChefZ_PepperBerries"
+   ],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Food\\peppercorns\\models\\peppercorns.p3d",
+   "texture": "ChefZ\\ChefZ_Food\\peppercorns\\data\\Peppercorns_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\peppercorns\\data\\Peppercorns_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\peppercorns\\data\\Peppercorns_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\peppercorns\\data\\Peppercorns_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\peppercorns\\data\\Peppercorns_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\peppercorns\\data\\Peppercorns_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\peppercorns\\data\\Peppercorns_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 0.05 kg"
+   ],
+   "source_tris": 1538,
+   "size_m": [
+    0.07,
+    0.07,
+    0.019
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Peppercorns"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Peppercorns_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Peppercorns_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Peppercorns_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Peppercorns_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Peppercorns_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Food\\peppercorns\\models\\peppercorns.p3d",
+   "lods": [
+    "resolution0:1538f",
+    "resolution1:1076f",
+    "resolution2:768f",
+    "resolution3:460f",
+    "shadow_volume0:768f",
+    "geometry0:158f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:158f",
+    "fire_geometry0:158f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  }
+ ]
+}

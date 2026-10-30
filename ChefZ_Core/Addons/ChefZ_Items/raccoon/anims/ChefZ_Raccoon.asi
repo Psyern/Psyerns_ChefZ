@@ -1,0 +1,10 @@
+$animsetinstance {
+ #template "DZ/animals/animations/!graph_files/AmbientLife/AmbientLife.ast"
+ #nparents 1
+ #parent "DZ/animals/animations/!graph_files/AmbientLife/VulpesVulpes_Skeleton.asi"
+ $animations {
+   "Default.Normal.walk" "ChefZ/ChefZ_Items/raccoon/anims/raccoon_walk.anm"
+   "Default.Normal.walk_eating" "ChefZ/ChefZ_Items/raccoon/anims/raccoon_walk_eating.anm"
+   "Default.Normal.walk_eating_idle_1" "ChefZ/ChefZ_Items/raccoon/anims/raccoon_walk_eating_idle_1.anm"
+ }
+}

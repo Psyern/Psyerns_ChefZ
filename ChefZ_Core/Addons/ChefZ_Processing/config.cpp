@@ -1275,10 +1275,9 @@ class CfgChefZ
     // Ein zweiter Datensatz gleicher ID waere ein doppelter Record desselben
     // Rangs, und ChefZ_RecordSink weist einen solchen ab, statt ihn zu patchen.
     //
-    // handcraftRecipeSlots = 0: der einzige HANDCRAFT-Prozess des Slice
-    // (PROCESS_SALT_CURE) traegt seine beiden Transforms in ChefZ_Preservation,
-    // und dort sind die zwei Plaetze auch reserviert. Zweimal reservieren hiesse
-    // vier Plaetze belegen und zwei davon leer lassen.
+    // handcraftRecipeSlots = 0: der Slice hat keinen HANDCRAFT-Transform. Der
+    // fruehere einzige, das Poekeln (PROCESS_SALT_CURE), ist am 30.10.2026 mit
+    // ChefZ_SaltedMeat und ChefZ_SaltedFish entfallen.
     class ChefZ_PreservationStations
     {
         chefzApiVersion = 1;
@@ -1552,31 +1551,6 @@ class CfgChefZProcesses
         displayName = "#STR_CHEFZ_PROC_SMOKE";
         baseDurationSec = 300.0;
         requiresHeat = 1;
-    };
-
-    // §43/§45: Salzen und Poekeln. HANDCRAFT, und das ist die einzige
-    // Ausfuehrungsform, die hier passt:
-    //
-    // - Der Vorgang hat KEINEN Ort. §43 und DME-Plan §31.1 nennen "Raw Meat +
-    //   Salt" und keine Station. Wer gerade ein Reh zerlegt hat, soll es
-    //   einsalzen koennen, ohne erst eine Station zu bauen - Poekeln ist der
-    //   frueheste Schritt der Konservierungskette.
-    // - Er hat GENAU ZWEI Eingaenge, Fleisch und Salz. Das ist woertlich die
-    //   Form, die Vanillas RecipeBase traegt: MAX_NUMBER_OF_INGREDIENTS = 2
-    //   (01 V12). Beide Plaetze sind mit Zutaten belegt - deshalb steht hier
-    //   KEINE toolGroups-Zeile. Ein Werkzeug waere der dritte Platz, und den
-    //   gibt es nicht.
-    //
-    // baseDurationSec = 6: kein Wartevorgang. Das Einreiben dauert Sekunden,
-    // die Haltbarkeit entsteht danach von selbst.
-    class PROCESS_SALT_CURE
-    {
-        exec = "HANDCRAFT";
-        displayName = "#STR_CHEFZ_PROC_SALT_CURE";
-        baseDurationSec = 6.0;
-        animationLength = 1.0;
-        specialty = 0.02;
-        toolDamage = 0;
     };
 
     //--------------------------------------------------------------------------

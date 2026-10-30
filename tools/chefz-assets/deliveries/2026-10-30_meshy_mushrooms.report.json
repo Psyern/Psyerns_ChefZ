@@ -1,0 +1,1457 @@
+{
+ "manifest": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\tools\\chefz-assets\\deliveries\\2026-10-30_meshy_mushrooms.json",
+ "runner": "tools/chefz-assets/build_delivery_local.py",
+ "duration": 27.6,
+ "blender_exit": 0,
+ "mirrored_files": 79,
+ "results": [
+  {
+   "name": "ButtonMushroom",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\buttonmushroom.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\ButtonMushroom_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ButtonMushroom_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ButtonMushroom_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ButtonMushroom_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ButtonMushroom_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ButtonMushroom_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ButtonMushroom_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 538,
+   "size_m": [
+    0.08,
+    0.079,
+    0.08
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: ButtonMushroom"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle ButtonMushroom_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: ButtonMushroom_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: ButtonMushroom_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: ButtonMushroom_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: ButtonMushroom_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\buttonmushroom.p3d",
+   "lods": [
+    "resolution0:538f",
+    "resolution1:376f",
+    "resolution2:269f",
+    "resolution3:161f",
+    "shadow_volume0:280f",
+    "geometry0:290f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:290f",
+    "fire_geometry0:290f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "Chanterelle",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\chanterelle.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\Chanterelle_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Chanterelle_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Chanterelle_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Chanterelle_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Chanterelle_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Chanterelle_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Chanterelle_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 556,
+   "size_m": [
+    0.08,
+    0.068,
+    0.08
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Chanterelle"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Chanterelle_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Chanterelle_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Chanterelle_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Chanterelle_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Chanterelle_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\chanterelle.p3d",
+   "lods": [
+    "resolution0:556f",
+    "resolution1:388f",
+    "resolution2:278f",
+    "resolution3:166f",
+    "shadow_volume0:278f",
+    "geometry0:136f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:136f",
+    "fire_geometry0:136f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "HedgehogMushroom",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\hedgehogmushroom.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\HedgehogMushroom_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\HedgehogMushroom_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\HedgehogMushroom_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\HedgehogMushroom_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\HedgehogMushroom_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\HedgehogMushroom_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\HedgehogMushroom_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 216,
+   "size_m": [
+    0.09,
+    0.089,
+    0.09
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: HedgehogMushroom"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle HedgehogMushroom_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: HedgehogMushroom_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: HedgehogMushroom_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: HedgehogMushroom_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: HedgehogMushroom_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\hedgehogmushroom.p3d",
+   "lods": [
+    "resolution0:216f",
+    "resolution1:150f",
+    "resolution2:108f",
+    "resolution3:64f",
+    "shadow_volume0:108f",
+    "geometry0:112f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:112f",
+    "fire_geometry0:112f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "Morel",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\morel.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\Morel_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Morel_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Morel_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Morel_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Morel_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Morel_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Morel_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 560,
+   "size_m": [
+    0.064,
+    0.066,
+    0.1
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Morel"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Morel_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Morel_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Morel_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Morel_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Morel_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\morel.p3d",
+   "lods": [
+    "resolution0:560f",
+    "resolution1:392f",
+    "resolution2:280f",
+    "resolution3:168f",
+    "shadow_volume0:280f",
+    "geometry0:256f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:256f",
+    "fire_geometry0:256f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "OysterMushroom",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\oystermushroom.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\OysterMushroom_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\OysterMushroom_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\OysterMushroom_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\OysterMushroom_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\OysterMushroom_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\OysterMushroom_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\OysterMushroom_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 552,
+   "size_m": [
+    0.12,
+    0.117,
+    0.066
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: OysterMushroom"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle OysterMushroom_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: OysterMushroom_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: OysterMushroom_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: OysterMushroom_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: OysterMushroom_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\oystermushroom.p3d",
+   "lods": [
+    "resolution0:552f",
+    "resolution1:386f",
+    "resolution2:276f",
+    "resolution3:164f",
+    "shadow_volume0:276f",
+    "geometry0:226f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:226f",
+    "fire_geometry0:226f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "Porcini",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "Variante c20c3cb6 statt 3ef84182 (siehe _comment)",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\porcini.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\Porcini_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Porcini_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Porcini_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Porcini_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Porcini_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Porcini_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\Porcini_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 552,
+   "size_m": [
+    0.123,
+    0.125,
+    0.14
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Porcini"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Porcini_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Porcini_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Porcini_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Porcini_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Porcini_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\porcini.p3d",
+   "lods": [
+    "resolution0:552f",
+    "resolution1:386f",
+    "resolution2:276f",
+    "resolution3:164f",
+    "shadow_volume0:276f",
+    "geometry0:348f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:348f",
+    "fire_geometry0:348f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "SaffronMilkCap",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\saffronmilkcap.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\SaffronMilkCap_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\SaffronMilkCap_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\SaffronMilkCap_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\SaffronMilkCap_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\SaffronMilkCap_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\SaffronMilkCap_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\SaffronMilkCap_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 548,
+   "size_m": [
+    0.1,
+    0.1,
+    0.076
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SaffronMilkCap"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SaffronMilkCap_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SaffronMilkCap_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SaffronMilkCap_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SaffronMilkCap_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SaffronMilkCap_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\saffronmilkcap.p3d",
+   "lods": [
+    "resolution0:548f",
+    "resolution1:382f",
+    "resolution2:274f",
+    "resolution3:164f",
+    "shadow_volume0:274f",
+    "geometry0:224f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:224f",
+    "fire_geometry0:224f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "ShaggyInkCap",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\shaggyinkcap.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyInkCap_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyInkCap_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyInkCap_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyInkCap_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyInkCap_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyInkCap_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyInkCap_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 518,
+   "size_m": [
+    0.047,
+    0.047,
+    0.14
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: ShaggyInkCap"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle ShaggyInkCap_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: ShaggyInkCap_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: ShaggyInkCap_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: ShaggyInkCap_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: ShaggyInkCap_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 2 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshuelle (206 Flaechen)",
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\shaggyinkcap.p3d",
+   "lods": [
+    "resolution0:518f",
+    "resolution1:362f",
+    "resolution2:258f",
+    "resolution3:154f",
+    "shadow_volume0:206f",
+    "geometry0:206f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:206f",
+    "fire_geometry0:206f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "ShaggyParasol",
+   "group": "mushrooms",
+   "bind": [],
+   "note": "",
+   "selection": "cs_raw",
+   "model": "\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\shaggyparasol.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyParasol_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyParasol_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyParasol_baked_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyParasol_boiled_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyParasol_dried_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyParasol_burnt_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\data\\ShaggyParasol_rotten_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 541,
+   "size_m": [
+    0.171,
+    0.166,
+    0.2
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: ShaggyParasol"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle ShaggyParasol_Geometry (1 Komponente(n), 0.5 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: ShaggyParasol_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: ShaggyParasol_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: ShaggyParasol_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: ShaggyParasol_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 2 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshuelle (232 Flaechen)",
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\mushrooms\\models\\shaggyparasol.p3d",
+   "lods": [
+    "resolution0:541f",
+    "resolution1:377f",
+    "resolution2:269f",
+    "resolution3:161f",
+    "shadow_volume0:232f",
+    "geometry0:232f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:232f",
+    "fire_geometry0:232f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "MushroomTray",
+   "group": "mushroom",
+   "bind": [],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Devices\\mushroom\\models\\mushroomtray.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\mushroom\\data\\MushroomTray_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\data\\MushroomTray_co.paa",
+     "exit": 0,
+     "ok": true
+    },
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\data\\MushroomTray_inoculated_co.paa",
+     "exit": 0,
+     "ok": true,
+     "soil_pixels": 193160,
+     "covered_pixels": 60628
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 2.0 kg",
+    "Erdflaeche: 194 UV-Dreiecke fuer die Myzel-Textur"
+   ],
+   "source_tris": 520,
+   "size_m": [
+    0.5,
+    0.376,
+    0.117
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: MushroomTray"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle MushroomTray_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: MushroomTray_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: MushroomTray_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: MushroomTray_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: MushroomTray_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "soil": [
+    {
+     "x": -0.14,
+     "y": -0.045,
+     "soil_z": 0.0739,
+     "normal_z": 0.897
+    },
+    {
+     "x": 0.0,
+     "y": 0.045,
+     "soil_z": 0.0848,
+     "normal_z": 0.951
+    },
+    {
+     "x": 0.14,
+     "y": -0.045,
+     "soil_z": 0.0675,
+     "normal_z": 0.99
+    }
+   ],
+   "proxy_clashes": [],
+   "proxies": [
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_traymushroom_1.001",
+     "blender_xyz": [
+      -0.14,
+      -0.0451,
+      0.0749
+     ]
+    },
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_traymushroom_2.001",
+     "blender_xyz": [
+      0.0,
+      0.0451,
+      0.0858
+     ]
+    },
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_traymushroom_3.001",
+     "blender_xyz": [
+      0.14,
+      -0.0451,
+      0.0685
+     ]
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\models\\mushroomtray.p3d",
+   "lods": [
+    "resolution0:523f",
+    "resolution1:367f",
+    "resolution2:263f",
+    "resolution3:159f",
+    "shadow_volume0:284f",
+    "geometry0:222f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:222f",
+    "fire_geometry0:222f"
+   ],
+   "status_model": "OK",
+   "proxy_files": [
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_traymushroom_1.p3d",
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_traymushroom_2.p3d",
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_traymushroom_3.p3d"
+   ],
+   "status": "OK"
+  },
+  {
+   "name": "MushroomShelf",
+   "group": "mushroom",
+   "bind": [],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Devices\\mushroom\\models\\mushroomshelf.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\mushroom\\data\\MushroomShelf_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\data\\MushroomShelf_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 25.0 kg"
+   ],
+   "source_tris": 502,
+   "size_m": [
+    1.495,
+    0.788,
+    1.6
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: MushroomShelf"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle MushroomShelf_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: MushroomShelf_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: MushroomShelf_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: MushroomShelf_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: MushroomShelf_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "boards": [
+    {
+     "z": 0.181,
+     "x": [
+      -0.681,
+      0.68
+     ],
+     "y": [
+      -0.394,
+      0.394
+     ],
+     "area": 1.079,
+     "clear_above": 0.531,
+     "rays_hit": [
+      49,
+      49
+     ]
+    },
+    {
+     "z": 0.712,
+     "x": [
+      -0.669,
+      0.669
+     ],
+     "y": [
+      -0.392,
+      0.391
+     ],
+     "area": 1.033,
+     "clear_above": 0.576,
+     "rays_hit": [
+      49,
+      49
+     ]
+    },
+    {
+     "z": 1.288,
+     "x": [
+      -0.66,
+      0.664
+     ],
+     "y": [
+      -0.392,
+      0.392
+     ],
+     "area": 1.028,
+     "clear_above": 1.312,
+     "rays_hit": [
+      49,
+      49
+     ]
+    }
+   ],
+   "proxy_clashes": [],
+   "proxies": [
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_1.001",
+     "blender_xyz": [
+      -0.3405,
+      0.0003,
+      0.182
+     ]
+    },
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_2.001",
+     "blender_xyz": [
+      0.34,
+      0.0003,
+      0.1808
+     ]
+    },
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_3.001",
+     "blender_xyz": [
+      -0.3343,
+      -0.0005,
+      0.7092
+     ]
+    },
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_4.001",
+     "blender_xyz": [
+      0.3344,
+      -0.0005,
+      0.709
+     ]
+    },
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_5.001",
+     "blender_xyz": [
+      -0.3294,
+      -0.0,
+      1.2861
+     ]
+    },
+    {
+     "name": "proxy:\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_6.001",
+     "blender_xyz": [
+      0.3327,
+      -0.0,
+      1.2853
+     ]
+    }
+   ],
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\models\\mushroomshelf.p3d",
+   "lods": [
+    "resolution0:508f",
+    "resolution1:356f",
+    "resolution2:256f",
+    "resolution3:156f",
+    "shadow_volume0:250f",
+    "geometry0:66f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:66f",
+    "fire_geometry0:66f"
+   ],
+   "status_model": "OK",
+   "proxy_files": [
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_1.p3d",
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_2.p3d",
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_3.p3d",
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_4.p3d",
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_5.p3d",
+    "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\mushroom\\proxies\\chefz_mushroomtray_6.p3d"
+   ],
+   "status": "OK"
+  }
+ ]
+}

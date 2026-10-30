@@ -168,4 +168,33 @@
             <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_WildStrawberry"/>
         </children>
     </event>
+    <!--
+        PILZE (### SLICE mushrooms ###, 30.10.2026) - nominal 80 und NICHT
+        140 wie ein Vanilla-Pilzevent. Die vier neuen Arten sind die
+        Edelpilze des Mods (Pfifferling, Morchel ...) und sollen seltener
+        sein als Champignon und Steinpilz: 80 Spawns auf vier Arten sind
+        rund 20 Stueck je Art in der Welt. Mehr gibt es nur ueber die Zucht
+        (Pilzregal). Ring, lifetime, cleanupradius und position=player sind
+        die Pilzwerte (db/events.xml, TrajectoryHumus).
+    -->
+    <event name="ChefZTrajectoryMushrooms">
+        <nominal>80</nominal>
+        <min>2</min>
+        <max>4</max>
+        <lifetime>180</lifetime>
+        <restock>0</restock>
+        <saferadius>25</saferadius>
+        <distanceradius>100</distanceradius>
+        <cleanupradius>25</cleanupradius>
+        <flags deletable="0" init_random="0" remove_damaged="0"/>
+        <position>player</position>
+        <limit>mixed</limit>
+        <active>1</active>
+        <children>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_Chanterelle"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_HedgehogMushroom"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_Morel"/>
+            <child lootmax="0" lootmin="0" max="0" min="0" type="ChefZ_ShaggyInkCap"/>
+        </children>
+    </event>
 </events>

@@ -87,6 +87,7 @@ class ChefZ_TerjeSkillsConfig
 
     //--- Nachschlagetabellen --------------------------------------------------
     private static ref map<string, int> s_Lookup;
+    private static ref map<string, string> s_TextLookup;
 
     //==========================================================================
     // Laden
@@ -107,6 +108,7 @@ class ChefZ_TerjeSkillsConfig
         s_Loaded = true;
 
         s_Lookup = new map<string, int>();
+        s_TextLookup = new map<string, string>();
         s_HarvestTags = new array<string>();
         s_HighlightRange = new array<float>();
 
@@ -274,6 +276,35 @@ class ChefZ_TerjeSkillsConfig
     static int HarvestClassXp(string className, int fallback)
     {
         return LookupInt(ROOT + " ChefZ_Xp ChefZ_Harvest ChefZ_Classes", className, fallback);
+    }
+
+    /**
+     * Terje-Skill, in den ein Prozess einzahlt, oder fallback.
+     *
+     * Ob es den Skill auf diesem Server gibt, prueft erst
+     * ChefZ_TerjeSkillsBridge.AddXp - hier steht nur, was die Config will.
+     */
+    static string ProcessSkill(string processId, string fallback)
+    {
+        Load();
+
+        if (processId == "")
+            return fallback;
+
+        string full = ROOT + " ChefZ_Xp ChefZ_Process ChefZ_ProcessSkills " + processId;
+
+        // Wie LookupInt: auch das Fehlen wird gemerkt, als "".
+        string cached;
+        if (!s_TextLookup.Find(full, cached))
+        {
+            cached = GetText(full, "");
+            s_TextLookup.Set(full, cached);
+        }
+
+        if (cached == "")
+            return fallback;
+
+        return cached;
     }
 
     /**

@@ -138,24 +138,23 @@ Keyed on the **process ID**, resolved from the reported transform via
 |---|---:|---|
 | `PROCESS_CUT_MEAT` | 1 | |
 | `PROCESS_CARVE_BOWL` | 1 | |
-| `PROCESS_CARVE_PLATE` | 1 | |
 | `PROCESS_GRIND_MEAT` | 2 | |
 | `PROCESS_SEPARATE_CREAM` | 2 | |
 | `PROCESS_GRIND_HERB` | 2 | |
 | `PROCESS_GRIND_SPICE` | 2 | |
 | `PROCESS_ROLL` | 2 | step 1 of pasta |
 | `PROCESS_DRY_SALT` | 2 | step 2 of salt |
-| `PROCESS_SALT_CURE` | 2 | step 1 of dried/cured meat |
 | `PROCESS_CHURN_BUTTER` | 3 | |
 | `PROCESS_PRESS_CHEESE` | 3 | |
 | `PROCESS_BOIL_BRINE` | 3 | step 1 of salt |
 | `PROCESS_MILL` | 3 | flour |
 | `PROCESS_KNEAD` | 3 | dough |
-| `PROCESS_DRY` | 3 | herbs, pepper; also step 2 of dried meat |
+| `PROCESS_DRY` | 3 | herbs, pepper |
 | `PROCESS_SMOKE` | 3 | step 2 of smoked sausage |
 | `PROCESS_STUFF_SAUSAGE` | 5 | |
 
-Eighteen of the **31** process IDs in the ChefZ data set are listed. `defaultXp = 1`
+Sixteen process IDs are listed (eighteen before 2026-10-30, when `PROCESS_SALT_CURE`
+and `PROCESS_CARVE_PLATE` were removed with salt-curing and the wooden plate). `defaultXp = 1`
 covers the rest — the five beekeeping build steps, `PROCESS_RAISE_HIVE`,
 `PROCESS_EXTEND_HIVE`, `PROCESS_HARVEST_HIVE`, `PROCESS_UNCAP_COMB`,
 `PROCESS_SPIN_HONEY`, `PROCESS_CARVE_BOWL_BARK`, `PROCESS_CUT_CANS`,
@@ -179,12 +178,13 @@ process value. Two entries exist:
 |---|---|---:|
 | Salt from brine | `PROCESS_BOIL_BRINE` 3 + `PROCESS_DRY_SALT` 2 | 5 |
 | Pasta | `TR_DoughToRawPasta` 5 | 5 |
-| Dried meat | `PROCESS_SALT_CURE` 2 + `PROCESS_DRY` 3 | 5 |
 | Smoked sausage | `PROCESS_STUFF_SAUSAGE` 5 + `PROCESS_SMOKE` 3 | 8 |
 | Smoked fish | `TR_FishToSmoked` 5 | 5 |
 
 **Consequence worth knowing:** a player who skips a step gets only that step's
-share. Smoking meat *without* curing it first pays 3, not 5. This is intentional —
+share. Smoked meat has no chain total since 2026-10-30 — raw meat goes straight into
+the smoker and pays `PROCESS_SMOKE` 3; the "dried meat" chain (`PROCESS_SALT_CURE` 2
++ `PROCESS_DRY` 3) was removed with salt-curing. This is intentional —
 the XP follows the work actually done — but it does mean the "chain total" numbers
 only hold for players who run the full chain. See [Production-Chains](Production-Chains).
 
@@ -205,7 +205,7 @@ left out, corn is not a herb; see below).
 |---|---|---|
 | `cook` | yes | |
 | `process` | yes | |
-| `preserve` | **no** | Smoking, drying and salting already run as transforms and already report `process`. The state change into a preserved state fires `preserve` *on top*. Taking both would pay dried meat and smoked sausage twice. On top of that, the `preserve` payload carries no `identityId` — there would be nobody to credit. |
+| `preserve` | **no** | Smoking and drying already run as transforms and already report `process` (salting was removed on 2026-10-30). The state change into a preserved state fires `preserve` *on top*. Taking both would pay smoked meat and smoked sausage twice. On top of that, the `preserve` payload carries no `identityId` — there would be nobody to credit. |
 | `consume` | **no** | See [System boundaries](#system-boundaries). |
 | `discover` | **no** | A first-time recipe success already paid through `cook` in the same operation. |
 

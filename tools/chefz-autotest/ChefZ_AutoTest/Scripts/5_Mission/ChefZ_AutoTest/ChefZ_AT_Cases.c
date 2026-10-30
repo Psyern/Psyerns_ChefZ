@@ -488,11 +488,6 @@ class ChefZ_AT_Cases
         c.AddOutput("ChefZ_EmptyCan");
         list.Insert(c);
 
-        c = ChefZ_AT_Case.Make("PROC", "TR_CarveWoodenPlate", "", "", "PROCESS_CARVE_PLATE");
-        c.AddInput("Firewood", 1, "", "");
-        c.AddOutput("ChefZ_EmptyPlate");
-        list.Insert(c);
-
         c = ChefZ_AT_Case.Make("PROC", "TR_CarveWoodenBowl", "", "", "PROCESS_CARVE_BOWL");
         c.AddInput("Firewood", 1, "", "");
         c.AddOutput("ChefZ_EmptyBowl");
@@ -860,43 +855,10 @@ class ChefZ_AT_Cases
         c.AddOutput("ChefZ_RawSpicySausage");
         list.Insert(c);
 
-        c = ChefZ_AT_Case.Make("PROC", "TR_SaltedMeatToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
-        c.seconds = 3600.0;
-        c.AddInput("ChefZ_SaltedMeat", 1, "", "");
-        c.AddOutput("ChefZ_SaltedMeat");
-        c.expectStage = "DRIED";
-        list.Insert(c);
-
-        c = ChefZ_AT_Case.Make("PROC", "TR_SaltedFishToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
-        c.seconds = 2700.0;
-        c.AddInput("ChefZ_SaltedFish", 1, "", "");
-        c.AddOutput("ChefZ_SaltedFish");
-        c.expectStage = "DRIED";
-        list.Insert(c);
-
         c = ChefZ_AT_Case.Make("PROC", "TR_RawSausageToDry", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 5400.0;
         c.AddInput("ChefZ_BoarSausage", 1, "RAW", "");
         c.AddOutput("ChefZ_DrySausage");
-        list.Insert(c);
-
-        c = ChefZ_AT_Case.Make("PROC", "TR_SaltMeat", "", "", "PROCESS_SALT_CURE");
-        c.AddInput("BearSteakMeat", 1, "RAW", "");
-        c.AddInput("ChefZ_Salt", 1, "", "");
-        c.AddOutput("ChefZ_SaltedMeat");
-        list.Insert(c);
-
-        c = ChefZ_AT_Case.Make("PROC", "TR_SaltFish", "", "", "PROCESS_SALT_CURE");
-        c.AddInput("CarpFilletMeat", 1, "RAW", "");
-        c.AddInput("ChefZ_Salt", 1, "", "");
-        c.AddOutput("ChefZ_SaltedFish");
-        list.Insert(c);
-
-        c = ChefZ_AT_Case.Make("PROC", "TR_SaltedMeatToSmoked", "ChefZ_Smoker", "", "PROCESS_SMOKE");
-        c.seconds = 300.0;
-        c.AddInput("ChefZ_SaltedMeat", 1, "", "");
-        c.AddOutput("ChefZ_SaltedMeat");
-        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_RawMeatToSmoked", "ChefZ_Smoker", "", "PROCESS_SMOKE");

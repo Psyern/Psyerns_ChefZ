@@ -1,0 +1,25 @@
+{
+  "_note": "### SLICE mushrooms ### (30.10.2026) Fliegenpilz und Kahlkopf sind seit heute zuechtbar. Der Trockenrahmen und der Moerser waehlen sie ueber cls, und ein cls-Selektor auf eine undeklarierte Klasse fuellt nie einen Slot (Vorfall 31.08.2026, ChefZ_Cooking/Config/Ingredients/Craftables.json). Deshalb stehen sie hier - OHNE Kategorie und ohne Tag, wie Brennholz dort: sie sind kein Speisepilz und sollen in keinen MUSHROOM-Slot eines Rezepts fallen. Fremde Klassen (Vanilla) stehen im Slice-JSON, nicht in der config.cpp (Workflow 10.5). Die Zuchtformen ChefZ_CultivatedAmanita/-Psilocybe sind in der config.cpp dieses Moduls gebunden (ChefZ_ToxicMushroomIngredient).",
+  "kind": "ingredient",
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "AmanitaMushroom",
+      "categories": [],
+      "tags": [],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    },
+    {
+      "id": "PsilocybeMushroom",
+      "categories": [],
+      "tags": [],
+      "defaultState": "RAW",
+      "quantityUnit": "PIECE",
+      "unitsPerWholeItem": 1,
+      "decays": true
+    }
+  ]
+}

@@ -358,7 +358,8 @@ it is not an array (`chefzsym.mjs:118-119`, `:125-126`). A `transform` that simp
 omits `process` or `stationsAllowed` therefore names nothing, nothing gets checked,
 and the run stays green.
 
-Not hypothetical: on 31.08.2026 `TR_SaltedMeatToSmoked` sat in `Smoking.json`
+Not hypothetical (the transform itself was removed on 2026-10-30 with Salted
+Meat): on 31.08.2026 `TR_SaltedMeatToSmoked` sat in `Smoking.json`
 without either field, while its two siblings in the same file carried both. It
 could never have bound to the smoker. Probed after the fix by deleting the two
 lines again — **0 errors, 0 warnings, exit 0**. The suite has no opinion on a

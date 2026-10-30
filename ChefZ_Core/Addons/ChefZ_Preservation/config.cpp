@@ -1,4 +1,4 @@
-// ChefZ_Preservation - Salzen und Poekeln, Trocknen, Raeuchern.
+// ChefZ_Preservation - Trocknen und Raeuchern.
 //
 // Slice "preservation". Quellen: Production Map §40-§46 (Wurst-, Fleisch- und
 // Fischzustaende), §56 (V1 Preservation Matrix), §57 (Trockenrahmen und
@@ -10,12 +10,11 @@
 // Konservendosen. Die Zustaende PICKLED und CANNED stehen deshalb NICHT unten
 // in CfgChefZStates - ein Zustand ohne Uebergang waere eine Zusage ohne Weg.
 //
-//   Raw Meat    + Salz   --HANDCRAFT-->      ChefZ_SaltedMeat      §43
-//   SaltedMeat  + Rahmen --PROCESS_DRY-->    bleibt, Zustand DRIED §43
 //   Fleisch     + Schrank--PROCESS_SMOKE-->  bleibt, Zustand SMOKED §43
-//   Fischfilet  + Salz   --HANDCRAFT-->      ChefZ_SaltedFish      §45
-//   SaltedFish  + Rahmen --PROCESS_DRY-->    bleibt, Zustand DRIED §45
 //   Fischfilet  + Schrank--PROCESS_SMOKE-->  bleibt, Zustand SMOKED §46
+//   (30.10.2026, Vorgabe Alex: ChefZ_SaltedMeat und ChefZ_SaltedFish sind
+//   entfallen und mit ihnen das Poekeln und das Trocknen von Fleisch und
+//   Fisch. Fleisch und Fisch werden nur noch geraeuchert.)
 //   (27.10.2026: die Sammelklassen ChefZ_DriedMeat/SmokedMeat/DriedFish/
 //   SmokedFish sind entfallen - jedes Filet hat seine eigene Raeucher- und
 //   Trockenoptik.)
@@ -161,13 +160,6 @@
 // varQuantityMax = 250 waere ab jetzt ein Ergebnis mit einem halben Prozent
 // Inhalt. Deshalb:
 //
-//   Salting.json   "quantity": 1 -> 250 an beiden Ausgaengen.
-//   Drying.json    TR_SaltedMeatToDried und TR_SaltedFishToDried bleiben bei
-//   Smoking.json   "fromInput": Ein- und Ausgang sind beide Klassen DIESES
-//                  Moduls und teilen varQuantityMax, die Menge traegt sich
-//                  also richtig weiter (und ein angebissenes Stueck bleibt
-//                  angebissen).
-//
 //   TR_RawSausageToDry, TR_RawSausageToSmoked und TR_FishToSmoked dagegen
 //   nehmen ihren Eingang aus einem FREMDEN Modul (SAUSAGE aus ChefZ_Meat,
 //   FISH aus Vanilla). Deren varQuantityMax gehoert diesem Slice nicht, und
@@ -202,8 +194,6 @@ class CfgPatches
             // Filet und Fleisch bleiben, nur ihr Zustand wechselt (Smoking.json,
             // Drying.json).
             "ChefZ_PreservedFood_Base",
-            "ChefZ_SaltedMeat",
-            "ChefZ_SaltedFish",
             "ChefZ_SmokedSausage",
             "ChefZ_DrySausage"
         };
@@ -212,16 +202,12 @@ class CfgPatches
         // Jeder Eintrag steht fuer etwas, das dieses Modul TATSAECHLICH nutzt:
         //   ChefZ_Core       ChefZ_Edible_Base als Skriptbasis und der Config
         //                    Manager, der CfgChefZStates einliest
-        //   ChefZ_Processing PROCESS_DRY, PROCESS_SMOKE, PROCESS_SALT_CURE und
+        //   ChefZ_Processing PROCESS_DRY, PROCESS_SMOKE und
         //                    die Stationen ChefZ_DryingRack und ChefZ_Smoker
         //   ChefZ_Meat       ChefZ_RawSausage und die uebrigen Rohwuerste als
         //                    Eingang von Raeuchern und Trocknen
         //   DZ_Gear_Food     Edible_Base und die Proxy-Modelle
         //   DZ_Data          Grundlage von allem
-        // ChefZ_Ingredients steht bewusst NICHT hier: das Salz wird ueber die
-        // KATEGORIE "SALT" gebunden, nicht ueber eine Klasse. Eine Kategorie ist
-        // Daten und kein Addon - der Transform greift, sobald irgendein Modul
-        // etwas in diese Kategorie legt, und faellt sonst still aus.
         requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Processing", "ChefZ_Meat", "ChefZ_Food"};
     };
 };
@@ -332,7 +318,7 @@ class CfgMods
 //   auch rund 50 Items in ChefZ_Fishing, ChefZ_Meat, ChefZ_Farming und
 //   ChefZ_Baking (z.B. ChefZ_PlaiceFillet, ChefZ_Fishing/config.cpp:515 -
 //   eigener Food-Block, Uebergaenge nur auf ChefZ_FishFillet_Base Z.438), und
-//   chefzfood.mjs meldet es per Bauart nicht. Probe im Spiel: ChefZ_SaltedMeat
+//   chefzfood.mjs meldet es per Bauart nicht. Probe im Spiel: ChefZ_SmokedSausage
 //   und ChefZ_PlaiceFillet zusammen in die Pfanne. Gart nur eines von beiden,
 //   ist die Frage beantwortet.
 //
@@ -468,164 +454,6 @@ class CfgVehicles
             // steht im Abschnitt "WARUM JEDE DER ACHT KLASSEN IHREN FOOD-BLOCK
             // VOLLSTAENDIG AUSSCHREIBT" ueber class CfgVehicles. Wer hier etwas
             // aendert, aendert es dort neun Mal.
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class ChefZ_PreservedRawToBaked
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class ChefZ_PreservedRawToBoiled
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
-
-    //==========================================================================
-    // §43 - Fleisch: gesalzen, getrocknet, geraeuchert
-    //==========================================================================
-
-    // Raw Meat + Salz. Wasser wird entzogen, die Energie bleibt - deshalb
-    // weniger water und ein hoeherer Energiewert als am rohen Stueck.
-    // agents 4: Poekeln ist keine Hitze (06 §3).
-    // PROXY: meat_steak.p3d. Ziel: ein Stueck Fleisch mit Salzkruste.
-    class ChefZ_SaltedMeat : ChefZ_PreservedFood_Base
-    {
-        scope = 2;
-        // Garstufen-Texturen (27.10.2026): Grundzustand, gebraten, gekocht, getrocknet/geraeuchert, verbrannt.
-        hiddenSelections[] = {"cs_raw"};
-        hiddenSelectionsTextures[] = {"dz\gear\food\data\meat_steak_raw_CO.paa", "dz\gear\food\data\meat_steak_baked_CO.paa", "dz\gear\food\data\meat_steak_boiled_co.paa", "dz\gear\food\data\meat_steak_dried_CO.paa", "dz\gear\food\data\meat_steak_burned_CO.paa"};
-        hiddenSelectionsMaterials[] = {"dz\gear\food\data\meat_steak_raw.rvmat", "dz\gear\food\data\meat_steak_baked.rvmat", "dz\gear\food\data\meat_steak_boiled.rvmat", "dz\gear\food\data\meat_steak_dried.rvmat", "dz\gear\food\data\meat_steak_burnt.rvmat", "dz\gear\food\data\meat_steak_rotten.rvmat"};
-        displayName = "#STR_CHEFZ_ITEM_SALTEDMEAT0";
-        descriptionShort = "#STR_CHEFZ_ITEM_SALTEDMEAT1";
-        model = "\dz\gear\food\meat_steak.p3d";
-        itemSize[] = {2, 1};
-        weight = 240;
-
-        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
-        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
-        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
-        // das Stueck an, und es meldet das nirgends.
-        // + die Raeucherhaken (27.10.2026, Spieltest "Wuerste passen nicht in
-        // die Raeucherkammer").
-        inventorySlot[] =
-        {
-            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05",
-            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
-            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
-        };
-
-        // VOLUMEN: 1.96 * 250 = 490. Das schwerste Stueck Fleisch der Kette,
-        // noch mit seinem Salzwasser - deshalb weit oben im Band 300-600 und
-        // ueber Doerr- wie Rauchfleisch, genau wie im alten Wert 115.
-        // Faktor auf alle Garstufen: 1.96 / 115.
-        class Nutrition
-        {
-            fullnessIndex = 1.96;
-            energy = 165;
-            water = 25;
-            nutritionalIndex = 16;
-            toxicity = 0;
-            agents = 4;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.96, 165, 25, 16, 0, 4, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.79, 330, 12, 26, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.87, 300, 40, 26, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {1.53, 320, 5, 30, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {1.28, 85, 6, 5, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 5}; nutrition_properties[] = {1.62, 100, 18, 5, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
-            };
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class ChefZ_PreservedRawToBaked
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                    class ChefZ_PreservedRawToBoiled
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
-
-    //==========================================================================
-    // §45/§46 - Fisch: gesalzen, getrocknet, geraeuchert
-    //
-    // Das Filetieren selbst gehoert NICHT hierher (§44, Uebergabepunkt): es ist
-    // Vanilla bzw. eine Fischerei-Erweiterung. Dieses Modul beginnt beim
-    // fertigen Filet und faellt still aus, wenn keines da ist.
-    //==========================================================================
-
-    // Fischfilet + Salz. Fisch traegt weniger Energie und mehr Naehrwertindex
-    // als Fleisch - das bleibt ueber die ganze Kette so.
-    // PROXY: meat_steak.p3d. Ziel: ein flaches Salzfilet.
-    class ChefZ_SaltedFish : ChefZ_PreservedFood_Base
-    {
-        scope = 2;
-        // Garstufen-Texturen (27.10.2026): Grundzustand, gebraten, gekocht, getrocknet/geraeuchert, verbrannt.
-        hiddenSelections[] = {"cs_raw"};
-        hiddenSelectionsTextures[] = {"dz\gear\food\data\meat_steak_raw_CO.paa", "dz\gear\food\data\meat_steak_baked_CO.paa", "dz\gear\food\data\meat_steak_boiled_co.paa", "dz\gear\food\data\meat_steak_dried_CO.paa", "dz\gear\food\data\meat_steak_burned_CO.paa"};
-        hiddenSelectionsMaterials[] = {"dz\gear\food\data\meat_steak_raw.rvmat", "dz\gear\food\data\meat_steak_baked.rvmat", "dz\gear\food\data\meat_steak_boiled.rvmat", "dz\gear\food\data\meat_steak_dried.rvmat", "dz\gear\food\data\meat_steak_burnt.rvmat", "dz\gear\food\data\meat_steak_rotten.rvmat"};
-        displayName = "#STR_CHEFZ_ITEM_SALTEDFISH0";
-        descriptionShort = "#STR_CHEFZ_ITEM_SALTEDFISH1";
-        model = "\dz\gear\food\meat_steak.p3d";
-        itemSize[] = {2, 1};
-        weight = 200;
-
-        // AN WELCHE HAKEN DES TROCKENRAHMENS ES DARF (07.09.2026).
-        // Die Engine prueft beide Richtungen - siehe class CfgSlots im Kopf
-        // von ChefZ_Processing/config.cpp. Ohne dieses Feld nimmt kein Haken
-        // das Stueck an, und es meldet das nirgends.
-        inventorySlot[] =
-        {
-            "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
-            "ChefZ_DryHook04", "ChefZ_DryHook05"
-        };
-
-        // VOLUMEN: 1.52 * 250 = 380. Ein Salzfilet ist flacher als ein
-        // Poekelstueck Fleisch und fuellt weniger - alter Wert 95 gegen 115.
-        // Faktor auf alle Garstufen: 1.52 / 95 (glatt 0.016).
-        class Nutrition
-        {
-            fullnessIndex = 1.52;
-            energy = 130;
-            water = 22;
-            nutritionalIndex = 20;
-            toxicity = 0;
-            agents = 4;
-            digestibility = 1;
-        };
-
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw { visual_properties[] = {0, 0, 0}; nutrition_properties[] = {1.52, 130, 22, 20, 0, 4, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Baked { visual_properties[] = {0, 1, 1}; nutrition_properties[] = {1.41, 250, 10, 32, 0, 0, 1}; cooking_properties[] = {100, 60, 200}; };
-                class Boiled { visual_properties[] = {0, 2, 2}; nutrition_properties[] = {1.47, 230, 38, 32, 0, 0, 1}; cooking_properties[] = {100, 80, 150}; };
-                class Dried { visual_properties[] = {0, 3, 3}; nutrition_properties[] = {1.28, 260, 4, 34, 0, 0, 1}; cooking_properties[] = {0, 0, 0}; };
-                class Burned { visual_properties[] = {0, 4, 4}; nutrition_properties[] = {0.96, 65, 5, 6, 0, 0, 1}; cooking_properties[] = {200, 20, 0}; };
-                class Rotten { visual_properties[] = {0, 0, 5}; nutrition_properties[] = {1.25, 80, 16, 6, 20, 16, 1}; cooking_properties[] = {0, 0, 0}; };
-            };
             class FoodStageTransitions
             {
                 class Raw
@@ -873,7 +701,9 @@ class CfgChefZStates
 
     // §43/§45. Projiziert auf RAW und nicht auf Dried - Salzen toetet keine
     // Keime (06 §3, ausdruecklich). Gesalzenes Fleisch bleibt roh, es haelt
-    // nur laenger. Deshalb traegt ChefZ_SaltedMeat auch agents = 4.
+    // nur laenger. Seit dem 30.10.2026 setzt kein Transform des Mods diesen
+    // Zustand mehr (Poekeln entfallen); er bleibt als Registry-Eintrag stehen,
+    // weil _deltas/salt.json ihn mit spoilageMultiplier fuehrt.
     class SALTED
     {
         displayName = "#STR_CHEFZ_STATE_SALTED";
@@ -943,11 +773,9 @@ class CfgChefZStates
 //------------------------------------------------------------------------------
 // Anmeldung beim Core (02 §4).
 //
-// handcraftRecipeSlots = 2: dieses Modul bringt GENAU ZWEI Transforms mit,
-// deren Prozess exec = "HANDCRAFT" hat - TR_SaltMeat und TR_SaltFish, beide
-// ueber PROCESS_SALT_CURE. Die Zahl ist eine Reservierung in Vanillas
-// Rezeptliste und muss vorab feststehen (Kopf von ChefZ_HandcraftBridge.c).
-// Trocknen und Raeuchern laufen an Stationen und brauchen keinen Platz.
+// Keine handcraftRecipeSlots: seit dem Wegfall von TR_SaltMeat/TR_SaltFish
+// (30.10.2026) bringt dieses Modul keinen Transform mit exec = "HANDCRAFT"
+// mehr. Trocknen und Raeuchern laufen an Stationen und brauchen keinen Platz.
 //
 // dataFiles[] beginnt mit dem PBO-Praefix, also dem ORDNERNAMEN des Addons.
 // loadOrder 280: nach ChefZ_Meat (200) und ChefZ_Processing (155-260), weil
@@ -959,11 +787,9 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 280;
-        handcraftRecipeSlots = 2;
         dataFiles[] =
         {
             "ChefZ_Preservation/Config/Ingredients/Preservation.json",
-            "ChefZ_Preservation/Config/Processing/Salting.json",
             "ChefZ_Preservation/Config/Processing/Drying.json",
             "ChefZ_Preservation/Config/Processing/Smoking.json"
         };

@@ -80,7 +80,7 @@ subclasses, so a variant of a listed class counts as a member.
 
 | Group | Members | Declared in | Used by |
 |---|---|---|---|
-| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife | `ChefZ_Processing` | `PROCESS_CUT_MEAT`, `PROCESS_CARVE_PLATE`, `PROCESS_CARVE_BOWL`, `PROCESS_CARVE_BOWL_BARK` |
+| `CUTTING_TOOL` | KitchenKnife, SteakKnife, HuntingKnife, CombatKnife, KukriKnife, BoneKnife, StoneKnife, FangeKnife | `ChefZ_Processing` | `PROCESS_CUT_MEAT`, `PROCESS_CARVE_BOWL`, `PROCESS_CARVE_BOWL_BARK` |
 | `ROLLING_PIN` | `ChefZ_PastaMachine`, MeatTenderizer | `ChefZ_Processing` | `PROCESS_ROLL` |
 | `METALWORK_TOOL` | Pliers, Hammer, Wrench, LugWrench, Screwdriver | `ChefZ_Processing` | `PROCESS_ASSEMBLE` |
 | `AXE_TOOL` | WoodAxe, Hatchet, FirefighterAxe, Iceaxe | `ChefZ_Cooking` | `PROCESS_CARVE_BOWL_BARK` |
@@ -161,7 +161,7 @@ Grinds dried herbs and spices into powders and mixes. Both processes are `STATIO
 
 `ChefZ_DryingRack` · category `RACK` · 4 parallel slots · cargo 4×3
 
-The busiest station in the mod. Twelve transforms across four different chains — herbs, spices, pasta and preservation. `PROCESS_DRY` needs neither heat nor fuel, only time, so a rack works anywhere. Four parallel slots. Individual transforms override the 10-minute base duration; the spread is 8 minutes for parsley to 90 minutes for dry sausage.
+The busiest station in the mod. Eleven transforms across five different chains — herbs, spices, pasta, mushrooms (since 2026-10-30) and preservation (sausage only: since 2026-10-30 meat and fish are no longer dried, only smoked). `PROCESS_DRY` needs neither heat nor fuel, only time, so a rack works anywhere. Four parallel slots. Individual transforms override the 10-minute base duration; the spread is 8 minutes for parsley to 90 minutes for dry sausage.
 
 ### Processes
 
@@ -169,14 +169,13 @@ The busiest station in the mod. Twelve transforms across four different chains �
 |---|---|---|---|---|
 | `PROCESS_DRY` | STATION_TIMED | 10 min | no | none |
 
-### Transforms (12)
+### Transforms (11)
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
 | `TR_RawPastaToDriedPasta` | 1× Fresh Pasta | Dried Pasta | 1:1 from input | 30 min | — |
-| `TR_SaltedMeatToDried` | 1× Salted Meat | Dried Meat | 1:1 from input | 60 min | DRIED |
-| `TR_SaltedFishToDried` | 1× Salted Fish | Dried Fish | 1:1 from input | 45 min | DRIED |
 | `TR_RawSausageToDry` | 1× *SAUSAGE* + state RAW | Dry Sausage | 1:1 from input | 90 min | DRIED |
+| `TR_MushroomToDried` | 1× *MUSHROOM*, stage Raw | the same item, state Dried | item stays | 10 min | DRIED |
 | `TR_ParsleyToDried` | 1× Fresh Parsley | Dried Parsley | 1:1 from input | 8 min | DRIED |
 | `TR_ThymeToDried` | 1× Fresh Thyme | Dried Thyme | 1:1 from input | 8 min | DRIED |
 | `TR_RosemaryToDried` | 1× Fresh Rosemary | Dried Rosemary | 1:1 from input | 10 min | DRIED |
@@ -194,7 +193,9 @@ on the same output class.
 
 `ChefZ_Smoker` · category `SMOKER` · 2 parallel slots · cargo 5×5
 
-Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` set.
+Smokes raw meat, raw fish and raw sausage. Two parallel slots, `needsFuel` set. Since
+2026-10-30 smoking is the only way to preserve meat and fish — salt-curing and
+Salted Meat / Salted Fish were removed.
 
 ### Processes
 
@@ -202,12 +203,15 @@ Smokes salted meat, raw fish and raw sausage. Two parallel slots, `needsFuel` se
 |---|---|---|---|---|
 | `PROCESS_SMOKE` | STATION_TIMED | 5 min | **required** | none |
 
-### Transforms (3)
+### Transforms
+
+`Smoking.json` holds nine transforms (recounted 2026-10-30); the three for meat,
+fish and sausage are listed here.
 
 | Transform | Input | Output | Ratio | Duration | Sets state |
 |---|---|---|---|---|---|
-| `TR_SaltedMeatToSmoked` | 1× Salted Meat | Smoked Meat | 1:1 from input | 5 min | SMOKED |
-| `TR_FishToSmoked` | 1× *FISH* + state RAW | Smoked Fish | 1:1 from input | 5 min | SMOKED |
+| `TR_RawMeatToSmoked` | 1× *MEAT* + state RAW + not *SAUSAGE* | the same item, state Smoked | item stays | 5 min | SMOKED |
+| `TR_FishToSmoked` | 1× *FISH* + state RAW | the same item, state Smoked | item stays | 5 min | SMOKED |
 | `TR_RawSausageToSmoked` | 1× *SAUSAGE* + state RAW | Smoked Sausage | 1:1 from input | 5 min | SMOKED |
 
 **The smoker burns its own fuel since 2026-08-31.** It had neither heat nor power:
@@ -225,6 +229,8 @@ can go on a hook or into the cargo; both get the same heat and both get smoked, 
 result lands in the cargo. The hooks accept only what the cargo accepts (meat and fish).
 Fire starts with kindling and keeps going on firewood; bark in the cargo still burns as before.
 
+> *History — `TR_SaltedMeatToSmoked` was removed with Salted Meat on 2026-10-30.*
+>
 > **Smoked Meat was blocked for a second, unrelated reason — fixed the same day.**
 > `TR_SaltedMeatToSmoked` declared no `process` field, unlike its two neighbours in
 > the same file, so `ChefZ_ProcessCompiler.c:355` dropped it at boot and no station
@@ -468,7 +474,7 @@ entry (assumption A5).
 
 ## Handcraft transforms — no station needed
 
-22 of the 61 transforms need no station at all. They run
+22 of the 61 transforms (before 2026-10-30) need no station at all. They run
 through the vanilla crafting menu; each module reserves places in that list up front
 with `handcraftRecipeSlots` in its `CfgChefZ` node.
 
@@ -476,10 +482,8 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 |---|---|---|---|---|
 | `PROCESS_KNEAD` | 8 s | none | 0 | 2 |
 | `PROCESS_ROLL` | 10 s | `ROLLING_PIN` | 2 | 2 |
-| `PROCESS_CARVE_PLATE` | 20 s | `CUTTING_TOOL` | 0 | 1 |
 | `PROCESS_CARVE_BOWL` | 25 s | `CUTTING_TOOL` | 0 | 1 |
 | `PROCESS_CUT_MEAT` | 4 s | `CUTTING_TOOL` | 2 | 1 |
-| `PROCESS_SALT_CURE` | 6 s | none | 0 | 2 |
 | `PROCESS_BUILD_HIVE_KIT` | 25 s | none | 0 | 1 |
 | `PROCESS_RAISE_HIVE` | 30 s | none | 0 | 1 |
 | `PROCESS_EXTEND_HIVE` | 30 s | none | 0 | 1 |
@@ -492,10 +496,7 @@ with `handcraftRecipeSlots` in its `CfgChefZ` node.
 |---|---|---|---|---|---|
 | `TR_FlourWaterToDough` | 1× Flour (250) + 1× container with Water (150) | Dough | 1× | 8 s | — |
 | `TR_DoughToRawPasta` | 1× Dough | Fresh Pasta | 500× | 10 s | — |
-| `TR_CarveWoodenPlate` | 1× Firewood | Empty Plate | 1× | 20 s | — |
 | `TR_CarveWoodenBowl` | 1× Firewood | Empty Bowl | 1× | 25 s | — |
-| `TR_SaltMeat` | 1× *MEAT* + state RAW + not *SAUSAGE* + 1× *SALT* (20) | Salted Meat | 1× | 6 s | SALTED |
-| `TR_SaltFish` | 1× *FISH* + state RAW + 1× *SALT* (20) | Salted Fish | 1× | 6 s | SALTED |
 | `TR_BuildBeehiveKit` | 4× Wooden Plank + 10× Nail | Beehive Kit | 1× | 25 s | — |
 | `TR_RaiseBeehive` | 1× Beehive Kit | Beehive | 1× | 30 s | — |
 | `TR_ExtendBeehive` | 2× Beehive Kit | Double Beehive | 1× | 30 s | — |
@@ -514,11 +515,11 @@ slots for them.
 |---|---|
 | Station records | 15 — 9 workbenches in `ChefZ_Processing`, 2 beehives and 4 wild-plant harvest points in `ChefZ_Farming` (added 2026-08-31). All fifteen are described above; a wild plant is a harvest point, not a workbench. |
 | Station categories | 11 |
-| Processes | 34 — 18 handcraft, 7 station action, 9 station timed (recounted 2026-08-31) |
-| Handcraft slots reserved | 22, matching the 22 handcraft transforms exactly |
-| Transforms | 62 — 40 at a station, 22 handcraft, none rejected at boot (recounted 2026-08-31, after `TR_SaltedMeatToSmoked` was fixed) |
+| Processes | 34 — 18 handcraft, 7 station action, 9 station timed (recounted 2026-08-31, before 2026-10-30: `PROCESS_SALT_CURE` and `PROCESS_CARVE_PLATE` have since been removed) |
+| Handcraft slots reserved | 22, matching the 22 handcraft transforms exactly (before 2026-10-30; `TR_SaltMeat`, `TR_SaltFish` and `TR_CarveWoodenPlate` have since been removed, `ChefZ_Serving` now reserves 4 instead of 5) |
+| Transforms | 62 — 40 at a station, 22 handcraft, none rejected at boot (recounted 2026-08-31, before 2026-10-30: six of them — `TR_SaltMeat`, `TR_SaltFish`, `TR_SaltedMeatToDried`, `TR_SaltedFishToDried`, `TR_SaltedMeatToSmoked`, `TR_CarveWoodenPlate` — have since been removed) |
 | Processes with no transform | 3 — `PROCESS_HARVEST_HIVE`, `PROCESS_HARVEST_WILD` and `PROCESS_PACK_HIVE`, all by design |
-| Transforms naming an undeclared process | 0 — the last one, `TR_SaltedMeatToSmoked`, was fixed on 31.08.2026, see the Smoker |
+| Transforms naming an undeclared process | 0 — the last one, `TR_SaltedMeatToSmoked`, was fixed on 31.08.2026 (and removed on 2026-10-30), see the Smoker |
 | Transforms naming an unknown station | 0 |
 | Stations without cargo | 0 since 2026-08-31 — Mortar and Drying Rack inherit theirs from `ChefZ_HerbStationBase` |
 

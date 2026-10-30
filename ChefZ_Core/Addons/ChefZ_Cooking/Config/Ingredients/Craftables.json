@@ -9,7 +9,7 @@
         "Klasse X, die keine deklarierte Zutat ist - dieser Slot wird nie",
         "gefuellt'. Betroffen waren VIER der FUENF Handcraft-Transforms dieses",
         "Slice:",
-        "  TR_CarveWoodenPlate    Firewood     -> ChefZ_EmptyPlate",
+        "  TR_CarveWoodenPlate    Firewood     -> ChefZ_EmptyPlate (entfallen 30.10.2026)",
         "  TR_CarveWoodenBowl     Firewood     -> ChefZ_EmptyBowl",
         "  TR_BoxFromPaper        Paper (2x)   -> ChefZ_EmptyBox",
         "  TR_CansFromMetalSheet  MetalPlate   -> 10x ChefZ_EmptyCan",

@@ -302,6 +302,7 @@ class ChefZ_CotCategories
 		BuildStations();
 		BuildDishes();
 		BuildContainers();
+		BuildAnimals();
 	}
 
 	// ChefZ / Zutaten - alles, was als Eingang in ein Rezept geht und in keine
@@ -342,6 +343,47 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_TomatoSauce");
 		classes.Insert("ChefZ_CreamSauce");
 		classes.Insert("ChefZ_MushroomCreamSauce");
+		// Pilzzucht (30.10.2026): die vier neuen Arten und die neun Zuchtformen,
+		// je Art direkt gefolgt von ihren Sporen und ihrem Myzel.
+		classes.Insert("ChefZ_Chanterelle");
+		classes.Insert("ChefZ_SporesChanterelle");
+		classes.Insert("ChefZ_MyceliumChanterelle");
+		classes.Insert("ChefZ_HedgehogMushroom");
+		classes.Insert("ChefZ_SporesHedgehog");
+		classes.Insert("ChefZ_MyceliumHedgehog");
+		classes.Insert("ChefZ_Morel");
+		classes.Insert("ChefZ_SporesMorel");
+		classes.Insert("ChefZ_MyceliumMorel");
+		classes.Insert("ChefZ_ShaggyInkCap");
+		classes.Insert("ChefZ_SporesShaggyInkCap");
+		classes.Insert("ChefZ_MyceliumShaggyInkCap");
+		classes.Insert("ChefZ_CultivatedAgaricus");
+		classes.Insert("ChefZ_SporesAgaricus");
+		classes.Insert("ChefZ_MyceliumAgaricus");
+		classes.Insert("ChefZ_CultivatedPleurotus");
+		classes.Insert("ChefZ_SporesPleurotus");
+		classes.Insert("ChefZ_MyceliumPleurotus");
+		classes.Insert("ChefZ_CultivatedBoletus");
+		classes.Insert("ChefZ_SporesBoletus");
+		classes.Insert("ChefZ_MyceliumBoletus");
+		classes.Insert("ChefZ_CultivatedLactarius");
+		classes.Insert("ChefZ_SporesLactarius");
+		classes.Insert("ChefZ_MyceliumLactarius");
+		classes.Insert("ChefZ_CultivatedMacrolepiota");
+		classes.Insert("ChefZ_SporesMacrolepiota");
+		classes.Insert("ChefZ_MyceliumMacrolepiota");
+		classes.Insert("ChefZ_CultivatedAuricularia");
+		classes.Insert("ChefZ_SporesAuricularia");
+		classes.Insert("ChefZ_MyceliumAuricularia");
+		classes.Insert("ChefZ_CultivatedCraterellus");
+		classes.Insert("ChefZ_SporesCraterellus");
+		classes.Insert("ChefZ_MyceliumCraterellus");
+		classes.Insert("ChefZ_CultivatedAmanita");
+		classes.Insert("ChefZ_SporesAmanita");
+		classes.Insert("ChefZ_MyceliumAmanita");
+		classes.Insert("ChefZ_CultivatedPsilocybe");
+		classes.Insert("ChefZ_SporesPsilocybe");
+		classes.Insert("ChefZ_MyceliumPsilocybe");
 
 		Add("chefz_cot_ingredients", "#STR_CHEFZ_COT_CAT_INGREDIENTS", "carrot", classes);
 	}
@@ -418,8 +460,6 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_BoarSausage");
 		classes.Insert("ChefZ_HunterSausage");
 		classes.Insert("ChefZ_SpicySausage");
-		classes.Insert("ChefZ_SaltedMeat");
-		classes.Insert("ChefZ_SaltedFish");
 		classes.Insert("ChefZ_SmokedSausage");
 		classes.Insert("ChefZ_DrySausage");
 
@@ -480,6 +520,8 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_MeatGrinder");
 		classes.Insert("ChefZ_Smoker");
 		classes.Insert("ChefZ_UncappingFork");
+		classes.Insert("ChefZ_MushroomShelf");
+		classes.Insert("ChefZ_MushroomTray");
 
 		Add("chefz_cot_stations", "#STR_CHEFZ_COT_CAT_STATIONS", "cooking-pot", classes);
 	}
@@ -528,12 +570,11 @@ class ChefZ_CotCategories
 	// ChefZ / Behaelter - die leeren Gefaesse.
 	//
 	// Getrennt von "Stationen und Werkzeuge", obwohl beides Nicht-Essbares ist:
-	// ein Teller ist Verbrauchsgut und wird in Mengen ausgegeben, eine
+	// eine Schuessel ist Verbrauchsgut und wird in Mengen ausgegeben, eine
 	// Kaesepresse ist ein Einzelstueck.
 	protected static void BuildContainers()
 	{
 		array<string> classes = new array<string>;
-		classes.Insert("ChefZ_EmptyPlate");
 		classes.Insert("ChefZ_EmptyBowl");
 		classes.Insert("ChefZ_EmptyCan");
 		classes.Insert("ChefZ_EmptyJar");
@@ -541,6 +582,16 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_MilkCan");
 
 		Add("chefz_cot_containers", "#STR_CHEFZ_COT_CAT_CONTAINERS", "container", classes);
+	}
+
+	// ChefZ / Tiere (30.10.2026) - der Waschbaer, ein Fuchs mit eigenem Modell
+	// (ChefZ_Meat/config.cpp). COT spawnt ihn mit KI wie jedes Tier.
+	protected static void BuildAnimals()
+	{
+		array<string> classes = new array<string>;
+		classes.Insert("ChefZ_Raccoon");
+
+		Add("chefz_cot_animals", "#STR_CHEFZ_COT_CAT_ANIMALS", "paw", classes);
 	}
 }
 #endif // JM_COT

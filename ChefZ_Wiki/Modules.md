@@ -20,7 +20,7 @@ For the reasoning behind the split, see [Architecture](Architecture).
 | `ChefZ_Ingredients` | 26 | 3 | 1 | 49 | 58 |
 | `ChefZ_Meat` | 32 | 1 | — | 58 | 55 |
 | `ChefZ_Baking` | 6 | 1 | — | 12 | 16 |
-| `ChefZ_Preservation` | 10 | 1 | 10 | 20 | 28 |
+| `ChefZ_Preservation` | 4 | 1 | 10 | 17 | 25 |
 | `ChefZ_Cooking` | 44 | 5 | 58 | 45 | 96 |
 | `ChefZ_Cookbook` | 2 | 12 | — | — | 5 |
 | `ChefZ_Devices` | 0 | 0 | — | — | — |
@@ -28,6 +28,9 @@ For the reasoning behind the split, see [Architecture](Architecture).
 | `ChefZ_Items` | 0 | 0 | — | — | — |
 | `ChefZ_Plants` | 0 | 0 | — | — | — |
 | **total** | **163** | **170** | **106** | **374** | **349** |
+
+The `ChefZ_Preservation` row was recounted on 2026-10-30, after Salted Meat and
+Salted Fish were removed; the other rows and the totals are from before that date.
 
 | Comp mod | Item classes | Script files | Stringtable keys |
 |---|---:|---:|---:|
@@ -47,7 +50,9 @@ brings the repository to 171 `.c` files.
 Across all modules that adds up to **47 recipes**, **61 transforms**,
 **33 processes**, **15 stations**, **185 ingredient bindings**, **5 containers**,
 **3 cooking devices**, **10 food states**, **5 quality tiers** and
-**8 tool groups**.
+**8 tool groups** — counted before 2026-10-30. Since then six transforms
+(salt-curing, dried meat/fish, `TR_CarveWoodenPlate`), two processes
+(`PROCESS_SALT_CURE`, `PROCESS_CARVE_PLATE`) and the `PLATE` container are gone.
 
 ## `ChefZ_Core`
 
@@ -276,22 +281,28 @@ bread, flatbread and pasta.
 
 ## `ChefZ_Preservation`
 
-Salting, drying, smoking — and the food-state vocabulary of the whole mod.
+Drying and smoking — and the food-state vocabulary of the whole mod. Salting was
+removed on 2026-10-30: `ChefZ_SaltedMeat`, `ChefZ_SaltedFish`, `PROCESS_SALT_CURE`
+and its transforms are gone, and meat and fish are only smoked.
 
-- **10 item classes**: `ChefZ_SaltedMeat`, `ChefZ_DriedMeat`, `ChefZ_SmokedMeat`,
-  the fish equivalents, `ChefZ_SmokedSausage`, `ChefZ_DrySausage`.
+- **4 item classes** (recounted 2026-10-30): the forward declaration `Edible_Base`,
+  `ChefZ_PreservedFood_Base`, `ChefZ_SmokedSausage`, `ChefZ_DrySausage`. The
+  separate dried/smoked meat and fish classes went on 2026-10-27 — smoking keeps
+  the item and changes its state.
 - **1 script file** (`ChefZ_PreservedFood_Base.c`).
 - **Rank 1**: **all 10 food states** — `RAW`, `PREPARED`, `COOKED`, `BAKED`,
   `FRIED`, `SALTED`, `SMOKED`, `DRIED`, `BURNT`, `ROTTEN`. States are
   sync-relevant, so rank 1 is not a choice; see
   [Architecture](Architecture#how-the-ranks-merge) and [Food States](Food-States).
-- **Rank 2**: **20 records** — 12 ingredients, 8 transforms.
-- **`CfgChefZ` slice**: `ChefZ_Preservation` (280, **2 handcraft slots**).
+- **Rank 2**: **17 records** — 7 ingredients, 10 transforms (1 drying, 9 smoking).
+- **`CfgChefZ` slice**: `ChefZ_Preservation` (280, **no handcraft slots** since
+  2026-10-30 — drying and smoking run at stations).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Food`, `ChefZ_Core`, `ChefZ_Processing`,
   `ChefZ_Meat`.
 
 This is the module that decides how long everything in ChefZ keeps: `SALTED`
-gets a 43 200 s freshness lifetime, `SMOKED` 86 400 s, `DRIED` 129 600 s, and
+gets a 43 200 s freshness lifetime (still declared, but nothing sets it since
+2026-10-30), `SMOKED` 86 400 s, `DRIED` 129 600 s, and
 each of them implies the tag `CHEFZ_PRESERVED`.
 
 ## `ChefZ_Cooking`
@@ -302,21 +313,24 @@ The largest module. Sauces, broths, tableware and all 28 dishes — 20 plates,
 - **44 item classes**: 28 dish classes — one class per dish since 2026-08-29,
   the served dish that forms in the cooking vessel and is eaten; portions are
   vanilla quantity — plus 4 sauces and broths with
-  `ChefZ_SauceItemBase`, 5 empty containers with `ChefZ_ContainerItemBase`, the
+  `ChefZ_SauceItemBase`, 5 empty containers with `ChefZ_ContainerItemBase` (4 since
+  `ChefZ_EmptyPlate` was removed on 2026-10-30), the
   two dish base classes (`ChefZ_PortionedDish_Base`, `ChefZ_ServedDish_Base`,
   both `scope = 0`), and 3 forward declarations of vanilla classes.
 - **5 script files**, among them `ChefZ_SauceItems.c`, `ChefZ_ServingItems.c`,
   `ChefZ_BowlDishItems.c` and `ChefZ_DishesBItems.c`.
 - **Rank 1**: **58 records** — 38 ingredient bindings, 5 quality tiers
   (`POOR`/`SIMPLE`/`PREPARED`/`SEASONED`/`PREMIUM`, tier set `DISH_DEFAULT`),
-  5 containers (`PLATE`, `BOWL`, `CAN`, `JAR`, `BOX`), 3 cooking devices
-  (`FryingPan` 2 portions, `Pot` 4, `Cauldron` 12), 5 processes and 2 tool
+  5 containers (`PLATE`, `BOWL`, `CAN`, `JAR`, `BOX`; `PLATE` removed on
+  2026-10-30, so 4 now), 3 cooking devices
+  (`FryingPan` 2 portions, `Pot` 4, `Cauldron` 12), 5 processes (4 since
+  `PROCESS_CARVE_PLATE` was removed on 2026-10-30) and 2 tool
   groups (`AXE_TOOL`, `SAWING_TOOL`). The bindings dropped from 64 with the bulk
   step: a dish that no longer exists twice needs one binding, not two.
 - **Rank 2**: **45 records** — 39 of the mod's 47 recipes, plus 5 transforms and
-  1 ingredient.
+  1 ingredient (before 2026-10-30; `TR_CarveWoodenPlate` has since been removed).
 - **`CfgChefZ` slices**: five — `ChefZ_Sauces` (300), `ChefZ_Serving`
-  (310, **2 handcraft slots**), `ChefZ_DishesA` (330), `ChefZ_DishesB` (330),
+  (310, **4 handcraft slots** since 2026-10-30, was 5), `ChefZ_DishesA` (330), `ChefZ_DishesB` (330),
   `ChefZ_DishesC` (340).
 - **Depends on**: `DZ_Data`, `DZ_Gear_Food`, `DZ_Gear_Cooking`, `ChefZ_Core`,
   `ChefZ_Ingredients`, `ChefZ_Farming`, `ChefZ_Meat`, `ChefZ_Processing`,

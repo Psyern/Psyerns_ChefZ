@@ -1,0 +1,311 @@
+{
+ "manifest": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\tools\\chefz-assets\\deliveries\\2026-10-30_higgsfield_salt_grain_thyme.json",
+ "runner": "tools/chefz-assets/build_delivery_local.py",
+ "duration": 7.5,
+ "blender_exit": 0,
+ "mirrored_files": 10,
+ "results": [
+  {
+   "name": "SaltShaker",
+   "group": "saltshaker",
+   "bind": [
+    "ChefZ_Salt",
+    "ChefZ_RawSalt"
+   ],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Items\\saltshaker\\models\\saltshaker.p3d",
+   "texture": "ChefZ\\ChefZ_Items\\saltshaker\\data\\SaltShaker_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Items\\saltshaker\\data\\SaltShaker_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 0.15 kg"
+   ],
+   "source_tris": 8326,
+   "size_m": [
+    0.05,
+    0.05,
+    0.11
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: SaltShaker"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle SaltShaker_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: SaltShaker_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: SaltShaker_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: SaltShaker_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: SaltShaker_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 3 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshuelle (2026 Flaechen)",
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Items\\saltshaker\\models\\saltshaker.p3d",
+   "lods": [
+    "resolution0:8326f",
+    "resolution1:5828f",
+    "resolution2:4163f",
+    "resolution3:2497f",
+    "shadow_volume0:2026f",
+    "geometry0:2026f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:2026f",
+    "fire_geometry0:2026f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "GrainSack",
+   "group": "grainsack",
+   "bind": [
+    "ChefZ_Wheat",
+    "ChefZ_MushroomCulture"
+   ],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Items\\grainsack\\models\\grainsack.p3d",
+   "texture": "ChefZ\\ChefZ_Items\\grainsack\\data\\GrainSack_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Items\\grainsack\\data\\GrainSack_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 1.0 kg"
+   ],
+   "source_tris": 8384,
+   "size_m": [
+    0.233,
+    0.191,
+    0.3
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: GrainSack"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle GrainSack_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: GrainSack_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: GrainSack_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: GrainSack_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: GrainSack_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 3 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshuelle (1138 Flaechen)",
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Items\\grainsack\\models\\grainsack.p3d",
+   "lods": [
+    "resolution0:8384f",
+    "resolution1:5868f",
+    "resolution2:4192f",
+    "resolution3:2515f",
+    "shadow_volume0:1138f",
+    "geometry0:1138f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:1138f",
+    "fire_geometry0:1138f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "WildThyme",
+   "group": "wildthyme",
+   "bind": [
+    "ChefZ_WildThyme"
+   ],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Plants\\wildthyme\\models\\wildthyme.p3d",
+   "texture": "ChefZ\\ChefZ_Plants\\wildthyme\\data\\WildThyme_co.paa",
+   "paa": [
+    {
+     "file": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\wildthyme\\data\\WildThyme_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [
+    "Geometry-Masse 0.3 kg"
+   ],
+   "source_tris": 7984,
+   "size_m": [
+    0.271,
+    0.3,
+    0.199
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: WildThyme"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle WildThyme_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: WildThyme_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: WildThyme_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: WildThyme_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: WildThyme_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 2 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshuelle (170 Flaechen)",
+   "p3d": "C:\\Users\\Administrator\\Desktop\\Psyerns_ChefZ\\ChefZ\\ChefZ_Plants\\wildthyme\\models\\wildthyme.p3d",
+   "lods": [
+    "resolution0:7984f",
+    "resolution1:5588f",
+    "resolution2:3992f",
+    "resolution3:2395f",
+    "shadow_volume0:170f",
+    "geometry0:170f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:170f",
+    "fire_geometry0:170f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  }
+ ]
+}

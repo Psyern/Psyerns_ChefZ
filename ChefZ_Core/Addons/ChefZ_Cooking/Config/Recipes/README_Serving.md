@@ -56,7 +56,9 @@ mit mehr Zutaten.
 
 ## 3. Behälterkategorien
 
-`PLATE` · `BOWL` · `CAN` · `JAR` · `BOX`
+`BOWL` · `CAN` · `JAR` · `BOX`
+
+`PLATE` ist am 30.10.2026 mit dem Holzteller (`ChefZ_EmptyPlate`) entfallen.
 
 Sie stehen **nicht** in der zentralen `Categories.json` — das ist die Registry
 der Zutatenkategorien. Eine Behälterkategorie existiert genau dann, wenn ein
@@ -64,10 +66,12 @@ Behälter sich in `CfgChefZContainers` zu ihr bekennt (`16` E2). Deklariert sind
 sie in der `config.cpp` dieses Moduls.
 
 Beim Kochen wird kein Behälter verlangt (16 §2, unverändert). `returnContainer`
-nennt seit 29.08.2026 eine **feste Klasse** (`ChefZ_EmptyBowl`, `ChefZ_EmptyPlate`):
+nennt seit 29.08.2026 eine **feste Klasse** (`ChefZ_EmptyBowl`):
 `"AUTO"` löst über den beim Servieren benutzten Behälter auf, und serviert wird
 nicht mehr — das Gericht entsteht direkt. Die leere Schüssel bleibt nach dem
-letzten Bissen zurück.
+letzten Bissen zurück. Tellergerichte tragen seit 30.10.2026 weder
+`returnContainer` noch `containerCategory`: sie werden ohne Behälter gegessen und
+geben nichts zurück.
 
 `CAN` ist der Konservenfall: `reusable = 0`, es kommt nichts zurück.
 
@@ -86,20 +90,22 @@ Ausgelöst wird sie in `ChefZ_Edible_Base.OnConsume`, **nachdem** Vanilla die
 Menge abgezogen hat und nur bei `Quantity <= 0` (`16` E4). Nicht bei jedem
 Bissen — das wäre ein Duplikations-Exploit erster Ordnung.
 
-## 5. Woher die Behälter kommen — die fünf HANDCRAFT-Transforms
+## 5. Woher die Behälter kommen — die vier HANDCRAFT-Transforms
 
-Alle fünf liegen in `Config/Processing/`, nicht hier: es sind `kind: transform`,
+Alle vier liegen in `Config/Processing/`, nicht hier: es sind `kind: transform`,
 keine `kind: recipe`. Ihre Prozesse stehen in **Rang 1** (`CfgChefZProcesses` in
 der `config.cpp` dieses Moduls), weil `ActionCondition()` den Aktionstext auch
 clientseitig braucht (`02` §2).
 
 | Transform | Datei | Eingang 1 | Eingang 2 / Werkzeug | Ergebnis |
 |---|---|---|---|---|
-| `TR_CarveWoodenPlate` | `Tableware.json` | `Firewood` | `CUTTING_TOOL` | 1 × `ChefZ_EmptyPlate` |
 | `TR_CarveWoodenBowl` | `Tableware.json` | `Firewood` | `CUTTING_TOOL` | 1 × `ChefZ_EmptyBowl` |
 | `TR_BowlFromBark` | `Containers.json` | `Bark_Birch` \| `Bark_Oak` | `CUTTING_TOOL` + `AXE_TOOL` | 1 × `ChefZ_EmptyBowl` |
 | `TR_BoxFromPaper` | `Containers.json` | `Paper` | `Paper` | 1 × `ChefZ_EmptyBox` |
 | `TR_CansFromMetalSheet` | `Containers.json` | `MetalPlate` | `SAWING_TOOL` (`Hacksaw`) | **10 ×** `ChefZ_EmptyCan` |
+
+`TR_CarveWoodenPlate` (`PROCESS_CARVE_PLATE`, → `ChefZ_EmptyPlate`) ist am
+30.10.2026 entfallen.
 
 ### Die Form, die ein HANDCRAFT-Transform haben **muss**
 
@@ -140,7 +146,7 @@ Nebenprodukt keinen Platz mehr.
 
 ### `handcraftRecipeSlots` ist die Zahl, die man vergisst
 
-`CfgChefZ/ChefZ_Serving` nennt `handcraftRecipeSlots = 5` — genau die fünf
+`CfgChefZ/ChefZ_Serving` nennt `handcraftRecipeSlots = 4` (bis 30.10.2026: 5) — genau die vier
 Zeilen der Tabelle oben. Die Reservierung muss **vor** dem Laden feststehen, weil
 Vanilla Rezept-IDs als Position in seiner Liste vergibt. Zu wenige Plätze heißt:
 die überzähligen Transforms erscheinen nicht, und im Spiel deutet nichts darauf

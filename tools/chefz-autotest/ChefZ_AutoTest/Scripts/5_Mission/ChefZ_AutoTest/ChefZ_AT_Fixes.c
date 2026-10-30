@@ -321,6 +321,122 @@ class ChefZ_AT_Fixes
     }
 
     //==========================================================================
+    // Pilzzucht (30.10.2026)
+    //==========================================================================
+
+    //! Regal -> Kasten -> Myzel -> Pilze. Prueft die Kette ohne echte Wartezeit:
+    //!   1. die neun Proxy-Bindungen stehen in CfgNonAIVehicles
+    //!   2. Kasten passt in Regalplatz 1, Myzel in den Myzelplatz, Wildpilz NICHT
+    //!   3. ein Regaltakt laesst nur den Kasten IM Regal wachsen
+    //!   4. ein langer Takt (Wachstumszeit) laesst 3 Austernseitlinge erscheinen,
+    //!      setzt den Balken auf 0 und markiert das Myzel zum Loeschen
+    static void MushroomFarm(vector site)
+    {
+        int proxies = 0;
+        for (int p = 1; p <= 6; p++)
+        {
+            if (g_Game.ConfigIsExisting("CfgNonAIVehicles Proxychefz_mushroomtray_" + p.ToString()))
+                proxies++;
+        }
+        for (int q = 1; q <= 3; q++)
+        {
+            if (g_Game.ConfigIsExisting("CfgNonAIVehicles Proxychefz_traymushroom_" + q.ToString()))
+                proxies++;
+        }
+        ChefZ_AT_Log.Result("FIX", "mushroom.proxies", proxies == 9, "gebunden=" + proxies.ToString() + "/9");
+
+        ChefZ_MushroomShelf shelf = ChefZ_MushroomShelf.Cast(g_Game.CreateObjectEx("ChefZ_MushroomShelf", site, ECE_PLACE_ON_SURFACE));
+        if (!shelf)
+        {
+            ChefZ_AT_Log.Result("FIX", "mushroom.spawn", false, "ChefZ_MushroomShelf nicht spawnbar");
+            return;
+        }
+
+        int traySlot = InventorySlots.GetSlotIdFromString("ChefZ_MushroomTray1");
+        ChefZ_MushroomTray tray = ChefZ_MushroomTray.Cast(shelf.GetInventory().CreateAttachmentEx("ChefZ_MushroomTray", traySlot));
+        ChefZ_MushroomTray loose = ChefZ_MushroomTray.Cast(g_Game.CreateObjectEx("ChefZ_MushroomTray", site + Vector(1.5, 0, 0), ECE_PLACE_ON_SURFACE));
+        bool trayIn = tray != null && tray.GetHierarchyParent() == shelf;
+        bool looseMade = loose != null;
+        if (!trayIn || !looseMade)
+        {
+            ChefZ_AT_Log.Result("FIX", "mushroom.traySlot", false, "kastenImRegal=" + trayIn.ToString() + " loserKasten=" + looseMade.ToString());
+            if (loose)
+                g_Game.ObjectDelete(loose);
+            g_Game.ObjectDelete(shelf);
+            return;
+        }
+
+        int mycelSlot = InventorySlots.GetSlotIdFromString(ChefZ_MushroomTray.CHEFZ_SLOT_MYCEL);
+        EntityAI wild = EntityAI.Cast(g_Game.CreateObjectEx("BoletusMushroom", site + Vector(1.5, 0, 1), ECE_PLACE_ON_SURFACE));
+        bool wildRefused = wild != null && !tray.GetInventory().CanAddAttachmentEx(wild, mycelSlot);
+        EntityAI mycel = tray.GetInventory().CreateAttachmentEx("ChefZ_MyceliumPleurotus", mycelSlot);
+        loose.GetInventory().CreateAttachmentEx("ChefZ_MyceliumPleurotus", mycelSlot);
+        bool mycelIn = mycel != null && tray.ChefZ_GetMycel() == mycel;
+        ChefZ_AT_Log.Result("FIX", "mushroom.slots", trayIn && mycelIn && wildRefused, "kasten=" + trayIn.ToString() + " myzel=" + mycelIn.ToString() + " wildpilzAbgewiesen=" + wildRefused.ToString());
+
+        tray.SetQuantity(0.0);
+        loose.SetQuantity(0.0);
+        shelf.ChefZ_OnGrowTick();
+        bool grewIn = tray.GetQuantity() > 0.0;
+        bool stillOut = loose.GetQuantity() == 0.0;
+        ChefZ_AT_Log.Result("FIX", "mushroom.growOnlyOnShelf", grewIn && stillOut, "imRegal=" + tray.GetQuantity().ToString() + " lose=" + loose.GetQuantity().ToString());
+
+        ChefZ_Mycelium_Base m = tray.ChefZ_GetMycel();
+        float grow = 0;
+        if (m)
+            grow = m.ChefZ_GrowSeconds();
+        tray.ChefZ_GrowTick(grow);
+        int fruits = 0;
+        for (int i = 1; i <= ChefZ_MushroomTray.CHEFZ_FRUIT_SLOTS; i++)
+        {
+            EntityAI f = tray.GetInventory().FindAttachmentByName(ChefZ_MushroomTray.ChefZ_FruitSlotName(i));
+            if (f && f.GetType() == "ChefZ_CultivatedPleurotus")
+                fruits++;
+        }
+        bool reset = tray.GetQuantity() == 0.0;
+        bool consumed = m != null && m.IsSetForDeletion();
+        ChefZ_AT_Log.Result("FIX", "mushroom.fruit", fruits == 3 && reset && consumed, "pilze=" + fruits.ToString() + "/3 balken0=" + reset.ToString() + " myzelVerbraucht=" + consumed.ToString() + " zeit=" + grow.ToString());
+
+        if (wild)
+            g_Game.ObjectDelete(wild);
+        g_Game.ObjectDelete(loose);
+        g_Game.ObjectDelete(shelf);
+    }
+
+    //! Die neun neuen Pilzmeshes: 6 Texturen (roh .. verdorben), keine
+    //! Materialien, Stufenwechsel bis DRIED und ROTTEN ohne Absturz.
+    static void MushroomTextures(vector site)
+    {
+        TStringArray classes = {"ChefZ_Chanterelle", "ChefZ_HedgehogMushroom", "ChefZ_Morel", "ChefZ_ShaggyInkCap", "ChefZ_CultivatedAgaricus", "ChefZ_CultivatedPleurotus", "ChefZ_CultivatedBoletus", "ChefZ_CultivatedLactarius", "ChefZ_CultivatedMacrolepiota"};
+        int good = 0;
+        string bad = "";
+        foreach (string cls : classes)
+        {
+            TStringArray tex = new TStringArray();
+            TStringArray mat = new TStringArray();
+            g_Game.ConfigGetTextArray("CfgVehicles " + cls + " hiddenSelectionsTextures", tex);
+            g_Game.ConfigGetTextArray("CfgVehicles " + cls + " hiddenSelectionsMaterials", mat);
+            Edible_Base e = Edible_Base.Cast(g_Game.CreateObjectEx(cls, site, ECE_PLACE_ON_SURFACE));
+            bool staged = false;
+            if (e)
+            {
+                e.ChangeFoodStage(FoodStageType.DRIED);
+                bool dried = e.GetFoodStageType() == FoodStageType.DRIED;
+                e.ChangeFoodStage(FoodStageType.ROTTEN);
+                staged = dried && e.GetFoodStageType() == FoodStageType.ROTTEN;
+                g_Game.ObjectDelete(e);
+            }
+            bool ok = tex.Count() == 6 && mat.Count() == 0 && staged;
+            if (ok)
+                good++;
+            else
+                bad = bad + cls + "(tex=" + tex.Count().ToString() + ",mat=" + mat.Count().ToString() + ",stufe=" + staged.ToString() + ") ";
+        }
+        bool all = (good == classes.Count());
+        ChefZ_AT_Log.Result("FIX", "mushroom.stageTextures", all, "ok=" + good.ToString() + "/" + classes.Count().ToString() + " " + bad);
+    }
+
+    //==========================================================================
     // Fleisch-Garstufen-Texturen
     //==========================================================================
 
