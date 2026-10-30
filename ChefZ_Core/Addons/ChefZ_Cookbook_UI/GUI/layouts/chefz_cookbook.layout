@@ -1,0 +1,259 @@
+FrameWidgetClass ChefZ_CookbookRoot {
+ position 0 0
+ size 1 1
+ halign center_ref
+ valign center_ref
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ priority 50
+ {
+  PanelWidgetClass Backdrop {
+   ignorepointer 1
+   color 0 0 0 0.7451
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+  }
+  PanelWidgetClass Book {
+   color 0.1137 0.1176 0.0902 0.9804
+   position 0 0
+   size 0.88 0.88
+   halign center_ref
+   valign center_ref
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+   {
+    TextWidgetClass Title {
+     ignorepointer 1
+     color 0.8392 0.7922 0.6588 1
+     position 0.015 0.02
+     size 0.29 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text "#STR_CHEFZ_CB_TITLE"
+     font "gui/fonts/sdf_MetronBook72"
+     "exact text" 1
+     "exact text size" 34
+    }
+    TextWidgetClass Progress {
+     ignorepointer 1
+     color 0.5961 0.6275 0.4118 1
+     position 0.015 0.075
+     size 0.29 0.03
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text ""
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "exact text size" 18
+    }
+    ScrollWidgetClass RecipeScroll {
+     clipchildren 1
+     position 0.015 0.115
+     size 0.29 0.865
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     "Scrollbar V" 1
+     {
+      WrapSpacerWidgetClass RecipeList {
+       ignorepointer 1
+       position 0 0
+       size 1 1
+       hexactpos 1
+       vexactpos 1
+       hexactsize 0
+       vexactsize 0
+       "no focus" 1
+       Padding 0
+       Margin 2
+       "Size To Content V" 1
+      }
+     }
+    }
+    PanelWidgetClass Divider {
+     ignorepointer 1
+     color 0.3333 0.3725 0.2196 1
+     position 0.315 0.02
+     size 0.002 0.96
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_colorable
+    }
+    TextWidgetClass DishName {
+     ignorepointer 1
+     color 0.8392 0.7922 0.6588 1
+     position 0.33 0.02
+     size 0.6 0.06
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text ""
+     font "gui/fonts/sdf_MetronBook72"
+     "exact text" 1
+     "exact text size" 32
+    }
+    ImageWidgetClass PageImage {
+     ignorepointer 1
+     position 0.33 0.1
+     size 0.4 0.86
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     mode blend
+     "src alpha" 1
+     stretch 1
+     fixaspect inside
+    }
+    TextWidgetClass NoImageHint {
+     visible 0
+     ignorepointer 1
+     color 0.5961 0.6275 0.4118 1
+     position 0.33 0.45
+     size 0.4 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text "#STR_CHEFZ_CB_NOIMAGE"
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "exact text size" 20
+     "text halign" center
+    }
+    TextWidgetClass DeviceLine {
+     ignorepointer 1
+     color 0.8392 0.7922 0.6588 1
+     position 0.75 0.1
+     size 0.235 0.035
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text ""
+     font "gui/fonts/sdf_MetronBook24"
+     "exact text" 1
+     "exact text size" 19
+    }
+    TextWidgetClass ConditionLine {
+     ignorepointer 1
+     color 0.5961 0.6275 0.4118 1
+     position 0.75 0.14
+     size 0.235 0.035
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text ""
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "exact text size" 18
+    }
+    TextWidgetClass IngredientsHeader {
+     ignorepointer 1
+     color 0.8392 0.7922 0.6588 1
+     position 0.75 0.2
+     size 0.235 0.035
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text "#STR_CHEFZ_CB_INGREDIENTS"
+     font "gui/fonts/sdf_MetronBook24"
+     "exact text" 1
+     "exact text size" 20
+    }
+    MultilineTextWidgetClass Ingredients {
+     ignorepointer 1
+     color 0.8392 0.7922 0.6588 1
+     position 0.75 0.24
+     size 0.235 0.34
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text ""
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "exact text size" 17
+     wrap 1
+    }
+    TextWidgetClass StepsHeader {
+     ignorepointer 1
+     color 0.8392 0.7922 0.6588 1
+     position 0.75 0.6
+     size 0.235 0.035
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text "#STR_CHEFZ_CB_STEPS"
+     font "gui/fonts/sdf_MetronBook24"
+     "exact text" 1
+     "exact text size" 20
+    }
+    MultilineTextWidgetClass Steps {
+     ignorepointer 1
+     color 0.8392 0.7922 0.6588 1
+     position 0.75 0.64
+     size 0.235 0.34
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text ""
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "exact text size" 17
+     wrap 1
+    }
+    TextWidgetClass EmptyHint {
+     visible 0
+     ignorepointer 1
+     color 0.5961 0.6275 0.4118 1
+     position 0.33 0.45
+     size 0.65 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text "#STR_CHEFZ_CB_EMPTY"
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "exact text size" 20
+     "text halign" center
+    }
+    ButtonWidgetClass CloseButton {
+     position 0.008 0.012
+     size 0.03 0.045
+     halign right_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "X"
+     font "gui/fonts/sdf_MetronBook24"
+    }
+   }
+  }
+ }
+}

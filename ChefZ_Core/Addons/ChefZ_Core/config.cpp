@@ -39,11 +39,23 @@ class CfgMods
     class ChefZ_Core
     {
         dir = "ChefZ_Core";
-        picture = "";
+
+        // Symbol in der Mod-Leiste des Hauptmenues. Vanilla laedt logo und
+        // logoOver per ImageWidget.LoadImageFile (ModsMenuSimpleEntry.c:32),
+        // picture und logoSmall in der Detailansicht
+        // (ModsMenuDetailedEntry.c:109). Expansion nimmt dafuer ein Imageset,
+        // fuer ein einzelnes Symbol reicht der Pfad. Die PAA erzeugt
+        // tools/chefz-modlogo/build.py (256 x 256, DXT5).
+        picture = "ChefZ_Core/data/gui/chefz_logo_ca.paa";
+        logo = "ChefZ_Core/data/gui/chefz_logo_ca.paa";
+        logoSmall = "ChefZ_Core/data/gui/chefz_logo_ca.paa";
+        logoOver = "ChefZ_Core/data/gui/chefz_logo_over_ca.paa";
+        tooltip = "Psyerns ChefZ";
+        overview = "Koch- und Lebensmittelproduktion fuer DayZ.";
         action = "";
-        hideName = 1;
-        hidePicture = 1;
-        name = "ChefZ Core";
+        hideName = 0;
+        hidePicture = 0;
+        name = "Psyerns ChefZ";
         credits = "Psyern";
         author = "Psyern";
         authorID = "0";
