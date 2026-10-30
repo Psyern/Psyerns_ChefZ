@@ -82,6 +82,8 @@ class ChefZ_VisCheck
         {
             string mode = l.Get(0);
             string cls = l.Get(1);
+            if (mode == "preview" || mode == "localworld")
+                continue;
             if (mode == "attach")
             {
                 EntityAI att;
@@ -168,6 +170,114 @@ class ChefZ_VisCheck
     }
 }
 
+//! Client: ein Raster aus ItemPreviewWidgets (wie Inventar und COT), je Zeile
+//! "preview <Klasse>" eine Zelle mit Klassennamen. Die Objekte sind lokal
+//! (ECE_LOCAL), damit keine Reste aus der Persistenz das Bild verfaelschen.
+class ChefZ_VisCheckPreviewGrid
+{
+    static const string LAYOUT = "ChefZ_VisCheck/gui/preview_cell.layout";
+    protected ref array<Widget> m_Cells = new array<Widget>();
+    protected ref array<Object> m_Objects = new array<Object>();
+    protected ref array<Object> m_WorldObjects = new array<Object>();
+
+    int Build()
+    {
+        array<ref TStringArray> lines;
+        if (!ChefZ_VisCheck.Read(lines))
+            return 0;
+        int index = 0;
+        foreach (TStringArray l : lines)
+        {
+            if (l.Get(0) == "localworld")
+            {
+                SpawnLocalWorld(l.Get(1));
+                continue;
+            }
+            if (l.Get(0) != "preview")
+                continue;
+            string cls = l.Get(1);
+            Widget cell = g_Game.GetWorkspace().CreateWidgets(LAYOUT);
+            if (!cell)
+            {
+                Print("[VISCHECK] preview layout fehlt");
+                return index;
+            }
+            int col = index % 8;
+            int row = index / 8;
+            cell.SetPos(40 + col * 230, 60 + row * 260);
+            TextWidget label = TextWidget.Cast(cell.FindAnyWidget("Label"));
+            if (label)
+                label.SetText(cls);
+            ItemPreviewWidget preview = ItemPreviewWidget.Cast(cell.FindAnyWidget("Preview"));
+            Object obj = g_Game.CreateObjectEx(cls, vector.Zero, ECE_LOCAL);
+            EntityAI item = EntityAI.Cast(obj);
+            // Optionale dritte Spalte: Textur fuer Selektion 0, um Textur und Modell zu tauschen.
+            int columns = l.Count();
+            bool swapTexture = columns >= 3;
+            if (!item)
+                swapTexture = false;
+            if (swapTexture)
+            {
+                item.SetObjectTexture(0, l.Get(2));
+                if (label)
+                    label.SetText(cls + " +tex");
+            }
+            if (preview && item)
+                preview.SetItem(item);
+            vector minMax[2];
+            float radius = 0;
+            if (obj)
+                radius = obj.ClippingInfo(minMax);
+            Print("[VISCHECK] preview " + cls + " item=" + (item != null).ToString() + " radius=" + radius.ToString() + " min=" + minMax[0].ToString() + " max=" + minMax[1].ToString());
+            m_Cells.Insert(cell);
+            if (obj)
+                m_Objects.Insert(obj);
+            index++;
+        }
+        return index;
+    }
+
+    //! "localworld <Klasse>": lokales Objekt in einer Reihe 1.5 m vor der Kamera.
+    protected void SpawnLocalWorld(string cls)
+    {
+        vector dir = g_Game.GetCurrentCameraDirection();
+        dir[1] = 0;
+        dir.Normalize();
+        vector right = Vector(dir[2], 0, -dir[0]);
+        int n = m_WorldObjects.Count();
+        int slot = n % 6;
+        int layer = n / 6;
+        float side = slot * 0.3;
+        side = side - 0.75;
+        float height = layer * 0.4;
+        vector pos = g_Game.GetCurrentCameraPosition() + dir * 1.5 + right * side;
+        pos[1] = g_Game.SurfaceY(pos[0], pos[2]) + 0.6 + height;
+        Object obj = g_Game.CreateObjectEx(cls, pos, ECE_LOCAL | ECE_NOLIFETIME);
+        if (obj)
+        {
+            obj.SetPosition(pos);
+            m_WorldObjects.Insert(obj);
+        }
+        Print("[VISCHECK] localworld " + cls + " ok=" + (obj != null).ToString() + " pos=" + pos.ToString());
+    }
+
+    void Clear()
+    {
+        foreach (Widget w : m_Cells)
+        {
+            if (w)
+                w.Unlink();
+        }
+        m_Cells.Clear();
+        foreach (Object o : m_Objects)
+        {
+            if (o)
+                g_Game.ObjectDelete(o);
+        }
+        m_Objects.Clear();
+    }
+}
+
 //! Loggt alle 15 s die Anbauteile; nach N s als "[VISCHECK] report" (Endbericht).
 class ChefZ_VisCheckReporter
 {
@@ -211,6 +321,7 @@ modded class MissionGameplay
 {
     protected float m_ChefZ_VisCheckTime;
     protected int m_ChefZ_VisCheckPhase;
+    protected ref ChefZ_VisCheckPreviewGrid m_ChefZ_VisCheckGrid;
 
     override void OnUpdate(float timeslice)
     {
@@ -228,12 +339,16 @@ modded class MissionGameplay
         if (m_ChefZ_VisCheckPhase == 0 && m_ChefZ_VisCheckTime > 30)
         {
             m_ChefZ_VisCheckPhase = 1;
-            ShowInventory();
-            Print("[VISCHECK] client inventory");
+            m_ChefZ_VisCheckGrid = new ChefZ_VisCheckPreviewGrid();
+            int cells = m_ChefZ_VisCheckGrid.Build();
+            if (cells == 0)
+                ShowInventory();
+            Print("[VISCHECK] client inventory previews=" + cells.ToString());
         }
         else if (m_ChefZ_VisCheckPhase == 1 && m_ChefZ_VisCheckTime > 45)
         {
             m_ChefZ_VisCheckPhase = 2;
+            m_ChefZ_VisCheckGrid.Clear();
             HideInventory();
             Print("[VISCHECK] client world");
         }

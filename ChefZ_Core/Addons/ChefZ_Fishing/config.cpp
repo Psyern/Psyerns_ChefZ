@@ -929,7 +929,7 @@ class CfgVehicles
     {
         hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
-        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\redmulletfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\redmulletfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026; zentriert 30.10.2026, sonst leere Vorschau)
         hiddenSelectionsTextures[] =
         {
             "ChefZ\ChefZ_Sealife\fishfilet\data\RedMulletFillet_co.paa",
@@ -1829,7 +1829,7 @@ class CfgVehicles
     {
         hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
         scope = 2;
-        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\tarponfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        model = "\ChefZ\ChefZ_Sealife\fishfilet\models\tarponfillet.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026; zentriert 30.10.2026, sonst leere Vorschau)
         hiddenSelectionsTextures[] =
         {
             "ChefZ\ChefZ_Sealife\fishfilet\data\TarponFillet_co.paa",
@@ -2811,7 +2811,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SOCKEYESALMON0";
         descriptionShort = "#STR_CHEFZ_FISH_FRESH_DESC_WHOLE";
-        model = "\ChefZ\ChefZ_Sealife\fish\models\sockeyesalmon.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
+        model = "\ChefZ\ChefZ_Sealife\fish\models\sockeyesalmon.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026; hingelegt und zentriert 30.10.2026, sonst leere Vorschau)
         hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\SockeyeSalmon_co.paa"};
         hiddenSelections[] = {"camo"};
         itemSize[] = {4, 2};
@@ -3060,7 +3060,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_SOLE0";
         descriptionShort = "#STR_CHEFZ_ITEM_SOLE1";
-        model = "\ChefZ\ChefZ_Sealife\fish\models\sole.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        model = "\ChefZ\ChefZ_Sealife\fish\models\sole.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026; hingelegt und zentriert 30.10.2026, sonst leere Vorschau)
         hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\Sole_co.paa"};
         hiddenSelections[] = {"camo"};
         itemSize[] = {3, 1};
@@ -3402,7 +3402,7 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_FISH_REDSNAPPER";
         descriptionShort = "#STR_CHEFZ_FISH_REDSNAPPER_DESC";
-        model = "\ChefZ\ChefZ_Sealife\fish\models\redsnapper.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026)
+        model = "\ChefZ\ChefZ_Sealife\fish\models\redsnapper.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 27.10.2026; hingelegt und zentriert 30.10.2026, sonst leere Vorschau)
         hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Sealife\fish\data\RedSnapper_co.paa"};
         hiddenSelections[] = {"camo"};
         itemSize[] = {3, 2};
