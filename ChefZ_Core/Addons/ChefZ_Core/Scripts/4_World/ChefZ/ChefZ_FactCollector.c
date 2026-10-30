@@ -458,6 +458,7 @@ class ChefZ_FactCollector
         // Als int in die Fakten: 1_Core darf den Enum FoodStageType nicht
         // kennen (05 §3.3). Erweitert wird er ohnehin nie - 01 V4.
         facts.vanillaFoodStage = stage.GetFoodStageType();
+        facts.cooksInPot = edible.CanBeCooked();
     }
 
     /**

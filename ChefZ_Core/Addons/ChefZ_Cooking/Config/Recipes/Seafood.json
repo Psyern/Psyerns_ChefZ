@@ -294,9 +294,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_WildGarlic"
-                            },
-                            {
-                                "cls": "ChefZ_DriedWildGarlic"
                             }
                         ]
                     },

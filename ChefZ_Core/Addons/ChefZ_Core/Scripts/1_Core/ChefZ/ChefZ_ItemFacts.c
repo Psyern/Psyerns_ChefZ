@@ -67,6 +67,9 @@ class ChefZ_ItemFacts : Managed
     bool      isLiquidContainer;
     ChefZ_Sym liquidTypeSym;
     bool      isEdible;
+    //! Gart im Gefaess mit (Vanillas CanBeCooked). false bei Kraeutern, die
+    //! ihre Stufe "Dried" im Topf behalten sollen (30.10.2026).
+    bool      cooksInPot;
     bool      isChefZManaged;
 
     //! Arbeitsfeld des Matchers, -1 = frei. Es steht hier und nicht in einer
@@ -112,6 +115,7 @@ class ChefZ_ItemFacts : Managed
         isLiquidContainer = false;
         liquidTypeSym     = ChefZ_SymbolTable.INVALID;
         isEdible          = false;
+        cooksInPot        = true;
         isChefZManaged    = false;
         slotBoundTo       = -1;
     }

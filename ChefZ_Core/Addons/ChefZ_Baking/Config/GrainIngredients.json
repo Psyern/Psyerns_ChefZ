@@ -18,14 +18,6 @@
             "decays": true
         },
         {
-            "id": "ChefZ_DriedPasta",
-            "categories": ["PASTA"],
-            "tags": ["CHEFZ_GRAIN"],
-            "quantityUnit": "GRAM",
-            "unitsPerWholeItem": 500,
-            "decays": true
-        },
-        {
             "id": "ChefZ_Bread",
             "categories": ["BREAD"],
             "tags": ["CHEFZ_GRAIN", "CHEFZ_BAKED_GOOD"],

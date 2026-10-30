@@ -11,19 +11,13 @@
             "inputs": [
                 {
                     "slotId": "berries",
-                    "match": { "cls": "CaninaBerry" },
-                    "minCount": 2,
-                    "consume": "whole"
+                    "match": { "allOf": [ { "cls": "CaninaBerry" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "none"
                 }
             ],
             "outputs": [
-                {
-                    "cls": "ChefZ_DriedBerries",
-                    "quantity": 100,
-                    "quantityMode": "fixed",
-                    "setState": "DRIED",
-                    "inheritFreshness": true
-                }
+                { "setState": "DRIED", "inheritFreshness": true }
             ],
             "freshnessCarry": 1,
             "priority": 100
@@ -37,19 +31,13 @@
             "inputs": [
                 {
                     "slotId": "berries",
-                    "match": { "cls": "SambucusBerry" },
-                    "minCount": 2,
-                    "consume": "whole"
+                    "match": { "allOf": [ { "cls": "SambucusBerry" }, { "vanillaStage": "Raw" } ] },
+                    "minCount": 1,
+                    "consume": "none"
                 }
             ],
             "outputs": [
-                {
-                    "cls": "ChefZ_DriedBerries",
-                    "quantity": 100,
-                    "quantityMode": "fixed",
-                    "setState": "DRIED",
-                    "inheritFreshness": true
-                }
+                { "setState": "DRIED", "inheritFreshness": true }
             ],
             "freshnessCarry": 1,
             "priority": 100

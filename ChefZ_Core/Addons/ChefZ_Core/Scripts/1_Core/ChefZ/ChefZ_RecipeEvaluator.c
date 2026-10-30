@@ -384,6 +384,15 @@ class ChefZ_RecipeEvaluator
                 if (facts.vanillaFoodStage == ChefZ_VanillaStage.NONE)
                     continue;
 
+                // Dasselbe fuer eine Zutat MIT FoodStage, die im Gefaess nicht
+                // mitgart (CanBeCooked false): die Kraeuter seit dem 30.10.2026 -
+                // sie tragen Stufen, damit "getrocknet" ein Zustand sein kann,
+                // bleiben im Topf aber bewusst stehen. Ohne diese Zeile wartete
+                // jede Suppe mit Pflichtkraut ewig auf "Boiled" fuer die
+                // Petersilie (Autotest RCP_ChefZ_BoneBrothSoup).
+                if (!facts.cooksInPot)
+                    continue;
+
                 if (!recipe.AcceptsDoneStage(facts.vanillaFoodStage))
                 {
                     reason = ChefZ_SymbolTable.NameOrMark(facts.classSym) + " ist " + ChefZ_VanillaStage.Name(facts.vanillaFoodStage) + ", gebraucht wird " + StagesToString(recipe);

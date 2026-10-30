@@ -146,7 +146,7 @@ class CfgPatches
     {
         units[] =
         {
-            "ChefZ_Dough", "ChefZ_RawPasta", "ChefZ_DriedPasta", "ChefZ_Bread", "ChefZ_Flatbread"
+            "ChefZ_Dough", "ChefZ_RawPasta", "ChefZ_Bread", "ChefZ_Flatbread"
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -335,10 +335,10 @@ class CfgVehicles
         //
         // Warum die Klasse einen eigenen Satz bekommt, obwohl 0.25 aus der
         // Basis fuer Gramm-Ware "nicht kaputt" waere: mit dem Basissatz waeren
-        // ChefZ_RawPasta und ChefZ_DriedPasta ZAHLENGLEICH (je 125 Volumen,
+        // frische und getrocknete Nudeln ZAHLENGLEICH (je 125 Volumen,
         // 1000 Energie, 50 Wasser). Der ganze Trockenschritt
-        // TR_RawPastaToDriedPasta haette dann keine Wirkung ausser der
-        // Haltbarkeit. Frisch ist feuchter und energieaermer, trocken ist
+        // TR_RawPastaToDriedPasta (seit 30.10.2026 die Stufe "Dried" an
+        // ChefZ_RawPasta) haette dann keine Wirkung ausser der Haltbarkeit. Frisch ist feuchter und energieaermer, trocken ist
         // konzentriert - das steht jetzt in den Zahlen.
         class Nutrition
         {
@@ -361,6 +361,10 @@ class CfgVehicles
             {
                 class Raw    { nutrition_properties[] = {0.75, 100, 35, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
                 class Baked  { nutrition_properties[] = {0.79, 110, 16, 25, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100.0, 40.0, 200.0}; };
+                // Trockennudeln (30.10.2026): frueher ChefZ_DriedPasta, jetzt die
+                // Stufe am selben Item - Werte der alten Klasse (dichter, fast
+                // kein Wasser), Textur 3 = lasagne_pasta_dried_co.paa.
+                class Dried  { nutrition_properties[] = {0.80, 100, 3, 22, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70.0, 45.0, 80.0}; };
                 class Burned { nutrition_properties[] = {0.19, 55, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200.0, 60.0, 250.0}; };
                 class Rotten { nutrition_properties[] = {0.30, 88, 14, 0, 20, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0}; };
             };
@@ -374,74 +378,7 @@ class CfgVehicles
                         cooking_method = 1;
                     };
                 };
-            };
-        };
-    };
-
-    //--------------------------------------------------------------------------
-    // Trockennudeln (§11, §56). Der Vorratsartikel der Kette.
-    //
-    // PROXY: Rice.p3d, Texturvariante spaeter (§71). Mesh gemeldet (S, P1).
-    //--------------------------------------------------------------------------
-    class ChefZ_DriedPasta : ChefZ_GrainFoodBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_DRIEDPASTA";
-        descriptionShort = "#STR_CHEFZ_DRIEDPASTA_DESC";
-        model = "\ChefZ\ChefZ_Food\models\dried_pasta.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
-        // Garstufen-Texturen (27.10.2026): Textur 0 roh, 1 gebacken, 2 gekocht, 3 getrocknet, 4 verbrannt (aus der Basistextur abgeleitet);
-        // Material 5 = verfault. Die Selektion "camo" ist in der model.cfg als section gefuehrt.
-        hiddenSelections[] = {"camo"};
-        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Food\data\dried_pasta_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_baked_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_boiled_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_dried_co.paa", "\ChefZ\ChefZ_Food\data\dried_pasta_burnt_co.paa"};
-        hiddenSelectionsMaterials[] = {};   // MLOD-Modell: jedes Material macht es unsichtbar, Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals, 27.10.2026)
-        weight = 350;
-        itemSize[] = {2, 2};
-        stackedUnit = "grams";
-        quantityBar = 1;
-        varQuantityInit = 500;
-        varQuantityMin = 0;
-        varQuantityMax = 500;
-        varQuantityDestroyOnMin = 1;
-        canBeSplit = 1;
-        lifetime = 172800;
-
-        // RECHNUNG (Herleitung im Dateikopf), varQuantityMax = 500 GRAMM:
-        //   Volumen  = 0.80 * 500 = 400   (dichter als die frische Nudel)
-        //   Energie  = 300/100 * 500 = 1500
-        //   Wasser   = 3/100   * 500 =   15  (getrocknet, praktisch nichts)
-        //
-        // Der Vorratsartikel der Kette und deshalb der energiereichste Posten
-        // dieses Moduls: 500 g Trockennudeln sind fuenf Portionen. 1500 gegen
-        // SL_ENERGY_MAX 5000 (PlayerConstants.c:44) - viel, aber die Ware ist
-        // teilbar (canBeSplit), niemand isst sie in einem Zug. Das Volumen
-        // bleibt mit 400 deutlich unter "Stuffed" 1000.
-        class Nutrition
-        {
-            fullnessIndex = 0.80;
-            energy = 100;
-            water = 3;
-            nutritionalIndex = 22;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        //   Raw    400 / 1500 kcal / 15 ml
-        //   Baked  420 / 1590 kcal / 10 ml
-        //   Burned 100 /  375 kcal /  0 ml   (25 % von Raw)
-        //   Rotten 160 /  600 kcal /  5 ml   (40 % von Raw, toxicity 20)
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw    { nutrition_properties[] = {0.80, 100, 3, 22, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0.0, 0.0, 0.0}; };
-                class Baked  { nutrition_properties[] = {0.84, 110, 2, 22, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100.0, 40.0, 200.0}; };
-                class Burned { nutrition_properties[] = {0.20, 75, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200.0, 60.0, 250.0}; };
-                class Rotten { nutrition_properties[] = {0.32, 120, 1, 0, 20, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0}; };
-            };
-            class FoodStageTransitions
-            {
-                class Raw
+                class Dried
                 {
                     class Baking
                     {

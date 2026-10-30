@@ -9,7 +9,7 @@
       "durationOverrideSec": 20,
       "qualityRule": "MEAN",
       "inputs": [
-        { "slotId": "corns", "match": { "cls": "ChefZ_DriedPeppercorns" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "corns", "match": { "allOf": [ { "cls": "ChefZ_PepperBerries" }, { "vanillaStage": "Dried" } ] }, "minCount": 1, "consume": "whole" }
       ],
       "outputs": [
         { "cls": "ChefZ_BlackPepper", "setState": "PREPARED", "quantityMode": "fromInput" }
@@ -23,7 +23,7 @@
       "durationOverrideSec": 20,
       "qualityRule": "MEAN",
       "inputs": [
-        { "slotId": "pods", "match": { "cls": "ChefZ_DriedPaprika" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "pods", "match": { "allOf": [ { "cls": "GreenBellPepper" }, { "vanillaStage": "Dried" } ] }, "minCount": 1, "consume": "whole" }
       ],
       "outputs": [
         { "cls": "ChefZ_PaprikaPowder", "setState": "PREPARED", "quantityMode": "fromInput" }
@@ -58,9 +58,9 @@
       "durationOverrideSec": 25,
       "qualityRule": "MEAN",
       "inputs": [
-        { "slotId": "thyme",    "match": { "cls": "ChefZ_DriedThyme" },    "minCount": 1, "consume": "whole" },
-        { "slotId": "parsley",  "match": { "cls": "ChefZ_DriedParsley" },  "minCount": 1, "consume": "whole" },
-        { "slotId": "rosemary", "match": { "cls": "ChefZ_DriedRosemary" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "thyme",    "match": { "allOf": [ { "cls": "ChefZ_Thyme" }, { "vanillaStage": "Dried" } ] },    "minCount": 1, "consume": "whole" },
+        { "slotId": "parsley",  "match": { "allOf": [ { "cls": "ChefZ_Parsley" }, { "vanillaStage": "Dried" } ] },  "minCount": 1, "consume": "whole" },
+        { "slotId": "rosemary", "match": { "allOf": [ { "cls": "ChefZ_Rosemary" }, { "vanillaStage": "Dried" } ] }, "minCount": 1, "consume": "whole" }
       ],
       "outputs": [
         { "cls": "ChefZ_HerbMix", "setState": "PREPARED", "quantityMode": "fixed", "quantity": 1 }
@@ -77,8 +77,8 @@
       "inputs": [
         { "slotId": "pepper",     "match": { "cls": "ChefZ_BlackPepper" },      "minCount": 1, "consume": "whole" },
         { "slotId": "paprika",    "match": { "cls": "ChefZ_PaprikaPowder" },    "minCount": 1, "consume": "whole" },
-        { "slotId": "thyme",      "match": { "cls": "ChefZ_DriedThyme" },       "minCount": 1, "consume": "whole" },
-        { "slotId": "wildgarlic", "match": { "cls": "ChefZ_DriedWildGarlic" },  "minCount": 1, "consume": "whole" },
+        { "slotId": "thyme",      "match": { "allOf": [ { "cls": "ChefZ_Thyme" }, { "vanillaStage": "Dried" } ] },       "minCount": 1, "consume": "whole" },
+        { "slotId": "wildgarlic", "match": { "allOf": [ { "cls": "ChefZ_WildGarlic" }, { "vanillaStage": "Dried" } ] },  "minCount": 1, "consume": "whole" },
         { "slotId": "salt",       "match": { "tag": "CHEFZ_SPICE" },            "minCount": 1, "consume": "whole" }
       ],
       "outputs": [

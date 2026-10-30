@@ -550,13 +550,6 @@
             "fullness": 35
         },
         {
-            "id": "ChefZ_DriedPasta",
-            "scope": "class",
-            "energy": 380,
-            "water": 5,
-            "fullness": 28
-        },
-        {
             "id": "ChefZ_Flatbread",
             "scope": "class",
             "energy": 320,
@@ -590,48 +583,6 @@
             "energy": 4,
             "water": 0,
             "fullness": 1
-        },
-        {
-            "id": "ChefZ_DriedPaprika",
-            "scope": "class",
-            "energy": 30,
-            "water": 2,
-            "fullness": 8
-        },
-        {
-            "id": "ChefZ_DriedParsley",
-            "scope": "class",
-            "energy": 8,
-            "water": 0,
-            "fullness": 2
-        },
-        {
-            "id": "ChefZ_DriedPeppercorns",
-            "scope": "class",
-            "energy": 6,
-            "water": 0,
-            "fullness": 2
-        },
-        {
-            "id": "ChefZ_DriedRosemary",
-            "scope": "class",
-            "energy": 8,
-            "water": 0,
-            "fullness": 2
-        },
-        {
-            "id": "ChefZ_DriedThyme",
-            "scope": "class",
-            "energy": 8,
-            "water": 0,
-            "fullness": 2
-        },
-        {
-            "id": "ChefZ_DriedWildGarlic",
-            "scope": "class",
-            "energy": 8,
-            "water": 0,
-            "fullness": 2
         },
         {
             "id": "ChefZ_HerbMix",
@@ -933,13 +884,6 @@
             "energy": 130,
             "water": 105,
             "fullness": 45
-        },
-        {
-            "id": "ChefZ_DriedBerries",
-            "scope": "class",
-            "energy": 130,
-            "water": 4,
-            "fullness": 12
         }
     ]
 }

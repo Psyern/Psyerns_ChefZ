@@ -119,9 +119,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Thyme"
-                            },
-                            {
-                                "cls": "ChefZ_DriedThyme"
                             }
                         ]
                     },
@@ -276,9 +273,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Parsley"
-                            },
-                            {
-                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },

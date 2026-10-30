@@ -9,8 +9,9 @@
 // ---------------------------------------------------------------------------
 // Fuer die uebrigen Gewuerze lautet die Antwort weiter NEIN, und sie steht
 // nicht hier, sondern in den Daten: ChefZ_SpiceBase, ChefZ_BlackPepper,
-// ChefZ_DriedPeppercorns, ChefZ_HerbMix, ChefZ_HunterSeasoning und die ganze
-// ChefZ_DriedHerbBase-Familie haben KEINEN Food-Knoten. HasFoodStage() ist
+// ChefZ_HerbMix und ChefZ_HunterSeasoning haben KEINEN Food-Knoten. (Die
+// frueheren Trockenklassen sind seit dem 30.10.2026 die Stufe "Dried" der
+// frischen Kraeuter, ChefZ_Farming.) HasFoodStage() ist
 // damit false (ItemBase.c:2654), es entsteht kein FoodStage-Objekt, und
 // CanBeCooked() waere selbst auf ChefZ_Edible_Base false - der erste Test dort
 // ist "if (!GetFoodStage()) return false;". Sie bekommen deshalb hier gar
@@ -103,12 +104,12 @@ class ChefZ_PaprikaPowder extends ChefZ_Edible_Base
 //
 // Sie gilt nicht fuer die Essaktion. Vanilla registriert die Essaktion auf
 // jeder Nahrungsklasse einzeln und NICHT auf Edible_Base (Potato.c:26-31).
-// ChefZ_SpiceBase und ChefZ_DriedHerbBase tragen beide einen
-// "class Nutrition"-Block; sie sind damit Nahrung im Sinne von
+// ChefZ_SpiceBase traegt einen "class Nutrition"-Block; die Gewuerze sind
+// damit Nahrung im Sinne von
 // PlayerStomach.InitData, werden aber ohne eine ActionEat*-Registrierung nie
 // zum Essen angeboten - kein Fehlerbild, keine Logzeile.
 //
-// Deshalb erben diese beiden Klassen von Edible_Base und NICHT von
+// Deshalb erbt ChefZ_SpiceBase von Edible_Base und NICHT von
 // ChefZ_Edible_Base. Das ist der ganze Unterschied und der Grund, warum die
 // Entscheidung des Dateikopfs bestehen bleibt:
 //
@@ -117,8 +118,9 @@ class ChefZ_PaprikaPowder extends ChefZ_Edible_Base
 //                     Verfallstakt. Genau das, was der Kopf vermeiden wollte.
 //   ChefZ_Edible_Base haette zusaetzlich den vollen Zustandsblock gebracht.
 //
-// Elf Klassen haengen an diesen beiden Basen; die Engine findet sie fuer jede
-// ueber die Config-Elternkette.
+// Die Gewuerzklassen haengen an dieser Basis; die Engine findet sie fuer jede
+// ueber die Config-Elternkette. (Bis zum 30.10.2026 gab es daneben
+// ChefZ_DriedHerbBase - getrocknet ist seitdem eine Garstufe, ChefZ_Farming.)
 //
 // WARUM NICHT "gar nicht essbar": fuer Salz, Pfeffer und Gewuerzpulver waere
 // das die ehrlichere Antwort, und der saubere Weg dorthin ist, ihnen die
@@ -130,8 +132,7 @@ class ChefZ_PaprikaPowder extends ChefZ_Edible_Base
 //      Slice nicht anfassen (Workflow §5).
 //   2. Jedes dieser Gewuerze ist ERGEBNIS eines Rezepts oder Transforms
 //      (ChefZ_BlackPepper, ChefZ_HerbMix, ChefZ_HunterSeasoning,
-//      ChefZ_PaprikaPowder, ChefZ_DriedThyme und die uebrige
-//      DriedHerb-Familie). Fuer Ergebnisklassen verlangt 01 V7 einen
+//      ChefZ_PaprikaPowder). Fuer Ergebnisklassen verlangt 01 V7 einen
 //      Nutrition- oder Food-Knoten; ohne ihn registriert PlayerStomach sie
 //      nie. Die Naehrwerte zu entfernen hiesse, diese Regel zu brechen.
 //
@@ -146,7 +147,7 @@ class ChefZ_PaprikaPowder extends ChefZ_Edible_Base
 // "noch etwas weniger als fast wertlos" geworden.)
 //==============================================================================
 
-//! Basis der Gewuerzpulver (§71): schwarzer Pfeffer, Pfefferkoerner,
+//! Basis der Gewuerzpulver (§71): schwarzer Pfeffer,
 //! Kraeutermischung, Jaegergewuerz. Traegt NUR die Essaktion.
 class ChefZ_SpiceBase extends Edible_Base
 {
@@ -176,16 +177,3 @@ class ChefZ_SpiceBase extends Edible_Base
     }
 }
 
-//! Basis der getrockneten Kraeuter (§16, §9): Petersilie, Thymian,
-//! Rosmarin, Baerlauch und getrocknete Paprikaschoten. Traegt NUR die
-//! Essaktion; Begruendung der Variante siehe ChefZ_SpiceBase.
-class ChefZ_DriedHerbBase extends Edible_Base
-{
-    override void SetActions()
-    {
-        super.SetActions();
-
-        AddAction(ActionForceFeedSmall);
-        AddAction(ActionEatSmall);
-    }
-}

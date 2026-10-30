@@ -93,9 +93,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Parsley"
-                            },
-                            {
-                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },
@@ -425,9 +422,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Thyme"
-                            },
-                            {
-                                "cls": "ChefZ_DriedThyme"
                             }
                         ]
                     },
@@ -572,9 +566,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Parsley"
-                            },
-                            {
-                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },
@@ -867,9 +858,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Rosemary"
-                            },
-                            {
-                                "cls": "ChefZ_DriedRosemary"
                             }
                         ]
                     },
@@ -1037,9 +1025,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Thyme"
-                            },
-                            {
-                                "cls": "ChefZ_DriedThyme"
                             }
                         ]
                     },
@@ -1322,9 +1307,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Parsley"
-                            },
-                            {
-                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },

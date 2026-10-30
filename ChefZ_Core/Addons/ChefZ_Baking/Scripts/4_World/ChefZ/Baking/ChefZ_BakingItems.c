@@ -17,11 +17,10 @@
 //! alle aus ihm (Entscheidung vom 29.08.2026: eine Teigart, keine Hefe).
 class ChefZ_Dough extends ChefZ_GrainFoodBase {}
 
-//! Frische Nudeln. Kurze Haltbarkeit, direkt kochbar.
+//! Frische Nudeln. Kurze Haltbarkeit, direkt kochbar. Getrocknet (Stufe
+//! "Dried" vom Trockenrahmen) der Vorratsartikel der Kette - frueher die
+//! eigene Klasse ChefZ_DriedPasta, entfallen am 30.10.2026.
 class ChefZ_RawPasta extends ChefZ_GrainFoodBase {}
-
-//! Trockennudeln. Der Vorratsartikel der Kette.
-class ChefZ_DriedPasta extends ChefZ_GrainFoodBase {}
 
 //! Brot: der Teig im Topf oder Ofen.
 class ChefZ_Bread extends ChefZ_GrainFoodBase {}

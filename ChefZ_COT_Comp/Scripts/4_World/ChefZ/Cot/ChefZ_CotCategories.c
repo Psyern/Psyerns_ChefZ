@@ -46,8 +46,7 @@
 //                           Beeren aus dem Slice "berries", dazu ChefZ_Chili.
 //   ChefZ_Meat (4)          ChefZ_BeefLeg, ChefZ_PorkLeg, ChefZ_VenisonLeg,
 //                           ChefZ_DicedMeat
-//   ChefZ_Ingredients (3)   ChefZ_CheeseCurd, ChefZ_DriedBerries,
-//                           ChefZ_MushroomCulture
+//   ChefZ_Ingredients (2)   ChefZ_CheeseCurd, ChefZ_MushroomCulture
 //   ChefZ_Cooking (2)       ChefZ_PumpkinSoupBowl, ChefZ_SmallFishPan
 //   ChefZ_Cookbook (1)      ChefZ_CookbookItem
 //   ChefZ_Processing (1)    ChefZ_HoneyExtractor
@@ -65,8 +64,8 @@
 //                  ueber die IsKindOf sie einsammeln koennte.
 //   Stationen      ChefZ_ButterChurn erbt Pot, ChefZ_CheesePress Cauldron,
 //                  der Rest Inventory_Base. Dasselbe Bild.
-//   Kraeuter       verteilen sich ueber drei Basen (ChefZ_FreshHerbBase,
-//                  ChefZ_DriedHerbBase, ChefZ_SpiceBase).
+//   Kraeuter       verteilen sich ueber zwei Basen (ChefZ_FreshHerbBase,
+//                  ChefZ_SpiceBase) und Vanillas GreenBellPepper.
 //
 // Die Alternative waere gewesen, die Vererbung der Items umzubauen, damit ein
 // Adminfilter huebsch wird. Das waere eine Aenderung an der Spielmechanik fuer
@@ -348,12 +347,13 @@ class ChefZ_CotCategories
 	}
 
 	// ChefZ / Kraeuter und Gewuerze - die vollstaendige Kraeuterkette in EINER
-	// Kategorie: frisch (Fundpflanze), getrocknet, gemahlen.
+	// Kategorie: frisch (Fundpflanze) und gemahlen. Getrocknet ist seit dem
+	// 30.10.2026 keine eigene Klasse mehr, sondern die Garstufe "Dried" am
+	// frischen Kraut - in COT also derselbe Eintrag wie frisch.
 	//
 	// Bewusst nicht nach Verarbeitungsgrad aufgeteilt. Ein Admin sucht
-	// "Thymian", nicht "Thymian, Stufe 2 von 3"; die drei Basisklassen dahinter
-	// (ChefZ_FreshHerbBase, ChefZ_DriedHerbBase, ChefZ_SpiceBase)
-	// interessieren ihn nicht.
+	// "Thymian", nicht "Thymian, gemahlen"; die Basisklassen dahinter
+	// (ChefZ_FreshHerbBase, ChefZ_SpiceBase) interessieren ihn nicht.
 	//
 	// Die drei Wildkraeuter sind die nullte Stufe derselben Kette und stehen
 	// deshalb hier - jedes direkt hinter seiner Ernte, damit die Liste Pflanze
@@ -376,13 +376,7 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_WildRosemary");
 		classes.Insert("ChefZ_WildGarlic");
 		classes.Insert("ChefZ_PepperBerries");
-		classes.Insert("ChefZ_DriedParsley");
-		classes.Insert("ChefZ_DriedThyme");
-		classes.Insert("ChefZ_DriedRosemary");
-		classes.Insert("ChefZ_DriedWildGarlic");
-		classes.Insert("ChefZ_DriedPaprika");
 		classes.Insert("ChefZ_PaprikaPowder");
-		classes.Insert("ChefZ_DriedPeppercorns");
 		classes.Insert("ChefZ_BlackPepper");
 		classes.Insert("ChefZ_HerbMix");
 		classes.Insert("ChefZ_HunterSeasoning");
@@ -440,7 +434,6 @@ class ChefZ_CotCategories
 		array<string> classes = new array<string>;
 		classes.Insert("ChefZ_Dough");
 		classes.Insert("ChefZ_RawPasta");
-		classes.Insert("ChefZ_DriedPasta");
 		classes.Insert("ChefZ_Bread");
 		classes.Insert("ChefZ_Flatbread");
 

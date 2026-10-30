@@ -9,10 +9,10 @@
       "durationOverrideSec": 480,
       "qualityRule": "MIN",
       "inputs": [
-        { "slotId": "herb", "match": { "cls": "ChefZ_Parsley" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "herb", "match": { "allOf": [ { "cls": "ChefZ_Parsley" }, { "vanillaStage": "Raw" } ] }, "minCount": 1, "consume": "none" }
       ],
       "outputs": [
-        { "cls": "ChefZ_DriedParsley", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+        { "setState": "DRIED", "inheritFreshness": true }
       ],
       "freshnessCarry": 1.0,
       "priority": 100
@@ -24,10 +24,10 @@
       "durationOverrideSec": 480,
       "qualityRule": "MIN",
       "inputs": [
-        { "slotId": "herb", "match": { "cls": "ChefZ_Thyme" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "herb", "match": { "allOf": [ { "cls": "ChefZ_Thyme" }, { "vanillaStage": "Raw" } ] }, "minCount": 1, "consume": "none" }
       ],
       "outputs": [
-        { "cls": "ChefZ_DriedThyme", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+        { "setState": "DRIED", "inheritFreshness": true }
       ],
       "freshnessCarry": 1.0,
       "priority": 100
@@ -39,10 +39,10 @@
       "durationOverrideSec": 600,
       "qualityRule": "MIN",
       "inputs": [
-        { "slotId": "herb", "match": { "cls": "ChefZ_Rosemary" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "herb", "match": { "allOf": [ { "cls": "ChefZ_Rosemary" }, { "vanillaStage": "Raw" } ] }, "minCount": 1, "consume": "none" }
       ],
       "outputs": [
-        { "cls": "ChefZ_DriedRosemary", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+        { "setState": "DRIED", "inheritFreshness": true }
       ],
       "freshnessCarry": 1.0,
       "priority": 100
@@ -54,10 +54,10 @@
       "durationOverrideSec": 480,
       "qualityRule": "MIN",
       "inputs": [
-        { "slotId": "herb", "match": { "cls": "ChefZ_WildGarlic" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "herb", "match": { "allOf": [ { "cls": "ChefZ_WildGarlic" }, { "vanillaStage": "Raw" } ] }, "minCount": 1, "consume": "none" }
       ],
       "outputs": [
-        { "cls": "ChefZ_DriedWildGarlic", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+        { "setState": "DRIED", "inheritFreshness": true }
       ],
       "freshnessCarry": 1.0,
       "priority": 100
@@ -69,10 +69,10 @@
       "durationOverrideSec": 900,
       "qualityRule": "MIN",
       "inputs": [
-        { "slotId": "pod", "match": { "cls": "GreenBellPepper" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "pod", "match": { "allOf": [ { "cls": "GreenBellPepper" }, { "vanillaStage": "Raw" } ] }, "minCount": 1, "consume": "none" }
       ],
       "outputs": [
-        { "cls": "ChefZ_DriedPaprika", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+        { "setState": "DRIED", "inheritFreshness": true }
       ],
       "freshnessCarry": 1.0,
       "priority": 100
@@ -84,10 +84,10 @@
       "durationOverrideSec": 900,
       "qualityRule": "MIN",
       "inputs": [
-        { "slotId": "berries", "match": { "cls": "ChefZ_PepperBerries" }, "minCount": 1, "consume": "whole" }
+        { "slotId": "berries", "match": { "allOf": [ { "cls": "ChefZ_PepperBerries" }, { "vanillaStage": "Raw" } ] }, "minCount": 1, "consume": "none" }
       ],
       "outputs": [
-        { "cls": "ChefZ_DriedPeppercorns", "setState": "DRIED", "quantityMode": "fromInput", "inheritFreshness": true }
+        { "setState": "DRIED", "inheritFreshness": true }
       ],
       "freshnessCarry": 1.0,
       "priority": 100

@@ -67,8 +67,7 @@ modded class ModItemRegisterCallbacks
 		pType.AddItemInHandsProfileIK("ChefZ_Garlic", asiFruit, pBehavior, ik + "tomato_fresh.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_Onion", asiFruit, pBehavior, ik + "tomato_fresh.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_PepperBerries", asiFruit, pBehavior, ik + "berries.anm");
-		pType.AddItemInHandsProfileIK("ChefZ_Thyme", asiOneHand, pBehavior, ik + "plant_material.anm");
-		pType.AddItemInHandsProfileIK("ChefZ_DriedHerbBase", asiOneHand, pBehavior, ik + "Bark_birch.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_Thyme", asiKnife, pBehavior, ik + "screwdriver.anm");   // Rosmarin-Modell seit 30.10.2026
 
 		// Fleisch, Kaese
 		pType.AddItemInHandsProfileIK("ChefZ_Cheese", asiOneHand, pBehavior, ik + "rice.anm");

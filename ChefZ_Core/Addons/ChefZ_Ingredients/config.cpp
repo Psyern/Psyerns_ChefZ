@@ -97,14 +97,13 @@ class CfgPatches
             "ChefZ_RawSalt",
             "ChefZ_Salt",
             // ### SLICE herbs ###
-            "ChefZ_DriedHerbBase",
-            "ChefZ_DriedParsley", "ChefZ_DriedThyme",
-            "ChefZ_DriedRosemary", "ChefZ_DriedWildGarlic", "ChefZ_DriedPaprika",
             "ChefZ_SpiceBase",
-            "ChefZ_PaprikaPowder", "ChefZ_DriedPeppercorns", "ChefZ_BlackPepper",
-            "ChefZ_HerbMix", "ChefZ_HunterSeasoning",
-            // ### SLICE vanilla-foods ###
-            "ChefZ_DriedBerries"
+            "ChefZ_PaprikaPowder", "ChefZ_BlackPepper",
+            "ChefZ_HerbMix", "ChefZ_HunterSeasoning"
+            // ### 30.10.2026 ### Die Trockenklassen (ChefZ_DriedParsley ...
+            // ChefZ_DriedPeppercorns, ChefZ_DriedBerries) sind entfallen:
+            // getrocknet ist seitdem die Garstufe "Dried" am Kraut, an der
+            // Paprika und an den Vanillabeeren selbst.
         };
         weapons[] = {};
         requiredVersion = 0.1;
@@ -199,164 +198,10 @@ class CfgVehicles
     // vorhandenen Trockenkette).
     //
     // Seit dem 29.08.2026 nur noch EINE Klasse: die geschnittene Zucchini ist
-    // mit dem uebrigen Schnittgut entfallen (Kopf dieser Datei). Der Grund
-    // fuer die Bauform von ChefZ_DriedBerries steht in ihrem eigenen Kommentar.
+    // mit dem uebrigen Schnittgut entfallen (Kopf dieser Datei). Getrocknete
+    // Beeren sind seit dem 30.10.2026 Vanillas Garstufe "Dried" an
+    // CaninaBerry/SambucusBerry, keine eigene Klasse mehr.
     //==========================================================================
-
-    //--------------------------------------------------------------------------
-    // Getrocknete Beeren - Hagebutte und Holunder vom Trockenrahmen.
-    //
-    // WARUM SIE EINE EIGENE BAUFORM BRAUCHT und nicht bei den Kraeutern liegt:
-    // getrocknete Kraeuter sind Wuerze und kommen nie in einen Pflicht-Slot;
-    // getrocknete Beeren waren die PFLICHTzutat des Obstkompotts (Slice
-    // dishes-vanilla, RCP_ChefZ_FruitCompote - am 14.09.2026 entfernt; die
-    // Bauform bleibt fuer das naechste Rezept mit Beeren-Pflichtslot). Dann gilt
-    // ChefZ_RecipeEvaluator.CheckStages: jede gebundene Pflichtzutat muss eine
-    // erlaubte Endstufe erreichen. Eine Klasse ohne FoodStage meldet Stufe 0
-    // (NONE), und das Gericht wuerde nie fertig.
-    //
-    // DER UEBERGANG AUS "Dried" IST DER KERN DIESER KLASSE.
-    // ChefZ_PreservedFood_Base gibt Doerrfleisch bewusst KEINEN Weg aus Dried
-    // heraus - Doerrfleisch ist fertig. Getrocknetes Obst ist das nicht: es
-    // wird im Kompott aufgekocht und zieht dabei Wasser. Genau dieser eine
-    // Uebergang Dried -> Boiled steht deshalb hier, und ohne ihn faellt
-    // FoodStage.GetNextFoodStageType auf BURNED zurueck (FoodStage.c:472) -
-    // die Beeren verkohlten im Topf und das Kompott wuerde nie fertig.
-    //
-    // Der Uebergang aus "Raw" steht daneben, weil eine Klasse ueber Admin- oder
-    // Lootspawn auch ohne den Transform entstehen kann und dann RAW ist.
-    //
-    // PROXY: Marmalade (Schraubglas) - getrocknete Beeren im Glas. Dieselbe
-    // Wahl und dieselbe Begruendung wie beim Slice dairy: eine GEERBTE
-    // Vanillaklasse statt eines von Hand getippten p3d-Pfades, weil ein
-    // geratener Pfad erst beim Packen auffaellt und eine geerbte Klasse nie.
-    // Eigene Geometrie steht im Slice-Bericht; kein Item wartet darauf.
-    //--------------------------------------------------------------------------
-    class ChefZ_DriedBerries : Marmalade
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDBERRIES";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDBERRIES_DESC";
-        rotationFlags = 17;
-        itemSize[] = {1, 1};
-        weight = 40;
-        absorbency = 0.0;
-        varQuantityInit = 100;
-        varQuantityMin = 0;
-        varQuantityMax = 100;
-        varQuantityDestroyOnMin = 1;
-        canBeSplit = 0;
-        isMeleeWeapon = 0;
-        soundImpactType = "food";
-        lifetime = 43200;
-
-        // fullnessIndex 60: STUECKWARE, varQuantityMax = 1. Ein Biss (EAT_BIG
-        // 25) nimmt die ganze Menge 1, also ist das Volumen des ganzen Glases
-        //     60 * 1 = 60
-        // - unteres Ende des Bandes 50-250 fuer essbare Zutaten. Ein Glas
-        // getrockneter Beeren ist eine Handvoll Trockenobst, kein Essen.
-        // 60 von 2000 (VOMIT_THRESHOLD) sind 3 Prozent.
-        //
-        // DER WERT STEIGT (vorher 12 -> 60), er faellt nicht: bei
-        // varQuantityMax = 1 war das alte Volumen ebenfalls 12 und damit
-        // praktisch nicht vorhanden. Nur die Klassen mit varQuantityMax = 100
-        // waren zu hoch. Das ist der Unterschied zwischen "die Invariante
-        // anwenden" und "alles durch hundert teilen".
-        //
-        // ENERGIE UND WASSER (26.10.2026): anders als das Volumen teilt der Magen
-        // sie durch 100 (PlayerStomach.c:92-93). Mit 130 brachte das ganze Glas
-        // 1.3 Energie. 13000 ergibt 130 - ein Viertel von Vanillas Marmelade
-        // (150 x 400 / 100 = 600) fuer ein Zehntel ihres Gewichts.
-        class Nutrition
-        {
-            fullnessIndex = 0.6;
-            energy = 130;
-            water = 4;
-            nutritionalIndex = 45;
-            toxicity = 0;
-            agents = 0;
-            digestibility = 1;
-        };
-
-        // nutrition_properties[0] ist der fullnessIndex und schlaegt den Wert
-        // aus class Nutrition (Edible_Base.c:394-503) - er ist hier ueberall
-        // mitgezogen. Die Verhaeltnisse der Stufen bleiben:
-        //   Raw/Baked/Dried 12 -> 60   (Faktor 5, wie class Nutrition)
-        //   Boiled          18 -> 90   (im Kompott aufgekocht, zieht Wasser)
-        //   Burned/Rotten    3 -> 15   (ein Viertel, wie vorher)
-        class Food
-        {
-            class FoodStages
-            {
-                class Raw
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {0.6, 130, 4, 45, 0, 0, 1};
-                };
-                class Baked
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {100, 40, 200};
-                    nutrition_properties[] = {0.6, 130, 2, 40, 0, 0, 1};
-                };
-                class Boiled
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {100, 60, 150};
-                    nutrition_properties[] = {0.9, 125, 55, 42, 0, 0, 1};
-                };
-                class Dried
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {0.6, 130, 4, 45, 0, 0, 1};
-                };
-                class Burned
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {200, 20, 0};
-                    nutrition_properties[] = {0.15, 20, 0, 0, 0, 0, 1};
-                };
-                class Rotten
-                {
-                    visual_properties[] = {0, 0, 0};
-                    cooking_properties[] = {0, 0, 0};
-                    nutrition_properties[] = {0.15, 20, 2, 0, 20, 16, 1};
-                };
-            };
-
-            // transition_to und cooking_method sind ZAHLEN, nicht Namen
-            // (SetupFoodStageTransitionMapping liest sie mit ConfigGetInt,
-            // FoodStage.c:167ff):
-            //   FoodStageType:     RAW 1, BAKED 2, BOILED 3, DRIED 4, BURNED 5, ROTTEN 6
-            //   CookingMethodType: NONE 0, BAKING 1, BOILING 2, DRYING 3, TIME 4
-            class FoodStageTransitions
-            {
-                class Raw
-                {
-                    class Boiling
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                    class Baking
-                    {
-                        transition_to = 2;
-                        cooking_method = 1;
-                    };
-                };
-                class Dried
-                {
-                    class Boiling
-                    {
-                        transition_to = 3;
-                        cooking_method = 2;
-                    };
-                };
-            };
-        };
-    };
 
     //==========================================================================
     // ### SLICE dairy ### Milchkette und Ei
@@ -838,6 +683,22 @@ class CfgVehicles
         weight = 1800;
         lifetime = 43200;
         repairableWithKits[] = {};
+
+        // MILCH IST DER FUELLSTAND DER KANNE (30.10.2026, Spieltest: "Wir
+        // brauchen Milch ... wie wir die Milch darstellen"). Kein eigener
+        // Fluessigkeitstyp: Vanillas Fluessigkeiten sind Bitmasken, die jede
+        // Trink- und Fuellaktion kennt, und ein fremdes Bit faellt dort ueberall
+        // durch. Stattdessen Liter als varQuantity mit Balken: Melken fuellt
+        // (ChefZ_ActionMilkCow), die Kaesepresse leert (je 5 l ein Kaese).
+        varQuantityInit = 0;
+        varQuantityMin = 0;
+        varQuantityMax = 20;   // Liter - eine Milchkanne, vier Kaese
+        varQuantityDestroyOnMin = 0;
+        quantityBar = 1;
+        canBeSplit = 0;
+        stackedUnit = "";
+        // Der Milchplatz der Kaesepresse (ChefZ_Processing, CfgSlots).
+        inventorySlot[] = {"ChefZ_PressMilkCan"};
     };
 
     // §51: Ei. Quelle ist Loot, Nest, Farmgebaeude - kein Huhn-System in V1.
@@ -1102,78 +963,6 @@ class CfgVehicles
     //
     // PROXY-MODELLE, alle Vanilla, alle im Asset-Bedarf des Slice gemeldet.
     //==========================================================================
-    class ChefZ_DriedHerbBase : Edible_Base
-    {
-        scope = 0;
-        model = "\dz\gear\consumables\birch_bark.p3d";
-        weight = 12;
-        itemSize[] = {1, 1};
-        rotationFlags = 17;
-        varQuantityInit = 1;
-        varQuantityMin = 0;
-        varQuantityMax = 1;
-        lifetime = 172800;
-
-        // fullnessIndex 0.1 (vorher 2): varQuantityMax = 1 (Stueckware, ein
-        // Biss nimmt alles), also
-        //     0.1 * 1 = 0.1 Volumen fuer das ganze Buendel
-        // - das ist die Kategorie "praktisch 0" aus dem Dateikopf. Ein
-        // geloeffeltes Gewuerz IST keine Mahlzeit, und der Magen soll das nicht
-        // anders sehen: 20000 Buendel Thymian ergaeben eine Kotzschwelle. Der
-        // Wert bleibt ueber 0, damit die Klasse einen NutritionalProfile
-        // behaelt (PlayerStomach.InitData, 01 V7) - "fast nichts" und "lautlos
-        // nichts" sind zwei verschiedene Dinge.
-        //
-        // Vorher waren es 2 Volumen. Nicht dramatisch, aber falsch begruendet
-        // und in derselben verschobenen Einheit wie der Rest der Datei.
-        // Vier Klassen erben diesen Block unveraendert.
-        class Nutrition
-        {
-            fullnessIndex = 0.1;
-            energy = 8;
-            water = 0;
-            nutritionalIndex = 15;
-            toxicity = 0;
-            digestibility = 1;
-        };
-    };
-
-    class ChefZ_DriedParsley : ChefZ_DriedHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDPARSLEY";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDPARSLEY_DESC";
-    };
-
-    class ChefZ_DriedThyme : ChefZ_DriedHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDTHYME";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDTHYME_DESC";
-    };
-
-    class ChefZ_DriedRosemary : ChefZ_DriedHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDROSEMARY";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDROSEMARY_DESC";
-    };
-
-    class ChefZ_DriedWildGarlic : ChefZ_DriedHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDWILDGARLIC";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDWILDGARLIC_DESC";
-    };
-
-    // Getrocknete Paprikaschoten - Zwischenstufe zum Pulver (Production Map §15).
-    class ChefZ_DriedPaprika : ChefZ_DriedHerbBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDPAPRIKA";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDPAPRIKA_DESC";
-        weight = 40;
-    };
 
     //--------------------------------------------------------------------------
     // Gewuerze. Production Map §71 empfiehlt EIN gemeinsames Behaelter-Mesh mit
@@ -1193,7 +982,7 @@ class CfgVehicles
 
         // fullnessIndex 0.1 (vorher 2): varQuantityMax = 1, also
         //     0.1 * 1 = 0.1 Volumen fuer die ganze Tuete
-        // - dieselbe Herleitung wie bei ChefZ_DriedHerbBase daneben. Pfeffer,
+        // - wie frueher bei den getrockneten Kraeutern. Pfeffer,
         // Paprikapulver, Kraeutermix und Jaegergewuerz saettigen nicht; sie
         // behalten nur so viel Profil, dass PlayerStomach sie ueberhaupt kennt.
         // Vier Klassen erben diesen Block; ChefZ_PaprikaPowder ueberschreibt
@@ -1294,16 +1083,6 @@ class CfgVehicles
         };
     };
 
-    // Pfefferkoerner sind noch kein Pulver - eigenes Modell, Beutelform.
-    class ChefZ_DriedPeppercorns : ChefZ_SpiceBase
-    {
-        scope = 2;
-        displayName = "#STR_CHEFZ_ITEM_DRIEDPEPPERCORNS";
-        descriptionShort = "#STR_CHEFZ_ITEM_DRIEDPEPPERCORNS_DESC";
-        model = "\dz\gear\food\Rice.p3d";
-        weight = 40;
-    };
-
     class ChefZ_BlackPepper : ChefZ_SpiceBase
     {
         scope = 2;
@@ -1366,8 +1145,8 @@ class CfgVehicles
     // PROXY: \dz\gear\food\Rice.p3d - ein kleiner Beutel. NICHT das geerbte
     // PowderedMilk.p3d der Basis: in einer KAESEkette saehe eine Tuete
     // Milchpulver wie die Milch aus, und der Spieler haette zwei verschiedene
-    // Dinge mit demselben Bild. Der Reisbeutel kollidiert dafuer mit
-    // ChefZ_DriedPeppercorns - gemeldet im Asset-Bedarf, aufgeloest mit dem
+    // Dinge mit demselben Bild. Der Reisbeutel kollidierte dafuer mit den
+    // frueheren ChefZ_DriedPeppercorns - gemeldet im Asset-Bedarf, aufgeloest mit dem
     // gemeinsamen Gewuerzbehaelter-Mesh aus Production Map §71 und der Textur
     // "graues Sporenpulver". Kein Item wartet darauf.
     //==========================================================================
@@ -1425,24 +1204,6 @@ class CfgVehicles
 //==============================================================================
 class CfgChefZIngredients
 {
-    // Getrocknete Beeren. BERRY haengt unter FRUIT (Delta _deltas/vanilla-foods.json);
-    // ein FRUIT-Slot nimmt sie damit mit, ein BERRY-Slot nur sie und die zwei
-    // frischen Vanillabeeren. CHEFZ_PRESERVED trennt sie im Rezept vom frischen
-    // Obst - RCP_ChefZ_FruitCompote nutzte genau diesen Unterschied (entfernt
-    // 14.09.2026; die Trennung bleibt fuer das naechste Obstrezept).
-    //
-    // defaultState "DRIED": die beiden Transforms setzen ihn ohnehin; dieser
-    // Wert ist die Rueckfallebene der Zustandsprojektion (06 §3) fuer Exemplare
-    // aus Admin- oder Lootspawn.
-    class ChefZ_DriedBerries
-    {
-        categories[]      = {"BERRY"};
-        tags[]            = {"CHEFZ_PRESERVED"};
-        defaultState      = "DRIED";
-        quantityUnit      = "PIECE";
-        unitsPerWholeItem = 1;
-        decays            = 1;
-    };
 };
 
 //==============================================================================

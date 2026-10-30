@@ -72,6 +72,24 @@ class ChefZ_FreshHerbBase extends ChefZ_Edible_Base
         AddAction(ActionForceFeed);
         AddAction(ActionEat);
     }
+
+    /**
+     * Kraeuter garen nicht mit (30.10.2026).
+     *
+     * Seit "getrocknet" ein Zustand am Kraut ist und keine eigene Klasse
+     * (Bannerkommentar ChefZ_Farming/config.cpp), tragen die Kraeuter
+     * FoodStages. Kochten sie im Topf mit, verloere ein getrocknetes Kraut dort
+     * seine Stufe "Dried" - und die Rezepte, die es als getrocknet suchen,
+     * faenden es beim Abschluss nicht mehr. Die alten Trockenklassen hatten gar
+     * keine Stufe und blieben im Topf ebenfalls unveraendert.
+     *
+     * BEWUSSTE AUSNAHME von "override immer mit super", wie IsFruit oben:
+     * festes Nein.
+     */
+    override bool CanBeCooked()
+    {
+        return false;
+    }
 }
 
 class ChefZ_Parsley    extends ChefZ_FreshHerbBase {}
@@ -90,5 +108,5 @@ class ChefZ_Chili extends ChefZ_FreshHerbBase {}
 //! Frische Paprika hat KEINE eigene Klasse: das ist Vanillas GreenBellPepper
 //! (Vanilla-Audit §2). Eingang der Trockenkette §15 ist deshalb ein
 //! Vanilla-Item; einen ChefZ-Zustand kann es nicht tragen, es braucht ihn hier
-//! auch nicht - TR_PaprikaToDried setzt den Zustand DRIED am AUSGANG
-//! ChefZ_DriedPaprika, und der ist eine ChefZ-Klasse.
+//! auch nicht - TR_PaprikaToDried projiziert DRIED auf Vanillas Garstufe
+//! "Dried" der Paprika (ChefZ_ProcessRunner.ProjectOntoVanillaStage).

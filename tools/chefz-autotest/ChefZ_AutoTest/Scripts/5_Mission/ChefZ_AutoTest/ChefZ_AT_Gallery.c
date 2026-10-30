@@ -35,7 +35,6 @@ class ChefZ_AT_Gallery extends UIScriptedMenu
         m_Classes.Insert("CarpFilletMeat");
         m_Classes.Insert("ChefZ_Bread");
         m_Classes.Insert("ChefZ_Dough");
-        m_Classes.Insert("ChefZ_DriedPasta");
         m_Classes.Insert("ChefZ_Flatbread");
         m_Classes.Insert("ChefZ_RawPasta");
         m_Classes.Insert("ChefZ_BoneBroth");

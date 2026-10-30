@@ -67,19 +67,14 @@
             "inputs": [
                 {
                     "slotId": "pasta",
-                    "match": { "cls": "ChefZ_RawPasta" },
+                    "match": { "allOf": [ { "cls": "ChefZ_RawPasta" }, { "vanillaStage": "Raw" } ] },
                     "minCount": 1,
                     "maxCount": 1,
-                    "consume": "whole"
+                    "consume": "none"
                 }
             ],
             "outputs": [
-                {
-                    "cls": "ChefZ_DriedPasta",
-                    "quantityMode": "fromInput",
-                    "inheritFreshness": true,
-                    "freshnessCarry": 0.9
-                }
+                { "setState": "DRIED", "inheritFreshness": true }
             ],
             "qualityRule": "MIN",
             "priority": 0

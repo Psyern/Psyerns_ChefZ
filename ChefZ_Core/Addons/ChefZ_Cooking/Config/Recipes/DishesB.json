@@ -240,9 +240,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Parsley"
-                            },
-                            {
-                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },
@@ -570,9 +567,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Rosemary"
-                            },
-                            {
-                                "cls": "ChefZ_DriedRosemary"
                             }
                         ]
                     },
@@ -862,9 +856,6 @@
                         "anyOf": [
                             {
                                 "cls": "ChefZ_Parsley"
-                            },
-                            {
-                                "cls": "ChefZ_DriedParsley"
                             }
                         ]
                     },
@@ -880,9 +871,6 @@
                             },
                             {
                                 "cls": "ChefZ_WildGarlic"
-                            },
-                            {
-                                "cls": "ChefZ_DriedWildGarlic"
                             }
                         ]
                     },
@@ -1194,9 +1182,7 @@
                             {
                                 "cls": "ChefZ_BlackPepper"
                             },
-                            {
-                                "cls": "ChefZ_DriedPeppercorns"
-                            }
+                            { "allOf": [ { "cls": "ChefZ_PepperBerries" }, { "vanillaStage": "Dried" } ] }
                         ]
                     },
                     "points": 1
