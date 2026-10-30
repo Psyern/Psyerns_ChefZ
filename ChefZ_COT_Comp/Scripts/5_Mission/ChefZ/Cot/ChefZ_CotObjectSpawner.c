@@ -143,6 +143,11 @@ class ChefZ_CotMenu
 	static const string GROUP_ID = "chefz_cot_group";
 	static const string GROUP_LABEL = "#STR_CHEFZ_COT_GROUP";
 	static const string GROUP_ICON = "chef-hat";
+
+	//! Die Pfanne, unter der die Pfannengerichte als Auswahl stehen.
+	static const string PAN_CLASS = "ChefZ_FryingPan";
+	//! Woran ein Pfannengericht erkennbar ist: sein Modell (30.10.2026).
+	static const string PAN_DISH_MODEL = "panfood_base.p3d";
 }
 
 // SCOUT-GEPRUEFT 2026-09-17 (chefz-cot130)
@@ -387,6 +392,55 @@ modded class JMObjectSpawnerForm
 	 * die in dieser Kategorie ohnehin nicht steht. In einer Kategorienliste ist
 	 * das keine Hilfe, sondern eine falsche Faehrte.
 	 */
+	/**
+	 * Auswahl "mit welchem Gericht spawnen" an der Pfanne (30.10.2026,
+	 * Spieltest: "ChefZ FryingPan sollte im COT eine Auswahlmoeglichkeit haben,
+	 * mit welchem Gericht man es spawnen kann, z. B. ChefZ_HunterPasta").
+	 *
+	 * Ein Pfannengericht IST die Pfanne mit dem Gericht darin: dasselbe Modell
+	 * Panfood_Base.p3d, nur die Textur traegt das Gericht. Deshalb spawnt jede
+	 * Zeile direkt die Gerichtsklasse - eine echte Klasse, mit Vorschau und
+	 * ohne Sonderweg im Spawner. Welche Gerichte dazugehoeren, liest diese
+	 * Methode aus dem Modellpfad der Gerichtskategorie; ein neues
+	 * Pfannengericht erscheint ohne Aenderung hier.
+	 */
+	protected void ChefZ_AddPanDishRows(array<string> rowLabels, array<string> rowSubs)
+	{
+		ChefZ_CotCategory dishes = ChefZ_CotCategories.Find("chefz_cot_dishes");
+		if (!dishes)
+		{
+			return;
+		}
+
+		array<string> dishClasses = dishes.GetClasses();
+		foreach (string dish : dishClasses)
+		{
+			string path = CFG_VEHICLESPATH + " " + dish;
+			string model;
+			if (!g_Game.ConfigGetText(path + " model", model))
+			{
+				continue;
+			}
+
+			model.ToLower();
+			if (!model.Contains(ChefZ_CotMenu.PAN_DISH_MODEL))
+			{
+				continue;
+			}
+
+			string label = "    " + ChefZ_CotMenu.PAN_CLASS + " -> " + dish;
+			string displayName;
+			if (m_Module.m_FilterWithDisplayName && g_Game.ConfigGetText(path + " displayName", displayName) && displayName != "")
+			{
+				label = "    -> " + Widget.TranslateString(displayName);
+			}
+
+			rowLabels.Insert(label);
+			rowSubs.Insert(dish);
+			m_ListClasses.Insert(dish);
+		}
+	}
+
 	protected void ChefZ_FillClassList(ChefZ_CotCategory category)
 	{
 		if (!m_ClassList || !m_ListClasses)
@@ -493,6 +547,11 @@ modded class JMObjectSpawnerForm
 			}
 
 			m_ListClasses.Insert(className);
+
+			if (className == ChefZ_CotMenu.PAN_CLASS)
+			{
+				ChefZ_AddPanDishRows(rowLabels, rowSubs);
+			}
 		}
 
 		m_ClassList.SetItems(rowLabels, rowSubs);

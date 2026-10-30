@@ -87,7 +87,7 @@ class ChefZ_AT_Cases
         c.SetLiquid("Water", 1000.0);
         c.AddInput("ChefZ_BoneBroth", 2, "", "");
         c.AddInput("Potato", 3, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_BoneBrothSoupBowl");
         list.Insert(c);
 
@@ -95,7 +95,7 @@ class ChefZ_AT_Cases
         c.SetLiquid("Water", 1000.0);
         c.AddInput("ChefZ_BoneBroth", 4, "", "");
         c.AddInput("Potato", 6, "", "");
-        c.AddInput("ChefZ_DriedParsley", 2, "", "");
+        c.AddInput("ChefZ_Parsley", 2, "", "Dried");
         c.AddOutput("ChefZ_BoneBrothSoupBowl");
         list.Insert(c);
 
@@ -218,14 +218,14 @@ class ChefZ_AT_Cases
         c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_SurvivorSpaghetti", "Pot", "BOILING", "");
         c.SetLiquid("Water", 1000.0);
         c.seconds = 180.0;
-        c.AddInput("ChefZ_DriedPasta", 1, "", "");
+        c.AddInput("ChefZ_RawPasta", 1, "", "Dried");
         c.AddInput("ChefZ_TomatoSauce", 1, "", "");
         c.AddOutput("ChefZ_SurvivorSpaghetti");
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_SausagePasta", "FryingPan", "BAKING", "");
         c.seconds = 200.0;
-        c.AddInput("ChefZ_DriedPasta", 1, "", "");
+        c.AddInput("ChefZ_RawPasta", 1, "", "Dried");
         c.AddInput("Lard", 1, "", "");
         c.AddInput("ChefZ_BoarSausage", 1, "", "");
         c.AddOutput("ChefZ_SausagePasta");
@@ -233,26 +233,26 @@ class ChefZ_AT_Cases
 
         c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_HunterPasta", "FryingPan", "BAKING", "");
         c.seconds = 240.0;
-        c.AddInput("ChefZ_DriedPasta", 1, "", "");
+        c.AddInput("ChefZ_RawPasta", 1, "", "Dried");
         c.AddInput("BoarSteakMeat", 1, "", "");
         c.AddInput("AgaricusMushroom", 1, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_HunterPasta");
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_CreamMushroomPasta", "FryingPan", "BAKING", "");
         c.seconds = 210.0;
-        c.AddInput("ChefZ_DriedPasta", 1, "", "");
+        c.AddInput("ChefZ_RawPasta", 1, "", "Dried");
         c.AddInput("ChefZ_Cream", 1, "", "");
         c.AddInput("AgaricusMushroom", 2, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_CreamMushroomPasta");
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("COOK", "RCP_ChefZ_MacAndCheese", "Pot", "BOILING", "");
         c.SetLiquid("Water", 1000.0);
         c.seconds = 200.0;
-        c.AddInput("ChefZ_DriedPasta", 1, "", "");
+        c.AddInput("ChefZ_RawPasta", 1, "", "Dried");
         c.AddInput("PowderedMilk", 2, "", "");
         c.AddOutput("ChefZ_MacAndCheese");
         list.Insert(c);
@@ -270,7 +270,7 @@ class ChefZ_AT_Cases
         c.AddInput("BoarSteakMeat", 1, "", "");
         c.AddInput("Potato", 1, "", "");
         c.AddInput("AgaricusMushroom", 1, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_HunterPlate");
         list.Insert(c);
 
@@ -286,7 +286,7 @@ class ChefZ_AT_Cases
         c.seconds = 200.0;
         c.AddInput("CarpFilletMeat", 1, "", "");
         c.AddInput("Potato", 1, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_FishPotatoPlate");
         list.Insert(c);
 
@@ -319,7 +319,7 @@ class ChefZ_AT_Cases
         c.AddInput("ChefZ_Cream", 1, "", "");
         c.AddInput("ChefZ_Salt", 1, "", "");
         c.AddInput("AgaricusMushroom", 3, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_MushroomCreamSauce");
         list.Insert(c);
 
@@ -328,7 +328,7 @@ class ChefZ_AT_Cases
         c.seconds = 420.0;
         c.AddInput("Bone", 2, "", "");
         c.AddInput("Potato", 2, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_BoneBroth");
         list.Insert(c);
 
@@ -345,7 +345,7 @@ class ChefZ_AT_Cases
         c.AddInput("ChefZ_CrimsonSquid", 2, "", "");
         c.AddInput("Rice", 1, "", "");
         c.AddInput("Tomato", 1, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_GrilledStuffedCalamari");
         list.Insert(c);
 
@@ -459,7 +459,8 @@ class ChefZ_AT_Cases
         c = ChefZ_AT_Case.Make("PROC", "TR_RawPastaToDriedPasta", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 1800.0;
         c.AddInput("ChefZ_RawPasta", 1, "", "");
-        c.AddOutput("ChefZ_DriedPasta");
+        c.AddOutput("ChefZ_RawPasta");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_BowlFromBark", "", "", "PROCESS_CARVE_BOWL_BARK");
@@ -533,7 +534,7 @@ class ChefZ_AT_Cases
         c = ChefZ_AT_Case.Make("PROC", "TR_ExtendBeehive", "", "", "PROCESS_EXTEND_HIVE");
         c.AddInput("ChefZ_BeehiveKit", 1, "", "");
         c.AddInput("ChefZ_BeehiveKit", 1, "", "");
-        c.AddOutput("ChefZ_BeehiveDouble");
+        c.AddOutput("ChefZ_BeehiveDoubleKit");
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_FillBeeSmoker", "", "", "PROCESS_FILL_SMOKER");
@@ -746,14 +747,16 @@ class ChefZ_AT_Cases
 
         c = ChefZ_AT_Case.Make("PROC", "TR_CaninaBerriesToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 420.0;
-        c.AddInput("CaninaBerry", 2, "", "");
-        c.AddOutput("ChefZ_DriedBerries");
+        c.AddInput("CaninaBerry", 1, "", "");
+        c.AddOutput("CaninaBerry");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_SambucusBerriesToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 420.0;
-        c.AddInput("SambucusBerry", 2, "", "");
-        c.AddOutput("ChefZ_DriedBerries");
+        c.AddInput("SambucusBerry", 1, "", "");
+        c.AddOutput("SambucusBerry");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_CutBeefLeg", "", "", "PROCESS_CUT_MEAT");
@@ -828,7 +831,7 @@ class ChefZ_AT_Cases
         c.AddInput("Guts", 1, "", "");
         c.AddInput("ChefZ_MincedVenison", 1, "", "");
         c.AddInput("ChefZ_BlackPepper", 1, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_RawVenisonSausage");
         list.Insert(c);
 
@@ -836,7 +839,7 @@ class ChefZ_AT_Cases
         c.AddInput("Guts", 1, "", "");
         c.AddInput("ChefZ_MincedBoar", 1, "", "");
         c.AddInput("ChefZ_BlackPepper", 1, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
         c.AddOutput("ChefZ_RawBoarSausage");
         list.Insert(c);
 
@@ -951,48 +954,54 @@ class ChefZ_AT_Cases
         c = ChefZ_AT_Case.Make("PROC", "TR_ParsleyToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 480.0;
         c.AddInput("ChefZ_Parsley", 1, "", "");
-        c.AddOutput("ChefZ_DriedParsley");
+        c.AddOutput("ChefZ_Parsley");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_ThymeToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 480.0;
         c.AddInput("ChefZ_Thyme", 1, "", "");
-        c.AddOutput("ChefZ_DriedThyme");
+        c.AddOutput("ChefZ_Thyme");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_RosemaryToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 600.0;
         c.AddInput("ChefZ_Rosemary", 1, "", "");
-        c.AddOutput("ChefZ_DriedRosemary");
+        c.AddOutput("ChefZ_Rosemary");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_WildGarlicToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 480.0;
         c.AddInput("ChefZ_WildGarlic", 1, "", "");
-        c.AddOutput("ChefZ_DriedWildGarlic");
+        c.AddOutput("ChefZ_WildGarlic");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_PaprikaToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 900.0;
         c.AddInput("GreenBellPepper", 1, "", "");
-        c.AddOutput("ChefZ_DriedPaprika");
+        c.AddOutput("GreenBellPepper");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_PepperBerriesToDried", "ChefZ_DryingRack", "", "PROCESS_DRY");
         c.seconds = 900.0;
         c.AddInput("ChefZ_PepperBerries", 1, "", "");
-        c.AddOutput("ChefZ_DriedPeppercorns");
+        c.AddOutput("ChefZ_PepperBerries");
+        c.expectStage = "DRIED";
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_PeppercornsToBlackPepper", "ChefZ_Mortar", "", "PROCESS_GRIND_SPICE");
         c.seconds = 20.0;
-        c.AddInput("ChefZ_DriedPeppercorns", 1, "", "");
+        c.AddInput("ChefZ_PepperBerries", 1, "", "Dried");
         c.AddOutput("ChefZ_BlackPepper");
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_DriedPaprikaToPowder", "ChefZ_Mortar", "", "PROCESS_GRIND_SPICE");
         c.seconds = 20.0;
-        c.AddInput("ChefZ_DriedPaprika", 1, "", "");
+        c.AddInput("GreenBellPepper", 1, "", "Dried");
         c.AddOutput("ChefZ_PaprikaPowder");
         list.Insert(c);
 
@@ -1004,9 +1013,9 @@ class ChefZ_AT_Cases
 
         c = ChefZ_AT_Case.Make("PROC", "TR_HerbMix", "ChefZ_Mortar", "", "PROCESS_GRIND_HERB");
         c.seconds = 25.0;
-        c.AddInput("ChefZ_DriedThyme", 1, "", "");
-        c.AddInput("ChefZ_DriedParsley", 1, "", "");
-        c.AddInput("ChefZ_DriedRosemary", 1, "", "");
+        c.AddInput("ChefZ_Thyme", 1, "", "Dried");
+        c.AddInput("ChefZ_Parsley", 1, "", "Dried");
+        c.AddInput("ChefZ_Rosemary", 1, "", "Dried");
         c.AddOutput("ChefZ_HerbMix");
         list.Insert(c);
 
@@ -1015,8 +1024,8 @@ class ChefZ_AT_Cases
         c.AddInput("ChefZ_BlackPepper", 1, "", "");
         c.AddInput("ChefZ_PaprikaPowder", 1, "", "");
         c.AddInput("ChefZ_BlackPepper", 1, "", "");
-        c.AddInput("ChefZ_DriedThyme", 1, "", "");
-        c.AddInput("ChefZ_DriedWildGarlic", 1, "", "");
+        c.AddInput("ChefZ_Thyme", 1, "", "Dried");
+        c.AddInput("ChefZ_WildGarlic", 1, "", "Dried");
         c.AddOutput("ChefZ_HunterSeasoning");
         list.Insert(c);
 

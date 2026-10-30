@@ -88,3 +88,29 @@ class ChefZ_MeatItemBase extends ChefZ_Edible_Base
         AddAction(ActionEatMeat);
     }
 }
+
+//! Wuerste (30.10.2026, Spieltest: "Angespitzter Stock sollte die Wuerste
+//! aufspiessen koennen jeder Art und auch ueber dem Feuer kochen koennen").
+//! Den Platz am Stock gibt die Config ("Ingredient" in inventorySlot[]), das
+//! Garen am Spiess dieser Schalter - in der Form, die der Kopf von
+//! ChefZ_Edible_Base.c fuer Content-Module vorsieht.
+class ChefZ_Sausage_Base extends ChefZ_MeatItemBase
+{
+    override bool CanBeCookedOnStick()
+    {
+        return ChefZ_Edible_Base.ChefZ_DeclaresCookTransitions(GetType());
+    }
+}
+
+class ChefZ_RawSausage        extends ChefZ_Sausage_Base {}
+class ChefZ_RawPorkSausage    extends ChefZ_Sausage_Base {}
+class ChefZ_RawVenisonSausage extends ChefZ_Sausage_Base {}
+class ChefZ_RawBoarSausage    extends ChefZ_Sausage_Base {}
+class ChefZ_RawHunterSausage  extends ChefZ_Sausage_Base {}
+class ChefZ_RawSpicySausage   extends ChefZ_Sausage_Base {}
+class ChefZ_CookedSausage     extends ChefZ_Sausage_Base {}
+class ChefZ_PorkSausage       extends ChefZ_Sausage_Base {}
+class ChefZ_VenisonSausage    extends ChefZ_Sausage_Base {}
+class ChefZ_BoarSausage       extends ChefZ_Sausage_Base {}
+class ChefZ_HunterSausage     extends ChefZ_Sausage_Base {}
+class ChefZ_SpicySausage      extends ChefZ_Sausage_Base {}

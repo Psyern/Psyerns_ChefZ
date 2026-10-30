@@ -264,11 +264,18 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     }
 
     //! Wie viele Bausaetze beim Abbau herauskommen. Virtuell aus demselben
-    //! Grund: die Doppelbeute entsteht aus zwei Bausaetzen (TR_ExtendBeehive)
-    //! und gibt beide zurueck.
+    //! Grund wie ChefZ_KitClass.
     int ChefZ_KitCount()
     {
         return 1;
+    }
+
+    //! Welcher Bausatz beim Abbau herauskommt. Seit dem 30.10.2026 hat die
+    //! Doppelbeute ihren eigenen Bausatz (ChefZ_BeehiveDoubleKit) und gibt
+    //! ihn zurueck.
+    string ChefZ_KitClass()
+    {
+        return CHEFZ_KIT_CLASS;
     }
 
     //! Beim Spawn (EEInit) und beim Laden (AfterStoreLoad) - beide Wege
@@ -829,7 +836,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
 
         for (int i = 0; i < wanted; i++)
         {
-            EntityAI kit = EntityAI.Cast(g_Game.CreateObjectEx(CHEFZ_KIT_CLASS, pos, ECE_PLACE_ON_SURFACE));
+            EntityAI kit = EntityAI.Cast(g_Game.CreateObjectEx(ChefZ_KitClass(), pos, ECE_PLACE_ON_SURFACE));
             if (!kit)
                 continue;
             float maxHealth = kit.GetMaxHealth("", "");
@@ -839,7 +846,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
 
         if (made == 0)
         {
-            ChefZ_LogPack("nicht abgebaut: " + CHEFZ_KIT_CLASS + " liess sich nicht anlegen.");
+            ChefZ_LogPack("nicht abgebaut: " + ChefZ_KitClass() + " liess sich nicht anlegen.");
             return;
         }
 
@@ -1241,10 +1248,11 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
 
 //! Die Doppelbeute: zwei Zargen, zwanzig Raehmchen, sonst in allem der
 //! Stock - Fuelltakt, Deckel, Stich und Regeln erbt sie unveraendert. Sie
-//! entsteht aus zwei Bausaetzen (TR_ExtendBeehive), nicht aus einem
-//! aufgestellten Stock: ein Handwerksschritt verbraucht seine Zutat samt
-//! allem, was an ihr haengt, und ein bestueckter Stock verloere dabei seine
-//! Raehmchen.
+//! entsteht aus ihrem eigenen Bausatz (ChefZ_BeehiveDoubleKit, seit dem
+//! 30.10.2026; der wiederum aus zwei einfachen Bausaetzen, TR_ExtendBeehive),
+//! nicht aus einem aufgestellten Stock: ein Handwerksschritt verbraucht seine
+//! Zutat samt allem, was an ihr haengt, und ein bestueckter Stock verloere
+//! dabei seine Raehmchen.
 class ChefZ_BeehiveDouble extends ChefZ_Beehive
 {
     override int ChefZ_FrameCapacity()
@@ -1252,9 +1260,9 @@ class ChefZ_BeehiveDouble extends ChefZ_Beehive
         return 20;
     }
 
-    override int ChefZ_KitCount()
+    override string ChefZ_KitClass()
     {
-        return 2;
+        return ChefZ_BeehiveDoubleKit.CHEFZ_DOUBLE_KIT_CLASS;
     }
 }
 
@@ -1355,6 +1363,12 @@ class ChefZ_BeehiveKit extends ItemBase
      * der Bausatz sichtbar und wird trotzdem geloescht. Dagegen hilft nur,
      * dass CHEFZ_HIVE_CLASS in derselben config.cpp steht wie dieser Bausatz.
      */
+    //! Was aus DIESEM Bausatz wird - virtuell fuer ChefZ_BeehiveDoubleKit.
+    string ChefZ_HiveClass()
+    {
+        return CHEFZ_HIVE_CLASS;
+    }
+
     override void OnPlacementComplete(Man player, vector position = "0 0 0", vector orientation = "0 0 0")
     {
         super.OnPlacementComplete(player, position, orientation);
@@ -1362,7 +1376,7 @@ class ChefZ_BeehiveKit extends ItemBase
         if (!g_Game || !g_Game.IsServer())
             return;
 
-        EntityAI hive = EntityAI.Cast(g_Game.CreateObjectEx(CHEFZ_HIVE_CLASS, GetPosition(), ECE_PLACE_ON_SURFACE));
+        EntityAI hive = EntityAI.Cast(g_Game.CreateObjectEx(ChefZ_HiveClass(), GetPosition(), ECE_PLACE_ON_SURFACE));
         if (!hive)
             return;
 
@@ -1378,6 +1392,20 @@ class ChefZ_BeehiveKit extends ItemBase
         hive.SetHealth("", "", maxHealth * health01);
 
         HideAllSelections();
+    }
+}
+
+//! Der Bausatz der Doppelbeute (30.10.2026, Spieltest: eigenes Modell
+//! "BeeHiveKitDouble"). Entsteht aus zwei einfachen Bausaetzen
+//! (TR_ExtendBeehive) und wird wie dieser aufgestellt - nur zur Doppelbeute.
+class ChefZ_BeehiveDoubleKit extends ChefZ_BeehiveKit
+{
+    static const string CHEFZ_DOUBLE_KIT_CLASS = "ChefZ_BeehiveDoubleKit";
+    static const string CHEFZ_DOUBLE_HIVE_CLASS = "ChefZ_BeehiveDouble";
+
+    override string ChefZ_HiveClass()
+    {
+        return CHEFZ_DOUBLE_HIVE_CLASS;
     }
 }
 

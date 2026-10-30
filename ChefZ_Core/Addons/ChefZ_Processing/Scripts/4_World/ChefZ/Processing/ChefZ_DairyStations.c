@@ -49,16 +49,14 @@
 //      Gittergroesse stehen ausgeschrieben an der Configklasse; gezaehlt wird
 //      hier, weil ein Gitter nur Platz zaehlen kann und keine Sorten.
 //
-// KEINE FLUESSIGKEITSFUEHRUNG, auch jetzt nicht. Milch ist und bleibt
-// Vanillas PowderedMilk als Stueckware (ChefZ_Ingredients/config.cpp:389); die
-// Ablehnung steht ausfuehrlich in der config.cpp dieses Moduls. Eine echte
-// ChefZ-Milchklasse gibt es nicht: ChefZ_MilkCan ist ein leeres Traggut ohne
-// Zutatendatensatz (ChefZ_Ingredients/config.cpp:657) und deshalb in keinem
-// Transform genannt.
-//
-// Die Kaesepresse bleibt leer. Sie hat einen Cargo (6x4), einen
-// Stationsdatensatz und mit TR_CurdToCheese einen erreichbaren Transform -
-// ihr fehlt nichts, was ein Skript geben koennte.
+// KEINE FLUESSIGKEITSFUEHRUNG im Vanilla-Sinn. Am Butterfass ist Milch
+// Vanillas PowderedMilk als Stueckware (ChefZ_Ingredients/config.cpp); die
+// Ablehnung eines eigenen Fluessigkeitstyps steht in der config.cpp dieses
+// Moduls. Seit dem 30.10.2026 gibt es daneben Milch als FUELLSTAND der
+// ChefZ_MilkCan (Liter als varQuantity, Melken fuellt sie) - und die
+// Kaesepresse liest ihn: Kanne in den Milchplatz, je 5 l ein Kaese
+// (ChefZ_CheesePress unten). Der Weg ueber den Bruch (TR_CurdToCheese)
+// bleibt daneben bestehen.
 //
 // ### 31.08.2026, Welle 2 ### Die Kaesekette ist jetzt zweistufig (Alex' Todo
 // 10): Milch + ChefZ_MushroomCulture werden im Kessel zu ChefZ_CheeseCurd,
@@ -236,10 +234,134 @@ class ChefZ_ButterChurn extends ChefZ_ProcessingStation_Base
     }
 }
 
-//! Die Kaesepresse. Leer, und das ist kein Versehen: Cargo, Stationsdatensatz
-//! und TR_CurdToCheese sind vollstaendig, es gibt nichts, was ein Skript
-//! beisteuern koennte. KEIN Selbstnachstart und KEIN Torwaechter - die
-//! Begruendung fuer beides steht im Dateikopf.
+//! Die Kaesepresse. Der Weg ueber den Bruch (TR_CurdToCheese) steht
+//! vollstaendig in Cargo, Stationsdatensatz und Transform. KEIN
+//! Selbstnachstart und KEIN Torwaechter - die Begruendung fuer beides steht im
+//! Dateikopf.
+//!
+//! Dazu seit dem 30.10.2026 der Weg ueber die Milch (Spieltest: "je nach
+//! Fuellmenge kann X Anzahl Kaese entstehen"): eine Milchkanne im Platz
+//! ChefZ_PressMilkCan, ihr Fuellstand in Litern, je volle
+//! CHEFZ_LITERS_PER_CHEESE ein Kaese. Gepresst wird mit
+//! ChefZ_ActionPressMilkCheese; was nicht fuer einen ganzen Kaese reicht,
+//! bleibt in der Kanne.
 class ChefZ_CheesePress extends ChefZ_ProcessingStation_Base
 {
+    static const string CHEFZ_MILK_SLOT = "ChefZ_PressMilkCan";
+    static const string CHEFZ_MILK_CAN = "ChefZ_MilkCan";
+    static const string CHEFZ_CHEESE = "ChefZ_Cheese";
+    static const float CHEFZ_LITERS_PER_CHEESE = 5.0;
+
+    override void SetActions()
+    {
+        super.SetActions();
+        AddAction(ChefZ_ActionPressMilkCheese);
+    }
+
+    //! Die Kanne im Milchplatz, sonst null.
+    ItemBase ChefZ_GetMilkCan()
+    {
+        ItemBase can = ItemBase.Cast(FindAttachmentBySlotName(CHEFZ_MILK_SLOT));
+        if (can && can.IsKindOf(CHEFZ_MILK_CAN))
+            return can;
+        return null;
+    }
+
+    //! Wie viele Kaese die Milch in der Kanne hergibt.
+    int ChefZ_CheesesFromMilk()
+    {
+        ItemBase can = ChefZ_GetMilkCan();
+        if (!can)
+            return 0;
+        float liters = can.GetQuantity();
+        return Math.Floor(liters / CHEFZ_LITERS_PER_CHEESE);
+    }
+
+    //! Presst so viele Kaese, wie Milch und Laderaum hergeben, und zieht die
+    //! Milch dafuer ab. Nur auf dem Server. Liefert die Zahl der Kaese.
+    int ChefZ_PressMilk()
+    {
+        if (!g_Game || !g_Game.IsServer())
+            return 0;
+
+        ItemBase can = ChefZ_GetMilkCan();
+        int wanted = ChefZ_CheesesFromMilk();
+        int made = 0;
+        for (int i = 0; i < wanted; i++)
+        {
+            EntityAI cheese = GetInventory().CreateEntityInCargo(CHEFZ_CHEESE);
+            if (!cheese)
+                break;
+            made++;
+        }
+
+        if (made > 0)
+            can.AddQuantity(-CHEFZ_LITERS_PER_CHEESE * made);
+        return made;
+    }
+}
+
+//==============================================================================
+// "Kaese aus Milch pressen" - die Aktion an der Presse (30.10.2026).
+//==============================================================================
+class ChefZ_ActionPressMilkCheeseCB extends ActionContinuousBaseCB
+{
+    override void CreateActionComponent()
+    {
+        m_ActionData.m_ActionComponent = new CAContinuousTime(ChefZ_ActionPressMilkCheese.PRESS_SECONDS);
+    }
+}
+
+class ChefZ_ActionPressMilkCheese extends ActionContinuousBase
+{
+    static const float PRESS_SECONDS = 10.0;
+
+    void ChefZ_ActionPressMilkCheese()
+    {
+        m_CallbackClass = ChefZ_ActionPressMilkCheeseCB;
+        m_CommandUID    = DayZPlayerConstants.CMD_ACTIONFB_CRAFTING;
+        m_FullBody      = true;
+        m_StanceMask    = DayZPlayerConstants.STANCEMASK_CROUCH;
+        m_Text          = "#STR_CHEFZ_ACTION_PRESSMILKCHEESE";
+    }
+
+    override typename GetInputType()
+    {
+        return ContinuousInteractActionInput;
+    }
+
+    override void CreateConditionComponents()
+    {
+        m_ConditionItem   = new CCINone();
+        m_ConditionTarget = new CCTNonRuined(UAMaxDistances.DEFAULT);
+    }
+
+    override bool HasProgress()
+    {
+        return true;
+    }
+
+    override bool ActionCondition(PlayerBase player, ActionTarget target, ItemBase item)
+    {
+        ChefZ_CheesePress press = ChefZ_CheesePress.Cast(target.GetObject());
+        if (!press)
+            return false;
+        return press.ChefZ_CheesesFromMilk() > 0;
+    }
+
+    override void OnFinishProgressServer(ActionData action_data)
+    {
+        ChefZ_CheesePress press = ChefZ_CheesePress.Cast(action_data.m_Target.GetObject());
+        if (press)
+            press.ChefZ_PressMilk();
+    }
+}
+
+modded class ActionConstructor
+{
+    override void RegisterActions(TTypenameArray actions)
+    {
+        super.RegisterActions(actions);
+        actions.Insert(ChefZ_ActionPressMilkCheese);
+    }
 }

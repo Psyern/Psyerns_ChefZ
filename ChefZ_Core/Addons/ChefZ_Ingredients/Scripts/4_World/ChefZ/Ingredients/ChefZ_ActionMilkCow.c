@@ -55,8 +55,11 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 	//! Zahl, damit ihn eine Aenderung an einer Stelle trifft.
 	static const float MILK_SECONDS = 8.0;
 
-	//! Was eine Kuh je Melkgang hergibt.
+	//! Was eine Kuh je Melkgang hergibt, wenn die Kanne schon voll ist.
 	static const string MILK_CLASS = "PowderedMilk";
+	//! Liter je Melkgang in die Kanne (30.10.2026: Milch ist der Fuellstand der
+	//! ChefZ_MilkCan, siehe ihre Config).
+	static const float MILK_LITERS = 2.0;
 
 	static const string TEXT = "#STR_CHEFZ_ACTION_MILK_COW";
 
@@ -154,6 +157,15 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 			return;
 
 		cow.ChefZ_MarkMilked();
+
+		// Zuerst in die Kanne in der Hand. Erst wenn sie voll ist, gibt es wie
+		// frueher Milchpulver - der Weg zum Butterfass (TR_MilkToCream) bleibt.
+		ItemBase can = action_data.m_MainItem;
+		if (can && can.GetQuantity() < can.GetQuantityMax())
+		{
+			can.AddQuantity(MILK_LITERS);
+			return;
+		}
 
 		EntityAI created = action_data.m_Player.GetInventory().CreateInInventory(MILK_CLASS);
 		if (created)

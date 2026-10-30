@@ -1,0 +1,15 @@
+{
+ "_comment": "Lieferung Meshy vom 27./29.10.2026 (Spieltest 30.10.2026): Bienenstock-Bausatz (Bound Timber Bundle), Doppelbeuten-Bausatz (Rusted Salvage Crate) und Kochbuch (Weathered Recipe Book). Aus C:/Users/info/Downloads kopiert nach E:/DayZ Modding/Deliveries/2026-10-30_Meshy_Kits/<Name>/{model.fbx,texture.png}.",
+ "source_root": "E:/DayZ Modding/Deliveries/2026-10-30_Meshy_Kits",
+ "project_root": "../../..",
+ "defaults": {"template": "item", "texture_size": 1024, "selection": "camo"},
+ "groups": {
+  "kits": {"target": "ChefZ\\ChefZ_Devices\\kits"},
+  "book": {"target": "ChefZ\\ChefZ_Devices\\book"}
+ },
+ "assets": [
+  {"name": "BeehiveKit",       "group": "kits", "source": "BeehiveKit/model.fbx",       "texture": "BeehiveKit/texture.png",       "length": 1.0,  "bind": ["ChefZ_BeehiveKit"]},
+  {"name": "BeehiveDoubleKit", "group": "kits", "source": "BeehiveDoubleKit/model.fbx", "texture": "BeehiveDoubleKit/texture.png", "length": 1.1,  "bind": ["ChefZ_BeehiveDoubleKit"]},
+  {"name": "Cookbook",         "group": "book", "source": "Cookbook/model.fbx",         "texture": "Cookbook/texture.png",         "length": 0.26, "bind": ["ChefZ_CookbookItem"]}
+ ]
+}

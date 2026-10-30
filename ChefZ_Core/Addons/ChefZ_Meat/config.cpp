@@ -1232,6 +1232,7 @@ class CfgVehicles
         // die Raeucherkammer").
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
@@ -1311,6 +1312,7 @@ class CfgVehicles
         // die Raeucherkammer").
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
@@ -1390,6 +1392,7 @@ class CfgVehicles
         // die Raeucherkammer").
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
@@ -1469,6 +1472,7 @@ class CfgVehicles
         // die Raeucherkammer").
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
@@ -1548,6 +1552,7 @@ class CfgVehicles
         // die Raeucherkammer").
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
@@ -1627,6 +1632,7 @@ class CfgVehicles
         // die Raeucherkammer").
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
@@ -1688,6 +1694,14 @@ class CfgVehicles
     class ChefZ_CookedSausage : ChefZ_MeatItemBase
     {
         scope = 2;
+        // Am angespitzten Stock nachbraten (30.10.2026): die Haken der Basis
+        // plus Vanillas Spiessplatz "Ingredient".
+        inventorySlot[] =
+        {
+            "Ingredient",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         displayName = "#STR_CHEFZ_ITEM_COOKEDSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_COOKEDSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
@@ -1752,6 +1766,13 @@ class CfgVehicles
     class ChefZ_PorkSausage : ChefZ_MeatItemBase
     {
         scope = 2;
+        // Haken der Basis plus Spiessplatz, wie ChefZ_CookedSausage.
+        inventorySlot[] =
+        {
+            "Ingredient",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         displayName = "#STR_CHEFZ_ITEM_PORKSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_PORKSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
@@ -1816,6 +1837,13 @@ class CfgVehicles
     class ChefZ_VenisonSausage : ChefZ_MeatItemBase
     {
         scope = 2;
+        // Haken der Basis plus Spiessplatz, wie ChefZ_CookedSausage.
+        inventorySlot[] =
+        {
+            "Ingredient",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         displayName = "#STR_CHEFZ_ITEM_VENISONSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_VENISONSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
@@ -1880,6 +1908,13 @@ class CfgVehicles
     class ChefZ_BoarSausage : ChefZ_MeatItemBase
     {
         scope = 2;
+        // Haken der Basis plus Spiessplatz, wie ChefZ_CookedSausage.
+        inventorySlot[] =
+        {
+            "Ingredient",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         displayName = "#STR_CHEFZ_ITEM_BOARSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_BOARSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
@@ -1944,6 +1979,13 @@ class CfgVehicles
     class ChefZ_HunterSausage : ChefZ_MeatItemBase
     {
         scope = 2;
+        // Haken der Basis plus Spiessplatz, wie ChefZ_CookedSausage.
+        inventorySlot[] =
+        {
+            "Ingredient",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         displayName = "#STR_CHEFZ_ITEM_HUNTERSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten
@@ -2008,6 +2050,13 @@ class CfgVehicles
     class ChefZ_SpicySausage : ChefZ_MeatItemBase
     {
         scope = 2;
+        // Haken der Basis plus Spiessplatz, wie ChefZ_CookedSausage.
+        inventorySlot[] =
+        {
+            "Ingredient",
+            "SmokingA", "SmokingB", "SmokingC", "SmokingD",
+            "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
+        };
         displayName = "#STR_CHEFZ_ITEM_SPICYSAUSAGE0";
         descriptionShort = "#STR_CHEFZ_ITEM_SPICYSAUSAGE1";
         model = "\ChefZ\ChefZ_Food\models\sausage_cooked.p3d";   // EIGENES MODELL (30.08.2026) - die eine gebratene Wurst der Lieferung, geteilt von allen sechs Sorten

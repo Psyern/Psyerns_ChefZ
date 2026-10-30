@@ -71,9 +71,9 @@ class CfgPatches
             "ChefZ_Parsley", "ChefZ_Thyme", "ChefZ_Rosemary",
             "ChefZ_WildGarlic", "ChefZ_PepperBerries", "ChefZ_Chili",
             // ### SLICE apiary ###
-            "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_BeehiveKit",
+            "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_BeehiveKit", "ChefZ_BeehiveDoubleKit",
             // Die Projektionshuelle des Aufstellvorgangs (31.08.2026).
-            "ChefZ_BeehivePlacing",
+            "ChefZ_BeehivePlacing", "ChefZ_BeehiveDoublePlacing",
             "ChefZ_HoneycombFrame_Base",
             "ChefZ_HoneycombFrameEmpty",
             "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
@@ -280,8 +280,8 @@ class CfgVehicles
         //
         // ACHTUNG, FREMDE MODULE ERBEN DIESEN WERT. Die Ableitungen dieser
         // Basis liegen in zwei Mengenwelten:
-        //   varQuantityMax 500..1000 (ChefZ_Flour, ChefZ_RawPasta,
-        //     ChefZ_DriedPasta) - fuer sie ist 0.25 richtig (125..250).
+        //   varQuantityMax 500..1000 (ChefZ_Flour, ChefZ_RawPasta) - fuer
+        //     sie ist 0.25 richtig (125..250).
         //   varQuantityMax 1 (ChefZ_Dough, ChefZ_Bread, ChefZ_Flatbread in
         //     ChefZ_Baking) - fuer sie ist 0.25 viel zu wenig; sie brauchen
         //     einen EIGENEN Nutrition-Block mit fullnessIndex ~300
@@ -333,7 +333,7 @@ class CfgVehicles
                 //      (FoodStage.c:5, "//default").
                 //
                 // Ergebnis vor dieser Zeile: rohes ChefZ_Wheat, ChefZ_Flour,
-                // ChefZ_Dough, ChefZ_RawPasta und ChefZ_DriedPasta lieferten
+                // ChefZ_Dough und ChefZ_RawPasta (frisch wie getrocknet) lieferten
                 // fullness 0, energy 0 UND water 0 - der class Nutrition-Block
                 // darueber war fuer sie tote Konfiguration. Nur Gebackenes kam
                 // je an seine Zahlen.
@@ -1183,10 +1183,17 @@ class CfgVehicles
     // Servertypen (types.xml / mapgroupproto) - eine Loot-Tabelle ist kein
     // Modulinhalt.
     //
-    // class Nutrition ist PFLICHT (01 V7). Bewusst OHNE class Food /
-    // FoodStages: frische Kraeuter kommen nicht in den Topf, sie kommen auf
-    // den Trockenrahmen. Wer FoodStages ohne FoodStageTransitions deklariert,
-    // baut die Falle aus 01 V4.
+    // class Nutrition ist PFLICHT (01 V7).
+    //
+    // ### 30.10.2026 - GETROCKNET IST EIN ZUSTAND, KEINE KLASSE (Spieltest) ###
+    // Die eigenen Trockenklassen (ChefZ_DriedParsley ... ChefZ_DriedPeppercorns)
+    // sind entfallen. Der Trockenrahmen setzt am Kraut selbst den Zustand DRIED,
+    // und der projiziert auf Vanillas Garstufe "Dried" - mit eigener Textur und
+    // Vanillas Etikett "Getrocknet". Dafuer brauchen die Kraeuter jetzt
+    // FoodStages, und zwar MIT FoodStageTransitions (Falle 01 V4): Raw ->
+    // Backen/Kochen/Trocknen wie Vanillas Beeren, Dried -> Kochen (getrocknete
+    // Kraeuter ziehen im Topf). Die Stufentexturen sind aus der Grundtextur
+    // getoent (tools/chefz-assets/stage-textures.py).
     //
     // PROXY-MODELLE, alle Vanilla, alle im Asset-Bedarf des Slice gemeldet.
     //==========================================================================
@@ -1217,9 +1224,8 @@ class CfgVehicles
         stackedUnit = "g";
         lifetime = 14400;
 
-        // KEINE FoodStages an dieser Basis (siehe Bannerkommentar oben) -
-        // hier gilt deshalb class Nutrition unmittelbar, und der Rescale
-        // erschoepft sich in dieser einen Zahl.
+        hiddenSelectionsMaterials[] = {};   // MLOD-Modelle: Stufen-Optik nur ueber Texturen (ChefZ_StageVisuals)
+
         class Nutrition
         {
             // 55 (Zielvolumen) / 50 (varQuantityMax) = 1.1. Faktor 11
@@ -1232,6 +1238,34 @@ class CfgVehicles
             toxicity = 0;
             digestibility = 1;
         };
+
+        // Stufen seit 30.10.2026 (Bannerkommentar oben). Raw = class Nutrition;
+        // getrocknet verliert das Kraut sein Wasser, sonst nichts.
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {1.1, 30, 24, 25, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {1.0, 30, 8, 25, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 30, 200}; };
+                class Boiled { nutrition_properties[] = {1.1, 30, 40, 25, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 45, 150}; };
+                class Dried  { nutrition_properties[] = {1.1, 30, 2, 25, 0, 0, 1}; visual_properties[] = {0, 3, 3}; cooking_properties[] = {70, 45, 80}; };
+                class Burned { nutrition_properties[] = {0.3, 5, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.3, 5, 3, 0, 15, 0, 1}; visual_properties[] = {0, 0, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking  { transition_to = 2; cooking_method = 1; };
+                    class Boiling { transition_to = 3; cooking_method = 2; };
+                    class Drying  { transition_to = 4; cooking_method = 3; };
+                };
+                class Dried
+                {
+                    class Boiling { transition_to = 3; cooking_method = 2; };
+                };
+            };
+        };
     };
 
     class ChefZ_Parsley : ChefZ_FreshHerbBase
@@ -1240,6 +1274,8 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_PARSLEY";
         descriptionShort = "#STR_CHEFZ_ITEM_PARSLEY_DESC";
         model = "\ChefZ\ChefZ_Plants\models\parsley.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Plants\data\parsley_co.paa", "\ChefZ\ChefZ_Plants\data\parsley_baked_co.paa", "\ChefZ\ChefZ_Plants\data\parsley_boiled_co.paa", "\ChefZ\ChefZ_Plants\data\parsley_dried_co.paa", "\ChefZ\ChefZ_Plants\data\parsley_burnt_co.paa"};
     };
 
     class ChefZ_Thyme : ChefZ_FreshHerbBase
@@ -1247,6 +1283,12 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_THYME";
         descriptionShort = "#STR_CHEFZ_ITEM_THYME_DESC";
+        // 30.10.2026: das Rosmarin-Zweiglein mit der vorhandenen Thymian-
+        // Textur statt Vanillas Pflanzenmaterial - das kennt keine camo-
+        // Selektion und kann deshalb nicht "getrocknet" aussehen.
+        model = "\ChefZ\ChefZ_Plants\models\rosmary.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Plants\data\thymian_co.paa", "\ChefZ\ChefZ_Plants\data\thymian_baked_co.paa", "\ChefZ\ChefZ_Plants\data\thymian_boiled_co.paa", "\ChefZ\ChefZ_Plants\data\thymian_dried_co.paa", "\ChefZ\ChefZ_Plants\data\thymian_burnt_co.paa"};
     };
 
     class ChefZ_Rosemary : ChefZ_FreshHerbBase
@@ -1255,6 +1297,8 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_ROSEMARY";
         descriptionShort = "#STR_CHEFZ_ITEM_ROSEMARY_DESC";
         model = "\ChefZ\ChefZ_Plants\models\rosmary.p3d";   // EIGENES MODELL (30.08.2026); Dateiname der Lieferung ohne e
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Plants\data\rosmary_co.paa", "\ChefZ\ChefZ_Plants\data\rosmary_baked_co.paa", "\ChefZ\ChefZ_Plants\data\rosmary_boiled_co.paa", "\ChefZ\ChefZ_Plants\data\rosmary_dried_co.paa", "\ChefZ\ChefZ_Plants\data\rosmary_burnt_co.paa"};
     };
 
     class ChefZ_WildGarlic : ChefZ_FreshHerbBase
@@ -1263,7 +1307,7 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_WILDGARLIC";
         descriptionShort = "#STR_CHEFZ_ITEM_WILDGARLIC_DESC";
         model = "\ChefZ\ChefZ_Food\models\wild_garlic.p3d";   // EIGENES MODELL (Lieferung 25.10.2026, gebunden 26.10.2026)
-        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\wild_garlic_co.paa"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Food\data\wild_garlic_co.paa", "ChefZ\ChefZ_Food\data\wild_garlic_baked_co.paa", "ChefZ\ChefZ_Food\data\wild_garlic_boiled_co.paa", "ChefZ\ChefZ_Food\data\wild_garlic_dried_co.paa", "ChefZ\ChefZ_Food\data\wild_garlic_burnt_co.paa"};
         hiddenSelections[] = {"camo"};
     };
 
@@ -1275,6 +1319,12 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_PEPPERBERRIES";
         descriptionShort = "#STR_CHEFZ_ITEM_PEPPERBERRIES_DESC";
         model = "\dz\gear\food\Sambucus_nigra.p3d";
+        // Vanillas Holunder-Modell ist binarisiert: Selektionen, Texturen und
+        // Materialien wie SambucusBerry (DZ/gear/food); getrocknet zeigt die
+        // zweite Selektion cs_dried (visual_properties unten).
+        hiddenSelections[] = {"cs_raw", "cs_dried"};
+        hiddenSelectionsTextures[] = {"dz\gear\food\data\sambucus_nigra_CO.paa", "dz\gear\food\data\sambucus_nigra_dried_CO.paa", "dz\gear\food\data\sambucus_nigra_dried_CO.paa", "dz\gear\food\data\sambucus_nigra_dried_CO.paa", "dz\gear\food\data\sambucus_nigra_burnt_CO.paa"};
+        hiddenSelectionsMaterials[] = {"dz\gear\food\data\sambucus_nigra_raw.rvmat", "dz\gear\food\data\sambucus_nigra_boiled.rvmat", "dz\gear\food\data\sambucus_nigra_baked.rvmat", "dz\gear\food\data\sambucus_nigra_dried.rvmat", "dz\gear\food\data\sambucus_nigra_burnt.rvmat", "dz\gear\food\data\sambucus_nigra_rotten.rvmat"};
         class Nutrition
         {
             // 50 (Zielvolumen) / 50 (varQuantityMax) = 1. Faktor 12.5
@@ -1286,6 +1336,31 @@ class CfgVehicles
             nutritionalIndex = 10;
             toxicity = 0;
             digestibility = 1;
+        };
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw    { nutrition_properties[] = {1.0, 24, 16, 10, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked  { nutrition_properties[] = {0.9, 24, 5, 10, 0, 0, 1}; visual_properties[] = {0, 1, 1}; cooking_properties[] = {100, 30, 200}; };
+                class Boiled { nutrition_properties[] = {1.0, 24, 30, 10, 0, 0, 1}; visual_properties[] = {0, 2, 2}; cooking_properties[] = {100, 45, 150}; };
+                class Dried  { nutrition_properties[] = {1.0, 24, 1, 10, 0, 0, 1}; visual_properties[] = {1, 3, 3}; cooking_properties[] = {70, 45, 80}; };
+                class Burned { nutrition_properties[] = {0.3, 5, 0, 0, 0, 0, 1}; visual_properties[] = {0, 4, 4}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.3, 5, 3, 0, 15, 0, 1}; visual_properties[] = {-1, -1, 5}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class Baking  { transition_to = 2; cooking_method = 1; };
+                    class Boiling { transition_to = 3; cooking_method = 2; };
+                    class Drying  { transition_to = 4; cooking_method = 3; };
+                };
+                class Dried
+                {
+                    class Boiling { transition_to = 3; cooking_method = 2; };
+                };
+            };
         };
     };
 
@@ -1310,6 +1385,8 @@ class CfgVehicles
         displayName = "#STR_CHEFZ_ITEM_CHILI";
         descriptionShort = "#STR_CHEFZ_ITEM_CHILI_DESC";
         model = "\ChefZ\ChefZ_Plants\models\chili.p3d";   // EIGENES MODELL (Lieferung 06.09.2026, gebunden 14.09.2026)
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"\ChefZ\ChefZ_Plants\data\chili_co.paa", "\ChefZ\ChefZ_Plants\data\chili_baked_co.paa", "\ChefZ\ChefZ_Plants\data\chili_boiled_co.paa", "\ChefZ\ChefZ_Plants\data\chili_dried_co.paa", "\ChefZ\ChefZ_Plants\data\chili_burnt_co.paa"};
         class Nutrition
         {
             // Zwischen Pfefferbeere (50) und Kraut (55): eine Schote hat mehr
@@ -1330,8 +1407,8 @@ class CfgVehicles
     // denselben defaultState RAW und stand mit GreenBellPepper im selben
     // anyOf-Slot beider Chili-Rezepte; erreichbar war es nie (siehe Kommentar
     // bei den Samen weiter oben). Die Trockenkette §15 haengt jetzt an
-    // GreenBellPepper: TR_PaprikaToDried (ChefZ_Processing) -> ChefZ_DriedPaprika
-    // -> ChefZ_PaprikaPowder. Der Food-Block mit den Garstufen entfaellt
+    // GreenBellPepper: TR_PaprikaToDried (ChefZ_Processing) setzt die Stufe
+    // "Dried" an der Paprika selbst -> ChefZ_PaprikaPowder. Der Food-Block mit den Garstufen entfaellt
     // ersatzlos - GreenBellPepper bringt ihn aus Vanilla mit.
 
     //==========================================================================
@@ -1566,6 +1643,15 @@ class CfgVehicles
         hologramMaterialPath = "";
     };
 
+    // Hologramm der Doppelbeute: ihr Modell, sonst wie oben.
+    class ChefZ_BeehiveDoublePlacing : ChefZ_BeehivePlacing
+    {
+        displayName = "#STR_CHEFZ_ITEM_BEEHIVE_DOUBLE";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVE_DOUBLE_DESC";
+        model = "\ChefZ\ChefZ_Devices\models\beehive.p3d";
+        itemSize[] = {6, 8};
+    };
+
     //--------------------------------------------------------------------------
     // Die Doppelbeute: zwei Zargen uebereinander.
     //
@@ -1686,7 +1772,9 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_BEEHIVEKIT";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVEKIT_DESC";
-        model = "\DZ\gear\camping\wooden_case.p3d";
+        model = "\ChefZ\ChefZ_Devices\kits\models\beehivekit.p3d";   // EIGENES MODELL (Meshy-Lieferung 27./29.10.2026, gebunden 30.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\kits\data\BeehiveKit_co.paa"};
+        hiddenSelections[] = {"camo"};
         rotationFlags = 17;
         itemSize[] = {3, 2};
         weight = 6000;
@@ -1697,6 +1785,22 @@ class CfgVehicles
         // Aufstellen (### 31.08.2026 ###) - siehe den Bannerkommentar oben.
         itemBehaviour = 2;
         projectionTypename = "ChefZ_BeehivePlacing";
+    };
+
+    // Der Bausatz der Doppelbeute (30.10.2026, eigenes Modell). Entsteht aus
+    // zwei einfachen Bausaetzen (TR_ExtendBeehive) und wird aufgestellt wie
+    // dieser; der Abbau der Doppelbeute gibt ihn zurueck.
+    class ChefZ_BeehiveDoubleKit : ChefZ_BeehiveKit
+    {
+        scope = 2;
+        model = "\ChefZ\ChefZ_Devices\kits\models\beehivedoublekit.p3d";   // EIGENES MODELL (Meshy-Lieferung 27./29.10.2026, gebunden 30.10.2026)
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\kits\data\BeehiveDoubleKit_co.paa"};
+        hiddenSelections[] = {"camo"};
+        displayName = "#STR_CHEFZ_ITEM_BEEHIVEDOUBLEKIT";
+        descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVEDOUBLEKIT_DESC";
+        itemSize[] = {4, 3};
+        weight = 12000;
+        projectionTypename = "ChefZ_BeehiveDoublePlacing";
     };
 
     //--------------------------------------------------------------------------

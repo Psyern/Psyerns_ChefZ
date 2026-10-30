@@ -217,6 +217,11 @@ class CfgSlots
     class Slot_ChefZ_ExtractorJar08 { name = "ChefZ_ExtractorJar08"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
     class Slot_ChefZ_ExtractorJar09 { name = "ChefZ_ExtractorJar09"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
     class Slot_ChefZ_ExtractorJar10 { name = "ChefZ_ExtractorJar10"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+
+    // Der Milchplatz der Kaesepresse (30.10.2026, Spieltest: "Kaesepresse braucht
+    // eigene Slots fuer Milch"). Milch ist der Fuellstand der ChefZ_MilkCan
+    // (ChefZ_Ingredients); die Kanne fuehrt diesen Namen in inventorySlot[].
+    class Slot_ChefZ_PressMilkCan { name = "ChefZ_PressMilkCan"; displayName = "#STR_CHEFZ_SLOT_PRESSMILKCAN"; ghostIcon = "set:dayz_inventory image:cookingequipment"; };
 };
 
 class CfgVehicles
@@ -696,6 +701,10 @@ class CfgVehicles
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
         lifetime = 172800;
+
+        // Milchkanne (30.10.2026): ihr Fuellstand bestimmt, wie viele Kaese die
+        // Presse macht (ChefZ_CheesePress.ChefZ_CheesesFromMilk).
+        attachments[] = {"ChefZ_PressMilkCan"};
 
         class Cargo
         {

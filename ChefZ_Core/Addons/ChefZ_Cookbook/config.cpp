@@ -225,15 +225,15 @@ class CfgVehicles
         scope = 2;
         displayName = "#STR_CHEFZ_BOOK_COOKING";
         descriptionShort = "#STR_CHEFZ_BOOK_COOKING_DESC";
-        model = "\dz\gear\books\book_kniga.p3d";
+        model = "\ChefZ\ChefZ_Devices\book\models\cookbook.p3d";   // EIGENES MODELL (Meshy-Lieferung 27./29.10.2026, gebunden 30.10.2026)
         rotationFlags = 1;
         weight = 400;
         itemSize[] = {2, 2};
         // Der eigene Platz am Spieler (CfgSlots oben). Cargo bleibt erlaubt -
         // inventorySlot schraenkt nur ein, in welche Anbauplaetze es passt.
         inventorySlot[] = {"ChefZ_Cookbook"};
-        hiddenSelections[] = {"camoGround"};
-        hiddenSelectionsTextures[] = {"dz\gear\books\data\book_TheWarOfTheWorlds_co.paa"};
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\book\data\Cookbook_co.paa"};
         varQuantityDestroyOnMin = 0;
 
         class DamageSystem

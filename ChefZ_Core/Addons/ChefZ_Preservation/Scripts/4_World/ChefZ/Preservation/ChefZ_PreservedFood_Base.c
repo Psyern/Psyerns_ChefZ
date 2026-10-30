@@ -72,3 +72,16 @@ class ChefZ_PreservedFood_Base extends ChefZ_Edible_Base
         AddAction(ActionEatMeat);
     }
 }
+
+//! Raeucher- und Trockenwurst am angespitzten Stock (30.10.2026), wie die
+//! Wuerste in ChefZ_Meat (ChefZ_Sausage_Base).
+class ChefZ_PreservedSausage_Base extends ChefZ_PreservedFood_Base
+{
+    override bool CanBeCookedOnStick()
+    {
+        return ChefZ_Edible_Base.ChefZ_DeclaresCookTransitions(GetType());
+    }
+}
+
+class ChefZ_SmokedSausage extends ChefZ_PreservedSausage_Base {}
+class ChefZ_DrySausage    extends ChefZ_PreservedSausage_Base {}

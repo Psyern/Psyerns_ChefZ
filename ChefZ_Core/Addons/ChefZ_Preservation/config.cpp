@@ -674,6 +674,7 @@ class CfgVehicles
         // Haken des Raeucherofens/Trockenrahmens - ohne dieses Feld lag es daneben.
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
@@ -745,6 +746,7 @@ class CfgVehicles
         // Haken des Raeucherofens/Trockenrahmens - ohne dieses Feld lag es daneben.
         inventorySlot[] =
         {
+            "Ingredient",   // angespitzter Stock (30.10.2026)
             "ChefZ_DryHook01", "ChefZ_DryHook02", "ChefZ_DryHook03",
             "ChefZ_DryHook04", "ChefZ_DryHook05",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",

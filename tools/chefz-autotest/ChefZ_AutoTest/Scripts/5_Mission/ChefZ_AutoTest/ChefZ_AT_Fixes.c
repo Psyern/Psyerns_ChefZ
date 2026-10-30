@@ -225,6 +225,102 @@ class ChefZ_AT_Fixes
     }
 
     //==========================================================================
+    // Angespitzter Stock (30.10.2026)
+    //==========================================================================
+
+    //! Jedes Filet und jede Wurst muss an den Stock (Platz "Ingredient") und
+    //! dort garen duerfen (CanBeCookedOnStick).
+    static void StickSkewer(vector site)
+    {
+        TStringArray classes = {"ChefZ_CodFillet", "ChefZ_SockeyeSalmonFillet", "ChefZ_PerchFillet", "ChefZ_RawSausage", "ChefZ_RawSpicySausage", "ChefZ_CookedSausage", "ChefZ_HunterSausage", "ChefZ_SmokedSausage", "ChefZ_DrySausage"};
+        foreach (string cls : classes)
+        {
+            EntityAI stick = EntityAI.Cast(g_Game.CreateObjectEx("SharpWoodenStick", site, ECE_PLACE_ON_SURFACE));
+            if (!stick)
+            {
+                ChefZ_AT_Log.Result("FIX", "stick.spawn", false, "SharpWoodenStick nicht spawnbar");
+                return;
+            }
+            EntityAI food = stick.GetInventory().CreateAttachment(cls);
+            Edible_Base edible = Edible_Base.Cast(food);
+            bool onStick = food != null && food.GetHierarchyParent() == stick;
+            bool cookable = edible != null && edible.CanBeCookedOnStick();
+            ChefZ_AT_Log.Result("FIX", "stick." + cls, onStick && cookable, "amStock=" + onStick.ToString() + " garbar=" + cookable.ToString());
+            g_Game.ObjectDelete(stick);
+        }
+    }
+
+    //! Getreidemuehle (30.10.2026): Weizen und Mais lassen sich einfuellen,
+    //! eine Tomate nicht. Dieselbe Bedingung wie die Aktion.
+    static void MillFill(vector site)
+    {
+        ChefZ_GrainMill mill = ChefZ_GrainMill.Cast(g_Game.CreateObjectEx("ChefZ_GrainMill", site, ECE_PLACE_ON_SURFACE));
+        if (!mill)
+        {
+            ChefZ_AT_Log.Result("FIX", "mill.spawn", false, "ChefZ_GrainMill nicht spawnbar");
+            return;
+        }
+        EntityAI wheat = EntityAI.Cast(g_Game.CreateObjectEx("ChefZ_Wheat", site + Vector(1, 0, 0), ECE_PLACE_ON_SURFACE));
+        EntityAI corn = EntityAI.Cast(g_Game.CreateObjectEx("ChefZ_Corn", site + Vector(1, 0, 0.5), ECE_PLACE_ON_SURFACE));
+        EntityAI tomato = EntityAI.Cast(g_Game.CreateObjectEx("Tomato", site + Vector(1, 0, 1), ECE_PLACE_ON_SURFACE));
+
+        bool wheatOk = ChefZ_ActionFillGrainMill.CanFill(mill, wheat);
+        bool cornOk = ChefZ_ActionFillGrainMill.CanFill(mill, corn);
+        bool tomatoRefused = !ChefZ_ActionFillGrainMill.CanFill(mill, tomato);
+        bool moved = false;
+        if (wheatOk)
+        {
+            mill.ServerTakeEntityToCargo(wheat);
+            moved = wheat.GetHierarchyParent() == mill;
+        }
+        ChefZ_AT_Log.Result("FIX", "mill.fill", wheatOk && cornOk && tomatoRefused && moved, "weizen=" + wheatOk.ToString() + " mais=" + cornOk.ToString() + " tomateAbgewiesen=" + tomatoRefused.ToString() + " imCargo=" + moved.ToString());
+
+        if (tomato)
+            g_Game.ObjectDelete(tomato);
+        if (corn)
+            g_Game.ObjectDelete(corn);
+        g_Game.ObjectDelete(mill);
+    }
+
+    //! Kaesepresse mit Milchkanne (30.10.2026): 12 l in der Kanne -> 2 Kaese,
+    //! 2 l bleiben. 3 l allein reichen fuer keinen.
+    static void MilkPress(vector site)
+    {
+        ChefZ_CheesePress press = ChefZ_CheesePress.Cast(g_Game.CreateObjectEx("ChefZ_CheesePress", site, ECE_PLACE_ON_SURFACE));
+        if (!press)
+        {
+            ChefZ_AT_Log.Result("FIX", "press.spawn", false, "ChefZ_CheesePress nicht spawnbar");
+            return;
+        }
+        ItemBase can = ItemBase.Cast(press.GetInventory().CreateAttachment("ChefZ_MilkCan"));
+        bool attached = can != null && can.GetHierarchyParent() == press;
+        if (!attached)
+        {
+            ChefZ_AT_Log.Result("FIX", "press.milkSlot", false, "Milchkanne passt nicht in den Platz");
+            g_Game.ObjectDelete(press);
+            return;
+        }
+
+        can.SetQuantity(3.0);
+        int fromThree = press.ChefZ_CheesesFromMilk();
+        can.SetQuantity(12.0);
+        int fromTwelve = press.ChefZ_CheesesFromMilk();
+        int made = press.ChefZ_PressMilk();
+        int cheeses = 0;
+        array<EntityAI> items = new array<EntityAI>();
+        press.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, items);
+        foreach (EntityAI e : items)
+        {
+            if (e.GetType() == "ChefZ_Cheese")
+                cheeses++;
+        }
+        float left = can.GetQuantity();
+        bool ok = fromThree == 0 && fromTwelve == 2 && made == 2 && cheeses == 2 && Math.AbsFloat(left - 2.0) < 0.01;
+        ChefZ_AT_Log.Result("FIX", "press.milk", ok, "3l=" + fromThree.ToString() + " 12l=" + fromTwelve.ToString() + " gepresst=" + made.ToString() + " kaese=" + cheeses.ToString() + " rest=" + left.ToString());
+        g_Game.ObjectDelete(press);
+    }
+
+    //==========================================================================
     // Fleisch-Garstufen-Texturen
     //==========================================================================
 

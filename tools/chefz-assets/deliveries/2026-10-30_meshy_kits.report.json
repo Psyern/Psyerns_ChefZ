@@ -1,0 +1,284 @@
+{
+ "manifest": "E:\\DayZ Modding\\Psyerns_ChefZ\\tools\\chefz-assets\\deliveries\\2026-10-30_meshy_kits.json",
+ "duration": 10.19858193397522,
+ "results": [
+  {
+   "name": "BeehiveKit",
+   "group": "kits",
+   "bind": [
+    "ChefZ_BeehiveKit"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\models\\beehivekit.p3d",
+   "model": "\\ChefZ\\ChefZ_Devices\\kits\\models\\beehivekit.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\kits\\data\\BeehiveKit_co.paa",
+   "size_m": [
+    1.0,
+    1.0,
+    0.513
+   ],
+   "source_tris": 3460,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\data\\BeehiveKit_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: BeehiveKit"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle BeehiveKit_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: BeehiveKit_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: BeehiveKit_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: BeehiveKit_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: BeehiveKit_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (234 Flächen)",
+   "lods": [
+    "resolution0:3460f",
+    "resolution1:2422f",
+    "resolution2:1730f",
+    "resolution3:1038f",
+    "shadow_volume0:234f",
+    "geometry0:234f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:234f",
+    "fire_geometry0:234f"
+   ]
+  },
+  {
+   "name": "BeehiveDoubleKit",
+   "group": "kits",
+   "bind": [
+    "ChefZ_BeehiveDoubleKit"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\models\\beehivedoublekit.p3d",
+   "model": "\\ChefZ\\ChefZ_Devices\\kits\\models\\beehivedoublekit.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\kits\\data\\BeehiveDoubleKit_co.paa",
+   "size_m": [
+    0.652,
+    1.1,
+    0.346
+   ],
+   "source_tris": 5057,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\data\\BeehiveDoubleKit_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: BeehiveDoubleKit"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle BeehiveDoubleKit_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: BeehiveDoubleKit_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: BeehiveDoubleKit_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: BeehiveDoubleKit_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: BeehiveDoubleKit_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen, 2 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "shadow": "Shadow Volume war offen - ersetzt durch die Kollisionshülle (244 Flächen)",
+   "lods": [
+    "resolution0:5057f",
+    "resolution1:3539f",
+    "resolution2:2528f",
+    "resolution3:1517f",
+    "shadow_volume0:244f",
+    "geometry0:244f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:244f",
+    "fire_geometry0:244f"
+   ]
+  },
+  {
+   "name": "Cookbook",
+   "group": "book",
+   "bind": [
+    "ChefZ_CookbookItem"
+   ],
+   "status": "OK",
+   "selection": "camo",
+   "note": "",
+   "messages": [],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\book\\models\\cookbook.p3d",
+   "model": "\\ChefZ\\ChefZ_Devices\\book\\models\\cookbook.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\book\\data\\Cookbook_co.paa",
+   "size_m": [
+    0.26,
+    0.183,
+    0.054
+   ],
+   "source_tris": 1216,
+   "textures": [
+    "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\book\\data\\Cookbook_co.paa"
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: Cookbook"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle Cookbook_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: Cookbook_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: Cookbook_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: Cookbook_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: Cookbook_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (85 Prüfungen)"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "lods": [
+    "resolution0:1216f",
+    "resolution1:850f",
+    "resolution2:607f",
+    "resolution3:364f",
+    "shadow_volume0:634f",
+    "geometry0:218f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:218f",
+    "fire_geometry0:218f"
+   ]
+  }
+ ]
+}

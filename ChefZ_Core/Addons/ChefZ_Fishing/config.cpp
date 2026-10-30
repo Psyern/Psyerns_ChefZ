@@ -400,8 +400,11 @@ class CfgVehicles
         // Raeucher- und Bratplaetze wie Vanillas Filets (CarpFilletMeat) plus
         // die Haken 5-12 des Raeucherschranks (27.10.2026, Spieltest "man kann
         // keine Fische raeuchern": ohne dieses Feld nahm kein Haken ein Filet).
+        // "Ingredient" ist der Platz am angespitzten Stock (SharpWoodenStick,
+        // Vanilla DZ/gear/crafting) - Filets ueber dem Feuer, 30.10.2026.
         inventorySlot[] =
         {
+            "Ingredient",
             "DirectCookingA", "DirectCookingB", "DirectCookingC",
             "SmokingA", "SmokingB", "SmokingC", "SmokingD",
             "ChefZ_SmokeHook05", "ChefZ_SmokeHook06", "ChefZ_SmokeHook07", "ChefZ_SmokeHook08", "ChefZ_SmokeHook09", "ChefZ_SmokeHook10", "ChefZ_SmokeHook11", "ChefZ_SmokeHook12", "ChefZ_SmokeHook13", "ChefZ_SmokeHook14", "ChefZ_SmokeHook15", "ChefZ_SmokeHook16", "ChefZ_SmokeHook17", "ChefZ_SmokeHook18"
