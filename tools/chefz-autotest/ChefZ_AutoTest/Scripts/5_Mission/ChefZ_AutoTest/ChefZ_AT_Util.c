@@ -77,6 +77,9 @@ class ChefZ_AT_Util
                 EntityAI e = CreateAtFreeSpot(container, input.cls);
                 if (!e)
                     e = container.GetInventory().CreateEntityInCargo(input.cls);
+                // Stationen nur mit Plaetzen (Honigschleuder seit 30.10.2026).
+                if (!e)
+                    e = container.GetInventory().CreateAttachment(input.cls);
                 if (!e)
                 {
                     ItemBase ground = SpawnGround(input.cls, container.GetPosition() + Vector(0.5, 0, 0.5));

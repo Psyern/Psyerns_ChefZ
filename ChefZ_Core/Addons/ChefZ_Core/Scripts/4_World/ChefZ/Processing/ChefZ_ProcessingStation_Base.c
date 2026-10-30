@@ -957,6 +957,21 @@ class ChefZ_ProcessingStation_Base extends ItemBase
     {
     }
 
+    /**
+     * Soll die Stationsaktion auch erscheinen, wenn gerade KEIN Transform
+     * passt? Standard nein (11 §5). Eine Station, deren Rezepte der Spieler
+     * nicht kennen kann, sagt hier ja und erklaert sich dann selbst im Haken
+     * ChefZ_OnStationActionFinished (Ausgang NO_MATCH). Umgebung und Werkzeug
+     * muessen trotzdem stimmen, ein freier Slot ebenso.
+     *
+     * Eingefuehrt 30.10.2026 fuer den Moerser (Spieltest Alex: "Moerser fehlt
+     * die Aktion") - die Aktion erschien nur bei exakt passendem Inhalt.
+     */
+    bool ChefZ_OffersActionWithoutMatch()
+    {
+        return false;
+    }
+
     //==========================================================================
     // Fortschritt (11 §6)
     //==========================================================================

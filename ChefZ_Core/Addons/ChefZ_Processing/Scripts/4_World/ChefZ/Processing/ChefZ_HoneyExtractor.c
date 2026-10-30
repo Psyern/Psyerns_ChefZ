@@ -71,150 +71,155 @@
 //
 // Diese Station fasst Vanillas Kochkette an keiner Stelle an (11 E6).
 //
+// ### 30.10.2026 - NUR NOCH SLOTS, ANKURBELN PER AKTION (Spieltest) ###
+// Das Cargo ist entfallen. Fuenf Plaetze nehmen NUR entdeckelte Rahmen, zehn
+// Plaetze leere Glaeser. "Honig schleudern" (ChefZ_ActionProcessAtStation,
+// PROCESS_SPIN_HONEY) startet die Schleuder; vorher lief sie beim Einlegen von
+// selbst an, belegte damit ihren einzigen Arbeitsplatz und die Aktion erschien
+// nie. Je Abschluss wird EIN leeres Glas in SEINEM Platz zum Honigglas und ein
+// Rahmen verliert eine Einheit; der Core-Applicator legt Ergebnisse nur ins
+// Cargo und ist hier deshalb nicht im Spiel (ChefZ_CompleteJob unten). Die
+// Ereignisse (XP, Fortschritt) gehen weiter ueber ChefZ_ProcessRunner.
+// Was oben ueber Cargo, Kapazitaet 15 und Selbststart beim Einlegen steht, ist
+// damit Geschichte; Schwelle und Reserve des Rahmens gelten unveraendert.
+//
 // Layer: 4_World.
 //==============================================================================
 
 class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
 {
-    //! Fuenf Rahmen und fuenfzehn Glaeser (Auftrag 8-10).
-    static const int    CHEFZ_FRAME_CAPACITY    = 5;
-    static const int    CHEFZ_JAR_CAPACITY      = 15;
     //! Der Prozess, den die Station sich selbst nachstartet.
     static const string CHEFZ_SPIN_PROCESS      = "PROCESS_SPIN_HONEY";
     //! Wozu ein leergeschleuderter Rahmen wird.
     static const string CHEFZ_FRAME_EMPTY_CLASS = "ChefZ_HoneycombFrameEmpty";
-    //! Unterhalb dieser Menge gilt ein Rahmen als leergeschleudert. Zwei und
-    //! nicht null: TR_SpinHoney verlangt mindestens zwei Einheiten, damit der
-    //! Core nie die letzte zieht und den Rahmen loescht (siehe Dateikopf).
-    //! Nach dem VIERTEN Glas steht der Rahmen auf 1 und faellt hier durch.
-    //!
-    //! Die Zahl 2.0 ist die einzige, die BEIDE Forderungen aus Auftrag 11
-    //! zugleich erfuellt: vier Glaeser UND ein Rahmen, der uebrig bleibt. Sie
-    //! muss mit amount.min in TR_SpinHoney uebereinstimmen - stuende sie
-    //! niedriger, zoege der Applicator die Einheit, die diese Schwelle
-    //! auffangen soll.
+    //! Unterhalb dieser Menge gilt ein Rahmen als leergeschleudert. Muss mit
+    //! amount.min in TR_SpinHoney uebereinstimmen (siehe Dateikopf).
     static const float  CHEFZ_FRAME_SPENT_BELOW  = 2.0;
-    //! Vanillas Honigglas - das Ergebnis darf liegen bleiben und zurueck.
+    //! Vanillas Honigglas - entsteht im Glasplatz aus dem leeren Glas.
     static const string CHEFZ_HONEY_CLASS       = "Honey";
-    //! Das leere Glas aus ChefZ_Cooking. Als NAME und nicht als Cast: dieses
-    //! Modul fuehrt ChefZ_Cooking nicht in requiredAddons (Ladezyklus, siehe
-    //! config.cpp), und ein Klassenbezug im Skript waere dieselbe Abhaengigkeit
-    //! durch die Hintertuer. IsKindOf loest den Namen zur Laufzeit auf.
+    //! Das leere Glas aus ChefZ_Cooking, als NAME (kein requiredAddons auf
+    //! ChefZ_Cooking, siehe config.cpp).
     static const string CHEFZ_JAR_CLASS         = "ChefZ_EmptyJar";
+    //! Praefixe der Slotnamen (config.cpp, CfgSlots).
+    static const string CHEFZ_FRAME_SLOT_PREFIX = "ChefZ_ExtractorFrame";
+    static const string CHEFZ_JAR_SLOT_PREFIX   = "ChefZ_ExtractorJar";
 
-    //! Der Spieler, der angekurbelt hat. Der Folgejob traegt seine Kennung,
-    //! damit XP je Glas an ihn geht - und erst nach dem Abschluss (Regel 7).
-    //! Kein eigener Speicherblock noetig: die Kennung kommt bei jedem
-    //! Abschluss frisch aus dem abgeschlossenen Job, und den schreibt und
-    //! liest der Job-Block der Basis (ChefZ_ProcessingStation_Base.c:1102,
-    //! 1178) - auch ueber einen Neustart hinweg.
-    //! 0 heisst "niemand beteiligt", wie ueberall im Core (ChefZ_ProcessJob.
-    //! Clear, ChefZ_ProcessContext.c:337; ChefZ_BuildContext, Basis Z.429).
+    //! Der Spieler, der angekurbelt hat; der Folgejob traegt seine Kennung.
     protected int m_ChefZ_PendingActorId;
-    //! Wahr, solange ChefZ_RetireSpentFrames einen Rahmen in Ort und Stelle
-    //! ersetzt: nur dann darf ein Leerrahmen ins Cargo. Von aussen nimmt die
-    //! Schleuder ausschliesslich entdeckelte Rahmen an (Auftrag 8-10).
-    protected bool m_ChefZ_ReplacingFrame;
+    //! Wahr, solange ein Platz an Ort und Stelle ersetzt wird (Rahmen ->
+    //! Leerrahmen, Glas -> Honig): nur dann nimmt ein Platz auch das an, was
+    //! ein Spieler nicht hineinlegen darf.
+    protected bool m_ChefZ_Replacing;
 
     void ChefZ_HoneyExtractor()
     {
         m_ChefZ_PendingActorId = 0;
-        m_ChefZ_ReplacingFrame = false;
+        m_ChefZ_Replacing = false;
     }
 
-    //! Entdeckelte Rahmen, leere Glaeser und Honig hinein - Rahmen wie
-    //! Glaeser nur bis zur Kapazitaet. Ein volles Raehmchen hat hier keinen
-    //! Zweck (Auftrag 8: fuenf Plaetze fuer entdeckelte Rahmen) und bleibt
-    //! draussen. Der Leerrahmen dagegen muss erlaubt sein: die Ersetzung
-    //! eines leergeschleuderten Rahmens legt ihn in dessen Cargo-Zelle an, und
-    //! er zaehlt mit, bis er entnommen ist - er belegt den Platz eines Rahmens.
-    //! Beleg: EntityAI.CanReceiveItemIntoCargo, scripts - 1.29/3_Game/DayZ/
-    //! Entities/EntityAI.c:1550-1559; Ueberschreibung wie Barrel_ColorBase.c:512.
-    override bool CanReceiveItemIntoCargo(EntityAI item)
+    //! Rahmenplaetze nehmen von aussen nur entdeckelte Rahmen; Glasplaetze nur
+    //! leere Glaeser (und Honig, den die Schleuder selbst erzeugt oder ein
+    //! Spieler zuruecklegt). Volle und leere Rahmen bleiben draussen.
+    override bool CanReceiveAttachment(EntityAI attachment, int slotId)
     {
-        if (!super.CanReceiveItemIntoCargo(item))
+        if (!super.CanReceiveAttachment(attachment, slotId))
             return false;
-        if (!item)
+        if (!attachment)
             return false;
-
-        // Von aussen nur entdeckelte Rahmen; der Leerrahmen, den die Schleuder
-        // selbst zuruecklaesst, entsteht waehrend der Ersetzung und darf bleiben.
-        if (ChefZ_HoneycombFrame_Base.Cast(item))
-        {
-            if (m_ChefZ_ReplacingFrame)
-                return true;
-            if (!ChefZ_HoneycombFrameUncapped.Cast(item))
-                return false;
-            return ChefZ_CountFrames() < CHEFZ_FRAME_CAPACITY;
-        }
-
-        // Beleg: Object.IsKindOf, scripts - 1.29/3_Game/DayZ/Entities/Object.c:517;
-        // Aufrufstelle Recipes/LoadMagazine.c:64.
-        if (item.IsKindOf(CHEFZ_JAR_CLASS))
-            return ChefZ_CountJars() < CHEFZ_JAR_CAPACITY;
-
-        if (item.IsKindOf(CHEFZ_HONEY_CLASS))
+        if (m_ChefZ_Replacing)
             return true;
 
-        return false;
+        string slotName = InventorySlots.GetSlotName(slotId);
+        if (slotName.IndexOf(CHEFZ_FRAME_SLOT_PREFIX) == 0)
+            return ChefZ_HoneycombFrameUncapped.Cast(attachment) != null;
+        if (slotName.IndexOf(CHEFZ_JAR_SLOT_PREFIX) == 0)
+            return attachment.IsKindOf(CHEFZ_JAR_CLASS) || attachment.IsKindOf(CHEFZ_HONEY_CLASS);
+        return true;
     }
 
-    //! Der Abschluss eines Glases stoesst das naechste an.
-    //!
-    //! Die Spielerkennung wird VOR super gesichert: die Basis loescht den Job
-    //! nach dem Lauf (job.Clear()). Der Neustart geht NICHT direkt aus dem
-    //! Timer-Rueckruf heraus, sondern in den naechsten Frame: super hat den
-    //! Job-Timer gerade angehalten, und ein Timer.Run aus dem eigenen Rueckruf
-    //! heraus ist kein belegter Pfad. CallLater aus derselben Warteschlange
-    //! ist es (GeyserArea.c:49, FireplaceBase.c:1767).
     /**
-     * Selbststart (26.10.2026): Glas oder entdeckelter Rahmen hinein - die Schleuder
-     * laeuft an, ohne dass jemand die Stationsaktion ausloest. Vorher fuellten sich
-     * eingesetzte Glaeser erst nach der Aktion. Ohne beide Zutaten scheitert
-     * ChefZ_BeginJob still (Debug-Log) und die Schleuder steht.
+     * Ein Glas fertig: Glas -> Honig im eigenen Platz, Rahmen eine Einheit
+     * weniger, leere Rahmen tauschen, naechstes Glas anstossen.
+     *
+     * Ersetzt den Abschluss der Basis, weil deren Applicator Ergebnisse ins
+     * Cargo legt und die Schleuder keines mehr hat. Neu gebunden wird trotzdem
+     * (11 §5): passt beim Abschluss kein Transform mehr, wird abgebrochen,
+     * ohne etwas zu verbrauchen.
      */
-    override void EECargoIn(EntityAI item)
-    {
-        super.EECargoIn(item);
-
-        if (!g_Game || !g_Game.IsServer() || !item)
-            return;
-        if (!item.IsKindOf(CHEFZ_JAR_CLASS) && !ChefZ_HoneycombFrameUncapped.Cast(item))
-            return;
-        if (ChefZ_ActiveJobCount() > 0)
-            return;
-
-        g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(ChefZ_SpinNextJar, 250, false);
-    }
-
     override bool ChefZ_CompleteJob(int slotIndex)
     {
-        int actorId = 0;
-        if (slotIndex >= 0 && slotIndex < m_ChefZ_Jobs.Count())
+        if (!g_Game || !g_Game.IsServer())
+            return false;
+        if (slotIndex < 0 || slotIndex >= m_ChefZ_Jobs.Count())
+            return false;
+
+        ChefZ_ProcessJob job = m_ChefZ_Jobs.Get(slotIndex);
+        if (!job.IsActive())
+            return false;
+
+        ChefZ_ProcessingManager mgr = ChefZ_ProcessingManager.Get();
+        if (!ResolveJob(job, mgr))
         {
-            ChefZ_ProcessJob job = m_ChefZ_Jobs.Get(slotIndex);
-            actorId = job.actorIdentityId;
+            ChefZ_CancelJob(slotIndex, "transform_gone");
+            return false;
+        }
+        ChefZ_CompiledTransform tr = mgr.GetTransform(job.transformSym);
+        if (!tr)
+        {
+            ChefZ_CancelJob(slotIndex, "transform_gone");
+            return false;
         }
 
-        bool ok = super.ChefZ_CompleteJob(slotIndex);
-        if (!ok)
+        int actorId = job.actorIdentityId;
+
+        ChefZ_ProcessContext ctx = new ChefZ_ProcessContext();
+        ChefZ_BuildContext(null, actorId, ctx);
+        ChefZ_FactSnapshot snapshot;
+        array<ItemBase> entities;
+        ChefZ_FactCollector.CollectFromStation(this, snapshot, entities);
+        snapshot.SortStable();
+        ChefZ_TransformMatch match;
+        if (!mgr.FindTransform(job.processSym, ctx, snapshot, null, match))
+        {
+            ChefZ_CancelJob(slotIndex, "input_lost");
             return false;
+        }
+
+        ItemBase frame = ChefZ_FindFrameWithHoney();
+        ItemBase jar = ChefZ_FindEmptyJar();
+        if (!frame || !jar)
+        {
+            ChefZ_CancelJob(slotIndex, "input_lost");
+            return false;
+        }
+
+        ItemBase honey = ChefZ_FillOneJar(jar);
+        if (!honey)
+        {
+            ChefZ_CancelJob(slotIndex, "output_blocked");
+            return false;
+        }
+        frame.AddQuantity(-1.0);
+
+        job.Clear();
+        SyncFromJobs();
+        if (ChefZ_ActiveJobCount() == 0)
+            StopJobTimer();
+
+        array<ItemBase> created = new array<ItemBase>();
+        created.Insert(honey);
+        ChefZ_ProcessRunner.RaiseProcessed(this, tr, match, entities, created, actorId);
 
         ChefZ_RetireSpentFrames();
 
         m_ChefZ_PendingActorId = actorId;
-        if (g_Game)
-            g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(ChefZ_SpinNextJar, 0, false);
-
+        g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(ChefZ_SpinNextJar, 0, false);
         return true;
     }
 
-    //! Startet den naechsten Job, solange Rahmen mit Vorrat und Glaeser
-    //! liegen (Annahme A3). Oeffentlich, weil CallLater ihn ruft. Scheitert
-    //! der Start, steht die Schleuder - kein Vorrat, kein Glas oder das Cargo
-    //! ist voll - und wartet auf das naechste Ankurbeln. Dasselbe gilt fuer
-    //! einen Job, der in der Basis ohne Verbrauch endet (RUN_FAILED bei
-    //! vollem Cargo): ChefZ_CompleteJob kehrt dann vor dem Nachstart zurueck.
+    //! Startet den naechsten Job, solange ein Rahmen mit Vorrat und ein leeres
+    //! Glas eingesetzt sind. Scheitert der Start, steht die Schleuder, bis ein
+    //! Spieler erneut "Honig schleudern" waehlt.
     void ChefZ_SpinNextJar()
     {
         if (!g_Game || !g_Game.IsServer())
@@ -234,32 +239,70 @@ class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
         }
     }
 
-    //! Rahmen unterhalb der Reserve-Schwelle werden in ihrer Cargo-Zelle zum
-    //! Leerrahmen. Rueckwaerts, weil die Ersetzung den Cargo-Index verschiebt.
-    //! Keine Variablen uebertragen, sonst wandert die Restmenge mit; Health ja.
-    //! Beleg: TurnItemIntoItemLambda + SetTransferParams, scripts - 1.29/
-    //! 4_World/DayZ/Static/MiscGameplayFunctions.c:1-14; spielerloser Pfad
-    //! Entities/Core/Inherited/InventoryItem.c:274-276; Cargo-Zweig der
-    //! Ersetzung ReplaceItemWithNewLambdaBase.c:157-158.
+    //! Ein eingesetzter entdeckelter Rahmen mit mindestens der Schwelle.
+    protected ItemBase ChefZ_FindFrameWithHoney()
+    {
+        GameInventory inventory = GetInventory();
+        if (!inventory)
+            return null;
+        int n = inventory.AttachmentCount();
+        for (int a = 0; a < n; a++)
+        {
+            ChefZ_HoneycombFrameUncapped frame = ChefZ_HoneycombFrameUncapped.Cast(inventory.GetAttachmentFromIndex(a));
+            if (frame && frame.GetQuantity() >= CHEFZ_FRAME_SPENT_BELOW)
+                return frame;
+        }
+        return null;
+    }
+
+    //! Ein eingesetztes leeres Glas.
+    protected ItemBase ChefZ_FindEmptyJar()
+    {
+        GameInventory inventory = GetInventory();
+        if (!inventory)
+            return null;
+        int n = inventory.AttachmentCount();
+        for (int a = 0; a < n; a++)
+        {
+            ItemBase item = ItemBase.Cast(inventory.GetAttachmentFromIndex(a));
+            if (item && item.IsKindOf(CHEFZ_JAR_CLASS))
+                return item;
+        }
+        return null;
+    }
+
+    //! Leeres Glas -> Honigglas im selben Platz. Gibt das Honigglas zurueck
+    //! oder null, wenn die Engine nichts ersetzt hat.
+    protected ItemBase ChefZ_FillOneJar(notnull ItemBase jar)
+    {
+        GameInventory jarInventory = jar.GetInventory();
+        if (!jarInventory)
+            return null;
+
+        InventoryLocation loc = new InventoryLocation();
+        if (!jarInventory.GetCurrentInventoryLocation(loc))
+            return null;
+        int slotId = loc.GetSlot();
+
+        TurnItemIntoItemLambda lambda = new TurnItemIntoItemLambda(jar, CHEFZ_HONEY_CLASS, null);
+        lambda.SetTransferParams(false, false, true, true);
+        m_ChefZ_Replacing = true;
+        jarInventory.ReplaceItemWithNew(InventoryMode.SERVER, lambda);
+        m_ChefZ_Replacing = false;
+
+        ItemBase honey = ItemBase.Cast(GetInventory().FindAttachment(slotId));
+        if (honey && honey.IsKindOf(CHEFZ_HONEY_CLASS))
+            return honey;
+        return null;
+    }
+
+    //! Rahmen unterhalb der Schwelle werden in ihrem Platz zum Leerrahmen.
+    //! Rueckwaerts, weil der Tausch die Liste veraendert.
     protected void ChefZ_RetireSpentFrames()
     {
         GameInventory inventory = GetInventory();
         if (!inventory)
             return;
-        CargoBase cargo = inventory.GetCargo();
-        if (!cargo)
-            return;
-
-        int i = cargo.GetItemCount() - 1;
-        while (i >= 0)
-        {
-            ChefZ_RetireOneFrame(ChefZ_HoneycombFrameUncapped.Cast(cargo.GetItem(i)));
-            i = i - 1;
-        }
-
-        // Und dasselbe fuer die eingehaengten Raehmchen (07.09.2026).
-        // Rueckwaerts aus demselben Grund wie oben: der Tausch veraendert die
-        // Liste, ueber die gerade gelaufen wird.
         int a = inventory.AttachmentCount() - 1;
         while (a >= 0)
         {
@@ -268,89 +311,22 @@ class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
         }
     }
 
-    /**
-     * Ein leergeschleudertes Raehmchen gegen ein leeres tauschen.
-     *
-     * Herausgezogen am 07.09.2026, als die Schleuder ihre Raehmchen auch aus
-     * Anbauplaetzen holen musste: derselbe Tausch an zwei Stellen waere zwei
-     * Gelegenheiten gewesen, ihn verschieden zu machen.
-     *
-     * ReplaceItemWithNew ersetzt AN ORT UND STELLE - ein Raehmchen im Cargo
-     * bleibt im Cargo, eines im Platz bleibt im Platz. Dass das leere
-     * Raehmchen die Extractor-Slots ebenfalls in seinem inventorySlot[] fuehrt,
-     * ist deshalb Bedingung und kein Beiwerk (ChefZ_Farming/config.cpp,
-     * class ChefZ_HoneycombFrame_Base).
-     */
+    //! Ein leergeschleudertes Raehmchen gegen ein leeres tauschen (an Ort und
+    //! Stelle, deshalb fuehrt ChefZ_HoneycombFrameEmpty die Extractor-Slots).
     protected void ChefZ_RetireOneFrame(ChefZ_HoneycombFrameUncapped frame)
     {
         if (!frame)
             return;
         if (frame.GetQuantity() >= CHEFZ_FRAME_SPENT_BELOW)
             return;
-
-        // Ein Rahmen ohne Inventar steckt bereits im Loeschen; ihn zu
-        // ersetzen waere ein VM-Fehler mitten im Timer-Rueckruf, und der
-        // Folgejob kaeme nie. Er wird uebersprungen.
         GameInventory frameInventory = frame.GetInventory();
         if (!frameInventory)
             return;
 
         TurnItemIntoItemLambda lambda = new TurnItemIntoItemLambda(frame, CHEFZ_FRAME_EMPTY_CLASS, null);
         lambda.SetTransferParams(false, false, true, true);
-        m_ChefZ_ReplacingFrame = true;
+        m_ChefZ_Replacing = true;
         frameInventory.ReplaceItemWithNew(InventoryMode.SERVER, lambda);
-        m_ChefZ_ReplacingFrame = false;
-    }
-
-    //! Rahmen im Cargo - entdeckelte und leergeschleuderte gleichermassen.
-    protected int ChefZ_CountFrames()
-    {
-        int count = 0;
-        GameInventory inventory = GetInventory();
-        if (!inventory)
-            return count;
-        CargoBase cargo = inventory.GetCargo();
-        if (!cargo)
-            return count;
-
-        int n = cargo.GetItemCount();
-        for (int i = 0; i < n; i++)
-        {
-            if (ChefZ_HoneycombFrame_Base.Cast(cargo.GetItem(i)))
-                count = count + 1;
-        }
-
-        // Und die fuenf Raehmchenplaetze (07.09.2026). Ohne diese Schleife
-        // zaehlte die Schleuder ein eingehaengtes Raehmchen nicht mit, meldete
-        // "keine Raehmchen" und stand - waehrend fuenf davon sichtbar an ihr
-        // hingen. Ein Slot ist kein Cargo.
-        int slots = inventory.AttachmentCount();
-        for (int a = 0; a < slots; a++)
-        {
-            if (ChefZ_HoneycombFrame_Base.Cast(inventory.GetAttachmentFromIndex(a)))
-                count = count + 1;
-        }
-        return count;
-    }
-
-    //! Leere Glaeser im Cargo.
-    protected int ChefZ_CountJars()
-    {
-        int count = 0;
-        GameInventory inventory = GetInventory();
-        if (!inventory)
-            return count;
-        CargoBase cargo = inventory.GetCargo();
-        if (!cargo)
-            return count;
-
-        int n = cargo.GetItemCount();
-        for (int i = 0; i < n; i++)
-        {
-            EntityAI entry = cargo.GetItem(i);
-            if (entry && entry.IsKindOf(CHEFZ_JAR_CLASS))
-                count = count + 1;
-        }
-        return count;
+        m_ChefZ_Replacing = false;
     }
 }

@@ -854,8 +854,12 @@ class ChefZ_ProcessRunner
      * Ausfuehrungsform" - dieselbe Meldung fuer HANDCRAFT, STATION_ACTION und
      * STATION_TIMED. Das ist der Grund, warum die Handcraft-Bruecke (S15)
      * ebenfalls durch DIESE Datei laeuft und sich kein eigenes Ereignis baut.
+     *
+     * Oeffentlich seit dem 30.10.2026: eine Station, die ihr Ergebnis selbst an
+     * Ort und Stelle erzeugt (ChefZ_HoneyExtractor - Glas im Platz wird zum
+     * Honigglas, kein Cargo), meldet ihren Abschluss ueber dieselbe Zeile.
      */
-    private static void RaiseProcessed(ItemBase station, notnull ChefZ_CompiledTransform tr, notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities, array<ItemBase> created, int actorId)
+    static void RaiseProcessed(ItemBase station, notnull ChefZ_CompiledTransform tr, notnull ChefZ_TransformMatch match, notnull array<ItemBase> entities, array<ItemBase> created, int actorId)
     {
         ChefZ_EventBus bus = ChefZ_EventBus.Get();
         ChefZ_CompiledProcess proc = ChefZ_ProcessingManager.Get().GetProcess(tr.processSym);

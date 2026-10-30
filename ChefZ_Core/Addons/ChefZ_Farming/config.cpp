@@ -1773,11 +1773,10 @@ class CfgVehicles
             // Passt das leere nicht in denselben Platz, misslingt der Tausch -
             // und zwar lautlos.
             //
-            // Warum auch am VOLLEN: ein verdeckeltes Raehmchen in der Schleuder
-            // ist kein Fehler, es matcht nur nicht (TR_SpinHoney nimmt
-            // ausdruecklich ChefZ_HoneycombFrameUncapped). Einhaengen duerfen
-            // und dann merken, dass erst entdeckelt werden muss, ist die
-            // freundlichere Rueckmeldung als ein Platz, der es gar nicht annimmt.
+            // Das VOLLE (verdeckelte) Raehmchen fuehrt die Plaetze nur noch der
+            // Basis wegen: seit 30.10.2026 weist die Schleuder es per Skript ab
+            // (ChefZ_HoneyExtractor.CanReceiveAttachment, Spieltest Alex: nicht
+            // entdeckelte Rahmen sollen nicht hinein).
             "ChefZ_ExtractorFrame01", "ChefZ_ExtractorFrame02", "ChefZ_ExtractorFrame03",
             "ChefZ_ExtractorFrame04", "ChefZ_ExtractorFrame05"
         };

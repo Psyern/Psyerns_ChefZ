@@ -202,6 +202,21 @@ class CfgSlots
     class Slot_ChefZ_ExtractorFrame03 { name = "ChefZ_ExtractorFrame03"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
     class Slot_ChefZ_ExtractorFrame04 { name = "ChefZ_ExtractorFrame04"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
     class Slot_ChefZ_ExtractorFrame05 { name = "ChefZ_ExtractorFrame05"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORFRAME"; };
+
+    // Die zehn Glasplaetze der Honigschleuder (30.10.2026, Spieltest: "eigentliches
+    // Inventar entfernen, wir arbeiten nur ueber Slots"). Ein leeres Glas wird in
+    // SEINEM Platz zum Honigglas (ChefZ_HoneyExtractor.ChefZ_FillOneJar) - deshalb
+    // fuehren ChefZ_EmptyJar (ChefZ_Cooking) und Vanillas Honey (unten) diese Namen.
+    class Slot_ChefZ_ExtractorJar01 { name = "ChefZ_ExtractorJar01"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar02 { name = "ChefZ_ExtractorJar02"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar03 { name = "ChefZ_ExtractorJar03"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar04 { name = "ChefZ_ExtractorJar04"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar05 { name = "ChefZ_ExtractorJar05"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar06 { name = "ChefZ_ExtractorJar06"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar07 { name = "ChefZ_ExtractorJar07"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar08 { name = "ChefZ_ExtractorJar08"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar09 { name = "ChefZ_ExtractorJar09"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
+    class Slot_ChefZ_ExtractorJar10 { name = "ChefZ_ExtractorJar10"; displayName = "#STR_CHEFZ_SLOT_EXTRACTORJAR"; ghostIcon = "set:dayz_inventory image:food"; };
 };
 
 class CfgVehicles
@@ -391,7 +406,7 @@ class CfgVehicles
         descriptionShort = "#STR_CHEFZ_PASTAMACHINE_DESC";
         model = "\ChefZ\ChefZ_Devices\models\pastamachine.p3d";   // EIGENES MODELL (06.09.2026, Lieferung 449b70f)
         weight = 2200;
-        itemSize[] = {3, 2};
+        itemSize[] = {2, 1};   // 30.10.2026: Modell auf 50 % verkleinert
         repairableWithKits[] = {};
         lifetime = 43200;
     };
@@ -1074,10 +1089,15 @@ class CfgVehicles
         // Glaeser und der erzeugte Honig. Wer die Raehmchen aus dem Cargo in
         // die Plaetze umhaengt, aendert am Ablauf nichts - ChefZ_CountFrames()
         // und ChefZ_RetireSpentFrames() lesen seit dem 07.09. beides.
+        //
+        // NUR SLOTS (30.10.2026, Spieltest): das Cargo ist entfallen. Fuenf Plaetze
+        // fuer entdeckelte Rahmen, zehn fuer leere Glaeser; ein Glas wird in seinem
+        // Platz zum Honigglas, ein leergeschleuderter Rahmen in seinem zum Leerrahmen.
         attachments[] =
         {
             "ChefZ_ExtractorFrame01", "ChefZ_ExtractorFrame02", "ChefZ_ExtractorFrame03",
-            "ChefZ_ExtractorFrame04", "ChefZ_ExtractorFrame05"
+            "ChefZ_ExtractorFrame04", "ChefZ_ExtractorFrame05",
+            "ChefZ_ExtractorJar01", "ChefZ_ExtractorJar02", "ChefZ_ExtractorJar03", "ChefZ_ExtractorJar04", "ChefZ_ExtractorJar05", "ChefZ_ExtractorJar06", "ChefZ_ExtractorJar07", "ChefZ_ExtractorJar08", "ChefZ_ExtractorJar09", "ChefZ_ExtractorJar10"
         };
         rotationFlags = 2;
         itemSize[] = {5, 5};
@@ -1087,11 +1107,32 @@ class CfgVehicles
         varQuantityDestroyOnMin = 0;
         lifetime = 172800;
 
-        class Cargo
+        class GUIInventoryAttachmentsProps
         {
-            itemsCargoSize[] = {10, 10};
-            openable = 0;
+            class Frames
+            {
+                name = "#STR_CHEFZ_SLOT_EXTRACTORFRAME";
+                description = "";
+                attachmentSlots[] = {"ChefZ_ExtractorFrame01", "ChefZ_ExtractorFrame02", "ChefZ_ExtractorFrame03", "ChefZ_ExtractorFrame04", "ChefZ_ExtractorFrame05"};
+                icon = "set:dayz_inventory image:cat_common_cargo";
+                view_index = 0;
+            };
+            class Jars
+            {
+                name = "#STR_CHEFZ_SLOT_EXTRACTORJAR";
+                description = "";
+                attachmentSlots[] = {"ChefZ_ExtractorJar01", "ChefZ_ExtractorJar02", "ChefZ_ExtractorJar03", "ChefZ_ExtractorJar04", "ChefZ_ExtractorJar05", "ChefZ_ExtractorJar06", "ChefZ_ExtractorJar07", "ChefZ_ExtractorJar08", "ChefZ_ExtractorJar09", "ChefZ_ExtractorJar10"};
+                icon = "set:dayz_inventory image:food";
+                view_index = 1;
+            };
         };
+    };
+
+    // Vanillas Honigglas darf in die Glasplaetze der Schleuder: dort entsteht es
+    // aus dem leeren Glas (30.10.2026). Honey hat in Vanilla kein inventorySlot.
+    class Honey : Edible_Base
+    {
+        inventorySlot[] = {"ChefZ_ExtractorJar01", "ChefZ_ExtractorJar02", "ChefZ_ExtractorJar03", "ChefZ_ExtractorJar04", "ChefZ_ExtractorJar05", "ChefZ_ExtractorJar06", "ChefZ_ExtractorJar07", "ChefZ_ExtractorJar08", "ChefZ_ExtractorJar09", "ChefZ_ExtractorJar10"};
     };
 };
 

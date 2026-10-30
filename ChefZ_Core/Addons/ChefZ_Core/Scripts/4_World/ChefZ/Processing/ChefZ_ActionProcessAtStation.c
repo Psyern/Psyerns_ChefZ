@@ -288,6 +288,28 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
      */
     protected bool IsProcessUsable(notnull ChefZ_ProcessingStation_Base station, ItemBase item, ChefZ_Sym process, int actorId)
     {
+        if (IsProcessUsableEx(station, item, process, actorId, true))
+            return true;
+        if (!station.ChefZ_OffersActionWithoutMatch())
+            return false;
+        // Nur wenn an der ganzen Station NICHTS passt: sonst stuende neben
+        // dem passenden Prozess ein zweiter, der sicher ins Leere laeuft.
+        int count = station.ChefZ_GetProcessCount();
+        for (int i = 0; i < count; i++)
+        {
+            ChefZ_Sym other = station.ChefZ_GetProcessAt(i);
+            if (other == process || !ChefZ_SymbolTable.IsValid(other))
+                continue;
+            if (IsProcessUsableEx(station, item, other, actorId, true))
+                return false;
+        }
+        return IsProcessUsableEx(station, item, process, actorId, false);
+    }
+
+    //! strict = Transform muss passen. Nicht strikt reichen Prozess, Slot,
+    //! Umgebung und Werkzeug (fuer ChefZ_OffersActionWithoutMatch).
+    protected bool IsProcessUsableEx(notnull ChefZ_ProcessingStation_Base station, ItemBase item, ChefZ_Sym process, int actorId, bool strict)
+    {
         ChefZ_ProcessingManager mgr = ChefZ_ProcessingManager.Get();
 
         ChefZ_CompiledProcess proc = mgr.GetProcess(process);
@@ -327,6 +349,9 @@ class ChefZ_ActionProcessAtStation extends ActionContinuousBase
         array<ItemBase>    entities;
         ChefZ_FactCollector.CollectFromStation(station, snapshot, entities);
         snapshot.SortStable();
+
+        if (!strict)
+            return true;
 
         ChefZ_TransformMatch match;
         return mgr.FindTransform(process, ctx, snapshot, null, match);

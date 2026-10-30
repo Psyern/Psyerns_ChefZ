@@ -897,19 +897,33 @@ class ChefZ_AT_Runner
         TestHoneyAutostart();
     }
 
+    //! Schleuder seit 30.10.2026: nur Plaetze, kein Selbststart beim Einlegen.
+    //! Ein voller (verdeckelter) Rahmen darf nicht hinein; vier leere Glaeser
+    //! werden zu Honig, der Rahmen (5) sinkt auf 1 und wird zum Leerrahmen.
     void TestHoneyAutostart()
     {
         ChefZ_HoneyExtractor ex = ChefZ_HoneyExtractor.Cast(g_Game.CreateObjectEx("ChefZ_HoneyExtractor", m_Site, ECE_PLACE_ON_SURFACE));
         if (!ex)
         {
-            ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.autostart", false, "nicht spawnbar");
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.slots", false, "nicht spawnbar");
             g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(RunFishing, 1000, false);
             return;
         }
         m_PendingStation = ex;
-        ex.GetInventory().CreateEntityInCargo("ChefZ_HoneycombFrameUncapped");
-        ex.GetInventory().CreateEntityInCargo("ChefZ_EmptyJar");
-        ex.GetInventory().CreateEntityInCargo("ChefZ_EmptyJar");
+        EntityAI full = ex.GetInventory().CreateAttachment("ChefZ_HoneycombFrameFull");
+        EntityAI frame = ex.GetInventory().CreateAttachment("ChefZ_HoneycombFrameUncapped");
+        int jarsIn = 0;
+        for (int j = 0; j < 4; j++)
+        {
+            if (ex.GetInventory().CreateAttachment("ChefZ_EmptyJar"))
+                jarsIn++;
+        }
+        bool hasCargo = (ex.GetInventory().GetCargo() != null);
+        bool fullOut = (full == null);
+        bool frameIn = (frame != null);
+        bool jarsOk = (jarsIn == 4);
+        bool slotsOk = fullOut && frameIn && jarsOk && !hasCargo;
+        ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.slots", slotsOk, "vollerRahmenAbgewiesen=" + fullOut.ToString() + " entdeckelt=" + frameIn.ToString() + " glaeser=" + jarsIn.ToString() + " cargo=" + hasCargo.ToString());
         g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CheckHoneyAutostart, 1500, false);
     }
 
@@ -922,7 +936,9 @@ class ChefZ_AT_Runner
             return;
         }
         int jobs = ex.ChefZ_ActiveJobCount();
-        ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.autostart", jobs > 0, "jobsNachEinlegen=" + jobs.ToString());
+        ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.noAutostart", jobs == 0, "jobsNachEinlegen=" + jobs.ToString());
+        // Was die Aktion "Honig schleudern" am Ende tut: den ersten Job starten.
+        ex.ChefZ_SpinNextJar();
         m_AtHoneyRounds = 0;
         HoneyRound();
     }
@@ -942,14 +958,14 @@ class ChefZ_AT_Runner
         for (int i = 0; i < 200; i++)
             ex.ChefZ_TickJobs(15.0);
         m_AtHoneyRounds++;
-        if (m_AtHoneyRounds < 4)
+        if (m_AtHoneyRounds < 6)
             g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(HoneyRound, 500, false);
         else
             g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CheckHoneyJars, 300, false);
     }
 
-    //! Eingesetzte Glaeser werden befuellt: zwei leere Glaeser rein, zwei
-    //! Honigglaeser raus, kein leeres Glas bleibt uebrig.
+    //! Vier Glaeser in ihren Plaetzen zu Honig, kein leeres Glas uebrig, der
+    //! leergeschleuderte Rahmen ist zum Leerrahmen geworden.
     void CheckHoneyJars()
     {
         ChefZ_HoneyExtractor ex = ChefZ_HoneyExtractor.Cast(m_PendingStation);
@@ -959,6 +975,7 @@ class ChefZ_AT_Runner
             ChefZ_AT_Util.CollectCargo(ex, items);
             int honey = 0;
             int empty = 0;
+            int spent = 0;
             foreach (EntityAI e : items)
             {
                 if (e.IsSetForDeletion())
@@ -967,10 +984,14 @@ class ChefZ_AT_Runner
                     honey++;
                 if (e.GetType() == "ChefZ_EmptyJar")
                     empty++;
+                if (e.GetType() == "ChefZ_HoneycombFrameEmpty")
+                    spent++;
             }
-            bool honeyOk = (honey == 2);
+            bool honeyOk = (honey == 4);
             bool emptyOk = (empty == 0);
-            ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.fillsJars", honeyOk && emptyOk, "leer=" + empty.ToString() + " voll=" + honey.ToString() + " Inhalt: " + DescribeItems(items));
+            bool spentOk = (spent == 1);
+            bool allOk = honeyOk && emptyOk && spentOk;
+            ChefZ_AT_Log.Result("DEVICE", "ChefZ_HoneyExtractor.fillsJars", allOk, "leer=" + empty.ToString() + " voll=" + honey.ToString() + " leerrahmen=" + spent.ToString() + " Inhalt: " + DescribeItems(items));
             g_Game.ObjectDelete(ex);
         }
         m_PendingStation = null;

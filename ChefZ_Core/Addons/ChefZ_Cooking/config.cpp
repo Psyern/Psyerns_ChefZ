@@ -807,6 +807,8 @@ class CfgVehicles
         model = "\ChefZ\ChefZ_Items\models\glass_jar.p3d";   // EIGENES MODELL (30.08.2026): glass_jar ersetzt jar
         itemSize[] = {1, 2};
         weight = 210;
+        // Die Glasplaetze der Honigschleuder (ChefZ_Processing, 30.10.2026).
+        inventorySlot[] = {"ChefZ_ExtractorJar01", "ChefZ_ExtractorJar02", "ChefZ_ExtractorJar03", "ChefZ_ExtractorJar04", "ChefZ_ExtractorJar05", "ChefZ_ExtractorJar06", "ChefZ_ExtractorJar07", "ChefZ_ExtractorJar08", "ChefZ_ExtractorJar09", "ChefZ_ExtractorJar10"};
     };
 
     // §18, DME-Plan §32: Lebensmittelbox fuer Trockenware.

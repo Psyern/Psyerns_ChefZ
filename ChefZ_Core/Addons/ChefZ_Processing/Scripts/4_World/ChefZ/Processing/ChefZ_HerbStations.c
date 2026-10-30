@@ -46,7 +46,34 @@
 //==============================================================================
 
 //! Moerser und Stoessel (DME-Plan §6.3, Production Map §57).
-class ChefZ_Mortar extends ChefZ_ProcessingStation_Base {}
+//! Seit 30.10.2026 mit einer Ausnahme vom "nichts ausser den Bindungen" oben
+//! (Spieltest Alex: "Moerser fehlt noch die Aktion"): die Aktion erschien nur,
+//! wenn der Inhalt exakt einem Rezept entsprach, und das kann ein Spieler
+//! nicht erraten. Jetzt erscheint "moersern", sobald etwas im Moerser liegt;
+//! passt nichts, sagt eine Meldung, was der Moerser verarbeitet.
+class ChefZ_Mortar extends ChefZ_ProcessingStation_Base
+{
+    override bool ChefZ_OffersActionWithoutMatch()
+    {
+        GameInventory inventory = GetInventory();
+        if (!inventory)
+            return false;
+        CargoBase cargo = inventory.GetCargo();
+        if (!cargo)
+            return false;
+        return cargo.GetItemCount() > 0;
+    }
+
+    override void ChefZ_OnStationActionFinished(PlayerBase actor, ItemBase inHands, ChefZ_Sym process, int outcome)
+    {
+        super.ChefZ_OnStationActionFinished(actor, inHands, process, outcome);
+        if (!actor)
+            return;
+        if (outcome != ChefZ_StationActionOutcome.NO_MATCH)
+            return;
+        NotificationSystem.SendNotificationToPlayerExtended(actor, 8.0, "#STR_CHEFZ_MORTAR_NOMATCH", "#STR_CHEFZ_MORTAR_NOMATCH_DESC");
+    }
+}
 
 //! Trockenrahmen (DME-Plan §6.7, Production Map §57).
 class ChefZ_DryingRack extends ChefZ_ProcessingStation_Base {}
