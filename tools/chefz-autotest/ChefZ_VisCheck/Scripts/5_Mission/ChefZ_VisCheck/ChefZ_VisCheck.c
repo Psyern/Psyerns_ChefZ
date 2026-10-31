@@ -18,6 +18,8 @@ class ChefZ_VisCheck
 {
     static const string FILE = "$profile:chefz_vischeck.txt";
     static ref ChefZ_VisCheckReporter s_Reporter;
+    static ref ChefZ_VisHands s_Hands;
+    static ref ChefZ_VisProbeServer s_Probe;
 
     static bool Read(out array<ref TStringArray> lines)
     {
@@ -78,12 +80,28 @@ class ChefZ_VisCheck
         int invIndex = 0;
         int worldIndex = 0;
         EntityAI lastWorld;
+        TStringArray handClasses = new TStringArray();
+        g_Game.GetWorld().SetDate(2026, 6, 15, 12, 0);
         foreach (TStringArray l : lines)
         {
             string mode = l.Get(0);
             string cls = l.Get(1);
             if (mode == "preview" || mode == "localworld")
                 continue;
+            if (mode == "hands")
+            {
+                handClasses.Insert(cls);
+                continue;
+            }
+            if (mode == "probe")
+            {
+                s_Probe = new ChefZ_VisProbeServer(player);
+                if (cls == "all")
+                    s_Probe.Start();
+                else
+                    s_Probe.StartPersist(cls);
+                continue;
+            }
             if (mode == "attach")
             {
                 EntityAI att;
@@ -150,7 +168,18 @@ class ChefZ_VisCheck
                 food.ChangeFoodStage(StageFromName(l.Get(2)));
             Print("[VISCHECK] gespawnt " + mode + " " + cls + " pos=" + pos.ToString());
         }
+        if (handClasses.Count() > 0)
+        {
+            s_Hands = new ChefZ_VisHands(player, handClasses);
+            g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(ChefZ_VisCheck.StartHands, 120000, false);
+        }
         Print("[VISCHECK] server spawn done");
+    }
+
+    //! Der Client laeuft erst rund eine Minute nach dem Verbinden.
+    static void StartHands()
+    {
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(s_Hands.Tick, ChefZ_VisHands.HAND_MS, true);
     }
 
     //! Listet die Anbauteile eines Objekts mit Menge.
@@ -180,12 +209,33 @@ class ChefZ_VisCheckPreviewGrid
     protected ref array<Object> m_Objects = new array<Object>();
     protected ref array<Object> m_WorldObjects = new array<Object>();
 
+    static const int PAGE_CELLS = 24;
+    protected int m_Page;
+    protected int m_Total;
+
+    //! Naechste Seite aufbauen. false, wenn keine mehr da ist.
+    bool NextPage()
+    {
+        Clear();
+        int shown = Build();
+        m_Page++;
+        return shown > 0;
+    }
+
+    int Page()
+    {
+        return m_Page;
+    }
+
     int Build()
     {
         array<ref TStringArray> lines;
         if (!ChefZ_VisCheck.Read(lines))
             return 0;
         int index = 0;
+        int seen = -1;
+        int first = m_Page * PAGE_CELLS;
+        int last = first + PAGE_CELLS;
         foreach (TStringArray l : lines)
         {
             if (l.Get(0) == "localworld")
@@ -194,6 +244,9 @@ class ChefZ_VisCheckPreviewGrid
                 continue;
             }
             if (l.Get(0) != "preview")
+                continue;
+            seen++;
+            if (seen < first || seen >= last)
                 continue;
             string cls = l.Get(1);
             Widget cell = g_Game.GetWorkspace().CreateWidgets(LAYOUT);
@@ -322,6 +375,62 @@ modded class MissionGameplay
     protected float m_ChefZ_VisCheckTime;
     protected int m_ChefZ_VisCheckPhase;
     protected ref ChefZ_VisCheckPreviewGrid m_ChefZ_VisCheckGrid;
+    protected ref ChefZ_VisProbeClient m_ChefZ_VisProbe;
+    protected ref ChefZ_VisHandsClient m_ChefZ_VisHands;
+    protected float m_ChefZ_VisPageTime;
+    protected bool m_ChefZ_VisPaged;
+    protected float m_ChefZ_VisEndAt;
+
+    //! Neue Listenzeilen: hands, probe, und mehrseitige Vorschau ("page" statt einmaligem Bild).
+    protected void ChefZ_VisUpdateAudit(float timeslice)
+    {
+        if (!m_ChefZ_VisProbe && !m_ChefZ_VisHands && !m_ChefZ_VisPaged)
+        {
+            array<ref TStringArray> lines;
+            if (!ChefZ_VisCheck.Read(lines))
+                return;
+            foreach (TStringArray l : lines)
+            {
+                string mode = l.Get(0);
+                if (mode == "probe" && !m_ChefZ_VisProbe)
+                    m_ChefZ_VisProbe = new ChefZ_VisProbeClient();
+                if (mode == "hands" && !m_ChefZ_VisHands)
+                    m_ChefZ_VisHands = new ChefZ_VisHandsClient();
+                if (mode == "page")
+                    m_ChefZ_VisPaged = true;
+            }
+        }
+        if (m_ChefZ_VisProbe)
+            m_ChefZ_VisProbe.Update(timeslice);
+        if (m_ChefZ_VisHands)
+            m_ChefZ_VisHands.Update(timeslice);
+        if (m_ChefZ_VisPaged)
+        {
+            if (m_ChefZ_VisCheckTime < 30)
+                return;
+            m_ChefZ_VisPageTime -= timeslice;
+            if (m_ChefZ_VisPageTime > 0)
+                return;
+            m_ChefZ_VisPageTime = 6.0;
+            if (!m_ChefZ_VisCheckGrid)
+                m_ChefZ_VisCheckGrid = new ChefZ_VisCheckPreviewGrid();
+            if (m_ChefZ_VisCheckGrid.NextPage())
+            {
+                g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(ChefZ_VisShot, 4000, false, m_ChefZ_VisCheckGrid.Page());
+            }
+            else
+            {
+                m_ChefZ_VisPaged = false;
+                m_ChefZ_VisCheckPhase = 3;
+                Print("[VISCHECK] client done");
+            }
+        }
+    }
+
+    protected void ChefZ_VisShot(int page)
+    {
+        Print("[VISCHECK] shot preview_" + page.ToString());
+    }
 
     override void OnUpdate(float timeslice)
     {
@@ -336,6 +445,10 @@ modded class MissionGameplay
             return;
         }
         m_ChefZ_VisCheckTime += timeslice;
+        if (m_ChefZ_VisCheckTime > 12)
+            ChefZ_VisUpdateAudit(timeslice);
+        if (m_ChefZ_VisPaged || m_ChefZ_VisProbe || m_ChefZ_VisHands)
+            return;
         if (m_ChefZ_VisCheckPhase == 0 && m_ChefZ_VisCheckTime > 30)
         {
             m_ChefZ_VisCheckPhase = 1;
