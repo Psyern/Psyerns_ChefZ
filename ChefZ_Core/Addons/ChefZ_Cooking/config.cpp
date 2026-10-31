@@ -697,10 +697,14 @@ class CfgVehicles
     class Pot : Bottle_Base
     {
         itemsCargoSize[] = {5, 4};
+        // Vanillamaske + LIQUID_CHEFZ_MILK (ChefZ_MixMilk.c).
+        liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608";
     };
     class Cauldron : Bottle_Base
     {
         itemsCargoSize[] = {6, 5};
+        // Vanillamaske + LIQUID_CHEFZ_MILK (ChefZ_MixMilk.c).
+        liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608";
     };
 
     // ------------------------------------------------------------------------

@@ -124,7 +124,7 @@ class CfgPatches
         //                     treten dort ein.
         // Keine Zirkularitaet: weder ChefZ_Meat noch ChefZ_Preservation nennt
         // ChefZ_Ingredients in seinem requiredAddons[].
-        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "ChefZ_Processing", "DZ_Gear_Consumables", "ChefZ_Meat", "ChefZ_Preservation", "ChefZ_Items", "ChefZ_Food"};
+        requiredAddons[] = {"DZ_Data", "DZ_Gear_Food", "ChefZ_Core", "ChefZ_Farming", "ChefZ_Processing", "DZ_Gear_Consumables", "ChefZ_Meat", "ChefZ_Preservation", "ChefZ_Items", "ChefZ_Food", "DZ_Gear_Drinks", "DZ_Gear_Cooking", "DZ_Gear_Containers", "DZ_Vehicles_Parts", "DZ_Gear_Nasdara_Drinks"};
     };
 };
 
@@ -144,7 +144,7 @@ class CfgMods
         version = "0.0.1";
         extra = 0;
         type = "mod";
-        dependencies[] = {"World"};
+        dependencies[] = {"World", "Mission"};
 
         class defs
         {
@@ -159,6 +159,43 @@ class CfgMods
                     "ChefZ_Ingredients/Scripts/4_World"
                 };
             };
+            // Nur der Name der Milch in Inspektion und Tooltip (ChefZ_MilkInspect.c).
+            class missionScriptModule
+            {
+                value = "";
+                files[] =
+                {
+                    "ChefZ_Ingredients/Scripts/5_Mission"
+                };
+            };
+        };
+    };
+};
+
+//------------------------------------------------------------------------------
+// MILCH ALS FLUESSIGKEIT (31.10.2026, Spieltest). Wasser + Milchpulver ergibt sie
+// (ChefZ_MixMilk.c), COT bietet sie an (ChefZ_COT_Comp, ChefZ_CotMilkLiquid.c).
+// type steht auch als LIQUID_CHEFZ_MILK im Skript (ChefZ_MixMilk.c).
+// Nutrition: wie Bier im Volumen, Energie von Vollmilch (etwa 65 kcal je 100 ml).
+//------------------------------------------------------------------------------
+class cfgLiquidDefinitions
+{
+    class ChefZ_Milk
+    {
+        type = 8388608;
+        displayName = "$STR_CHEFZ_LIQUID_MILK";
+        flammability = -10;
+        liquidFreezeThreshold = -1;
+        liquidThawThreshold = 0;
+        liquidBoilingThreshold = 100;
+        class Nutrition
+        {
+            fullnessIndex = 1;
+            energy = 65;
+            water = 90;
+            nutritionalIndex = 75;
+            toxicity = 0;
+            digestibility = 2;
         };
     };
 };
@@ -167,6 +204,19 @@ class CfgVehicles
 {
     class Inventory_Base;
     class GardenLime;   // ### SLICE salt ###
+
+    // Das Milch-Bit in den Masken der Behaelter. Die Masken sind Vanillas Werte
+    // (DZ/gear/*/config.cpp) mit dem angehaengten Bit.
+    class Container_Base;
+    class Bottle_Base;
+    class Canteen: Bottle_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608"; };
+    class WaterBottle: Bottle_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608"; };
+    class GlassBottle: Bottle_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608"; };
+    class WineBottle: Bottle_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608"; };
+    class Waterskin_ColorBase: Bottle_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608"; };
+    class FilteringBottle: Bottle_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 - 8192 - 16384 + 8388608"; };
+    class CanisterGasoline: Bottle_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608"; };
+    class Barrel_ColorBase: Container_Base { liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608"; };
 
     // ### SLICE dairy ### Proxy-Basen
     //
@@ -691,10 +741,10 @@ class CfgVehicles
         repairableWithKits[] = {};
 
         // MILCH IST DER FUELLSTAND DER KANNE (30.10.2026, Spieltest: "Wir
-        // brauchen Milch ... wie wir die Milch darstellen"). Kein eigener
-        // Fluessigkeitstyp: Vanillas Fluessigkeiten sind Bitmasken, die jede
-        // Trink- und Fuellaktion kennt, und ein fremdes Bit faellt dort ueberall
-        // durch. Stattdessen Liter als varQuantity mit Balken: Melken fuellt
+        // brauchen Milch ... wie wir die Milch darstellen"). Die Fluessigkeit
+        // ChefZ_Milk (31.10.2026, oben) gilt fuer Vanillas Trinkbehaelter; die
+        // Kanne bleibt beim Fuellstand, weil die Kaesepresse ihn liest. Liter als
+        // varQuantity mit Balken: Melken fuellt
         // (ChefZ_ActionMilkCow), die Kaesepresse leert (je 5 l ein Kaese).
         varQuantityInit = 0;
         varQuantityMin = 0;
