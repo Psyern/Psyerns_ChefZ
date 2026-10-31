@@ -78,7 +78,8 @@ class ChefZ_MeatGrinder extends ChefZ_ProcessingStation_Base
     //!           sind die Eingaenge ALLER sechs Wolf-Transforms und die
     //!           Ergebnisse aller sechs Wurst-Transforms abgedeckt, ohne dass
     //!           hier eine einzige Fleischklasse steht.
-    //!   CASING  die Daerme (Guts, SmallGuts) - Pflichteingang jeder Wurst.
+    //!   CASING  die Daerme (Guts, SmallGuts, ChefZ_SausageCasing) -
+    //!           Pflichteingang jeder Wurst.
     //!   SPICE   trifft ueber die Closure auch SALT.
     //!   HERB    trifft ueber die Closure auch DRIED_HERB.
     //!

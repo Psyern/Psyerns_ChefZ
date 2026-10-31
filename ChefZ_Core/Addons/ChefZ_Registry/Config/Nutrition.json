@@ -676,6 +676,13 @@
             "fullness": 148
         },
         {
+            "id": "ChefZ_SausageCasing",
+            "scope": "class",
+            "energy": 20,
+            "water": 12,
+            "fullness": 60
+        },
+        {
             "id": "ChefZ_MincedBear",
             "scope": "class",
             "energy": 205,

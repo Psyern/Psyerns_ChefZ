@@ -176,7 +176,8 @@ class CfgMods
 // MILCH ALS FLUESSIGKEIT (31.10.2026, Spieltest). Wasser + Milchpulver ergibt sie
 // (ChefZ_MixMilk.c), COT bietet sie an (ChefZ_COT_Comp, ChefZ_CotMilkLiquid.c).
 // type steht auch als LIQUID_CHEFZ_MILK im Skript (ChefZ_MixMilk.c).
-// Nutrition: wie Bier im Volumen, Energie von Vollmilch (etwa 65 kcal je 100 ml).
+// Nutrition: wie Bier im Volumen. Energie deutlich ueber Vollmilch, damit ein
+// Schluck spuerbar saettigt (Spieltest 31.10.2026: nicht nur hydrieren).
 //------------------------------------------------------------------------------
 class cfgLiquidDefinitions
 {
@@ -191,7 +192,7 @@ class cfgLiquidDefinitions
         class Nutrition
         {
             fullnessIndex = 1;
-            energy = 65;
+            energy = 150;
             water = 90;
             nutritionalIndex = 75;
             toxicity = 0;
@@ -728,7 +729,7 @@ class CfgVehicles
     // (Config/Ingredients/Dairy.json). Die Kanne existiert, damit das
     // gelieferte Modell im Spiel ist und ein spaeterer Melk-Slice sie fuellt.
     //--------------------------------------------------------------------------
-    class ChefZ_MilkCan : Inventory_Base
+    class ChefZ_MilkCan : Bottle_Base
     {
         scope = 2;
         displayName = "#STR_CHEFZ_ITEM_MILKCAN";
@@ -740,19 +741,21 @@ class CfgVehicles
         lifetime = 43200;
         repairableWithKits[] = {};
 
-        // MILCH IST DER FUELLSTAND DER KANNE (30.10.2026, Spieltest: "Wir
-        // brauchen Milch ... wie wir die Milch darstellen"). Die Fluessigkeit
-        // ChefZ_Milk (31.10.2026, oben) gilt fuer Vanillas Trinkbehaelter; die
-        // Kanne bleibt beim Fuellstand, weil die Kaesepresse ihn liest. Liter als
-        // varQuantity mit Balken: Melken fuellt
-        // (ChefZ_ActionMilkCow), die Kaesepresse leert (je 5 l ein Kaese).
+        // EIN FLUESSIGKEITSBEHAELTER SEIT DEM 31.10.2026 (Spieltest: Inhalt im
+        // COT waehlen, daraus trinken). Bottle_Base bringt Trinken und Umfuellen
+        // mit, die Maske ist die der Vanilla-Trinkbehaelter plus ChefZ_Milk.
+        // Milliliter wie jeder Behaelter: Melken fuellt (ChefZ_ActionMilkCow),
+        // die Kaesepresse leert (je 5 l ein Kaese).
         varQuantityInit = 0;
         varQuantityMin = 0;
-        varQuantityMax = 20;   // Liter - eine Milchkanne, vier Kaese
+        varQuantityMax = 20000;   // eine Milchkanne, vier Kaese
         varQuantityDestroyOnMin = 0;
+        varLiquidTypeInit = 8388608;
+        liquidContainerType = "1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536  + 131072 + 262144 + 524288 + 2097152 + 4194304 - (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256) - 32768 + 8388608";
+        destroyOnEmpty = 0;
         quantityBar = 1;
         canBeSplit = 0;
-        stackedUnit = "";
+        stackedUnit = "ml";
         // Der Milchplatz der Kaesepresse (ChefZ_Processing, CfgSlots).
         inventorySlot[] = {"ChefZ_PressMilkCan"};
     };

@@ -42,7 +42,7 @@ class CfgPatches
     class ChefZ_Processing
     {
         units[] = {
-            "ChefZ_GrainMill", "ChefZ_PastaMachine", "ChefZ_Flour",
+            "ChefZ_GrainMill", "ChefZ_GrainMillKit", "ChefZ_GrainMillPlacing", "ChefZ_PastaMachine", "ChefZ_Flour",
             // Slice "herbs" (DME-Plan §6.3 und §6.7, Production Map §57)
             "ChefZ_HerbStationBase", "ChefZ_Mortar", "ChefZ_DryingRack",
             // ### SLICE dairy ###
@@ -160,6 +160,8 @@ class CfgMods
 //==============================================================================
 class CfgSlots
 {
+    // Das fertige Gericht in der Pfanne (Proxy "meal" in fryingpan.p3d).
+    class Slot_ChefZ_Meal { name = "ChefZ_Meal"; displayName = "#STR_CHEFZ_SLOT_MEAL"; ghostIcon = "set:dayz_inventory image:cat_common_cargo"; };
     class Slot_ChefZ_DryHook01 { name = "ChefZ_DryHook01"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
     class Slot_ChefZ_DryHook02 { name = "ChefZ_DryHook02"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
     class Slot_ChefZ_DryHook03 { name = "ChefZ_DryHook03"; displayName = "#STR_CHEFZ_SLOT_DRYHOOK"; };
@@ -291,6 +293,43 @@ class CfgVehicles
     // PROXY: wooden_case.p3d - eine Holzkiste in der richtigen Groessenordnung.
     // Eigenes Muehlenmesh ist gemeldet (U, P1).
     //--------------------------------------------------------------------------
+    // Der Bausatz der Muehle (31.10.2026, Lieferung
+    // deliveries/2026-10-31_meshy_shelfkit.json). TR_BuildGrainMillKit ergibt
+    // ihn, erst das Aufstellen ergibt die Muehle (ChefZ_GrainMillKit).
+    class ChefZ_GrainMillKit : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_GRAINMILLKIT";
+        descriptionShort = "#STR_CHEFZ_ITEM_GRAINMILLKIT_DESC";
+        model = "\ChefZ\ChefZ_Devices\kits\models\grainmillkit.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\kits\data\GrainMillKit_co.paa"};
+        rotationFlags = 17;
+        itemSize[] = {3, 2};
+        weight = 9000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        lifetime = 43200;
+        itemBehaviour = 2;
+        projectionTypename = "ChefZ_GrainMillPlacing";
+    };
+
+    // Hologramm der Muehle, Begruendung an ChefZ_BeehivePlacing.
+    class ChefZ_GrainMillPlacing : Inventory_Base
+    {
+        scope = 1;
+        displayName = "#STR_CHEFZ_GRAINMILL";
+        descriptionShort = "#STR_CHEFZ_GRAINMILL_DESC";
+        model = "\ChefZ\ChefZ_Devices\models\grainmill.p3d";
+        rotationFlags = 2;
+        itemSize[] = {6, 4};
+        weight = 9000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        hologramMaterial = "";
+        hologramMaterialPath = "";
+    };
+
     class ChefZ_GrainMill : Inventory_Base
     {
         // Spieler laufen nicht durch: Inventory_Base liegt auf item_small, Vanillas
@@ -753,17 +792,18 @@ class CfgVehicles
         absorbency = 0.0;
         canBeDigged = 0;
         varQuantityDestroyOnMin = 0;
+        attachments[] = {"ChefZ_Meal"};
 
         // Der Cargo-Bereich IST die Eingangsseite der Station:
         // ChefZ_ProcessingStation_Base liest seine Zutaten ueber
         // ChefZ_FactCollector.CollectFromCargo aus genau diesem Bereich.
-        // 4x3: Rohsalz (2x2) und das fertige Salz (2x2) muessen GLEICHZEITIG
+        // 6x5 wie die Bratpfanne (31.10.2026). Mindestens 4x3: Rohsalz (2x2) und das fertige Salz (2x2) muessen GLEICHZEITIG
         // Platz haben - die Anwendung legt den Ausgang an, bevor sie den
         // Eingang verbraucht. Mit 3x2 brach TR_RawSaltToSalt mit "kein Platz"
         // ab (Testlauf 26.10.2026). Ebenso Wasserflasche (1x3) nebst Rohsalz.
         class Cargo
         {
-            itemsCargoSize[] = {4, 3};
+            itemsCargoSize[] = {6, 5};
             openable = 0;
         };
     };
@@ -1164,10 +1204,10 @@ class CfgChefZ
 {
     // ### SLICE grain ### Ein Knoten je SLICE (02 §4), nicht je Modul - er
     // heisst deshalb nicht wie das Addon.
-    // handcraftRecipeSlots = 1 (war 0): dieser Slice bringt seit der
-    // Pastamaschine GENAU EINEN Transform mit, dessen Prozess exec =
-    // "HANDCRAFT" hat - TR_AssemblePastaMachine ueber PROCESS_ASSEMBLE, beide
-    // in diesem Modul. Die Zahl ist eine RESERVIERUNG in Vanillas Rezeptliste
+    // handcraftRecipeSlots = 2: dieser Slice bringt ZWEI Transforms mit, deren
+    // Prozess exec = "HANDCRAFT" hat - TR_AssemblePastaMachine ueber
+    // PROCESS_ASSEMBLE und TR_BuildGrainMillKit ueber PROCESS_BUILD_GRAIN_MILL,
+    // alle in diesem Modul. Die Zahl ist eine RESERVIERUNG in Vanillas Rezeptliste
     // und muss vor dem Laden feststehen; wird sie vergessen, erscheint das
     // Rezept nicht, und zwar OHNE Fehlermeldung an der Stelle, an der man
     // sucht (Begruendung im Kopf von ChefZ_HandcraftBridge.c).
@@ -1175,7 +1215,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 220;
-        handcraftRecipeSlots = 1;
+        handcraftRecipeSlots = 2;
         dataFiles[] =
         {
             "ChefZ_Processing/Config/GrainProcesses.json",
@@ -1251,8 +1291,8 @@ class CfgChefZ
     // liegen in ChefZ_Meat und melden sich dort an - hier stuende sonst
     // Content eines anderen Moduls.
     //
-    // handcraftRecipeSlots = 0: Wuerfeln und Darm reinigen sind am 29.08.2026
-    // entfallen; die drei Keulen-Transforms reserviert ChefZ_Meat selbst.
+    // handcraftRecipeSlots = 0: alle Messer-Transforms der Fleischkette (Keulen,
+    // Wuerfel, Darm) reserviert ChefZ_Meat selbst.
     class ChefZ_MeatProcessing
     {
         chefzApiVersion = 1;
@@ -1332,6 +1372,17 @@ class CfgChefZ
 //------------------------------------------------------------------------------
 class CfgChefZProcesses
 {
+    // Bretter + Stein -> Muehlen-Bausatz, wie die Bauschritte der Pilzzucht.
+    class PROCESS_BUILD_GRAIN_MILL
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_BUILD_GRAIN_MILL";
+        baseDurationSec = 30.0;
+        animationLength = 4.0;
+        specialty = 0.03;
+        toolDamage = 0;
+    };
+
     // STATION_TIMED: der Rahmen tickt ohne Spieler weiter (11 §3).
     class PROCESS_DRY
     {
@@ -1756,5 +1807,17 @@ class CfgChefZTools
             "Jambiya"
         };
         allowSubclasses = 1;
+    };
+};
+
+// Proxy -> Slot des Gerichts in der Pfanne.
+class CfgNonAIVehicles
+{
+    class ProxyAttachment;
+    class Proxymeal : ProxyAttachment
+    {
+        scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
+        model = "\ChefZ\ChefZ_Food\models\proxies\meal.p3d";
     };
 };

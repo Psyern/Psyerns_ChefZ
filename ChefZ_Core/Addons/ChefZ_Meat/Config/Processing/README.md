@@ -63,10 +63,21 @@ Gerichte (Kategorie `FAT`) bleiben damit bedienbar.
 Umgesetzt als eigene Klasse und nicht als Variable am Item: eine Variable haette
 die Naehrwerte nicht mitgenommen, denn die haengen an Klasse x Garstufe (13 §2).
 
-### `TR_SausageCasing` — entfallen (29.08.2026)
+### `TR_SausageCasing`, `TR_SmallGutsCasing` — wieder da (30.10.2026)
 
-Vanillas `Guts` und `SmallGuts` sind die Huelle (Kategorie `CASING`); die
-Wurst-Transforms nehmen sie direkt.
+Am 29.08.2026 entfallen, seit dem 30.10.2026 als Ertragsstufe zurueck. Vorgabe
+Alex: "Innereien koennen zu ChefZ Darm verarbeitet werden und dadurch entstehen
+mehr als das Vanilla Innereien."
+
+`Guts` + Messer ergibt **drei**, `SmallGuts` + Messer **zwei**
+`ChefZ_SausageCasing`. Mehr Stueck sind mehr Eintraege in `outputs`, aus dem
+Grund, der bei den Keulen steht. `quantity: 250` ist die volle Fuellung je Stueck
+(Abschnitt Mengenskala). Beide Innereien bleiben trotzdem direkt als Huelle
+zulaessig (Kategorie `CASING`): aus einem Darm wird dann nur eine Wurst.
+
+Der Eingang steht ueber `cls` und nicht ueber `CASING`, sonst schnitte das Messer
+den fertigen Darm erneut und vermehrte ihn ohne Ende. `vanillaStage` fehlt, weil
+Vanillas Innereien keine Garstufen fuehren.
 
 ### `TR_RawSausage`
 

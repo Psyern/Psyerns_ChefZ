@@ -20,6 +20,8 @@ class ChefZ_VisCheck
     static ref ChefZ_VisCheckReporter s_Reporter;
     static ref ChefZ_VisHands s_Hands;
     static ref ChefZ_VisProbeServer s_Probe;
+    static ref ChefZ_VisPanServer s_Pan;
+    static ref ChefZ_VisOlderServer s_Older;
 
     static bool Read(out array<ref TStringArray> lines)
     {
@@ -115,8 +117,21 @@ class ChefZ_VisCheck
             string cls = l.Get(1);
             if (mode == "preview" || mode == "localworld" || mode == "cot")
                 continue;
+            if (mode == "older")
+            {
+                s_Older = new ChefZ_VisOlderServer(player);
+                continue;
+            }
+            if (mode == "pan")
+            {
+                s_Pan = new ChefZ_VisPanServer(player);
+                continue;
+            }
             if (mode == "hands")
             {
+                TIntArray itemSize = new TIntArray();
+                g_Game.ConfigGetIntArray("CfgVehicles " + cls + " itemSize", itemSize);
+                Print("[VISCHECK] itemSize " + cls + " " + itemSize.ToString());
                 handClasses.Insert(cls);
                 continue;
             }
@@ -425,10 +440,12 @@ modded class MissionGameplay
 #endif
 
     protected ref ChefZ_VisBookClient m_ChefZ_VisBook;
+    protected ref ChefZ_VisPanClient m_ChefZ_VisPan;
+    protected ref ChefZ_VisOlderClient m_ChefZ_VisOlder;
 
     protected void ChefZ_VisUpdateAudit(float timeslice)
     {
-        if (!m_ChefZ_VisProbe && !m_ChefZ_VisHands && !m_ChefZ_VisPaged && !m_ChefZ_VisBook)
+        if (!m_ChefZ_VisProbe && !m_ChefZ_VisHands && !m_ChefZ_VisPaged && !m_ChefZ_VisBook && !m_ChefZ_VisPan && !m_ChefZ_VisOlder)
         {
             array<ref TStringArray> lines;
             if (!ChefZ_VisCheck.Read(lines))
@@ -442,6 +459,10 @@ modded class MissionGameplay
                     m_ChefZ_VisHands = new ChefZ_VisHandsClient();
                 if (mode == "page")
                     m_ChefZ_VisPaged = true;
+                if (mode == "older" && !m_ChefZ_VisOlder)
+                    m_ChefZ_VisOlder = new ChefZ_VisOlderClient();
+                if (mode == "pan" && !m_ChefZ_VisPan)
+                    m_ChefZ_VisPan = new ChefZ_VisPanClient();
                 if (mode == "book" && !m_ChefZ_VisBook)
                     m_ChefZ_VisBook = new ChefZ_VisBookClient(l.Get(1));
 #ifdef JM_COT
@@ -456,6 +477,10 @@ modded class MissionGameplay
 #endif
         if (m_ChefZ_VisBook)
             m_ChefZ_VisBook.Update(timeslice);
+        if (m_ChefZ_VisPan)
+            m_ChefZ_VisPan.Update(timeslice);
+        if (m_ChefZ_VisOlder)
+            m_ChefZ_VisOlder.Update(timeslice);
         if (m_ChefZ_VisProbe)
             m_ChefZ_VisProbe.Update(timeslice);
         if (m_ChefZ_VisHands)
@@ -503,7 +528,7 @@ modded class MissionGameplay
         m_ChefZ_VisCheckTime += timeslice;
         if (m_ChefZ_VisCheckTime > 12)
             ChefZ_VisUpdateAudit(timeslice);
-        if (m_ChefZ_VisPaged || m_ChefZ_VisProbe || m_ChefZ_VisHands || m_ChefZ_VisBook)
+        if (m_ChefZ_VisPaged || m_ChefZ_VisProbe || m_ChefZ_VisHands || m_ChefZ_VisBook || m_ChefZ_VisPan || m_ChefZ_VisOlder)
             return;
         if (m_ChefZ_VisCheckPhase == 0 && m_ChefZ_VisCheckTime > 30)
         {

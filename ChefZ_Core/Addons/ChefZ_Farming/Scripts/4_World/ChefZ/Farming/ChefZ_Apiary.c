@@ -74,6 +74,28 @@
 //! Raehmchen voll werden, steht HIER - siehe Dateikopf.
 class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
 {
+    //! Gefuellt bleibt der Stock stehen (Spieltest 31.10.2026): erst die
+    //! Raehmchen heraus, dann in die Hand oder ins Inventar.
+    protected bool ChefZ_HasFrames()
+    {
+        GameInventory inventory = GetInventory();
+        return inventory && inventory.AttachmentCount() > 0;
+    }
+
+    override bool CanPutIntoHands(EntityAI parent)
+    {
+        if (!super.CanPutIntoHands(parent))
+            return false;
+        return !ChefZ_HasFrames();
+    }
+
+    override bool CanPutInCargo(EntityAI parent)
+    {
+        if (!super.CanPutInCargo(parent))
+            return false;
+        return !ChefZ_HasFrames();
+    }
+
     //==========================================================================
     // Das Fuellen - Zahlen und Namen
     //==========================================================================

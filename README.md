@@ -791,8 +791,9 @@ Full reference, including the double-XP guard and every config key:
 
 All ChefZ classes use the `ChefZ_PascalCase` prefix. Where vanilla already has the item,
 ChefZ uses the vanilla class instead of inventing one — milk is `PowderedMilk`, fresh
-paprika is `GreenBellPepper`, honey is `Honey`, and the sausage casing comes from
-`SmallGuts`.
+paprika is `GreenBellPepper`, honey is `Honey`, and the sausage casing can be
+`Guts` or `SmallGuts` directly. Cut with a knife, they yield several
+`ChefZ_SausageCasing` instead.
 
 ```text
 ChefZ_Wheat              ChefZ_Cream              ChefZ_MincedMeat

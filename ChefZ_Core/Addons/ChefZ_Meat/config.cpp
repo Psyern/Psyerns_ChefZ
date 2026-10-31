@@ -7,12 +7,13 @@
 //
 //   Keule    --Messer-->        2x Vanilla-Steak + Knochen  (Zerteilen)
 //   Fleisch  --Fleischwolf-->   ChefZ_Minced*              §30
+//   Innereien --Messer-->       3x/2x ChefZ_SausageCasing  (mehr Huellen je Tier)
 //   Hack + Gewuerz + Darm   --> ChefZ_Raw*Sausage          §34-§39
 //
-//   Seit dem 29.08.2026 ohne Zwischenstufen, die Vanilla schon hat: kein
-//   Wuerfel mehr (die Eintoepfe nehmen gewolftes Fleisch; das rohe Steak
-//   bleibt Vanilla-Kochen, Invariante I2), und Vanillas Guts / SmallGuts
-//   sind die Wursthuelle (kein ChefZ_SausageCasing).
+//   Seit dem 29.08.2026 ohne Wuerfelzwang: die Eintoepfe nehmen gewolftes
+//   Fleisch; das rohe Steak bleibt Vanilla-Kochen, Invariante I2. Huelle sind
+//   Vanillas Guts / SmallGuts direkt oder, seit dem 30.10.2026 wieder, der
+//   daraus geschnittene ChefZ_SausageCasing - alle tragen Kategorie CASING.
 //   Raw*Sausage  --Pfanne/Topf--> ChefZ_*Sausage           §40 (Vanilla-Garstufe)
 //
 // Raeuchern und Trocknen (§41, §42) stehen NICHT hier: sie gehoeren dem Slice
@@ -205,6 +206,7 @@ class CfgPatches
             "ChefZ_MincedBoar",
             "ChefZ_MincedChicken",
             "ChefZ_MincedBear",
+            "ChefZ_SausageCasing",
             "ChefZ_RawSausage",
             "ChefZ_RawPorkSausage",
             "ChefZ_RawVenisonSausage",
@@ -1196,6 +1198,74 @@ class CfgVehicles
                     };
                     // Trocknen an Vanillas Raeucherplaetzen (Feuerstelle/Ofen), wie Vanillas
                     // Steaks (Spieltest 27.10.2026: "Ja, wie Vanilla").
+                    class ChefZ_RawToDried
+                    {
+                        transition_to = 4;
+                        cooking_method = 3;
+                    };
+                };
+            };
+        };
+    };
+
+    // Der gereinigte Darm (30.10.2026, wieder da). Auftrag: "Innereien koennen zu
+    // ChefZ Darm verarbeitet werden und dadurch entstehen mehr als das Vanilla
+    // Innereien". Innereien + Messer ergibt mehrere Stueck (TR_SausageCasing,
+    // TR_SmallGutsCasing); Guts und SmallGuts bleiben trotzdem direkt als Huelle
+    // zulaessig - der Darm ist der ergiebigere Weg, nicht der einzige.
+    //
+    // KEINE hiddenSelections: animal_smallguts.p3d hat keine Selektion "camo".
+    // Die Optik bleibt in jeder Garstufe gleich; die modded FoodStage
+    // (ChefZ_StageVisuals.c) laesst Klassen ohne Selektion deshalb aus.
+    // inventorySlot leer: ein Darm gehoert nicht an die Raeucherhaken.
+    //
+    // VOLUMEN: 200 (ein Bissen Darm). 200 / varQuantityMax 250 = 0.8.
+    class ChefZ_SausageCasing : ChefZ_MeatItemBase
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_SAUSAGECASING0";
+        descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGECASING1";
+        model = "\dz\gear\food\animal_smallguts.p3d";
+        inventorySlot[] = {};
+        itemSize[] = {1, 1};
+        weight = 60;
+
+        class Nutrition
+        {
+            fullnessIndex = 0.8;
+            energy = 20;
+            water = 12;
+            nutritionalIndex = 2;
+            toxicity = 0;
+            agents = 4;
+            digestibility = 1;
+        };
+
+        class Food
+        {
+            class FoodStages
+            {
+                class Raw { nutrition_properties[] = {0.8, 20, 12, 2, 0, 4, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+                class Baked { nutrition_properties[] = {0.75, 30, 4, 2, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 60, 200}; };
+                class Boiled { nutrition_properties[] = {0.8, 26, 20, 2, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {100, 80, 150}; };
+                class Dried { nutrition_properties[] = {0.75, 30, 2, 2, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {70, 120, 80}; };
+                class Burned { nutrition_properties[] = {0.75, 10, 2, 1, 0, 0, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {200, 20, 0}; };
+                class Rotten { nutrition_properties[] = {0.75, 12, 8, 1, 20, 16, 1}; visual_properties[] = {0, 0, 0}; cooking_properties[] = {0, 0, 0}; };
+            };
+            class FoodStageTransitions
+            {
+                class Raw
+                {
+                    class ChefZ_RawToBaked
+                    {
+                        transition_to = 2;
+                        cooking_method = 1;
+                    };
+                    class ChefZ_RawToBoiled
+                    {
+                        transition_to = 3;
+                        cooking_method = 2;
+                    };
                     class ChefZ_RawToDried
                     {
                         transition_to = 4;
@@ -2328,7 +2398,7 @@ class CfgVehicles
 // ---------------------------------------------------------------------------
 // Anmeldung beim Core (02 §4).
 //
-// handcraftRecipeSlots = 4: dieses Modul bringt GENAU VIER Transforms mit,
+// handcraftRecipeSlots = 6: dieses Modul bringt GENAU SECHS Transforms mit,
 // deren Prozess exec = "HANDCRAFT" hat. Die Liste, damit die Zahl nachpruefbar
 // bleibt und nicht wieder driftet:
 //
@@ -2336,16 +2406,15 @@ class CfgVehicles
 //   TR_CutPorkLeg       PROCESS_CUT_MEAT       Keule   + Messer -> 2x PigSteakMeat  + Lard
 //   TR_CutVenisonLeg    PROCESS_CUT_MEAT       Keule   + Messer -> 2x DeerSteakMeat + Bone
 //   TR_DicedMeat        PROCESS_CUT_MEAT       Fleisch + Messer -> Wuerfel (seit 29.08.2026 wieder)
+//   TR_SausageCasing    PROCESS_CUT_MEAT       Guts    + Messer -> 3x ChefZ_SausageCasing
+//   TR_SmallGutsCasing  PROCESS_CUT_MEAT       SmallGuts + Messer -> 2x ChefZ_SausageCasing
 //
 // Die Zahl ist eine Reservierung in Vanillas Rezeptliste und muss vorab
 // feststehen; die Begruendung steht im Kopf von ChefZ_HandcraftBridge.c. Nennt
 // ein Slice zu wenig Plaetze, weist ChefZ_HandcraftBridge.Reserve die
 // ueberzaehligen Transforms ab - sie erscheinen dann nie im Kontextmenue.
 //
-// Frueher fuenf: Wuerfeln (TR_DicedMeat) und Darm reinigen (TR_SausageCasing)
-// sind am 29.08.2026 entfallen - die Eintoepfe nehmen gewolftes Fleisch, und
-// Vanillas Darm IST die Huelle. Alles andere laeuft an einer Station und
-// braucht keinen Platz.
+// Alles andere laeuft an einer Station und braucht keinen Platz.
 //
 // dataFiles[] beginnt mit dem PBO-Praefix, also dem ORDNERNAMEN des Addons.
 // ---------------------------------------------------------------------------
@@ -2355,7 +2424,7 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 200;
-        handcraftRecipeSlots = 4;
+        handcraftRecipeSlots = 6;
         dataFiles[] =
         {
             "ChefZ_Meat/Config/Ingredients/Meat.json",

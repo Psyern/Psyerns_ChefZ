@@ -250,13 +250,14 @@ files into its own categories without cloning them.
 
 Butchery products and the sausage chain.
 
-- **32 item classes**: the three primal cuts, `ChefZ_DicedMeat`, the `Minced*`
-  classes, the raw and cooked sausages. The sausage casing is gone since 2026-08-29 —
-  vanilla `Guts`/`SmallGuts` fill that role. Diced meat went the same day and
+- **33 item classes**: the three primal cuts, `ChefZ_DicedMeat`, the `Minced*`
+  classes, `ChefZ_SausageCasing`, the raw and cooked sausages. The casing returned
+  on 2026-10-30 as a yield step: guts give several casings, while vanilla
+  `Guts`/`SmallGuts` still work directly. Diced meat went on 2026-08-29 and
   returned hours later with `beefcubes.p3d`, a model of its own.
 - **1 script file** (`ChefZ_MeatItemBase.c`).
 - **Rank 1**: none.
-- **Rank 2**: **58 records** — 36 ingredient bindings, 16 transforms, 6 recipes.
+- **Rank 2**: **61 records** — 37 ingredient bindings, 18 transforms, 6 recipes.
   The ingredient count is the highest in the mod because this module also
   classifies *vanilla* meat: `PigSteakMeat` through `BearSteakMeat`, plus
   `Lard`, `Bone` and `Guts`. ChefZ creates no own class for those — that would

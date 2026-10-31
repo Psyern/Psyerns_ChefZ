@@ -34,7 +34,7 @@
  * behalten (Aufheben, Ablegen, Weitergeben) und die Melkaktion zusaetzlich
  * bekommen.
  */
-class ChefZ_MilkCan extends ItemBase
+class ChefZ_MilkCan extends Bottle_Base
 {
 	override void SetActions()
 	{

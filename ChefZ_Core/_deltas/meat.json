@@ -147,6 +147,12 @@
       "stomach": 95
     },
     {
+      "class": "ChefZ_SausageCasing",
+      "energy": 20,
+      "water": 12,
+      "stomach": 60
+    },
+    {
       "class": "ChefZ_MincedBear",
       "energy": 205,
       "water": 36,
@@ -267,6 +273,7 @@
     "ChefZ_MincedBoar",
     "ChefZ_MincedChicken",
     "ChefZ_MincedBear",
+    "ChefZ_SausageCasing",
     "ChefZ_RawSausage",
     "ChefZ_RawPorkSausage",
     "ChefZ_RawVenisonSausage",

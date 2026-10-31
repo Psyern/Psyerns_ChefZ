@@ -74,6 +74,7 @@ class CfgPatches
             "ChefZ_Beehive", "ChefZ_BeehiveDouble", "ChefZ_BeehiveKit", "ChefZ_BeehiveDoubleKit",
             // Die Projektionshuelle des Aufstellvorgangs (31.08.2026).
             "ChefZ_BeehivePlacing", "ChefZ_BeehiveDoublePlacing",
+            "ChefZ_MushroomShelfKit", "ChefZ_MushroomShelfPlacing", "ChefZ_Mycelium_Empty",
             "ChefZ_HoneycombFrame_Base",
             "ChefZ_HoneycombFrameEmpty",
             "ChefZ_HoneycombFrameFull", "ChefZ_HoneycombFrameUncapped",
@@ -1864,7 +1865,7 @@ class CfgVehicles
         hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\kits\data\BeehiveKit_co.paa"};
         hiddenSelections[] = {"camo"};
         rotationFlags = 17;
-        itemSize[] = {3, 2};
+        itemSize[] = {2, 1};
         weight = 6000;
         absorbency = 0.0;
         canBeDigged = 0;
@@ -1886,7 +1887,7 @@ class CfgVehicles
         hiddenSelections[] = {"camo"};
         displayName = "#STR_CHEFZ_ITEM_BEEHIVEDOUBLEKIT";
         descriptionShort = "#STR_CHEFZ_ITEM_BEEHIVEDOUBLEKIT_DESC";
-        itemSize[] = {4, 3};
+        itemSize[] = {2, 2};
         weight = 12000;
         projectionTypename = "ChefZ_BeehiveDoublePlacing";
     };
@@ -3057,6 +3058,46 @@ class CfgVehicles
     };
 
     //--------------------------------------------------------------------------
+    // Der Bausatz des Regals (31.10.2026). TR_BuildMushroomShelf ergibt ihn, und
+    // erst das Aufstellen ergibt das Regal (ChefZ_MushroomShelfKit).
+    //
+    // MODELL: Lieferung vom 31.10.2026 (deliveries/2026-10-31_meshy_shelfkit.json).
+    //--------------------------------------------------------------------------
+    class ChefZ_MushroomShelfKit : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MUSHROOMSHELFKIT";
+        descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMSHELFKIT_DESC";
+        model = "\ChefZ\ChefZ_Devices\kits\models\mushroomshelfkit.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\kits\data\MushroomShelfKit_co.paa"};
+        rotationFlags = 17;
+        itemSize[] = {2, 2};
+        weight = 12000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        lifetime = 43200;
+        itemBehaviour = 2;
+        projectionTypename = "ChefZ_MushroomShelfPlacing";
+    };
+
+    // Hologramm des Regals, Begruendung an ChefZ_BeehivePlacing.
+    class ChefZ_MushroomShelfPlacing : Inventory_Base
+    {
+        scope = 1;
+        displayName = "#STR_CHEFZ_ITEM_MUSHROOMSHELF";
+        descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMSHELF_DESC";
+        model = "\ChefZ\ChefZ_Devices\mushroom\models\mushroomshelf.p3d";
+        rotationFlags = 2;
+        itemSize[] = {6, 8};
+        weight = 25000;
+        absorbency = 0.0;
+        canBeDigged = 0;
+        hologramMaterial = "";
+        hologramMaterialPath = "";
+    };
+
+    //--------------------------------------------------------------------------
     // Der Anzuchtkasten.
     //
     // DER BALKEN ist varQuantity 0..100 mit quantityBar - dieselbe Bauform wie
@@ -3128,7 +3169,8 @@ class CfgVehicles
     // Das Myzel - das Saatgut der Pilzzucht, eines je zuechtbarer Art, als
     // Brutbeutel (Koernerbrut). Die Kette seit dem 30.10.2026:
     //   getrockneter Pilz --Moerser--> Sporen (Mushroom_Transforms.json)
-    //   Sporen + 100 g Weizen --Hand--> Myzel (Mushroom_Crafts.json)
+    //   100 g Weizen + Lumpen --Hand--> ChefZ_Mycelium_Empty (ungeimpft)
+    //   Sporen + ChefZ_Mycelium_Empty --Hand--> Myzel (Mushroom_Crafts.json)
     // Das Myzel wird im Zuchtkasten verbraucht, sobald die Pilze stehen.
     //
     // DREI EIGENE FELDER tragen die Zuchtregel, gelesen von
@@ -3164,6 +3206,22 @@ class CfgVehicles
         chefzMushroomClass = "";
         chefzGrowSeconds = 14400;
         chefzFruitCount = 3;
+    };
+
+    // Ungeimpft: derselbe Beutel ohne weisse Faeden und ohne Myzelplatz.
+    class ChefZ_Mycelium_Empty : Inventory_Base
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ITEM_MYCEL_EMPTY";
+        descriptionShort = "#STR_CHEFZ_ITEM_MYCEL_EMPTY_DESC";
+        model = "\ChefZ\ChefZ_Devices\mycelium\models\myceliumbag.p3d";
+        hiddenSelections[] = {"camo"};
+        hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Devices\mycelium\data\MyceliumBag_empty_co.paa"};
+        itemSize[] = {2, 2};
+        weight = 1000;
+        absorbency = 0.2;
+        canBeDigged = 0;
+        lifetime = 43200;
     };
 
     class ChefZ_MyceliumAgaricus : ChefZ_Mycelium_Base
@@ -3550,9 +3608,9 @@ class CfgChefZ
     {
         chefzApiVersion = 1;
         loadOrder = 285;
-        // 2 Bauschritte (Regal, Kasten) + 13 Ansetz-Transforms, je Art einer
-        // (TR_Spores*ToMycelium). Seit dem 30.10.2026 15 statt 2.
-        handcraftRecipeSlots = 15;
+        // 2 Bauschritte (Regal, Kasten) + der leere Beutel + 13 Impf-Transforms,
+        // je Art einer (TR_Spores*ToMycelium).
+        handcraftRecipeSlots = 16;
         dataFiles[] =
         {
             "ChefZ_Farming/Config/Ingredients/Mushroom_Wild.json",
@@ -4060,7 +4118,18 @@ class CfgChefZProcesses
         baseDurationSec = 20.0;
     };
 
-    // Sporen + Weizen -> Myzel (Koernerbrut). HANDCRAFT mit zwei Eingaengen
+    // Weizen + Lumpen -> leerer Brutbeutel.
+    class PROCESS_PREPARE_SPAWN
+    {
+        exec = "HANDCRAFT";
+        displayName = "#STR_CHEFZ_PROC_PREPARE_SPAWN";
+        baseDurationSec = 8.0;
+        animationLength = 1.0;
+        specialty = 0.02;
+        toolDamage = 0;
+    };
+
+    // Sporen + leerer Beutel -> Myzel (Koernerbrut). HANDCRAFT mit zwei Eingaengen
     // und deshalb ohne Werkzeug, dieselbe Form wie die Bauschritte darueber.
     class PROCESS_INOCULATE_SPAWN
     {

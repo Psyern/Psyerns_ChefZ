@@ -33,6 +33,21 @@
 // Layer: 4_World.
 //==============================================================================
 
+//! Der Bausatz des Regals (31.10.2026). Aufstellen wie der Bienenstock-Bausatz,
+//! nur das Ergebnis ist ein anderes.
+class ChefZ_MushroomShelfKit extends ChefZ_BeehiveKit
+{
+    override string ChefZ_HiveClass()
+    {
+        return "ChefZ_MushroomShelf";
+    }
+}
+
+//! Der ungeimpfte Brutbeutel (31.10.2026). Bewusst KEIN ChefZ_Mycelium_Base:
+//! der Myzelplatz des Kastens nimmt nur das, und ungeimpft waechst nichts.
+//! Sporen + dieser Beutel = Myzel der Art (Mushroom_Crafts.json).
+class ChefZ_Mycelium_Empty extends ItemBase {}
+
 //! Das Saatgut. Liest die drei Zuchtfelder aus der eigenen Config-Klasse.
 class ChefZ_Mycelium_Base extends ItemBase
 {

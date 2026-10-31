@@ -330,12 +330,12 @@ Mince raw meat, then stuff the mince into casing. Twelve transforms — six minc
 | `TR_BoarToMinced` | 1× Boar Steak + stage Raw | Minced Boar<br>byproduct: Animal Fat (35 %) | 1:1 from input | 30 s | PREPARED |
 | `TR_ChickenToMinced` | 1× Chicken Breast + stage Raw | Minced Chicken | 1:1 from input | 30 s | PREPARED |
 | `TR_BearToMinced` | 1× Bear Steak + stage Raw | Minced Bear<br>byproduct: Animal Fat (60 %) | 1:1 from input | 30 s | PREPARED |
-| `TR_RawSausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Sausage | 1× | 15 s | RAW |
-| `TR_RawPorkSausage` | 1× Minced Pork + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Pork Sausage | 1× | 15 s | RAW |
-| `TR_RawVenisonSausage` | 1× Minced Venison + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Venison Sausage | 1× | 15 s | RAW |
-| `TR_RawBoarSausage` | 1× Minced Boar + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Boar Sausage | 1× | 15 s | RAW |
-| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Hunter Sausage | 1× | 15 s | RAW |
-| `TR_RawSpicySausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Spicy Sausage | 1× | 15 s | RAW |
+| `TR_RawSausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Sausage | 1× | 15 s | RAW |
+| `TR_RawPorkSausage` | 1× Minced Pork + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Pork Sausage | 1× | 15 s | RAW |
+| `TR_RawVenisonSausage` | 1× Minced Venison + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Venison Sausage | 1× | 15 s | RAW |
+| `TR_RawBoarSausage` | 1× Minced Boar + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Boar Sausage | 1× | 15 s | RAW |
+| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Hunter Sausage | 1× | 15 s | RAW |
+| `TR_RawSpicySausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Spicy Sausage | 1× | 15 s | RAW |
 
 > **Cargo since 2026-08-31.** This station had no `class Cargo` block and could
 > not receive input at all. It has one now, so the transforms above are reachable.

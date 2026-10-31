@@ -1,0 +1,37 @@
+{
+ "_comment": "Lieferung Meshy vom 31.10.2026: Pilzregal-Bausatz (Roped Weathered Planks) und Muehlen-Bausatz (Ancient Millstone on Wooden Plank). Aus C:/Users/info/Downloads kopiert nach E:/DayZ Modding/Deliveries/2026-10-31_Meshy_ShelfKit/<Name>/{model.fbx,texture.png}. Gebunden von Hand in den config.cpp. Laenge 0.6 m: etwas groesser als der halbierte Bienenstock-Bausatz.",
+ "source_root": "E:/DayZ Modding/Deliveries/2026-10-31_Meshy_ShelfKit",
+ "project_root": "../../..",
+ "defaults": {
+  "template": "item",
+  "texture_size": 1024,
+  "selection": "camo"
+ },
+ "groups": {
+  "kits": {
+   "target": "ChefZ\\ChefZ_Devices\\kits"
+  }
+ },
+ "assets": [
+  {
+   "name": "MushroomShelfKit",
+   "group": "kits",
+   "source": "MushroomShelfKit/model.fbx",
+   "texture": "MushroomShelfKit/texture.png",
+   "length": 0.6,
+   "bind": [
+    "ChefZ_MushroomShelfKit"
+   ]
+  },
+  {
+   "name": "GrainMillKit",
+   "group": "kits",
+   "source": "GrainMillKit/model.fbx",
+   "texture": "GrainMillKit/texture.png",
+   "length": 0.6,
+   "bind": [
+    "ChefZ_GrainMillKit"
+   ]
+  }
+ ]
+}

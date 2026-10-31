@@ -106,6 +106,7 @@ class ChefZ_AT_Gallery extends UIScriptedMenu
         m_Classes.Insert("ChefZ_MincedMeat");
         m_Classes.Insert("ChefZ_MincedPork");
         m_Classes.Insert("ChefZ_MincedVenison");
+        m_Classes.Insert("ChefZ_SausageCasing");
         m_Classes.Insert("ChefZ_PorkLeg");
         m_Classes.Insert("ChefZ_PorkSausage");
         m_Classes.Insert("ChefZ_RawBoarSausage");

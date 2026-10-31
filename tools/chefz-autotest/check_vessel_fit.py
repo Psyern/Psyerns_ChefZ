@@ -17,7 +17,7 @@ import chefz_index as ci  # noqa: E402
 import make_cases as mc  # noqa: E402
 
 VANILLA_DZ = r"E:\DayZ Modding\Mod Repositories\scripts (and more) - 1.30\DZ"
-CARGO = {"Pot": (5, 4), "Cauldron": (6, 5), "FryingPan": (5, 4)}  # ChefZ_Cooking vergroessert den Laderaum
+CARGO = {"Pot": (5, 4), "Cauldron": (6, 5), "FryingPan": (6, 5)}  # ChefZ_Cooking vergroessert den Laderaum
 CLASS_RE = re.compile(r"\bclass\s+(\w+)\s*(?::\s*(\w+))?\s*\{")
 
 

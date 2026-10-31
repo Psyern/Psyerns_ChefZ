@@ -44,7 +44,7 @@ error — it is the normal case. See [Recipes](Recipes#1-the-one-rule-that-matte
 | *minced meat* | Diced Meat · Minced Meat · Minced Pork · Minced Venison · Minced Boar · Minced Chicken · Minced Bear |
 | *wild meat* | Deer, Boar and Rabbit steak · Minced Venison and Minced Boar · the raw and cooked Venison, Boar and Hunter sausages. **Wolf and Bear are not in it** — they are category `PREDATOR_MEAT`, and so is Minced Bear |
 | *sausage* | All fourteen sausage classes — raw, cooked, dry and smoked |
-| *casing* | Guts · Small Guts |
+| *casing* | Guts · Small Guts · Sausage Casing |
 | *fish* | Carp, Mackerel, Steelhead Trout, Walleye Pollock fillet · Sardines · Bitterlings — smoked fillets too |
 | *canned fish* | Opened Crab, Sardines and Tuna cans |
 | *canned meat* | Brisket Spread · Lunchmeat · Pajka · Pate · Opened Pork Can |
@@ -209,6 +209,7 @@ The whole meat chain, from the animal to the sausage, has its own page:
 ```
 1× Beef / Pork / Venison Leg          =  2× steak + bone or lard    by hand + knife, 4 s
 1× any raw meat                       =  Diced Meat                 by hand + knife, 4 s
+1× Guts / Small Guts                  =  3× / 2× Sausage Casing     by hand + knife, 4 s
 1× raw steak                          =  Minced Meat (6 kinds)      Meat Grinder, 30 s
 1× *minced meat* + spice + *casing*   =  Raw Sausage (6 kinds)      Meat Grinder, 15 s
 ```

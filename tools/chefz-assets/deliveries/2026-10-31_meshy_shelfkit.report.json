@@ -1,0 +1,203 @@
+{
+ "manifest": "E:\\DayZ Modding\\Psyerns_ChefZ\\tools\\chefz-assets\\deliveries\\2026-10-31_meshy_shelfkit.json",
+ "runner": "tools/chefz-assets/build_delivery_local.py",
+ "duration": 8.4,
+ "blender_exit": 0,
+ "mirrored_files": 9,
+ "results": [
+  {
+   "name": "MushroomShelfKit",
+   "group": "kits",
+   "bind": [
+    "ChefZ_MushroomShelfKit"
+   ],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Devices\\kits\\models\\mushroomshelfkit.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\kits\\data\\MushroomShelfKit_co.paa",
+   "paa": [
+    {
+     "file": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\data\\MushroomShelfKit_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 226,
+   "size_m": [
+    0.6,
+    0.161,
+    0.157
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: MushroomShelfKit"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle MushroomShelfKit_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: MushroomShelfKit_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: MushroomShelfKit_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: MushroomShelfKit_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: MushroomShelfKit_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\models\\mushroomshelfkit.p3d",
+   "lods": [
+    "resolution0:226f",
+    "resolution1:158f",
+    "resolution2:113f",
+    "resolution3:67f",
+    "shadow_volume0:148f",
+    "geometry0:138f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:138f",
+    "fire_geometry0:138f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  },
+  {
+   "name": "GrainMillKit",
+   "group": "kits",
+   "bind": [
+    "ChefZ_GrainMillKit"
+   ],
+   "note": "",
+   "selection": "camo",
+   "model": "\\ChefZ\\ChefZ_Devices\\kits\\models\\grainmillkit.p3d",
+   "texture": "ChefZ\\ChefZ_Devices\\kits\\data\\GrainMillKit_co.paa",
+   "paa": [
+    {
+     "file": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\data\\GrainMillKit_co.paa",
+     "exit": 0,
+     "ok": true
+    }
+   ],
+   "messages": [],
+   "source_tris": 312,
+   "size_m": [
+    0.6,
+    0.371,
+    0.109
+   ],
+   "steps": [
+    {
+     "step": "source",
+     "status": "OK",
+     "message": "Resolution-LOD 0 vorhanden: GrainMillKit"
+    },
+    {
+     "step": "geometry",
+     "status": "OK",
+     "message": "Konvexe Kollisionshülle GrainMillKit_Geometry (1 Komponente(n), 1 kg)"
+    },
+    {
+     "step": "resolution",
+     "status": "OK",
+     "message": "3 Resolution-LOD(s) erzeugt (LOD 1–3, 3 Stufen)"
+    },
+    {
+     "step": "shadow",
+     "status": "OK",
+     "message": "Shadow Volume erzeugt: GrainMillKit_Shadow"
+    },
+    {
+     "step": "land_contact",
+     "status": "OK",
+     "message": "Land Contact mit 4 Bodenkontakt-Punkten erzeugt: GrainMillKit_land_contact"
+    },
+    {
+     "step": "fire",
+     "status": "OK",
+     "message": "Fire Geometry aus dem Geometry-LOD erzeugt: GrainMillKit_fire_geometry"
+    },
+    {
+     "step": "view",
+     "status": "OK",
+     "message": "View Geometry aus dem Geometry-LOD erzeugt: GrainMillKit_view_geometry"
+    },
+    {
+     "step": "memory",
+     "status": "OK",
+     "message": "Memory Points aus dem Template angelegt: ce_center, invView (Positionen bitte prüfen)"
+    },
+    {
+     "step": "props",
+     "status": "OK",
+     "message": "Named Properties gesetzt (Preset SMALL_ITEM)"
+    },
+    {
+     "step": "validate",
+     "status": "OK",
+     "message": "Validierung bestanden (86 Prüfungen, 1 Warnung(en))"
+    },
+    {
+     "step": "build",
+     "status": "SKIPPED",
+     "message": "Build abgewählt."
+    }
+   ],
+   "p3d": "E:\\DayZ Modding\\Psyerns_ChefZ\\ChefZ\\ChefZ_Devices\\kits\\models\\grainmillkit.p3d",
+   "lods": [
+    "resolution0:312f",
+    "resolution1:218f",
+    "resolution2:156f",
+    "resolution3:92f",
+    "shadow_volume0:156f",
+    "geometry0:160f",
+    "memory0:0f",
+    "land_contact0:0f",
+    "view_geometry0:160f",
+    "fire_geometry0:160f"
+   ],
+   "status_model": "OK",
+   "status": "OK"
+  }
+ ]
+}

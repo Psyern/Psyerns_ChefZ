@@ -19,7 +19,9 @@ graph LR
   A2(["any hunted animal"]) --> S
   S -->|"Meat Grinder, 30 s"| M(["Minced Meat<br/>6 kinds"])
   M --> ST(["Meat Grinder<br/>stuff, 15 s"])
-  C(["Guts / Small Guts"]) --> ST
+  G(["Guts / Small Guts"]) -->|"knife, 4 s"| C(["3x / 2x Sausage Casing"])
+  G --> ST
+  C --> ST
   P(["spice, herb"]) --> ST
   ST --> R(["Raw Sausage<br/>6 kinds"])
   R -->|"pan or pot"| K(["Cooked Sausage"])
@@ -36,7 +38,7 @@ Five steps, two of them at the same station. The Meat Grinder does the mincing
 |---|---|
 | A knife | Any of the eight classes in tool group `CUTTING_TOOL` — see [Processing-Stations](Processing-Stations#tool-groups) |
 | **Meat Grinder** | Deployed station, cargo 5×3. Both sausage steps happen here |
-| A casing | `Guts` or `SmallGuts` — vanilla's own guts, dropped when you gut an animal. There is no ChefZ casing item and no cleaning step |
+| A casing | `Guts` or `SmallGuts` — vanilla's own guts, dropped when you gut an animal — or the better deal: cut them with a knife into **Sausage Casing**. Guts give 3 casings, Small Guts give 2, and each casing fills one sausage |
 | A spice | Anything tagged `CHEFZ_SPICE`, listed below |
 | Cookware, a Smoker or a Drying Rack | Depending on which of the three endings you want |
 

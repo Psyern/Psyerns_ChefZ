@@ -359,6 +359,7 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_MyceliumShaggyInkCap");
 		classes.Insert("ChefZ_CultivatedAgaricus");
 		classes.Insert("ChefZ_SporesAgaricus");
+		classes.Insert("ChefZ_Mycelium_Empty");
 		classes.Insert("ChefZ_MyceliumAgaricus");
 		classes.Insert("ChefZ_CultivatedPleurotus");
 		classes.Insert("ChefZ_SporesPleurotus");
@@ -448,6 +449,7 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_MincedBoar");
 		classes.Insert("ChefZ_MincedChicken");
 		classes.Insert("ChefZ_MincedBear");
+		classes.Insert("ChefZ_SausageCasing");
 		classes.Insert("ChefZ_RawSausage");
 		classes.Insert("ChefZ_RawPorkSausage");
 		classes.Insert("ChefZ_RawVenisonSausage");
@@ -511,6 +513,7 @@ class ChefZ_CotCategories
 	{
 		array<string> classes = new array<string>;
 		classes.Insert("ChefZ_GrainMill");
+		classes.Insert("ChefZ_GrainMillKit");
 		classes.Insert("ChefZ_PastaMachine");
 		classes.Insert("ChefZ_Mortar");
 		classes.Insert("ChefZ_DryingRack");
@@ -521,6 +524,7 @@ class ChefZ_CotCategories
 		classes.Insert("ChefZ_Smoker");
 		classes.Insert("ChefZ_UncappingFork");
 		classes.Insert("ChefZ_MushroomShelf");
+		classes.Insert("ChefZ_MushroomShelfKit");
 		classes.Insert("ChefZ_MushroomTray");
 
 		Add("chefz_cot_stations", "#STR_CHEFZ_COT_CAT_STATIONS", "cooking-pot", classes);

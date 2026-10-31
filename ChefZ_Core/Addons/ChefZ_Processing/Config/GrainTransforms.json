@@ -3,6 +3,34 @@
     "schemaVersion": 1,
     "records": [
         {
+            "id": "TR_BuildGrainMillKit",
+            "_note": "Der Bausatz der Muehle: sechs Bretter fuer das Gestell, ein ganzer Stein fuer den Mahlgang (Vanillas Stone ist kein Stapel). Dieselbe Form wie TR_BuildMushroomShelf.",
+            "process": "PROCESS_BUILD_GRAIN_MILL",
+            "inputs": [
+                {
+                    "slotId": "planks",
+                    "match": { "cls": "WoodenPlank" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "unit": "PIECE",
+                    "amount": { "min": 6.0 },
+                    "consume": "amount",
+                    "consumeAmount": 6.0
+                },
+                {
+                    "slotId": "stone",
+                    "match": { "cls": "Stone" },
+                    "minCount": 1,
+                    "maxCount": 1,
+                    "consume": "whole"
+                }
+            ],
+            "outputs": [
+                { "cls": "ChefZ_GrainMillKit", "quantity": 1, "quantityMode": "fixed" }
+            ],
+            "priority": 0
+        },
+        {
             "id": "TR_WheatToFlour",
             "process": "PROCESS_MILL",
             "stationsAllowed": ["ChefZ_GrainMill"],

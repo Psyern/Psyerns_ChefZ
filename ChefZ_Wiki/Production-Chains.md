@@ -280,6 +280,8 @@ graph LR
 ```mermaid
 graph LR
   G(["Guts / SmallGuts<br/>vanilla, category CASING"]) --> SS
+  G -->|"knife, 4 s"| SC(["3x / 2x Sausage Casing<br/>category CASING"])
+  SC --> SS
   MM(["Minced Meat"]) --> SS
   SP(["1-3x SPICE<br/>or HERB"]) --> SS
   SS(["Meat Grinder<br/>stuff, 15 s"])
@@ -336,17 +338,23 @@ meat too. The stews reach it without naming it.
 
 ### Stuffing
 
-The casing is vanilla's own gut since 2026-08-29 — `Guts` or `SmallGuts`, both
-category `CASING`; there is no cleaning step and no ChefZ casing class.
+Three items fill the casing slot, all category `CASING`: vanilla's `Guts` and
+`SmallGuts` directly, or `ChefZ_SausageCasing`, cut from them by hand. Cutting
+first yields more sausages per gut.
 
 | Step | Input | Output | Where | Tool | Duration |
 |---|---|---|---|---|---|
-| `TR_RawSausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawPorkSausage` | 1× Minced Pork + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Pork Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawVenisonSausage` | 1× Minced Venison + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Venison Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawBoarSausage` | 1× Minced Boar + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts or Small Guts) | Raw Boar Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Hunter Sausage (1×) | Meat Grinder | — | 15 s |
-| `TR_RawSpicySausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts or Small Guts) | Raw Spicy Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_SausageCasing` | 1× `Guts` | 3× `ChefZ_SausageCasing` | *handcraft* | `CUTTING_TOOL` | 4 s |
+| `TR_SmallGutsCasing` | 1× `SmallGuts` | 2× `ChefZ_SausageCasing` | *handcraft* | `CUTTING_TOOL` | 4 s |
+
+| Step | Input | Output | Where | Tool | Duration |
+|---|---|---|---|---|---|
+| `TR_RawSausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawPorkSausage` | 1× Minced Pork + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Pork Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawVenisonSausage` | 1× Minced Venison + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Venison Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawBoarSausage` | 1× Minced Boar + 1× *SPICE* (1) + 1× *HERB* or *DRIED_HERB* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Boar Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawHunterSausage` | 2× *WILD_MEAT* + stage Raw + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Hunter Sausage (1×) | Meat Grinder | — | 15 s |
+| `TR_RawSpicySausage` | 1× *MINCED_MEAT* + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *SPICE* (1) + 1× *CASING* (Guts, Small Guts or Sausage Casing) | Raw Spicy Sausage (1×) | Meat Grinder | — | 15 s |
 
 `TR_RawHunterSausage` is the only stuffing transform that takes **whole raw wild
 meat** instead of mince — 2× `WILD_MEAT` at stage `Raw`. It is also the only
@@ -569,12 +577,13 @@ graph LR
 
 | Step | Input | Output | Where | Duration |
 |---|---|---|---|---|
-| `TR_BuildMushroomShelf` | 8× Wooden Plank + 16× Nail | Mushroom Shelf | handcraft | 30 s |
+| `TR_BuildMushroomShelf` | 8× Wooden Plank + 16× Nail | Mushroom Shelf Kit (place it to get the shelf) | handcraft | 30 s |
 | `TR_BuildMushroomTray` | 2× Wooden Plank + 6× Nail | Growing Tray | handcraft | 12 s |
 | `TR_MushroomToDried` | any `MUSHROOM`, raw | same item, stage Dried | Drying Rack | 600 s |
 | `TR_ToxicMushroomToDried` | Fly Agaric / Liberty Cap (wild or cultivated), raw | same item, stage Dried | Drying Rack | 600 s |
 | `TR_Dried<Species>ToSpores` (13×) | 1 dried mushroom of the species | 1 sachet of Spores of the species | Mortar (`PROCESS_GRIND_MYCELIUM`, "Grind spores") | 20 s |
-| `TR_Spores<Species>ToMycelium` (13×) | 1 Spores + 100 g Wheat | 1 Mycelium (grain spawn bag) | handcraft (`PROCESS_INOCULATE_SPAWN`) | 8 s |
+| `TR_PrepareMyceliumBag` | 100 g Wheat + 1 Rag | 1 Grain Spawn Bag (not inoculated) | handcraft (`PROCESS_PREPARE_SPAWN`) | 8 s |
+| `TR_Spores<Species>ToMycelium` (13×) | 1 Spores + 1 Grain Spawn Bag | 1 Mycelium (grain spawn bag) | handcraft (`PROCESS_INOCULATE_SPAWN`) | 8 s |
 | *(script, no transform)* | Mycelium in a tray on the shelf | up to 3 mushrooms, mycelium used up | Mushroom Shelf | per species, below |
 
 | Mycelium | Grows | Time | Yield |

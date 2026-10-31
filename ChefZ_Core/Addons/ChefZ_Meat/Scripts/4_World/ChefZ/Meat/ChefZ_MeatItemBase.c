@@ -114,3 +114,16 @@ class ChefZ_VenisonSausage    extends ChefZ_Sausage_Base {}
 class ChefZ_BoarSausage       extends ChefZ_Sausage_Base {}
 class ChefZ_HunterSausage     extends ChefZ_Sausage_Base {}
 class ChefZ_SpicySausage      extends ChefZ_Sausage_Base {}
+
+//! Der Darm sitzt auf Vanillas animal_smallguts.p3d und nimmt deshalb dessen
+//! Haltung (DayZPlayerCfgBase.c, SmallGuts). Sie steht hier und nicht in
+//! ChefZ_HandProfiles.c, weil der Core keine Content-Klassen kennt (I3).
+modded class ModItemRegisterCallbacks
+{
+    override void RegisterOneHanded(DayZPlayerType pType, DayzPlayerItemBehaviorCfg pBehavior)
+    {
+        super.RegisterOneHanded(pType, pBehavior);
+
+        pType.AddItemInHandsProfileIK("ChefZ_SausageCasing", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/guts_animal_small.anm");
+    }
+}

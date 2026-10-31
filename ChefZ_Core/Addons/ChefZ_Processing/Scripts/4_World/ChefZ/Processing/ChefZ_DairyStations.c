@@ -241,7 +241,7 @@ class ChefZ_ButterChurn extends ChefZ_ProcessingStation_Base
 //!
 //! Dazu seit dem 30.10.2026 der Weg ueber die Milch (Spieltest: "je nach
 //! Fuellmenge kann X Anzahl Kaese entstehen"): eine Milchkanne im Platz
-//! ChefZ_PressMilkCan, ihr Fuellstand in Litern, je volle
+//! ChefZ_PressMilkCan, ihr Fuellstand in Millilitern, je volle
 //! CHEFZ_LITERS_PER_CHEESE ein Kaese. Gepresst wird mit
 //! ChefZ_ActionPressMilkCheese; was nicht fuer einen ganzen Kaese reicht,
 //! bleibt in der Kanne.
@@ -250,7 +250,9 @@ class ChefZ_CheesePress extends ChefZ_ProcessingStation_Base
     static const string CHEFZ_MILK_SLOT = "ChefZ_PressMilkCan";
     static const string CHEFZ_MILK_CAN = "ChefZ_MilkCan";
     static const string CHEFZ_CHEESE = "ChefZ_Cheese";
-    static const float CHEFZ_LITERS_PER_CHEESE = 5.0;
+    static const float CHEFZ_LITERS_PER_CHEESE = 5000.0;
+    //! Wie LIQUID_CHEFZ_MILK (ChefZ_MixMilk.c): gepresst wird nur Milch.
+    static const int CHEFZ_LIQUID_MILK = 8388608;
 
     override void SetActions()
     {
@@ -271,7 +273,7 @@ class ChefZ_CheesePress extends ChefZ_ProcessingStation_Base
     int ChefZ_CheesesFromMilk()
     {
         ItemBase can = ChefZ_GetMilkCan();
-        if (!can)
+        if (!can || can.GetLiquidType() != CHEFZ_LIQUID_MILK)
             return 0;
         float liters = can.GetQuantity();
         return Math.Floor(liters / CHEFZ_LITERS_PER_CHEESE);

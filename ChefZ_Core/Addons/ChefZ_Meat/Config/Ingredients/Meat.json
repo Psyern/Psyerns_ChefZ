@@ -367,6 +367,17 @@
             "decays": true
         },
         {
+            "id": "ChefZ_SausageCasing",
+            "categories": [
+                "CASING"
+            ],
+            "tags": [],
+            "defaultState": "PREPARED",
+            "quantityUnit": "PIECE",
+            "unitsPerWholeItem": 1,
+            "decays": true
+        },
+        {
             "id": "ChefZ_RawSausage",
             "categories": [
                 "MEAT",

@@ -686,13 +686,18 @@ class CfgVehicles
     // Vanillas Topf, Kessel und Pfanne haben alle 4x3 Laderaum (12 Felder).
     // Die Eintoepfe, das Chili und die Calamari brauchen schon in der kleinsten
     // erlaubten Menge mehr - 14 Rezepte waren unkochbar (gemessen mit
-    // tools/chefz-autotest/check_vessel_fit.py). Topf und Pfanne bekommen 5x4,
-    // der Kessel als Gefaess der Gruppengerichte 6x5. Nur der Laderaum waechst,
+    // tools/chefz-autotest/check_vessel_fit.py). Der Topf bekommt 5x4, die Pfanne
+    // (31.10.2026, Spieltest: zu wenig Platz) und der Kessel als Gefaess der
+    // Gruppengerichte 6x5. Nur der Laderaum waechst,
     // die Gefaesse selbst bleiben 4x3 gross.
     // ------------------------------------------------------------------------
     class FryingPan : Inventory_Base
     {
-        itemsCargoSize[] = {5, 4};
+        itemsCargoSize[] = {6, 5};
+        // Das Vanilla-Modell ist binarisiert und hat keinen Proxy. Das ChefZ-Modell
+        // traegt "meal", dort liegt das fertige Gericht (31.10.2026).
+        model = "\ChefZ\ChefZ_Items\models\fryingpan.p3d";
+        attachments[] = {"ChefZ_Meal"};
     };
     class Pot : Bottle_Base
     {
@@ -1196,6 +1201,7 @@ class CfgVehicles
     class ChefZ_TacticalBreakfast : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_TACTICALBREAKFAST";
         descriptionShort = "#STR_CHEFZ_ITEM_TACTICALBREAKFAST_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -1247,6 +1253,7 @@ class CfgVehicles
     class ChefZ_ScrambledEggSausage : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_SCRAMBLEDEGGSAUSAGE";
         descriptionShort = "#STR_CHEFZ_ITEM_SCRAMBLEDEGGSAUSAGE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -1298,6 +1305,7 @@ class CfgVehicles
     class ChefZ_FarmersBreakfast : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_FARMERSBREAKFAST";
         descriptionShort = "#STR_CHEFZ_ITEM_FARMERSBREAKFAST_DESC";
         model = "\ChefZ\ChefZ_Food\models\farmersbreakfast.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -1347,6 +1355,7 @@ class CfgVehicles
     class ChefZ_CheeseFlatbread : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_CHEESEFLATBREAD";
         descriptionShort = "#STR_CHEFZ_ITEM_CHEESEFLATBREAD_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -1398,6 +1407,7 @@ class CfgVehicles
     class ChefZ_SausageBreadPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_SAUSAGEBREADPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEBREADPLATE_DESC";
         model = "\ChefZ\ChefZ_Food\models\sausage_breadplate.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -1448,6 +1458,7 @@ class CfgVehicles
     class ChefZ_MushroomPan : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_MUSHROOMPAN";
         descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMPAN_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -1498,6 +1509,7 @@ class CfgVehicles
     class ChefZ_PotatoPancakes : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_POTATOPANCAKES";
         descriptionShort = "#STR_CHEFZ_ITEM_POTATOPANCAKES_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -1550,6 +1562,7 @@ class CfgVehicles
     class ChefZ_MeatDumplings : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_MEATDUMPLINGS";
         descriptionShort = "#STR_CHEFZ_ITEM_MEATDUMPLINGS_DESC";
         model = "\ChefZ\ChefZ_Food\models\meatdumplings.p3d";   // EIGENES MODELL (30.08.2026, Lieferung c09900f)
@@ -1600,6 +1613,7 @@ class CfgVehicles
     class ChefZ_MilkRice : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_MILKRICE";
         descriptionShort = "#STR_CHEFZ_ITEM_MILKRICE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -1650,6 +1664,7 @@ class CfgVehicles
     class ChefZ_HoneyBreadPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_HONEYBREADPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_HONEYBREADPLATE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2060,6 +2075,7 @@ class CfgVehicles
     class ChefZ_SmallFishPan : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_SMALLFISHPAN";
         descriptionShort = "#STR_CHEFZ_ITEM_SMALLFISHPAN_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2135,6 +2151,7 @@ class CfgVehicles
     class ChefZ_SurvivorSpaghetti : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_SURVIVORSPAGHETTI";
         descriptionShort = "#STR_CHEFZ_ITEM_SURVIVORSPAGHETTI_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2178,6 +2195,7 @@ class CfgVehicles
     class ChefZ_SausagePasta : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_SAUSAGEPASTA";
         descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEPASTA_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2221,6 +2239,7 @@ class CfgVehicles
     class ChefZ_HunterPasta : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_HUNTERPASTA";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERPASTA_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2263,6 +2282,7 @@ class CfgVehicles
     class ChefZ_CreamMushroomPasta : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_CREAMMUSHROOMPASTA";
         descriptionShort = "#STR_CHEFZ_ITEM_CREAMMUSHROOMPASTA_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2307,6 +2327,7 @@ class CfgVehicles
     class ChefZ_MacAndCheese : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_MACANDCHEESE";
         descriptionShort = "#STR_CHEFZ_ITEM_MACANDCHEESE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2349,6 +2370,7 @@ class CfgVehicles
     class ChefZ_SausagePotatoes : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_SAUSAGEPOTATOES";
         descriptionShort = "#STR_CHEFZ_ITEM_SAUSAGEPOTATOES_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2391,6 +2413,7 @@ class CfgVehicles
     class ChefZ_HunterPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_HUNTERPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_HUNTERPLATE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2434,6 +2457,7 @@ class CfgVehicles
     class ChefZ_BloodSausagePlate : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_BLOODSAUSAGEPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_BLOODSAUSAGEPLATE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2476,6 +2500,7 @@ class CfgVehicles
     class ChefZ_FishPotatoPlate : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_FISHPOTATOPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_FISHPOTATOPLATE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";
@@ -2516,6 +2541,7 @@ class CfgVehicles
     class ChefZ_CrispyFriedCalamari : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_CRISPYFRIEDCALAMARI";
         descriptionShort = "#STR_CHEFZ_ITEM_CRISPYFRIEDCALAMARI_DESC";
         model = "\ChefZ\ChefZ_Food\models\crispy_fried_calamari.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
@@ -2549,6 +2575,7 @@ class CfgVehicles
     class ChefZ_GrilledStuffedCalamari : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_GRILLEDSTUFFEDCALAMARI";
         descriptionShort = "#STR_CHEFZ_ITEM_GRILLEDSTUFFEDCALAMARI_DESC";
         model = "\ChefZ\ChefZ_Food\models\grilled_stuffed_calamari.p3d";   // EIGENES MODELL (Lieferung 25.10.2026)
@@ -2623,6 +2650,7 @@ class CfgVehicles
     class ChefZ_BeanSausagePlate : ChefZ_ServedDish_Base
     {
         scope = 2;
+        inventorySlot[] = {"ChefZ_Meal"};
         displayName = "#STR_CHEFZ_ITEM_BEANSAUSAGEPLATE";
         descriptionShort = "#STR_CHEFZ_ITEM_BEANSAUSAGEPLATE_DESC";
         model = "\ChefZ\ChefZ_Food\models\Panfood_Base.p3d";

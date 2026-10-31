@@ -777,6 +777,19 @@ class ChefZ_AT_Cases
         c.AddOutput("ChefZ_DicedMeat");
         list.Insert(c);
 
+        c = ChefZ_AT_Case.Make("PROC", "TR_SausageCasing", "", "", "PROCESS_CUT_MEAT");
+        c.AddInput("Guts", 1, "", "");
+        c.AddOutput("ChefZ_SausageCasing");
+        c.AddOutput("ChefZ_SausageCasing");
+        c.AddOutput("ChefZ_SausageCasing");
+        list.Insert(c);
+
+        c = ChefZ_AT_Case.Make("PROC", "TR_SmallGutsCasing", "", "", "PROCESS_CUT_MEAT");
+        c.AddInput("SmallGuts", 1, "", "");
+        c.AddOutput("ChefZ_SausageCasing");
+        c.AddOutput("ChefZ_SausageCasing");
+        list.Insert(c);
+
         c = ChefZ_AT_Case.Make("PROC", "TR_MeatToMinced", "ChefZ_MeatGrinder", "", "PROCESS_GRIND_MEAT");
         c.AddInput("CowSteakMeat", 1, "RAW", "Raw");
         c.AddOutput("ChefZ_MincedMeat");
@@ -815,7 +828,7 @@ class ChefZ_AT_Cases
         list.Insert(c);
 
         c = ChefZ_AT_Case.Make("PROC", "TR_RawPorkSausage", "ChefZ_MeatGrinder", "", "PROCESS_STUFF_SAUSAGE");
-        c.AddInput("Guts", 1, "", "");
+        c.AddInput("ChefZ_SausageCasing", 1, "", "");
         c.AddInput("ChefZ_MincedPork", 1, "", "");
         c.AddInput("ChefZ_BlackPepper", 1, "", "");
         c.AddInput("ChefZ_BlackPepper", 1, "", "");

@@ -41,5 +41,6 @@ modded class ActionConstructor
         super.RegisterActions(actions);
         actions.Insert(ChefZ_ActionTakePortion);
         actions.Insert(ChefZ_ActionProcessAtStation);
+        actions.Insert(ChefZ_ActionEatFromPan);
     }
 }

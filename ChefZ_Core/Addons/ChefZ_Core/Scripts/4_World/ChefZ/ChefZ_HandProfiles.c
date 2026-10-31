@@ -135,6 +135,8 @@ modded class ModItemRegisterCallbacks
 		// Die Doppelbeute erbt vom einfachen Bausatz.
 		pType.AddItemInHandsProfileIK("ChefZ_BeehiveKit", asiPot, pBehavior, cauldron);
 		pType.AddItemInHandsProfileIK("ChefZ_MushroomTray", asiPot, pBehavior, cauldron);
+		pType.AddItemInHandsProfileIK("ChefZ_MushroomShelfKit", asiPot, pBehavior, cauldron);
+		pType.AddItemInHandsProfileIK("ChefZ_GrainMillKit", asiPot, pBehavior, cauldron);
 	}
 
 	override void RegisterHeavy(DayZPlayerType pType, DayzPlayerItemBehaviorCfg pBehavior)

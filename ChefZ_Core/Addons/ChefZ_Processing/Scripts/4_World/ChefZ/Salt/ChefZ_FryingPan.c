@@ -53,6 +53,13 @@ class ChefZ_FryingPan extends ChefZ_ProcessingStation_Base
 	//! sieht.
 	static const float CHEFZ_HEAT_RADIUS_M = 2.5;
 
+	override void SetActions()
+	{
+		super.SetActions();
+
+		AddAction(ChefZ_ActionEatFromPan);
+	}
+
 	/**
 	 * Brennt in Reichweite eine Feuerstelle?
 	 *

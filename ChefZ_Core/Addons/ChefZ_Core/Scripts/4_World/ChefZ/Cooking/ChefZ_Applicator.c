@@ -58,6 +58,9 @@
 
 class ChefZ_Applicator
 {
+    //! Der Platz des fertigen Gerichts in der Pfanne (Proxy "meal").
+    static const string MEAL_SLOT = "ChefZ_Meal";
+
     /**
      * Steht, solange der Applicator selbst ein Ergebnis in ein Gefaess legt
      * (27.10.2026). Gefaesse mit reinem Ausgabe-Cargo (Raeucherschrank:
@@ -709,6 +712,25 @@ class ChefZ_Applicator
      * jedes bereits erzeugte Ergebnis hat den Platz veraendert, und eine
      * gemerkte InventoryLocation waere dann veraltet.
      */
+    /**
+     * Der Slot, in den dieses Gericht in diesem Gefaess sichtbar gehoert, sonst
+     * -1. Das Gericht nennt ihn in inventorySlot[], die Pfanne in attachments[];
+     * ist er belegt, geht das Gericht wie jedes andere ins Cargo.
+     */
+    private static int FindMealSlot(string cls, notnull ItemBase device)
+    {
+        TStringArray slots = new TStringArray();
+        g_Game.ConfigGetTextArray(CFG_VEHICLESPATH + " " + cls + " inventorySlot", slots);
+        if (slots.Find(MEAL_SLOT) < 0)
+            return -1;
+
+        int slotId = InventorySlots.GetSlotIdFromString(MEAL_SLOT);
+        GameInventory inv = device.GetInventory();
+        if (!inv.HasAttachmentSlot(slotId) || inv.FindAttachment(slotId))
+            return -1;
+        return slotId;
+    }
+
     static ItemBase SpawnOutput(notnull ChefZ_OutputDef outDef, ChefZ_Sym tier, notnull ItemBase device, out string err)
     {
         err = "";
@@ -725,6 +747,16 @@ class ChefZ_Applicator
         {
             err = "das Gefaess hat kein Inventar";
             return null;
+        }
+
+        int mealSlot = FindMealSlot(cls, device);
+        if (mealSlot >= 0)
+        {
+            s_ChefZ_Placing = true;
+            ItemBase meal = ItemBase.Cast(inv.CreateAttachmentEx(cls, mealSlot));
+            s_ChefZ_Placing = false;
+            if (meal)
+                return meal;
         }
 
         InventoryLocation loc = FindCargoSpot(inv, cls);
@@ -822,6 +854,12 @@ class ChefZ_Applicator
     {
         if (!device || !item || item.IsSetForDeletion() || device.IsSetForDeletion())
             return;
+        s_ChefZ_Placing = true;
+        bool asMeal = FindMealSlot(item.GetType(), device) >= 0 && device.ServerTakeEntityAsAttachment(item);
+        s_ChefZ_Placing = false;
+        if (asMeal)
+            return;
+
         s_ChefZ_Placing = true;
         bool inCargo = device.ServerTakeEntityToCargo(item);
         s_ChefZ_Placing = false;

@@ -75,7 +75,7 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 	static const string MILK_CLASS = "PowderedMilk";
 	//! Liter je Melkgang in die Kanne (30.10.2026: Milch ist der Fuellstand der
 	//! ChefZ_MilkCan, siehe ihre Config).
-	static const float MILK_LITERS = 2.0;
+	static const float MILK_LITERS = 2000.0;
 
 	static const string TEXT = "#STR_CHEFZ_ACTION_MILK_COW";
 
@@ -155,6 +155,10 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 		if (!Class.CastTo(cow, targetObject))
 			return false;
 
+		// Milch mischt sich nicht mit dem, was schon in der Kanne ist.
+		if (item && item.GetQuantity() > 0 && item.GetLiquidType() != LIQUID_CHEFZ_MILK)
+			return false;
+
 		return cow.ChefZ_CanBeMilked();
 	}
 
@@ -185,6 +189,7 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 		ItemBase can = action_data.m_MainItem;
 		if (can && can.GetQuantity() < can.GetQuantityMax())
 		{
+			can.SetLiquidType(LIQUID_CHEFZ_MILK);
 			can.AddQuantity(MILK_LITERS);
 			return;
 		}

@@ -79,6 +79,13 @@ modded class FoodStage
     override void UpdateVisualsEx(bool forced = false)
     {
         Edible_Base food = GetFoodItem();
+        // Klassen auf einem Modell ohne Selektion: nichts zu
+        // wechseln, und Vanilla laese die leere Liste per Index (FoodStage.c:595).
+        if (food && food.IsInherited(ChefZ_Edible_Base) && food.GetHiddenSelections().Count() == 0)
+        {
+            m_FoodStageTypeClientLast = m_FoodStageType;
+            return;
+        }
         if (!food || !ChefZ_StageVisuals.UsesTextureOnly(food))
         {
             super.UpdateVisualsEx(forced);

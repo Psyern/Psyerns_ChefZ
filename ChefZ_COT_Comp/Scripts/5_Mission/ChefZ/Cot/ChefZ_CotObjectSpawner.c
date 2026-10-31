@@ -10,7 +10,7 @@
 // Spawner.
 //
 // Das ist die EINZIGE Datei dieses Mods, die COT-Code erweitert, und sie
-// erweitert genau eine Klasse: JMObjectSpawnerForm. Keine COT-Datei wird
+// erweitert zwei Klassen: JMObjectSpawnerForm und JMItemCategoryPicker. Keine COT-Datei wird
 // veraendert; jede Ueberschreibung ruft super auf oder faellt auf super zurueck.
 //
 // STAND: COT_New (COT_New/Scripts/...). Alle Zeilennummern unten beziehen sich
@@ -33,8 +33,7 @@
 //     if (m_Module.m_CurrentType == "" || g_Game.IsKindOf( strNameLower, m_Module.m_CurrentType ))
 //
 // m_CurrentType ist also ein einzelner BASISKLASSENNAME. Gesetzt wird er in
-// SelectCategory(string) (:935-954, die Zuweisung in :937) aus der Tabelle
-// CategoryTable (:527-560).
+// OnCategoryChanged aus der Auswahl des JMItemCategoryPicker.
 //
 // Warum ein einzelner Basisklassenname die acht ChefZ-Kategorien nicht
 // abbilden kann, steht ausfuehrlich im Kopf von
@@ -45,40 +44,36 @@
 // DER EINGRIFF: EINE GRUPPE IM KATEGORIEMENUE
 // ---------------------------------------------------------------------------
 // COT_New zeigt seine Kategorien nicht mehr als Knopfstreifen, sondern hinter
-// dem Filterknopf neben dem Suchfeld: ein Kontextmenue mit vier Gruppenzeilen
-// (:760-777), jede oeffnet ein Untermenue (:841-854). ChefZ haengt dort genau
-// EINE weitere Gruppenzeile an und fuellt deren Untermenue mit den acht
-// Kategorien. Kein eigenes Bedienelement, kein eigener Platz im Fenster.
+// dem Filterknopf neben dem Suchfeld: ein UIActionFilterMenu mit vier
+// Gruppenzeilen, jede oeffnet eine eigene Seite. ChefZ haengt dort genau EINE
+// weitere Gruppenzeile an und fuellt deren Seite mit den acht Kategorien. Kein
+// eigenes Bedienelement, kein eigener Platz im Fenster.
 //
-//   1. RebuildCategoryMenu          super, danach EINMAL die ChefZ-Gruppenzeile
-//                                   anhaengen (:760, Aufrufer :744).
-//   2. RefreshCategoryMenuColors    super, danach die ChefZ-Gruppenzeile
-//                                   einfaerben, wenn eine ChefZ-Kategorie
-//                                   aktiv ist (:779-810).
-//   3. RebuildCategorySubMenu       super, danach - nur fuer die ChefZ-Gruppe -
-//                                   die acht Zeilen (:841-854).
-//   4. RefreshCategorySubMenuColors super, danach die aktive ChefZ-Zeile
-//                                   einfaerben (:856-872).
-//   5. CategoryLabel / CategoryIcon Beschriftung und Symbol fuer die
-//                                   ChefZ-Ids, sonst super (:661-687).
-//   6. UpdateList                   erkennt an m_CurrentType, ob eine
+//   1. BuildRootPage                super, danach die ChefZ-Gruppenzeile, markiert
+//                                   solange eine ChefZ-Kategorie aktiv ist.
+//   2. ChefZ_BuildGroupPage         die acht Zeilen der ChefZ-Gruppe.
+//   3. Toggle                       meldet die Seite der Gruppe an, sobald
+//                                   COT das Menue angelegt hat.
+//   4. PushRecent                   ChefZ-Kategorien bekommen keinen Chip.
+//   5. UpdateList (Formular)        erkennt an m_CurrentType, ob eine
 //                                   ChefZ-Kategorie gewaehlt ist. Wenn nein -
 //                                   und das ist der Normalfall - laeuft
 //                                   unveraendert super.UpdateList(). Wenn ja,
 //                                   fuellt ChefZ_FillClassList die Liste aus
 //                                   der Kategorientabelle.
 //
-// SelectCategory (:935) braucht KEINE Ueberschreibung. Der Klick im Untermenue
-// laeuft ueber COTs unveraenderten Pfad OnClick_CategorySubMenu (:905-912) ->
-// CategoryIdFor (:702, laesst jede Id ausser "__all" unveraendert) ->
-// SelectCategory -> m_CurrentType = "chefz_cot_*" -> UpdateList (:953).
+// STAND 30.10.2026: COT hat das Kategoriemenue aus JMObjectSpawnerForm nach
+// JMItemCategoryPicker verlegt. RebuildCategoryMenu und die uebrigen fuenf
+// frueheren Haken gibt es nicht mehr; ihre Overrides brachen das Mission-Modul.
+// Ein Klick laeuft jetzt OnGroupChange -> Select -> OnCategoryChanged (Formular)
+// -> m_CurrentType = "chefz_cot_*" -> UpdateList.
 //
-// GroupOfCategory (:638) braucht ebenfalls keine Ueberschreibung.
-// RefreshCategoryMenuColors faerbt ausschliesslich Zeilen, deren Id aus der
-// statischen CategoryGroupTable (:570-580) stammt; die ChefZ-Gruppe steht dort
-// nicht und wird deshalb in Punkt 2 selbst gefaerbt. Fuer eine ChefZ-Kategorie
-// liefert COTs GroupOfCategory "" - genau richtig, denn dann faerbt super
-// keine der vier COT-Gruppen ein.
+// JMFilterRegistry waere der vorgesehene Weg fuer einzelne Zeilen, kennt aber
+// nur die Wurzelseite: acht flache Zeilen statt einer Gruppe wie bei COT selbst.
+//
+// CategoryLabel und CategoryIcon des Pickers sind statisch und lassen sich nicht
+// ueberschreiben. Ein Chip stuende deshalb ohne Text da; die Kategorien bleiben
+// ueber das Menue erreichbar, darum faellt nur der Chip weg (PushRecent).
 //
 // ---------------------------------------------------------------------------
 // WARUM KEINE EIGENE AUSWAHLBOX MEHR
@@ -99,13 +94,8 @@
 // ---------------------------------------------------------------------------
 // PRIVATE FELDER DER BASISKLASSE
 // ---------------------------------------------------------------------------
-// m_ClassList (:146), m_ListClasses (:31), m_SearchBox (:125), m_CategoryMenu
-// (:18), m_CategorySubMenu (:19) und m_CurrentGroup (:22) sind in
-// JMObjectSpawnerForm als "private" deklariert (m_Module :169 ist protected).
-// In Enforce sind sie aus einer modded class dennoch erreichbar - die modded
-// class IST die Klasse, nicht ihr Nachfahre. TerjeCompatibilityCOT/Scripts/
-// 5_Mission/CotCompatibility.c nutzt dasselbe an derselben Klasse
-// (m_ObjItemStateLiquid, m_PreviewItem).
+// JMObjectSpawnerForm fuehrt m_ClassList, m_ListClasses, m_SearchBox und m_Module
+// als protected. Eine modded class ist die Klasse selbst und erreicht sie direkt.
 //
 // ---------------------------------------------------------------------------
 // KEINE SPIELMECHANIK
@@ -150,132 +140,49 @@ class ChefZ_CotMenu
 	static const string PAN_DISH_MODEL = "panfood_base.p3d";
 }
 
-// SCOUT-GEPRUEFT 2026-09-17 (chefz-cot130)
-// Sieben Ueberschreibungen. Vier davon (RebuildCategoryMenu,
-// RefreshCategoryMenuColors, RebuildCategorySubMenu,
-// RefreshCategorySubMenuColors) rufen super als ERSTE Anweisung und haengen
-// danach nur an; CategoryLabel und CategoryIcon geben fuer jede fremde Id
-// super zurueck; UpdateList faellt in zwei von drei Zweigen auf super zurueck
-// und geht nur bei einer der acht ChefZ-Kategorien eigene Wege. Das einzige
-// Member traegt Mod-Praefix. TerjeCompatibilityCOT moddet dieselbe Klasse auf
-// OnInit und UpdateItemStateType - keine Feld- oder Methodenueberschneidung.
-modded class JMObjectSpawnerForm
+// Die ChefZ-Gruppe im Kategoriemenue des Object Spawners. Der Picker dient auch
+// der Loot-Analyse; die kennt die ChefZ-Filter nicht, also gilt alles nur fuer den
+// Geltungsbereich OBJECTS.
+modded class JMItemCategoryPicker
 {
-	// Die Gruppenzeile wird genau EINMAL angehaengt. Ein eigenes Flag und
-	// nicht GetItemCount(): COTs eigener Aufbau laeuft nur bei
-	// GetItemCount() == 0 (:765), nach super ist der Zaehler also immer
-	// groesser als 0 und taugt nicht als Unterscheidung.
-	// UIActionContextMenu hat kein HasItem (gui/actions/uiactioncontextmenu.c:
-	// 268-396), und AddItem baut bei jedem Aufruf alle Zeilen neu (:300-304) -
-	// eine zweite Gruppenzeile waere also nicht nur doppelt, sondern teuer.
-	protected bool m_ChefZCotGroupInMenu;
+	protected bool m_ChefZCotPageAdded;
 
-	/**
-	 * Die ChefZ-Gruppenzeile an COTs Kategoriemenue anhaengen.
-	 *
-	 * submenu = true, damit die Zeile den Pfeil traegt und der Klick in
-	 * OnClick_CategoryMenu (:885-903) nicht als Kategorie, sondern als
-	 * Gruppenoeffnung gelesen wird: die Id ist nicht MENU_ID_ALL, also landet
-	 * sie in OpenCategorySubMenu (:902).
-	 */
-	override protected void RebuildCategoryMenu()
+	override void Toggle(notnull Widget button)
 	{
-		super.RebuildCategoryMenu();
+		super.Toggle(button);
 
-		if (!m_CategoryMenu)
+		if (!m_Menu || m_ChefZCotPageAdded || m_RegistryScope != JMFilterRegistry.OBJECTS)
 		{
 			return;
 		}
 
-		if (m_ChefZCotGroupInMenu)
-		{
-			return;
-		}
-
-		m_ChefZCotGroupInMenu = true;
-		m_CategoryMenu.AddItem(ChefZ_CotMenu.GROUP_ID, ChefZ_CotMenu.GROUP_LABEL, JMConstants.Lucide(ChefZ_CotMenu.GROUP_ICON), 0, true);
-
-		// super hat seine Farben gesetzt, bevor es die Zeile gab.
-		RefreshCategoryMenuColors();
+		m_ChefZCotPageAdded = true;
+		m_Menu.AddPage(ChefZ_CotMenu.GROUP_ID, this, "ChefZ_BuildGroupPage", PAGE_ROOT, false, "", this, "OnGroupChange", true);
 	}
 
-	/**
-	 * Die ChefZ-Gruppenzeile markieren, solange eine ChefZ-Kategorie aktiv ist.
-	 *
-	 * super faerbt nur Zeilen, deren Id aus CategoryGroupTable (:570-580)
-	 * stammt (:794-807). Die ChefZ-Gruppe steht dort nicht und wuerde sonst nie
-	 * markiert - der Admin saehe nicht, aus welcher Gruppe seine Liste kommt.
-	 */
-	override protected void RefreshCategoryMenuColors()
+	override void BuildRootPage(UIActionFilterMenu menu)
 	{
-		super.RefreshCategoryMenuColors();
+		super.BuildRootPage(menu);
 
-		if (!m_CategoryMenu || !m_ChefZCotGroupInMenu || !m_Module)
+		if (m_RegistryScope != JMFilterRegistry.OBJECTS)
 		{
 			return;
 		}
 
-		// 0 heisst "Menuefarbe benutzen" - genau wie bei COT (:787, :801).
+		// 0 heisst "Menuefarbe benutzen". COTs GroupOfCategory kennt die Gruppe
+		// nicht, die Markierung steht deshalb hier.
 		int color = 0;
-		if (ChefZ_CotCategories.Find(m_Module.m_CurrentType))
+		if (ChefZ_CotCategories.Find(m_Current))
 		{
 			color = JMTheme.ACCENT;
 		}
 
-		m_CategoryMenu.SetItemTextColor(ChefZ_CotMenu.GROUP_ID, color);
+		menu.AddRow(ChefZ_CotMenu.GROUP_ID, ChefZ_CotMenu.GROUP_LABEL, JMConstants.Lucide(ChefZ_CotMenu.GROUP_ICON), color, true, ChefZ_CotMenu.GROUP_ID);
 	}
 
-	/**
-	 * Das Untermenue der ChefZ-Gruppe fuellen.
-	 *
-	 * super leert das Menue und fuellt es aus CategoryGroupMembers
-	 * (:585-636). Fuer die ChefZ-Gruppe liefert diese statische Tabelle eine
-	 * LEERE Liste - sie wird bewusst nicht angefasst -, super hinterlaesst
-	 * also ein leeres, sauber geraeumtes Menue, in das hier die acht Zeilen
-	 * gehen.
-	 */
-	override protected void RebuildCategorySubMenu()
+	//! Oeffentlich, weil das Menue die Seite ueber ihren Namen aufruft.
+	void ChefZ_BuildGroupPage(UIActionFilterMenu menu)
 	{
-		super.RebuildCategorySubMenu();
-
-		if (!m_CategorySubMenu || m_CurrentGroup != ChefZ_CotMenu.GROUP_ID)
-		{
-			return;
-		}
-
-		array<ref ChefZ_CotCategory> categories = ChefZ_CotCategories.Get();
-		if (!categories)
-		{
-			return;
-		}
-
-		ChefZ_CotCategory category;
-		for (int i = 0; i < categories.Count(); i++)
-		{
-			category = categories.Get(i);
-			if (!category)
-			{
-				continue;
-			}
-
-			// MenuIdFor (:694) waere hier wirkungslos: es tauscht nur den
-			// leeren Text gegen MENU_ID_ALL, und keine FilterId ist leer.
-			m_CategorySubMenu.AddItem(category.GetFilterId(), category.GetLabel(), JMConstants.Lucide(category.GetIconName()));
-		}
-
-		RefreshCategorySubMenuColors();
-	}
-
-	/** Die aktive ChefZ-Zeile im Untermenue markieren. */
-	override protected void RefreshCategorySubMenuColors()
-	{
-		super.RefreshCategorySubMenuColors();
-
-		if (!m_CategorySubMenu || m_CurrentGroup != ChefZ_CotMenu.GROUP_ID || !m_Module)
-		{
-			return;
-		}
-
 		array<ref ChefZ_CotCategory> categories = ChefZ_CotCategories.Get();
 		if (!categories)
 		{
@@ -293,51 +200,31 @@ modded class JMObjectSpawnerForm
 			}
 
 			color = 0;
-			if (category.GetFilterId() == m_Module.m_CurrentType)
+			if (category.GetFilterId() == m_Current)
 			{
 				color = JMTheme.ACCENT;
 			}
 
-			m_CategorySubMenu.SetItemTextColor(category.GetFilterId(), color);
+			menu.AddRow(category.GetFilterId(), category.GetLabel(), JMConstants.Lucide(category.GetIconName()), color);
 		}
 	}
 
-	/**
-	 * Beschriftung einer ChefZ-Id.
-	 *
-	 * Nicht nur fuer das Untermenue: SelectCategory legt jede gewaehlte Id in
-	 * den Verlauf (:944, PushRecentCategory :962-976), und die Chips holen
-	 * ihre Beschriftung genau hier (:1011). Ohne diese Ueberschreibung liefe
-	 * COTs Suche in der statischen CategoryTable ins Leere und gaebe "" zurueck
-	 * (:672) - der Chip stuende dann ohne Text da.
-	 */
-	override protected string CategoryLabel(string id)
+	override protected bool PushRecent(string id)
 	{
-		ChefZ_CotCategory category = ChefZ_CotCategories.Find(id);
-		if (category)
+		if (ChefZ_CotCategories.Find(id))
 		{
-			return category.GetLabel();
+			return false;
 		}
 
-		return super.CategoryLabel(id);
+		return super.PushRecent(id);
 	}
+}
 
-	/**
-	 * Symbol einer ChefZ-Id. Ohne diese Ueberschreibung faellt COT auf das
-	 * Sammelsymbol "layers" zurueck (:686), und alle acht Kategorien saehen im
-	 * Verlauf gleich aus.
-	 */
-	override protected string CategoryIcon(string id)
-	{
-		ChefZ_CotCategory category = ChefZ_CotCategories.Find(id);
-		if (category)
-		{
-			return JMConstants.Lucide(category.GetIconName());
-		}
-
-		return super.CategoryIcon(id);
-	}
-
+// Eine Ueberschreibung: UpdateList faellt in zwei von drei Zweigen auf super
+// zurueck und geht nur bei einer der acht ChefZ-Kategorien eigene Wege.
+// TerjeCompatibilityCOT moddet dieselbe Klasse auf OnInit und UpdateItemStateType.
+modded class JMObjectSpawnerForm
+{
 	/**
 	 * Der Verteiler.
 	 *

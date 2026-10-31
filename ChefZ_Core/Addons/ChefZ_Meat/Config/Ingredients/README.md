@@ -40,7 +40,8 @@ Waran gibt kein Steak her.
 
 §27/§31/§32/§33: Fett, Knochen und Daerme kommen aus der Zerlegung und sind
 Vanilla-Klassen. ChefZ legt fuer sie KEINE eigene Klasse an — es waere eine
-zweite Sorte desselben Dings.
+zweite Sorte desselben Dings. `ChefZ_SausageCasing` ist keine zweite Sorte,
+sondern das Erzeugnis: aus den Innereien geschnitten, mehrere Stueck je Eingang.
 
 ### 2b. Keulen (`ChefZ_BeefLeg`, `ChefZ_PorkLeg`, `ChefZ_VenisonLeg`)
 

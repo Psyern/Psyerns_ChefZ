@@ -20,6 +20,16 @@
 // Layer: 4_World.
 //==============================================================================
 
+//! Der Bausatz der Muehle (31.10.2026). Aufstellen wie der Bienenstock-Bausatz,
+//! nur das Ergebnis ist ein anderes.
+class ChefZ_GrainMillKit extends ChefZ_BeehiveKit
+{
+    override string ChefZ_HiveClass()
+    {
+        return "ChefZ_GrainMill";
+    }
+}
+
 //! Die Getreidemuehle. Sie bietet PROCESS_MILL an; welcher Transform daran
 //! zuendet, entscheidet der ChefZ_ProcessingManager aus den Daten.
 //!

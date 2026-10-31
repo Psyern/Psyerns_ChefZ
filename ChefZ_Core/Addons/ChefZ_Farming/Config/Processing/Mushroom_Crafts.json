@@ -39,7 +39,7 @@
       ],
       "outputs": [
         {
-          "cls": "ChefZ_MushroomShelf",
+          "cls": "ChefZ_MushroomShelfKit",
           "quantity": 1,
           "quantityMode": "fixed"
         }
@@ -88,8 +88,47 @@
       "priority": 0
     },
     {
+      "id": "TR_PrepareMyceliumBag",
+      "_note": "Der ungeimpfte Beutel: 100 g Weizen in einem Lumpen. Weizen und nicht Reis: ChefZ_Wheat ist in Gramm gebunden (GrainIngredients.json).",
+      "process": "PROCESS_PREPARE_SPAWN",
+      "inputs": [
+        {
+          "slotId": "grain",
+          "match": {
+            "cls": "ChefZ_Wheat"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "consume": "amount",
+          "consumeAmount": 100.0
+        },
+        {
+          "slotId": "rag",
+          "match": {
+            "cls": "Rag"
+          },
+          "minCount": 1,
+          "maxCount": 1,
+          "unit": "PIECE",
+          "amount": {
+            "min": 1.0
+          },
+          "consume": "amount",
+          "consumeAmount": 1.0
+        }
+      ],
+      "outputs": [
+        {
+          "cls": "ChefZ_Mycelium_Empty",
+          "quantity": 1,
+          "quantityMode": "fixed"
+        }
+      ],
+      "priority": 0
+    },
+    {
       "id": "TR_SporesAgaricusToMycelium",
-      "_note": "Koernerbrut: Sporen auf 100 g Weizen ergeben einen Brutbeutel Myzel. Je Art ein Transform, weil das Ergebnis die Art traegt. Weizen und nicht Reis: ChefZ_Wheat ist in Gramm gebunden (GrainIngredients.json, GRAM, 1000), Reis nur als ganzes Stueck - 100 g aus einem Reispaket liessen sich nicht abziehen. Zwei Eingaenge, kein Werkzeug (Vanillas RecipeBase kennt zwei Zutatenplaetze, 01 V12).",
+      "_note": "Impfen: Sporen + leerer Brutbeutel ergeben Myzel der Art. Je Art ein Transform, weil das Ergebnis die Art traegt. Der Beutel entsteht in TR_PrepareMyceliumBag.",
       "process": "PROCESS_INOCULATE_SPAWN",
       "inputs": [
         {
@@ -102,14 +141,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -135,14 +173,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -168,14 +205,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -201,14 +237,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -234,14 +269,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -267,14 +301,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -300,14 +333,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -333,14 +365,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -366,14 +397,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -399,14 +429,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -432,14 +461,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -465,14 +493,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
@@ -498,14 +525,13 @@
           "consume": "whole"
         },
         {
-          "slotId": "grain",
+          "slotId": "bag",
           "match": {
-            "cls": "ChefZ_Wheat"
+            "cls": "ChefZ_Mycelium_Empty"
           },
           "minCount": 1,
           "maxCount": 1,
-          "consume": "amount",
-          "consumeAmount": 100.0
+          "consume": "whole"
         }
       ],
       "outputs": [
