@@ -523,6 +523,7 @@ class ChefZ_VisProbeServer
 		if (m_Cow)
 			m_Cow.SetDirection(Vector(cowDir[2], 0, -cowDir[0]));
 		m_FreshCows++;
+		m_Can.SetQuantity(0);
 		Print("[VISCHECK] fresh cow " + m_FreshCows.ToString() + " can=" + m_Can.GetQuantity().ToString());
 	}
 

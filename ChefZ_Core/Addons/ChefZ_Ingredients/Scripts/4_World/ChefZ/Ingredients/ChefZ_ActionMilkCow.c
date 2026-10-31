@@ -49,13 +49,12 @@ class ChefZ_ActionMilkCowCB extends ActionContinuousBaseCB
 	}
 }
 
-//! Beginnen wie CCTCursorNoRuinCheck, weitermachen auch an einer laufenden Kuh:
-//! CanContinue ruft sonst Can (CCTBase.c), und der Server braeche bei rund zwei
-//! Metern plus Kuhradius ab (Spieltest 31.10.2026: Abbruch nach rund fuenf Sekunden).
+//! Beginnen wie CCTCursorNoRuinCheck, weitermachen auch an einer fluechtenden Kuh:
+//! die Vorgabe brach in der Messung bei rund 19 m ab, und zwar ohne Milch.
 class ChefZ_CCTMilkCow extends CCTCursorNoRuinCheck
 {
-	//! Reicht fuer eine Kuh, die acht Sekunden lang weglaeuft.
-	static const float CONTINUE_DISTANCE = 15.0;
+	//! Reicht fuer eine Kuh, die acht Sekunden lang flieht.
+	static const float CONTINUE_DISTANCE = 40.0;
 
 	override bool CanContinue(PlayerBase player, ActionTarget target)
 	{
