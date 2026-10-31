@@ -68,15 +68,21 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 		m_CallbackClass   = ChefZ_ActionMilkCowCB;
 		m_CommandUID      = DayZPlayerConstants.CMD_ACTIONFB_CRAFTING;
 		m_FullBody        = true;
-		m_StanceMask      = DayZPlayerConstants.STANCEMASK_CROUCH;
+		// Stehend und hockend (31.10.2026): nur hockend fand der Spieler die
+		// Aktion nicht, und eine Kuh laesst sich auch im Stehen erreichen.
+		m_StanceMask      = DayZPlayerConstants.STANCEMASK_ERECT | DayZPlayerConstants.STANCEMASK_CROUCH;
 		m_SpecialtyWeight = UASoftSkillsWeight.PRECISE_LOW;
 		m_Text            = TEXT;
 		m_LockTargetOnUse = false;
 	}
 
+	//! Die Aktion haengt an der Kanne in der Hand. ContinuousInteractActionInput
+	//! sucht nur am Ziel (m_DetectFromItem = false, ActionInput.c:553) und haette
+	//! sie nie gefunden; das war der Grund, warum das Melken nie erschien
+	//! (Spieltest 31.10.2026). Dasselbe tut ActionSkinning mit dem Messer.
 	override typename GetInputType()
 	{
-		return ContinuousInteractActionInput;
+		return ContinuousDefaultActionInput;
 	}
 
 	/**
