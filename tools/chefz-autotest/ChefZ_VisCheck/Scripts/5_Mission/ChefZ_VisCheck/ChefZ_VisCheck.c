@@ -64,6 +64,33 @@ class ChefZ_VisCheck
         return FoodStageType.RAW;
     }
 
+    //! "drop <Klasse>": wirklich fallen lassen, Lage danach im Log (0/0 = wie gespawnt).
+    static ref array<EntityAI> s_Dropped = new array<EntityAI>();
+    static PlayerBase s_DropPlayer;
+
+    static void DropNow()
+    {
+        foreach (EntityAI item : s_Dropped)
+        {
+            bool ok = s_DropPlayer.ServerDropEntity(item);
+            Print("[VISCHECK] dropped " + item.GetType() + " ok=" + ok.ToString());
+        }
+        s_Dropped.Clear();
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(ChefZ_VisCheck.DropNow);
+        g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(ChefZ_VisCheck.DropReport, 8000, false);
+    }
+
+    static void DropReport()
+    {
+        array<Object> found = new array<Object>();
+        g_Game.GetObjectsAtPosition(s_DropPlayer.GetPosition(), 4.0, found, null);
+        foreach (Object o : found)
+        {
+            if (o.IsKindOf("ChefZ_CookbookItem") || o.IsKindOf("ChefZ_Perch"))
+                Print("[VISCHECK] liegt " + o.GetType() + " ypr=" + o.GetOrientation().ToString() + " pos=" + o.GetPosition().ToString());
+        }
+    }
+
     static void Spawn(PlayerBase player)
     {
         array<ref TStringArray> lines;
@@ -114,6 +141,17 @@ class ChefZ_VisCheck
             {
                 EntityAI carried = player.GetInventory().CreateInInventory(cls);
                 Print("[VISCHECK] player " + cls + " ok=" + (carried != null).ToString());
+                continue;
+            }
+            if (mode == "drop")
+            {
+                EntityAI dropped = player.GetInventory().CreateInInventory(cls);
+                Print("[VISCHECK] drop " + cls + " ok=" + (dropped != null).ToString());
+                s_DropPlayer = player;
+                if (dropped)
+                    s_Dropped.Insert(dropped);
+                if (dropped)
+                    g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(ChefZ_VisCheck.DropNow, 20000, false);
                 continue;
             }
             if (mode == "call")

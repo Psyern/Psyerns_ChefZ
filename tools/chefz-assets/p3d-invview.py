@@ -28,7 +28,8 @@ low = [min(p[i] for p in points) for i in range(3)]
 high = [max(p[i] for p in points) for i in range(3)]
 center = [(low[i] + high[i]) * 0.5 for i in range(3)]
 target = list(center)
-target[axis] += max(high[i] - low[i] for i in range(3))
+# Innerhalb der Huelle: der Punkt zaehlt zur Bounding Box, ausserhalb schwebt das Item beim Fallenlassen.
+target[axis] += (high[axis] - low[axis]) * 0.45
 done = False
 for lod in lods:
     for name, selection in lod.selections.items():
