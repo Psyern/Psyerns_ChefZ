@@ -321,6 +321,7 @@ class CfgVehicles
     // ihre Elternklasse nennen koennen, ohne sie neu zu erfinden.
     class AnimalBase;
     class Animal_VulpesVulpes;
+    class DeadFox;
 
     // ------------------------------------------------------------------------
     // Gemeinsame Configbasis dieses Moduls.
@@ -2311,6 +2312,16 @@ class CfgVehicles
             startnode = "Master_SM";
             skeletonName = "vulpes_vulpes_skeleton.xob";
         };
+    };
+    // Der tote Waschbaer (31.10.2026): das Tier tauscht sich beim Sterben gegen
+    // dieses Item (ChefZ_Raccoon.c). Vom Fuchs: Griff, Zerlegen, Fleisch und Fell.
+    // Modell: raccoon.p3d auf die Seite gelegt (tools/chefz-assets/make-dead-animal.py).
+    class ChefZ_DeadRaccoon : DeadFox
+    {
+        scope = 2;
+        displayName = "#STR_CHEFZ_ANIMAL_RACCOON";
+        descriptionShort = "#STR_CHEFZ_ANIMAL_RACCOON_DESC";
+        model = "\ChefZ\ChefZ_Items\raccoon\models\raccoon_dead.p3d";
     };
 };
 
