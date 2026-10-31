@@ -142,6 +142,35 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 		return cow.ChefZ_CanBeMilked();
 	}
 
+	//! Die Kuh bleibt beim Melken stehen (Spieltest 31.10.2026): lief sie weiter,
+	//! brach die Aktion nach rund fuenf Sekunden ohne Milch ab. OnEndServer laeuft
+	//! auch beim Abbruch und gibt sie wieder frei (Muster: ZombieBase.c:1068, :1099).
+	protected void ChefZ_KeepCowIdle(ActionData action_data, bool keepIdle)
+	{
+		if (!action_data || !action_data.m_Target)
+			return;
+
+		Animal_BosTaurusF cow;
+		if (!Class.CastTo(cow, action_data.m_Target.GetObject()))
+			return;
+
+		AIAgent agent = cow.GetAIAgent();
+		if (agent)
+			agent.SetKeepInIdle(keepIdle);
+	}
+
+	override void OnStartServer(ActionData action_data)
+	{
+		super.OnStartServer(action_data);
+		ChefZ_KeepCowIdle(action_data, true);
+	}
+
+	override void OnEndServer(ActionData action_data)
+	{
+		super.OnEndServer(action_data);
+		ChefZ_KeepCowIdle(action_data, false);
+	}
+
 	/**
 	 * Serverseitig: die Kuh sperrt sich, dann entsteht die Milch.
 	 *

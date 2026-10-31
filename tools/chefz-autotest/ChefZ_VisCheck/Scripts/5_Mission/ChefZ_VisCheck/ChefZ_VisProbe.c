@@ -108,6 +108,14 @@ class ChefZ_VisProbeServer
 	//! "probe reuse": den gespeicherten Stock laden, vor den Spieler stellen, dagegen laufen.
 	void StartPersist(string mode)
 	{
+		if (mode == "cow")
+		{
+			Cleanup();
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCan, 80000, false);
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FreshCow, 100000, false);
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CowReport, 290000, false);
+			return;
+		}
 		array<Object> leftovers = new array<Object>();
 		array<CargoBase> leftoverCargos = new array<CargoBase>();
 		g_Game.GetObjectsAtPosition(m_Player.GetPosition(), 40.0, leftovers, leftoverCargos);
@@ -352,9 +360,9 @@ class ChefZ_VisProbeServer
 		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(KillRaccoon, 4000, false);
 
 		Print("[VISCHECK] actions ready");
-		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(MixMilk, 40000, false);
-		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCan, 50000, false);
-		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FinalReport, 110000, false);
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(MixMilk, 120000, false);
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCan, 130000, false);
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FinalReport, 200000, false);
 	}
 
 	protected void ChefZ_ReportBehaviour(string cls)
@@ -408,6 +416,35 @@ class ChefZ_VisProbeServer
 		Print("[VISCHECK] milk bottle liquid=" + m_Bottle.GetLiquidType().ToString() + " qty=" + m_Bottle.GetQuantity().ToString() + " powder " + before.ToString() + " -> " + m_Powder.GetQuantity().ToString());
 	}
 
+	void CowReport()
+	{
+		if (m_Can)
+			Print("[VISCHECK] can after milking qty=" + m_Can.GetQuantity().ToString());
+		if (m_Cow)
+			Print("[VISCHECK] cow moved=" + vector.Distance(m_Cow.GetPosition(), m_CowStart).ToString());
+		Print("[VISCHECK] report probe done");
+	}
+
+	protected vector m_CowStart;
+	protected int m_FreshCows;
+
+	//! Alle 20 s eine neue Kuh vor den Spieler: jeder Melkversuch beginnt gleich.
+	void FreshCow()
+	{
+		if (m_Cow)
+			g_Game.ObjectDelete(m_Cow);
+		vector cowDir = m_Player.GetDirection();
+		cowDir[1] = 0;
+		cowDir.Normalize();
+		m_Cow = g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + cowDir * 1.8), ECE_PLACE_ON_SURFACE | ECE_INITAI | ECE_CREATEPHYSICS);
+		if (m_Cow)
+			m_Cow.SetDirection(Vector(cowDir[2], 0, -cowDir[0]));
+		m_FreshCows++;
+		Print("[VISCHECK] fresh cow " + m_FreshCows.ToString() + " can=" + m_Can.GetQuantity().ToString());
+		if (m_FreshCows < 9)
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FreshCow, 20000, false);
+	}
+
 	void GiveCan()
 	{
 		if (m_Powder)
@@ -419,13 +456,16 @@ class ChefZ_VisProbeServer
 	{
 		m_Can = ItemBase.Cast(m_Player.GetHumanInventory().CreateInHands("ChefZ_MilkCan"));
 		Print("[VISCHECK] can in hands=" + (m_Can != null).ToString() + " qty=" + m_Can.GetQuantity().ToString());
-		// Ohne KI: die Kuh bleibt stehen, damit der Spieler sie mit dem Fadenkreuz treffen kann.
+		// Mit KI wie im Spiel: die Kuh darf sich bewegen.
 		vector cowDir = m_Player.GetDirection();
 		cowDir[1] = 0;
 		cowDir.Normalize();
-		m_Cow = g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + cowDir * 1.8), ECE_PLACE_ON_SURFACE | ECE_CREATEPHYSICS);
+		m_Cow = g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + cowDir * 1.8), ECE_PLACE_ON_SURFACE | ECE_INITAI | ECE_CREATEPHYSICS);
 		if (m_Cow)
+		{
 			m_Cow.SetDirection(Vector(cowDir[2], 0, -cowDir[0]));
+			m_CowStart = m_Cow.GetPosition();
+		}
 		Print("[VISCHECK] cow=" + (m_Cow != null).ToString());
 	}
 
@@ -465,6 +505,20 @@ class ChefZ_VisProbeClient
 			return;
 		m_Time += dt;
 		vector pos = player.GetPosition();
+		m_RunLog -= dt;
+		if (m_Stage == 4 && m_RunLog <= 0)
+		{
+			m_RunLog = 1.0;
+			ActionBase running = player.GetActionManager().GetRunningAction();
+			string runName = "none";
+			if (running)
+				runName = running.Type().ToString();
+			Object nearCow = FindNear(player, "Animal_BosTaurusF", 0, 99);
+			float cowDist = -1;
+			if (nearCow)
+				cowDist = vector.Distance(pos, nearCow.GetPosition());
+			Print("[VISCHECK] run " + runName + " cow=" + cowDist.ToString());
+		}
 		if (m_WalkLeft > 0)
 		{
 			m_WalkLeft -= dt;
@@ -487,6 +541,13 @@ class ChefZ_VisProbeClient
 		if (m_Time < m_NextScan)
 			return;
 		m_NextScan = m_Time + 0.5;
+		if (FindNear(player, "Animal_BosTaurusF", 0, 99))
+		{
+			m_ActionsPhase = true;
+			m_Stage = 3;
+			m_NextQuery = m_Time + 1.0;
+			return;
+		}
 		if (FindNear(player, "ChefZ_HoneyExtractor", 2, 8))
 		{
 			m_ActionsPhase = true;
@@ -600,6 +661,20 @@ class ChefZ_VisProbeClient
 		}
 		if (m_Stage == 2)
 		{
+			Force(player, FindNear(player, "ChefZ_HoneyExtractor", 8, 8), "extractorFull");
+			m_Stage = 10;
+			return;
+		}
+		if (m_Stage == 10)
+		{
+			Report(player, m_ForcedTag);
+			Print("[VISCHECK] press F 75 extractorfull");
+			m_NextQuery = m_Time + 80.0;
+			m_Stage = 11;
+			return;
+		}
+		if (m_Stage == 11)
+		{
 			Force(player, null, "");
 			m_Stage = 3;
 			return;
@@ -613,23 +688,34 @@ class ChefZ_VisProbeClient
 			if (m_MilkOffered)
 			{
 				Print("[VISCHECK] shot cow_action");
-				Print("[VISCHECK] press LMB 11 milk");
+				Print("[VISCHECK] press LMB 11 milk" + m_MilkTries.ToString());
 				m_Stage = 4;
 				m_NextQuery = m_Time + 13.0;
 				return;
 			}
 			m_Looks++;
-			Print("[VISCHECK] look 50 " + m_Looks.ToString());
+			if (m_Looks <= 1)
+				Print("[VISCHECK] look 50 " + m_Looks.ToString());
 			return;
 		}
 		if (m_Stage == 4)
 		{
 			Print("[VISCHECK] milk can client qty=" + ItemBase.Cast(held).GetQuantity().ToString());
+			// Noch leer: die Kuh ist weg gelaufen. Wie ein Spieler erneut anpeilen.
+			if (m_MilkTries < 8)
+			{
+				m_MilkTries++;
+				m_MilkOffered = false;
+				m_Stage = 3;
+				return;
+			}
 			m_Stage = 5;
 		}
 	}
 
 	protected bool m_MilkOffered;
+	protected int m_MilkTries;
+	protected float m_RunLog;
 	protected int m_Looks;
 	protected int m_Stage;
 }

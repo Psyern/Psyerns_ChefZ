@@ -14,6 +14,7 @@ public class VisS {
   [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
   [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
   [DllImport("user32.dll")] public static extern void mouse_event(uint flags, int dx, int dy, uint data, UIntPtr extra);
+  [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
   public struct RECT { public int L, T, R, B; }
 }
 "@
@@ -72,6 +73,30 @@ while ((Get-Date) -lt $deadline) {
     if ($seen.ContainsKey($name)) { continue }
     $seen[$name] = $true
     [VisS]::mouse_event(1, 0, [int]$m.Groups[1].Value, 0, [UIntPtr]::Zero)
+  }
+  # "[VISCHECK] wheel <x> <y> <rasten> <id>" und "click <x> <y> <id>": Maus auf dem Bildschirm.
+  foreach ($m in [regex]::Matches($text, "\[VISCHECK\] wheel (\d+) (\d+) (-?\d+) (\S+)")) {
+    $name = "wheel_" + $m.Groups[4].Value
+    if ($seen.ContainsKey($name)) { continue }
+    $seen[$name] = $true
+    [VisS]::SetCursorPos([int]$m.Groups[1].Value, [int]$m.Groups[2].Value) | Out-Null
+    Start-Sleep -Milliseconds 300
+    for ($i = 0; $i -lt [Math]::Abs([int]$m.Groups[3].Value); $i++) {
+      $delta = 120
+      if ([int]$m.Groups[3].Value -lt 0) { $delta = -120 }
+      [VisS]::mouse_event(0x0800, 0, 0, [uint32]($delta -band 0xFFFFFFFFL), [UIntPtr]::Zero)
+      Start-Sleep -Milliseconds 80
+    }
+  }
+  foreach ($m in [regex]::Matches($text, "\[VISCHECK\] click (\d+) (\d+) (\S+)")) {
+    $name = "click_" + $m.Groups[3].Value
+    if ($seen.ContainsKey($name)) { continue }
+    $seen[$name] = $true
+    [VisS]::SetCursorPos([int]$m.Groups[1].Value, [int]$m.Groups[2].Value) | Out-Null
+    Start-Sleep -Milliseconds 300
+    [VisS]::mouse_event(2, 0, 0, 0, [UIntPtr]::Zero)
+    Start-Sleep -Milliseconds 300
+    [VisS]::mouse_event(4, 0, 0, 0, [UIntPtr]::Zero)
   }
   # "[VISCHECK] press <F|LMB> <sekunden> <id>": Taste wirklich halten.
   foreach ($m in [regex]::Matches($text, "\[VISCHECK\] press (\S+) (\d+) (\S+)")) {

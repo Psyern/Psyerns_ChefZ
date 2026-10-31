@@ -17,14 +17,10 @@ modded class JMObjectSpawnerProperties
 			m_LiquidType.ChefZ_VisOpen();
 	}
 
-	//! Die Milch-Zeile waehlen wie ein Klick: Dropdown zu, Kopfzeile zeigt den Text.
-	void ChefZ_VisPickMilk()
+	//! Was Mausrad und Klick im Dropdown bewirkt haben.
+	void ChefZ_VisReport()
 	{
-		int row = m_LiquidValues.Find(LIQUID_CHEFZ_MILK);
-		Print("[VISCHECK] cot pick row=" + row.ToString());
-		m_LiquidType.SetSelection(row, true);
-		m_LiquidType.Close();
-		Print("[VISCHECK] cot picked value=" + m_LiquidValue.ToString());
+		Print("[VISCHECK] cot selection=" + m_LiquidType.GetSelection().ToString() + " open=" + m_LiquidType.IsOpen().ToString() + " milkRow=" + m_LiquidValues.Find(LIQUID_CHEFZ_MILK).ToString());
 	}
 
 	void ChefZ_VisRead(out float health, out float temp, out float quantity, out int itemState)
@@ -48,9 +44,9 @@ modded class JMObjectSpawnerForm
 			m_Props.ChefZ_VisOpen(cls);
 	}
 
-	void ChefZ_VisPickMilk()
+	void ChefZ_VisReport()
 	{
-		m_Props.ChefZ_VisPickMilk();
+		m_Props.ChefZ_VisReport();
 	}
 
 	//! Wie der Spawn-Knopf in der Betriebsart "Spielerposition" (jmobjectspawnerform.c:862).
@@ -112,23 +108,41 @@ class ChefZ_VisCotClient
 		JMObjectSpawnerForm picked = JMObjectSpawnerForm.Cast(m_Module.GetForm());
 		if (m_Stage == 3 && m_Time > 27)
 		{
-			m_Stage = 4;
-			picked.ChefZ_VisPickMilk();
+			m_Stage = 40;
+			Print("[VISCHECK] wheel 1792 1200 -10 list");
 			return;
 		}
-		if (m_Stage == 4 && m_Time > 30)
+		if (m_Stage == 40 && m_Time > 30)
+		{
+			m_Stage = 41;
+			Print("[VISCHECK] shot cot_scrolled");
+			return;
+		}
+		if (m_Stage == 41 && m_Time > 33)
+		{
+			m_Stage = 42;
+			Print("[VISCHECK] click 1792 1185 row");
+			return;
+		}
+		if (m_Stage == 42 && m_Time > 36)
+		{
+			m_Stage = 4;
+			picked.ChefZ_VisReport();
+			return;
+		}
+		if (m_Stage == 4 && m_Time > 37)
 		{
 			m_Stage = 5;
 			Print("[VISCHECK] shot cot_milk");
 			return;
 		}
-		if (m_Stage == 5 && m_Time > 34)
+		if (m_Stage == 5 && m_Time > 41)
 		{
 			m_Stage = 6;
 			picked.ChefZ_VisSpawn(m_Class);
 			return;
 		}
-		if (m_Stage == 6 && m_Time > 40)
+		if (m_Stage == 6 && m_Time > 47)
 		{
 			m_Stage = 7;
 			array<Object> objects = new array<Object>();
