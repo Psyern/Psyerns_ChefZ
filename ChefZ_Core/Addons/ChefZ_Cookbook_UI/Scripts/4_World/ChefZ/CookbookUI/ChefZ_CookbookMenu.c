@@ -70,6 +70,8 @@ class ChefZ_CookbookUIMenu : UIScriptedMenu
     //! LocalPress() nichts mehr, und ChefZ_CookbookInput.Poll oeffnet nicht
     //! sofort wieder, falls die Mission nach dem Menue aktualisiert wird.
     protected bool  m_ChefZ_ToggleArmed;
+    //! Die Seiten sind quadratisch; das Bild wird einmal auf ein Quadrat gesetzt.
+    protected bool  m_ChefZ_ImageFitted;
 
     protected TextWidget          m_ChefZ_Progress;
     protected WrapSpacerWidget    m_ChefZ_List;
@@ -113,16 +115,67 @@ class ChefZ_CookbookUIMenu : UIScriptedMenu
     override void OnShow()
     {
         super.OnShow();
+        ChefZ_SetGameplayInput(false);
         ChefZ_RequestStateIfEmpty();
     }
 
     override void OnHide()
     {
         super.OnHide();
+        ChefZ_SetGameplayInput(true);
         // Die Instanz haelt ChefZ_CookbookUIHost. Freigegeben wird im naechsten
         // Bild, nicht mitten in dem Aufruf, der sie gerade schliesst.
         if (g_Game)
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).Call(ChefZ_CookbookUIHost.Release);
+    }
+
+    //! Bei offenem Buch steht der Spieler still und HUD und Schnellleiste sind
+    //! weg (Spieltest 31.10.2026). UIScriptedMenu.LockControls allein laesst die
+    //! Maus weiter das Blickfeld drehen; Vanillas Menues setzen dieselbe Sperre
+    //! (MissionGameplay.PlayerControlDisable, InGameMenu.c:143).
+    protected void ChefZ_SetGameplayInput(bool enabled)
+    {
+        if (!g_Game)
+            return;
+        Mission mission = g_Game.GetMission();
+        if (!mission)
+            return;
+
+        if (enabled)
+            mission.PlayerControlEnable(true);
+        else
+            mission.PlayerControlDisable(INPUT_EXCLUDE_ALL);
+
+        Hud hud = mission.GetHud();
+        if (!hud)
+            return;
+        hud.ShowHudUI(enabled && g_Game.GetProfileOption(EDayZProfilesOptions.HUD));
+        hud.ShowQuickbarUI(enabled && g_Game.GetProfileOption(EDayZProfilesOptions.QUICKBAR));
+    }
+
+    //! Die Seite ist 1024 x 1024; das Layout gibt dem Bild ein hohes Rechteck, und
+    //! "fixaspect" wirkt zusammen mit "stretch" nicht (Spieltest: verzogen). Sobald
+    //! die Masse feststehen, wird es zum Quadrat und mittig in seine Spalte gesetzt.
+    protected void ChefZ_FitImage()
+    {
+        if (m_ChefZ_ImageFitted || !m_ChefZ_Image)
+            return;
+        float screenW;
+        float screenH;
+        m_ChefZ_Image.GetScreenSize(screenW, screenH);
+        if (screenW <= 0 || screenH <= 0)
+            return;
+        float side = Math.Min(screenW, screenH);
+        float relW;
+        float relH;
+        m_ChefZ_Image.GetSize(relW, relH);
+        float posX;
+        float posY;
+        m_ChefZ_Image.GetPos(posX, posY);
+        float fittedW = relW * side / screenW;
+        m_ChefZ_Image.SetPos(posX + (relW - fittedW) * 0.5, posY);
+        m_ChefZ_Image.SetSize(fittedW, relH * side / screenH);
+        m_ChefZ_ImageFitted = true;
     }
 
     override bool OnClick(Widget w, int x, int y, int button)
@@ -149,6 +202,8 @@ class ChefZ_CookbookUIMenu : UIScriptedMenu
     override void Update(float timeslice)
     {
         super.Update(timeslice);
+
+        ChefZ_FitImage();
 
         if (m_ChefZ_Opening)
         {
