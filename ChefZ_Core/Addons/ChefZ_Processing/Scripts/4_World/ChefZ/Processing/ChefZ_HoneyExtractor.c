@@ -137,6 +137,24 @@ class ChefZ_HoneyExtractor extends ChefZ_ProcessingStation_Base
         return true;
     }
 
+    //! Die Aktion erscheint, sobald ein entdeckelter Rahmen und ein leeres Glas
+    //! eingesetzt sind, auch wenn der Client-Abgleich scheitert (Spieltest
+    //! 31.10.2026 "Aktion fehlt"). Ob wirklich geschleudert wird, entscheidet der
+    //! Server; er gibt NO_MATCH ohne Verbrauch zurueck.
+    override bool ChefZ_OffersActionWithoutMatch()
+    {
+        return ChefZ_FindFrameWithHoney() != null && ChefZ_FindEmptyJar() != null;
+    }
+
+    //! Eine beladene Schleuder wird nicht aufgehoben. Sonst steht "In die Hand"
+    //! an erster Stelle und das Schleudern erst nach dem Mausrad (Spieltest 31.10.2026).
+    override bool CanPutIntoHands(EntityAI parent)
+    {
+        if (!super.CanPutIntoHands(parent))
+            return false;
+        return !ChefZ_OffersActionWithoutMatch();
+    }
+
     /**
      * Ein Glas fertig: Glas -> Honig im eigenen Platz, Rahmen eine Einheit
      * weniger, leere Rahmen tauschen, naechstes Glas anstossen.
