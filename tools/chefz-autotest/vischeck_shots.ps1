@@ -13,6 +13,7 @@ public class VisS {
   [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
   [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
   [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
+  [DllImport("user32.dll")] public static extern void mouse_event(uint flags, int dx, int dy, uint data, UIntPtr extra);
   public struct RECT { public int L, T, R, B; }
 }
 "@
@@ -64,6 +65,32 @@ while ((Get-Date) -lt $deadline) {
     [VisS]::keybd_event(0x57, 0x11, 0, [UIntPtr]::Zero)
     Start-Sleep -Seconds 5
     [VisS]::keybd_event(0x57, 0x11, 2, [UIntPtr]::Zero)
+  }
+  # "[VISCHECK] look <dy> <id>": Maus nach unten bewegen, um auf ein Ziel zu blicken.
+  foreach ($m in [regex]::Matches($text, "\[VISCHECK\] look (-?\d+) (\S+)")) {
+    $name = "look_" + $m.Groups[2].Value
+    if ($seen.ContainsKey($name)) { continue }
+    $seen[$name] = $true
+    [VisS]::mouse_event(1, 0, [int]$m.Groups[1].Value, 0, [UIntPtr]::Zero)
+  }
+  # "[VISCHECK] press <F|LMB> <sekunden> <id>": Taste wirklich halten.
+  foreach ($m in [regex]::Matches($text, "\[VISCHECK\] press (\S+) (\d+) (\S+)")) {
+    $name = "press_" + $m.Groups[3].Value
+    if ($seen.ContainsKey($name)) { continue }
+    $seen[$name] = $true
+    $client = Get-Process DayZDiag_x64 -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 -and $_.MainWindowTitle -notmatch "Server|Console" } | Select-Object -First 1
+    if (-not $client) { continue }
+    [VisS]::SetForegroundWindow($client.MainWindowHandle) | Out-Null
+    Start-Sleep -Milliseconds 200
+    if ($m.Groups[1].Value -eq "LMB") {
+      [VisS]::mouse_event(2, 0, 0, 0, [UIntPtr]::Zero)
+      Start-Sleep -Seconds ([int]$m.Groups[2].Value)
+      [VisS]::mouse_event(4, 0, 0, 0, [UIntPtr]::Zero)
+    } else {
+      [VisS]::keybd_event(0x46, 0x21, 0, [UIntPtr]::Zero)
+      Start-Sleep -Seconds ([int]$m.Groups[2].Value)
+      [VisS]::keybd_event(0x46, 0x21, 2, [UIntPtr]::Zero)
+    }
   }
   if ($text.Contains("[VISCHECK] client done")) { break }
 }

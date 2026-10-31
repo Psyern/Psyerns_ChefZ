@@ -113,7 +113,7 @@ class ChefZ_VisCheck
         {
             string mode = l.Get(0);
             string cls = l.Get(1);
-            if (mode == "preview" || mode == "localworld")
+            if (mode == "preview" || mode == "localworld" || mode == "cot")
                 continue;
             if (mode == "hands")
             {
@@ -420,6 +420,10 @@ modded class MissionGameplay
     protected float m_ChefZ_VisEndAt;
 
     //! Neue Listenzeilen: hands, probe, und mehrseitige Vorschau ("page" statt einmaligem Bild).
+#ifdef JM_COT
+    protected ref ChefZ_VisCotClient m_ChefZ_VisCot;
+#endif
+
     protected void ChefZ_VisUpdateAudit(float timeslice)
     {
         if (!m_ChefZ_VisProbe && !m_ChefZ_VisHands && !m_ChefZ_VisPaged)
@@ -436,8 +440,16 @@ modded class MissionGameplay
                     m_ChefZ_VisHands = new ChefZ_VisHandsClient();
                 if (mode == "page")
                     m_ChefZ_VisPaged = true;
+#ifdef JM_COT
+                if (mode == "cot" && !m_ChefZ_VisCot)
+                    m_ChefZ_VisCot = new ChefZ_VisCotClient(l.Get(1));
+#endif
             }
         }
+#ifdef JM_COT
+        if (m_ChefZ_VisCot)
+            m_ChefZ_VisCot.Update(timeslice);
+#endif
         if (m_ChefZ_VisProbe)
             m_ChefZ_VisProbe.Update(timeslice);
         if (m_ChefZ_VisHands)

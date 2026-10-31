@@ -67,7 +67,8 @@ class ChefZ_VisProbeServer
 	static const float OBSTACLE_AHEAD = 2.5;
 	static const int LANE_MS = 11000;
 	//! "kit:<Klasse>" baut wie der Spieler ueber OnPlacementComplete auf.
-	static ref TStringArray LANES = {"ChefZ_Beehive", "ChefZ_BeehiveDouble", "kit:ChefZ_BeehiveKit", "kit:ChefZ_BeehiveDoubleKit"};
+	//! "yaw:<Grad>:<Klasse>" dreht das Hindernis (Anlauf von der Seite), "drop:<Klasse>" kommt aus der Hand.
+	static ref TStringArray LANES = {"ChefZ_Beehive", "ChefZ_BeehiveDouble", "kit:ChefZ_BeehiveKit", "kit:ChefZ_BeehiveDoubleKit", "yaw:90:ChefZ_Beehive", "yaw:90:ChefZ_BeehiveDouble", "yaw:180:ChefZ_BeehiveDouble", "yaw:270:ChefZ_BeehiveDouble", "drop:ChefZ_Beehive", "drop:ChefZ_BeehiveDouble"};
 	static ref TStringArray WATCH = {"ChefZ_BeehiveDouble", "ChefZ_Beehive"};
 
 	protected PlayerBase m_Player;
@@ -232,6 +233,29 @@ class ChefZ_VisProbeServer
 					m_Obstacle = candidate;
 			}
 		}
+		else if (cls.IndexOf("drop:") == 0)
+		{
+			string dropClass = cls.Substring(5, cls.Length() - 5);
+			EntityAI carried = m_Player.GetHumanInventory().CreateInHands(dropClass);
+			Print("[VISCHECK] drop lane " + dropClass + " inHands=" + (carried != null).ToString());
+			if (carried)
+			{
+				bool droppedOk = m_Player.ServerDropEntity(carried);
+				Print("[VISCHECK] drop lane dropped=" + droppedOk.ToString());
+				g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FinishDrop, 2500, false, carried);
+				m_Obstacle = carried;
+			}
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(NextLane, LANE_MS + 3000, false);
+			return;
+		}
+		else if (cls.IndexOf("yaw:") == 0)
+		{
+			TStringArray parts = new TStringArray();
+			cls.Split(":", parts);
+			m_Obstacle = g_Game.CreateObjectEx(parts.Get(2), pos, ECE_PLACE_ON_SURFACE);
+			if (m_Obstacle)
+				m_Obstacle.SetOrientation(Vector(parts.Get(1).ToFloat(), 0, 0));
+		}
 		else
 		{
 			m_Obstacle = g_Game.CreateObjectEx(cls, pos, ECE_PLACE_ON_SURFACE);
@@ -251,6 +275,24 @@ class ChefZ_VisProbeServer
 			Print("[VISCHECK] obstacle FEHLT " + cls);
 		}
 		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(NextLane, LANE_MS, false);
+	}
+
+	//! Fallengelassen: Physik protokollieren, dann vor den Spieler, weil er sonst darin steht.
+	void FinishDrop(EntityAI item)
+	{
+		if (!item)
+			return;
+		string info = " body=" + dBodyIsSet(item).ToString();
+		if (dBodyIsSet(item))
+		{
+			int layer = dBodyGetInteractionLayer(item);
+			info = info + " layer=" + layer.ToString() + " vsChar=" + dGetInteractionLayer(item, PhxInteractionLayers.CHARACTER, layer).ToString() + " dynamic=" + dBodyIsDynamic(item).ToString();
+		}
+		Print("[VISCHECK] dropped obstacle " + item.GetType() + info);
+		vector dir = m_Player.GetDirection();
+		dir[1] = 0;
+		dir.Normalize();
+		item.SetPosition(Ground(m_Player.GetPosition() + dir * OBSTACLE_AHEAD));
 	}
 
 	protected EntityAI SpawnExtractor(vector pos, int frames, int jars)
@@ -310,9 +352,9 @@ class ChefZ_VisProbeServer
 		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(KillRaccoon, 4000, false);
 
 		Print("[VISCHECK] actions ready");
-		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(MixMilk, 18000, false);
-		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCan, 30000, false);
-		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FinalReport, 60000, false);
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(MixMilk, 40000, false);
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCan, 50000, false);
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FinalReport, 110000, false);
 	}
 
 	protected void ChefZ_ReportBehaviour(string cls)
@@ -377,7 +419,13 @@ class ChefZ_VisProbeServer
 	{
 		m_Can = ItemBase.Cast(m_Player.GetHumanInventory().CreateInHands("ChefZ_MilkCan"));
 		Print("[VISCHECK] can in hands=" + (m_Can != null).ToString() + " qty=" + m_Can.GetQuantity().ToString());
-		m_Cow = g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + m_Dir * 1.6), ECE_PLACE_ON_SURFACE | ECE_INITAI | ECE_CREATEPHYSICS);
+		// Ohne KI: die Kuh bleibt stehen, damit der Spieler sie mit dem Fadenkreuz treffen kann.
+		vector cowDir = m_Player.GetDirection();
+		cowDir[1] = 0;
+		cowDir.Normalize();
+		m_Cow = g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + cowDir * 1.8), ECE_PLACE_ON_SURFACE | ECE_CREATEPHYSICS);
+		if (m_Cow)
+			m_Cow.SetDirection(Vector(cowDir[2], 0, -cowDir[0]));
 		Print("[VISCHECK] cow=" + (m_Cow != null).ToString());
 	}
 
@@ -448,6 +496,9 @@ class ChefZ_VisProbeClient
 		foreach (string cls : ChefZ_VisProbeServer.WATCH)
 		{
 			Object o = FindNear(player, cls, 0, 99);
+			// Noch an den Fuessen (fallengelassen): erst laufen, wenn es vorn steht.
+			if (o && vector.Distance(pos, o.GetPosition()) < 1.2)
+				continue;
 			if (o && o != m_WalkTarget)
 			{
 				m_WalkTarget = o;
@@ -493,7 +544,6 @@ class ChefZ_VisProbeClient
 			line = line + " hands=" + held.GetType();
 		if (m_Forced)
 			line = line + " dist=" + vector.Distance(player.GetPosition(), m_Forced.GetPosition()).ToString();
-		ActionBase toStart;
 		array<typename> inputs = {ContinuousInteractActionInput, InteractActionInput, ContinuousDefaultActionInput, DefaultActionInput};
 		foreach (typename inputType : inputs)
 		{
@@ -504,29 +554,11 @@ class ChefZ_VisProbeClient
 			foreach (ActionBase action : possible)
 			{
 				line = line + " " + action.Type().ToString();
-				string name = action.Type().ToString();
-				if (name == "ChefZ_ActionProcessAtStation" || name == "ChefZ_ActionMilkCow")
-					toStart = action;
+				if (action.Type() == ChefZ_ActionMilkCow)
+					m_MilkOffered = true;
 			}
 		}
 		Print(line);
-		if (tag == "cow" && m_Forced)
-		{
-			ActionBase milk = ActionManagerBase.GetAction(ChefZ_ActionMilkCow);
-			vector hit = m_Forced.GetPosition();
-			hit[1] = hit[1] + 1.0;
-			ActionTarget real = new ActionTarget(m_Forced, null, -1, hit, -1);
-			ItemBase can = ItemBase.Cast(held);
-			Print("[VISCHECK] cow direct can=" + milk.Can(player, real, can).ToString() + " canBeMilked=" + Animal_BosTaurusF.Cast(m_Forced).ChefZ_CanBeMilked().ToString());
-		}
-		if (toStart && m_Started.Find(tag) < 0 && tag != "extractorFull")
-		{
-			m_Started.Insert(tag);
-			ActionTarget target = manager.FindActionTarget();
-			ItemBase item = ItemBase.Cast(held);
-			manager.PerformActionStart(toStart, target, item);
-			Print("[VISCHECK] action started " + toStart.Type().ToString() + " on " + tag);
-		}
 	}
 
 	protected void Force(PlayerBase player, Object target, string tag)
@@ -542,29 +574,63 @@ class ChefZ_VisProbeClient
 			manager.ClearForceTarget();
 	}
 
+	//! Wie ein Spieler: Ziel anpeilen und die Taste wirklich halten (vischeck_shots.ps1).
+	//! Ein Ziel darf waehrend der Aktion nicht wechseln, sonst bricht sie ab.
 	protected void QueryActions(PlayerBase player)
 	{
 		m_NextQuery = m_Time + 1.5;
-		if (m_Forced)
+		EntityAI held = player.GetHumanInventory().GetEntityInHands();
+		if (m_Stage == 0)
+		{
+			Object extractor = FindNear(player, "ChefZ_HoneyExtractor", 2, 2);
+			if (!extractor)
+				return;
+			Force(player, extractor, "extractorSmall");
+			m_Stage = 1;
+			return;
+		}
+		if (m_Stage == 1)
 		{
 			Report(player, m_ForcedTag);
-			Force(player, null, "");
+			Print("[VISCHECK] shot extractor_action");
+			Print("[VISCHECK] press F 25 extractor");
+			m_NextQuery = m_Time + 30.0;
+			m_Stage = 2;
 			return;
 		}
-		EntityAI held = player.GetHumanInventory().GetEntityInHands();
-		Object cow = FindNear(player, "Animal_BosTaurusF", 0, 99);
-		if (held && held.IsKindOf("ChefZ_MilkCan") && cow)
+		if (m_Stage == 2)
 		{
-			Force(player, cow, "cow");
+			Force(player, null, "");
+			m_Stage = 3;
 			return;
 		}
-		m_Stage++;
-		if (m_Stage % 2 == 0)
-			Force(player, FindNear(player, "ChefZ_HoneyExtractor", 2, 2), "extractorSmall");
-		else
-			Force(player, FindNear(player, "ChefZ_HoneyExtractor", 8, 8), "extractorFull");
+		Object cow = FindNear(player, "Animal_BosTaurusF", 0, 99);
+		if (m_Stage == 3)
+		{
+			if (!held || !held.IsKindOf("ChefZ_MilkCan") || !cow)
+				return;
+			Report(player, "cow");
+			if (m_MilkOffered)
+			{
+				Print("[VISCHECK] shot cow_action");
+				Print("[VISCHECK] press LMB 11 milk");
+				m_Stage = 4;
+				m_NextQuery = m_Time + 13.0;
+				return;
+			}
+			m_Looks++;
+			Print("[VISCHECK] look 50 " + m_Looks.ToString());
+			return;
+		}
+		if (m_Stage == 4)
+		{
+			Print("[VISCHECK] milk can client qty=" + ItemBase.Cast(held).GetQuantity().ToString());
+			m_Stage = 5;
+		}
 	}
 
+	protected bool m_MilkOffered;
+	protected int m_Looks;
 	protected int m_Stage;
 }
 
