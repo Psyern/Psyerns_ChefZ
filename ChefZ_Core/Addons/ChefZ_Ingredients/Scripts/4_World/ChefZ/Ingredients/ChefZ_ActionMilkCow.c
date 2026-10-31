@@ -49,6 +49,23 @@ class ChefZ_ActionMilkCowCB extends ActionContinuousBaseCB
 	}
 }
 
+//! Beginnen wie CCTCursorNoRuinCheck, weitermachen auch an einer laufenden Kuh:
+//! CanContinue ruft sonst Can (CCTBase.c), und der Server braeche bei rund zwei
+//! Metern plus Kuhradius ab (Spieltest 31.10.2026: Abbruch nach rund fuenf Sekunden).
+class ChefZ_CCTMilkCow extends CCTCursorNoRuinCheck
+{
+	//! Reicht fuer eine Kuh, die acht Sekunden lang weglaeuft.
+	static const float CONTINUE_DISTANCE = 15.0;
+
+	override bool CanContinue(PlayerBase player, ActionTarget target)
+	{
+		if (!player || !target || !target.GetObject())
+			return false;
+
+		return vector.Distance(target.GetObject().GetPosition(), player.GetPosition()) <= CONTINUE_DISTANCE;
+	}
+}
+
 class ChefZ_ActionMilkCow extends ActionContinuousBase
 {
 	//! Wie lange das Melken dauert. Balancingwert - er steht hier als einzige
@@ -101,7 +118,7 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 	override void CreateConditionComponents()
 	{
 		m_ConditionItem   = new CCINonRuined;
-		m_ConditionTarget = new CCTCursorNoRuinCheck;
+		m_ConditionTarget = new ChefZ_CCTMilkCow;
 	}
 
 	override bool HasProgress()
@@ -140,35 +157,6 @@ class ChefZ_ActionMilkCow extends ActionContinuousBase
 			return false;
 
 		return cow.ChefZ_CanBeMilked();
-	}
-
-	//! Die Kuh bleibt beim Melken stehen (Spieltest 31.10.2026): lief sie weiter,
-	//! brach die Aktion nach rund fuenf Sekunden ohne Milch ab. OnEndServer laeuft
-	//! auch beim Abbruch und gibt sie wieder frei (Muster: ZombieBase.c:1068, :1099).
-	protected void ChefZ_KeepCowIdle(ActionData action_data, bool keepIdle)
-	{
-		if (!action_data || !action_data.m_Target)
-			return;
-
-		Animal_BosTaurusF cow;
-		if (!Class.CastTo(cow, action_data.m_Target.GetObject()))
-			return;
-
-		AIAgent agent = cow.GetAIAgent();
-		if (agent)
-			agent.SetKeepInIdle(keepIdle);
-	}
-
-	override void OnStartServer(ActionData action_data)
-	{
-		super.OnStartServer(action_data);
-		ChefZ_KeepCowIdle(action_data, true);
-	}
-
-	override void OnEndServer(ActionData action_data)
-	{
-		super.OnEndServer(action_data);
-		ChefZ_KeepCowIdle(action_data, false);
 	}
 
 	/**

@@ -108,12 +108,28 @@ class ChefZ_VisProbeServer
 	//! "probe reuse": den gespeicherten Stock laden, vor den Spieler stellen, dagegen laufen.
 	void StartPersist(string mode)
 	{
+		if (mode == "idle")
+		{
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(IdleSpawn, 20000, false);
+			return;
+		}
+		if (mode == "walk")
+		{
+			Cleanup();
+			m_WalkMode = true;
+			m_OpenGround = true;
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCan, 80000, false);
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(WalkTick, 81000, false);
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CowReport, 200000, false);
+			return;
+		}
 		if (mode == "cow")
 		{
 			Cleanup();
 			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCan, 80000, false);
-			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FreshCow, 100000, false);
-			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CowReport, 290000, false);
+			m_OpenGround = true;
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(WalkTick, 100000, false);
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(CowReport, 400000, false);
 			return;
 		}
 		array<Object> leftovers = new array<Object>();
@@ -426,7 +442,74 @@ class ChefZ_VisProbeServer
 	}
 
 	protected vector m_CowStart;
+	protected Animal_BosTaurusF m_IdleCow;
+	protected Animal_BosTaurusF m_FreeCow;
+	protected int m_IdleTicks;
+
+	//! Haelt SetKeepInIdle eine Kuh an? Zwei Kuehe, eine davon nach 10 s festgehalten.
+	void IdleSpawn()
+	{
+		m_IdleCow = Animal_BosTaurusF.Cast(g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + m_Dir * 6.0), ECE_PLACE_ON_SURFACE | ECE_INITAI | ECE_CREATEPHYSICS));
+		m_FreeCow = Animal_BosTaurusF.Cast(g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() - m_Dir * 6.0), ECE_PLACE_ON_SURFACE | ECE_INITAI | ECE_CREATEPHYSICS));
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(IdleTick, 1000, true);
+	}
+
+	void IdleTick()
+	{
+		m_IdleTicks++;
+		if (m_IdleTicks == 10)
+		{
+			m_IdleCow.DisableSimulation(true);
+			Print("[VISCHECK] idle set");
+		}
+		if (m_IdleTicks == 25)
+		{
+			m_IdleCow.DisableSimulation(false);
+			Print("[VISCHECK] idle released");
+		}
+		Print("[VISCHECK] idle t=" + m_IdleTicks.ToString() + " held=" + m_IdleCow.GetPosition().ToString() + " free=" + m_FreeCow.GetPosition().ToString());
+		if (m_IdleTicks >= 35)
+		{
+			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(IdleTick);
+			Print("[VISCHECK] report probe done");
+		}
+	}
+
 	protected int m_FreshCows;
+	protected bool m_WalkMode;
+	protected bool m_OpenGround;
+	protected float m_SinceCow;
+	protected bool m_WalkRunning;
+	protected float m_WalkMeters;
+
+	//! Reproduzierbar statt Zufall der KI: sobald die Aktion laeuft, wandert die Kuh mit 1 m/s weg.
+	void WalkTick()
+	{
+		bool running = m_Player.GetActionManager().GetRunningAction() != null;
+		if (running != m_WalkRunning)
+		{
+			float cowDist = -1;
+			if (m_Cow)
+				cowDist = vector.Distance(m_Cow.GetPosition(), m_Player.GetPosition());
+			Print("[VISCHECK] walk action running=" + running.ToString() + " meters=" + m_WalkMeters.ToString() + " cowDist=" + cowDist.ToString() + " can=" + m_Can.GetQuantity().ToString() + " health=" + m_Player.GetHealth("", "").ToString());
+		}
+		m_SinceCow = m_SinceCow + 0.25;
+		if (!m_WalkMode && !running && m_SinceCow >= 16)
+		{
+			m_SinceCow = 0;
+			FreshCow();
+		}
+		m_WalkRunning = running;
+		if (m_WalkMode && running && m_Cow)
+		{
+			vector away = vector.Direction(m_Player.GetPosition(), m_Cow.GetPosition());
+			away[1] = 0;
+			away.Normalize();
+			m_Cow.SetPosition(Ground(m_Cow.GetPosition() + away * 0.25));
+			m_WalkMeters = m_WalkMeters + 0.25;
+		}
+		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(WalkTick, 250, false);
+	}
 
 	//! Alle 20 s eine neue Kuh vor den Spieler: jeder Melkversuch beginnt gleich.
 	void FreshCow()
@@ -441,12 +524,13 @@ class ChefZ_VisProbeServer
 			m_Cow.SetDirection(Vector(cowDir[2], 0, -cowDir[0]));
 		m_FreshCows++;
 		Print("[VISCHECK] fresh cow " + m_FreshCows.ToString() + " can=" + m_Can.GetQuantity().ToString());
-		if (m_FreshCows < 9)
-			g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(FreshCow, 20000, false);
 	}
 
 	void GiveCan()
 	{
+		// Offenes Gelaende: am gespeicherten Standort stand ein Zaunpfosten vor der Kuh.
+		if (m_OpenGround)
+			m_Player.SetPosition(Ground(Vector(4737, 0, 9178)));
 		if (m_Powder)
 			g_Game.ObjectDelete(m_Powder);
 		g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GiveCanNow, 800, false);
@@ -461,6 +545,11 @@ class ChefZ_VisProbeServer
 		cowDir[1] = 0;
 		cowDir.Normalize();
 		m_Cow = g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + cowDir * 1.8), ECE_PLACE_ON_SURFACE | ECE_INITAI | ECE_CREATEPHYSICS);
+		if (m_WalkMode && m_Cow)
+		{
+			g_Game.ObjectDelete(m_Cow);
+			m_Cow = g_Game.CreateObjectEx("Animal_BosTaurusF_Brown", Ground(m_Player.GetPosition() + cowDir * 1.8), ECE_PLACE_ON_SURFACE | ECE_CREATEPHYSICS);
+		}
 		if (m_Cow)
 		{
 			m_Cow.SetDirection(Vector(cowDir[2], 0, -cowDir[0]));
@@ -694,7 +783,11 @@ class ChefZ_VisProbeClient
 				return;
 			}
 			m_Looks++;
-			if (m_Looks <= 1)
+			if (m_Looks == 2 || m_Looks == 8)
+				Print("[VISCHECK] shot cow_view" + m_Looks.ToString());
+			if (m_Looks == 2)
+				Print("[VISCHECK] cow dist=" + vector.Distance(cow.GetPosition(), player.GetPosition()).ToString() + " alive=" + cow.IsAlive().ToString() + " player=" + player.GetPosition().ToString() + " cowpos=" + cow.GetPosition().ToString());
+			if (m_Looks <= 3)
 				Print("[VISCHECK] look 50 " + m_Looks.ToString());
 			return;
 		}
@@ -702,7 +795,7 @@ class ChefZ_VisProbeClient
 		{
 			Print("[VISCHECK] milk can client qty=" + ItemBase.Cast(held).GetQuantity().ToString());
 			// Noch leer: die Kuh ist weg gelaufen. Wie ein Spieler erneut anpeilen.
-			if (m_MilkTries < 8)
+			if (m_MilkTries < 30)
 			{
 				m_MilkTries++;
 				m_MilkOffered = false;
