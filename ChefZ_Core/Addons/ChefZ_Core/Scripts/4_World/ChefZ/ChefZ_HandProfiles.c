@@ -75,7 +75,18 @@ modded class ModItemRegisterCallbacks
 		pType.AddItemInHandsProfileIK("ChefZ_BeefLeg", asiSodaCan, pBehavior, ik + "soda_can.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_PorkLeg", asiSodaCan, pBehavior, ik + "soda_can.anm");
 		pType.AddItemInHandsProfileIK("ChefZ_VenisonLeg", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		// Wuerste: Griff in der Mitte (Ursprung der Modelle seit 31.10.2026 dort).
 		pType.AddItemInHandsProfileIK("ChefZ_CookedSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_RawSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_RawPorkSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_RawVenisonSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_RawBoarSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_RawHunterSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_RawSpicySausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_SmokedSausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		pType.AddItemInHandsProfileIK("ChefZ_DrySausage", asiSodaCan, pBehavior, ik + "soda_can.anm");
+		// Salzstreuer: die geerbte Pose ist Vanillas zweihaendiger Duengersack.
+		pType.AddItemInHandsProfileIK("ChefZ_RawSalt", asiSodaCan, pBehavior, ik + "soda_can.anm");
 
 		// Geraete und Behaelter
 		pType.AddItemInHandsProfileIK("ChefZ_FryingPan", asiPipe, pBehavior, ik + "frying_pan.anm");
@@ -119,6 +130,11 @@ modded class ModItemRegisterCallbacks
 		pType.AddItemInHandsProfileIK("ChefZ_ChernarusChiliBowl", asiPot, pBehavior, cauldron);
 		pType.AddItemInHandsProfileIK("ChefZ_EmptyBowl", asiPot, pBehavior, cauldron);
 		pType.AddItemInHandsProfileIK("ChefZ_EmptyBox", asiPot, pBehavior, cauldron);
+
+		// Bausaetze der Imkerei und Anzuchtkasten (31.10.2026): mit beiden Haenden.
+		// Die Doppelbeute erbt vom einfachen Bausatz.
+		pType.AddItemInHandsProfileIK("ChefZ_BeehiveKit", asiPot, pBehavior, cauldron);
+		pType.AddItemInHandsProfileIK("ChefZ_MushroomTray", asiPot, pBehavior, cauldron);
 	}
 
 	override void RegisterHeavy(DayZPlayerType pType, DayzPlayerItemBehaviorCfg pBehavior)

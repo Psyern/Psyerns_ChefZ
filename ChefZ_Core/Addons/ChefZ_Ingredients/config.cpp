@@ -929,6 +929,7 @@ class CfgVehicles
         hiddenSelections[] = {"camo"};
         hiddenSelectionsTextures[] = {"ChefZ\ChefZ_Items\saltshaker\data\RawSalt_co.paa"};
         rotationFlags = 17;
+        itemBehaviour = 1;
         itemSize[] = {2, 2};
         weight = 140;
         absorbency = 0.6;
