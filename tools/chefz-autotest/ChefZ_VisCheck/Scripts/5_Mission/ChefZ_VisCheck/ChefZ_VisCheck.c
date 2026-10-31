@@ -424,9 +424,11 @@ modded class MissionGameplay
     protected ref ChefZ_VisCotClient m_ChefZ_VisCot;
 #endif
 
+    protected ref ChefZ_VisBookClient m_ChefZ_VisBook;
+
     protected void ChefZ_VisUpdateAudit(float timeslice)
     {
-        if (!m_ChefZ_VisProbe && !m_ChefZ_VisHands && !m_ChefZ_VisPaged)
+        if (!m_ChefZ_VisProbe && !m_ChefZ_VisHands && !m_ChefZ_VisPaged && !m_ChefZ_VisBook)
         {
             array<ref TStringArray> lines;
             if (!ChefZ_VisCheck.Read(lines))
@@ -440,6 +442,8 @@ modded class MissionGameplay
                     m_ChefZ_VisHands = new ChefZ_VisHandsClient();
                 if (mode == "page")
                     m_ChefZ_VisPaged = true;
+                if (mode == "book" && !m_ChefZ_VisBook)
+                    m_ChefZ_VisBook = new ChefZ_VisBookClient();
 #ifdef JM_COT
                 if (mode == "cot" && !m_ChefZ_VisCot)
                     m_ChefZ_VisCot = new ChefZ_VisCotClient(l.Get(1));
@@ -450,6 +454,8 @@ modded class MissionGameplay
         if (m_ChefZ_VisCot)
             m_ChefZ_VisCot.Update(timeslice);
 #endif
+        if (m_ChefZ_VisBook)
+            m_ChefZ_VisBook.Update(timeslice);
         if (m_ChefZ_VisProbe)
             m_ChefZ_VisProbe.Update(timeslice);
         if (m_ChefZ_VisHands)
@@ -497,7 +503,7 @@ modded class MissionGameplay
         m_ChefZ_VisCheckTime += timeslice;
         if (m_ChefZ_VisCheckTime > 12)
             ChefZ_VisUpdateAudit(timeslice);
-        if (m_ChefZ_VisPaged || m_ChefZ_VisProbe || m_ChefZ_VisHands)
+        if (m_ChefZ_VisPaged || m_ChefZ_VisProbe || m_ChefZ_VisHands || m_ChefZ_VisBook)
             return;
         if (m_ChefZ_VisCheckPhase == 0 && m_ChefZ_VisCheckTime > 30)
         {

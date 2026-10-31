@@ -121,7 +121,6 @@ FrameWidgetClass ChefZ_CookbookRoot {
      mode blend
      "src alpha" 1
      stretch 1
-     fixaspect inside
     }
     TextWidgetClass NoImageHint {
      visible 0

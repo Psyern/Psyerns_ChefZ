@@ -71,7 +71,11 @@ class ChefZ_CookbookUIMenu : UIScriptedMenu
     //! sofort wieder, falls die Mission nach dem Menue aktualisiert wird.
     protected bool  m_ChefZ_ToggleArmed;
     //! Die Seiten sind quadratisch; das Bild wird einmal auf ein Quadrat gesetzt.
-    protected bool  m_ChefZ_ImageFitted;
+    protected bool  m_ChefZ_ImageBoxRead;
+    protected float m_ChefZ_ImageBoxX;
+    protected float m_ChefZ_ImageBoxY;
+    protected float m_ChefZ_ImageBoxW;
+    protected float m_ChefZ_ImageBoxH;
 
     protected TextWidget          m_ChefZ_Progress;
     protected WrapSpacerWidget    m_ChefZ_List;
@@ -153,29 +157,28 @@ class ChefZ_CookbookUIMenu : UIScriptedMenu
         hud.ShowQuickbarUI(enabled && g_Game.GetProfileOption(EDayZProfilesOptions.QUICKBAR));
     }
 
-    //! Die Seite ist 1024 x 1024; das Layout gibt dem Bild ein hohes Rechteck, und
-    //! "fixaspect" wirkt zusammen mit "stretch" nicht (Spieltest: verzogen). Sobald
-    //! die Masse feststehen, wird es zum Quadrat und mittig in seine Spalte gesetzt.
+    //! Die Seite ist 1024 x 1024; das Layout gibt dem Bild ein hohes Rechteck. "fixaspect"
+    //! verfaelschte die Groesse (Spieltest: verzogen), also wird hier ein Quadrat gesetzt.
     protected void ChefZ_FitImage()
     {
-        if (m_ChefZ_ImageFitted || !m_ChefZ_Image)
+        if (!m_ChefZ_Image || !m_ChefZ_Image.GetParent())
             return;
-        float screenW;
-        float screenH;
-        m_ChefZ_Image.GetScreenSize(screenW, screenH);
-        if (screenW <= 0 || screenH <= 0)
+        float parentW;
+        float parentH;
+        m_ChefZ_Image.GetParent().GetScreenSize(parentW, parentH);
+        if (parentW <= 0 || parentH <= 0)
             return;
-        float side = Math.Min(screenW, screenH);
-        float relW;
-        float relH;
-        m_ChefZ_Image.GetSize(relW, relH);
-        float posX;
-        float posY;
-        m_ChefZ_Image.GetPos(posX, posY);
-        float fittedW = relW * side / screenW;
-        m_ChefZ_Image.SetPos(posX + (relW - fittedW) * 0.5, posY);
-        m_ChefZ_Image.SetSize(fittedW, relH * side / screenH);
-        m_ChefZ_ImageFitted = true;
+        if (!m_ChefZ_ImageBoxRead)
+        {
+            m_ChefZ_Image.GetPos(m_ChefZ_ImageBoxX, m_ChefZ_ImageBoxY);
+            m_ChefZ_Image.GetSize(m_ChefZ_ImageBoxW, m_ChefZ_ImageBoxH);
+            m_ChefZ_ImageBoxRead = true;
+        }
+        // Am Elternteil gemessen: die Bildgroesse selbst stimmt im ersten Bild noch nicht.
+        float side = Math.Min(m_ChefZ_ImageBoxW * parentW, m_ChefZ_ImageBoxH * parentH);
+        float fittedW = side / parentW;
+        m_ChefZ_Image.SetPos(m_ChefZ_ImageBoxX + (m_ChefZ_ImageBoxW - fittedW) * 0.5, m_ChefZ_ImageBoxY);
+        m_ChefZ_Image.SetSize(fittedW, side / parentH);
     }
 
     override bool OnClick(Widget w, int x, int y, int button)
