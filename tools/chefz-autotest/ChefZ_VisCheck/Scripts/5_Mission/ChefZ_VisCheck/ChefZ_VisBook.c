@@ -5,6 +5,13 @@ class ChefZ_VisBookClient
 	protected int m_Stage;
 	protected vector m_Pos;
 	protected vector m_Cam;
+	protected bool m_GroundOnly;
+
+	//! "book ground": nur nach unten blicken und fotografieren, was vor dem Spieler liegt.
+	void ChefZ_VisBookClient(string what)
+	{
+		m_GroundOnly = what == "ground";
+	}
 
 	protected void Measure(string tag)
 	{
@@ -28,6 +35,25 @@ class ChefZ_VisBookClient
 		if (!player)
 			return;
 		m_Time += dt;
+		if (m_GroundOnly)
+		{
+			if (m_Stage == 0 && m_Time > 15)
+			{
+				m_Stage = 1;
+				Print("[VISCHECK] look 250 ground");
+			}
+			else if (m_Stage == 1 && m_Time > 18)
+			{
+				m_Stage = 2;
+				Print("[VISCHECK] shot ground");
+			}
+			else if (m_Stage == 2 && m_Time > 21)
+			{
+				m_Stage = 3;
+				Print("[VISCHECK] client done");
+			}
+			return;
+		}
 		if (m_Stage == 0 && m_Time > 15)
 		{
 			m_Stage = 1;

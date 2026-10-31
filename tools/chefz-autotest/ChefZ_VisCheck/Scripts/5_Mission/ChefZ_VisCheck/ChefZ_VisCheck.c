@@ -443,7 +443,7 @@ modded class MissionGameplay
                 if (mode == "page")
                     m_ChefZ_VisPaged = true;
                 if (mode == "book" && !m_ChefZ_VisBook)
-                    m_ChefZ_VisBook = new ChefZ_VisBookClient();
+                    m_ChefZ_VisBook = new ChefZ_VisBookClient(l.Get(1));
 #ifdef JM_COT
                 if (mode == "cot" && !m_ChefZ_VisCot)
                     m_ChefZ_VisCot = new ChefZ_VisCotClient(l.Get(1));
