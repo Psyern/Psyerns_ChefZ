@@ -3075,6 +3075,8 @@ class CfgVehicles
     class ChefZ_MushroomTray : Inventory_Base
     {
         scope = 2;
+        // Zweihaendig (Spieltest 31.10.2026), Griff in ChefZ_HandProfiles.c.
+        itemBehaviour = 2;
         displayName = "#STR_CHEFZ_ITEM_MUSHROOMTRAY";
         descriptionShort = "#STR_CHEFZ_ITEM_MUSHROOMTRAY_DESC";
         model = "\ChefZ\ChefZ_Devices\mushroom\models\mushroomtray.p3d";

@@ -330,6 +330,28 @@ class ChefZ_MushroomShelf extends ItemBase
         }
     }
 
+    //! Beladen bleibt das Regal stehen (Spieltest 31.10.2026): erst die Kaesten
+    //! heraus, dann in die Hand oder ins Inventar.
+    protected bool ChefZ_IsLoaded()
+    {
+        GameInventory inventory = GetInventory();
+        return inventory && inventory.AttachmentCount() > 0;
+    }
+
+    override bool CanPutIntoHands(EntityAI parent)
+    {
+        if (!super.CanPutIntoHands(parent))
+            return false;
+        return !ChefZ_IsLoaded();
+    }
+
+    override bool CanPutInCargo(EntityAI parent)
+    {
+        if (!super.CanPutInCargo(parent))
+            return false;
+        return !ChefZ_IsLoaded();
+    }
+
     //! Aufstellen mit Vanillas Hologramm - dieselben zwei Aktionen, die
     //! ChefZ_ProcessingStation_Base.SetActions jeder Station gibt. Das
     //! Hologramm zeigt das Regal selbst (Hologram.GetProjectionName liefert
