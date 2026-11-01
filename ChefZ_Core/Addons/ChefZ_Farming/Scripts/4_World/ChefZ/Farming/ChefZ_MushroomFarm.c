@@ -65,6 +65,11 @@ class ChefZ_Mycelium_Base extends ItemBase
 
     float ChefZ_GrowSeconds()
     {
+        // Die Vorgabe des Betreibers aus Farming.json gilt vor der Zeit der Art.
+        float operatorSeconds = ChefZ_FarmingSettings.MushroomGrowSeconds();
+        if (operatorSeconds > 0.0)
+            return operatorSeconds;
+
         float seconds = ConfigGetFloat("chefzGrowSeconds");
         if (seconds <= 0.0)
             return CHEFZ_DEFAULT_GROW_SECONDS;

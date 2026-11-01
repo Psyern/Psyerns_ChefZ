@@ -176,8 +176,9 @@ class CfgMods
         extra = 0;
         type = "mod";
 
-        // Nur World: dieses Modul bringt ausschliesslich Entitaetsklassen mit.
-        dependencies[] = {"World"};
+        // World fuer die Entitaetsklassen, Mission nur fuer den Starthaken, der
+        // $profile:ChefZ\Farming.json anlegt (ChefZ_FarmingNotice.c).
+        dependencies[] = {"World", "Mission"};
 
         class defs
         {
@@ -187,6 +188,14 @@ class CfgMods
                 files[] =
                 {
                     "ChefZ_Farming/Scripts/4_World"
+                };
+            };
+            class missionScriptModule
+            {
+                value = "";
+                files[] =
+                {
+                    "ChefZ_Farming/Scripts/5_Mission"
                 };
             };
         };

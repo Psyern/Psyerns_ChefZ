@@ -100,10 +100,8 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
     // Das Fuellen - Zahlen und Namen
     //==========================================================================
 
-    //! Vier Stunden je Raehmchen (Auftrag 3). Zehn Raehmchen sind damit
-    //! vierzig Stunden - die laengste Wartezeit des Projekts, und sie soll es
-    //! sein: Honig ist der einzige Suessstoff der Kette.
-    static const float CHEFZ_FILL_SECONDS_PER_FRAME = 14400.0;
+    //! Die Fuellzeit je Raehmchen stellt der Betreiber in Farming.json ein
+    //! (ChefZ_FarmingSettings, Standard vier Stunden).
 
     //! Der Takt des Fuelltimers. Zehn Sekunden und nicht zwei wie der
     //! Job-Timer der Basis: bei vier Stunden je Raehmchen ist ein Schritt von
@@ -603,7 +601,7 @@ class ChefZ_Beehive extends ChefZ_ProcessingStation_Base
         }
 
         float max = frame.GetQuantityMax();
-        float step = max * CHEFZ_FILL_TICK_SEC / CHEFZ_FILL_SECONDS_PER_FRAME;
+        float step = max * CHEFZ_FILL_TICK_SEC / ChefZ_FarmingSettings.HoneySecondsPerFrame();
         float remaining = max - frame.GetQuantity();
 
         if (remaining > step)
