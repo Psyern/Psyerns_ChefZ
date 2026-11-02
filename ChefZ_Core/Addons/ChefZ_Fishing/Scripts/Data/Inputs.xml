@@ -20,7 +20,7 @@
 			<input name="UAChefZQteHit" loc="STR_CHEFZ_INPUT_QTE_HIT" />
 		</actions>
 
-		<sorting name="chefzfishing" loc="STR_CHEFZ_INPUT_GROUP_FISHING">
+		<sorting name="psyern" loc="Psyern's">
 			<input name="UAChefZQteUp" />
 			<input name="UAChefZQteDown" />
 			<input name="UAChefZQteLeft" />

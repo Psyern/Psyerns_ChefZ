@@ -35,7 +35,7 @@
 			<input name="UAChefZCookbookToggle" loc="STR_CHEFZ_INPUT_COOKBOOK" />
 		</actions>
 
-		<sorting name="chefz" loc="STR_CHEFZ_INPUT_GROUP">
+		<sorting name="psyern" loc="Psyern's">
 			<input name="UAChefZCookbookToggle" />
 		</sorting>
 	</inputs>
