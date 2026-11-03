@@ -855,18 +855,18 @@ class ChefZ_Applicator
         if (!device || !item || item.IsSetForDeletion() || device.IsSetForDeletion())
             return;
         s_ChefZ_Placing = true;
-        bool asMeal = FindMealSlot(item.GetType(), device) >= 0 && device.ServerTakeEntityAsAttachment(item);
+        bool asMeal = FindMealSlot(item.GetType(), device) >= 0 && device.ServerTakeEntityToTargetAttachment(device, item);
         s_ChefZ_Placing = false;
         if (asMeal)
             return;
 
         s_ChefZ_Placing = true;
-        bool inCargo = device.ServerTakeEntityToCargo(item);
+        bool inCargo = device.ServerTakeEntityToTargetCargo(device, item);
         s_ChefZ_Placing = false;
         if (inCargo)
             return;
         // Raeucherofen und Trockenrahmen haben keinen Laderaum, nur Haken.
-        if (device.GetInventory().CanAddAttachment(item) && device.ServerTakeEntityAsAttachment(item))
+        if (device.GetInventory().CanAddAttachment(item) && device.ServerTakeEntityToTargetAttachment(device, item))
             return;
 
         ChefZ_Log.Warn(ChefZ_LogChannel.COOK, recipeId + ": " + item.GetType() + " passt auch nach dem Verbrauch nicht ins Gefaess und liegt daneben.");
