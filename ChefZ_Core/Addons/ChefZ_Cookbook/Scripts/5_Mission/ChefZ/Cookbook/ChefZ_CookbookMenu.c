@@ -376,10 +376,10 @@ class ChefZ_CookbookMenu extends UIScriptedMenu
     {
         if (rezept.outputs && rezept.outputs.Count() > 0)
         {
-            ChefZ_OutputDef out0 = rezept.outputs.Get(0);
-            if (out0 && out0.cls != "")
+            ChefZ_OutputDef firstOutput = rezept.outputs.Get(0);
+            if (firstOutput && firstOutput.cls != "")
             {
-                string name = ClassDisplayName(out0.cls);
+                string name = ClassDisplayName(firstOutput.cls);
                 if (name != "")
                     return name;
             }

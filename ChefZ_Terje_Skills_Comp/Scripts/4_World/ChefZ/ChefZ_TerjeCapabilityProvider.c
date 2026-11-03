@@ -36,7 +36,7 @@
 //         string GetProviderName()
 //         int    GetPriority()
 //         bool   TryGetCapability(int identityId, ChefZ_Sym capability,
-//                                 out float value)
+//                                 out float outValue)
 //       -> "false, wenn dieser Anbieter zu dieser Faehigkeit nichts sagen
 //          kann. Dann wird der naechste Anbieter gefragt."
 //       -> "identityId 0 heisst 'niemand beteiligt'. Ein Anbieter, der einen
@@ -82,9 +82,9 @@ class ChefZ_TerjeCapabilityProvider extends ChefZ_ICapabilityProvider
         return ChefZ_TerjeSkillsConfig.CapabilityPriority();
     }
 
-    override bool TryGetCapability(int identityId, ChefZ_Sym capability, out float value)
+    override bool TryGetCapability(int identityId, ChefZ_Sym capability, out float outValue)
     {
-        value = 0.0;
+        outValue = 0.0;
 
         // Ein Anbieter, der einen Spieler braucht, antwortet ohne Spieler mit
         // false - so steht es woertlich in der Schnittstelle.
@@ -112,19 +112,19 @@ class ChefZ_TerjeCapabilityProvider extends ChefZ_ICapabilityProvider
             TerjePlayerSkillsAccessor skills = ChefZ_TerjeSkillsBridge.SkillsOf(player);
             if (!skills)
                 return false;
-            value = skills.GetSkillLevel(def.skillId);
+            outValue = skills.GetSkillLevel(def.skillId);
             return true;
         }
 
         if (def.source == "perkLevel")
         {
-            value = ChefZ_TerjeSkillsBridge.PerkLevel(player, def.skillId, def.perkId);
+            outValue = ChefZ_TerjeSkillsBridge.PerkLevel(player, def.skillId, def.perkId);
             return true;
         }
 
         if (def.source == "perkValue")
         {
-            value = ChefZ_TerjeSkillsBridge.PerkValue(player, def.skillId, def.perkId);
+            outValue = ChefZ_TerjeSkillsBridge.PerkValue(player, def.skillId, def.perkId);
             return true;
         }
 

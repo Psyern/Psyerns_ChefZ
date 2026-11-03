@@ -16,7 +16,7 @@
 // Layer: 5_Mission. Bildlauf aus MissionGameplay.OnUpdate (unten).
 //==============================================================================
 
-class ChefZ_FishingQteHud
+class ChefZ_FishingQteHud : Managed
 {
     static const string LAYOUT = "ChefZ_Fishing/GUI/layouts/chefz_fishing_qte.layout";
 
